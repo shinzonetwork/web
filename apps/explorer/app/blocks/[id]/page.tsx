@@ -35,7 +35,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
       <main className="container mx-auto py-12">
         <div className="mb-10 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background-secondary">
-            <Cube className="h-6 w-6 text-accent-foreground" />
+            <Cube className="h-6 w-6 text-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-foreground">Block #{block.number}</h1>
@@ -51,7 +51,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
           </CardHeader>
           <CardContent className="px-8 pb-8">
             <div className="space-y-6">
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Block Height</span>
                 <div className="flex items-center gap-3">
                   <Link href={`/blocks/${block.number - 1}`}>
@@ -68,19 +68,19 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 </div>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Timestamp</span>
                 <span className="text-sm text-foreground">{new Date(block.timestamp).toLocaleString()}</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Transactions</span>
                 <Link href={`/transactions?block=${block.number}`} className="text-sm text-background-secondary hover:underline">
                   {block.transactionCount} transactions
                 </Link>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Miner</span>
                 <div className="flex items-center gap-2">
                   <Link href={`/address/${block.miner}`} className="font-mono text-sm text-background-secondary hover:underline">
@@ -90,27 +90,27 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 </div>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Block Reward</span>
                 <span className="text-sm text-foreground">{(Math.random() * 0.05 + 0.01).toFixed(4)} ETH</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Difficulty</span>
                 <span className="font-mono text-sm text-foreground">{block.difficulty}</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Total Difficulty</span>
                 <span className="font-mono text-sm text-foreground">{block.totalDifficulty}</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Size</span>
                 <span className="text-sm text-foreground">{(Number(block.size) / 1024).toFixed(2)} KB</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Gas Used</span>
                 <span className="text-sm text-foreground">
                   {(Number(block.gasUsed) / 1e6).toFixed(2)}M (
@@ -118,17 +118,17 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 </span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Gas Limit</span>
                 <span className="text-sm text-foreground">{(Number(block.gasLimit) / 1e6).toFixed(2)}M</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Base Fee Per Gas</span>
                 <span className="text-sm text-foreground">{block.baseFeePerGas} Gwei</span>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Hash</span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-sm text-foreground">{formatHash(block.hash, 16, 12)}</span>
@@ -136,7 +136,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 </div>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">Parent Hash</span>
                 <div className="flex items-center gap-2">
                   <Link
@@ -149,7 +149,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 </div>
               </div>
 
-              <div className="flex justify-between border-b border-border pb-4">
+              <div className="flex justify-between border-b border-light pb-4">
                 <span className="text-sm text-muted-foreground">State Root</span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-sm text-foreground">{formatHash(block.stateRoot, 16, 12)}</span>

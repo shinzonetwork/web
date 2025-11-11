@@ -87,12 +87,12 @@ export default function HomePage() {
                 {latestBlocks.map((block) => (
                   <div
                     key={block.hash}
-                    className="flex items-start justify-between border-b border-border pb-6 last:border-0 last:pb-0"
+                    className="flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background-secondary">
-                          <Cube className="h-5 w-5 text-accent-foreground" />
+                          <Cube className="h-5 w-5 text-foreground" />
                         </div>
                         <div>
                           <Link
@@ -134,7 +134,7 @@ export default function HomePage() {
                 {latestTransactions.map((tx) => (
                   <div
                     key={tx.hash}
-                    className="flex items-start justify-between border-b border-border pb-6 last:border-0 last:pb-0"
+                    className="flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
                   >
                     <div className="space-y-1">
                       <Link

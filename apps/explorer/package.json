@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 9181",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "graphql-codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",
+    "graphql:codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",
+    "graphql:watch": "graphql-codegen --config ./lib/shared/graphql/codegen.ts --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "postinstall": "pnpm graphql:codegen"
   },
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.8",
@@ -35,6 +37,7 @@
     "@graphql-tools/load": "^8.1.4",
     "@graphql-tools/url-loader": "^9.0.2",
     "@graphql-tools/utils": "^10.10.1",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@parcel/watcher": "^2.5.1",
     "@storybook/nextjs": "^10.0.5",
     "@svgr/webpack": "^8.1.0",

@@ -45,7 +45,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
       <main className="container mx-auto py-8">
         <div className="mb-6 flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
-            <FileText className="h-6 w-6 text-secondary-foreground" />
+            <FileText className="h-6 w-6 text-foreground" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-foreground">Transaction Details</h1>
@@ -74,7 +74,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Transaction Hash</span>
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-sm text-foreground">{formatHash(tx.hash, 16, 12)}</span>
@@ -82,7 +82,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     </div>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Status</span>
                     {tx.status ? (
                       <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
@@ -97,14 +97,14 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     )}
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Block</span>
                     <Link href={`/blocks/${tx.blockNumber}`} className="text-sm text-accent hover:underline">
                       {tx.blockNumber}
                     </Link>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Timestamp</span>
                     <span className="text-sm text-foreground">
                       {formatDistanceToNow(new Date(Date.now() - Math.random() * 300000), {
@@ -113,7 +113,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     </span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">From</span>
                     <div className="flex items-center gap-2">
                       <Link href={`/address/${tx.from}`} className="font-mono text-sm text-accent hover:underline">
@@ -123,7 +123,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     </div>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">To</span>
                     <div className="flex items-center gap-2">
                       <Link href={`/address/${tx.to}`} className="font-mono text-sm text-accent hover:underline">
@@ -133,39 +133,39 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     </div>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Value</span>
                     <span className="text-sm font-medium text-foreground">{formatValue(tx.value)} ETH</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Transaction Fee</span>
                     <span className="text-sm text-foreground">{transactionFee.toFixed(8)} ETH</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Gas Price</span>
                     <span className="text-sm text-foreground">{formatGasPrice(tx.gasPrice)} Gwei</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Gas Limit</span>
                     <span className="font-mono text-sm text-foreground">{tx.gas}</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Gas Used</span>
                     <span className="font-mono text-sm text-foreground">
                       {tx.gasUsed} ({((Number(tx.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)
                     </span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Nonce</span>
                     <span className="font-mono text-sm text-foreground">{tx.nonce}</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-border pb-3">
+                  <div className="flex justify-between border-b border-light pb-3">
                     <span className="text-sm text-muted-foreground">Position in Block</span>
                     <span className="text-sm text-foreground">{tx.transactionIndex}</span>
                   </div>
@@ -192,7 +192,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     <CardContent>
                       <div className="space-y-4">
                         {logs.map((log, index) => (
-                          <div key={index} className="rounded-lg border border-border bg-background-secondary/30 p-4">
+                          <div key={index} className="rounded-lg border border-light bg-background-secondary/30 p-4">
                             <div className="mb-3 flex items-center justify-between">
                               <Badge variant="secondary">Log #{log.logIndex}</Badge>
                               <span className="text-xs text-muted-foreground">

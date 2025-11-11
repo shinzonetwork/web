@@ -9,7 +9,7 @@ import { Button } from "@/shared/ui/button"
 import { useBlocks } from '@/entities/block';
 
 export default function BlocksPage() {
-  const { data: blocks } = useBlocks();
+  const { data: blocks } = useBlocks({ limit: 10 });
   console.log(blocks);
 
   const formatHash = (hash: string, start = 10, end = 8) => {
@@ -53,7 +53,7 @@ export default function BlocksPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                <tr className="border-b border-border">
+                <tr className="border-b border-light">
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Block</th>
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Age</th>
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Txn</th>
@@ -64,15 +64,15 @@ export default function BlocksPage() {
                 </thead>
                 <tbody>
                 {(blocks ?? []).map((block) => (
-                  <tr key={block.hash} className="border-b border-border last:border-0">
+                  <tr key={block.hash} className="border-b border-light last:border-0">
                     <td className="py-5">
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background-secondary">
-                          <Cube className="h-5 w-5 text-accent-foreground" />
+                          <Cube className="h-5 w-5 text-foreground" />
                         </div>
                         <Link
                           href={`/blocks/${block.number}`}
-                          className="font-mono text-sm font-medium text-background-secondary hover:underline"
+                          className="font-mono text-sm font-medium text-foreground hover:underline"
                         >
                           {block.number}
                         </Link>

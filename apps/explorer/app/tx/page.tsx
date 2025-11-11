@@ -66,7 +66,7 @@ export default function TransactionsPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                <tr className="border-b border-border">
+                <tr className="border-b border-light">
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Txn Hash</th>
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Block</th>
                   <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Age</th>
@@ -79,7 +79,7 @@ export default function TransactionsPage() {
                 </thead>
                 <tbody>
                 {transactions.map((tx) => (
-                  <tr key={tx.hash} className="border-b border-border last:border-0">
+                  <tr key={tx.hash} className="border-b border-light last:border-0">
                     <td className="py-5">
                       <Link href={`/tx/${tx.hash}`} className="font-mono text-sm text-secondary hover:underline">
                         {formatHash(tx.hash, 12, 8)}
