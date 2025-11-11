@@ -67,12 +67,12 @@ export default function BlocksPage() {
                   <tr key={block.hash} className="border-b border-border last:border-0">
                     <td className="py-5">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background-secondary">
                           <Cube className="h-5 w-5 text-accent-foreground" />
                         </div>
                         <Link
                           href={`/blocks/${block.number}`}
-                          className="font-mono text-sm font-medium text-secondary hover:underline"
+                          className="font-mono text-sm font-medium text-background-secondary hover:underline"
                         >
                           {block.number}
                         </Link>
@@ -92,7 +92,7 @@ export default function BlocksPage() {
                     <td className="py-5">
                       <Link
                         href={`/address/${block.miner}`}
-                        className="font-mono text-sm text-secondary hover:underline"
+                        className="font-mono text-sm text-background-secondary hover:underline"
                       >
                         {formatHash(block.miner, 8, 6)}
                       </Link>

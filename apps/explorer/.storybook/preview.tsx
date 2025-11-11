@@ -4,7 +4,7 @@ import '../app/globals.css';
 const preview: Preview = {
   decorators: [
     Story => (
-      <main className={`text-text-primary`}>
+      <main className={`text-foreground`}>
         <Story />
       </main>
     )

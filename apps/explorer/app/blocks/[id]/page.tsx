@@ -34,7 +34,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
       <Header />
       <main className="container mx-auto py-12">
         <div className="mb-10 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background-secondary">
             <Cube className="h-6 w-6 text-accent-foreground" />
           </div>
           <div>
@@ -75,7 +75,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
 
               <div className="flex justify-between border-b border-border pb-4">
                 <span className="text-sm text-muted-foreground">Transactions</span>
-                <Link href={`/transactions?block=${block.number}`} className="text-sm text-secondary hover:underline">
+                <Link href={`/transactions?block=${block.number}`} className="text-sm text-background-secondary hover:underline">
                   {block.transactionCount} transactions
                 </Link>
               </div>
@@ -83,7 +83,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
               <div className="flex justify-between border-b border-border pb-4">
                 <span className="text-sm text-muted-foreground">Miner</span>
                 <div className="flex items-center gap-2">
-                  <Link href={`/address/${block.miner}`} className="font-mono text-sm text-secondary hover:underline">
+                  <Link href={`/address/${block.miner}`} className="font-mono text-sm text-background-secondary hover:underline">
                     {formatHash(block.miner)}
                   </Link>
                   <CopyButton text={block.miner} />
@@ -141,7 +141,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
                 <div className="flex items-center gap-2">
                   <Link
                     href={`/blocks/${block.number - 1}`}
-                    className="font-mono text-sm text-secondary hover:underline"
+                    className="font-mono text-sm text-background-secondary hover:underline"
                   >
                     {formatHash(block.parentHash, 16, 12)}
                   </Link>

@@ -28,7 +28,7 @@ export default function HomePage() {
           <Card className="bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Blocks</CardTitle>
-              <Cube className="h-4 w-4 text-primary" />
+              <Cube className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">{stats.totalBlocks.toLocaleString()}</div>
@@ -39,7 +39,7 @@ export default function HomePage() {
           <Card className="bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Transactions</CardTitle>
-              <TrendingUp className="h-4 w-4 text-primary" />
+              <TrendingUp className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">{(stats.totalTransactions / 1e9).toFixed(2)}B</div>
@@ -50,7 +50,7 @@ export default function HomePage() {
           <Card className="bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Avg Gas Price</CardTitle>
-              <Zap className="h-4 w-4 text-primary" />
+              <Zap className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">{stats.avgGasPrice} Gwei</div>
@@ -61,7 +61,7 @@ export default function HomePage() {
           <Card className="bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Network Hash Rate</CardTitle>
-              <Clock className="h-4 w-4 text-primary" />
+              <Clock className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">{stats.networkHashRate}</div>
@@ -91,7 +91,7 @@ export default function HomePage() {
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background-secondary">
                           <Cube className="h-5 w-5 text-accent-foreground" />
                         </div>
                         <div>
@@ -124,7 +124,7 @@ export default function HomePage() {
             <CardHeader className="pb-6">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-foreground">Latest Transactions</CardTitle>
-                <Link href="/transactions" className="flex items-center gap-1 text-sm text-secondary hover:underline">
+                <Link href="/tx" className="flex items-center gap-1 text-sm text-secondary hover:underline">
                   View all <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>

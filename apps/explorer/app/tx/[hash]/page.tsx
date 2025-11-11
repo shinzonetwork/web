@@ -99,7 +99,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
 
                   <div className="flex justify-between border-b border-border pb-3">
                     <span className="text-sm text-muted-foreground">Block</span>
-                    <Link href={`/blocks/${tx.blockNumber}`} className="text-sm text-primary hover:underline">
+                    <Link href={`/blocks/${tx.blockNumber}`} className="text-sm text-accent hover:underline">
                       {tx.blockNumber}
                     </Link>
                   </div>
@@ -116,7 +116,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                   <div className="flex justify-between border-b border-border pb-3">
                     <span className="text-sm text-muted-foreground">From</span>
                     <div className="flex items-center gap-2">
-                      <Link href={`/address/${tx.from}`} className="font-mono text-sm text-primary hover:underline">
+                      <Link href={`/address/${tx.from}`} className="font-mono text-sm text-accent hover:underline">
                         {formatHash(tx.from)}
                       </Link>
                       <CopyButton text={tx.from} />
@@ -126,7 +126,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                   <div className="flex justify-between border-b border-border pb-3">
                     <span className="text-sm text-muted-foreground">To</span>
                     <div className="flex items-center gap-2">
-                      <Link href={`/address/${tx.to}`} className="font-mono text-sm text-primary hover:underline">
+                      <Link href={`/address/${tx.to}`} className="font-mono text-sm text-accent hover:underline">
                         {formatHash(tx.to)}
                       </Link>
                       <CopyButton text={tx.to} />
@@ -192,7 +192,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                     <CardContent>
                       <div className="space-y-4">
                         {logs.map((log, index) => (
-                          <div key={index} className="rounded-lg border border-border bg-muted/30 p-4">
+                          <div key={index} className="rounded-lg border border-border bg-background-secondary/30 p-4">
                             <div className="mb-3 flex items-center justify-between">
                               <Badge variant="secondary">Log #{log.logIndex}</Badge>
                               <span className="text-xs text-muted-foreground">
@@ -204,7 +204,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                                 <span className="w-20 text-muted-foreground">Address:</span>
                                 <Link
                                   href={`/address/${log.address}`}
-                                  className="font-mono text-primary hover:underline"
+                                  className="font-mono text-accent hover:underline"
                                 >
                                   {formatHash(log.address)}
                                 </Link>
@@ -263,7 +263,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
                 <Separator />
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Block Hash</span>
-                  <Link href={`/blocks/${tx.blockNumber}`} className="font-mono text-xs text-primary hover:underline">
+                  <Link href={`/blocks/${tx.blockNumber}`} className="font-mono text-xs text-accent hover:underline">
                     {formatHash(tx.blockHash, 8, 6)}
                   </Link>
                 </div>
@@ -292,7 +292,7 @@ export default async function TransactionDetailPage({ params }: { params: Promis
               </CardContent>
             </Card>
 
-            <Card className="bg-muted/30">
+            <Card className="bg-background-secondary/30">
               <CardHeader>
                 <CardTitle className="text-base">Transaction Fee</CardTitle>
               </CardHeader>
