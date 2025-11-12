@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 const BlocksQuery = graphql(`
   query Blocks($offset: Int, $limit: Int) {
     blockCount: _count(Block: {})
-    Block(offset: $offset, limit: $limit) {
+    Block(offset: $offset, limit: $limit, order: { number: DESC }) {
       hash
       number
       timestamp

@@ -3492,6 +3492,13 @@ export type CommitsOrderArg = {
   height?: InputMaybe<Ordering>;
 };
 
+export type BlockQueryVariables = Exact<{
+  number: Scalars['Int']['input'];
+}>;
+
+
+export type BlockQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null } | null> | null };
+
 export type BlocksQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -3519,10 +3526,35 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const BlockDocument = new TypedDocumentString(`
+    query Block($number: Int!) {
+  Block(filter: {number: {_eq: $number}}, limit: 1) {
+    hash
+    number
+    timestamp
+    parentHash
+    difficulty
+    totalDifficulty
+    gasUsed
+    gasLimit
+    baseFeePerGas
+    nonce
+    miner
+    size
+    stateRoot
+    sha3Uncles
+    transactionsRoot
+    receiptsRoot
+    logsBloom
+    extraData
+    mixHash
+  }
+}
+    `) as unknown as TypedDocumentString<BlockQuery, BlockQueryVariables>;
 export const BlocksDocument = new TypedDocumentString(`
     query Blocks($offset: Int, $limit: Int) {
   blockCount: _count(Block: {})
-  Block(offset: $offset, limit: $limit) {
+  Block(offset: $offset, limit: $limit, order: {number: DESC}) {
     hash
     number
     timestamp
