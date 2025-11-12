@@ -14,4 +14,5 @@ export {
 export {
   type UsePageOptions,
   usePage,
+  DEFAULT_LIMIT,
 } from './use-page';
