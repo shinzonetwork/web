@@ -1,14 +1,17 @@
-import { Header } from "@/widgets/header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
-import { generateMockBlocks, generateMockTransactions, getMockNetworkStats } from "@/shared/utils/mock-data"
-import Link from "next/link"
-import { ArrowRight, Cable as Cube, TrendingUp } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+'use client';
+
+import Link from 'next/link'
+import { formatDistanceToNow } from 'date-fns'
+import { ArrowRight, Cable as Cube, TrendingUp } from 'lucide-react'
+import { Header } from '@/widgets/header'
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
+import { useBlocks } from '@/entities/block';
+import { useTransactions } from '@/entities/tx';
+import { Skeleton } from '@/shared/ui/skeleton';
 
 export default function HomePage() {
-  const stats = getMockNetworkStats()
-  const latestBlocks = generateMockBlocks(10)
-  const latestTransactions = generateMockTransactions(10)
+  const { data: blocks, isLoading: blocksLoading } = useBlocks({ limit: 10, offset: 0 });
+  const { data: txs, isLoading: txLoading } = useTransactions({ limit: 10, offset: 0 });
 
   const formatHash = (hash: string, start = 10, end = 8) => {
     return `${hash.slice(0, start)}...${hash.slice(-end)}`
@@ -31,8 +34,16 @@ export default function HomePage() {
               <Cube className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.totalBlocks.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">Avg block time: {stats.avgBlockTime}s</p>
+              {blocksLoading ? (
+                <div className='w-40 h-12'>
+                  <Skeleton />
+                </div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">{blocks?.totalCount ?? 0}</div>
+                  <p className="text-xs text-muted-foreground">Avg block time: 12.1s</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -42,13 +53,20 @@ export default function HomePage() {
               <TrendingUp className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">{(stats.totalTransactions / 1e9).toFixed(2)}B</div>
-              <p className="text-xs text-muted-foreground">Across all blocks</p>
+              {txLoading ? (
+                <div className='w-40 h-12'>
+                  <Skeleton />
+                </div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">{((txs?.totalCount ?? 0) / 1e6).toFixed(2)}M</div>
+                  <p className="text-xs text-muted-foreground">Across all blocks</p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Latest Blocks and Transactions */}
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Latest Blocks */}
           <Card className="bg-card">
@@ -61,11 +79,17 @@ export default function HomePage() {
               </div>
             </CardHeader>
             <CardContent className="px-8 pb-8">
-              <div className="space-y-6">
-                {latestBlocks.map((block) => (
+              <div className="flex flex-col gap-6">
+                {blocksLoading && new Array(10).fill('').map((_, index) => (
+                  <div key={index} className='w-full h-16'>
+                    <Skeleton />
+                  </div>
+                ))}
+
+                {(blocks?.blocks ?? []).map((block) => (
                   <div
-                    key={block.hash}
-                    className="flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
+                    key={block?.hash}
+                    className="h-16 flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
@@ -74,22 +98,24 @@ export default function HomePage() {
                         </div>
                         <div>
                           <Link
-                            href={`/blocks/${block.number}`}
+                            href={`/blocks/${block?.number}`}
                             className="font-mono text-sm font-medium text-secondary hover:underline"
                           >
-                            {block.number}
+                            {block?.number}
                           </Link>
-                          <p className="text-xs text-muted-foreground">
-                            {formatDistanceToNow(new Date(block.timestamp), {
-                              addSuffix: true,
-                            })}
-                          </p>
+                          {block?.timestamp && (
+                            <p className="text-xs text-muted-foreground">
+                              {formatDistanceToNow(new Date(Number(block.timestamp) * 1000), {
+                                addSuffix: true,
+                              })}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium text-foreground">{block.transactionCount} txns</p>
-                      <p className="text-xs text-muted-foreground">Miner: {formatHash(block.miner, 6, 4)}</p>
+                      <p className="text-sm font-medium text-foreground">0 txns</p>
+                      <p className="text-xs text-muted-foreground">Miner: {formatHash(block?.miner || '', 6, 4)}</p>
                     </div>
                   </div>
                 ))}
@@ -108,28 +134,44 @@ export default function HomePage() {
               </div>
             </CardHeader>
             <CardContent className="px-8 pb-8">
-              <div className="space-y-6">
-                {latestTransactions.map((tx) => (
+              <div className="flex flex-col gap-6">
+                {txLoading && new Array(10).fill('').map((_, index) => (
+                  <div key={index} className='w-full h-16'>
+                    <Skeleton />
+                  </div>
+                ))}
+
+                {(txs?.transactions ?? []).map((tx) => (
                   <div
-                    key={tx.hash}
-                    className="flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
+                    key={tx?.hash}
+                    className="h-16 flex items-start justify-between border-b border-light pb-6 last:border-0 last:pb-0"
                   >
                     <div className="space-y-1">
-                      <Link
-                        href={`/tx/${tx.hash}`}
-                        className="block font-mono text-sm font-medium text-secondary hover:underline"
-                      >
-                        {formatHash(tx.hash)}
-                      </Link>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>From: {formatHash(tx.from, 6, 4)}</span>
-                        <ArrowRight className="h-3 w-3" />
-                        <span>To: {formatHash(tx.to, 6, 4)}</span>
-                      </div>
+                      {tx?.hash && (
+                        <Link
+                          href={`/tx/${tx?.hash}`}
+                          className="block font-mono text-sm font-medium text-secondary hover:underline"
+                        >
+                          {formatHash(tx.hash)}
+                        </Link>
+                      )}
+
+                      {!!(tx?.from && tx?.to) && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span>From: {formatHash(tx.from, 6, 4)}</span>
+                          <ArrowRight className="h-3 w-3" />
+                          <span>To: {formatHash(tx.to, 6, 4)}</span>
+                        </div>
+                      )}
                     </div>
+
                     <div className="text-right">
-                      <p className="text-sm font-medium text-foreground">{formatValue(tx.value)} ETH</p>
-                      <p className="text-xs text-muted-foreground">Block {tx.blockNumber}</p>
+                      {tx?.value && (
+                        <p className="text-sm font-medium text-foreground">{formatValue(tx.value)} ETH</p>
+                      )}
+                      {tx?.blockNumber && (
+                        <p className="text-xs text-muted-foreground">Block {tx.blockNumber}</p>
+                      )}
                     </div>
                   </div>
                 ))}
