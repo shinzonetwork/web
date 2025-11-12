@@ -2,7 +2,7 @@ import { Header } from "@/widgets/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { generateMockBlocks, generateMockTransactions, getMockNetworkStats } from "@/shared/utils/mock-data"
 import Link from "next/link"
-import { ArrowRight, Clock, Cable as Cube, TrendingUp, Zap } from "lucide-react"
+import { ArrowRight, Cable as Cube, TrendingUp } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 
 export default function HomePage() {
@@ -22,9 +22,9 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <Header />
+
       <main className="container mx-auto py-12">
-        {/* Statistics Grid */}
-        <div className="mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-12 grid gap-6 md:grid-cols-2">
           <Card className="bg-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Blocks</CardTitle>
@@ -44,28 +44,6 @@ export default function HomePage() {
             <CardContent>
               <div className="text-2xl font-bold text-foreground">{(stats.totalTransactions / 1e9).toFixed(2)}B</div>
               <p className="text-xs text-muted-foreground">Across all blocks</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Avg Gas Price</CardTitle>
-              <Zap className="h-4 w-4 text-accent" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.avgGasPrice} Gwei</div>
-              <p className="text-xs text-muted-foreground">Last 100 blocks</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Network Hash Rate</CardTitle>
-              <Clock className="h-4 w-4 text-accent" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.networkHashRate}</div>
-              <p className="text-xs text-muted-foreground">Current rate</p>
             </CardContent>
           </Card>
         </div>

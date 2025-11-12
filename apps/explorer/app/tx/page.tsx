@@ -1,26 +1,22 @@
 "use client"
 
 import { Header } from "@/widgets/header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
-import { generateMockTransactions } from "@/shared/utils/mock-data"
+import { Card, CardContent, CardTitle } from "@/shared/ui/card"
 import Link from "next/link"
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { Button } from "@/shared/ui/button"
 import { useSearchParams } from "next/navigation"
+import { DEFAULT_LIMIT, Pagination, usePage } from '@/shared/ui/pagination';
+import { useTransactions } from '@/entities/tx';
+import { Table, TableBody, TableHead, TableHeader, TableLoadingBody, TableNullableCell, TableRow } from '@/shared/ui/table';
+import { formatHash } from '@/shared/utils/format-hash';
 
 export default function TransactionsPage() {
-  const searchParams = useSearchParams()
-  const blockFilter = searchParams.get("block")
+  const searchParams = useSearchParams();
+  const blockFilter = Number(searchParams.get('block'));
+  console.log(blockFilter);
 
-  const allTransactions = generateMockTransactions(50)
-  const transactions = blockFilter
-    ? allTransactions.filter((tx) => tx.blockNumber === Number(blockFilter))
-    : allTransactions
-
-  const formatHash = (hash: string, start = 10, end = 8) => {
-    return `${hash.slice(0, start)}...${hash.slice(-end)}`
-  }
+  const { page, offset, limit } = usePage();
+  const { data: transactions, isLoading } = useTransactions({ limit, offset, blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter });
 
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18
@@ -35,6 +31,7 @@ export default function TransactionsPage() {
   return (
     <div className="min-h-screen">
       <Header />
+
       <main className="container mx-auto py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-foreground">
@@ -46,77 +43,82 @@ export default function TransactionsPage() {
         </div>
 
         <Card>
-          <CardHeader className="pb-8">
-            <div className="flex items-center justify-between">
-              <CardTitle>Transaction List</CardTitle>
-              <div className="flex items-center gap-4">
-                <Button variant="outline" size="sm" disabled>
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous
-                </Button>
-                <p className="text-sm text-muted-foreground">Page 1 of 10000+</p>
-                <Button variant="outline" size="sm">
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
+          <div className="flex items-center justify-between px-8">
+            <CardTitle>Transaction List</CardTitle>
+
+            <Pagination page={page} totalItems={transactions?.totalCount ?? 0} />
+          </div>
+
           <CardContent className="px-8 pb-8">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                <tr className="border-b border-light">
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Txn Hash</th>
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Block</th>
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground">Age</th>
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground">From</th>
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground"></th>
-                  <th className="pb-4 text-left text-sm font-medium text-muted-foreground">To</th>
-                  <th className="pb-4 text-right text-sm font-medium text-muted-foreground">Value</th>
-                  <th className="pb-4 text-right text-sm font-medium text-muted-foreground">Fee</th>
-                </tr>
-                </thead>
-                <tbody>
-                {transactions.map((tx) => (
-                  <tr key={tx.hash} className="border-b border-light last:border-0">
-                    <td className="py-5">
-                      <Link href={`/tx/${tx.hash}`} className="font-mono text-sm text-secondary hover:underline">
-                        {formatHash(tx.hash, 12, 8)}
-                      </Link>
-                    </td>
-                    <td className="py-5">
-                      <Link href={`/blocks/${tx.blockNumber}`} className="text-sm text-secondary hover:underline">
-                        {tx.blockNumber}
-                      </Link>
-                    </td>
-                    <td className="py-5 text-sm text-muted-foreground">
-                      {formatDistanceToNow(new Date(Date.now() - Math.random() * 300000), {
-                        addSuffix: true,
-                      })}
-                    </td>
-                    <td className="py-5">
-                      <Link href={`/address/${tx.from}`} className="font-mono text-sm text-secondary hover:underline">
-                        {formatHash(tx.from, 8, 6)}
-                      </Link>
-                    </td>
-                    <td className="py-5">
-                      <ArrowRight className="h-4 w-4 text-muted-foreground" />
-                    </td>
-                    <td className="py-5">
-                      <Link href={`/address/${tx.to}`} className="font-mono text-sm text-secondary hover:underline">
-                        {formatHash(tx.to, 8, 6)}
-                      </Link>
-                    </td>
-                    <td className="py-5 text-right text-sm text-foreground">{formatValue(tx.value)} ETH</td>
-                    <td className="py-5 text-right text-sm text-muted-foreground">
-                      {formatGasPrice(tx.gasPrice)} Gwei
-                    </td>
-                  </tr>
-                ))}
-                </tbody>
-              </table>
-            </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Hash</TableHead>
+                  <TableHead>Block</TableHead>
+                  <TableHead>Age</TableHead>
+                  <TableHead>From</TableHead>
+                  <TableHead>To</TableHead>
+                  <TableHead>Value</TableHead>
+                  <TableHead>Fee</TableHead>
+                </TableRow>
+              </TableHeader>
+
+              {isLoading ? (
+                <TableLoadingBody columns={7} rows={DEFAULT_LIMIT} />
+              ) : (
+                <TableBody>
+                  {(transactions?.transactions ?? []).map((tx) => (
+                    <TableRow key={tx?.hash} className='h-12'>
+                      <TableNullableCell value={tx?.hash}>
+                        {(value) => (
+                          <Link href={`/tx/${value}`} className="font-mono text-sm text-foreground hover:underline">
+                            {formatHash(value, 12, 8)}
+                          </Link>
+                        )}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.blockNumber}>
+                        {(value) => (
+                          <Link href={`/blocks/${value}`} className="text-sm hover:underline">
+                            {value}
+                          </Link>
+                        )}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.timestamp as string}>
+                        {(value) => (
+                          formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })
+                        )}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.from}>
+                        {(value) => (
+                          <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
+                            {formatHash(value, 8, 6)}
+                          </Link>
+                        )}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.to}>
+                        {(value) => (
+                          <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
+                            {formatHash(value, 8, 6)}
+                          </Link>
+                        )}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.value}>
+                        {(value) => `${formatValue(value)} ETH`}
+                      </TableNullableCell>
+
+                      <TableNullableCell value={tx?.gasPrice}>
+                        {(value) => `${formatGasPrice(value)} Gwei`}
+                      </TableNullableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              )}
+            </Table>
           </CardContent>
         </Card>
       </main>

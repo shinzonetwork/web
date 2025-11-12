@@ -3507,6 +3507,22 @@ export type BlocksQueryVariables = Exact<{
 
 export type BlocksQuery = { __typename?: 'Query', blockCount?: number | null, Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null } | null> | null };
 
+export type TransactionQueryVariables = Exact<{
+  hash?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null } | null> | null };
+
+export type TransactionsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type TransactionsQuery = { __typename?: 'Query', txCount?: number | null, Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null } | null> | null };
+
 export class TypedDocumentString<TResult, TVariables>
   extends String
   implements DocumentTypeDecoration<TResult, TVariables>
@@ -3577,3 +3593,65 @@ export const BlocksDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<BlocksQuery, BlocksQueryVariables>;
+export const TransactionDocument = new TypedDocumentString(`
+    query Transaction($hash: String) {
+  Transaction(filter: {hash: {_eq: $hash}}, limit: 1) {
+    hash
+    blockNumber
+    blockHash
+    from
+    to
+    value
+    gas
+    gasPrice
+    gasUsed
+    effectiveGasPrice
+    maxFeePerGas
+    maxPriorityFeePerGas
+    nonce
+    transactionIndex
+    type
+    input
+    chainId
+    v
+    r
+    s
+    status
+    cumulativeGasUsed
+  }
+}
+    `) as unknown as TypedDocumentString<TransactionQuery, TransactionQueryVariables>;
+export const TransactionsDocument = new TypedDocumentString(`
+    query Transactions($offset: Int, $limit: Int, $blockNumber: Int) {
+  txCount: _count(Transaction: {})
+  Transaction(
+    offset: $offset
+    limit: $limit
+    order: {blockNumber: DESC}
+    filter: {blockNumber: {_eq: $blockNumber}}
+  ) {
+    hash
+    blockNumber
+    blockHash
+    from
+    to
+    value
+    gas
+    gasPrice
+    gasUsed
+    effectiveGasPrice
+    maxFeePerGas
+    maxPriorityFeePerGas
+    nonce
+    transactionIndex
+    type
+    input
+    chainId
+    v
+    r
+    s
+    status
+    cumulativeGasUsed
+  }
+}
+    `) as unknown as TypedDocumentString<TransactionsQuery, TransactionsQueryVariables>;

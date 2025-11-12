@@ -4,6 +4,7 @@ import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import { Card, CardContent, CardTitle } from "@/shared/ui/card"
 import { usePage, Pagination, DEFAULT_LIMIT } from "@/shared/ui/pagination"
+import { formatHash } from '@/shared/utils/format-hash';
 import { useBlocks } from '@/entities/block';
 import { Header } from "@/widgets/header"
 import {
@@ -20,10 +21,6 @@ import {
 export default function BlocksPage() {
   const { page, offset, limit } = usePage();
   const { data: blocks, isLoading } = useBlocks({ limit, offset });
-
-  const formatHash = (hash: string, start = 10, end = 8) => {
-    return `${hash.slice(0, start)}...${hash.slice(-end)}`;
-  };
 
   const formatGasUsed = (gasUsed: string, gasLimit: string) => {
     const used = Number(gasUsed)
