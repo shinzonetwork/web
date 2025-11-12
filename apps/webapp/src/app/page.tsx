@@ -1,27 +1,30 @@
 'use client'
 
-import { useSignInContext } from "@/hooks/useSignInContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
 
+import useShinzoStore from "@/store/store";
+
+
 export default function LandingPage() {
   const { isConnected } = useAccount();
-  const { signedWithWallet, handleSignedWithWallet } = useSignInContext();
+  const { registered, profileCompleted } = useShinzoStore();
   const router = useRouter();
 
   useEffect(() => {
-    const stored = localStorage.getItem('shinzo');
-    if(stored) {
-      const parsed = JSON.parse(stored);
-      handleSignedWithWallet(parsed['isSignedWithWallet']);
+    if(isConnected){
+      if(!registered && !profileCompleted){
+        router.replace('/registration/configuration');
+      } else if(registered && !profileCompleted){
+        router.replace('/registration/profile');
+      } else if(registered && profileCompleted){
+        router.replace('/dashboard');
+      }
+    } else {
+      router.replace('/');
     }
-    if(isConnected && !signedWithWallet){
-      router.replace('/registration/configuration');
-    } else if(isConnected && signedWithWallet) {
-      router.replace('/registration/profile');
-    }
-  },[isConnected, signedWithWallet, router])
+  },[isConnected, registered, profileCompleted, router])
 
   return (
     <div>

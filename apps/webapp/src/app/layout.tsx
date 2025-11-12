@@ -4,7 +4,8 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import { RainbowKitWagmiProvider } from "@/providers/rainbowkit/provider";
 import { WalletDisconnectHandler } from "@/components/handlers/wallet-disconnect-handler";
-import { SignInContextProvider } from "@/context/signInContext/signInContextProvider";
+import { RegistrationContextProvider } from "@/context/registrationContext/registrationContextProvider";
+
 
 export const metadata: Metadata = {
   title: "Shinzo",
@@ -20,11 +21,11 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body>
         <RainbowKitWagmiProvider>
-          <SignInContextProvider>
+          <RegistrationContextProvider>
             <WalletDisconnectHandler />
             <Header />
             <main className="min-h-screen">{children}</main>
-          </SignInContextProvider>
+          </RegistrationContextProvider>
         </RainbowKitWagmiProvider>
       </body>
     </html>

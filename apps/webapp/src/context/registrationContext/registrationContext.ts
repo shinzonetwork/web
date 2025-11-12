@@ -1,20 +1,20 @@
 import { createContext } from 'react';
 import { Hex } from 'viem';
 
-export type SignInContext = {
+export type RegistrationContext = {
     defraPublicKey: string,
+    peerId: string,
     signature: Hex | undefined,
-    signedWithWallet: boolean | undefined,
     handleDefraPublicKey: (_key: string) => void,
+    handlePeerId: (_peerId: string) => void,
     handleSignature: (_sign: Hex) => void,
-    handleSignedWithWallet: (_isSigned: boolean | undefined) => void
 }
 
-export const SignInContext = createContext<SignInContext>({
+export const RegistrationContext = createContext<RegistrationContext>({
     defraPublicKey: '',
+    peerId: '',
     signature: undefined,
-    signedWithWallet: false,
     handleDefraPublicKey: (_key: string) => {},
+    handlePeerId: (_peerId: string) => {},
     handleSignature:(_sign: Hex) => {},
-    handleSignedWithWallet: (_isSigned: boolean | undefined) => {}
 });
