@@ -3,14 +3,14 @@
 import { Header } from "@/widgets/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import Link from "next/link"
-import { Cable as Cube, ChevronLeft, ChevronRight } from "lucide-react"
+import { Cable as Cube } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { Button } from "@/shared/ui/button"
+import { usePage, Pagination } from "@/shared/ui/pagination"
 import { useBlocks } from '@/entities/block';
 
 export default function BlocksPage() {
-  const { data: blocks } = useBlocks({ limit: 10 });
-  console.log(blocks);
+  const { page, offset, limit } = usePage();
+  const { data: blocks } = useBlocks({ limit, offset });
 
   const formatHash = (hash: string, start = 10, end = 8) => {
     return `${hash.slice(0, start)}...${hash.slice(-end)}`
@@ -26,6 +26,7 @@ export default function BlocksPage() {
   return (
     <div className="min-h-screen">
       <Header />
+
       <main className="container mx-auto py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-foreground">Blocks</h1>
@@ -36,17 +37,8 @@ export default function BlocksPage() {
           <CardHeader className="pb-8">
             <div className="flex items-center justify-between">
               <CardTitle>Block List</CardTitle>
-              <div className="flex items-center gap-4">
-                <Button variant="outline" size="sm" disabled>
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous
-                </Button>
-                <p className="text-sm text-muted-foreground">Page 1 of 1000+</p>
-                <Button variant="outline" size="sm">
-                  Next
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
+
+              <Pagination page={page} totalItems={blocks?.totalCount ?? 0} />
             </div>
           </CardHeader>
           <CardContent className="px-8 pb-8">
@@ -63,7 +55,7 @@ export default function BlocksPage() {
                 </tr>
                 </thead>
                 <tbody>
-                {(blocks ?? []).map((block) => (
+                {(blocks?.blocks ?? []).map((block) => (
                   <tr key={block.hash} className="border-b border-light last:border-0">
                     <td className="py-5">
                       <div className="flex items-center gap-3">
@@ -85,7 +77,7 @@ export default function BlocksPage() {
                     </td>
                     <td className="py-5">
                       <div className="flex items-center gap-1 text-sm text-foreground">
-                        {block.transactionCount ?? 0}
+                        {block.txCount ?? 0}
                         <span className="text-muted-foreground">txns</span>
                       </div>
                     </td>

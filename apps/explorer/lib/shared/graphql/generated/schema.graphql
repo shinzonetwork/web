@@ -62,16 +62,6 @@ directive @embedding(
   url: String
 ) on FIELD_DEFINITION
 
-"""
-Marks a field for searchable encryption, allowing queries on encrypted data.
-"""
-directive @encryptedIndex(
-  """
-  The type of searchable encryption (currently only 'equality' is supported).
-  """
-  type: String = "equality"
-) on FIELD_DEFINITION
-
 """@explain is a directive that can be used to explain the query."""
 directive @explain(type: ExplainType) on MUTATION | QUERY
 
@@ -1017,12 +1007,6 @@ input Block__uncles__CountSelector {
   offset: Int
 }
 
-input BooleanEncryptedFilterArg {
-  _and: [BooleanEncryptedFilterArg!]
-  _eq: Boolean
-  _or: [BooleanEncryptedFilterArg!]
-}
-
 input BooleanFilterArg {
   _and: [BooleanFilterArg!]
   _eq: Boolean
@@ -1285,14 +1269,6 @@ input DateTimeOperatorBlock {
 }
 
 """
-Result type for encrypted search queries containing matching document IDs
-"""
-type EncryptedSearchResult {
-  """Array of document IDs matching the encrypted search criteria"""
-  docIDs: [String!]!
-}
-
-"""
 ExplainType is an enum selecting the type of explanation done by the @explain directive.
 """
 enum ExplainType {
@@ -1308,12 +1284,6 @@ enum ExplainType {
 The `Float32` scalar type represents signed single-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 """
 scalar Float32
-
-input Float32EncryptedFilterArg {
-  _and: [Float32EncryptedFilterArg!]
-  _eq: Float32
-  _or: [Float32EncryptedFilterArg!]
-}
 
 input Float32FilterArg {
   _and: [Float32FilterArg!]
@@ -1417,12 +1387,6 @@ input Float32OperatorBlock {
 The `Float64` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 """
 scalar Float64
-
-input Float64EncryptedFilterArg {
-  _and: [Float64EncryptedFilterArg!]
-  _eq: Float64
-  _or: [Float64EncryptedFilterArg!]
-}
 
 input Float64FilterArg {
   _and: [Float64FilterArg!]
@@ -1560,12 +1524,6 @@ input IDOperatorBlock {
 input IndexField {
   direction: Ordering
   field: String
-}
-
-input IntEncryptedFilterArg {
-  _and: [IntEncryptedFilterArg!]
-  _eq: Int
-  _or: [IntEncryptedFilterArg!]
 }
 
 input IntFilterArg {
@@ -2536,12 +2494,6 @@ input NotNullBlobOperatorBlock {
   _nlike: String
 }
 
-input NotNullBooleanEncryptedFilterArg {
-  _and: [NotNullBooleanEncryptedFilterArg!]
-  _eq: Boolean
-  _or: [NotNullBooleanEncryptedFilterArg!]
-}
-
 input NotNullBooleanFilterArg {
   _and: [NotNullBooleanFilterArg!]
   _eq: Boolean
@@ -2607,12 +2559,6 @@ input NotNullBooleanOperatorBlock {
   
   """
   _nin: [Boolean!]
-}
-
-input NotNullFloat32EncryptedFilterArg {
-  _and: [NotNullFloat32EncryptedFilterArg!]
-  _eq: Float32
-  _or: [NotNullFloat32EncryptedFilterArg!]
 }
 
 input NotNullFloat32FilterArg {
@@ -2713,12 +2659,6 @@ input NotNullFloat32OperatorBlock {
   _nin: [Float32!]
 }
 
-input NotNullFloat64EncryptedFilterArg {
-  _and: [NotNullFloat64EncryptedFilterArg!]
-  _eq: Float64
-  _or: [NotNullFloat64EncryptedFilterArg!]
-}
-
 input NotNullFloat64FilterArg {
   _and: [NotNullFloat64FilterArg!]
   _eq: Float64
@@ -2817,12 +2757,6 @@ input NotNullFloat64OperatorBlock {
   _nin: [Float64!]
 }
 
-input NotNullIntEncryptedFilterArg {
-  _and: [NotNullIntEncryptedFilterArg!]
-  _eq: Int
-  _or: [NotNullIntEncryptedFilterArg!]
-}
-
 input NotNullIntFilterArg {
   _and: [NotNullIntFilterArg!]
   _eq: Int
@@ -2919,12 +2853,6 @@ input NotNullIntOperatorBlock {
   
   """
   _nin: [Int!]
-}
-
-input NotNullStringEncryptedFilterArg {
-  _and: [NotNullStringEncryptedFilterArg!]
-  _eq: String
-  _or: [NotNullStringEncryptedFilterArg!]
 }
 
 input NotNullStringFilterArg {
@@ -3314,6 +3242,7 @@ type Query {
     """
     showDeleted: Boolean
   ): [Transaction]
+  _: Boolean
   """
   
   Returns the average of the specified field values within the specified child sets. If
@@ -3324,11 +3253,42 @@ type Query {
   _avg(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
   """
   
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(AccessListEntry: AccessListEntry__CountSelector, Block: Block__CountSelector, Log: Log__CountSelector, Transaction: Transaction__CountSelector): Int
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
   Returns a set of commits matching any provided criteria. If no arguments are
    provided all commits in the system will be returned.
   
   """
-  _commits(
+  commits(
     """
     
     An optional value that specifies the commit ID of the commits to return. If a
@@ -3395,20 +3355,13 @@ type Query {
   ): [Commit]
   """
   
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(AccessListEntry: AccessListEntry__CountSelector, Block: Block__CountSelector, Log: Log__CountSelector, Transaction: Transaction__CountSelector): Int
-  """
-  
   Returns a set of head commits matching any provided criteria. If no arguments are
    provided all head commits in the system will be returned. If no 'field' argument
    is provided only composite commits will be returned. This is equivalent to
-   a '_commits' query with Depth: 1, and a differing 'field' default value.
+   a 'commits' query with Depth: 1, and a differing 'field' default value.
   
   """
-  _latestCommits(
+  latestCommits(
     """
     
     An optional docID parameter for this commit query. Only commits for a document
@@ -3426,30 +3379,6 @@ type Query {
     """
     fieldName: String
   ): [Commit]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
 }
 
 """
@@ -3471,12 +3400,6 @@ type Signature {
   The value of the signature, which is used to verify the integrity of the commit and the data it contains.
   """
   value: String
-}
-
-input StringEncryptedFilterArg {
-  _and: [StringEncryptedFilterArg!]
-  _eq: String
-  _or: [StringEncryptedFilterArg!]
 }
 
 input StringFilterArg {
@@ -3851,77 +3774,7 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Transaction]
-  """
-  
-  Returns a set of commits matching any provided criteria. If no arguments are
-   provided all commits in the system will be returned.
-  
-  """
-  _commits(
-    """
-    
-    An optional value that specifies the commit ID of the commits to return. If a
-     matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: ID
-    """
-    
-    An optional value that specifies the maximum depth to which the commit DAG graph
-     should be traversed from matching commits.
-    
-    """
-    depth: Int
-    """
-    
-    An optional docID parameter for this commit query. Only commits for a document
-     with a matching docID will be returned.  If no documents match, the result
-     set will be empty.
-    
-    """
-    docID: ID
-    """
-    
-    An optional field name parameter for this commit query. Only commits for a fields
-     matching this name will be returned. Specifying '_C' will limit the results to
-     composite (document level) commits only. If no fields match, the result set will be empty.
-    
-    """
-    fieldName: String
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [commitFields!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [commitsOrderArg]
-  ): [Commit]
+  _: Boolean
 }
 
 type Transaction {
@@ -4513,7 +4366,7 @@ enum commitCountFieldArg {
 
 """
 
-These are the set of fields supported for grouping by in a _commits query.
+These are the set of fields supported for grouping by in a commits query.
 
 """
 enum commitFields {

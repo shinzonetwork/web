@@ -15,16 +15,16 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Blocks {\n    Block {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": typeof types.BlocksDocument,
+    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": typeof types.BlocksDocument,
 };
 const documents: Documents = {
-    "\n  query Blocks {\n    Block {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": types.BlocksDocument,
+    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": types.BlocksDocument,
 };
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Blocks {\n    Block {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n"): typeof import('./graphql').BlocksDocument;
+export function graphql(source: "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n"): typeof import('./graphql').BlocksDocument;
 
 
 export function graphql(source: string) {
