@@ -3512,7 +3512,7 @@ export type TransactionQueryVariables = Exact<{
 }>;
 
 
-export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null } | null> | null };
+export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, block?: { __typename?: 'Block', timestamp?: string | null } | null } | null> | null };
 
 export type TransactionsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3618,6 +3618,9 @@ export const TransactionDocument = new TypedDocumentString(`
     s
     status
     cumulativeGasUsed
+    block {
+      timestamp
+    }
   }
 }
     `) as unknown as TypedDocumentString<TransactionQuery, TransactionQueryVariables>;

@@ -1,79 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { ReactNode } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { Cable as Cube, ChevronLeft, ChevronRight, Copy } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Cable as Cube, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardRow, CardTitle } from '@/shared/ui/card';
 import { useBlock } from '@/entities/block';
 import { Button } from '@/shared/ui/button';
 
 export interface BlockCardProps {
   height: number;
 }
-
-const CopyButton = ({ text }: { text: string }) => {
-  const copy = () => {
-    navigator.clipboard.writeText(text);
-  };
-
-  return (
-    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={copy}>
-      <Copy className="h-3 w-3"/>
-    </Button>
-  );
-};
-
-interface CardRowNullableProps {
-  title: string;
-  value?: string | number | null;
-  copyable?: boolean;
-  link?: string;
-  loading?: boolean;
-  children?: ReactNode;
-}
-
-const CardRowNullable = ({
-  title,
-  value,
-  copyable = false,
-  link,
-  loading = false,
-  children
-}: CardRowNullableProps) => {
-  if (loading) {
-    return (
-      <div className="flex justify-between border-b border-light pb-4">
-        <div className="h-5 w-32">
-          <Skeleton />
-        </div>
-        <div className="h-5 w-48">
-          <Skeleton />
-        </div>
-      </div>
-    );
-  }
-
-  const isValueNull = typeof value === 'undefined' || value == null;
-  const displayValue = isValueNull ? '—' : children || value;
-
-  return (
-    <div className="flex justify-between border-b border-light pb-4">
-      <span className="text-sm text-muted-foreground">{title}</span>
-      <div className="flex items-center gap-2">
-        {link && !isValueNull ? (
-          <Link href={link} className="font-mono text-sm text-foreground hover:underline">
-            {displayValue}
-          </Link>
-        ) : (
-          <span className="text-sm text-foreground">{displayValue}</span>
-        )}
-        {copyable && !isValueNull && typeof value === 'string' && <CopyButton text={value} />}
-      </div>
-    </div>
-  );
-};
 
 export const BlockCard = ({ height }: BlockCardProps) => {
   const { data: block, isLoading } = useBlock({ number: height });
@@ -130,15 +66,15 @@ export const BlockCard = ({ height }: BlockCardProps) => {
                 </div>
               </div>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Timestamp"
                 value={block.timestamp}
               >
                 {block.timestamp && new Date(Number(block.timestamp) * 1000).toLocaleString()}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Miner"
                 value={block.miner}
@@ -146,17 +82,17 @@ export const BlockCard = ({ height }: BlockCardProps) => {
                 link={block.miner ? `/address/${block.miner}` : undefined}
               >
                 {block.miner && formatHash(block.miner)}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Size"
                 value={block.size}
               >
                 {block.size && `${(Number(block.size) / 1024).toFixed(2)} KB`}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Gas Used"
                 value={block.gasUsed}
@@ -167,54 +103,54 @@ export const BlockCard = ({ height }: BlockCardProps) => {
                     {((Number(block.gasUsed) / Number(block.gasLimit)) * 100).toFixed(2)}%)
                   </>
                 )}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Gas Limit"
                 value={block.gasLimit}
               >
                 {block.gasLimit && `${(Number(block.gasLimit) / 1e6).toFixed(2)}M`}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Base Fee Per Gas"
                 value={block.baseFeePerGas}
               >
                 {block.baseFeePerGas} Gwei
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Nonce"
                 value={block.nonce}
               />
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Difficulty"
                 value={block.difficulty}
               />
 
               {block.totalDifficulty && (
-                <CardRowNullable
+                <CardRow
                   loading={isLoading}
                   title="Total Difficulty"
                   value={block.totalDifficulty}
                 />
               )}
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Hash"
                 value={block.hash}
                 copyable
               >
                 {block.hash && formatHash(block.hash, 16, 12)}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="Parent Hash"
                 value={block.parentHash}
@@ -222,16 +158,16 @@ export const BlockCard = ({ height }: BlockCardProps) => {
                 link={block.number ? `/blocks/${block.number - 1}` : undefined}
               >
                 {block.parentHash && formatHash(block.parentHash, 16, 12)}
-              </CardRowNullable>
+              </CardRow>
 
-              <CardRowNullable
+              <CardRow
                 loading={isLoading}
                 title="State Root"
                 value={block.stateRoot}
                 copyable
               >
                 {block.stateRoot && formatHash(block.stateRoot, 16, 12)}
-              </CardRowNullable>
+              </CardRow>
             </div>
           </CardContent>
         </Card>

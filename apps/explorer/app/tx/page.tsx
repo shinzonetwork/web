@@ -13,7 +13,6 @@ import { formatHash } from '@/shared/utils/format-hash';
 export default function TransactionsPage() {
   const searchParams = useSearchParams();
   const blockFilter = Number(searchParams.get('block'));
-  console.log(blockFilter);
 
   const { page, offset, limit } = usePage();
   const { data: transactions, isLoading } = useTransactions({ limit, offset, blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter });
