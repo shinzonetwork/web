@@ -23,7 +23,7 @@ import {
   MESSAGE_TO_SIGN,
   SHINZO_PRECOMPILE_ADDRESS,
 } from "@/lib/constants";
-import { convertToHexIfNeeded } from "@/lib/utils";
+import { convertToHexIfNeeded, sanitizeString } from "@/lib/utils";
 
 type FormData = {
   defraPublicKey: string;
@@ -92,32 +92,52 @@ export default function Configuration() {
   });
 
   const handleInputChange = (field: string, value: string | number) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    const sanitizedValue =
+      typeof value === "string" ? sanitizeString(value) : value;
+    setFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
   };
 
   const handleUserRoleChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, entity: parseInt(value) }));
-    setUserRole(formData.entity === EntityRole.Indexer ? "indexer" : "host");
+    const newEntity = parseInt(value) as EntityRole;
+    setFormData((prev) => ({ ...prev, entity: newEntity }));
+    setUserRole(newEntity === EntityRole.Indexer ? "indexer" : "host");
   };
 
   // Handle successful transaction confirmation
   useEffect(() => {
     if (isConfirmed && txHash) {
-      console.log("Transaction confirmed:", txHash);
       isRegistered(true);
     }
   }, [isConfirmed, txHash, isRegistered]);
 
   const sendRegisterTransaction = async () => {
+    // Validate inputs before sending transaction
+    if (!formData.peerId.trim()) {
+      alert("Peer ID is required");
+      return;
+    }
+    if (!formData.peerSignedMessage.trim()) {
+      alert("Peer signature is required");
+      return;
+    }
+    if (!formData.defraPublicKey.trim()) {
+      alert("Defra Public Key is required");
+      return;
+    }
+    if (!formData.defraSignedMessage.trim()) {
+      alert("Defra signature is required");
+      return;
+    }
+
     try {
       const data = encodeFunctionData({
         abi: REGISTER_TRANSACTION_ABI,
         functionName: "register",
         args: [
-          convertToHexIfNeeded(formData.peerId),
-          convertToHexIfNeeded(formData.peerSignedMessage),
-          convertToHexIfNeeded(formData.defraPublicKey),
-          convertToHexIfNeeded(formData.defraSignedMessage),
+          convertToHexIfNeeded(formData.peerId.trim()),
+          convertToHexIfNeeded(formData.peerSignedMessage.trim()),
+          convertToHexIfNeeded(formData.defraPublicKey.trim()),
+          convertToHexIfNeeded(formData.defraSignedMessage.trim()),
           stringToHex(MESSAGE_TO_SIGN),
           formData.entity,
         ],
@@ -128,21 +148,20 @@ export default function Configuration() {
         data,
       });
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Transaction failed:", error.message);
-      } else {
-        console.error("Transaction failed:", error);
-      }
-      console.error("Transaction failed:", sendError);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unknown error occurred";
+      // Show user-friendly error message
+      alert(`Transaction failed: ${errorMessage}`);
     }
   };
 
-  const isRegistrationDisabled: boolean = Boolean(
-    !formData.defraPublicKey.trim() &&
-      !formData.defraSignedMessage.trim() &&
-      !formData.peerId.trim() &&
-      !formData.peerSignedMessage.trim(),
-  );
+  const isRegistrationDisabled: boolean =
+    !formData.defraPublicKey.trim() ||
+    !formData.defraSignedMessage.trim() ||
+    !formData.peerId.trim() ||
+    !formData.peerSignedMessage.trim();
 
   return (
     <>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
+import { isValidAddress } from "@/lib/utils";
 
 export default function WalletProfile({
   wallets,
@@ -69,7 +70,17 @@ export default function WalletProfile({
                 onChange={(e) =>
                   handleWalletChange(wallet.id, "address", e.target.value)
                 }
+                className={
+                  wallet.address && !isValidAddress(wallet.address)
+                    ? "border-destructive"
+                    : ""
+                }
               />
+              {wallet.address && !isValidAddress(wallet.address) && (
+                <p className="text-sm text-destructive">
+                  Invalid wallet address format
+                </p>
+              )}
             </div>
             {index !== 0 ? (
               <Button

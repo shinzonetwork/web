@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
+import { isValidUrl } from "@/lib/utils";
 
 export default function SocialProfile({
   socials,
@@ -69,7 +70,17 @@ export default function SocialProfile({
                 onChange={(e) =>
                   handleSocialChange(social.id, "link", e.target.value)
                 }
+                className={
+                  social.link && !isValidUrl(social.link)
+                    ? "border-destructive"
+                    : ""
+                }
               />
+              {social.link && !isValidUrl(social.link) && (
+                <p className="text-sm text-destructive">
+                  Invalid URL format
+                </p>
+              )}
             </div>
             {socials.length > 1 && (
               <Button

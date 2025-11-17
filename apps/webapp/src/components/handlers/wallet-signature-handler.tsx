@@ -19,13 +19,8 @@ export default function WalletSignatureHandler() {
       try {
         if (isSuccess) {
           if (!walletClientData?.account.address) {
-            console.error("No wallet connected.");
             return;
           }
-          console.log(
-            "Signing message with wallet address:",
-            walletClientData.account.address,
-          );
           const signedMessage = await signMessageAsync({
             account: walletClientData.account.address,
             message: MESSAGE_TO_SIGN,
@@ -33,7 +28,9 @@ export default function WalletSignatureHandler() {
           setSignature(signedMessage);
         }
       } catch (err: unknown) {
-        console.error("Error signing message:", err);
+        if (process.env.NODE_ENV === "development") {
+          console.error("Error signing message:", err);
+        }
       }
     };
     signMessage();

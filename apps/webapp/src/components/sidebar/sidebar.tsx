@@ -40,9 +40,7 @@ export default function Sidebar({
                 width={123}
                 height={23}
                 priority
-                unoptimized
                 className="h-auto w-auto"
-                style={{ display: "block" }}
               />
             )}
             <Button

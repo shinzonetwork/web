@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import useShinzoStore from "@/store/store";
 import SocialProfile from "@/components/registration/social-profile/social-profile";
 import WalletProfile from "@/components/registration/wallet-profile/wallet-profile";
+import { isValidEmail } from "@/lib/utils";
 
 export type Social = {
   id: string;
@@ -59,24 +60,25 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      console.log("[v0] Saving profile data:", {
-        ...formData,
-        socials,
-        wallets,
-      });
 
       // TODO: Send data to backend API
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
       isProfileCompleted(true);
     } catch (error) {
-      console.error("[v0] Error saving profile:", error);
-      alert("Failed to save profile. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unknown error occurred";
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error saving profile:", error);
+      }
+      alert(`Failed to save profile: ${errorMessage}. Please try again.`);
     } finally {
       setIsSaving(false);
     }
   };
 
-  const isFormValid = formData.email.trim() !== "";
+  const isFormValid = isValidEmail(formData.email);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
