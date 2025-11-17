@@ -3,15 +3,17 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 type StoreState = {
-  registered: boolean;
-  userRole: Role;
   profileCompleted: boolean;
+  registered: boolean;
+  signedWithWallet: boolean;
+  userRole: Role;
 }
 
 type StoreAction = {
-    isRegistered: (registered: boolean) => void;
-    setUserRole: (role: Role) => void;
     isProfileCompleted: (profileCompleted: boolean) => void;
+    isRegistered: (registered: boolean) => void;
+    isSignedWithWallet: (signedWithWallet: boolean) => void;
+    setUserRole: (role: Role) => void;
 }
 
 type Store = StoreState & StoreAction;
@@ -19,12 +21,14 @@ type Store = StoreState & StoreAction;
 const useShinzoStore = create<Store>()(
   persist(
     (set) => ({
+      profileCompleted: false,
       registered: false,
       userRole: null,
-      profileCompleted: false,
-      isRegistered: (registered) => set({ registered }),
-      setUserRole: (userRole) => set({ userRole }),
+      signedWithWallet: false,
       isProfileCompleted: (profileCompleted) => set({ profileCompleted }),
+      isRegistered: (registered) => set({ registered }),
+      isSignedWithWallet: (signedWithWallet) => set({ signedWithWallet }),
+      setUserRole: (userRole) => set({ userRole }),
     }),
     {
       name: 'shinzo-store', // key in localStorage

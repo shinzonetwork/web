@@ -1,21 +1,28 @@
-'use client'
+"use client";
 
-import { useAccount, useVerifyMessage } from 'wagmi'
-import { useRegistrationContext } from '@/hooks/useRegistrationContext'
-import { useEffect } from 'react';
-import useShinzoStore from '@/store/store';
+import { useAccount, useVerifyMessage } from "wagmi";
+import { useEffect } from "react";
+import useShinzoStore from "@/store/store";
+import { MESSAGE_TO_SIGN } from "@/lib/constants";
+import { Hex } from "viem";
 
-export function SignatureVerificationHandler() {
-  const { address }  = useAccount();
-  const { signature, defraPublicKey} = useRegistrationContext();
-  const { isRegistered } = useShinzoStore();
+export function SignatureVerificationHandler({
+  signature,
+}: {
+  signature: Hex;
+}) {
+  const { address } = useAccount();
+  const { isSignedWithWallet } = useShinzoStore();
 
-  const { data } = useVerifyMessage({address, message: defraPublicKey, signature: signature})
-  
+  const { data } = useVerifyMessage({
+    address,
+    message: MESSAGE_TO_SIGN,
+    signature: signature,
+  });
+
   useEffect(() => {
-    isRegistered(Boolean(data))
-  }, [data])
+    isSignedWithWallet(Boolean(data));
+  }, [data]);
 
   return null;
 }
-

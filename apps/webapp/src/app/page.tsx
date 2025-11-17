@@ -1,34 +1,40 @@
-'use client'
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import useShinzoStore from "@/store/store";
-
+import WalletSignatureHandler from "@/components/handlers/wallet-signature-handler";
 
 export default function LandingPage() {
   const { isConnected } = useAccount();
-  const { registered, profileCompleted } = useShinzoStore();
+  const { profileCompleted, registered, signedWithWallet } = useShinzoStore();
   const router = useRouter();
 
   useEffect(() => {
-    if(isConnected){
-      if(!registered && !profileCompleted){
-        router.replace('/registration/configuration');
-      } else if(registered && !profileCompleted){
-        router.replace('/registration/profile');
-      } else if(registered && profileCompleted){
-        router.replace('/dashboard');
+    if (isConnected && signedWithWallet) {
+      if (!registered && !profileCompleted) {
+        router.replace("/registration/configuration");
+      } else if (registered && !profileCompleted) {
+        router.replace("/registration/profile");
+      } else if (registered && profileCompleted) {
+        router.replace("/dashboard");
       }
     } else {
-      router.replace('/');
+      router.replace("/");
     }
-  },[isConnected, registered, profileCompleted, router])
+  }, [isConnected, registered, profileCompleted, router, signedWithWallet]);
 
   return (
-    <div>
-      <p>The Shinzo webapp allows a user to interact with different parts of the Shinzo ecosystem.</p>
-    </div>
+    <>
+      {(isConnected && !signedWithWallet) && <WalletSignatureHandler />}
+      <div>
+        <p>
+          The Shinzo webapp allows a user to interact with different parts of
+          the Shinzo ecosystem.
+        </p>
+      </div>
+    </>
   );
 }
