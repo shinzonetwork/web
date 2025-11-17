@@ -149,9 +149,7 @@ export default function Configuration() {
       });
     } catch (error: unknown) {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred";
+        error instanceof Error ? error.message : "An unknown error occurred";
       // Show user-friendly error message
       alert(`Transaction failed: ${errorMessage}`);
     }

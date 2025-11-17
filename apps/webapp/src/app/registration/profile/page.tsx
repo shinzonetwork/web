@@ -60,15 +60,12 @@ export default function ProfilePage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-
       // TODO: Send data to backend API
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
       isProfileCompleted(true);
     } catch (error) {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred";
+        error instanceof Error ? error.message : "An unknown error occurred";
       if (process.env.NODE_ENV === "development") {
         console.error("Error saving profile:", error);
       }

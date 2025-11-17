@@ -77,9 +77,7 @@ export default function SocialProfile({
                 }
               />
               {social.link && !isValidUrl(social.link) && (
-                <p className="text-sm text-destructive">
-                  Invalid URL format
-                </p>
+                <p className="text-sm text-destructive">Invalid URL format</p>
               )}
             </div>
             {socials.length > 1 && (

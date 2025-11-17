@@ -43,7 +43,8 @@ export function isValidUrl(url: string): boolean {
   if (!url || typeof url !== "string") return false;
   try {
     // Allow relative URLs and full URLs
-    if (url.startsWith("/") || url.startsWith("#") || url.startsWith("@")) return true;
+    if (url.startsWith("/") || url.startsWith("#") || url.startsWith("@"))
+      return true;
     new URL(url);
     return true;
   } catch {
@@ -52,7 +53,11 @@ export function isValidUrl(url: string): boolean {
 }
 
 // Validate hex string with length constraints
-export function isValidHex(value: string, minLength = 0, maxLength = Infinity): boolean {
+export function isValidHex(
+  value: string,
+  minLength = 0,
+  maxLength = Infinity,
+): boolean {
   if (!value || typeof value !== "string") return false;
   if (!isHex(value)) return false;
   const hexLength = value.length - 2; // Subtract 0x prefix

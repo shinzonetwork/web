@@ -11,9 +11,7 @@ const shinzo = {
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {
     default: {
-      http: [
-        process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545",
-      ],
+      http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"],
     },
   },
 } as const satisfies Chain;
