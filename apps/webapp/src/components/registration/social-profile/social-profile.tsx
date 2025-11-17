@@ -49,7 +49,7 @@ export default function SocialProfile({
         </Button>
       </div>
       <div className="space-y-3">
-        {socials.map((social, index) => (
+        {socials.map((social) => (
           <div key={social.id} className="flex gap-2 items-start">
             <div className="flex-1 space-y-2">
               <Input

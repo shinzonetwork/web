@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
@@ -24,6 +24,14 @@ import {
   SHINZO_PRECOMPILE_ADDRESS,
 } from "@/lib/constants";
 import { convertToHexIfNeeded } from "@/lib/utils";
+
+type FormData = {
+  defraPublicKey: string;
+  defraSignedMessage: string;
+  peerId: string;
+  peerSignedMessage: string;
+  entity: EntityRole;
+};
 
 const formInputs = [
   {
@@ -75,7 +83,7 @@ export default function Configuration() {
     });
   const { setUserRole, isRegistered } = useShinzoStore();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     defraPublicKey: "",
     defraSignedMessage: "",
     peerId: "",
@@ -119,9 +127,13 @@ export default function Configuration() {
         to: SHINZO_PRECOMPILE_ADDRESS,
         data,
       });
-    } catch (err: unknown) {
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Transaction failed:", error.message);
+      } else {
+        console.error("Transaction failed:", error);
+      }
       console.error("Transaction failed:", sendError);
-      alert("Failed to send transaction. Please try again.");
     }
   };
 
@@ -172,7 +184,7 @@ export default function Configuration() {
                   <Textarea
                     id={input.id}
                     placeholder={`Enter ${input.label.toLowerCase()}...`}
-                    value={(formData as any)[input.id]}
+                    value={formData[input.id as keyof FormData] as string}
                     onChange={(e) =>
                       handleInputChange(input.id, e.target.value)
                     }
@@ -182,7 +194,7 @@ export default function Configuration() {
                   <Input
                     id={input.id}
                     type="text"
-                    value={(formData as any)[input.id]}
+                    value={formData[input.id as keyof FormData] as string}
                     onChange={(e) =>
                       handleInputChange(input.id, e.target.value)
                     }
@@ -207,11 +219,6 @@ export default function Configuration() {
             {sendError && (
               <div className="text-sm text-destructive mt-2">
                 Error: {sendError.message}
-              </div>
-            )}
-            {isConfirmed && (
-              <div className="text-sm text-green-600 mt-2">
-                Transaction confirmed! Registration successful.
               </div>
             )}
           </CardContent>

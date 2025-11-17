@@ -22,7 +22,7 @@ export function SignatureVerificationHandler({
 
   useEffect(() => {
     isSignedWithWallet(Boolean(data));
-  }, [data]);
+  }, [data, isSignedWithWallet]);
 
   return null;
 }

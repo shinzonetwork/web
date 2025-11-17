@@ -28,7 +28,7 @@ export default function LandingPage() {
 
   return (
     <>
-      {(isConnected && !signedWithWallet) && <WalletSignatureHandler />}
+      {isConnected && !signedWithWallet && <WalletSignatureHandler />}
       <div>
         <p>
           The Shinzo webapp allows a user to interact with different parts of

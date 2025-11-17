@@ -1,21 +1,24 @@
-'use client'
-import type React from "react"
-import { useState } from "react"
-import Sidebar from "@/components/sidebar/sidebar"
+"use client";
+import type React from "react";
+import { useState } from "react";
+import Sidebar from "@/components/sidebar/sidebar";
 
-export default function layout({
+export default function HomeLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <div className="min-h-screen">
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        <main className={`${isCollapsed ? "lg:pl-20" : "lg:pl-70"}`} style={{ transition: "padding 300ms" }}>
-            {children}
-        </main>
+      <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+      <main
+        className={`${isCollapsed ? "lg:pl-20" : "lg:pl-70"}`}
+        style={{ transition: "padding 300ms" }}
+      >
+        {children}
+      </main>
     </div>
-  )
+  );
 }

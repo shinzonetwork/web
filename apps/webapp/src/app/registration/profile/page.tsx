@@ -50,7 +50,7 @@ export default function ProfilePage() {
     if (registered && profileCompleted) {
       router.replace("/dashboard");
     }
-  }, [profileCompleted]);
+  }, [profileCompleted, registered, router]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

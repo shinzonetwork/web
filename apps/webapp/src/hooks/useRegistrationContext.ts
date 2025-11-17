@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { RegistrationContext } from '@/context/registrationContext/registrationContext';
-import { useContext } from 'react';
-
+import { RegistrationContext } from "@/context/registrationContext/registrationContext";
+import { useContext } from "react";
 
 export const useRegistrationContext = () => {
-    return useContext(RegistrationContext);
+  return useContext(RegistrationContext);
 };

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,34 +9,38 @@ import Configuration from "@/components/registration/configuration/configuration
 import ConfigurationSkeleton from "@/components/skeletons/configuration-skeleton";
 
 export default function ConfigurationPage() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [showContent, setShowContent] = useState(false);
 
   const { registered } = useShinzoStore();
   const { isConnected, isConnecting } = useAccount();
   const router = useRouter();
 
+  // Derive loading state from connection status
+  const shouldShowLoading = isConnecting || !isConnected;
+
   useEffect(() => {
     if (registered) {
-      router.replace('/registration/profile');
+      router.replace("/registration/profile");
     }
   }, [registered, router]);
 
   useEffect(() => {
-    // Show skeleton while connecting or checking connection
-    if (isConnecting || !isConnected) {
-      setIsLoading(true);
-    } else {
-      // Small delay to ensure everything is ready
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-      return () => clearTimeout(timer);
+    if (shouldShowLoading) {
+      return;
     }
-  }, [isConnected, isConnecting]);
+    // Small delay to ensure everything is ready
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 300);
+    return () => {
+      clearTimeout(timer);
+      setShowContent(false);
+    };
+  }, [shouldShowLoading]);
 
-  if (isLoading) {
+  if (shouldShowLoading || !showContent) {
     return <ConfigurationSkeleton />;
   }
 
-    return <Configuration />;
+  return <Configuration />;
 }
