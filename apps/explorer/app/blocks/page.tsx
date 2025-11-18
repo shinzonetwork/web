@@ -6,7 +6,7 @@ import { Card, CardContent, CardTitle } from "@/shared/ui/card"
 import { usePage, Pagination, DEFAULT_LIMIT } from "@/shared/ui/pagination"
 import { formatHash } from '@/shared/utils/format-hash';
 import { useBlocks } from '@/entities/block';
-import { Header } from "@/widgets/header"
+import { PageLayout } from '@/widgets/layout'
 import {
   Table,
   TableHeader,
@@ -30,10 +30,8 @@ export default function BlocksPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      <Header />
-
-      <main className="container mx-auto py-12">
+    <PageLayout title='Blocks'>
+      <section className="container mx-auto py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-foreground">Blocks</h1>
           <p className="text-muted-foreground">Latest blocks on the blockchain</p>
@@ -114,7 +112,7 @@ export default function BlocksPage() {
             </Table>
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </section>
+    </PageLayout>
   )
 }

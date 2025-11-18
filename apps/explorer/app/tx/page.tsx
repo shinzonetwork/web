@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from "@/widgets/header"
+import { PageLayout } from '@/widgets/layout'
 import { Card, CardContent, CardTitle } from "@/shared/ui/card"
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
@@ -28,10 +28,8 @@ export default function TransactionsPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <Header />
-
-      <main className="container mx-auto py-12">
+    <PageLayout title='Transactions'>
+      <section className="container mx-auto py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-foreground">
             {blockFilter ? `Transactions in Block #${blockFilter}` : "Transactions"}
@@ -120,7 +118,7 @@ export default function TransactionsPage() {
             </Table>
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </section>
+    </PageLayout>
   )
 }

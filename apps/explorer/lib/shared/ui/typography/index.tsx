@@ -1,17 +1,14 @@
-import * as React from "react";
+import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/shared/utils/utils"
-import { ElementType } from 'react';
 
 const typographyVariants = cva('',
   {
     variants: {
       variant: {
-        h1: 'text-3xl',
-        h2: 'text-2xl',
+        h2: 'text-h2',
+        md: 'text-md',
         base: 'text-base',
-        sm: 'text-sm',
-        xs: 'text-xs',
       },
       weight: {
         regular: 'font-normal',
@@ -23,10 +20,16 @@ const typographyVariants = cva('',
         sans: 'font-sans',
         mono: 'font-mono',
       },
+      color: {
+        primary: 'text-text-primary',
+        secondary: 'text-text-secondary',
+        accent: 'text-text-accent',
+        inverted: 'text-text-inverted',
+      },
     },
     defaultVariants: {
       variant: 'base',
-      weight: 'regular',
+      weight: 'medium',
       font: 'sans',
     },
   }
@@ -35,16 +38,14 @@ const typographyVariants = cva('',
 export type TypographyVariant = NonNullable<VariantProps<typeof typographyVariants>['variant']>;
 
 const tagMapping: Record<TypographyVariant, ElementType> = {
-  h1: 'h1',
   h2: 'h2',
+  md: 'p',
   base: 'p',
-  sm: 'p',
-  xs: 'span',
 };
 
-export interface TypographyProps extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof typographyVariants> {
+export interface TypographyProps extends Omit<HTMLAttributes<HTMLElement>, 'color'>, VariantProps<typeof typographyVariants> {
   as?: ElementType;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export const Typography = ({
@@ -52,6 +53,7 @@ export const Typography = ({
   variant,
   weight,
   font,
+  color,
   as,
   children,
   ...props
@@ -60,7 +62,7 @@ export const Typography = ({
 
   return (
     <Component
-      className={cn(typographyVariants({ variant, weight, font }), className)}
+      className={cn(typographyVariants({ variant, weight, font, color }), className)}
       {...props}
     >
       {children}

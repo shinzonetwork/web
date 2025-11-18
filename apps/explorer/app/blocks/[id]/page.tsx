@@ -1,4 +1,4 @@
-import { Header } from "@/widgets/header"
+import { PageLayout } from '@/widgets/layout'
 import { BlockCard } from '@/entities/block';
 
 export default async function BlockDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -6,9 +6,8 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
   const blockNumber = Number(id)
 
   return (
-    <div className="min-h-screen">
-      <Header />
+    <PageLayout title='Block Detail'>
       <BlockCard height={blockNumber} />
-    </div>
-  )
+    </PageLayout>
+  );
 }

@@ -1,14 +1,12 @@
-import { Header } from "@/widgets/header"
+import { PageLayout } from '@/widgets/layout'
 import { TransactionCard } from '@/entities/tx';
 
 export default async function TransactionDetailPage({ params }: { params: Promise<{ hash: string }> }) {
   const { hash } = await params;
 
   return (
-    <div className="min-h-screen">
-      <Header />
-
+    <PageLayout title='Transaction Details'>
       <TransactionCard txHash={hash} />
-    </div>
+    </PageLayout>
   );
 }
