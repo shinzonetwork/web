@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+
+  /* main colors */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-background-secondary: #f5f5f5;
+  --color-accent: #d01f27;
+  --color-light: #e5e5e5;
+
+  /* legacy colors */
+  --color-card: #fafafa;
+  --color-muted-foreground: #666666;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #C7C7C7;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* custom typography */
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 140%;
+
+  --text-md: 1.125rem;
+  --text-md--line-height: 140%;
+
+  --text-base: 1rem;
+  --text-base--line-height: 140%;
+
+  --color-text-primary: #353535;
+  --color-text-secondary: #525252;
+  --color-text-accent: #D01F27;
+  --color-text-inverted: #fff;
+
+  /* custom animations */
+  --color-dark: #0D0D0D;
+  --color-dark-hover: #1e1e1e;
+  --animate-shimmer: shimmer 2s infinite;
+
+  @keyframes shimmer {
+    0% {
+      left: -50%;
+    }
+    100% {
+      left: 150%;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-light;
+  }
+
+  /* Ensure body has pure white background and black text */
+  body {
+    @apply bg-white text-black;
+  }
+
+  html {
+    @apply antialiased;
+  }
+}

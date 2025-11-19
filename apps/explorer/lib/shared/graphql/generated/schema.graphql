@@ -1,0 +1,4431 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+"""
+@branchable is a directive that defines whether the history of this collection is tracked
+ as a single, verifiable entity or not. It will default to false if ommited.
+
+ If multiple @branchable directives are provided, they will aggregated with OR logic (if any are true, the
+ collection history will be tracked).
+
+ The history may be queried like a document history can be queried, for example via 'commits'
+ GQL queries.
+
+ Currently this property is immutable and can only be set on collection creation, however
+ that will change in the future.
+"""
+directive @branchable(if: Boolean) on OBJECT
+
+"""
+
+Set constrains on a field.
+"""
+directive @constraints(
+  """The size constraint for array fields."""
+  size: Int
+) on FIELD_DEFINITION
+
+"""
+
+Allows the explicit definition of a field's CRDT type. By default it is defined as LWWRegister.
+
+"""
+directive @crdt(type: CRDTType) on FIELD_DEFINITION
+
+"""
+@default is a directive that can be used to set a default field value.
+		
+		Setting a default value on a field within a view has no effect.
+"""
+directive @default(blob: Blob, bool: Boolean, dateTime: DateTime, float: Float, float32: Float32, float64: Float64, int: Int, json: JSON, string: String) on FIELD_DEFINITION
+
+"""
+
+Indicate that a [float!] type is used to store embeddings.
+
+"""
+directive @embedding(
+  """The fields to pass to the model."""
+  fields: [String]
+  """The model to use for embedding. (nomic-embed-text, etc.)"""
+  model: String
+  """The provider to use for embedding. (ollama, openAI, etc.)"""
+  provider: String
+  """
+  The template to use with the fields to create the content to feed the model.
+  """
+  template: String
+  """The URL of the provider API."""
+  url: String
+) on FIELD_DEFINITION
+
+"""@explain is a directive that can be used to explain the query."""
+directive @explain(type: ExplainType) on MUTATION | QUERY
+
+"""
+@index is a directive that can be used to create an index on a type or a field.
+"""
+directive @index(
+  """
+  Sets the default index ordering for all fields.
+  				
+  	If a field in the includes list does not specify a direction
+  	the default ordering from this value will be used instead.
+  """
+  direction: Ordering
+  """
+  Sets the fields the index is created on.
+  
+  	When used on a field definition and the field is not in the includes list
+  	it will be implicitly added as the first entry.
+  """
+  includes: [IndexField]
+  """Sets the index name."""
+  name: String
+  """Makes the index unique."""
+  unique: Boolean
+) on FIELD_DEFINITION | OBJECT
+
+"""
+@materialized is a directive that specifies whether a collection is cached or not.
+ It will default to true if ommited.  If multiple @materialized directives are provided, they will aggregated
+ with OR logic (if any are true, the collection will be cached).
+"""
+directive @materialized(if: Boolean) on OBJECT
+
+"""
+@policy is a directive that can be used to link a policy on a collection type.
+"""
+directive @policy(id: String, resource: String) on OBJECT
+
+"""
+
+Indicate the primary side of a one-to-one relationship.
+
+"""
+directive @primary on FIELD_DEFINITION
+
+"""
+
+Allows the explicit definition of relationship attributes instead of using the system generated
+ defaults.
+
+"""
+directive @relation(
+  """
+  
+  Explicitly define the name of the relationship instead of using the system generated defaults.
+  
+  """
+  name: String
+) on FIELD_DEFINITION
+
+type AccessListEntry {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(_group: AccessListEntry__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(_group: AccessListEntry__CountSelector, _version: AccessListEntry___version__CountSelector, storageKeys: AccessListEntry__storageKeys__CountSelector): Int
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: AccessListEntryFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [AccessListEntryField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [AccessListEntryOrderArg]
+  ): [AccessListEntry]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(_group: AccessListEntry__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(_group: AccessListEntry__NumericSelector): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  _similarity: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(_group: AccessListEntry__NumericSelector): Float
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  address: String
+  storageKeys: [String]
+  transaction(
+    """
+    
+    An optional filter for this join, if the related record does
+     not meet the filter criteria the host record will still be returned,
+     but the value of this field will be null.
+    
+    """
+    filter: TransactionFilterArg
+  ): Transaction
+  transaction_id: ID
+}
+
+enum AccessListEntryExplicitField {
+  address
+  storageKeys
+  transaction
+  transaction_id
+}
+
+enum AccessListEntryField {
+  _deleted
+  _docID
+  _group
+  _version
+  address
+  storageKeys
+  transaction
+  transaction_id
+}
+
+input AccessListEntryFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [AccessListEntryFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: AccessListEntryFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [AccessListEntryFilterArg!]
+  address: StringOperatorBlock
+  storageKeys: StringListOperatorBlock
+  transaction: TransactionFilterArg
+  transaction_id: IDOperatorBlock
+}
+
+input AccessListEntryMutationInputArg {
+  address: String
+  storageKeys: [String]
+  transaction: ID
+  transaction_id: ID
+}
+
+enum AccessListEntryNumericFieldsArg {
+  _avg
+  _count
+  _max
+  _min
+  _sum
+}
+
+input AccessListEntryOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  address: Ordering
+  storageKeys: Ordering
+  transaction: TransactionOrderArg
+  transaction_id: Ordering
+}
+
+input AccessListEntry__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: AccessListEntryFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input AccessListEntry__NumericSelector {
+  field: AccessListEntryNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: AccessListEntryFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [AccessListEntryOrderArg]
+}
+
+input AccessListEntry___group__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input AccessListEntry___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input AccessListEntry__storageKeys__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+"""The `Blob` scalar type represents a binary large object."""
+scalar Blob
+
+"""
+
+These are the set of filter operators available for use when filtering on String
+ values.
+
+"""
+input BlobOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Blob
+  """
+  
+  The case insensitive like operator - if the target value contains the given case insensitive sub-string the check
+   will pass. '%' characters may be used as wildcards, for example '_like: "%ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _ilike: String
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Blob]
+  """
+  
+  The like operator - if the target value contains the given sub-string the check will pass. '%'
+   characters may be used as wildcards, for example '_like: "%Ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _like: String
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Blob
+  """
+  
+  The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
+   the check will pass. '%' characters may be used as wildcards, for example '_nlike: "%ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nilike: String
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Blob]
+  """
+  
+  The not-like operator - if the target value does not contain the given sub-string the check will
+   pass. '%' characters may be used as wildcards, for example '_nlike: "%Ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nlike: String
+}
+
+type Block {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(_group: Block__NumericSelector, transactions: Transaction__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(_group: Block__CountSelector, _version: Block___version__CountSelector, transactions: Transaction__CountSelector, uncles: Block__uncles__CountSelector): Int
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: BlockFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [BlockField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [BlockOrderArg]
+  ): [Block]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(_group: Block__NumericSelector, transactions: Transaction__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(_group: Block__NumericSelector, transactions: Transaction__NumericSelector): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  _similarity: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(_group: Block__NumericSelector, transactions: Transaction__NumericSelector): Float
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  baseFeePerGas: String
+  difficulty: String
+  extraData: String
+  gasLimit: String
+  gasUsed: String
+  hash: String
+  logsBloom: String
+  miner: String
+  mixHash: String
+  nonce: String
+  number: Int
+  parentHash: String
+  receiptsRoot: String
+  sha3Uncles: String
+  size: String
+  stateRoot: String
+  timestamp: String
+  totalDifficulty: String
+  transactions(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: TransactionFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [TransactionField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [TransactionOrderArg]
+  ): [Transaction]
+  transactionsRoot: String
+  uncles: [String]
+}
+
+enum BlockExplicitField {
+  baseFeePerGas
+  difficulty
+  extraData
+  gasLimit
+  gasUsed
+  hash
+  logsBloom
+  miner
+  mixHash
+  nonce
+  number
+  parentHash
+  receiptsRoot
+  sha3Uncles
+  size
+  stateRoot
+  timestamp
+  totalDifficulty
+  transactions
+  transactionsRoot
+  uncles
+}
+
+enum BlockField {
+  _deleted
+  _docID
+  _group
+  _version
+  baseFeePerGas
+  difficulty
+  extraData
+  gasLimit
+  gasUsed
+  hash
+  logsBloom
+  miner
+  mixHash
+  nonce
+  number
+  parentHash
+  receiptsRoot
+  sha3Uncles
+  size
+  stateRoot
+  timestamp
+  totalDifficulty
+  transactions
+  transactionsRoot
+  uncles
+}
+
+input BlockFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [BlockFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: BlockFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [BlockFilterArg!]
+  baseFeePerGas: StringOperatorBlock
+  difficulty: StringOperatorBlock
+  extraData: StringOperatorBlock
+  gasLimit: StringOperatorBlock
+  gasUsed: StringOperatorBlock
+  hash: StringOperatorBlock
+  logsBloom: StringOperatorBlock
+  miner: StringOperatorBlock
+  mixHash: StringOperatorBlock
+  nonce: StringOperatorBlock
+  number: IntOperatorBlock
+  parentHash: StringOperatorBlock
+  receiptsRoot: StringOperatorBlock
+  sha3Uncles: StringOperatorBlock
+  size: StringOperatorBlock
+  stateRoot: StringOperatorBlock
+  timestamp: StringOperatorBlock
+  totalDifficulty: StringOperatorBlock
+  transactions: TransactionFilterArg
+  transactionsRoot: StringOperatorBlock
+  uncles: StringListOperatorBlock
+}
+
+input BlockMutationInputArg {
+  baseFeePerGas: String
+  difficulty: String
+  extraData: String
+  gasLimit: String
+  gasUsed: String
+  hash: String
+  logsBloom: String
+  miner: String
+  mixHash: String
+  nonce: String
+  number: Int
+  parentHash: String
+  receiptsRoot: String
+  sha3Uncles: String
+  size: String
+  stateRoot: String
+  timestamp: String
+  totalDifficulty: String
+  transactionsRoot: String
+  uncles: [String]
+}
+
+enum BlockNumericFieldsArg {
+  _avg
+  _count
+  _max
+  _min
+  _sum
+  number
+}
+
+input BlockOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  baseFeePerGas: Ordering
+  difficulty: Ordering
+  extraData: Ordering
+  gasLimit: Ordering
+  gasUsed: Ordering
+  hash: Ordering
+  logsBloom: Ordering
+  miner: Ordering
+  mixHash: Ordering
+  nonce: Ordering
+  number: Ordering
+  parentHash: Ordering
+  receiptsRoot: Ordering
+  sha3Uncles: Ordering
+  size: Ordering
+  stateRoot: Ordering
+  timestamp: Ordering
+  totalDifficulty: Ordering
+  transactionsRoot: Ordering
+  uncles: Ordering
+}
+
+input Block__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: BlockFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Block__NumericSelector {
+  field: BlockNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: BlockFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [BlockOrderArg]
+}
+
+input Block___group__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Block___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Block__transactions__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Block__uncles__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input BooleanFilterArg {
+  _and: [BooleanFilterArg!]
+  _eq: Boolean
+  _in: [Boolean]
+  _ne: Boolean
+  _nin: [Boolean]
+  _or: [BooleanFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Boolean] values.
+"""
+input BooleanListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: BooleanOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: BooleanOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: BooleanOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Boolean
+ values.
+
+"""
+input BooleanOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Boolean
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Boolean]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Boolean
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Boolean]
+}
+
+"""One of the possible CRDT Types."""
+enum CRDTType {
+  """Last Write Wins register"""
+  lww
+  """
+  Positive Counter.
+  	
+  	WARNING: Incrementing an integer and causing it to overflow the int64 max value
+  	will cause the value to roll over to the int64 min value. Incremeting a float and
+  	causing it to overflow the float64 max value will act like a no-op.
+  """
+  pcounter
+  """
+  Positive-Negative Counter.
+  	
+  	WARNING: Incrementing an integer and causing it to overflow the int64 max value
+  	will cause the value to roll over to the int64 min value. Incremeting a float and
+  	causing it to overflow the float64 max value will act like a no-op.
+  """
+  pncounter
+}
+
+"""
+
+Commit represents an individual commit to a MerkleCRDT, every mutation to a
+ document will result in a new commit per modified field, and one composite
+ commit composed of the field level commits and, in the case of an update,
+ the prior composite commit.  If the collection is branchable, there will
+ also be a collection-level commit for each mutation.
+
+"""
+type Commit {
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(field: commitCountFieldArg): Int
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group: [Commit]
+  """
+  
+  The unique CID of this commit, and the primary means through which to safely identify
+   a specific commit.
+  
+  """
+  cid: String
+  """
+  
+  The CBOR encoded representation of the value that is saved as part of this commit.
+  
+  """
+  delta: String
+  """
+  
+  The docID of the document that this commit is for.
+  
+  """
+  docID: String
+  """
+  
+  The name of the field that this commit was committed against. If this is a composite
+   or a collection the value will be null.
+  
+  """
+  fieldName: String
+  """
+  
+  Height represents the location of the commit in the DAG. All commits (collection, composite,
+   and field level) on create will have a height of '1', each subsequent local update
+   will increment this by one for the new commits.
+  
+  """
+  height: Int
+  """
+  
+  Child commits in the DAG that contribute to the composition of this commit.
+   Composite commits will link to the field commits for the fields modified during
+   the single mutation.  Collection commits will link to composites.
+  
+  """
+  links: [CommitLink]
+  """
+  
+  The ID of the schema version that this commit was committed against. This ID allows one
+   to determine the state of the data model at the time of commit.
+  
+  """
+  schemaVersionId: String
+  """
+  
+  The signature of the commit, if one exists. This is used to verify the integrity
+   of the commit and the data it contains.
+  
+  """
+  signature: Signature
+}
+
+"""
+
+Child commits in the DAG that contribute to the composition of this commit.
+ Composite commits will link to the field commits for the fields modified during
+ the single mutation.  Collection commits will link to composites.
+
+"""
+type CommitLink {
+  """
+  
+  The CID of this linked commit.
+  
+  """
+  cid: String
+  """
+  
+  The Name of the field that this linked commit mutated.
+  
+  """
+  name: String
+}
+
+"""
+The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string
+"""
+scalar DateTime
+
+"""
+
+These are the set of filter operators available for use when filtering on DateTime
+ values.
+
+"""
+input DateTimeOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: DateTime
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: DateTime
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: DateTime
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [DateTime]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: DateTime
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: DateTime
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: DateTime
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [DateTime]
+}
+
+"""
+ExplainType is an enum selecting the type of explanation done by the @explain directive.
+"""
+enum ExplainType {
+  """Like simple explain, but more verbose nodes (no attributes)."""
+  debug
+  """Deeper explanation - insights gathered by executing the plan graph."""
+  execute
+  """Simple explanation - dump of the plan graph."""
+  simple
+}
+
+"""
+The `Float32` scalar type represents signed single-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+"""
+scalar Float32
+
+input Float32FilterArg {
+  _and: [Float32FilterArg!]
+  _eq: Float32
+  _ge: Float32
+  _gt: Float32
+  _in: [Float32]
+  _le: Float32
+  _lt: Float32
+  _ne: Float32
+  _nin: [Float32]
+  _or: [Float32FilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Float32] values.
+"""
+input Float32ListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: Float32OperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: Float32OperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: Float32OperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Float32
+ values.
+
+"""
+input Float32OperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Float32
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Float32
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Float32
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Float32]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Float32
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Float32
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Float32
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Float32]
+}
+
+"""
+The `Float64` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
+"""
+scalar Float64
+
+input Float64FilterArg {
+  _and: [Float64FilterArg!]
+  _eq: Float64
+  _ge: Float64
+  _gt: Float64
+  _in: [Float64]
+  _le: Float64
+  _lt: Float64
+  _ne: Float64
+  _nin: [Float64]
+  _or: [Float64FilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Float64] values.
+"""
+input Float64ListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: Float64OperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: Float64OperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: Float64OperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Float64
+ values.
+
+"""
+input Float64OperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Float64
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Float64
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Float64
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Float64]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Float64
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Float64
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Float64
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Float64]
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on ID
+ values.
+
+"""
+input IDOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: ID
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [ID!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: ID
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [ID!]
+}
+
+"""Used to create an index from a field."""
+input IndexField {
+  direction: Ordering
+  field: String
+}
+
+input IntFilterArg {
+  _and: [IntFilterArg!]
+  _eq: Int
+  _ge: Int
+  _gt: Int
+  _in: [Int]
+  _le: Int
+  _lt: Int
+  _ne: Int
+  _nin: [Int]
+  _or: [IntFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Int] values.
+"""
+input IntListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: IntOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: IntOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: IntOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Int
+ values.
+
+"""
+input IntOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Int
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Int
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Int
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Int]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Int
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Int
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Int
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Int]
+}
+
+"""The `JSON` scalar type represents a JSON value."""
+scalar JSON
+
+type Log {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(_group: Log__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(_group: Log__CountSelector, _version: Log___version__CountSelector, topics: Log__topics__CountSelector): Int
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: LogFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [LogField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [LogOrderArg]
+  ): [Log]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(_group: Log__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(_group: Log__NumericSelector): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  _similarity: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(_group: Log__NumericSelector): Float
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  address: String
+  block(
+    """
+    
+    An optional filter for this join, if the related record does
+     not meet the filter criteria the host record will still be returned,
+     but the value of this field will be null.
+    
+    """
+    filter: BlockFilterArg
+  ): Block
+  blockHash: String
+  blockNumber: Int
+  block_id: ID
+  data: String
+  logIndex: Int
+  removed: String
+  topics: [String]
+  transaction(
+    """
+    
+    An optional filter for this join, if the related record does
+     not meet the filter criteria the host record will still be returned,
+     but the value of this field will be null.
+    
+    """
+    filter: TransactionFilterArg
+  ): Transaction
+  transactionHash: String
+  transactionIndex: Int
+  transaction_id: ID
+}
+
+enum LogExplicitField {
+  address
+  block
+  blockHash
+  blockNumber
+  block_id
+  data
+  logIndex
+  removed
+  topics
+  transaction
+  transactionHash
+  transactionIndex
+  transaction_id
+}
+
+enum LogField {
+  _deleted
+  _docID
+  _group
+  _version
+  address
+  block
+  blockHash
+  blockNumber
+  block_id
+  data
+  logIndex
+  removed
+  topics
+  transaction
+  transactionHash
+  transactionIndex
+  transaction_id
+}
+
+input LogFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [LogFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: LogFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [LogFilterArg!]
+  address: StringOperatorBlock
+  block: BlockFilterArg
+  blockHash: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  block_id: IDOperatorBlock
+  data: StringOperatorBlock
+  logIndex: IntOperatorBlock
+  removed: StringOperatorBlock
+  topics: StringListOperatorBlock
+  transaction: TransactionFilterArg
+  transactionHash: StringOperatorBlock
+  transactionIndex: IntOperatorBlock
+  transaction_id: IDOperatorBlock
+}
+
+input LogMutationInputArg {
+  address: String
+  block: ID
+  blockHash: String
+  blockNumber: Int
+  block_id: ID
+  data: String
+  logIndex: Int
+  removed: String
+  topics: [String]
+  transaction: ID
+  transactionHash: String
+  transactionIndex: Int
+  transaction_id: ID
+}
+
+enum LogNumericFieldsArg {
+  _avg
+  _count
+  _max
+  _min
+  _sum
+  blockNumber
+  logIndex
+  transactionIndex
+}
+
+input LogOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  address: Ordering
+  block: BlockOrderArg
+  blockHash: Ordering
+  blockNumber: Ordering
+  block_id: Ordering
+  data: Ordering
+  logIndex: Ordering
+  removed: Ordering
+  topics: Ordering
+  transaction: TransactionOrderArg
+  transactionHash: Ordering
+  transactionIndex: Ordering
+  transaction_id: Ordering
+}
+
+input Log__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: LogFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Log__NumericSelector {
+  field: LogNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: LogFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [LogOrderArg]
+}
+
+input Log___group__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Log___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Log__topics__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+type Mutation {
+  _: Boolean
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_AccessListEntry(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [AccessListEntryExplicitField!]
+    """Create AccessListEntry documents"""
+    input: [AccessListEntryMutationInputArg!]
+  ): [AccessListEntry]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_Block(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [BlockExplicitField!]
+    """Create Block documents"""
+    input: [BlockMutationInputArg!]
+  ): [Block]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_Log(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [LogExplicitField!]
+    """Create Log documents"""
+    input: [LogMutationInputArg!]
+  ): [Log]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_Transaction(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [TransactionExplicitField!]
+    """Create Transaction documents"""
+    input: [TransactionMutationInputArg!]
+  ): [Transaction]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_AccessListEntry(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: AccessListEntryFilterArg
+  ): [AccessListEntry]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_Block(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: BlockFilterArg
+  ): [Block]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_Log(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: LogFilterArg
+  ): [Log]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_Transaction(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: TransactionFilterArg
+  ): [Transaction]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
+  update_AccessListEntry(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: AccessListEntryFilterArg
+    """Update field values"""
+    input: AccessListEntryMutationInputArg
+  ): [AccessListEntry]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
+  update_Block(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: BlockFilterArg
+    """Update field values"""
+    input: BlockMutationInputArg
+  ): [Block]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
+  update_Log(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: LogFilterArg
+    """Update field values"""
+    input: LogMutationInputArg
+  ): [Log]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
+  update_Transaction(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: TransactionFilterArg
+    """Update field values"""
+    input: TransactionMutationInputArg
+  ): [Transaction]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
+  upsert_AccessListEntry(
+    """Create field values"""
+    create: AccessListEntryMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: AccessListEntryFilterArg!
+    """Update field values"""
+    update: AccessListEntryMutationInputArg!
+  ): [AccessListEntry]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
+  upsert_Block(
+    """Create field values"""
+    create: BlockMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: BlockFilterArg!
+    """Update field values"""
+    update: BlockMutationInputArg!
+  ): [Block]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
+  upsert_Log(
+    """Create field values"""
+    create: LogMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: LogFilterArg!
+    """Update field values"""
+    update: LogMutationInputArg!
+  ): [Log]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
+  upsert_Transaction(
+    """Create field values"""
+    create: TransactionMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: TransactionFilterArg!
+    """Update field values"""
+    update: TransactionMutationInputArg!
+  ): [Transaction]
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on String!
+ values.
+
+"""
+input NotNullBlobOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Blob
+  """
+  
+  The case insensitive like operator - if the target value contains the given case insensitive sub-string the check
+   will pass. '%' characters may be used as wildcards, for example '_like: "%ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _ilike: String
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Blob!]
+  """
+  
+  The like operator - if the target value contains the given sub-string the check will pass. '%'
+   characters may be used as wildcards, for example '_like: "%Ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _like: String
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Blob
+  """
+  
+  The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
+   the check will pass. '%' characters may be used as wildcards, for example '_nlike: "%ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nilike: String
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Blob!]
+  """
+  
+  The not-like operator - if the target value does not contain the given sub-string the check will
+   pass. '%' characters may be used as wildcards, for example '_nlike: "%Ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nlike: String
+}
+
+input NotNullBooleanFilterArg {
+  _and: [NotNullBooleanFilterArg!]
+  _eq: Boolean
+  _in: [Boolean!]
+  _ne: Boolean
+  _nin: [Boolean!]
+  _or: [NotNullBooleanFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Boolean!] values.
+"""
+input NotNullBooleanListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: NotNullBooleanOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: NotNullBooleanOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: NotNullBooleanOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Boolean!
+ values.
+
+"""
+input NotNullBooleanOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Boolean
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Boolean!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Boolean
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Boolean!]
+}
+
+input NotNullFloat32FilterArg {
+  _and: [NotNullFloat32FilterArg!]
+  _eq: Float32
+  _ge: Float32
+  _gt: Float32
+  _in: [Float32!]
+  _le: Float32
+  _lt: Float32
+  _ne: Float32
+  _nin: [Float32!]
+  _or: [NotNullFloat32FilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Float32!] values.
+"""
+input NotNullFloat32ListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: NotNullFloat32OperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: NotNullFloat32OperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: NotNullFloat32OperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Float32!
+ values.
+
+"""
+input NotNullFloat32OperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Float32
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Float32
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Float32
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Float32!]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Float32
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Float32
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Float32
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Float32!]
+}
+
+input NotNullFloat64FilterArg {
+  _and: [NotNullFloat64FilterArg!]
+  _eq: Float64
+  _ge: Float64
+  _gt: Float64
+  _in: [Float64!]
+  _le: Float64
+  _lt: Float64
+  _ne: Float64
+  _nin: [Float64!]
+  _or: [NotNullFloat64FilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Float64!] values.
+"""
+input NotNullFloat64ListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: NotNullFloat64OperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: NotNullFloat64OperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: NotNullFloat64OperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Float64!
+ values.
+
+"""
+input NotNullFloat64OperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Float64
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Float64
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Float64
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Float64!]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Float64
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Float64
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Float64
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Float64!]
+}
+
+input NotNullIntFilterArg {
+  _and: [NotNullIntFilterArg!]
+  _eq: Int
+  _ge: Int
+  _gt: Int
+  _in: [Int!]
+  _le: Int
+  _lt: Int
+  _ne: Int
+  _nin: [Int!]
+  _or: [NotNullIntFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [Int!] values.
+"""
+input NotNullIntListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: NotNullIntOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: NotNullIntOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: NotNullIntOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on Int!
+ values.
+
+"""
+input NotNullIntOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: Int
+  """
+  
+  The greater than or equal to operator - if the target value is greater than or equal to the
+   given value the check will pass.
+  
+  """
+  _ge: Int
+  """
+  
+  The greater than operator - if the target value is greater than the given value the
+   check will pass.
+  
+  """
+  _gt: Int
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [Int!]
+  """
+  
+  The less than or equal to operator - if the target value is less than or equal to the
+   given value the check will pass.
+  
+  """
+  _le: Int
+  """
+  
+  The less than operator - if the target value is less than the given value the check will pass.
+  
+  """
+  _lt: Int
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: Int
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [Int!]
+}
+
+input NotNullStringFilterArg {
+  _and: [NotNullStringFilterArg!]
+  _eq: String
+  _ilike: String
+  _in: [String!]
+  _like: String
+  _ne: String
+  _nilike: String
+  _nin: [String!]
+  _nlike: String
+  _or: [NotNullStringFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [String!] values.
+"""
+input NotNullStringListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: NotNullStringOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: NotNullStringOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: NotNullStringOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on String!
+ values.
+
+"""
+input NotNullStringOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: String
+  """
+  
+  The case insensitive like operator - if the target value contains the given case insensitive sub-string the check
+   will pass. '%' characters may be used as wildcards, for example '_like: "%ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _ilike: String
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [String!]
+  """
+  
+  The like operator - if the target value contains the given sub-string the check will pass. '%'
+   characters may be used as wildcards, for example '_like: "%Ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _like: String
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: String
+  """
+  
+  The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
+   the check will pass. '%' characters may be used as wildcards, for example '_nlike: "%ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nilike: String
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [String!]
+  """
+  
+  The not-like operator - if the target value does not contain the given sub-string the check will
+   pass. '%' characters may be used as wildcards, for example '_nlike: "%Ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nlike: String
+}
+
+enum Ordering {
+  """
+  
+  Sort the results in ascending order, e.g. null,1,2,3,a,b,c.
+  
+  """
+  ASC
+  """
+  
+  Sort the results in descending order, e.g. c,b,a,3,2,1,null.
+  
+  """
+  DESC
+}
+
+type Query {
+  AccessListEntry(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: AccessListEntryFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [AccessListEntryField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [AccessListEntryOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [AccessListEntry]
+  Block(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: BlockFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [BlockField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [BlockOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Block]
+  Log(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: LogFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [LogField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [LogOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Log]
+  Transaction(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: TransactionFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [TransactionField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [TransactionOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Transaction]
+  _: Boolean
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(AccessListEntry: AccessListEntry__CountSelector, Block: Block__CountSelector, Log: Log__CountSelector, Transaction: Transaction__CountSelector): Int
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(AccessListEntry: AccessListEntry__NumericSelector, Block: Block__NumericSelector, Log: Log__NumericSelector, Transaction: Transaction__NumericSelector): Float
+  """
+  
+  Returns a set of commits matching any provided criteria. If no arguments are
+   provided all commits in the system will be returned.
+  
+  """
+  commits(
+    """
+    
+    An optional value that specifies the commit ID of the commits to return. If a
+     matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: ID
+    """
+    
+    An optional value that specifies the maximum depth to which the commit DAG graph
+     should be traversed from matching commits.
+    
+    """
+    depth: Int
+    """
+    
+    An optional docID parameter for this commit query. Only commits for a document
+     with a matching docID will be returned.  If no documents match, the result
+     set will be empty.
+    
+    """
+    docID: ID
+    """
+    
+    An optional field name parameter for this commit query. Only commits for a fields
+     matching this name will be returned. Specifying '_C' will limit the results to
+     composite (document level) commits only. If no fields match, the result set will be empty.
+    
+    """
+    fieldName: String
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [commitFields!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [commitsOrderArg]
+  ): [Commit]
+  """
+  
+  Returns a set of head commits matching any provided criteria. If no arguments are
+   provided all head commits in the system will be returned. If no 'field' argument
+   is provided only composite commits will be returned. This is equivalent to
+   a 'commits' query with Depth: 1, and a differing 'field' default value.
+  
+  """
+  latestCommits(
+    """
+    
+    An optional docID parameter for this commit query. Only commits for a document
+     with a matching docID will be returned.  If no documents match, the result
+     set will be empty.
+    
+    """
+    docID: ID!
+    """
+    
+    An optional field name parameter for this commit query. Only commits for a fields
+     matching this name will be returned. Specifying '_C' will limit the results to
+     composite (document level) commits only. If no fields match, the result set will be empty.
+    
+    """
+    fieldName: String
+  ): [Commit]
+}
+
+"""
+
+The signature of the commit, if one exists. This is used to verify the integrity
+ of the commit and the data it contains.
+
+"""
+type Signature {
+  """
+  The identity of the signer, which is used to determine the public key used to verify the signature.ureIdentityFieldDescription
+  """
+  identity: String
+  """
+  The type of the signature, which is used to determine the algorithm used to generate the signature.
+  """
+  type: String
+  """
+  The value of the signature, which is used to verify the integrity of the commit and the data it contains.
+  """
+  value: String
+}
+
+input StringFilterArg {
+  _and: [StringFilterArg!]
+  _eq: String
+  _ilike: String
+  _in: [String]
+  _like: String
+  _ne: String
+  _nilike: String
+  _nin: [String]
+  _nlike: String
+  _or: [StringFilterArg!]
+}
+
+"""
+These are the set of filter operators available for use when filtering on [String] values.
+"""
+input StringListOperatorBlock {
+  """
+  
+  The all operator - all checks within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _all: StringOperatorBlock
+  """
+  
+  The any operator - only one check within this clause must pass on each item in order for this check to pass.	
+  
+  """
+  _any: StringOperatorBlock
+  """
+  
+  The none operator - only one check within this clause must fail on one item in order for this check to pass.	
+  
+  """
+  _none: StringOperatorBlock
+}
+
+"""
+
+These are the set of filter operators available for use when filtering on String
+ values.
+
+"""
+input StringOperatorBlock {
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: String
+  """
+  
+  The case insensitive like operator - if the target value contains the given case insensitive sub-string the check
+   will pass. '%' characters may be used as wildcards, for example '_like: "%ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _ilike: String
+  """
+  
+  The contains operator - if the target value is within the given set the check will pass.
+  
+  """
+  _in: [String]
+  """
+  
+  The like operator - if the target value contains the given sub-string the check will pass. '%'
+   characters may be used as wildcards, for example '_like: "%Ritchie"' would match on strings
+   ending in 'Ritchie'.
+  
+  """
+  _like: String
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _ne: String
+  """
+  
+  The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
+   the check will pass. '%' characters may be used as wildcards, for example '_nlike: "%ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nilike: String
+  """
+  
+  The does not contains operator - if the target value is not within the given set the
+   check will pass.
+  
+  """
+  _nin: [String]
+  """
+  
+  The not-like operator - if the target value does not contain the given sub-string the check will
+   pass. '%' characters may be used as wildcards, for example '_nlike: "%Ritchie"' would match on
+   the string 'Quentin Tarantino'.
+  
+  """
+  _nlike: String
+}
+
+type Subscription {
+  AccessListEntry(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: AccessListEntryFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [AccessListEntryField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [AccessListEntryOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [AccessListEntry]
+  Block(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: BlockFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [BlockField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [BlockOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Block]
+  Log(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: LogFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [LogField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [LogOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Log]
+  Transaction(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: TransactionFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [TransactionField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [TransactionOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Transaction]
+  _: Boolean
+}
+
+type Transaction {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(_group: Transaction__NumericSelector, accessList: AccessListEntry__NumericSelector, logs: Log__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(_group: Transaction__CountSelector, _version: Transaction___version__CountSelector, accessList: AccessListEntry__CountSelector, logs: Log__CountSelector): Int
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: TransactionFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [TransactionField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [TransactionOrderArg]
+  ): [Transaction]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(_group: Transaction__NumericSelector, accessList: AccessListEntry__NumericSelector, logs: Log__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(_group: Transaction__NumericSelector, accessList: AccessListEntry__NumericSelector, logs: Log__NumericSelector): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  _similarity: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(_group: Transaction__NumericSelector, accessList: AccessListEntry__NumericSelector, logs: Log__NumericSelector): Float
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  accessList(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: AccessListEntryFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [AccessListEntryField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [AccessListEntryOrderArg]
+  ): [AccessListEntry]
+  block(
+    """
+    
+    An optional filter for this join, if the related record does
+     not meet the filter criteria the host record will still be returned,
+     but the value of this field will be null.
+    
+    """
+    filter: BlockFilterArg
+  ): Block
+  blockHash: String
+  blockNumber: Int
+  block_id: ID
+  chainId: String
+  cumulativeGasUsed: String
+  effectiveGasPrice: String
+  from: String
+  gas: String
+  gasPrice: String
+  gasUsed: String
+  hash: String
+  input: String
+  logs(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [String!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: LogFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [LogField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [LogOrderArg]
+  ): [Log]
+  maxFeePerGas: String
+  maxPriorityFeePerGas: String
+  nonce: String
+  r: String
+  s: String
+  status: Boolean
+  to: String
+  transactionIndex: Int
+  type: String
+  v: String
+  value: String
+}
+
+enum TransactionExplicitField {
+  accessList
+  block
+  blockHash
+  blockNumber
+  block_id
+  chainId
+  cumulativeGasUsed
+  effectiveGasPrice
+  from
+  gas
+  gasPrice
+  gasUsed
+  hash
+  input
+  logs
+  maxFeePerGas
+  maxPriorityFeePerGas
+  nonce
+  r
+  s
+  status
+  to
+  transactionIndex
+  type
+  v
+  value
+}
+
+enum TransactionField {
+  _deleted
+  _docID
+  _group
+  _version
+  accessList
+  block
+  blockHash
+  blockNumber
+  block_id
+  chainId
+  cumulativeGasUsed
+  effectiveGasPrice
+  from
+  gas
+  gasPrice
+  gasUsed
+  hash
+  input
+  logs
+  maxFeePerGas
+  maxPriorityFeePerGas
+  nonce
+  r
+  s
+  status
+  to
+  transactionIndex
+  type
+  v
+  value
+}
+
+input TransactionFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [TransactionFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: TransactionFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [TransactionFilterArg!]
+  accessList: AccessListEntryFilterArg
+  block: BlockFilterArg
+  blockHash: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  block_id: IDOperatorBlock
+  chainId: StringOperatorBlock
+  cumulativeGasUsed: StringOperatorBlock
+  effectiveGasPrice: StringOperatorBlock
+  from: StringOperatorBlock
+  gas: StringOperatorBlock
+  gasPrice: StringOperatorBlock
+  gasUsed: StringOperatorBlock
+  hash: StringOperatorBlock
+  input: StringOperatorBlock
+  logs: LogFilterArg
+  maxFeePerGas: StringOperatorBlock
+  maxPriorityFeePerGas: StringOperatorBlock
+  nonce: StringOperatorBlock
+  r: StringOperatorBlock
+  s: StringOperatorBlock
+  status: BooleanOperatorBlock
+  to: StringOperatorBlock
+  transactionIndex: IntOperatorBlock
+  type: StringOperatorBlock
+  v: StringOperatorBlock
+  value: StringOperatorBlock
+}
+
+input TransactionMutationInputArg {
+  block: ID
+  blockHash: String
+  blockNumber: Int
+  block_id: ID
+  chainId: String
+  cumulativeGasUsed: String
+  effectiveGasPrice: String
+  from: String
+  gas: String
+  gasPrice: String
+  gasUsed: String
+  hash: String
+  input: String
+  maxFeePerGas: String
+  maxPriorityFeePerGas: String
+  nonce: String
+  r: String
+  s: String
+  status: Boolean
+  to: String
+  transactionIndex: Int
+  type: String
+  v: String
+  value: String
+}
+
+enum TransactionNumericFieldsArg {
+  _avg
+  _count
+  _max
+  _min
+  _sum
+  blockNumber
+  transactionIndex
+}
+
+input TransactionOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  block: BlockOrderArg
+  blockHash: Ordering
+  blockNumber: Ordering
+  block_id: Ordering
+  chainId: Ordering
+  cumulativeGasUsed: Ordering
+  effectiveGasPrice: Ordering
+  from: Ordering
+  gas: Ordering
+  gasPrice: Ordering
+  gasUsed: Ordering
+  hash: Ordering
+  input: Ordering
+  maxFeePerGas: Ordering
+  maxPriorityFeePerGas: Ordering
+  nonce: Ordering
+  r: Ordering
+  s: Ordering
+  status: Ordering
+  to: Ordering
+  transactionIndex: Ordering
+  type: Ordering
+  v: Ordering
+  value: Ordering
+}
+
+input Transaction__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: TransactionFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Transaction__NumericSelector {
+  field: TransactionNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: TransactionFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [TransactionOrderArg]
+}
+
+input Transaction___group__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Transaction___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Transaction__accessList__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Transaction__logs__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+"""
+
+Returns the total number of items within the specified child sets. If multiple child
+ sets are specified, the combined total of all of them will be returned as a single value.
+
+"""
+enum commitCountFieldArg {
+  """
+  
+  Child commits in the DAG that contribute to the composition of this commit.
+   Composite commits will link to the field commits for the fields modified during
+   the single mutation.  Collection commits will link to composites.
+  
+  """
+  links
+}
+
+"""
+
+These are the set of fields supported for grouping by in a commits query.
+
+"""
+enum commitFields {
+  """
+  
+  The unique CID of this commit, and the primary means through which to safely identify
+   a specific commit.
+  
+  """
+  cid
+  """
+  
+  The docID of the document that this commit is for.
+  
+  """
+  docID
+  """
+  
+  The name of the field that this commit was committed against. If this is a composite
+   or a collection the value will be null.
+  
+  """
+  fieldName
+  """
+  
+  Height represents the location of the commit in the DAG. All commits (collection, composite,
+   and field level) on create will have a height of '1', each subsequent local update
+   will increment this by one for the new commits.
+  
+  """
+  height
+}
+
+"""
+
+An optional set of field-orders which may be used to sort the results. An
+ empty set will be ignored.
+
+"""
+input commitsOrderArg {
+  """
+  
+  The unique CID of this commit, and the primary means through which to safely identify
+   a specific commit.
+  
+  """
+  cid: Ordering
+  """
+  
+  The docID of the document that this commit is for.
+  
+  """
+  docID: Ordering
+  """
+  
+  Height represents the location of the commit in the DAG. All commits (collection, composite,
+   and field level) on create will have a height of '1', each subsequent local update
+   will increment this by one for the new commits.
+  
+  """
+  height: Ordering
+}
