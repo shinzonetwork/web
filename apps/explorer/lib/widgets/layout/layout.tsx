@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Typography } from '@/shared/ui/typography';
+import { Container } from '@/widgets/layout';
 import { Header, HeaderProps } from './header';
-import { Container } from './container';
 import { Footer } from './footer';
 
 export interface PageLayoutProps extends Partial<HeaderProps> {

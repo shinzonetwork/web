@@ -9,6 +9,9 @@ export interface ContainerProps {
   borderB?: boolean;
 }
 
+/**
+ * A container component that limits children width, centers its content and optionally adds borders.
+ */
 export const Container = ({ borderX, borderB, children, className, wrapperClassName }: ContainerProps) => {
   return (
     <div className={cn(

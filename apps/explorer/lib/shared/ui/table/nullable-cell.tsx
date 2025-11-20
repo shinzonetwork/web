@@ -1,9 +1,9 @@
-import type { ComponentProps, ReactNode } from 'react';
-import { TableCell } from './table';
+import type { ReactNode } from 'react';
+import { TableCell, TableCellProps } from './table-cell';
 
 type NormalizedValue<T> = T extends (infer U)[] ? NonNullable<U>[] : NonNullable<T>;
 
-export interface TableNullableCellProps<VALUE> extends Omit<ComponentProps<"td">, 'children'> {
+export interface TableNullableCellProps<VALUE> extends Omit<TableCellProps, 'children'> {
   value?: VALUE | VALUE[] | null;
   children?: (value: NormalizedValue<VALUE>) => ReactNode;
 }
