@@ -9,6 +9,8 @@ const typographyVariants = cva('',
         h2: 'text-h2',
         md: 'text-md',
         base: 'text-base',
+        sm: 'text-sm',
+        xs: 'text-xs',
       },
       weight: {
         regular: 'font-normal',
@@ -41,6 +43,8 @@ const tagMapping: Record<TypographyVariant, ElementType> = {
   h2: 'h2',
   md: 'p',
   base: 'p',
+  sm: 'p',
+  xs: 'p',
 };
 
 export interface TypographyProps extends Omit<HTMLAttributes<HTMLElement>, 'color'>, VariantProps<typeof typographyVariants> {

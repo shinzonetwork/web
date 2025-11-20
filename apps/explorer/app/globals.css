@@ -35,6 +35,12 @@
   --text-base: 1rem;
   --text-base--line-height: 140%;
 
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 140%;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 160%;
+
   --color-text-primary: #353535;
   --color-text-secondary: #525252;
   --color-text-accent: #D01F27;
