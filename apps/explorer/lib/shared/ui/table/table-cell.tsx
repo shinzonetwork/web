@@ -53,7 +53,7 @@ export const TableCell = ({
       )}
     >
       {loading ? (
-        <div className='h-1/2 w-full max-w-20'>
+        <div className='h-1/2 w-full max-w-3/4'>
           <Skeleton />
         </div>
       ) : (

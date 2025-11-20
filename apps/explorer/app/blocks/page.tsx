@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import { usePage, Pagination, DEFAULT_LIMIT } from "@/shared/ui/pagination"
+import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatGasUsed } from '@/shared/utils/format-gas';
 import { formatHash } from '@/shared/utils/format-hash';
 import { useBlocks } from '@/entities/block';
@@ -17,6 +18,7 @@ import {
   TableCell,
   TableNullableCell,
 } from '@/shared/ui/table';
+import { Typography } from '@/shared/ui/typography';
 
 export default function BlocksPage() {
   const { page, offset, limit } = usePage();
@@ -24,7 +26,7 @@ export default function BlocksPage() {
 
   return (
     <PageLayout title='Blocks'>
-      <Container wrapperClassName='mt-16 mb-8' borderB>
+      <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
         <Tabs defaultValue='all'>
           <TabsList>
             <TabsTrigger value='all' className='min-w-16'>
@@ -32,6 +34,12 @@ export default function BlocksPage() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+
+        <Pagination
+          page={page}
+          totalItems={blocks?.totalCount ?? 0}
+          itemsPerPage={DEFAULT_LIMIT}
+        />
       </Container>
 
       <TableLayout
@@ -44,11 +52,13 @@ export default function BlocksPage() {
           <>
             <TableNullableCell value={block?.number}>
               {(value) => (
-                <Link
-                  href={`/blocks/${value}`}
-                  className="font-mono text-sm font-medium text-foreground hover:underline"
-                >
-                  {value}
+                <Link href={`/blocks/${value}`} className='flex items-center gap-4'>
+                  <i className='flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm'>
+                    <ShinzoFilledIcon className='size-4' />
+                  </i>
+                  <Typography color='accent' className='underline'>
+                    {value}
+                  </Typography>
                 </Link>
               )}
             </TableNullableCell>

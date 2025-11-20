@@ -6,7 +6,7 @@ export default async function BlockDetailPage({ params }: { params: Promise<{ id
   const blockNumber = Number(id)
 
   return (
-    <PageLayout title='Block Detail'>
+    <PageLayout title={`Block #${blockNumber}`}>
       <BlockCard height={blockNumber} />
     </PageLayout>
   );

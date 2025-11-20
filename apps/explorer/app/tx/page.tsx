@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { useSearchParams } from 'next/navigation';
 import { DEFAULT_LIMIT, Pagination, usePage } from '@/shared/ui/pagination';
+import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { formatHash } from '@/shared/utils/format-hash';
-import { useTransactions } from '@/entities/tx';
+import { Typography } from '@/shared/ui/typography';
 import { Container, PageLayout } from '@/widgets/layout'
+import { useTransactions } from '@/entities/tx';
 import {
   TableLayout,
   TableNullableCell,
 } from '@/shared/ui/table';
-import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 export default function TransactionsPage() {
   const searchParams = useSearchParams();
@@ -32,7 +33,7 @@ export default function TransactionsPage() {
 
   return (
     <PageLayout title={blockFilter ? `Transactions in block #${blockFilter}` : 'Transactions'}>
-      <Container wrapperClassName='mt-16 mb-8' borderB>
+      <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
         <Tabs defaultValue='all'>
           <TabsList>
             <TabsTrigger value='all' className='min-w-16'>
@@ -40,6 +41,12 @@ export default function TransactionsPage() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
+
+        <Pagination
+          page={page}
+          totalItems={transactions?.totalCount ?? 0}
+          itemsPerPage={DEFAULT_LIMIT}
+        />
       </Container>
 
       <TableLayout
@@ -52,8 +59,10 @@ export default function TransactionsPage() {
           <>
             <TableNullableCell value={tx?.hash}>
               {(value) => (
-                <Link href={`/tx/${value}`} className="font-mono text-sm text-foreground hover:underline">
-                  {formatHash(value, 12, 8)}
+                <Link href={`/tx/${value}`}>
+                  <Typography color='accent' className='underline'>
+                    {formatHash(value, 12, 8)}
+                  </Typography>
                 </Link>
               )}
             </TableNullableCell>

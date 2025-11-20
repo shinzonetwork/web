@@ -26,23 +26,6 @@ export const BlockCard = ({ height }: BlockCardProps) => {
 
   return (
       <main className="container mx-auto py-12">
-        <div className="mb-10 flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-background-secondary">
-            <Cube className="h-6 w-6 text-foreground" />
-          </div>
-
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Block <span className='text-accent'>#{block.number}</span>
-            </h1>
-            {block.timestamp && (
-              <p className="text-muted-foreground">
-                {formatDistanceToNow(new Date(Number(block.timestamp) * 1000), { addSuffix: true })}
-              </p>
-            )}
-          </div>
-        </div>
-
         <Card>
           <CardHeader className="pb-8">
             <CardTitle>Block Details</CardTitle>
