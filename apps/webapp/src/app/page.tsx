@@ -9,22 +9,17 @@ import WalletSignatureHandler from "@/components/handlers/wallet-signature-handl
 
 export default function LandingPage() {
   const { isConnected } = useAccount();
-  const { profileCompleted, registered, signedWithWallet } = useShinzoStore();
+  const { signedWithWallet, registered, profileCompleted } = useShinzoStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (isConnected && signedWithWallet) {
-      if (!registered && !profileCompleted) {
-        router.replace("/registration/configuration");
-      } else if (registered && !profileCompleted) {
-        router.replace("/registration/profile");
-      } else if (registered && profileCompleted) {
-        router.replace("/dashboard");
-      }
+    if (isConnected && signedWithWallet && !(registered || profileCompleted)) {
+      router.replace("/registration");
     } else {
+      console.log("redirecting to home");
       router.replace("/");
     }
-  }, [isConnected, registered, profileCompleted, router, signedWithWallet]);
+  }, [isConnected, router, signedWithWallet, registered, profileCompleted]);
 
   return (
     <>
