@@ -44,7 +44,7 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       style={{ /* set bg image URL used in ::before element */ '--tab-highlight': `url(${highlightUrl.src})` } as React.CSSProperties}
       className={cn(
-        'relative inline-flex h-11 flex-1 items-center justify-center gap-1 border border-border px-2 py-1 whitespace-nowrap transition-all',
+        'relative inline-flex h-11 flex-1 items-center justify-center gap-1 border border-border px-6 py-1 whitespace-nowrap transition-all',
         'hover:bg-background-accent-hover cursor-pointer',
         'text-base text-text-primary data-[state=inactive]:underline data-[state=active]:text-text-accent',
         'focus-visible:border-transparent focus-visible:ring-ring/50 focus-visible:outline-none focus-visible:ring-3 focus-visible:outline-1',

@@ -32,6 +32,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
+  --radius-full: 9999px;
 
   /* custom typography */
   --text-h2: 1.875rem;

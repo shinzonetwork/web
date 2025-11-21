@@ -19,17 +19,21 @@ export const TransactionsPage = () => {
   const blockFilter = Number(searchParams.get('block'));
 
   const { page, offset, limit } = usePage();
-  const { data: transactions, isLoading } = useTransactions({ limit, offset, blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter });
+  const { data: transactions, isLoading } = useTransactions({
+    limit,
+    offset,
+    blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter,
+  });
 
   const formatValue = (value: string) => {
-    const eth = Number(value) / 1e18
-    return eth.toFixed(6)
-  }
+    const eth = Number(value) / 1e18;
+    return eth.toFixed(6);
+  };
 
   const formatGasPrice = (gasPrice: string) => {
-    const gwei = Number(gasPrice) / 1e9
-    return gwei.toFixed(2)
-  }
+    const gwei = Number(gasPrice) / 1e9;
+    return gwei.toFixed(2);
+  };
 
   return (
     <PageLayout title={blockFilter ? `Transactions in block #${blockFilter}` : 'Transactions'}>
@@ -53,6 +57,7 @@ export const TransactionsPage = () => {
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound='No transactions found.'
+        gridClass='grid-cols-[1fr_100px_120px_1fr_1fr_160px_160px]'
         headings={['Hash', 'Block', 'Age', 'From', 'To', 'Value', 'Fee']}
         iterable={transactions?.transactions ?? []}
         rowRenderer={(tx) => (
@@ -69,8 +74,10 @@ export const TransactionsPage = () => {
 
             <TableNullableCell value={tx?.blockNumber}>
               {(value) => (
-                <Link href={`/blocks/${value}`} className="text-sm hover:underline">
-                  {value}
+                <Link href={`/blocks/${value}`}>
+                  <Typography color='accent' className='underline'>
+                    {value}
+                  </Typography>
                 </Link>
               )}
             </TableNullableCell>

@@ -18,7 +18,7 @@ export const PageLayout = ({ title, info, hideSearch, hideTitle, children }: Pag
 
       {!hideTitle && (
         <Container borderB borderX className='h-36 flex justify-between items-end py-4 px-8'>
-          <Typography variant='h2'>
+          <Typography variant='h2' font='mono'>
             {'/ '}
             {title}
           </Typography>

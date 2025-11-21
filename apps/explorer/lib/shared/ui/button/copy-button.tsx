@@ -1,14 +1,39 @@
-import { Button } from './button';
-import { Copy } from 'lucide-react';
+'use client';
 
-export const CopyButton = ({ text }: { text: string }) => {
-  const copy = () => {
-    navigator.clipboard.writeText(text);
+import { Copy, Check } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@/shared/utils/utils';
+
+export interface CopyButtonProps {
+  text: string;
+  className?: string;
+}
+
+export const CopyButton = ({ text, className }: CopyButtonProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
   return (
-    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={copy}>
-      <Copy className="h-3 w-3"/>
-    </Button>
+    <button
+      onClick={copy}
+      className={cn(
+        'size-6 flex items-center justify-center text-text-accent cursor-pointer rounded-full hover:bg-background-accent-hover',
+        className,
+      )}
+    >
+      {copied ? (
+        <Check className="size-3"/>
+      ) : (
+        <Copy className="size-3"/>
+      )}
+    </button>
   );
 };
