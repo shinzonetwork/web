@@ -16,6 +16,7 @@ import SocialProfile from "@/components/registration/profile/social-profile/soci
 import WalletProfile from "@/components/registration/profile/wallet-profile/wallet-profile";
 import { isValidEmail } from "@/lib/utils";
 import ContactProfile from "./contact-profile/contact-profile";
+import { useProfile } from "@/hooks/useProfile";
 
 export type Social = {
   id: string;
@@ -35,7 +36,7 @@ export type ContactProfile = {
 };
 
 export default function Profile() {
-  const [contactProfile, setContactProfile] = useState({
+  const [contactProfile, setContactProfile] = useState<ContactProfile>({
     email: "",
     phone: "",
   });
@@ -46,25 +47,41 @@ export default function Profile() {
   const [wallets, setWallets] = useState<Wallet[]>([
     { id: crypto.randomUUID(), name: "", address: "" },
   ]);
-  const [isSaving, setIsSaving] = useState(false);
 
   const { isProfileCompleted } = useShinzoStore();
+  const {
+    saveProfile,
+    checkEmail,
+    loading: isSaving,
+    error: saveError,
+  } = useProfile();
 
   const handleSave = async () => {
-    setIsSaving(true);
+    // Check if email already exists
+    const emailExists = await checkEmail(contactProfile.email);
+
+    if (emailExists) {
+      alert("This email is already registered. Please use a different email.");
+      return;
+    }
     try {
-      // TODO: Send data to backend API
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      isProfileCompleted(true);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      if (process.env.NODE_ENV === "development") {
-        console.error("Error saving profile:", error);
+      // Save profile
+      const success = await saveProfile({
+        email: contactProfile.email,
+        phone: contactProfile.phone || undefined,
+        socials: socials.filter((s) => s.platform && s.link), // Only save non-empty socials
+        wallets: wallets.filter((w) => w.name && w.address), // Only save non-empty wallets
+      });
+      if (success) {
+        isProfileCompleted(true);
+      } else {
+        alert(
+          `Failed to save profile: ${saveError || "Unknown error"}. Please try again.`,
+        );
       }
-      alert(`Failed to save profile: ${errorMessage}. Please try again.`);
-    } finally {
-      setIsSaving(false);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Failed to save profile. Please try again.");
     }
   };
 

@@ -16,7 +16,6 @@ export default function LandingPage() {
     if (isConnected && signedWithWallet && !(registered || profileCompleted)) {
       router.replace("/registration");
     } else {
-      console.log("redirecting to home");
       router.replace("/");
     }
   }, [isConnected, router, signedWithWallet, registered, profileCompleted]);
