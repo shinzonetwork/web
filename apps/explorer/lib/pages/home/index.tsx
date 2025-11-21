@@ -3,11 +3,11 @@
 import Link from 'next/link'
 import { formatDistanceToNow } from 'date-fns'
 import { ArrowRight, Cable as Cube, TrendingUp } from 'lucide-react'
-import { PageLayout } from '@/widgets/layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
-import { useBlocks } from '@/entities/block';
-import { useTransactions } from '@/entities/tx';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { PageLayout } from '@/widgets/layout'
+import { useTransactions } from '@/pages/transactions';
+import { useBlocks } from '@/pages/blocks';
 
 export const HomePage = () => {
   const { data: blocks, isLoading: blocksLoading } = useBlocks({ limit: 10, offset: 0 });

@@ -1,0 +1,1 @@
+export { BlockDetailPage } from './page';

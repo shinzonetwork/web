@@ -6,8 +6,8 @@ import { CheckCircle2, FileText, XCircle } from 'lucide-react';
 import { formatHash } from '@/shared/utils/format-hash';
 import { Separator } from '@/shared/ui/separator';
 import { Card, CardContent, CardHeader, CardRow, CardTitle } from '@/shared/ui/card';
-import { useTransaction } from '@/entities/tx';
 import { Badge } from '@/shared/ui/badge';
+import { useTransaction } from './use-tx';
 
 export interface TransactionCardProps {
   txHash: string;

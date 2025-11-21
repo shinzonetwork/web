@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { Cable as Cube, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardRow, CardTitle } from '@/shared/ui/card';
-import { useBlock } from '@/entities/block';
 import { Button } from '@/shared/ui/button';
+import { useBlock } from './use-block';
 
 export interface BlockCardProps {
   height: number;
