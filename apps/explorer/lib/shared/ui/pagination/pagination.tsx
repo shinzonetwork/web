@@ -8,8 +8,8 @@ import {
 import Link from 'next/link'
 import type { ComponentProps } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Typography } from '@/shared/ui/typography';
 import { cn } from "@/shared/utils/utils"
-import { Button, buttonVariants } from "@/shared/ui/button"
 import { getRange, transform } from './utils';
 import { DEFAULT_LIMIT } from './use-page';
 
@@ -97,25 +97,23 @@ function PaginationContent({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex flex-row items-center gap-1", className)}
+      className={cn("h-11 flex flex-row items-center", className)}
       {...props}
     />
   )
 }
 
 function PaginationItem({ ...props }: React.ComponentProps<"li">) {
-  return <li data-slot="pagination-item" {...props} />
+  return <li data-slot="pagination-item" className='h-full' {...props} />
 }
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<typeof Link>;
+} & React.ComponentProps<typeof Link>;
 
 function PaginationLink({
   className,
   isActive,
-  size = "icon",
   ...props
 }: PaginationLinkProps) {
   return (
@@ -124,10 +122,10 @@ function PaginationLink({
       data-slot="pagination-link"
       data-active={isActive}
       className={cn(
-        buttonVariants({
-          variant: isActive ? "outline" : "ghost",
-          size,
-        }),
+        'h-full flex items-center justify-center gap-1 py-2.5 px-3 border border-border',
+        'hover:bg-background-accent-hover cursor-pointer transition-all',
+        'data-[active=true]:min-w-16 data-[active=true]:border-accent data-[active=true]:text-text-accent data-[active=true]:bg-background-accent-light',
+        'focus-visible:border-transparent focus-visible:ring-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:outline-1',
         className
       )}
       {...props}
@@ -142,12 +140,11 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn(className, 'text-text-secondary')}
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <Typography color='secondary'>Prev</Typography>
     </PaginationLink>
   )
 }
@@ -159,11 +156,10 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
-      className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      className={cn(className, 'text-text-secondary')}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <Typography>Next</Typography>
       <ChevronRightIcon />
     </PaginationLink>
   )
@@ -177,7 +173,7 @@ function PaginationEllipsis({
     <span
       aria-hidden
       data-slot="pagination-ellipsis"
-      className={cn("flex size-9 items-center justify-center", className)}
+      className={cn("h-full flex items-center justify-center gap-1 py-2.5 px-3 border border-border", className)}
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
