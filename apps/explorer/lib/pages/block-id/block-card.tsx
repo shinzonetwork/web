@@ -1,21 +1,19 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardRow, CardTitle } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import { useBlock } from './use-block';
+import { useState } from "react";
+import { useBlock } from "./use-block";
+import { DataItem, DataList } from "@/widgets/data-list";
+import { MinusIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/shared/ui/button";
 
 export interface BlockCardProps {
   height: number;
 }
 
 export const BlockCard = ({ height }: BlockCardProps) => {
+  const [showMore, setShowMore] = useState(false);
   const { data: block, isLoading } = useBlock({ number: height });
-
-  const formatHash = (hash: string, start = 10, end = 8) => {
-    return `${hash.slice(0, start)}...${hash.slice(-end)}`
-  }
 
   if (!block || !block.number) {
     return (
@@ -24,135 +22,144 @@ export const BlockCard = ({ height }: BlockCardProps) => {
   }
 
   return (
-      <main className="container mx-auto py-12">
-        <Card>
-          <CardHeader className="pb-8">
-            <CardTitle>Block Details</CardTitle>
-          </CardHeader>
-          <CardContent className="px-8 pb-8">
-            <div className="space-y-6">
-              <div className="flex justify-between border-b border-light pb-4">
-                <span className="text-sm text-muted-foreground">Block Height</span>
-                <div className="flex items-center gap-3">
-                  <Link href={`/blocks/${block.number - 1}`}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                  <span className="font-mono text-sm text-foreground">{block.number}</span>
-                  <Link href={`/blocks/${block.number + 1}`}>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+    <>
+      <DataList>
+        <DataItem
+          title="Block Height"
+          value={block.number}
+          copyable
+          loading={isLoading}
+        >
+          {block.number}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Timestamp"
-                value={block.timestamp}
-              >
-                {block.timestamp && new Date(Number(block.timestamp) * 1000).toLocaleString()}
-              </CardRow>
+        <DataItem
+          title="Timestamp"
+          value={block.number}
+          copyable
+          loading={isLoading}
+        >
+          {block.timestamp &&
+            new Date(Number(block.timestamp) * 1000).toLocaleString()}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Miner"
-                value={block.miner}
-                copyable
-                link={block.miner ? `/address/${block.miner}` : undefined}
-              >
-                {block.miner && formatHash(block.miner)}
-              </CardRow>
+        <DataItem
+          title="Miner"
+          value={block.miner}
+          link={block.miner ? `/address/${block.miner}` : undefined}
+          copyable
+          loading={isLoading}
+        >
+          {block.miner}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Size"
-                value={block.size}
-              >
-                {block.size && `${(Number(block.size) / 1024).toFixed(2)} KB`}
-              </CardRow>
+        <DataItem title="size" value={block.size} loading={isLoading}>
+          {block.size && `${(Number(block.size) / 1024).toFixed(2)} KB`}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Gas Used"
-                value={block.gasUsed}
-              >
-                {block.gasUsed && block.gasLimit && (
-                  <>
-                    {(Number(block.gasUsed) / 1e6).toFixed(2)}M (
-                    {((Number(block.gasUsed) / Number(block.gasLimit)) * 100).toFixed(2)}%)
-                  </>
-                )}
-              </CardRow>
-
-              <CardRow
-                loading={isLoading}
-                title="Gas Limit"
-                value={block.gasLimit}
-              >
-                {block.gasLimit && `${(Number(block.gasLimit) / 1e6).toFixed(2)}M`}
-              </CardRow>
-
-              <CardRow
-                loading={isLoading}
-                title="Base Fee Per Gas"
-                value={block.baseFeePerGas}
-              >
-                {block.baseFeePerGas} Gwei
-              </CardRow>
-
-              <CardRow
-                loading={isLoading}
-                title="Nonce"
-                value={block.nonce}
-              />
-
-              <CardRow
-                loading={isLoading}
-                title="Difficulty"
-                value={block.difficulty}
-              />
-
-              {block.totalDifficulty && (
-                <CardRow
-                  loading={isLoading}
-                  title="Total Difficulty"
-                  value={block.totalDifficulty}
-                />
+        <DataItem title="Gas Used" value={block.gasUsed} loading={isLoading}>
+          {block.gasUsed && block.gasLimit && (
+            <>
+              {(Number(block.gasUsed) / 1e6).toFixed(2)}M (
+              {((Number(block.gasUsed) / Number(block.gasLimit)) * 100).toFixed(
+                2
               )}
+              %)
+            </>
+          )}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Hash"
-                value={block.hash}
-                copyable
-              >
-                {block.hash && formatHash(block.hash, 16, 12)}
-              </CardRow>
+        <DataItem title="Gas Limit" value={block.gasLimit} loading={isLoading}>
+          {block.gasLimit && `${(Number(block.gasLimit) / 1e6).toFixed(2)}M`}
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="Parent Hash"
-                value={block.parentHash}
-                copyable
-                link={block.number ? `/blocks/${block.number - 1}` : undefined}
-              >
-                {block.parentHash && formatHash(block.parentHash, 16, 12)}
-              </CardRow>
+        <DataItem
+          title="Base Fee Per Gas"
+          value={block.baseFeePerGas}
+          loading={isLoading}
+        >
+          {block.baseFeePerGas} Gwei
+        </DataItem>
 
-              <CardRow
-                loading={isLoading}
-                title="State Root"
-                value={block.stateRoot}
-                copyable
-              >
-                {block.stateRoot && formatHash(block.stateRoot, 16, 12)}
-              </CardRow>
-            </div>
-          </CardContent>
-        </Card>
-      </main>
+        <DataItem title="Nonce" value={block.nonce} loading={isLoading} />
+
+        <DataItem
+          title="Difficulty"
+          value={block.difficulty}
+          loading={isLoading}
+        />
+
+        <DataItem
+          title="Total Difficulty"
+          value={block.totalDifficulty}
+          loading={isLoading}
+        />
+      </DataList>
+
+      <div className="col-span-3 h-8 w-full" />
+
+      <div className="col-span-3 h-3 w-full border-y border-border" />
+      
+      {showMore ? (
+        <DataList>
+          <DataItem
+            title="Hash"
+            value={block.hash}
+            copyable
+            loading={isLoading}
+            truncate={false}
+          >
+            <span className="whitespace-nowrap overflow-x-auto">
+              {block.hash}
+            </span>
+          </DataItem>
+
+          <DataItem
+            title="Parent Hash"
+            value={block.parentHash}
+            copyable
+            link={block.number ? `/blocks/${block.number - 1}` : undefined}
+            truncate={false}
+          >
+            {block.parentHash}
+          </DataItem>
+
+          <DataItem
+            title="State Root"
+            value={block.stateRoot}
+            copyable
+            loading={isLoading}
+            truncate={false}
+          >
+            {block.stateRoot}
+          </DataItem>
+          <DataItem
+            title="More Details"
+            loading={isLoading}
+          >
+            <Button variant="link" onClick={() => setShowMore(false)}>
+            <span className="flex items-center gap-2 text-[#D01F27]">
+              <MinusIcon className="w-4 h-4" />
+              Click to show less details
+            </span>
+            </Button>
+          </DataItem>
+        </DataList>
+      ) : (
+        <DataList>
+          <DataItem
+            title="More Details"
+            loading={isLoading}
+          >
+            <Button variant="link" onClick={() => setShowMore(true)}>
+            <span className="flex items-center gap-2 text-[#D01F27]">
+              <PlusIcon className="w-4 h-4" />
+                Click to show more details
+              </span>
+            </Button>
+          </DataItem>
+        </DataList>
+      )}
+    </>
   );
 };

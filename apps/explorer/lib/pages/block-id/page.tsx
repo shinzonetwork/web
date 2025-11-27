@@ -1,5 +1,5 @@
 import { PageLayout } from '@/widgets/layout'
-import { BlockCard } from './block-card';
+import { BlockTabs } from './block-tabs';
 
 export const BlockDetailPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
@@ -7,7 +7,7 @@ export const BlockDetailPage = async ({ params }: { params: Promise<{ id: string
 
   return (
     <PageLayout title={`Block #${blockNumber}`}>
-      <BlockCard height={blockNumber} />
+      <BlockTabs height={blockNumber} />
     </PageLayout>
   );
 };
