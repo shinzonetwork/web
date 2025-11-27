@@ -66,9 +66,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         link={`/blocks/${tx.blockNumber}`}
         loading={isLoading}
       >
-          <span className='font-mono'>
             {tx.blockNumber}
-          </span>
       </DataItem>
 
       <DataItem
@@ -161,7 +159,12 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title="Input Data"
         value={tx.input}
         loading={isLoading}
-      />
+        copyable
+        allowWrap
+        wrapAt={tx.input && tx.input.length > 100 ? 100 : tx.input?.length}
+      >
+          {tx.input}
+      </DataItem>
 
       <DataItem
         title='Type'
