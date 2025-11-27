@@ -2,8 +2,7 @@
 
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import { useSearchParams } from 'next/navigation';
-import { DEFAULT_LIMIT, Pagination, usePage } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { formatHash } from '@/shared/utils/format-hash';
 import { Typography } from '@/shared/ui/typography';
@@ -14,15 +13,17 @@ import {
 } from '@/shared/ui/table';
 import { useTransactions } from './use-txs';
 
-export const TransactionsPage = () => {
-  const searchParams = useSearchParams();
-  const blockFilter = Number(searchParams.get('block'));
+export interface TransactionPageProps {
+  block?: number;
+  pageParams: PageParams;
+}
 
-  const { page, offset, limit } = usePage();
+export const TransactionsPageClient = ({ block, pageParams }: TransactionPageProps) => {
+  const { page, offset, limit } = pageParams;
   const { data: transactions, isLoading } = useTransactions({
     limit,
     offset,
-    blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter,
+    blockNumber: block,
   });
 
   const formatValue = (value: string) => {
@@ -36,7 +37,7 @@ export const TransactionsPage = () => {
   };
 
   return (
-    <PageLayout title={blockFilter ? `Transactions in block #${blockFilter}` : 'Transactions'}>
+    <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
       <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
         <Tabs defaultValue='all'>
           <TabsList>
@@ -82,7 +83,7 @@ export const TransactionsPage = () => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={tx?.timestamp as string}>
+            <TableNullableCell value={undefined}>
               {(value) => (
                 formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })
               )}

@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
-import { usePage } from './use-page';
 import { Pagination } from './pagination';
 
 const PaginationDemo = ({
@@ -9,7 +8,7 @@ const PaginationDemo = ({
   totalItems: number;
   itemsPerPage: number;
 }) => {
-  const { page } = usePage();
+  const page = 1;
 
   return (
     <div className="min-w-[600px]">
