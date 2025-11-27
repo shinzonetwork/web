@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useBlock } from "./use-block";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
-import Link from "next/link";
 import { Button } from "@/shared/ui/button";
+import { useBlock } from "./use-block";
 
 export interface BlockCardProps {
   height: number;

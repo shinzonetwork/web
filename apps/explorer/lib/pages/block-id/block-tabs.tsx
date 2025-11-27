@@ -3,13 +3,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { BlockCard } from './block-card';
-import { Typography } from '@/shared/ui/typography';
+import { BlockTransactions } from './block-txs';
+import { PageParams } from '@/shared/ui/pagination';
 
 export interface BlockTabsProps {
   height: number;
+  pageParams: PageParams;
 }
 
-export const BlockTabs = ({ height }: BlockTabsProps) => {
+export const BlockTabs = ({ height, pageParams }: BlockTabsProps) => {
   return (
     <Tabs defaultValue='overview'>
       <Container wrapperClassName='mt-12' borderB>
@@ -29,9 +31,7 @@ export const BlockTabs = ({ height }: BlockTabsProps) => {
         </TabsContent>
 
         <TabsContent asChild value='transactions'>
-          <Container className='py-10'>
-            <Typography variant='md'>Nothing here yet.</Typography>
-          </Container>
+          <BlockTransactions blockNumber={height} pageParams={pageParams} />
         </TabsContent>
       </div>
     </Tabs>
