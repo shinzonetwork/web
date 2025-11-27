@@ -4,17 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "opennextjs-cloudflare build",
+    "preview": "opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare deploy",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "lint": "eslint",
     "shadcn": "pnpm dlx shadcn@latest add",
     "graphql:codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",
-    "graphql:watch": "graphql-codegen --config ./lib/shared/graphql/codegen.ts --watch",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "graphql:watch": "graphql-codegen --config ./lib/shared/graphql/codegen.ts --watch"
   },
   "dependencies": {
     "@radix-ui/react-separator": "^1.1.8",
