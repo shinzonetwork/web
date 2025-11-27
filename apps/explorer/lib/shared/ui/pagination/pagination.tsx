@@ -1,17 +1,17 @@
-import * as React from "react"
+import * as React from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreHorizontalIcon,
-} from "lucide-react"
+} from 'lucide-react';
 
 import Link from 'next/link'
 import type { ComponentProps } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Typography } from '@/shared/ui/typography';
-import { cn } from "@/shared/utils/utils"
+import { cn } from '@/shared/utils/utils';
 import { getRange, transform } from './utils';
-import { DEFAULT_LIMIT } from './use-page';
+import { DEFAULT_LIMIT } from './get-server-page';
 
 export interface PaginationProps extends ComponentProps<"nav"> {
   itemsPerPage?: number;
