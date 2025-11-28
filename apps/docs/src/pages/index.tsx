@@ -14,7 +14,7 @@ import styles from './index.module.css';
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <header className={clsx('padding-horiz--md', styles.heroBanner)}>
+    <header className={clsx('', styles.heroBanner)}>
       <div>
         <ThemedImage
           className={styles.heroLogo}
@@ -43,7 +43,7 @@ export default function Home(): ReactNode {
       title={`${siteConfig.title}`}
       description={`${siteConfig.tagline}`}
       wrapperClassName='szo-home'>
-      <main>
+      <main className={styles.main}>
         <HomepageHeader />
         <HomepageFeatures />
       </main>
