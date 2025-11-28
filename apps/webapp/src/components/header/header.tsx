@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <div className="flex p-4">
       <Image
-        src="/images/logo.svg"
+        src="/images/shinzo-logo.svg"
         alt="Shinzo"
         width={123}
         height={23}
