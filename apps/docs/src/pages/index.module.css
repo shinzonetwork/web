@@ -4,20 +4,40 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
+  padding: 8rem 0;
   position: relative;
   overflow: hidden;
+  min-height: 30vh;
+  display: flex;
+  align-items: center;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroTitle {
+  font-size: 3rem;
 }
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.heroLogo {
+  max-width: 300px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 996px) {
+  .heroLogo {
+    max-width: 200px;
+  }
+  .heroBanner {
+    padding: 4rem 0 2rem;
+  }
+  .heroTitle {
+    font-size: 26px;
+  }
 }
