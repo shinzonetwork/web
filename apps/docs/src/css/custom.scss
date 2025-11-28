@@ -9,7 +9,7 @@
 /* You can override the default Infima variables here. */
 :root {
   --background: #fff;
-  --foreground: #000;
+  --foreground: #353535;
 
   --szo-border: #c7c7c7;
 
@@ -90,7 +90,7 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme="dark"] {
-  --background: #000;
+  --background: #131313;
   --foreground: #fff;
   --szo-border: rgb(71, 71, 71);
 
@@ -163,19 +163,29 @@ html {
   }
 }
 
+// Markdown overrides
+
+.markdown {
+  h1:first-child {
+    --ifm-h1-font-size: 2.5rem;
+  }
+}
+
 // NavBar
 .navbar {
   box-shadow: none;
   border-bottom: 1px solid var(--szo-border);
 }
+
 .navbar__logo {
   img {
     max-width: 125px;
   }
 }
-
-.theme-doc-sidebar-container {
-  border-right: 1px solid var(--szo-border);
+.main-wrapper {
+  .theme-doc-sidebar-container {
+    border-right: 1px solid var(--szo-border);
+  }
 }
 
 /* Breadcrumbs */
