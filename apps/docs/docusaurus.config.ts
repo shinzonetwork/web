@@ -94,7 +94,7 @@ const config: Config = {
           items: [
             {
               label: "Getting Started",
-              to: "/",
+              to: "/docs/intro",
             },
             {
               label: "GitHub",

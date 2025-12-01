@@ -1,12 +1,12 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import { Button } from '@site/src/components/Button';
 import Heading from '@theme/Heading';
 import Layout from '@theme/Layout';
 import ThemedImage from '@theme/ThemedImage';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
-
-
+import Link from '@docusaurus/Link';
 
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import styles from './index.module.css';
@@ -30,6 +30,12 @@ function HomepageHeader() {
         </Heading>
 
         <p className="hero__subtitle">{siteConfig.tagline}</p>
+
+        <Link to="/docs/intro">
+          <Button>
+            Get Started
+          </Button>
+        </Link>
       </div>
     </header>
   );
