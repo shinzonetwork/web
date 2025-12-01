@@ -1,47 +1,46 @@
-import type {Config} from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
-import { codeTheme } from './src/code-theme';
+import type { Config } from "@docusaurus/types";
+import type * as Preset from "@docusaurus/preset-classic";
+import { codeTheme } from "./src/code-theme";
 
 const config: Config = {
-  title: 'Shinzo Developer Portal',
-  tagline: 'The Home of Shinzo Developers',
-  url: 'https://docs.shinzo.network',
-  baseUrl: '/',
-  favicon: 'img/favicon.png',
+  title: "Shinzō Developer Portal",
+  tagline: "Build the Read Layer of Truth",
+  url: "https://docs.shinzo.network",
+  baseUrl: "/",
+  favicon: "img/favicon.png",
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true,
   },
 
-  organizationName: 'shinzonetwork',
-  projectName: 'shinzo-docs',
+  organizationName: "shinzonetwork",
+  projectName: "shinzo-docs",
 
-  onBrokenLinks: 'warn',
+  onBrokenLinks: "warn",
   markdown: {
     hooks: {
-      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownLinks: "warn",
     },
   },
 
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       {
         docs: {
-          sidebarPath: './sidebars.ts',
+          sidebarPath: "./sidebars.ts",
           sidebarCollapsible: true,
           sidebarCollapsed: true,
-          editUrl:
-            'https://github.com/shinzonetwork/web/tree/main/apps/docs/',
+          editUrl: "https://github.com/shinzonetwork/web/tree/main/apps/docs/",
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.scss",
         },
       } satisfies Preset.Options,
     ],
@@ -55,86 +54,75 @@ const config: Config = {
     },
     colorMode: {
       respectPrefersColorScheme: false,
-      defaultMode: 'light',
+      defaultMode: "light",
     },
     navbar: {
       title: null,
       hideOnScroll: false,
       logo: {
-        alt: 'Shinzo Network Documentation',
-        src: 'img/shinzo-logo.svg',
+        alt: "Shinzo Network Documentation",
+        src: "img/shinzo-logo.svg",
+        srcDark: "img/shinzo-logo-w.svg",
       },
 
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'shinzoSidebar',
-          position: 'left',
-          label: 'Shinzo',
-          className: 'header-docs-link-shinzo',
+          type: "docSidebar",
+          sidebarId: "shinzoSidebar",
+          position: "left",
+          label: "Get Started",
+          className: "header-docs-link-shinzo",
         },
         {
-          href: 'https://github.com/shinzonetwork/',
-          'aria-label': 'GitHub repository',
-          label: 'GitHub',
-          position: 'right',
+          href: "https://github.com/shinzonetwork/",
+          "aria-label": "GitHub repository",
+          position: "right",
+          className: "header-github-link",
         },
       ],
     },
     footer: {
-      style: 'light',
+      style: "light",
       logo: {
-        alt: 'Shinzo Logo',
-        src: 'img/shinzo-logo.svg',
-        href: 'https://shinzo.network',
+        alt: "Shinzo Logo",
+        src: "img/shinzo-logo-footer.svg",
+        srcDark: "img/shinzo-logo-footer-w.svg",
+        href: "https://shinzo.network",
       },
       links: [
         {
-          title: 'Developers',
           items: [
             {
-              label: 'Getting Started',
-              to: '/',
+              label: "Getting Started",
+              to: "/docs/intro",
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/sourcenetwork',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'Discord',
-              href: 'https://source.network/discord',
+              label: "GitHub",
+              href: "https://github.com/shinzonetwork",
             },
             {
-              label: 'Twitter',
-              href: 'https://x.com/edgeofsource',
-            },
-          ],
-        },
-        {
-          title: 'About',
-          items: [
-            {
-              label: 'About Us',
+              label: "shinzo.network",
               href: "https://shinzo.network/",
-            },
-            {
-              label: 'Privacy Policy',
-              href: 'https://source.network/privacy',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Source, Inc & Democratized Data Foundation.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Shinzo`,
     },
     prism: {
       theme: codeTheme,
     },
   } satisfies Preset.ThemeConfig,
+  plugins: [
+    [
+      "docusaurus-plugin-sass",
+      {
+        sassOptions: {
+          includePaths: ["./src/css"],
+        },
+      },
+    ],
+  ],
 };
 
 export default config;
