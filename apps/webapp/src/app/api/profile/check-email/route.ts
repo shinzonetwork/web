@@ -12,7 +12,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { emailExists } from "@/lib/gcs/profile-storage";
+import { fetchUserContactByEmail } from "@/lib/gcs/profile-storage";
 import { isValidEmail } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
@@ -36,11 +36,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if email exists
-    const exists = await emailExists(email);
+    const userContact = await fetchUserContactByEmail(email);
 
     return NextResponse.json({
       success: true,
-      exists,
+      userContact: userContact ?? null,
     });
   } catch (error) {
     console.error("Error checking email:", error);

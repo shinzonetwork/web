@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import useShinzoStore from "@/store/store";
@@ -45,6 +46,7 @@ export default function Profile({
   ]);
 
   const { isProfileCompleted } = useShinzoStore();
+  const { address } = useAccount();
   const {
     saveProfile,
     checkEmail,
@@ -53,17 +55,26 @@ export default function Profile({
   } = useProfile();
 
   const handleSave = async () => {
-    // Check if email already exists
-    const emailExists = await checkEmail(contactProfile.email);
-
-    if (emailExists) {
-      alert("This email is already registered. Please use a different email.");
+    if (!address) {
+      alert("Wallet address is required. Please connect your wallet.");
       return;
     }
+
+    // Check if email already exists (if email is provided)
+    if (contactProfile.email) {
+      const emailExists = await checkEmail(contactProfile.email);
+      if (emailExists) {
+        alert(
+          "This email is already registered. Please use a different email.",
+        );
+        return;
+      }
+    }
+
     try {
-      // Save profile
-      const success = await saveProfile({
-        email: contactProfile.email,
+      // Save profile with wallet address
+      const success = await saveProfile(address, {
+        email: contactProfile.email || undefined,
         phone: contactProfile.phone || undefined,
         socials: socials.filter((s) => s.platform && s.link), // Only save non-empty socials
         wallets: wallets.filter((w) => w.name && w.address), // Only save non-empty wallets
@@ -82,7 +93,8 @@ export default function Profile({
     }
   };
 
-  const isFormValid = isValidEmail(contactProfile.email);
+  const isFormValid =
+    !contactProfile.email || isValidEmail(contactProfile.email);
 
   return (
     <div className="space-y-6 mt-6">

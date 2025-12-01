@@ -1,11 +1,12 @@
 /**
  * API Route: Save User Profile
  *
- * POST /api/profile/save
+ * POST /api/profile/update-profile
  *
  * Body (JSON):
  * {
- *   email: string;
+ *   walletAddress: string;
+ *   email?: string;
  *   phone?: string;
  *   socials: Array<{ id: string; platform: string; link: string }>;
  *   wallets: Array<{ id: string; name: string; address: string }>;
@@ -23,17 +24,27 @@ import { isValidEmail } from "@/lib/utils";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, phone, socials, wallets } = body;
+    const { walletAddress, profile } = body;
 
     // Validate required fields
-    if (!email) {
+    if (!walletAddress) {
       return NextResponse.json(
-        { success: false, error: "Email is required" },
+        { success: false, error: "Wallet address is required" },
         { status: 400 },
       );
     }
 
-    if (!isValidEmail(email)) {
+    if (!profile) {
+      return NextResponse.json(
+        { success: false, error: "Profile data is required" },
+        { status: 400 },
+      );
+    }
+
+    const { email, phone, socials, wallets } = profile;
+
+    // Validate email if provided
+    if (email && !isValidEmail(email)) {
       return NextResponse.json(
         { success: false, error: "Invalid email format" },
         { status: 400 },
@@ -55,8 +66,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Save profile to GCS
-    await saveProfile({
-      email,
+    await saveProfile(walletAddress, {
+      email: email || undefined,
       phone: phone || undefined,
       socials,
       wallets,

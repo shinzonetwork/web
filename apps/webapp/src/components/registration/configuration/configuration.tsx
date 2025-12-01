@@ -17,6 +17,8 @@ import {
   SHINZO_PRECOMPILE_ADDRESS,
 } from "@/lib/constants";
 import { convertToHexIfNeeded, sanitizeString } from "@/lib/utils";
+import { useAccount } from "wagmi";
+import { useProfile } from "@/hooks/useProfile";
 
 type FormData = {
   defraPublicKey: string;
@@ -78,7 +80,9 @@ export default function Configuration({
     useWaitForTransactionReceipt({
       hash: txHash as `0x${string}`,
     });
-  const { setUserRole, isRegistered } = useShinzoStore();
+  const { setUserRole, isRegistered, registered } = useShinzoStore();
+  const { address } = useAccount();
+  const { updateRegisteredStatus } = useProfile();
 
   const [formData, setFormData] = useState<FormData>({
     defraPublicKey: "",
@@ -102,11 +106,21 @@ export default function Configuration({
 
   // Handle successful transaction confirmation
   useEffect(() => {
-    if (isConfirmed && txHash) {
+    if (isConfirmed && txHash && address && !registered) {
       isRegistered(true);
+      // Update registered status in GCS
+      updateRegisteredStatus(address, true);
       handleConfigComplete();
     }
-  }, [isConfirmed, txHash, isRegistered, handleConfigComplete]);
+  }, [
+    isConfirmed,
+    txHash,
+    address,
+    registered,
+    isRegistered,
+    updateRegisteredStatus,
+    handleConfigComplete,
+  ]);
 
   const sendRegisterTransaction = async () => {
     // Validate inputs before sending transaction

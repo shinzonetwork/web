@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import useShinzoStore from "@/store/store";
 import { MESSAGE_TO_SIGN } from "@/lib/constants";
 import { Hex } from "viem";
+import { useProfile } from "@/hooks/useProfile";
 
 export function SignatureVerificationHandler({
   signature,
@@ -13,6 +14,7 @@ export function SignatureVerificationHandler({
 }) {
   const { address } = useAccount();
   const { isSignedWithWallet } = useShinzoStore();
+  const { initializeProfile } = useProfile();
 
   const { data } = useVerifyMessage({
     address,
@@ -21,8 +23,13 @@ export function SignatureVerificationHandler({
   });
 
   useEffect(() => {
-    isSignedWithWallet(Boolean(data));
-  }, [data, isSignedWithWallet]);
+    const verified = Boolean(data);
+    if (verified && address) {
+      isSignedWithWallet(verified);
+      // Initialize profile in GCS when wallet signs
+      initializeProfile(address, verified);
+    }
+  }, [data, address, isSignedWithWallet, initializeProfile]);
 
   return null;
 }

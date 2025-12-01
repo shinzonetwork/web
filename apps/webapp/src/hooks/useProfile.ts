@@ -7,21 +7,34 @@
 
 import { useState } from "react";
 
-export interface UserProfile {
-  email: string;
+export interface UserContact {
+  email?: string;
   phone?: string;
   socials: Array<{ id: string; platform: string; link: string }>;
   wallets: Array<{ id: string; name: string; address: string }>;
 }
-
-export interface FetchedUserProfile extends UserProfile {
+export interface UserProfile extends UserContact {
+  walletAddress: string;
+  signedWithWallet: boolean;
+  registered: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
 interface UseProfileReturn {
-  saveProfile: (profile: UserProfile) => Promise<boolean>;
-  checkEmail: (email: string) => Promise<boolean | null>;
+  initializeProfile: (
+    walletAddress: string,
+    signedWithWallet: boolean,
+  ) => Promise<boolean>;
+  updateRegisteredStatus: (
+    walletAddress: string,
+    registered: boolean,
+  ) => Promise<boolean>;
+  saveProfile: (
+    walletAddress: string,
+    profile: UserContact,
+  ) => Promise<boolean>;
+  checkEmail: (email: string) => Promise<UserContact | null>;
   loading: boolean;
   error: string | null;
 }
@@ -30,17 +43,88 @@ export function useProfile(): UseProfileReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const saveProfile = async (profile: UserProfile): Promise<boolean> => {
+  const initializeProfile = async (
+    walletAddress: string,
+    signedWithWallet: boolean,
+  ): Promise<boolean> => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/profile/save", {
+      const response = await fetch("/api/profile/initialize", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(profile),
+        body: JSON.stringify({ walletAddress, signedWithWallet }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to initialize profile");
+      }
+
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to initialize profile";
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateRegisteredStatus = async (
+    walletAddress: string,
+    registered: boolean,
+  ): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/profile/update-registered", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ walletAddress, registered }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to update registered status");
+      }
+
+      return true;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to update registered status";
+      setError(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const saveProfile = async (
+    walletAddress: string,
+    profile: UserContact,
+  ): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("/api/profile/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ walletAddress, profile }),
       });
 
       const result = await response.json();
@@ -60,7 +144,7 @@ export function useProfile(): UseProfileReturn {
     }
   };
 
-  const checkEmail = async (email: string): Promise<boolean | null> => {
+  const checkEmail = async (email: string): Promise<UserContact | null> => {
     setLoading(true);
     setError(null);
 
@@ -74,7 +158,7 @@ export function useProfile(): UseProfileReturn {
         throw new Error(result.error || "Failed to check email");
       }
 
-      return result.exists as boolean;
+      return result.userContact ?? null;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to check email";
@@ -86,6 +170,8 @@ export function useProfile(): UseProfileReturn {
   };
 
   return {
+    initializeProfile,
+    updateRegisteredStatus,
     saveProfile,
     checkEmail,
     loading,
