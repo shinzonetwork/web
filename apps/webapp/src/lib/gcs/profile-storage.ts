@@ -12,6 +12,7 @@ export interface UserProfile {
   walletAddress: string;
   signedWithWallet: boolean;
   registered: boolean;
+  profileCompleted: boolean;
   email?: string;
   phone?: string;
   socials: Array<{ id: string; platform: string; link: string }>;
@@ -100,6 +101,7 @@ export async function initializeProfile(
     walletAddress: normalizedAddress,
     signedWithWallet,
     registered: existingProfile.registered || false,
+    profileCompleted: existingProfile.profileCompleted || false,
     email: existingProfile.email,
     phone: existingProfile.phone,
     socials: existingProfile.socials || [],
@@ -197,9 +199,9 @@ export async function saveProfile(
   const profileData: UserProfile = {
     ...existingProfile,
     ...profile,
+    profileCompleted: true,
     updatedAt: new Date().toISOString(),
   };
-  console.log("calling save");
   await file.save(JSON.stringify(profileData, null, 2), {
     contentType: "application/json",
     metadata: {
@@ -262,6 +264,39 @@ export async function fetchUserContactByEmail(
     return null;
   } catch (error) {
     console.error("Error checking email existence:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetch user profile by wallet address
+ * @param walletAddress - Wallet address
+ * @returns Promise<Partial<UserProfile> | null> - Profile data or null if not found
+ */
+export async function fetchUserStatusByWalletAddress(
+  walletAddress: string,
+): Promise<Partial<UserProfile> | null> {
+  const bucket = getBucket();
+  const normalizedAddress = normalizeWalletAddress(walletAddress);
+  const filePath = getProfileFilePath(normalizedAddress);
+  const file = bucket.file(filePath);
+
+  try {
+    const [exists] = await file.exists();
+    if (!exists) {
+      return null;
+    }
+
+    const [buffer] = await file.download();
+    const profile: UserProfile = JSON.parse(buffer.toString());
+    return {
+      walletAddress: profile.walletAddress,
+      signedWithWallet: profile.signedWithWallet,
+      registered: profile.registered,
+      profileCompleted: profile.profileCompleted,
+    };
+  } catch (error) {
+    console.error("Error fetching profile:", error);
     return null;
   }
 }

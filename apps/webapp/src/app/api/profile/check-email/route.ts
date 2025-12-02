@@ -7,7 +7,7 @@
  * - email: Email address to check (required)
  *
  * Returns:
- * - { success: true, exists: boolean }
+ * - { success: true, usercontact: UserContact }
  * - { success: false, error: string }
  */
 

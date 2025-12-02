@@ -2,10 +2,10 @@
 
 import { useAccount, useVerifyMessage } from "wagmi";
 import { useEffect } from "react";
-import useShinzoStore from "@/store/store";
 import { MESSAGE_TO_SIGN } from "@/lib/constants";
 import { Hex } from "viem";
 import { useProfile } from "@/hooks/useProfile";
+import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
 export function SignatureVerificationHandler({
   signature,
@@ -13,7 +13,7 @@ export function SignatureVerificationHandler({
   signature: Hex;
 }) {
   const { address } = useAccount();
-  const { isSignedWithWallet } = useShinzoStore();
+  const { setSignedWithWallet } = useRegistrationContext();
   const { initializeProfile } = useProfile();
 
   const { data } = useVerifyMessage({
@@ -25,11 +25,11 @@ export function SignatureVerificationHandler({
   useEffect(() => {
     const verified = Boolean(data);
     if (verified && address) {
-      isSignedWithWallet(verified);
+      setSignedWithWallet(verified);
       // Initialize profile in GCS when wallet signs
       initializeProfile(address, verified);
     }
-  }, [data, address, isSignedWithWallet, initializeProfile]);
+  }, [data, address, setSignedWithWallet, initializeProfile]);
 
   return null;
 }

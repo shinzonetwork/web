@@ -1,20 +1,19 @@
 import { createContext } from "react";
-import { Hex } from "viem";
 
 export type RegistrationContext = {
-  defraPublicKey: string;
-  peerId: string;
-  signature: Hex | undefined;
-  handleDefraPublicKey: (key: string) => void;
-  handlePeerId: (peerId: string) => void;
-  handleSignature: (sign: Hex) => void;
+  isProfileCompleted: boolean;
+  isRegistered: boolean;
+  isSignedWithWallet: boolean;
+  setProfileCompleted: (profileCompleted: boolean) => void;
+  setRegistered: (registered: boolean) => void;
+  setSignedWithWallet: (signedWithWallet: boolean) => void;
 };
 
 export const RegistrationContext = createContext<RegistrationContext>({
-  defraPublicKey: "",
-  peerId: "",
-  signature: undefined,
-  handleDefraPublicKey: () => {},
-  handlePeerId: () => {},
-  handleSignature: () => {},
+  isProfileCompleted: false,
+  isRegistered: false,
+  isSignedWithWallet: false,
+  setProfileCompleted: () => {},
+  setRegistered: () => {},
+  setSignedWithWallet: () => {},
 });

@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 import { Button } from "@/components/ui/button";
-import useShinzoStore from "@/store/store";
 import SocialProfile from "@/components/registration/profile/social-profile/social-profile";
 import WalletProfile from "@/components/registration/profile/wallet-profile/wallet-profile";
 import { isValidEmail } from "@/lib/utils";
 import ContactProfile from "./contact-profile/contact-profile";
 import { useProfile } from "@/hooks/useProfile";
+import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
 export type Social = {
   id: string;
@@ -28,11 +28,7 @@ export type ContactProfile = {
   phone: string;
 };
 
-export default function Profile({
-  handleProfileComplete,
-}: {
-  handleProfileComplete: () => void;
-}) {
+export default function Profile() {
   const [contactProfile, setContactProfile] = useState<ContactProfile>({
     email: "",
     phone: "",
@@ -45,7 +41,7 @@ export default function Profile({
     { id: crypto.randomUUID(), name: "", address: "" },
   ]);
 
-  const { isProfileCompleted } = useShinzoStore();
+  const { setProfileCompleted } = useRegistrationContext();
   const { address } = useAccount();
   const {
     saveProfile,
@@ -80,8 +76,7 @@ export default function Profile({
         wallets: wallets.filter((w) => w.name && w.address), // Only save non-empty wallets
       });
       if (success) {
-        isProfileCompleted(true);
-        handleProfileComplete();
+        setProfileCompleted(true);
       } else {
         alert(
           `Failed to save profile: ${saveError || "Unknown error"}. Please try again.`,

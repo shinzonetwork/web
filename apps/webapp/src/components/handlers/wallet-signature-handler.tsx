@@ -1,44 +1,32 @@
 "use client";
 
 import { SignatureVerificationHandler } from "@/components/handlers/signature-verification-handler";
-import { MESSAGE_TO_SIGN } from "@/lib/constants";
-import { useEffect, useState } from "react";
-import { Hex } from "viem";
-import { useSignMessage, useWalletClient } from "wagmi";
-import useShinzoStore from "@/store/store";
+import { useWalletSignature } from "@/hooks/useWalletSignature";
+import { useRegistrationContext } from "@/hooks/useRegistrationContext";
+import { useEffect } from "react";
 
+/**
+ * Handler for wallet signature when not signed with wallet
+ * The hook handles preventing duplicate signing attempts internally
+ */
 export default function WalletSignatureHandler() {
-  const [signature, setSignature] = useState<Hex>("0x");
-
-  const { signMessageAsync } = useSignMessage();
-  const { data: walletClientData, isSuccess } = useWalletClient();
-  const { signedWithWallet } = useShinzoStore();
+  const { signature, signMessage, isSigning, error } = useWalletSignature();
+  const { isSignedWithWallet } = useRegistrationContext();
 
   useEffect(() => {
-    const signMessage = async () => {
-      try {
-        if (isSuccess) {
-          if (!walletClientData?.account.address) {
-            return;
-          }
-          const signedMessage = await signMessageAsync({
-            account: walletClientData.account.address,
-            message: MESSAGE_TO_SIGN,
-          });
-          setSignature(signedMessage);
-        }
-      } catch (err: unknown) {
-        if (process.env.NODE_ENV === "development") {
-          console.error("Error signing message:", err);
-        }
-      }
-    };
+    // Skip if already signed, have signature, is signing, or have error
+    if (isSignedWithWallet || signature || isSigning || error) {
+      return;
+    }
+
     signMessage();
-  }, [isSuccess, signMessageAsync, walletClientData]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSignedWithWallet, signature, isSigning, error]);
 
   // Render SignatureVerificationHandler when we have a valid signature
-  // and haven't already verified (to avoid re-verification)
-  if (signature.length > 2 && !signedWithWallet) {
+  // and haven't already verified
+  if (signature && signature.length > 2 && !isSignedWithWallet) {
     return <SignatureVerificationHandler signature={signature} />;
   }
 

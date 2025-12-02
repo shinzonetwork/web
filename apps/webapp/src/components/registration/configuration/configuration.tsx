@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 
-import useShinzoStore from "@/store/store";
 import {
   EntityRole,
   MESSAGE_TO_SIGN,
@@ -19,6 +18,7 @@ import {
 import { convertToHexIfNeeded, sanitizeString } from "@/lib/utils";
 import { useAccount } from "wagmi";
 import { useProfile } from "@/hooks/useProfile";
+import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
 type FormData = {
   defraPublicKey: string;
@@ -64,11 +64,7 @@ const REGISTER_TRANSACTION_ABI = [
   },
 ];
 
-export default function Configuration({
-  handleConfigComplete,
-}: {
-  handleConfigComplete: () => void;
-}) {
+export default function Configuration() {
   const {
     sendTransaction,
     isPending,
@@ -80,7 +76,7 @@ export default function Configuration({
     useWaitForTransactionReceipt({
       hash: txHash as `0x${string}`,
     });
-  const { setUserRole, isRegistered, registered } = useShinzoStore();
+  const { isRegistered, setRegistered } = useRegistrationContext();
   const { address } = useAccount();
   const { updateRegisteredStatus } = useProfile();
 
@@ -101,25 +97,22 @@ export default function Configuration({
   const handleUserRoleChange = (value: string) => {
     const newEntity = parseInt(value) as EntityRole;
     setFormData((prev) => ({ ...prev, entity: newEntity }));
-    setUserRole(newEntity === EntityRole.Indexer ? "indexer" : "host");
   };
 
   // Handle successful transaction confirmation
   useEffect(() => {
-    if (isConfirmed && txHash && address && !registered) {
-      isRegistered(true);
+    if (isConfirmed && txHash && address && !isRegistered) {
+      setRegistered(true);
       // Update registered status in GCS
       updateRegisteredStatus(address, true);
-      handleConfigComplete();
     }
   }, [
     isConfirmed,
     txHash,
     address,
-    registered,
     isRegistered,
+    setRegistered,
     updateRegisteredStatus,
-    handleConfigComplete,
   ]);
 
   const sendRegisterTransaction = async () => {
@@ -174,7 +167,7 @@ export default function Configuration({
     !formData.peerSignedMessage.trim();
 
   return (
-    <div className="space-y-6 mt-6">
+    <div className="space-y-6 mx-6">
       <div className="space-y-2">
         <h3 className="text-3xl font-bold">Configuration</h3>
         <p className="text-base leading-relaxed text-muted-foreground">

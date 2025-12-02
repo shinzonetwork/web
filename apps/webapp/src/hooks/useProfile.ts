@@ -17,6 +17,7 @@ export interface UserProfile extends UserContact {
   walletAddress: string;
   signedWithWallet: boolean;
   registered: boolean;
+  profileCompleted: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,6 +36,9 @@ interface UseProfileReturn {
     profile: UserContact,
   ) => Promise<boolean>;
   checkEmail: (email: string) => Promise<UserContact | null>;
+  fetchUserStatus: (
+    walletAddress: string,
+  ) => Promise<Partial<UserProfile> | null>;
   loading: boolean;
   error: string | null;
 }
@@ -169,11 +173,39 @@ export function useProfile(): UseProfileReturn {
     }
   };
 
+  const fetchUserStatus = async (
+    walletAddress: string,
+  ): Promise<Partial<UserProfile> | null> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams({ walletAddress });
+      const response = await fetch(`/api/profile/fetch-user-status?${params}`);
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || "Failed to fetch profile");
+      }
+
+      return result.userStatus ?? null;
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch profile";
+      setError(errorMessage);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     initializeProfile,
     updateRegisteredStatus,
     saveProfile,
     checkEmail,
+    fetchUserStatus,
     loading,
     error,
   };

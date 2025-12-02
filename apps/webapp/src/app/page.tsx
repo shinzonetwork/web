@@ -4,25 +4,36 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
 
-import useShinzoStore from "@/store/store";
-import WalletSignatureHandler from "@/components/handlers/wallet-signature-handler";
+import { useRegistrationContext } from "@/hooks/useRegistrationContext";
+import { WalletProfileHydrator } from "@/components/handlers/wallet-profile-hydrator";
 
 export default function LandingPage() {
   const { isConnected } = useAccount();
-  const { signedWithWallet, registered, profileCompleted } = useShinzoStore();
+  const { isSignedWithWallet, isRegistered, isProfileCompleted } =
+    useRegistrationContext();
   const router = useRouter();
 
   useEffect(() => {
-    if (isConnected && signedWithWallet && !(registered || profileCompleted)) {
+    if (
+      isConnected &&
+      isSignedWithWallet &&
+      (!isRegistered || !isProfileCompleted)
+    ) {
       router.replace("/registration");
     } else {
       router.replace("/");
     }
-  }, [isConnected, router, signedWithWallet, registered, profileCompleted]);
+  }, [
+    isConnected,
+    router,
+    isSignedWithWallet,
+    isRegistered,
+    isProfileCompleted,
+  ]);
 
   return (
     <>
-      {isConnected && !signedWithWallet && <WalletSignatureHandler />}
+      {isConnected && <WalletProfileHydrator />}
       <div>
         <p>
           The Shinzo webapp allows a user to interact with different parts of
