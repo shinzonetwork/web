@@ -12,7 +12,8 @@ export {
 } from './pagination';
 
 export {
-  type UsePageOptions,
-  usePage,
+  getServerPage,
   DEFAULT_LIMIT,
-} from './use-page';
+  type PageParams,
+  type PageParamsOptions,
+} from './get-server-page';

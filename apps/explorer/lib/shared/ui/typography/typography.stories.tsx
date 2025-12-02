@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['h1', 'h2', 'base', 'sm', 'xs'],
+      options: ['h2', 'md', 'base', 'sm', 'xs'],
       description: 'Text size variant matching Tailwind utilities',
     },
     weight: {
@@ -20,6 +20,11 @@ const meta = {
       control: 'select',
       options: ['sans', 'mono'],
       description: 'Font family (Geist Sans or Geist Mono)',
+    },
+    color: {
+      control: 'select',
+      options: ['primary', 'secondary', 'accent', 'inverted'],
+      description: 'Button text color',
     },
     as: {
       control: 'select',
@@ -36,44 +41,5 @@ export const Default: Story = {
   args: {
     variant: 'base',
     children: 'Default typography text',
-  },
-};
-
-export const Heading1: Story = {
-  args: {
-    variant: 'h1',
-    weight: 'bold',
-    children: 'Page Title (text-3xl)',
-  },
-};
-
-export const Heading2: Story = {
-  args: {
-    variant: 'h2',
-    weight: 'bold',
-    children: 'Section Header (text-2xl)',
-  },
-};
-
-export const SmallText: Story = {
-  args: {
-    variant: 'sm',
-    children: 'Small text for links and labels (text-sm)',
-  },
-};
-
-export const Caption: Story = {
-  args: {
-    variant: 'xs',
-    children: 'Caption or meta info (text-xs)',
-  },
-};
-
-export const MonoHash: Story = {
-  args: {
-    variant: 'sm',
-    font: 'mono',
-    weight: 'medium',
-    children: '0x1234567890abcdef...',
   },
 };

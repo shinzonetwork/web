@@ -1,2 +1,2 @@
-export { TransactionsPage } from './page';
+export { TransactionsPage } from './page-server';
 export { useTransactions } from './use-txs';

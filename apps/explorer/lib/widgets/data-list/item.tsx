@@ -13,6 +13,9 @@ export interface DataItemProps {
   loading?: boolean;
   children?: ReactNode;
   className?: string;
+  allowWrap?: boolean;
+  wrapAt?: number;
+  truncate?: boolean;
 }
 
 export const DataItem = ({
@@ -23,20 +26,42 @@ export const DataItem = ({
   link,
   children,
   className,
+  allowWrap,
+  wrapAt,
+  truncate = true,
 }: DataItemProps) => {
   const isValueNull = typeof value === 'undefined' || value == null;
-  const displayValue = isValueNull ? '—' : children || value;
+  const displayValue =
+  typeof children !== 'undefined' ? children : isValueNull ? '—' : value;  const wrapStyle =
+    allowWrap && wrapAt
+      ? {
+          maxWidth: `${wrapAt}ch`,
+        }
+      : undefined;
+  const textBehaviorClass = allowWrap
+    ? 'break-all whitespace-pre-wrap'
+    : truncate
+      ? 'truncate'
+      : 'whitespace-nowrap overflow-x-auto';
 
   return (
-    <div className={cn(
-      'grid grid-cols-subgrid col-span-3 gap-x-6 items-center',
-      'h-16 border-b border-r border-border',
-      className,
-    )}>
-      <div className='w-3 h-full bg-background-accent-light border-r border-border' />
+    <div
+      className={cn(
+        'grid grid-cols-subgrid col-span-3 gap-x-6 items-center',
+        'h-16 border-b border-r border-border',
+        allowWrap && 'items-start py-4 h-auto',
+        className,
+      )}
+    >
+      <div
+        className={cn(
+          'w-3 bg-background-accent-light border-r border-border',
+          allowWrap ? 'self-stretch -my-4' : 'h-full',
+        )}
+      />
 
       <div className='pr-8'>
-        <Typography>
+        <Typography className='w-48 shrink-0'>
           {title}:
         </Typography>
       </div>
@@ -46,15 +71,40 @@ export const DataItem = ({
           <Skeleton />
         </div>
       ) : (
-        <div className='flex items-center gap-2 min-w-0 pr-8'>
+        <div
+          className={cn(
+            'flex gap-2 min-w-0 pr-8',
+            allowWrap ? 'items-start' : 'items-center',
+          )}
+        >
           {link && !isValueNull ? (
-            <Link href={link} className='truncate min-w-0'>
-              <Typography color='accent' className='underline'>
+            <Link
+              href={link}
+              className={cn(
+                'min-w-0',
+                textBehaviorClass,
+              )}
+              style={wrapStyle}
+            >
+              <Typography
+                color='accent'
+                className={cn(
+                  'underline',
+                  textBehaviorClass,
+                )}
+                style={wrapStyle}
+              >
                 {displayValue}
               </Typography>
             </Link>
           ) : (
-            <Typography className='truncate min-w-0'>
+            <Typography
+              className={cn(
+                'min-w-0', 'w-[900px]',
+                textBehaviorClass,
+              )}
+              style={wrapStyle}
+            >
               {displayValue}
             </Typography>
           )}

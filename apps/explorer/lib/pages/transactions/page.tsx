@@ -1,42 +1,26 @@
 "use client"
 
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { useSearchParams } from 'next/navigation';
-import { DEFAULT_LIMIT, Pagination, usePage } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { formatHash } from '@/shared/utils/format-hash';
-import { Typography } from '@/shared/ui/typography';
 import { Container, PageLayout } from '@/widgets/layout'
-import {
-  TableLayout,
-  TableNullableCell,
-} from '@/shared/ui/table';
+import { TransactionsList } from './txns-list';
 import { useTransactions } from './use-txs';
 
-export const TransactionsPage = () => {
-  const searchParams = useSearchParams();
-  const blockFilter = Number(searchParams.get('block'));
+export interface TransactionPageProps {
+  block?: number;
+  pageParams: PageParams;
+}
 
-  const { page, offset, limit } = usePage();
+export const TransactionsPageClient = ({ block, pageParams }: TransactionPageProps) => {
+  const { page, offset, limit } = pageParams;
   const { data: transactions, isLoading } = useTransactions({
     limit,
     offset,
-    blockNumber: (isNaN(blockFilter) || blockFilter === 0) ? undefined: blockFilter,
+    blockNumber: block,
   });
 
-  const formatValue = (value: string) => {
-    const eth = Number(value) / 1e18;
-    return eth.toFixed(6);
-  };
-
-  const formatGasPrice = (gasPrice: string) => {
-    const gwei = Number(gasPrice) / 1e9;
-    return gwei.toFixed(2);
-  };
-
   return (
-    <PageLayout title={blockFilter ? `Transactions in block #${blockFilter}` : 'Transactions'}>
+    <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
       <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
         <Tabs defaultValue='all'>
           <TabsList>
@@ -53,66 +37,11 @@ export const TransactionsPage = () => {
         />
       </Container>
 
-      <TableLayout
+      <TransactionsList
+        transactions={
+          transactions?.transactions?.filter((txn): txn is NonNullable<typeof txn> => txn !== null) ?? []
+        }
         isLoading={isLoading}
-        loadingRowCount={DEFAULT_LIMIT}
-        notFound='No transactions found.'
-        gridClass='grid-cols-[1fr_100px_120px_1fr_1fr_160px_160px]'
-        headings={['Hash', 'Block', 'Age', 'From', 'To', 'Value', 'Fee']}
-        iterable={transactions?.transactions ?? []}
-        rowRenderer={(tx) => (
-          <>
-            <TableNullableCell value={tx?.hash}>
-              {(value) => (
-                <Link href={`/tx/${value}`}>
-                  <Typography color='accent' className='underline'>
-                    {formatHash(value, 12, 8)}
-                  </Typography>
-                </Link>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.blockNumber}>
-              {(value) => (
-                <Link href={`/blocks/${value}`}>
-                  <Typography color='accent' className='underline'>
-                    {value}
-                  </Typography>
-                </Link>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.timestamp as string}>
-              {(value) => (
-                formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.from}>
-              {(value) => (
-                <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
-                  {formatHash(value, 8, 6)}
-                </Link>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.to}>
-              {(value) => (
-                <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
-                  {formatHash(value, 8, 6)}
-                </Link>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.value}>
-              {(value) => `${formatValue(value)} ETH`}
-            </TableNullableCell>
-
-            <TableNullableCell value={tx?.gasPrice}>
-              {(value) => `${formatGasPrice(value)} Gwei`}
-            </TableNullableCell>
-          </>
-        )}
       />
     </PageLayout>
   );

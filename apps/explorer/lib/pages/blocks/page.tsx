@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
-import { usePage, Pagination, DEFAULT_LIMIT } from "@/shared/ui/pagination"
+import { Pagination, DEFAULT_LIMIT, PageParams } from '@/shared/ui/pagination'
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatGasUsed } from '@/shared/utils/format-gas';
 import { formatHash } from '@/shared/utils/format-hash';
@@ -20,8 +20,12 @@ import {
 } from '@/shared/ui/table';
 import { useBlocks } from './use-blocks';
 
-export const BlocksPage = () => {
-  const { page, offset, limit } = usePage();
+export interface BlocksPageClientProps {
+  pageParams: PageParams;
+}
+
+export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
+  const { page, offset, limit } = pageParams;
   const { data: blocks, isLoading } = useBlocks({ limit, offset });
 
   return (
@@ -67,7 +71,7 @@ export const BlocksPage = () => {
               {(value) => formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.txCount as number | null}>
+            <TableNullableCell value={0}>
               {(value) => (
                 <div className="flex items-center gap-1 text-sm text-foreground">
                   {value}
