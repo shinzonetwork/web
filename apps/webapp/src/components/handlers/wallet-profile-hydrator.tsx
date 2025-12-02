@@ -23,25 +23,40 @@ export function WalletProfileHydrator() {
     setSignedWithWallet,
   } = useRegistrationContext();
 
-  const hasFetchedRef = useRef<string | null>(null);
+  const fetchedAddressRef = useRef<string | null>(null);
+
+  // Reset hydration state when address changes
+  useEffect(() => {
+    if (
+      address &&
+      fetchedAddressRef.current &&
+      fetchedAddressRef.current !== address
+    ) {
+      setIsHydrated(false);
+      fetchedAddressRef.current = null;
+    }
+  }, [address]);
 
   useEffect(() => {
+    // Skip if already hydrated
+    if (isHydrated) {
+      return;
+    }
+
+    // Skip if wallet not connected or no address
+    if (!isConnected || !address) {
+      fetchedAddressRef.current = null;
+      return;
+    }
+
+    // Skip if we already fetched for this address - to avoid multiple requests for same address
+    if (fetchedAddressRef.current === address) {
+      return;
+    }
+
+    fetchedAddressRef.current = address;
+
     const loadProfile = async () => {
-      if (isHydrated) {
-        return;
-      }
-
-      // Skip if wallet not connected or no address
-      if (!isConnected || !address) {
-        hasFetchedRef.current = null;
-        return;
-      }
-
-      // Skip if we already fetched for this address
-      if (hasFetchedRef.current === address) {
-        return;
-      }
-
       try {
         // Fetch profile from GCS
         const userStatus = await fetchUserStatus(address);
@@ -58,27 +73,17 @@ export function WalletProfileHydrator() {
           }
         }
 
-        // Mark as fetched for this address
-        hasFetchedRef.current = address;
         setIsHydrated(true);
       } catch (error) {
         console.error("Error loading profile from GCS:", error);
+        // Reset on error so it can retry
+        fetchedAddressRef.current = null;
       }
     };
 
     loadProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isConnected,
-    address,
-    fetchUserStatus,
-    isSignedWithWallet,
-    isRegistered,
-    setIsHydrated,
-    setProfileCompleted,
-    setRegistered,
-    setSignedWithWallet,
-  ]);
+  }, [isConnected, address]);
 
   return <>{isHydrated && !isSignedWithWallet && <WalletSignatureHandler />}</>;
 }
