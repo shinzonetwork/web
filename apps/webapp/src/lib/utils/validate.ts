@@ -52,18 +52,6 @@ export function isValidUrl(url: string): boolean {
   }
 }
 
-// Validate hex string with length constraints
-export function isValidHex(
-  value: string,
-  minLength = 0,
-  maxLength = Infinity,
-): boolean {
-  if (!value || typeof value !== "string") return false;
-  if (!isHex(value)) return false;
-  const hexLength = value.length - 2; // Subtract 0x prefix
-  return hexLength >= minLength && hexLength <= maxLength;
-}
-
 // Sanitize string input (basic XSS prevention)
 export function sanitizeString(input: string): string {
   if (typeof input !== "string") return "";

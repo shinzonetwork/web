@@ -1,9 +1,9 @@
-import { Social } from "@/app/registration/profile/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
-import { isValidUrl } from "@/lib/utils";
+import { isValidUrl } from "@/lib/utils/validate";
+import { Social } from "../types";
 
 export default function SocialProfile({
   socials,

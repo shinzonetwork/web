@@ -15,9 +15,9 @@ import {
   MESSAGE_TO_SIGN,
   SHINZO_PRECOMPILE_ADDRESS,
 } from "@/lib/constants";
-import { convertToHexIfNeeded, sanitizeString } from "@/lib/utils";
+import { convertToHexIfNeeded, sanitizeString } from "@/lib/utils/validate";
 import { useAccount } from "wagmi";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
 type FormData = {
@@ -76,10 +76,7 @@ export default function Configuration() {
     useWaitForTransactionReceipt({
       hash: txHash as `0x${string}`,
     });
-  const { isRegistered, setRegistered } = useRegistrationContext();
   const { address } = useAccount();
-  const { updateRegisteredStatus } = useProfile();
-
   const [formData, setFormData] = useState<FormData>({
     defraPublicKey: "",
     defraSignedMessage: "",
@@ -87,6 +84,11 @@ export default function Configuration() {
     peerSignedMessage: "",
     entity: EntityRole.Indexer,
   });
+
+  const { isRegistered, setRegistered } = useRegistrationContext();
+  const { updateRegisteredStatus } = useProfile();
+
+
 
   const handleInputChange = (field: string, value: string | number) => {
     const sanitizedValue =

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 import WalletSignatureHandler from "./wallet-signature-handler";
 

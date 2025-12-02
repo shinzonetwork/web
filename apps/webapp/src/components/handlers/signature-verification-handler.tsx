@@ -4,7 +4,7 @@ import { useAccount, useVerifyMessage } from "wagmi";
 import { useEffect } from "react";
 import { MESSAGE_TO_SIGN } from "@/lib/constants";
 import { Hex } from "viem";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
 export function SignatureVerificationHandler({

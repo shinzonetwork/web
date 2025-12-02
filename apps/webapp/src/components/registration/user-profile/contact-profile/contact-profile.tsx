@@ -1,15 +1,14 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Dispatch, SetStateAction } from "react";
+import type { ContactProfile as ContactProfileType } from "../types";
 
 export default function ContactProfile({
   contactProfile,
   handleContactProfile,
 }: {
-  contactProfile: { email: string; phone: string };
-  handleContactProfile: Dispatch<
-    SetStateAction<{ email: string; phone: string }>
-  >;
+  contactProfile: ContactProfileType;
+  handleContactProfile: Dispatch<SetStateAction<ContactProfileType>>;
 }) {
   const handleInputChange = (field: "email" | "phone", value: string) => {
     handleContactProfile((prev) => ({ ...prev, [field]: value }));

@@ -13,7 +13,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { fetchUserContactByEmail } from "@/lib/gcs/profile-storage";
-import { isValidEmail } from "@/lib/utils";
+import { isValidEmail } from "@/lib/utils/validate";
 
 export async function GET(request: NextRequest) {
   try {

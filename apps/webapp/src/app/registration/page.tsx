@@ -1,7 +1,7 @@
 "use client";
 
 import Configuration from "@/components/registration/configuration/configuration";
-import Profile from "@/components/registration/profile/profile";
+import UserProfile from "@/components/registration/user-profile/user-profile";
 import UserGuide from "@/components/registration/user-guide/user-guide";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 
@@ -10,7 +10,7 @@ export default function Registration() {
   return (
     <>
       {!isRegistered && !isProfileCompleted && <Configuration />}
-      {isRegistered && !isProfileCompleted && <Profile />}
+      {isRegistered && !isProfileCompleted && <UserProfile />}
       {isRegistered && isProfileCompleted && <UserGuide />}
     </>
   );

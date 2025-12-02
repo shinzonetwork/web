@@ -19,7 +19,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { saveProfile } from "@/lib/gcs/profile-storage";
-import { isValidEmail } from "@/lib/utils";
+import { isValidEmail } from "@/lib/utils/validate";
 
 export async function POST(request: NextRequest) {
   try {

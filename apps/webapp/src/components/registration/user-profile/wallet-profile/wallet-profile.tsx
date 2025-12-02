@@ -1,9 +1,9 @@
-import { Wallet } from "@/app/registration/profile/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
-import { isValidAddress } from "@/lib/utils";
+import { isValidAddress } from "@/lib/utils/validate";
+import { Wallet } from "../types";
 
 export default function WalletProfile({
   wallets,
