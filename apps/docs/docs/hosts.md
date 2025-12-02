@@ -24,7 +24,7 @@ Open the `config.yaml` file at the root of the project, here we will place some 
     `keyring_secret` - can sometimes be useful for tests. Instead, it is generally recommended to set an environment variable `DEFRA_KEYRING_SECRET` to a keyring secret. This secret can be any secure passcode - it is recommended to use a secure password generator to create one. The `DEFRA_KEYRING_SECRET` will overwrite any `keyring_secret` provided in config.yaml - you are welcome to remove this field from config altogether.
     `p2p` *Very important - if not done correctly your Host will not receive primitive data from Indexers*
         `bootstrap_peers` - these nodes will be your initial connection point to the network. By default, we will provide at least one bootstrap peer for you to connect with so that you can join the Shinzo network. However, if you can grab some peer info for reliable Indexers from the Shinzo block explorer and include them here, it can really boost the speed with which your Host gets connected to Shinzo and starts hosting Views.
-        `listen_addr` - the default value of "/ip4/0.0.0.0/tcp/0" should be sufficient when running locally. If running in a container, you'll want to manually choose a port "/ip4/0.0.0.0/tcp/<your port here>" so that you can expose that port in your container.
+        `listen_addr` - the default value of "/ip4/0.0.0.0/tcp/0" should be sufficient when running locally. If running in a container, you'll want to manually choose a port "/ip4/0.0.0.0/tcp/\<your port here\>" so that you can expose that port in your container.
 
 `store`
     `path` - with this, you can change where your Host's embedded defra instance stores data. In general, the default should be fine.
