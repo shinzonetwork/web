@@ -7,7 +7,7 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "build-and-deploy": "pnpm build && wrangler deploy",
-    "build-and-upload": "pnpm build && wrangler deploy --env preview",
+    "build-and-upload": "pnpm build && wrangler versions upload",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
     "typecheck": "tsc"

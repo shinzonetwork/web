@@ -9,10 +9,5 @@
   "assets": {
     "directory": "./build",
     "binding": "ASSETS"
-  },
-  "env": {
-    "preview": {
-      "name": "shinzo-docs"
-    }
   }
 }
