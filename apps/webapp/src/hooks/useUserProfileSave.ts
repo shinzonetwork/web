@@ -27,7 +27,7 @@ export function useProfileSave({
   const { address } = useAccount();
   const { setProfileCompleted } = useRegistrationContext();
   const {
-    saveProfile,
+    saveUserContact,
     checkEmail,
     loading: isSaving,
     error: saveError,
@@ -52,7 +52,7 @@ export function useProfileSave({
 
     try {
       // Save profile with wallet address
-      const success = await saveProfile(address, {
+      const success = await saveUserContact(address, {
         email: contactProfile.email || undefined,
         phone: contactProfile.phone || undefined,
         socials: socials.filter((s) => s.platform && s.link), // Only save non-empty socials
@@ -79,7 +79,7 @@ export function useProfileSave({
     socials,
     wallets,
     checkEmail,
-    saveProfile,
+    saveUserContact,
     saveError,
     setProfileCompleted,
   ]);

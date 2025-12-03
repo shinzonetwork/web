@@ -31,9 +31,9 @@ interface UseProfileReturn {
     walletAddress: string,
     registered: boolean,
   ) => Promise<boolean>;
-  saveProfile: (
+  saveUserContact: (
     walletAddress: string,
-    profile: UserContact,
+    contact: UserContact,
   ) => Promise<boolean>;
   checkEmail: (email: string) => Promise<UserContact | null>;
   fetchUserStatus: (
@@ -115,9 +115,9 @@ export function useProfile(): UseProfileReturn {
     }
   };
 
-  const saveProfile = async (
+  const saveUserContact = async (
     walletAddress: string,
-    profile: UserContact,
+    contact: UserContact,
   ): Promise<boolean> => {
     setLoading(true);
     setError(null);
@@ -128,19 +128,19 @@ export function useProfile(): UseProfileReturn {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ walletAddress, profile }),
+        body: JSON.stringify({ walletAddress, contact }),
       });
 
       const result = await response.json();
 
       if (!result.success) {
-        throw new Error(result.error || "Failed to save profile");
+        throw new Error(result.error || "Failed to save user contact");
       }
 
       return true;
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to save profile";
+        err instanceof Error ? err.message : "Failed to save user contact";
       setError(errorMessage);
       return false;
     } finally {
@@ -203,7 +203,7 @@ export function useProfile(): UseProfileReturn {
   return {
     initializeProfile,
     updateRegisteredStatus,
-    saveProfile,
+    saveUserContact,
     checkEmail,
     fetchUserStatus,
     loading,

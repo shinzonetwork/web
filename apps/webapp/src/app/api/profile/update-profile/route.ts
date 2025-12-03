@@ -18,13 +18,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { saveProfile } from "@/lib/gcs/profile-storage";
+import { saveUserContact } from "@/lib/gcs/profile-storage";
 import { isValidEmail } from "@/lib/utils/validate";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { walletAddress, profile } = body;
+    const { walletAddress, contact } = body;
 
     // Validate required fields
     if (!walletAddress) {
@@ -34,14 +34,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!profile) {
+    if (!contact) {
       return NextResponse.json(
         { success: false, error: "Profile data is required" },
         { status: 400 },
       );
     }
 
-    const { email, phone, socials, wallets } = profile;
+    const { email, phone, socials, wallets } = contact;
 
     // Validate email if provided
     if (email && !isValidEmail(email)) {
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Save profile to GCS
-    await saveProfile(walletAddress, {
+    await saveUserContact(walletAddress, {
       email: email || undefined,
       phone: phone || undefined,
       socials,

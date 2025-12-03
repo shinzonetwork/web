@@ -169,12 +169,13 @@ export async function updateRegisteredStatus(
 
 /**
  * Save user profile data to Google Cloud Storage
- * @param profile - User profile data (walletAddress is required)
+ * @param walletAddress - Wallet address
+ * @param contact - User contact data
  * @returns Promise with success status
  */
-export async function saveProfile(
+export async function saveUserContact(
   walletAddress: string,
-  profile: UserContact,
+  contact: UserContact,
 ): Promise<{ success: true }> {
   const bucket = getBucket();
   const normalizedAddress = normalizeWalletAddress(walletAddress);
@@ -198,7 +199,7 @@ export async function saveProfile(
 
   const profileData: UserProfile = {
     ...existingProfile,
-    ...profile,
+    ...contact,
     profileCompleted: true,
     updatedAt: new Date().toISOString(),
   };
