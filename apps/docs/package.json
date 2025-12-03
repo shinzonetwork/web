@@ -7,11 +7,9 @@
     "start": "docusaurus start",
     "build": "docusaurus build",
     "build-and-deploy": "pnpm build && pnpx wrangler deploy",
-    "build-and-upload": "pnpm build && pnpx wrangler upload",
+    "build-and-upload": "pnpm build && pnpx wrangler deploy --env preview",
     "clear": "docusaurus clear",
     "serve": "docusaurus serve",
-    "write-translations": "docusaurus write-translations",
-    "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc"
   },
   "dependencies": {
