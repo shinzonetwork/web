@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, X } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
-import { isValidAddress } from "@/lib/utils/validate";
+import { isValidAddress } from "@/lib/utils/validation-utils";
 import { Wallet } from "../types";
 
 export default function WalletProfile({

@@ -5,7 +5,7 @@ import SocialProfile from "@/components/registration/user-profile/social-profile
 import WalletProfile from "@/components/registration/user-profile/wallet-profile/wallet-profile";
 import { useProfileForm } from "@/hooks/useUserProfileForm";
 import { useProfileSave } from "@/hooks/useUserProfileSave";
-import { validateEmail } from "@/lib/utils/user-profile";
+import { validateEmail } from "@/lib/utils/user-profile-utils";
 import ContactProfile from "./contact-profile/contact-profile";
 import FormHeader from "@/components/header/form-header";
 

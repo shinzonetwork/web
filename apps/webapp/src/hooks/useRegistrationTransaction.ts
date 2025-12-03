@@ -8,7 +8,7 @@ import { SHINZO_PRECOMPILE_ADDRESS } from "@/lib/constants";
 import { REGISTER_TRANSACTION_ABI } from "@/components/registration/configuration/register-transaction-abi";
 import { useStoredProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
-import type { ConfigurationFormData } from "@/lib/utils/configuration";
+import type { ConfigurationFormData } from "@/lib/utils/configuration-utils";
 
 /**
  * Hook to handle registration transaction logic

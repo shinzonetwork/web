@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/lib/utils/validate";
+import { cn } from "@/lib/utils/validation-utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (

@@ -7,12 +7,12 @@ import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
 import { useAccount } from "wagmi";
 import { Hex } from "viem";
 
-import { REGISTRATION_FORM_INPUTS } from "@/lib/utils/configuration";
+import { REGISTRATION_FORM_INPUTS } from "@/lib/utils/configuration-utils";
 import {
   validateRegistrationForm,
   getRegistrationButtonText,
   validateRequiredFields,
-} from "@/lib/utils/configuration";
+} from "@/lib/utils/configuration-utils";
 import { useConfigurationForm } from "@/hooks/useConfigurationForm";
 import { useRegistrationTransaction } from "@/hooks/useRegistrationTransaction";
 import { ConfigurationFormField as FormField } from "./configuration-form-field";

@@ -1,4 +1,4 @@
-import { isValidEmail } from "@/lib/utils/validate";
+import { isValidEmail } from "@/lib/utils/validation-utils";
 import type { ContactProfile } from "@/components/registration/user-profile/types";
 
 /**

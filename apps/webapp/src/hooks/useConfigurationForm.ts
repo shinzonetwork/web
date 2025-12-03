@@ -2,8 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { EntityRole } from "@/lib/constants";
-import { sanitizeString } from "@/lib/utils/validate";
-import type { ConfigurationFormData } from "@/lib/utils/configuration";
+import { sanitizeString } from "@/lib/utils/validation-utils";
+import type { ConfigurationFormData } from "@/lib/utils/configuration-utils";
 
 /**
  * Hook to manage configuration form state with input sanitization
