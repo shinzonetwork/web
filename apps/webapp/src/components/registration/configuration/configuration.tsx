@@ -3,6 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../../ui/radio-group";
+
+import { useAccount } from "wagmi";
+import { Hex } from "viem";
+
 import { REGISTRATION_FORM_INPUTS } from "@/lib/utils/configuration";
 import {
   validateRegistrationForm,
@@ -12,8 +16,12 @@ import {
 import { useConfigurationForm } from "@/hooks/useConfigurationForm";
 import { useRegistrationTransaction } from "@/hooks/useRegistrationTransaction";
 import { ConfigurationFormField as FormField } from "./configuration-form-field";
+import FormHeader from "@/components/header/form-header";
+import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/lib/indexer-whitelist";
 
 export default function Configuration() {
+  const { address } = useAccount();
+
   const { formData, handleInputChange, handleUserRoleChange } =
     useConfigurationForm();
 
@@ -43,14 +51,15 @@ export default function Configuration() {
 
   const isRegistrationDisabled = !validateRegistrationForm(formData);
 
+  const isIndexerWhitelisted = isIndexerWhitelistedFunction(address as Hex);
+
   return (
-    <div className="space-y-6 mx-6">
-      <div className="space-y-2">
-        <h3 className="text-3xl font-bold">Configuration</h3>
-        <p className="text-base leading-relaxed text-muted-foreground">
-          Subtext on why we need this configuration information.
-        </p>
-      </div>
+    <div className="space-y-6 mx-12 my-12">
+      <FormHeader
+        title="Configuration"
+        description="Subtext on why we need this configuration information."
+      />
+
       <div className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="userRole" className="text-sm font-medium">
@@ -63,14 +72,17 @@ export default function Configuration() {
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="1" id="indexer" />
-              <Label htmlFor="indexer">Indexer</Label>
+              <Label htmlFor="indexer">Host</Label>
             </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="0" id="host" />
-              <Label htmlFor="host">Host</Label>
-            </div>
+            {isIndexerWhitelisted && (
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="2" id="host" />
+                <Label htmlFor="host">Indexer</Label>
+              </div>
+            )}
           </RadioGroup>
         </div>
+
         {REGISTRATION_FORM_INPUTS.map((input) => (
           <FormField
             key={input.id}
@@ -81,6 +93,7 @@ export default function Configuration() {
             isTextarea={input.isTextarea}
           />
         ))}
+
         <Button
           onClick={handleRegister}
           className="w-full"
@@ -88,6 +101,7 @@ export default function Configuration() {
         >
           {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
         </Button>
+
         {sendError && (
           <div className="text-sm text-destructive mt-2">
             Error: {sendError.message}

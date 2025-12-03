@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
-import { encodeFunctionData, Hex, stringToHex } from "viem";
+import { encodeFunctionData, Hex } from "viem";
 import { useAccount } from "wagmi";
 import { SHINZO_PRECOMPILE_ADDRESS } from "@/lib/constants";
 import { REGISTER_TRANSACTION_ABI } from "@/components/registration/configuration/register-transaction-abi";

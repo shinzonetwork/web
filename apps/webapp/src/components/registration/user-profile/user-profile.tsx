@@ -7,6 +7,7 @@ import { useProfileForm } from "@/hooks/useUserProfileForm";
 import { useProfileSave } from "@/hooks/useUserProfileSave";
 import { validateEmail } from "@/lib/utils/user-profile";
 import ContactProfile from "./contact-profile/contact-profile";
+import FormHeader from "@/components/header/form-header";
 
 export default function UserProfile() {
   const {
@@ -28,14 +29,10 @@ export default function UserProfile() {
 
   return (
     <div className="space-y-6 mx-6">
-      <div className="space-y-2">
-        <h3 className="text-3xl font-bold">Profile Information</h3>
-        <p className="text-base leading-relaxed text-muted-foreground">
-          Complete your profile by providing your contact information and social
-          media handles. This information will be associated with your connected
-          wallet address.
-        </p>
-      </div>
+      <FormHeader
+        title="Profile Information"
+        description="Complete your profile by providing your contact information and social media handles. This information will be associated with your connected wallet address."
+      />
 
       <div className="space-y-6">
         {/* Contact Information Section */}
