@@ -3,7 +3,7 @@
 import { TransactionsList } from "@/pages/transactions/txns-list";
 import { Container, PageLayout } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
-import { useTransactions } from "@/pages/transactions/use-txs";
+import { useTransactions } from "@/hooks/use-txs";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 export interface BlockTxsProps {

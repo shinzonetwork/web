@@ -18,7 +18,7 @@ import {
   TableCell,
   TableNullableCell,
 } from '@/shared/ui/table';
-import { useBlocks } from './use-blocks';
+import { useBlocks } from '../../hooks/use-blocks';
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;

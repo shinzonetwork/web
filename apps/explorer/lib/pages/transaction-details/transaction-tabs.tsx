@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container } from '@/widgets/layout';
-import { TransactionCard } from './tx-card';
+import { TransactionCard } from './transaction-card';
 import { Typography } from '@/shared/ui/typography';
 
 export interface TxTabsProps {
