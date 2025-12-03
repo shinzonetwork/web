@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useAccount } from "wagmi";
-import { useProfile } from "@/hooks/useStoredProfile";
+import { useStoredProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 import type {
   Social,
@@ -28,26 +28,14 @@ export function useProfileSave({
   const { setProfileCompleted } = useRegistrationContext();
   const {
     saveUserContact,
-    checkEmail,
     loading: isSaving,
     error: saveError,
-  } = useProfile();
+  } = useStoredProfile();
 
   const handleSave = useCallback(async () => {
     if (!address) {
       alert("Wallet address is required. Please connect your wallet.");
       return false;
-    }
-
-    // Check if email already exists (if email is provided)
-    if (contactProfile.email) {
-      const emailExists = await checkEmail(contactProfile.email);
-      if (emailExists) {
-        alert(
-          "This email is already registered. Please use a different email.",
-        );
-        return false;
-      }
     }
 
     try {
@@ -78,7 +66,6 @@ export function useProfileSave({
     contactProfile,
     socials,
     wallets,
-    checkEmail,
     saveUserContact,
     saveError,
     setProfileCompleted,

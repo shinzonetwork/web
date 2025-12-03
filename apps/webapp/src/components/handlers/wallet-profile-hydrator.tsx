@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
-import { useProfile } from "@/hooks/useStoredProfile";
+import { useStoredProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 import WalletSignatureHandler from "./wallet-signature-handler";
 
@@ -13,7 +13,7 @@ import WalletSignatureHandler from "./wallet-signature-handler";
 export function WalletProfileHydrator() {
   const [isHydrated, setIsHydrated] = useState(false);
   const { address, isConnected } = useAccount();
-  const { fetchUserStatus } = useProfile();
+  const { fetchUserStatus } = useStoredProfile();
   const {
     isSignedWithWallet,
     isRegistered,

@@ -6,7 +6,7 @@ import { encodeFunctionData, Hex } from "viem";
 import { useAccount } from "wagmi";
 import { SHINZO_PRECOMPILE_ADDRESS } from "@/lib/constants";
 import { REGISTER_TRANSACTION_ABI } from "@/components/registration/configuration/register-transaction-abi";
-import { useProfile } from "@/hooks/useStoredProfile";
+import { useStoredProfile } from "@/hooks/useStoredProfile";
 import { useRegistrationContext } from "@/hooks/useRegistrationContext";
 import type { ConfigurationFormData } from "@/lib/utils/configuration";
 
@@ -28,7 +28,7 @@ export function useRegistrationTransaction(formData: ConfigurationFormData) {
 
   const { address } = useAccount();
   const { isRegistered, setRegistered } = useRegistrationContext();
-  const { updateRegisteredStatus } = useProfile();
+  const { updateRegisteredStatus } = useStoredProfile();
 
   // Handle successful transaction confirmation
   useEffect(() => {

@@ -35,7 +35,6 @@ interface UseProfileReturn {
     walletAddress: string,
     contact: UserContact,
   ) => Promise<boolean>;
-  checkEmail: (email: string) => Promise<UserContact | null>;
   fetchUserStatus: (
     walletAddress: string,
   ) => Promise<Partial<UserProfile> | null>;
@@ -43,7 +42,7 @@ interface UseProfileReturn {
   error: string | null;
 }
 
-export function useProfile(): UseProfileReturn {
+export function useStoredProfile(): UseProfileReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -148,31 +147,6 @@ export function useProfile(): UseProfileReturn {
     }
   };
 
-  const checkEmail = async (email: string): Promise<UserContact | null> => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const params = new URLSearchParams({ email });
-      const response = await fetch(`/api/profile/check-email?${params}`);
-
-      const result = await response.json();
-
-      if (!result.success) {
-        throw new Error(result.error || "Failed to check email");
-      }
-
-      return result.userContact ?? null;
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to check email";
-      setError(errorMessage);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const fetchUserStatus = async (
     walletAddress: string,
   ): Promise<Partial<UserProfile> | null> => {
@@ -204,7 +178,6 @@ export function useProfile(): UseProfileReturn {
     initializeProfile,
     updateRegisteredStatus,
     saveUserContact,
-    checkEmail,
     fetchUserStatus,
     loading,
     error,
