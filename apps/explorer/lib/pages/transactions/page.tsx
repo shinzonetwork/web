@@ -4,7 +4,7 @@ import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { TransactionsList } from './txns-list';
-import { useTransactions } from './use-txs';
+import { useTransactions } from '../../hooks/use-txs';
 
 export interface TransactionPageProps {
   block?: number;
