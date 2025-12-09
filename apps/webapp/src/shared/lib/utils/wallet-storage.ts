@@ -38,7 +38,9 @@ export function isWalletSigned(address: string | undefined): boolean {
     const value = localStorage.getItem(key);
     return value === "true";
   } catch (error) {
-    console.error("Error reading from localStorage:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error reading from localStorage:", error);
+    }
     return false;
   }
 }
@@ -60,20 +62,8 @@ export function setWalletSigned(
       localStorage.removeItem(key);
     }
   } catch (error) {
-    console.error("Error writing to localStorage:", error);
-  }
-}
-
-/**
- * Clear signed status for a wallet address (useful on disconnect)
- */
-export function clearWalletSigned(address: string | undefined): void {
-  if (!address || !isLocalStorageAvailable()) return;
-
-  try {
-    const key = getStorageKey(address);
-    localStorage.removeItem(key);
-  } catch (error) {
-    console.error("Error clearing localStorage:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error writing to localStorage:", error);
+    }
   }
 }

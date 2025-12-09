@@ -36,8 +36,8 @@ export function useWalletSignature(): UseWalletSignatureReturn {
       return;
     }
 
-    // Skip if already attempting to sign
-    if (signingAttemptRef.current || isSigning) {
+    // Skip if already attempting to sign (using ref to avoid dependency on isSigning)
+    if (signingAttemptRef.current) {
       return;
     }
 
@@ -72,7 +72,7 @@ export function useWalletSignature(): UseWalletSignatureReturn {
     } finally {
       setIsSigning(false);
     }
-  }, [address, isConnected, signMessageAsync, isSignedWithWallet, isSigning]);
+  }, [address, isConnected, signMessageAsync, isSignedWithWallet]);
 
   // Reset attempt ref when signature is set or signed status changes
   useEffect(() => {

@@ -3,7 +3,7 @@ import { Hex, getAddress, isAddress } from "viem";
 import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
 
 export type RegistrationFormData = {
-  message: string | undefined;
+  message: Hex | undefined;
   defraPublicKey: Hex | undefined;
   defraSignedMessage: Hex | undefined;
   peerId: Hex | undefined;
@@ -15,12 +15,12 @@ export type RegistrationFormData = {
 export const REGISTRATION_FORM_INPUTS = [
   {
     id: "message",
-    label: "Message to sign",
+    label: "Signed message",
     isTextarea: false,
   },
   {
     id: "defraPublicKey",
-    label: "Public Key",
+    label: "Public key",
     isTextarea: false,
   },
   {
@@ -125,7 +125,9 @@ export const isIndexerWhitelisted = (
     return normalizedWhitelist.includes(normalizedAddress);
   } catch (error) {
     // Invalid address format
-    console.error("Invalid address format:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Invalid address format:", error);
+    }
     return false;
   }
 };

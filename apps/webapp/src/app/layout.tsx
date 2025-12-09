@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 import { AppProviders } from "@/providers";
-import { WalletDisconnectHandler } from "@/widget";
+import { Toast, WalletDisconnectHandler } from "@/widget";
 import { RegistrationContextProvider } from "@/entities/registration-process";
 
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ export default function RootLayout({
           <RegistrationContextProvider>
             <WalletDisconnectHandler />
             <main className="min-h-screen">{children}</main>
+            <Toast />
           </RegistrationContextProvider>
         </AppProviders>
       </body>

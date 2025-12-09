@@ -6,7 +6,6 @@ import { Button } from "@/shared/ui/button";
 import { RegistrationForm } from "./registration-form";
 import { useRegistrationContext } from "@/entities/registration-process";
 import { DisconnectWallet } from "@/widget/disconnect-wallet";
-import { SuccessToast } from "@/widget";
 
 export default function Registration() {
   const { isConnected } = useAccount();
@@ -22,7 +21,7 @@ export default function Registration() {
         <div className="flex flex-row items-center justify-between gap-4 mb-4">
           <Button
             onClick={() => handleRegisterFormVisibility(true)}
-            className="w-1/12 rounded-full"
+            className="w-32 rounded-full"
           >
             Register
           </Button>
@@ -35,7 +34,6 @@ export default function Registration() {
           <RegistrationForm />
         </>
       )}
-      <SuccessToast />
     </>
   );
 }

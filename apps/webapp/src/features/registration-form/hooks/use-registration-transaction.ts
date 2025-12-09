@@ -52,15 +52,24 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
 
   const sendRegisterTransaction = useCallback(async () => {
     try {
+      if (
+        !formData.peerId ||
+        !formData.peerSignedMessage ||
+        !formData.defraPublicKey ||
+        !formData.defraSignedMessage ||
+        !formData.message
+      ) {
+        throw new Error("Missing required fields");
+      }
       const data = encodeFunctionData({
         abi: REGISTER_TRANSACTION_ABI,
         functionName: "register",
         args: [
-          formData.peerId as Hex,
-          formData.peerSignedMessage as Hex,
-          formData.defraPublicKey as Hex,
-          formData.defraSignedMessage as Hex,
-          formData.message as Hex,
+          formData.peerId,
+          formData.peerSignedMessage,
+          formData.defraPublicKey,
+          formData.defraSignedMessage,
+          formData.message,
           formData.entity,
         ],
       });
@@ -72,7 +81,14 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "An unknown error occurred";
-      alert(`Transaction failed: ${errorMessage}`);
+      toast.error(`Registration failed: ${errorMessage}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       throw error;
     }
   }, [formData, sendTransaction]);

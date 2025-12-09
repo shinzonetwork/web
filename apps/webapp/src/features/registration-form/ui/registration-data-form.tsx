@@ -10,7 +10,7 @@ import {
   REGISTRATION_FORM_INPUTS,
   type RegistrationFormData,
 } from "@/shared/lib";
-import { RegistrationInputField as Inputfield } from "./registration-input-filed";
+import { RegistrationInputField as Inputfield } from "./registration-input-field";
 
 import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
 
@@ -26,7 +26,9 @@ export function RegistrationDataForm({
   handleUserRoleChange,
 }: RegistrationDataFormProps) {
   const { address } = useAccount();
-  const isIndexerWhitelisted = isIndexerWhitelistedFunction(address as Hex);
+  const isIndexerWhitelisted = isIndexerWhitelistedFunction(
+    address ? (address as Hex) : undefined
+  );
 
   return (
     <div className="space-y-6">
@@ -40,13 +42,13 @@ export function RegistrationDataForm({
           onValueChange={handleUserRoleChange}
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="indexer" />
-            <Label htmlFor="indexer">Host</Label>
+            <RadioGroupItem value="1" id="host" />
+            <Label htmlFor="host">Host</Label>
           </div>
           {isIndexerWhitelisted && (
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id="host" />
-              <Label htmlFor="host">Indexer</Label>
+              <RadioGroupItem value="2" id="indexer" />
+              <Label htmlFor="indexer">Indexer</Label>
             </div>
           )}
         </RadioGroup>

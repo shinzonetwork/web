@@ -10,6 +10,7 @@ import {
   validateRegistrationForm,
   validateRequiredFields,
 } from "@/shared/lib";
+import { toast } from "react-toastify";
 
 export function RegistrationForm() {
   const { formData, handleInputChange, handleUserRoleChange } =
@@ -27,7 +28,14 @@ export function RegistrationForm() {
     // Validate inputs before sending transaction
     const { isValid, errors } = validateRequiredFields(formData);
     if (!isValid) {
-      alert(errors.join("\n"));
+      toast.error(errors.join("\n"), {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
 
@@ -35,7 +43,9 @@ export function RegistrationForm() {
       await sendRegisterTransaction();
     } catch (error) {
       // Error is already handled in the hook
-      console.error("Registration failed:", error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Registration failed:", error);
+      }
     }
   };
 
@@ -50,7 +60,7 @@ export function RegistrationForm() {
       />
       <Button
         onClick={handleRegister}
-        className="w-1/12 rounded-full"
+        className="w-fit rounded-full"
         disabled={isRegistrationDisabled || isPending || isConfirming}
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}

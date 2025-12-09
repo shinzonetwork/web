@@ -1,1 +1,1 @@
-export { SuccessToast } from "./ui/success-toast";
+export { Toast } from "./ui/toast";

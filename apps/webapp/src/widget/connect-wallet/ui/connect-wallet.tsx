@@ -13,7 +13,7 @@ export function ConnectWallet() {
   }
   return (
     <div className="my-2">
-      <Button onClick={openConnectModal} className="w-1/12 rounded-full">
+      <Button onClick={openConnectModal} className="w-fit rounded-full">
         Connect Wallet
       </Button>
     </div>
