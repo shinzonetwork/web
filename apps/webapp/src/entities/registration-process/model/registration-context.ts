@@ -7,6 +7,8 @@ import { RegistrationContext as RegistrationContextType } from "./types";
 export const RegistrationContext = createContext<RegistrationContextType>({
   isRegistered: false,
   isSignedWithWallet: false,
+  showRegisterForm: false,
   setRegistered: () => {},
-  setSignedWithWallet: () => {},
+  handleSignedWithWallet: () => {},
+  handleRegisterFormVisibility: () => {},
 });

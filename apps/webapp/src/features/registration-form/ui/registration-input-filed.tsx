@@ -22,14 +22,13 @@ export function RegistrationInputField({
   isTextarea = false,
 }: RegistrationInputFieldProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
       </Label>
       {isTextarea ? (
         <Textarea
           id={id}
-          placeholder={`Enter ${label.toLowerCase()}...`}
           value={value ?? ""}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             onChange(e.target.value)

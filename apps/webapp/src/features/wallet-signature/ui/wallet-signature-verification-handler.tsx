@@ -4,7 +4,7 @@ import { useAccount, useVerifyMessage } from "wagmi";
 import { useEffect } from "react";
 import { Hex } from "viem";
 
-import { useRegistrationContext } from "@/entities";
+import { useRegistrationContext } from "@/entities/registration-process";
 
 import { MESSAGE_TO_SIGN } from "@/shared/lib";
 
@@ -14,7 +14,7 @@ export function SignatureVerificationHandler({
   signature: Hex;
 }) {
   const { address } = useAccount();
-  const { setSignedWithWallet } = useRegistrationContext();
+  const { handleSignedWithWallet } = useRegistrationContext();
 
   const { data } = useVerifyMessage({
     address,
@@ -25,9 +25,9 @@ export function SignatureVerificationHandler({
   useEffect(() => {
     const verified = Boolean(data);
     if (verified && address) {
-      setSignedWithWallet(verified);
+      handleSignedWithWallet(verified);
     }
-  }, [data, address, setSignedWithWallet]);
+  }, [data, address, handleSignedWithWallet]);
 
   return null;
 }

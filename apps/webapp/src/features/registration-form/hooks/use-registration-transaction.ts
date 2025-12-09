@@ -4,9 +4,10 @@ import { useEffect, useCallback } from "react";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { encodeFunctionData, Hex } from "viem";
 import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
 import { SHINZO_PRECOMPILE_ADDRESS } from "@/shared/lib";
 import { REGISTER_TRANSACTION_ABI } from "../abi/register-transaction-abi";
-import { useRegistrationContext } from "@/entities";
+import { useRegistrationContext } from "@/entities/registration-process";
 import type { RegistrationFormData } from "@/shared/lib";
 
 /**
@@ -26,14 +27,28 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
     });
 
   const { address } = useAccount();
-  const { isRegistered, setRegistered } = useRegistrationContext();
+  const { isRegistered, setRegistered, handleRegisterFormVisibility } =
+    useRegistrationContext();
 
   // Handle successful transaction confirmation
   useEffect(() => {
     if (isConfirmed && txHash && address && !isRegistered) {
       setRegistered(true);
+      handleRegisterFormVisibility(false);
+      toast.success(
+        "Registration successful! Your transaction has been confirmed.",
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
     }
-  }, [isConfirmed, txHash, address, isRegistered, setRegistered]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConfirmed, txHash, address, isRegistered]);
 
   const sendRegisterTransaction = useCallback(async () => {
     try {

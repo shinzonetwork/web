@@ -1,67 +1,66 @@
 "use client";
 
-import { useAccount } from "wagmi";
-import { Hex } from "viem";
+import { Button } from "@/shared/ui/button";
 
-import { Label } from "@/shared/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
-
+import { RegistrationDataForm } from "./registration-data-form";
+import { useRegistrationForm } from "../hooks/use-registration-form";
+import { useRegistrationTransaction } from "../hooks/use-registration-transaction";
 import {
-  REGISTRATION_FORM_INPUTS,
-  type RegistrationFormData,
+  getRegistrationButtonText,
+  validateRegistrationForm,
+  validateRequiredFields,
 } from "@/shared/lib";
-import { RegistrationInputField as Inputfield } from "./registration-input-filed";
 
-import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
+export function RegistrationForm() {
+  const { formData, handleInputChange, handleUserRoleChange } =
+    useRegistrationForm();
 
-interface RegistrationFormProps {
-  formData: RegistrationFormData;
-  handleInputChange: (field: string, value: string) => void;
-  handleUserRoleChange: (value: string) => void;
-}
+  const {
+    sendRegisterTransaction,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    sendError,
+  } = useRegistrationTransaction(formData);
 
-export default function RegistrationForm({
-  formData,
-  handleInputChange,
-  handleUserRoleChange,
-}: RegistrationFormProps) {
-  const { address } = useAccount();
-  const isIndexerWhitelisted = isIndexerWhitelistedFunction(address as Hex);
+  const handleRegister = async () => {
+    // Validate inputs before sending transaction
+    const { isValid, errors } = validateRequiredFields(formData);
+    if (!isValid) {
+      alert(errors.join("\n"));
+      return;
+    }
+
+    try {
+      await sendRegisterTransaction();
+    } catch (error) {
+      // Error is already handled in the hook
+      console.error("Registration failed:", error);
+    }
+  };
+
+  const isRegistrationDisabled = !validateRegistrationForm(formData);
 
   return (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="userRole" className="text-sm font-medium">
-          Select a role
-        </Label>
-        <RadioGroup
-          className="flex gap-4"
-          value={formData.entity.toString()}
-          onValueChange={handleUserRoleChange}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="indexer" />
-            <Label htmlFor="indexer">Host</Label>
-          </div>
-          {isIndexerWhitelisted && (
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id="host" />
-              <Label htmlFor="host">Indexer</Label>
-            </div>
-          )}
-        </RadioGroup>
-      </div>
+      <RegistrationDataForm
+        formData={formData}
+        handleInputChange={handleInputChange}
+        handleUserRoleChange={handleUserRoleChange}
+      />
+      <Button
+        onClick={handleRegister}
+        className="w-1/12 rounded-full"
+        disabled={isRegistrationDisabled || isPending || isConfirming}
+      >
+        {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
+      </Button>
 
-      {REGISTRATION_FORM_INPUTS.map((input) => (
-        <Inputfield
-          key={input.id}
-          id={input.id}
-          label={input.label}
-          value={formData[input.id as keyof typeof formData] as string}
-          onChange={(value) => handleInputChange(input.id, value)}
-          isTextarea={input.isTextarea}
-        />
-      ))}
+      {sendError && (
+        <div className="text-sm text-destructive mt-2">
+          Error: {sendError.message}
+        </div>
+      )}
     </div>
   );
 }

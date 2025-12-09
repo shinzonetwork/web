@@ -1,6 +1,8 @@
 export type RegistrationContext = {
   isRegistered: boolean;
   isSignedWithWallet: boolean;
+  showRegisterForm: boolean;
   setRegistered: (registered: boolean) => void;
-  setSignedWithWallet: (signedWithWallet: boolean) => void;
+  handleSignedWithWallet: (signedWithWallet: boolean) => void;
+  handleRegisterFormVisibility: (visible: boolean) => void;
 };

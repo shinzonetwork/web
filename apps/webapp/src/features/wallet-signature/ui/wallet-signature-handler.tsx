@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import { SignatureVerificationHandler } from "./wallet-signature-verification-handler";
 import { useWalletSignature } from "../hooks/use-wallet-signature";
-import { useRegistrationContext } from "@/entities";
+import { useRegistrationContext } from "@/entities/registration-process";
 
 /**
  * Handler for wallet signature when not signed with wallet

@@ -1,10 +1,4 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { stringToHex, isAddress } from "viem";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 // Utility to check if a string is hex
 export function isHex(value: string): boolean {
@@ -50,13 +44,4 @@ export function isValidUrl(url: string): boolean {
   } catch {
     return false;
   }
-}
-
-// Sanitize string input (basic XSS prevention)
-export function sanitizeString(input: string): string {
-  if (typeof input !== "string") return "";
-  return input
-    .replace(/[<>]/g, "") // Remove potential HTML tags
-    .trim()
-    .slice(0, 10000); // Limit length
 }

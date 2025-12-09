@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+
 import { AppProviders } from "@/providers";
-import { Header, WalletDisconnectHandler } from "@/widget";
-import { RegistrationContextProvider } from "@/entities";
+import { WalletDisconnectHandler } from "@/widget";
+import { RegistrationContextProvider } from "@/entities/registration-process";
 
 export const metadata: Metadata = {
   title: "Shinzo",
@@ -22,7 +23,6 @@ export default function RootLayout({
         <AppProviders>
           <RegistrationContextProvider>
             <WalletDisconnectHandler />
-            <Header />
             <main className="min-h-screen">{children}</main>
           </RegistrationContextProvider>
         </AppProviders>

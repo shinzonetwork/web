@@ -1,27 +1,27 @@
 "use client";
 
-import { useAccount } from "wagmi";
-
-import { useRegistrationContext } from "@/entities";
-import { Registration } from "@/page-components";
-import WalletSignatureHandler from "@/features/wallet-signature/ui/wallet-signature-handler";
+import { Register } from "@/page-components";
+import Image from "next/image";
 
 export default function LandingPage() {
-  const { isConnected } = useAccount();
-  const { isSignedWithWallet, isRegistered } = useRegistrationContext();
-  console.log(isConnected, isSignedWithWallet, isRegistered);
-
-  const isRegistrationVisible =
-    isConnected && isSignedWithWallet && !isRegistered;
   return (
     <>
-      <div>
+      <div className="flex p-4">
+        <Image
+          src="/images/shinzo-logo.svg"
+          alt="Shinzo"
+          width={123}
+          height={123}
+          priority
+          unoptimized
+        />
+      </div>
+      <div className="mx-12 my-12">
         <p>
           The Shinzo webapp allows a user to interact with different parts of
           the Shinzo ecosystem.
         </p>
-        {isConnected && !isSignedWithWallet && <WalletSignatureHandler />}
-        {isRegistrationVisible && <Registration />}
+        <Register />
       </div>
     </>
   );
