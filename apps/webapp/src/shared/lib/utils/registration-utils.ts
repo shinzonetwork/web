@@ -1,5 +1,5 @@
 import type { EntityRole } from "../constants";
-import { Hex, getAddress, isAddress } from "viem";
+import { Hex, getAddress, isAddress, isHex } from "viem";
 import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
 
 export type RegistrationFormData = {
@@ -99,6 +99,28 @@ export function validateRequiredFields(formData: RegistrationFormData): {
     errors,
   };
 }
+
+export const validateHexFormat = (formData: RegistrationFormData) => {
+  const hexFields = {
+    peerId: formData.peerId,
+    peerSignedMessage: formData.peerSignedMessage,
+    defraPublicKey: formData.defraPublicKey,
+    defraSignedMessage: formData.defraSignedMessage,
+    message: formData.message,
+  };
+
+  for (const value of Object.values(hexFields)) {
+    if (!value || !isHex(value)) {
+      return false;
+    }
+    // Validate even length (each byte = 2 hex chars)
+    const hexContent = value.startsWith("0x") ? value.slice(2) : value;
+    if (hexContent.length % 2 !== 0) {
+      return false;
+    }
+  }
+  return true;
+};
 
 // Normalize all whitelist addresses once for case-insensitive comparison
 const normalizedWhitelist = INDEXER_WHITELIST.map((addr) =>

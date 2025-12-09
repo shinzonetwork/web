@@ -9,6 +9,7 @@ interface RegistrationInputFieldProps {
   value: string;
   onChange: (value: string) => void;
   isTextarea?: boolean;
+  error?: string;
 }
 
 /**
@@ -20,9 +21,10 @@ export function RegistrationInputField({
   value,
   onChange,
   isTextarea = false,
+  error,
 }: RegistrationInputFieldProps) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
       </Label>
@@ -33,7 +35,11 @@ export function RegistrationInputField({
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             onChange(e.target.value)
           }
-          className="min-h-[100px] font-mono text-sm"
+          className={`min-h-[100px] font-mono text-sm ${
+            error ? "border-destructive focus-visible:ring-destructive" : ""
+          }`}
+          aria-invalid={error ? "true" : "false"}
+          aria-describedby={error ? `${id}-error` : undefined}
         />
       ) : (
         <Input
@@ -43,8 +49,21 @@ export function RegistrationInputField({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
-          className="font-mono"
+          className={`font-mono ${
+            error ? "border-destructive focus-visible:ring-destructive" : ""
+          }`}
+          aria-invalid={error ? "true" : "false"}
+          aria-describedby={error ? `${id}-error` : undefined}
         />
+      )}
+      {error && (
+        <p
+          id={`${id}-error`}
+          className="text-sm text-destructive mt-1"
+          role="alert"
+        >
+          {error}
+        </p>
       )}
     </div>
   );

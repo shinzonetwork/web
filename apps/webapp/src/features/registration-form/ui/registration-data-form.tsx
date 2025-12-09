@@ -17,12 +17,14 @@ interface RegistrationDataFormProps {
   formData: RegistrationFormData;
   handleInputChange: (field: string, value: string) => void;
   handleUserRoleChange: (value: string) => void;
+  fieldErrors?: Record<string, string | undefined>;
 }
 
 export function RegistrationDataForm({
   formData,
   handleInputChange,
   handleUserRoleChange,
+  fieldErrors = {},
 }: RegistrationDataFormProps) {
   const { address } = useAccount();
   const isIndexerWhitelisted = isIndexerWhitelistedFunction(
@@ -61,6 +63,7 @@ export function RegistrationDataForm({
           value={formData[input.id as keyof typeof formData]?.toString() ?? ""}
           onChange={(value) => handleInputChange(input.id, value)}
           isTextarea={input.isTextarea}
+          error={fieldErrors[input.id]}
         />
       ))}
     </div>

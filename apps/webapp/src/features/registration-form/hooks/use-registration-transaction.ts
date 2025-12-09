@@ -5,7 +5,7 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
-import { SHINZO_PRECOMPILE_ADDRESS } from "@/shared/lib";
+import { SHINZO_PRECOMPILE_ADDRESS, validateHexFormat } from "@/shared/lib";
 import { REGISTER_TRANSACTION_ABI } from "../abi/register-transaction-abi";
 import { useRegistrationContext } from "@/entities/registration-process";
 import type { RegistrationFormData } from "@/shared/lib";
@@ -47,7 +47,14 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         }
       );
     }
-  }, [isConfirmed, txHash, address, isRegistered, handleRegisterFormVisibility, setRegistered]);
+  }, [
+    isConfirmed,
+    txHash,
+    address,
+    isRegistered,
+    handleRegisterFormVisibility,
+    setRegistered,
+  ]);
 
   const sendRegisterTransaction = useCallback(async () => {
     try {
@@ -59,6 +66,9 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         !formData.message
       ) {
         throw new Error("Missing required fields");
+      }
+      if (!validateHexFormat(formData)) {
+        throw new Error("Invalid hex fields");
       }
       const data = encodeFunctionData({
         abi: REGISTER_TRANSACTION_ABI,

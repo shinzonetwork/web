@@ -10,11 +10,15 @@ import {
   validateRegistrationForm,
   validateRequiredFields,
 } from "@/shared/lib";
-import { toast } from "react-toastify";
 
 export function RegistrationForm() {
-  const { formData, handleInputChange, handleUserRoleChange } =
-    useRegistrationForm();
+  const {
+    formData,
+    handleInputChange,
+    handleUserRoleChange,
+    fieldErrors,
+    validateHexFields,
+  } = useRegistrationForm();
 
   const {
     sendRegisterTransaction,
@@ -25,17 +29,15 @@ export function RegistrationForm() {
   } = useRegistrationTransaction(formData);
 
   const handleRegister = async () => {
-    // Validate inputs before sending transaction
-    const { isValid, errors } = validateRequiredFields(formData);
+    // Validate required fields first
+    const { isValid } = validateRequiredFields(formData);
     if (!isValid) {
-      toast.error(errors.join("\n"), {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      return;
+    }
+
+    // Validate hex format on button click
+    const isHexValid = validateHexFields();
+    if (!isHexValid) {
       return;
     }
 
@@ -57,6 +59,7 @@ export function RegistrationForm() {
         formData={formData}
         handleInputChange={handleInputChange}
         handleUserRoleChange={handleUserRoleChange}
+        fieldErrors={fieldErrors}
       />
       <Button
         onClick={handleRegister}
