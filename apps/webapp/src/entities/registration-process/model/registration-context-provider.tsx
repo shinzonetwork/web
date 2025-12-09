@@ -1,10 +1,18 @@
 "use client";
 
-import { useState, useCallback, ReactNode, useMemo } from "react";
+import { useState, useCallback, ReactNode, useMemo, useRef } from "react";
 import { useAccount } from "wagmi";
 import { RegistrationContext as RegistrationContextType } from "./types";
 import { RegistrationContext } from "./registration-context";
 import { isWalletSigned, setWalletSigned } from "@/shared/lib";
+
+/**
+ * Cache for localStorage reads to avoid synchronous reads during render
+ */
+type LocalStorageCache = {
+  address: string | null;
+  value: boolean;
+};
 
 /**
  * The provider for the registration context.
@@ -23,18 +31,34 @@ export const RegistrationContextProvider = ({
     Record<string, boolean>
   >({});
 
-  // Compute signed state: manual override takes precedence, then localStorage
-  // This is computed during render, not in an effect, so it updates when address changes
+  // Cache localStorage reads to avoid synchronous reads during render
+  // This ref stores the last read value for the current address
+  const localStorageCacheRef = useRef<LocalStorageCache>({
+    address: null,
+    value: false,
+  });
+
   const isSignedWithWallet = useMemo(() => {
-    if (!isConnected || !address) return false;
+    if (!isConnected || !address) {
+      // Reset cache when disconnected
+      localStorageCacheRef.current = { address: null, value: false };
+      return false;
+    }
 
     // Check if manually set (user action)
     if (address in manualSignedState) {
       return manualSignedState[address];
     }
 
-    // Fall back to localStorage (persistent state)
-    return isWalletSigned(address);
+    // Check cache - if address matches, use cached value 
+    if (localStorageCacheRef.current.address === address) {
+      return localStorageCacheRef.current.value;
+    }
+
+    // Address changed or cache miss - read from localStorage and cache it
+    const signed = isWalletSigned(address);
+    localStorageCacheRef.current = { address, value: signed };
+    return signed;
   }, [isConnected, address, manualSignedState]);
 
   const handleSetSignedWithWallet = useCallback(
@@ -43,21 +67,32 @@ export const RegistrationContextProvider = ({
 
       // Update manual state (takes precedence over localStorage)
       setManualSignedState((prev) => ({ ...prev, [address]: signed }));
+      // Update cache to reflect the new state
+      localStorageCacheRef.current = { address, value: signed };
       // Persist to localStorage for future sessions
       setWalletSigned(address, signed);
     },
     [address]
   );
 
-  const context: RegistrationContextType = {
+  const context: RegistrationContextType = useMemo(() => {
+    return {
+      isRegistered,
+      isSignedWithWallet,
+      showRegisterForm,
+      setRegistered: (registered: boolean) => setIsRegistered(registered),
+      handleSignedWithWallet: handleSetSignedWithWallet,
+      handleRegisterFormVisibility: (visible: boolean) =>
+        setShowRegisterForm(visible),
+    };
+  }, [
     isRegistered,
     isSignedWithWallet,
     showRegisterForm,
-    setRegistered: (registered: boolean) => setIsRegistered(registered),
-    handleSignedWithWallet: handleSetSignedWithWallet,
-    handleRegisterFormVisibility: (visible: boolean) =>
-      setShowRegisterForm(visible),
-  };
+    setIsRegistered,
+    handleSetSignedWithWallet,
+    setShowRegisterForm,
+  ]);
 
   return (
     <RegistrationContext.Provider value={context}>

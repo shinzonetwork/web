@@ -1,7 +1,6 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { Hex } from "viem";
 
 import { Label } from "@/shared/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
@@ -27,7 +26,7 @@ export function RegistrationDataForm({
 }: RegistrationDataFormProps) {
   const { address } = useAccount();
   const isIndexerWhitelisted = isIndexerWhitelistedFunction(
-    address ? (address as Hex) : undefined
+    address ? address : undefined
   );
 
   return (
@@ -59,7 +58,7 @@ export function RegistrationDataForm({
           key={input.id}
           id={input.id}
           label={input.label}
-          value={formData[input.id as keyof typeof formData] as string}
+          value={formData[input.id as keyof typeof formData]?.toString() ?? ""}
           onChange={(value) => handleInputChange(input.id, value)}
           isTextarea={input.isTextarea}
         />

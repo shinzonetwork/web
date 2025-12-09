@@ -2,7 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
-import { encodeFunctionData, Hex } from "viem";
+import { encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { SHINZO_PRECOMPILE_ADDRESS } from "@/shared/lib";
@@ -23,7 +23,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
     useWaitForTransactionReceipt({
-      hash: txHash as Hex,
+      hash: txHash ? txHash : undefined,
     });
 
   const { address } = useAccount();
@@ -47,8 +47,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         }
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConfirmed, txHash, address, isRegistered]);
+  }, [isConfirmed, txHash, address, isRegistered, handleRegisterFormVisibility, setRegistered]);
 
   const sendRegisterTransaction = useCallback(async () => {
     try {
