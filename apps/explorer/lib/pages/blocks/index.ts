@@ -1,2 +1,2 @@
 export { BlocksPage } from './page-server';
-export { useBlocks } from '../../hooks/use-blocks';
+export { useBlocks } from './use-blocks';

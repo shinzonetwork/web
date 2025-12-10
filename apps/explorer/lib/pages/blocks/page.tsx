@@ -18,7 +18,7 @@ import {
   TableCell,
   TableNullableCell,
 } from '@/shared/ui/table';
-import { useBlocks } from '../../hooks/use-blocks';
+import { useBlocks } from './use-blocks';
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;
@@ -96,6 +96,8 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
             </TableNullableCell>
 
             <TableCell>
+              {/* TODO: replace with actual reward */}
+              {/* eslint-disable-next-line react-hooks/purity */}
               {(Math.random() * 0.05 + 0.01).toFixed(4)} ETH
             </TableCell>
           </>

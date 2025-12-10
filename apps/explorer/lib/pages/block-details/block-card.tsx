@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { useBlock } from "../../hooks/use-block";
+import { useBlock } from "./use-block";
 
 export interface BlockCardProps {
   height: number;
