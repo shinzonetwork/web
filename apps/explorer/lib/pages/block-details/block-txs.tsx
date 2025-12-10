@@ -1,11 +1,9 @@
 'use client';
 
-import { TransactionsList } from "@/pages/transactions/txns-list";
-import { Container, PageLayout } from '@/widgets/layout';
+import { TransactionsList } from "@/pages/transactions/transactions-list";
+import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
-import { useTransactions } from "@/pages/transactions/use-txs";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-
+import { useTransactions } from "@/pages/transactions/use-transactions";
 export interface BlockTxsProps {
   blockNumber: number;
   pageParams: PageParams;

@@ -3,7 +3,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
-import { useTransaction } from './use-tx';
+import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
 
 export interface TransactionCardProps {

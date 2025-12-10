@@ -1,1 +1,1 @@
-export { BlockDetailPage as default } from '@/pages/block-id';
+export { BlockDetailPage as default } from '@/pages/block-details';
