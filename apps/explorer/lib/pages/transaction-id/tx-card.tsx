@@ -74,11 +74,15 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         value={tx.block?.timestamp}
         loading={isLoading}
       >
-        {tx.block?.timestamp && formatDistanceToNow(new Date(Number(tx.block.timestamp) * 1000), {
-          addSuffix: true,
-        })}
-        {' '}
-        ({new Date(Number(tx.block!.timestamp) * 1000).toUTCString()})
+        {tx.block?.timestamp && (
+          <>
+            {formatDistanceToNow(new Date(Number(tx.block.timestamp) * 1000), {
+              addSuffix: true,
+            })}
+            {' '}
+            ({new Date(Number(tx.block.timestamp) * 1000).toUTCString()})
+          </>
+        )}
       </DataItem>
 
       <DataItem
