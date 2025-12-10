@@ -17,6 +17,7 @@ export function DisconnectWallet() {
     handleRegisterFormVisibility(false);
     openAccountModal?.();
   };
+
   return (
     <>
       {isConnected && address && (

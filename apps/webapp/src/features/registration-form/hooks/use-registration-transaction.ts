@@ -5,7 +5,11 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
-import { SHINZO_PRECOMPILE_ADDRESS, validateHexFormat } from "@/shared/lib";
+import {
+  SHINZO_PRECOMPILE_ADDRESS,
+  TOAST_CONFIG,
+  validateHexFormat,
+} from "@/shared/lib";
 import { REGISTER_TRANSACTION_ABI } from "../abi/register-transaction-abi";
 import { useRegistrationContext } from "@/entities/registration-process";
 import type { RegistrationFormData } from "@/shared/lib";
@@ -21,14 +25,27 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
     data: txHash,
   } = useSendTransaction();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash: txHash ? txHash : undefined,
-    });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError: isErrorConfirming,
+  } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
 
   const { address } = useAccount();
   const { isRegistered, setRegistered, handleRegisterFormVisibility } =
     useRegistrationContext();
+
+  // Handle transaction receipt errors (transaction reverted, etc.)
+  useEffect(() => {
+    if (isErrorConfirming && txHash) {
+      toast.error(
+        "Transaction failed to confirm. Please check the transaction status.",
+        TOAST_CONFIG
+      );
+    }
+  }, [isErrorConfirming, txHash]);
 
   // Handle successful transaction confirmation
   useEffect(() => {
@@ -37,14 +54,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
       handleRegisterFormVisibility(false);
       toast.success(
         "Registration successful! Your transaction has been confirmed.",
-        {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
+        TOAST_CONFIG
       );
     }
   }, [
@@ -57,20 +67,21 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
   ]);
 
   const sendRegisterTransaction = useCallback(async () => {
+    if (
+      !formData.peerId ||
+      !formData.peerSignedMessage ||
+      !formData.defraPublicKey ||
+      !formData.defraSignedMessage ||
+      !formData.message
+    ) {
+      throw new Error("Missing required fields");
+    }
+    if (!validateHexFormat(formData)) {
+      throw new Error("Invalid hex fields");
+    }
+    let encodedData;
     try {
-      if (
-        !formData.peerId ||
-        !formData.peerSignedMessage ||
-        !formData.defraPublicKey ||
-        !formData.defraSignedMessage ||
-        !formData.message
-      ) {
-        throw new Error("Missing required fields");
-      }
-      if (!validateHexFormat(formData)) {
-        throw new Error("Invalid hex fields");
-      }
-      const data = encodeFunctionData({
+      encodedData = encodeFunctionData({
         abi: REGISTER_TRANSACTION_ABI,
         functionName: "register",
         args: [
@@ -82,22 +93,27 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
           formData.entity,
         ],
       });
-
-      await sendTransaction({
-        to: SHINZO_PRECOMPILE_ADDRESS,
-        data,
-      });
     } catch (error: unknown) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      toast.error(`Registration failed: ${errorMessage}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
+        error instanceof Error
+          ? error.message
+          : "Error encoding data before sending transaction";
+      toast.error(`Registration failed - ${errorMessage}`, TOAST_CONFIG);
+      throw error;
+    }
+
+    try {
+      await sendTransaction({
+        to: SHINZO_PRECOMPILE_ADDRESS,
+        data: encodedData,
       });
+      console.log("Transaction sent successfully");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unknown error occurred while sending transaction";
+      toast.error(`Registration failed: ${errorMessage}`, TOAST_CONFIG);
       throw error;
     }
   }, [formData, sendTransaction]);

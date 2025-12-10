@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, ReactNode, useMemo } from "react";
+import { useState, useCallback, ReactNode, useMemo, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { RegistrationContext as RegistrationContextType } from "./types";
 import { RegistrationContext } from "./registration-context";
@@ -16,58 +16,56 @@ export const RegistrationContextProvider = ({
 }) => {
   const { address, isConnected } = useAccount();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const [signedState, setSignedState] = useState<Record<string, boolean>>({});
   const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false);
 
-  // Track manual updates separately from localStorage reads
-  const [manualSignedState, setManualSignedState] = useState<
-    Record<string, boolean>
-  >({});
+  useEffect(() => {
+    const loadSignedState = () => {
+      if (!isConnected || !address) {
+        return;
+      }
 
-  // Cache localStorage reads per address
-  // Store as state to avoid ref access during render
-  const [localStorageCache, setLocalStorageCache] = useState<
-    Record<string, boolean>
-  >({});
+      // Check if signed with wallet
+      if (address in signedState) {
+        return;
+      }
 
+      // Check localStorage for this address
+      const signed = isWalletSigned(address);
+
+      //update signed state
+      setSignedState((prev: Record<string, boolean>) => ({
+        ...prev,
+        [address]: signed,
+      }));
+    };
+    loadSignedState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, address]);
+
+  // Derive isSignedWithWallet from address and localStorage
   const isSignedWithWallet = useMemo(() => {
     if (!isConnected || !address) {
       return false;
     }
 
-    // Check if manually set (user action)
-    if (address in manualSignedState) {
-      return manualSignedState[address];
+    // Check if signed with wallet
+    if (address in signedState) {
+      return signedState[address];
     }
 
-    // Use cached value if available
-    if (address in localStorageCache) {
-      return localStorageCache[address];
-    }
+    // Check localStorage for this address
+    return isWalletSigned(address);
+  }, [isConnected, address, signedState]);
 
-    // Cache miss - read from localStorage directly,only happens once per address change
-    const signed = isWalletSigned(address);
-
-    // Update cache asynchronously to avoid setState during render warning
-    setTimeout(() => {
-      setLocalStorageCache((prev) => {
-        if (!(address in prev) && signed) {
-          return { ...prev, [address]: signed };
-        }
-        return prev;
-      });
-    }, 0);
-
-    return signed;
-  }, [isConnected, address, manualSignedState, localStorageCache]);
-
-  const handleSetSignedWithWallet = useCallback(
+  const handleSignedWithWallet = useCallback(
     (signed: boolean) => {
       if (!address) return;
-
-      // Update manual state
-      setManualSignedState((prev) => ({ ...prev, [address]: signed }));
-      // Update cache to reflect the new state
-      setLocalStorageCache((prev) => ({ ...prev, [address]: signed }));
+      // Update signed state (takes precedence over localStorage)
+      setSignedState((prev: Record<string, boolean>) => ({
+        ...prev,
+        [address]: signed,
+      }));
       // Persist to localStorage for future sessions
       setWalletSigned(address, signed);
     },
@@ -80,7 +78,7 @@ export const RegistrationContextProvider = ({
       isSignedWithWallet,
       showRegisterForm,
       setRegistered: (registered: boolean) => setIsRegistered(registered),
-      handleSignedWithWallet: handleSetSignedWithWallet,
+      handleSignedWithWallet: handleSignedWithWallet,
       handleRegisterFormVisibility: (visible: boolean) =>
         setShowRegisterForm(visible),
     };
@@ -89,7 +87,7 @@ export const RegistrationContextProvider = ({
     isSignedWithWallet,
     showRegisterForm,
     setIsRegistered,
-    handleSetSignedWithWallet,
+    handleSignedWithWallet,
     setShowRegisterForm,
   ]);
 

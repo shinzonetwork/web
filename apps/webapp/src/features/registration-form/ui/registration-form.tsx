@@ -7,9 +7,11 @@ import { useRegistrationForm } from "../hooks/use-registration-form";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction";
 import {
   getRegistrationButtonText,
+  TOAST_CONFIG,
   validateRegistrationForm,
   validateRequiredFields,
 } from "@/shared/lib";
+import { toast } from "react-toastify";
 
 export function RegistrationForm() {
   const {
@@ -32,12 +34,14 @@ export function RegistrationForm() {
     // Validate required fields first
     const { isValid } = validateRequiredFields(formData);
     if (!isValid) {
+      toast.error("Please fill in all required fields", TOAST_CONFIG);
       return;
     }
 
     // Validate hex format on button click
     const isHexValid = validateHexFields();
     if (!isHexValid) {
+      toast.error("Please fill in with valid hex strings", TOAST_CONFIG);
       return;
     }
 

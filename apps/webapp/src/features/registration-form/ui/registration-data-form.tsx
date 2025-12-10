@@ -12,6 +12,7 @@ import {
 import { RegistrationInputField as Inputfield } from "./registration-input-field";
 
 import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
+import { Hex } from "viem";
 
 interface RegistrationDataFormProps {
   formData: RegistrationFormData;
@@ -60,7 +61,13 @@ export function RegistrationDataForm({
           key={input.id}
           id={input.id}
           label={input.label}
-          value={formData[input.id as keyof typeof formData]?.toString() ?? ""}
+          value={
+            (
+              formData[input.id as keyof RegistrationFormData] as
+                | Hex
+                | undefined
+            )?.toString() ?? ""
+          }
           onChange={(value) => handleInputChange(input.id, value)}
           isTextarea={input.isTextarea}
           error={fieldErrors[input.id]}

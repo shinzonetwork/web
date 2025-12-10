@@ -6,6 +6,7 @@ import { SignatureVerificationHandler } from "./wallet-signature-verification-ha
 import { useWalletSignature } from "../hooks/use-wallet-signature";
 import { useRegistrationContext } from "@/entities/registration-process";
 import { toast } from "react-toastify";
+import { TOAST_CONFIG } from "@/shared/lib";
 
 /**
  * Handler for wallet signature when not signed with wallet
@@ -22,14 +23,7 @@ export default function WalletSignatureHandler() {
       // Reset the ref when we're in a state that allows signing again
       if (error) {
         hasInitiatedSigningRef.current = false;
-        toast.error("Error signing message: " + error.message, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error("Error signing message: " + error.message, TOAST_CONFIG);
       }
       return;
     }
