@@ -193,4 +193,6 @@ export {
   PaginationItem,
   PaginationPrevious,
   PaginationNext,
+  PaginationFirst,
+  PaginationLast,
 }
