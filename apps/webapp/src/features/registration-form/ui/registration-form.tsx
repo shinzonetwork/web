@@ -22,13 +22,8 @@ export function RegistrationForm() {
     validateHexFields,
   } = useRegistrationForm();
 
-  const {
-    sendRegisterTransaction,
-    isPending,
-    isConfirming,
-    isConfirmed,
-    sendError,
-  } = useRegistrationTransaction(formData);
+  const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
+    useRegistrationTransaction(formData);
 
   const handleRegister = async () => {
     // Validate required fields first
@@ -72,12 +67,6 @@ export function RegistrationForm() {
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
       </Button>
-
-      {sendError && (
-        <div className="text-sm text-destructive mt-2">
-          Error: {sendError.message}
-        </div>
-      )}
     </div>
   );
 }

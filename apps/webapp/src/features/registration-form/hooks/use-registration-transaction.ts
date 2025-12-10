@@ -47,6 +47,17 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
     }
   }, [isErrorConfirming, txHash]);
 
+  // Handle sendTransaction errors (wallet rejections, network errors, etc.)
+  useEffect(() => {
+    if (sendError) {
+      const { shortMessage } = sendError as {
+        shortMessage?: string;
+        message?: string;
+      };
+      toast.error(`Registration failed: ${shortMessage}`, TOAST_CONFIG);
+    }
+  }, [sendError]);
+
   // Handle successful transaction confirmation
   useEffect(() => {
     if (isConfirmed && txHash && address && !isRegistered) {
@@ -94,9 +105,13 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         ],
       });
     } catch (error: unknown) {
+      const { shortMessage } = error as {
+        shortMessage?: string;
+        message?: string;
+      };
       const errorMessage =
         error instanceof Error
-          ? error.message
+          ? shortMessage
           : "Error encoding data before sending transaction";
       toast.error(`Registration failed - ${errorMessage}`, TOAST_CONFIG);
       throw error;
@@ -107,11 +122,14 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         to: SHINZO_PRECOMPILE_ADDRESS,
         data: encodedData,
       });
-      console.log("Transaction sent successfully");
     } catch (error: unknown) {
+      const { shortMessage } = error as {
+        shortMessage?: string;
+        message?: string;
+      };
       const errorMessage =
         error instanceof Error
-          ? error.message
+          ? shortMessage
           : "Unknown error occurred while sending transaction";
       toast.error(`Registration failed: ${errorMessage}`, TOAST_CONFIG);
       throw error;
