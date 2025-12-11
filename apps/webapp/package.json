@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build-open": "cd apps/webapp && next build --webpack && opennextjs-cloudflare build --skipBuild",
+    "build-open": "next build --webpack && opennextjs-cloudflare build --skipBuild",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
