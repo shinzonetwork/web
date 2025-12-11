@@ -1,14 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        // Prevent Turbopack from trying to bundle `thread-stream`
-        "thread-stream": false as any,
-      },
-    },
-  },
+  /* config options here */
 };
 
 export default nextConfig;
