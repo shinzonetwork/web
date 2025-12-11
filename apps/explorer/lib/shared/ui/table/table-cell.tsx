@@ -9,6 +9,8 @@ export interface TableCellProps {
   loading?: boolean;
   /** Renders numbers in a monospace font with letters of equal size */
   numeric?: boolean;
+  /** Text alignment: 'left', 'center', or 'right' */
+  align?: 'left' | 'center' | 'right';
 }
 
 /**
@@ -40,14 +42,18 @@ export const TableCell = ({
   loading,
   numeric,
   isHeading,
+  align = 'left',
   as: Container = 'div',
 }: TableCellProps) => {
+  const alignClass = align === 'center' ? 'text-center justify-center' : align === 'right' ? 'text-right justify-end' : 'text-left justify-start';
+  
   return (
     <Container
       className={cn(
         'h-18 py-1 px-2',
         'inline-flex items-center gap-2',
-        'text-base font-mono text-left font-medium text-text-primary',
+        'text-base font-mono font-medium text-text-primary',
+        alignClass,
         isHeading && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',
       )}
