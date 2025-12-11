@@ -837,6 +837,12 @@ export type Block__Uncles__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type BooleanEncryptedFilterArg = {
+  _and?: InputMaybe<Array<BooleanEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Boolean']['input']>;
+  _or?: InputMaybe<Array<BooleanEncryptedFilterArg>>;
+};
+
 export type BooleanFilterArg = {
   _and?: InputMaybe<Array<BooleanFilterArg>>;
   _eq?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1107,6 +1113,13 @@ export type DateTimeOperatorBlock = {
   _nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
 };
 
+/** Result type for encrypted search queries containing matching document IDs */
+export type EncryptedSearchResult = {
+  __typename?: 'EncryptedSearchResult';
+  /** Array of document IDs matching the encrypted search criteria */
+  docIDs: Array<Scalars['String']['output']>;
+};
+
 /** ExplainType is an enum selecting the type of explanation done by the @explain directive. */
 export enum ExplainType {
   /** Like simple explain, but more verbose nodes (no attributes). */
@@ -1116,6 +1129,12 @@ export enum ExplainType {
   /** Simple explanation - dump of the plan graph. */
   Simple = 'simple'
 }
+
+export type Float32EncryptedFilterArg = {
+  _and?: InputMaybe<Array<Float32EncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Float32']['input']>;
+  _or?: InputMaybe<Array<Float32EncryptedFilterArg>>;
+};
 
 export type Float32FilterArg = {
   _and?: InputMaybe<Array<Float32FilterArg>>;
@@ -1211,6 +1230,12 @@ export type Float32OperatorBlock = {
    *
    */
   _nin?: InputMaybe<Array<InputMaybe<Scalars['Float32']['input']>>>;
+};
+
+export type Float64EncryptedFilterArg = {
+  _and?: InputMaybe<Array<Float64EncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Float64']['input']>;
+  _or?: InputMaybe<Array<Float64EncryptedFilterArg>>;
 };
 
 export type Float64FilterArg = {
@@ -1347,6 +1372,12 @@ export type IdOperatorBlock = {
 export type IndexField = {
   direction?: InputMaybe<Ordering>;
   field?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IntEncryptedFilterArg = {
+  _and?: InputMaybe<Array<IntEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Int']['input']>;
+  _or?: InputMaybe<Array<IntEncryptedFilterArg>>;
 };
 
 export type IntFilterArg = {
@@ -2118,6 +2149,12 @@ export type NotNullBlobOperatorBlock = {
   _nlike?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type NotNullBooleanEncryptedFilterArg = {
+  _and?: InputMaybe<Array<NotNullBooleanEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Boolean']['input']>;
+  _or?: InputMaybe<Array<NotNullBooleanEncryptedFilterArg>>;
+};
+
 export type NotNullBooleanFilterArg = {
   _and?: InputMaybe<Array<NotNullBooleanFilterArg>>;
   _eq?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2181,6 +2218,12 @@ export type NotNullBooleanOperatorBlock = {
    *
    */
   _nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+};
+
+export type NotNullFloat32EncryptedFilterArg = {
+  _and?: InputMaybe<Array<NotNullFloat32EncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Float32']['input']>;
+  _or?: InputMaybe<Array<NotNullFloat32EncryptedFilterArg>>;
 };
 
 export type NotNullFloat32FilterArg = {
@@ -2279,6 +2322,12 @@ export type NotNullFloat32OperatorBlock = {
   _nin?: InputMaybe<Array<Scalars['Float32']['input']>>;
 };
 
+export type NotNullFloat64EncryptedFilterArg = {
+  _and?: InputMaybe<Array<NotNullFloat64EncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Float64']['input']>;
+  _or?: InputMaybe<Array<NotNullFloat64EncryptedFilterArg>>;
+};
+
 export type NotNullFloat64FilterArg = {
   _and?: InputMaybe<Array<NotNullFloat64FilterArg>>;
   _eq?: InputMaybe<Scalars['Float64']['input']>;
@@ -2375,6 +2424,12 @@ export type NotNullFloat64OperatorBlock = {
   _nin?: InputMaybe<Array<Scalars['Float64']['input']>>;
 };
 
+export type NotNullIntEncryptedFilterArg = {
+  _and?: InputMaybe<Array<NotNullIntEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['Int']['input']>;
+  _or?: InputMaybe<Array<NotNullIntEncryptedFilterArg>>;
+};
+
 export type NotNullIntFilterArg = {
   _and?: InputMaybe<Array<NotNullIntFilterArg>>;
   _eq?: InputMaybe<Scalars['Int']['input']>;
@@ -2469,6 +2524,12 @@ export type NotNullIntOperatorBlock = {
    *
    */
   _nin?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type NotNullStringEncryptedFilterArg = {
+  _and?: InputMaybe<Array<NotNullStringEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['String']['input']>;
+  _or?: InputMaybe<Array<NotNullStringEncryptedFilterArg>>;
 };
 
 export type NotNullStringFilterArg = {
@@ -2593,7 +2654,6 @@ export type Query = {
   Block?: Maybe<Array<Maybe<Block>>>;
   Log?: Maybe<Array<Maybe<Log>>>;
   Transaction?: Maybe<Array<Maybe<Transaction>>>;
-  _?: Maybe<Scalars['Boolean']['output']>;
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -2604,11 +2664,27 @@ export type Query = {
   _avg?: Maybe<Scalars['Float']['output']>;
   /**
    *
+   * Returns a set of commits matching any provided criteria. If no arguments are
+   *  provided all commits in the system will be returned.
+   *
+   */
+  _commits?: Maybe<Array<Maybe<Commit>>>;
+  /**
+   *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
   _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * Returns a set of head commits matching any provided criteria. If no arguments are
+   *  provided all head commits in the system will be returned. If no 'field' argument
+   *  is provided only composite commits will be returned. This is equivalent to
+   *  a '_commits' query with Depth: 1, and a differing 'field' default value.
+   *
+   */
+  _latestCommits?: Maybe<Array<Maybe<Commit>>>;
   /**
    *
    * Returns the maximum of the specified field values within the specified child sets. If
@@ -2633,22 +2709,6 @@ export type Query = {
    *
    */
   _sum?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns a set of commits matching any provided criteria. If no arguments are
-   *  provided all commits in the system will be returned.
-   *
-   */
-  commits?: Maybe<Array<Maybe<Commit>>>;
-  /**
-   *
-   * Returns a set of head commits matching any provided criteria. If no arguments are
-   *  provided all head commits in the system will be returned. If no 'field' argument
-   *  is provided only composite commits will be returned. This is equivalent to
-   *  a 'commits' query with Depth: 1, and a differing 'field' default value.
-   *
-   */
-  latestCommits?: Maybe<Array<Maybe<Commit>>>;
 };
 
 
@@ -2708,11 +2768,29 @@ export type Query_AvgArgs = {
 };
 
 
+export type Query_CommitsArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  depth?: InputMaybe<Scalars['Int']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  fieldName?: InputMaybe<Scalars['String']['input']>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
+};
+
+
 export type Query_CountArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__CountSelector>;
   Block?: InputMaybe<Block__CountSelector>;
   Log?: InputMaybe<Log__CountSelector>;
   Transaction?: InputMaybe<Transaction__CountSelector>;
+};
+
+
+export type Query_LatestCommitsArgs = {
+  docID: Scalars['ID']['input'];
+  fieldName?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2739,24 +2817,6 @@ export type Query_SumArgs = {
   Transaction?: InputMaybe<Transaction__NumericSelector>;
 };
 
-
-export type QueryCommitsArgs = {
-  cid?: InputMaybe<Scalars['ID']['input']>;
-  depth?: InputMaybe<Scalars['Int']['input']>;
-  docID?: InputMaybe<Scalars['ID']['input']>;
-  fieldName?: InputMaybe<Scalars['String']['input']>;
-  groupBy?: InputMaybe<Array<CommitFields>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
-};
-
-
-export type QueryLatestCommitsArgs = {
-  docID: Scalars['ID']['input'];
-  fieldName?: InputMaybe<Scalars['String']['input']>;
-};
-
 /**
  *
  * The signature of the commit, if one exists. This is used to verify the integrity
@@ -2771,6 +2831,12 @@ export type Signature = {
   type?: Maybe<Scalars['String']['output']>;
   /** The value of the signature, which is used to verify the integrity of the commit and the data it contains. */
   value?: Maybe<Scalars['String']['output']>;
+};
+
+export type StringEncryptedFilterArg = {
+  _and?: InputMaybe<Array<StringEncryptedFilterArg>>;
+  _eq?: InputMaybe<Scalars['String']['input']>;
+  _or?: InputMaybe<Array<StringEncryptedFilterArg>>;
 };
 
 export type StringFilterArg = {
@@ -2880,7 +2946,13 @@ export type Subscription = {
   Block?: Maybe<Array<Maybe<Block>>>;
   Log?: Maybe<Array<Maybe<Log>>>;
   Transaction?: Maybe<Array<Maybe<Transaction>>>;
-  _?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   *
+   * Returns a set of commits matching any provided criteria. If no arguments are
+   *  provided all commits in the system will be returned.
+   *
+   */
+  _commits?: Maybe<Array<Maybe<Commit>>>;
 };
 
 
@@ -2929,6 +3001,18 @@ export type SubscriptionTransactionArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<TransactionOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type Subscription_CommitsArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  depth?: InputMaybe<Scalars['Int']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  fieldName?: InputMaybe<Scalars['String']['input']>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
 };
 
 export type Transaction = {
@@ -3428,7 +3512,7 @@ export enum CommitCountFieldArg {
 
 /**
  *
- * These are the set of fields supported for grouping by in a commits query.
+ * These are the set of fields supported for grouping by in a _commits query.
  *
  */
 export enum CommitFields {
@@ -3512,7 +3596,7 @@ export type TransactionQueryVariables = Exact<{
 }>;
 
 
-export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, block?: { __typename?: 'Block', timestamp?: string | null } | null } | null> | null };
+export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', _docID?: string | null, hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, accessList?: Array<{ __typename?: 'AccessListEntry', address?: string | null } | null> | null, block?: { __typename?: 'Block', timestamp?: string | null } | null } | null> | null };
 
 export type TransactionsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3596,6 +3680,10 @@ export const BlocksDocument = new TypedDocumentString(`
 export const TransactionDocument = new TypedDocumentString(`
     query Transaction($hash: String) {
   Transaction(filter: {hash: {_eq: $hash}}, limit: 1) {
+    _docID
+    accessList {
+      address
+    }
     hash
     blockNumber
     blockHash
