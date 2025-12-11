@@ -3,7 +3,8 @@ import { cn } from '@/shared/utils/utils';
 import { TableCell } from './table-cell';
 
 export interface TableLayoutProps<ROW = unknown> {
-  headings: ReactNode[];
+  numColumns?: number;
+  headings?: ReactNode[];
   iterable: ROW[];
   rowRenderer: (row: ROW, rowIndex: number) => ReactNode;
   isLoading?: boolean;
@@ -81,6 +82,7 @@ export const TableLayoutWrapper = ({ children }: { children: ReactNode }) => {
  * ```
  */
 export const TableLayout = <ROW = unknown>({
+  numColumns,
   headings,
   iterable,
   rowRenderer,
@@ -90,7 +92,7 @@ export const TableLayout = <ROW = unknown>({
   className,
   gridClass: gridClassName,
 }: TableLayoutProps<ROW>) => {
-  const columns = headings.length;
+  const columns = numColumns ?? headings?.length ?? 0;
   const isNotFound = !!(!isLoading && iterable.length === 0 && notFound);
   const gridClass = gridClassName ?? (GRID_COLUMN_CLASSES[columns] || 'grid-cols-1');
   const spanClass = SPAN_COLUMN_CLASSES[columns] || 'col-span-1';
@@ -103,13 +105,14 @@ export const TableLayout = <ROW = unknown>({
   return (
     <TableLayoutWrapper>
       <div className={cn('grid w-full grow container', gridClass, className)}>
-        <div className={cn('h-18 grid grid-cols-subgrid border-b border-border', spanClass)}>
-          {headings.map((heading, index) => (
+        { headings && headings.length > 0 && <div className={cn('h-18 grid grid-cols-subgrid border-b border-border', spanClass)}>
+          {headings?.map((heading, index) => (
             <TableCell key={index} isHeading>
               {heading}
             </TableCell>
           ))}
         </div>
+        }
 
         {isNotFound && (
           <div className={cn(spanClass, 'min-h-54 border-x border-b border-border flex flex-col items-center justify-center bg-background-accent-light text-md text-text-primary')}>
