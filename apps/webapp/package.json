@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build-open": "next build --webpack && opennextjs-cloudflare build --skipBuild",
+    "build": "next build --webpack",
+    "build-open": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
