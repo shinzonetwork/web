@@ -10,7 +10,7 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "lint": "eslint",
+    "lint": "eslint --fix",
     "shadcn": "pnpm dlx shadcn@latest add",
     "graphql:codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",
     "graphql:watch": "graphql-codegen --config ./lib/shared/graphql/codegen.ts --watch"

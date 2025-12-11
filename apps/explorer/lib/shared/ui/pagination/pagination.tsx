@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  MoreHorizontalIcon,
 } from 'lucide-react';
 
 import Link from 'next/link'
@@ -10,7 +9,6 @@ import type { ComponentProps } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Typography } from '@/shared/ui/typography';
 import { cn } from '@/shared/utils/utils';
-import { getRange, transform } from './utils';
 import { DEFAULT_LIMIT } from './get-server-page';
 
 export interface PaginationProps extends ComponentProps<"nav"> {
@@ -20,12 +18,7 @@ export interface PaginationProps extends ComponentProps<"nav"> {
 }
 
 export const Pagination = ({ page, itemsPerPage = DEFAULT_LIMIT, totalItems = 0, ...props }: PaginationProps) => {
-  const siblingCount = 1;
-  const showEdges = true;
-
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-  const range = getRange(page, totalPages, siblingCount, showEdges);
-  const pages = transform(range);
 
   const pathname = usePathname();
   const params = useSearchParams();
@@ -41,35 +34,35 @@ export const Pagination = ({ page, itemsPerPage = DEFAULT_LIMIT, totalItems = 0,
     <PaginationRoot {...props}>
       <PaginationContent>
         <PaginationItem>
+          <PaginationFirst
+            href={getPageLink(1)}
+            aria-disabled={page <= 1}
+          />
+        </PaginationItem>
+
+        <PaginationItem>
           <PaginationPrevious
             href={getPageLink(Math.max(1, page - 1))}
             aria-disabled={page <= 1}
           />
         </PaginationItem>
 
-        {pages.map((item, index) => {
-          if (item.type === 'ellipsis') {
-            return (
-              <PaginationItem key={`ellipsis-${index}`}>
-                <PaginationEllipsis />
-              </PaginationItem>
-            );
-          }
-          return (
-            <PaginationItem key={`page-${item.value}`}>
-              <PaginationLink
-                href={getPageLink(item.value)}
-                isActive={item.value === page}
-              >
-                {item.value}
-              </PaginationLink>
-            </PaginationItem>
-          );
-        })}
+        <PaginationItem>
+          <PaginationLink isActive href={getPageLink(page)} aria-disabled>
+            {page}
+          </PaginationLink>
+        </PaginationItem>
 
         <PaginationItem>
           <PaginationNext
             href={getPageLink(Math.min(totalPages, page + 1))}
+            aria-disabled={page >= totalPages}
+          />
+        </PaginationItem>
+
+        <PaginationItem>
+          <PaginationLast
+            href={getPageLink(totalPages)}
             aria-disabled={page >= totalPages}
           />
         </PaginationItem>
@@ -133,6 +126,21 @@ function PaginationLink({
   )
 }
 
+function PaginationFirst({
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  return (
+    <PaginationLink
+      aria-label="Go to the first page"
+      className={cn(className)}
+      {...props}
+    >
+      <Typography className='underline'>First</Typography>
+    </PaginationLink>
+  )
+}
+
 function PaginationPrevious({
   className,
   ...props
@@ -140,11 +148,10 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      className={cn(className, 'text-text-secondary')}
+      className={cn(className, 'border-x-0')}
       {...props}
     >
       <ChevronLeftIcon />
-      <Typography color='secondary'>Prev</Typography>
     </PaginationLink>
   )
 }
@@ -155,30 +162,27 @@ function PaginationNext({
 }: React.ComponentProps<typeof PaginationLink>) {
   return (
     <PaginationLink
-      aria-label="Go to next page"
-      className={cn(className, 'text-text-secondary')}
+      aria-label="Go to the last page"
+      className={cn(className, 'border-x-0')}
       {...props}
     >
-      <Typography>Next</Typography>
       <ChevronRightIcon />
     </PaginationLink>
   )
 }
 
-function PaginationEllipsis({
+function PaginationLast({
   className,
   ...props
-}: React.ComponentProps<"span">) {
+}: React.ComponentProps<typeof PaginationLink>) {
   return (
-    <span
-      aria-hidden
-      data-slot="pagination-ellipsis"
-      className={cn("h-full flex items-center justify-center gap-1 py-2.5 px-3 border border-border", className)}
+    <PaginationLink
+      aria-label="Go to the last page"
+      className={cn(className)}
       {...props}
     >
-      <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
-    </span>
+      <Typography className='underline'>Last</Typography>
+    </PaginationLink>
   )
 }
 
@@ -189,5 +193,6 @@ export {
   PaginationItem,
   PaginationPrevious,
   PaginationNext,
-  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
 }
