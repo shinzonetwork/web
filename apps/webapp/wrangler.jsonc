@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+
+  // 👇 Change this:
+  // "name": "shinzo-webapp",
+  // 👇 To this:
+  "name": "shinzo-register",
+
+  "compatibility_date": "2025-12-11",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  // 👇 Fix self-reference binding to point at the actual worker name
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "shinzo-register"
+    }
+  ],
+
+  "images": {
+    "binding": "IMAGES"
+  }
+}
