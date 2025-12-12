@@ -18,7 +18,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "shinzo-register"
+      "service": "shinzo-webapp"
     }
   ],
 
