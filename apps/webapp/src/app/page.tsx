@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function LandingPage() {
   return (
     <>
-      <div className="flex p-4">
+      <div className="flex flex-col gap-4 p-4">
         <Image
           src="/images/shinzo-logo.svg"
           alt="Shinzo"
@@ -15,12 +15,12 @@ export default function LandingPage() {
           priority
           unoptimized
         />
-      </div>
-      <div className="mx-12 my-12">
         <p>
-          The Shinzo webapp allows a user to interact with different parts of
-          the Shinzo ecosystem.
+          Sign up your indexer to be recognized by the Shinzo Network and
+          contribute to the ecosystem.
         </p>
+      </div>
+      <div className="mx-12 my-1 border-t border-border">
         <Register />
       </div>
     </>

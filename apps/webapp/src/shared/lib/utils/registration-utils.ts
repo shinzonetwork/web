@@ -79,7 +79,7 @@ export function validateRequiredFields(formData: RegistrationFormData): {
   const errors: string[] = [];
 
   if (!formData.message?.trim()) {
-    errors.push("Message to sign is required");
+    errors.push("Signed message is required");
   }
   if (!formData.defraPublicKey?.trim()) {
     errors.push("Public key is required");
