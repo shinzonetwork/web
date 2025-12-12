@@ -5,6 +5,7 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
+import { ConfirmationsTooltip } from '@/pages/transaction-details/confirmations-tooltip';
 
 export interface TransactionCardProps {
   txHash: string;
@@ -30,6 +31,9 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
   }
 
   const transactionFee = (Number(tx.gasUsed) * Number(tx.gasPrice)) / 1e18;
+  const confirmations = tx.accessList
+    ?.map((item) => item?.address)
+    .filter(Boolean) as string[];
 
   return (
     <DataList>
@@ -48,15 +52,23 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         loading={isLoading}
       >
         {tx.status ? (
-          <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
-            <CheckCircle2 className="mr-1 h-3 w-3" />
-            Success
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
+              <CheckCircle2 className="mr-1 h-3 w-3" />
+              Success
+            </Badge>
+
+            <ConfirmationsTooltip confirmations={confirmations} />
+          </div>
         ) : (
-          <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
-            <XCircle className="mr-1 h-3 w-3" />
-            Failed
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
+              <XCircle className="mr-1 h-3 w-3" />
+              Failed
+            </Badge>
+
+            <ConfirmationsTooltip confirmations={confirmations} />
+          </div>
         )}
       </DataItem>
 
