@@ -4,6 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 const TransactionQuery = graphql(`
   query Transaction($hash: String) {
     Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {
+      _docID
+      accessList {
+          address
+      }
       hash
       blockNumber
       blockHash
