@@ -1,19 +1,22 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
+import { injected } from "wagmi/connectors";
 
 export function ConnectWallet() {
-  const { openConnectModal } = useConnectModal();
   const { isConnected, address } = useAccount();
+  const { connect } = useConnect();
 
   if (isConnected && address) {
     return null;
   }
   return (
     <div className="my-2">
-      <Button onClick={openConnectModal} className="w-fit rounded-full">
+      <Button
+        onClick={() => connect({ connector: injected() })}
+        className="w-fit rounded-full"
+      >
         Connect Wallet
       </Button>
     </div>

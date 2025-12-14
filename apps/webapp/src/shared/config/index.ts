@@ -1,26 +1,28 @@
 "use client";
 
-import "@rainbow-me/rainbowkit/styles.css";
-import { Chain, getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { createConfig, http } from "wagmi";
+import { defineChain, type Chain } from "viem";
 
-export const Shinzo: Chain = {
+export const Shinzo: Chain = defineChain({
   id: 9000,
   name: "Shinzo",
-  iconUrl: "/public/logo.svg",
-  iconBackground: "#fff",
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {
     default: {
       http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"],
     },
+    public: {
+      http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"],
+    },
   },
-} as const satisfies Chain;
-
-const config = getDefaultConfig({
-  appName: "Shinzo",
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
-  chains: [Shinzo],
-  ssr: true,
 });
 
+const config = createConfig({
+  chains: [Shinzo],
+  transports: {
+    [Shinzo.id]: http(
+      process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"
+    ),
+  },
+});
 export default config;

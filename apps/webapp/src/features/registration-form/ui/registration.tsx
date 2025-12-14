@@ -30,7 +30,9 @@ export default function Registration() {
       )}
       {showRegisterForm && (
         <>
-          <DisconnectWallet />
+          <div className="flex flex-row items-center justify-end">
+            <DisconnectWallet />
+          </div>
           <RegistrationForm />
         </>
       )}
