@@ -4,7 +4,7 @@ import { createConfig, http } from "wagmi";
 import { defineChain, type Chain } from "viem";
 
 export const Shinzo: Chain = defineChain({
-  id: 9000,
+  id: 2328,
   name: "Shinzo",
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {
