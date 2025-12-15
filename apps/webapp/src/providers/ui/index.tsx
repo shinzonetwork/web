@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { AppWagmiProvider } from "./wagmi-provider";
-import { AppRainbowKitProvider } from "./rainbowkit-provider";
 import { AppQueryProvider } from "./query-provider";
 
 interface AppProvidersProps {
@@ -12,9 +11,7 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <AppWagmiProvider>
-      <AppQueryProvider>
-        <AppRainbowKitProvider>{children}</AppRainbowKitProvider>
-      </AppQueryProvider>
+      <AppQueryProvider>{children}</AppQueryProvider>
     </AppWagmiProvider>
   );
 }
