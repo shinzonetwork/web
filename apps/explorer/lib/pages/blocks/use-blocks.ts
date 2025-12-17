@@ -1,5 +1,6 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Block } from '@/shared/graphql/generated/graphql';
 
 const BlocksQuery = graphql(`
   query Blocks($offset: Int, $limit: Int) {
@@ -41,7 +42,7 @@ export const useBlocks = (options: Partial<UseBlocksOptions>) => {
     queryFn: async () => {
       const res = await execute(BlocksQuery, { offset, limit });
       return {
-        blocks: res.Block,
+        blocks: res.Block?.filter(Boolean) as Block[],
         totalCount: res.blockCount,
       };
     },

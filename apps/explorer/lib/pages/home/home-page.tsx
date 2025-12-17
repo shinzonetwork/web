@@ -3,7 +3,7 @@
 import { Cable as Cube, TrendingUp } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Skeleton } from "@/shared/ui/skeleton";
-import { PageLayout } from "@/widgets/layout";
+import { PageLayout } from '@/widgets/layout';
 import { useTransactions } from "@/pages/transactions";
 import { useBlocks } from "@/pages/blocks";
 import { BlocksHome } from "./blocks-home";
@@ -72,29 +72,11 @@ export const HomePage = () => {
           </CardContent>
         </Card>
       </div>
-      <div className="bg-background-accent-light pl-8 pr-8 border-t border-border">
-      <div className="grid gap-4 lg:grid-cols-2 border-b border-border">
-        {/* Latest Blocks */}
-        <BlocksHome
-          blocks={
-            blocks?.blocks?.filter(
-              (block): block is NonNullable<typeof block> => block !== null
-            ) ?? []
-          }
-          isLoading={blocksLoading}
-        />
 
-        {/* Latest Transactions */}
-        <TransactionsHome
-          transactions={
-            txs?.transactions?.filter(
-              (txn): txn is NonNullable<typeof txn> => txn !== null
-            ) ?? []
-          }
-          isLoading={txLoading}
-        />
-      </div>
-      </div>
+      <section className='grid gap-12 lg:gap-4 lg:grid-cols-2'>
+        <BlocksHome blocks={blocks?.blocks ?? []} isLoading={blocksLoading} />
+        <TransactionsHome transactions={txs?.transactions ?? []} isLoading={txLoading} />
+      </section>
     </PageLayout>
   );
 };

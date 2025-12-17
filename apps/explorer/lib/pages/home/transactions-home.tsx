@@ -1,34 +1,41 @@
-"use client";
+import { TableLayout, TableNullableCell } from '@/shared/ui/table';
+import Link from 'next/link';
+import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
+import { Typography } from '@/shared/ui/typography';
+import { formatHash } from '@/shared/utils/format-hash';
+import { Transaction } from '@/shared/graphql/generated/graphql';
+import { HALF_CONTAINER_CLASS } from '@/pages/home/blocks-home';
+import { cn } from '@/shared/utils/utils';
 
-import Link from "next/link";
-
-import { Typography } from "@/shared/ui/typography";
-import { TableLayout, TableNullableCell } from "@/shared/ui/table";
-import ShinzoTxnIcon from "@/shared/ui/icons/shinzo-txn.svg";
-
-import { formatHash } from "@/shared/utils/format-hash";
-import { Transaction } from "@/shared/graphql/generated/graphql";
-
-export const TransactionsHome = ({
-  transactions,
-  isLoading,
-}: {
+export interface TransactionsHomeProps {
   transactions: Transaction[] | [];
   isLoading: boolean;
-}) => {
+}
+
+export const TransactionsHome = ({ transactions, isLoading }: TransactionsHomeProps) => {
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18;
     return eth.toFixed(2);
   };
 
   return (
-    <div className="flex flex-col">
+    <div>
+      <div className='flex'>
+        <Typography variant='md' className={cn('block py-3 pl-8 lg:pl-0', HALF_CONTAINER_CLASS)}>
+          / Latest Transactions
+        </Typography>
+        <div className='flex grow shrink' />
+      </div>
+
       <TableLayout
+        className={HALF_CONTAINER_CLASS}
         isLoading={isLoading}
         loadingRowCount={5}
         notFound="No transactions found."
         gridClass="grid-cols-[1fr_270px_150px]"
-        numColumns={3}
+        headings={['Hash', 'From–To', 'Value']}
+        hideHeader
+        hideLeftSpacer
         iterable={transactions ?? []}
         rowRenderer={(tx) => (
           <>
@@ -93,15 +100,19 @@ export const TransactionsHome = ({
           </>
         )}
       />
-      <div className="flex justify-center pr-8 border-r border-l border-border bg-background py-4">
-        <Link
-          href="/tx"
-          className="flex items-center gap-7 text-sm hover:underline"
-        >
-          <Typography color="accent" className="hover:underline">
-            View all
-          </Typography>
-        </Link>
+
+      <div className='flex'>
+        <div className={cn('relative flex justify-center border-r border-b border-l border-border bg-background py-4', HALF_CONTAINER_CLASS)}>
+          <Link
+            href="/tx"
+            className="flex items-center gap-7 text-sm text-secondary hover:underline"
+          >
+            <Typography color="accent" font='mono' className="underline">
+              View all transactions
+            </Typography>
+          </Link>
+        </div>
+        <div className='flex grow shrink' />
       </div>
     </div>
   );
