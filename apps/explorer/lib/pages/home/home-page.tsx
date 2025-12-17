@@ -1,13 +1,13 @@
 "use client";
 
-import { Cable as Cube, TrendingUp } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { PageLayout } from '@/widgets/layout';
+import { Container, PageLayout } from '@/widgets/layout';
 import { useTransactions } from "@/pages/transactions";
 import { useBlocks } from "@/pages/blocks";
 import { BlocksHome } from "./blocks-home";
 import { TransactionsHome } from "./transactions-home";
+import { HomeStats } from '@/pages/home/stats';
+import { Typography } from '@/shared/ui/typography';
+import { SearchInput } from '@/shared/ui/search-input';
 
 export const HomePage = () => {
   const { data: blocks, isLoading: blocksLoading } = useBlocks({
@@ -21,59 +21,23 @@ export const HomePage = () => {
 
   return (
     <PageLayout title="Home" hideTitle hideSearch>
-      <div className="mb-12 grid gap-6 md:grid-cols-2">
-        <Card className="bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Blocks
-            </CardTitle>
-            <Cube className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            {blocksLoading ? (
-              <div className="w-40 h-12">
-                <Skeleton />
-              </div>
-            ) : (
-              <>
-                <div className="text-2xl font-bold text-foreground">
-                  {blocks?.totalCount ?? 0}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Avg block time: 12.1s
-                </p>
-              </>
-            )}
-          </CardContent>
-        </Card>
+      <Container borderX borderB className='flex flex-col lg:flex-row'>
+        <HomeStats
+          totalTransactions={txs?.totalCount ?? 0}
+          totalBlocks={blocks?.totalCount ?? 0}
+          blocksLoading={blocksLoading}
+          transactionsLoading={txLoading}
+        />
 
-        <Card className="bg-card">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Transactions
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            {txLoading ? (
-              <div className="w-40 h-12">
-                <Skeleton />
-              </div>
-            ) : (
-              <>
-                <div className="text-2xl font-bold text-foreground">
-                  {((txs?.totalCount ?? 0) / 1e6).toFixed(2)}M
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Across all blocks
-                </p>
-              </>
-            )}
-          </CardContent>
-        </Card>
-      </div>
+        <div className='flex flex-col gap-4 grow -mt-px bg-background-accent-light border-t lg:border-t-0 border-l border-b border-border py-11 px-6 lg:px-10'>
+          <Typography font='mono' className='text-[25px] whitespace-nowrap'>
+            Shinzō Chain Explorer
+          </Typography>
+          <SearchInput />
+        </div>
+      </Container>
 
-      <section className='grid gap-12 lg:gap-4 lg:grid-cols-2'>
+      <section className='grid gap-12 lg:gap-4 lg:grid-cols-2 mt-18'>
         <BlocksHome blocks={blocks?.blocks ?? []} isLoading={blocksLoading} />
         <TransactionsHome transactions={txs?.transactions ?? []} isLoading={txLoading} />
       </section>

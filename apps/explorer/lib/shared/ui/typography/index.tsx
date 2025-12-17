@@ -7,6 +7,7 @@ const typographyVariants = cva('',
     variants: {
       variant: {
         h2: 'text-h2',
+        lg: 'text-lg',
         md: 'text-md',
         base: 'text-base',
         sm: 'text-sm',
@@ -41,6 +42,7 @@ export type TypographyVariant = NonNullable<VariantProps<typeof typographyVarian
 
 const tagMapping: Record<TypographyVariant, ElementType> = {
   h2: 'h2',
+  lg: 'p',
   md: 'p',
   base: 'p',
   sm: 'p',
