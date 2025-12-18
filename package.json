@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.14.6",
+    "@payloadcms/db-d1-sqlite": "^3.68.5",
+    "@payloadcms/next": "^3.68.5",
+    "@payloadcms/richtext-lexical": "^3.68.5",
+    "@payloadcms/storage-r2": "^3.68.5",
+    "@payloadcms/ui": "^3.68.5",
+    "payload": "^3.68.5"
+  }
+}
