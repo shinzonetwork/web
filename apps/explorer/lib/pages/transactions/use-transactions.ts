@@ -1,5 +1,6 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Transaction } from '@/shared/graphql/generated/graphql';
 
 const TransactionsQuery = graphql(`
   query Transactions($offset: Int, $limit: Int, $blockNumber: Int) {
@@ -50,7 +51,7 @@ export const useTransactions = (options: Partial<UseTransactionsOptions>) => {
     queryFn: async () => {
       const res = await execute(TransactionsQuery, { offset, limit, blockNumber });
       return {
-        transactions: res.Transaction,
+        transactions: res.Transaction?.filter(Boolean) as Transaction[],
         totalCount: res.txCount,
       };
     },
