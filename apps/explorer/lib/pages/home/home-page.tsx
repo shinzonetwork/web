@@ -33,7 +33,7 @@ export const HomePage = () => {
           <Typography font='mono' className='text-[25px] whitespace-nowrap'>
             Shinzō Chain Explorer
           </Typography>
-          <SearchInput />
+          {/*<SearchInput />*/}
         </div>
       </Container>
 
