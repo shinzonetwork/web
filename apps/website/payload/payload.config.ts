@@ -1,17 +1,20 @@
-import { sqliteD1Adapter } from "@payloadcms/db-d1-sqlite";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import path from "path";
-import { buildConfig } from "payload";
-import { fileURLToPath } from "url";
 import {
   CloudflareContext,
   getCloudflareContext,
 } from "@opennextjs/cloudflare";
-import { GetPlatformProxyOptions } from "wrangler";
+import { sqliteD1Adapter } from "@payloadcms/db-d1-sqlite";
+import { seoPlugin } from "@payloadcms/plugin-seo";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { r2Storage } from "@payloadcms/storage-r2";
+import path from "path";
+import { buildConfig } from "payload";
+import { fileURLToPath } from "url";
+import { GetPlatformProxyOptions } from "wrangler";
 
-import { Users } from "./collections/Users";
+import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
+import { Posts } from "./collections/Posts";
+import { Users } from "./collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -33,7 +36,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media],
+  collections: [Users, Media, Posts, Authors],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -44,6 +47,12 @@ export default buildConfig({
     r2Storage({
       bucket: cloudflare.env.R2,
       collections: { media: true },
+    }),
+    seoPlugin({
+      collections: ["posts"],
+      uploadsCollection: "media",
+      generateTitle: ({ doc }) => `Shinzo — ${doc.title}`,
+      generateDescription: ({ doc }) => doc.excerpt,
     }),
   ],
 });
