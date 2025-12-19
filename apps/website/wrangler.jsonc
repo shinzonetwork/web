@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "main": "worker.js",
+  "main": ".open-next/worker.js",
   "name": "shinzo-website-cmsdev",
   "compatibility_date": "2025-12-03",
   "compatibility_flags": [
@@ -11,10 +11,51 @@
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
     "global_fetch_strictly_public",
   ],
+
+  "keep_vars": true,
+
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
   },
+
+  "services": [
+    // The service should match the "name" of your worker
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "shinzo-website-cmsdev",
+    },
+  ],
+
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "shinzo-website-r2",
+    },
+    // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
+    // https://opennext.js.org/cloudflare/caching#incremental-cache
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "shinzo-website-r2",
+    },
+  ],
+
+  // DO Queue - (Time based revalidation)
+  // https://opennext.js.org/cloudflare/caching#queue
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "NEXT_CACHE_DO_QUEUE",
+        "class_name": "DOQueueHandler",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["DOQueueHandler"],
+    },
+  ],
 
   "d1_databases": [
     {
@@ -23,57 +64,26 @@
       "database_name": "shinzo-website-db",
       "remote": true,
     },
-  ],
-  "services": [
-    // The service should match the "name" of your worker
-    // {
-    //   "binding": "WORKER_SELF_REFERENCE",
-    //   "service": "my-app"
-    // },
-  ],
-  "r2_buckets": [
+    // D1 Tag Cache (Next mode)
+    // https://opennext.js.org/cloudflare/caching#tag-cache-for-on-demand-revalidation
     {
-      "binding": "R2",
-      "bucket_name": "shinzo-website-r2",
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
+      "database_name": "shinzo-website-db",
     },
-    // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
-    // {
-    //   "binding": "NEXT_INC_CACHE_R2_BUCKET",
-    //   "bucket_name": "<BUCKET_NAME>",
-    // },
   ],
+
+  // TODO:
+  // https://opennext.js.org/cloudflare/howtos/image#use-a-cloudflare-images-binding
+  // "images": {
+  //   "binding": "IMAGES",
+  // },
 
   // Here's how to configure an additional environment
   // It can be deployed with `CLOUDFLARE_ENV=staging pnpm run deploy`
-  "env": {
-    "dev": {
-      "name": "shinzo-website-cmsdev",
-      "d1_databases": [
-        {
-          "binding": "D1",
-          "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
-          "database_name": "shinzo-website-db",
-          "remote": true,
-        },
-      ],
-      "services": [
-        // The service should match the "name" of your worker
-        // {
-        //   "binding": "WORKER_SELF_REFERENCE",
-        //   "service": "shinzo-website-cmsdev",
-        // },
-      ],
-      "r2_buckets": [
-        {
-          "binding": "R2",
-          "bucket_name": "shinzo-website-r2",
-        },
-        // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
-        // {
-        //   "binding": "NEXT_INC_CACHE_R2_BUCKET",
-        //   "bucket_name": "shinzo-website-r2",
-        // },
-      ],
-    },
-  },
+  // "env": {
+  //   "staging": {
+  //     "name": "shinzo-website-cmsdev-staging",
+  //   },
+  // },
 }

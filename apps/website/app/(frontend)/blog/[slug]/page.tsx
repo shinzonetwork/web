@@ -73,7 +73,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
                         {image && <Image src={image.url || ''} alt={image.alt || ''} width={image.width || 0} height={image.height || 0} className="w-full aspect-video object-cover border border-szo-border mb-10" />}
                         {post.content && <RichText data={post.content} />}
 
-                        <div className="flex flex-col gap-y-4 not-prose">
+                        <div className="flex flex-col gap-y-4 not-prose mt-10">
                             {previousPost && <Link href={`/blog/${previousPost?.slug || ''}`} className="group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
                                 <p className="text-px-14 mb-2">Previous Post</p>
                                 <h4 className="text-h4 mb-2 group-hover:underline">{previousPost?.title || ''}</h4>
@@ -112,7 +112,7 @@ const queryAdjacentPost = cache(async ({ date, slug, direction = 'next' }: { dat
     const operator = direction === 'previous' ? { greater_than: date } : { less_than: date };
     const sort = direction === 'previous' ? 'publishedAt' : '-publishedAt';
     const post = await payload.find({ collection: 'posts', limit: 1, sort: sort, where: { publishedAt: operator, slug: { not_equals: slug, }, }, });
-    
+
     return post.docs?.[0] || null;
 })
 
