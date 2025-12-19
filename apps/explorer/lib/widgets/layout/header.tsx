@@ -11,7 +11,7 @@ export interface HeaderProps {
 export const Header = ({ hideSearch }: HeaderProps) => {
   return (
     <header className="h-40 w-full flex items-center border-b border-border">
-      <div className="container mx-auto flex items-center justify-between gap-12">
+      <div className="container mx-auto flex items-center justify-between gap-12 px-4 lg:px-0">
         <div className="flex items-center gap-12">
           <Link href="/">
             <ShinzoLogo className="h-7 w-39" />
