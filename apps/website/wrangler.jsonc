@@ -27,13 +27,13 @@
     },
   ],
 
+  // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
+  // https://opennext.js.org/cloudflare/caching#incremental-cache
   "r2_buckets": [
     {
       "binding": "R2",
       "bucket_name": "shinzo-website-r2",
     },
-    // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
-    // https://opennext.js.org/cloudflare/caching#incremental-cache
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "shinzo-website-r2",
