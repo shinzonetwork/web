@@ -12,12 +12,8 @@ export const dynamic = "force-static"
 export const revalidate = 600
 
 export const metadata: Metadata = {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_URL || 'https://shinzo.network'),
     title: 'Shinzō | Latest From the Blog',
     description: 'Read the latest news and updates from the Shinzo team.',
-    twitter: {
-        card: 'summary_large_image',
-    },
 }
 
 export default async function Blog() {
@@ -74,7 +70,7 @@ export default async function Blog() {
                     </Link>
                 )}
 
-                <div className="flex flex-col my-20">
+                {morePosts?.length > 0 && <div className="flex flex-col my-20">
                     <SectionTitle text="More Posts" className="mb-4" />
 
                     {morePosts.map((post) => (
@@ -94,7 +90,7 @@ export default async function Blog() {
                             <p className="font-mono font-bold text-szo-primary text-px-14 shrink-0 block text-right self-end">{`{Read More}`}</p>
                         </Link>
                     ))}
-                </div>
+                </div>}
             </BlockContainer>
         </div >
     );

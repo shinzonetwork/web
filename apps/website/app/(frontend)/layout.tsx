@@ -1,6 +1,7 @@
 import BlockContainer from "@/components/block-container";
 import { cn } from "@/lib/utils";
 import ShinzoLogoFull from "@/public/shinzo-logo-full.svg";
+import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,9 +12,18 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], });
 
-export const metadata = {
+export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_URL || "https://shinzo.network"
+  ),
   title: 'Shinzō | The Read Layer of Truth',
-  description: 'Shinzō | The Read Layer of Truth',
+  twitter: {
+    card: "summary_large_image",
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
