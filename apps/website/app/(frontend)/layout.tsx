@@ -1,26 +1,10 @@
 import BlockContainer from "@/components/block-container";
 import { cn } from "@/lib/utils";
 import ShinzoLogoFull from "@/public/shinzo-logo-full.svg";
-import type { Metadata } from 'next';
-import { Geist_Mono, Inter } from 'next/font/google';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import './styles.css';
-
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_URL || "https://shinzo.network"
-  ),
-  title: 'Shinzō | The Read Layer of Truth',
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: {
-    index: process.env.ALLOW_INDEXING === "true",
-    follow: process.env.ALLOW_FOLLOWING === "true",
-  },
-}
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
