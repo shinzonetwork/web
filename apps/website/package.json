@@ -18,12 +18,12 @@
     "generate:types:payload": "payload generate:types",
     "cms:deploy": "pnpm run cms:deploy:database && pnpm run cms:deploy:app",
     "cms:deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV",
-    "cms:deploy:database": "cross-env NODE_ENV=production PAYLOAD_SECRET=ignore payload migrate && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote"
+    "cms:deploy:database": "cross-env NODE_ENV=production PAYLOAD_SECRET=ignore CLOUDFLARE_ENV=$CLOUDFLARE_ENV payload migrate && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.14.7",
     "@payloadcms/db-d1-sqlite": "3.68.5",
-    "@payloadcms/email-resend": "^3.69.0",
+    "@payloadcms/email-resend": "3.68.5",
     "@payloadcms/next": "3.68.5",
     "@payloadcms/plugin-seo": "^3.68.5",
     "@payloadcms/richtext-lexical": "3.68.5",

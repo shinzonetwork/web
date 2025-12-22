@@ -21,9 +21,8 @@
   --spacing-p150: 150%;
   --spacing-p170: 170%;
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-inter: var(--font-inter);
   --font-jp-serif: var(--font-jp-serif);
 
   --color-sidebar-ring: var(--sidebar-ring);
@@ -125,7 +124,7 @@
 
   .richtext {
     @apply prose max-w-none leading-p150;
-    @apply prose-headings:font-normal prose-headings:font-mono prose-headings:leading-p110;
+    @apply prose-headings:font-normal prose-headings:font-mono prose-headings:leading-p110 prose-headings:[&>strong]:font-normal;
     @apply prose-p:leading-p150;
 
     @apply prose-h1:text-px-30 md:prose-h1:text-px-52;
