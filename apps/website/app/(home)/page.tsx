@@ -16,6 +16,8 @@ import vsSvg from "@/public/vs.svg";
 import GithubSvg from "@/components/github-svg";
 import DiscordSvg from "@/components/discord-svg";
 
+console.log("SITE URL:", process.env.NEXT_PUBLIC_URL);
+
 export const metadata: Metadata = {
   title: "Shinzo | The Read Layer of Truth",
   description:
