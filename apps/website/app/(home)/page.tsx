@@ -28,6 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
+console.log("metadata", metadata);
+
 export default function Home() {
   return (
     <main className="wrapper">
