@@ -17,9 +17,6 @@ import vsSvg from "@/public/vs.svg";
 console.log("SITE URL:", process.env.NEXT_PUBLIC_URL);
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_URL || "https://shinzo.network"
-  ),
   title: "Shinzo | The Read Layer of Truth",
   description:
     "Shinzō is a decentralized, trustless, verifiable, open-sourced, permissionless, and local-first read layer that makes seeing the chain as trustworthy as writing to it.",
