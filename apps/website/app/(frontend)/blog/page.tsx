@@ -24,6 +24,7 @@ export default async function Blog() {
         depth: 1,
         limit: 1000,
         overrideAccess: false,
+        sort: "-publishedAt",
         select: {
             title: true,
             slug: true,
