@@ -2,10 +2,10 @@ import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // images: {
-  //   loader: "custom",
-  //   loaderFile: "./image-loader.ts",
-  // },
+  images: {
+    loader: "custom",
+    loaderFile: "./image-loader.ts",
+  },
   // Your Next.js config here
   webpack: (webpackConfig: any) => {
     webpackConfig.resolve.extensionAlias = {
