@@ -51,8 +51,8 @@ export default buildConfig({
     seoPlugin({
       collections: [],
       uploadsCollection: "media",
-      generateTitle: ({ doc }) => `Shinzo — ${doc.title}`,
-      generateDescription: ({ doc }) => doc.excerpt,
+      generateTitle: ({ doc }) => `Shinzo | ${doc.title}`,
+      generateDescription: ({ doc }) => doc?.excerpt || "",
     }),
   ],
 });

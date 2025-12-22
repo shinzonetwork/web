@@ -43,7 +43,9 @@ export const Posts: CollectionConfig = {
           label: "SEO",
           fields: [
             OverviewField({}),
-            MetaTitleField({}),
+            MetaTitleField({
+              hasGenerateFn: true,
+            }),
             MetaImageField({ relationTo: "media" }),
             MetaDescriptionField({}),
             PreviewField({

@@ -1,4 +1,6 @@
+import type { Config, Media } from "@/payload/payload-types";
 import { clsx, type ClassValue } from "clsx";
+import { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
