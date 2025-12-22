@@ -73,6 +73,10 @@
     },
   ],
 
+  "images": {
+    "binding": "IMAGES",
+  },
+
   // TODO:
   // https://opennext.js.org/cloudflare/howtos/image#use-a-cloudflare-images-binding
   // "images": {

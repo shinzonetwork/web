@@ -47,4 +47,6 @@ next-env.d.ts
 
 # Media
 /media
+
+# Cloudflare
 .dev.vars*
