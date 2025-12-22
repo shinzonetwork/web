@@ -36,10 +36,6 @@ export const generateMeta = async (args: {
     page: getImageURL(doc?.meta?.image),
   };
 
-  console.log("image", image);
-  console.log("metaImage", doc?.meta?.image);
-  console.log("featuredImage", doc?.featuredImage);
-
   const title = doc?.meta?.title
     ? doc?.meta?.title
     : doc?.title
@@ -53,7 +49,6 @@ export const generateMeta = async (args: {
       : "";
 
   const ogImage = image[type];
-
   const path = paths[type];
   const canonicalUrl = `${getServerSideURL()}${path}`;
 
