@@ -14,8 +14,6 @@ import ShinzoLogoFull from "@/public/shinzo-logo-full.svg";
 import ShinzoLogoHero from "@/public/shinzo-logo-hero.svg";
 import vsSvg from "@/public/vs.svg";
 
-console.log("SITE URL:", process.env.NEXT_PUBLIC_URL);
-
 export const metadata: Metadata = {
   title: "Shinzo | The Read Layer of Truth",
   description:
@@ -24,8 +22,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
 };
-
-console.log("metadata", metadata);
 
 export default function Home() {
   return (

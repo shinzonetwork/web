@@ -3,6 +3,7 @@ import {
   getCloudflareContext,
 } from "@opennextjs/cloudflare";
 import { sqliteD1Adapter } from "@payloadcms/db-d1-sqlite";
+import { resendAdapter } from "@payloadcms/email-resend";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { r2Storage } from "@payloadcms/storage-r2";
@@ -55,6 +56,11 @@ export default buildConfig({
       generateDescription: ({ doc }) => doc?.excerpt || "",
     }),
   ],
+  email: resendAdapter({
+    defaultFromAddress: "updates@web-mail.shinzo.network",
+    defaultFromName: "Shinzo Website",
+    apiKey: process.env.RESEND_API_KEY || "",
+  }),
 });
 
 // Adapted from https://github.com/opennextjs/opennextjs-cloudflare/blob/d00b3a13e42e65aad76fba41774815726422cc39/packages/cloudflare/src/api/cloudflare-context.ts#L328C36-L328C46
