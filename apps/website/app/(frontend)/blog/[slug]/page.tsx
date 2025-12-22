@@ -1,8 +1,8 @@
 import BlockContainer from "@/components/block-container";
 import BlockHero from "@/components/block-hero";
 import RichText from "@/components/RichText";
+import { generateMeta } from "@/lib/generateMeta";
 import { asPopulated, isPopulated } from "@/lib/utils";
-import { Post } from "@/payload/payload-types";
 import configPromise from '@payload-config';
 import { Metadata } from "next";
 import Image from "next/image";
@@ -38,7 +38,7 @@ export async function generateMetadata({ params: paramsPromise }: BlogDetailProp
     const decodedSlug = decodeURIComponent(slug)
     const post = await queryPostBySlug({ slug: decodedSlug });
 
-    return generateMeta({ doc: post })
+    return generateMeta({ doc: post, type: 'post' })
 }
 
 export default async function BlogDetail({ params }: BlogDetailProps) {
@@ -115,14 +115,3 @@ const queryAdjacentPost = cache(async ({ date, slug, direction = 'next' }: { dat
 
     return post.docs?.[0] || null;
 })
-
-const generateMeta = async (args: {
-    doc: Partial<Post> | null
-}): Promise<Metadata> => {
-    const { doc } = args;
-
-    const title = doc?.meta?.title ? doc?.meta?.title : doc?.title ? `${doc?.title} | Shinzō` : 'Shinzō';
-    const description = doc?.meta?.description ? doc?.meta?.description : doc?.excerpt ? doc?.excerpt : '';
-
-    return { title, description, }
-}

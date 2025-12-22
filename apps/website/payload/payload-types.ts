@@ -190,11 +190,11 @@ export interface Post {
   } | null;
   meta?: {
     title?: string | null;
-    description?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
+    description?: string | null;
   };
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -352,8 +352,8 @@ export interface PostsSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        description?: T;
         image?: T;
+        description?: T;
       };
   generateSlug?: T;
   slug?: T;
