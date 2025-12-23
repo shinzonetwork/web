@@ -16,6 +16,7 @@ import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
+import { BlogLanding } from "./globals/BlogLanding";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -38,6 +39,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Posts, Authors],
+  globals: [BlogLanding],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

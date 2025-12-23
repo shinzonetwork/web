@@ -4,6 +4,7 @@ import SectionTitle from "@/components/section-title";
 import { isPopulated } from "@/lib/utils";
 import configPromise from '@payload-config';
 import { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { getPayload } from "payload";
@@ -11,29 +12,18 @@ import { getPayload } from "payload";
 export const dynamic = "force-static"
 export const revalidate = 600
 
-export const metadata: Metadata = {
-    title: 'Shinzō | Latest From the Blog',
-    description: 'Read the latest news and updates from the Shinzo team.',
+export async function generateMetadata({ }): Promise<Metadata> {
+    const blogLanding = await queryBlogLandingGlobal();
+
+    return {
+        title: blogLanding?.meta?.title || blogLanding.title || 'Blog | Shinzō',
+        description: blogLanding?.meta?.description || blogLanding.subtitle || '',
+    };
 }
 
 export default async function Blog() {
-    const payload = await getPayload({ config: configPromise })
-
-    const posts = await payload.find({
-        collection: 'posts',
-        depth: 1,
-        limit: 1000,
-        overrideAccess: false,
-        sort: "-publishedAt",
-        select: {
-            title: true,
-            slug: true,
-            featuredImage: true,
-            excerpt: true,
-            publishedAt: true,
-            authors: true,
-        },
-    });
+    const blogLanding = await queryBlogLandingGlobal();
+    const posts = await queryPosts();
 
     const firstPost = posts.docs[0];
     const morePosts = posts.docs.slice(1);
@@ -41,8 +31,8 @@ export default async function Blog() {
     return (
         <div>
             <BlockHero
-                title={<h1>Latest From the Blog</h1>}
-                content={<p>Read the latest news and updates from the Shinzo team.</p>}
+                title={<h1>{blogLanding?.title}</h1>}
+                content={<p>{blogLanding?.subtitle}</p>}
             />
 
             <BlockContainer>
@@ -96,3 +86,43 @@ export default async function Blog() {
         </div >
     );
 }
+
+const queryPosts = async () => {
+    const payload = await getPayload({ config: configPromise });
+
+    return await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit: 1000,
+        overrideAccess: false,
+        sort: "-publishedAt",
+        select: {
+            title: true,
+            slug: true,
+            featuredImage: true,
+            excerpt: true,
+            publishedAt: true,
+            authors: true,
+        },
+    });
+}
+
+const queryBlogLandingGlobal = unstable_cache(
+    async () => {
+        const payload = await getPayload({ config: configPromise });
+        const global = await payload.findGlobal({
+            slug: 'blogLanding',
+            depth: 2,
+            select: {
+                title: true,
+                subtitle: true,
+                featuredPost: true,
+                meta: true,
+            },
+        });
+
+        return global;
+    },
+    ['blogLanding'],
+    { tags: [`global_blogLanding`] }
+);

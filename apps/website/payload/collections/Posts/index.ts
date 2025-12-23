@@ -9,13 +9,14 @@ import {
 } from "@payloadcms/plugin-seo/fields";
 import { slugField, type CollectionConfig } from "payload";
 import { revalidateDelete, revalidatePost } from "./hooks/revalidatePost";
+import { authenticatedOrPublished } from "@/payload/access/authenticatedOrPublished";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
   access: {
     create: authenticated,
     delete: authenticated,
-    read: anyone,
+    read: authenticatedOrPublished,
     update: authenticated,
   },
   admin: {
@@ -91,5 +92,11 @@ export const Posts: CollectionConfig = {
   hooks: {
     afterChange: [revalidatePost],
     afterDelete: [revalidateDelete],
+  },
+  versions: {
+    drafts: {
+      schedulePublish: false,
+    },
+    maxPerDoc: 10,
   },
 };
