@@ -3,6 +3,8 @@ import { ArrowLeftRightIcon } from 'lucide-react';
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { Typography } from '@/shared/ui/typography';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { useTransactionsCount } from './use-transactions-count';
+import { useBlocksCount } from './use-blocks-count';
 
 export interface StatsBlockProps {
   title: string;
@@ -37,19 +39,10 @@ export const StatsBlock = ({ children, icon, title, isLoading }: StatsBlockProps
   );
 };
 
-export interface HomeStatsProps {
-  totalTransactions: number;
-  totalBlocks: number;
-  transactionsLoading?: boolean;
-  blocksLoading?: boolean;
-}
+export const HomeStats = () => {
+  const { data: totalTransactions, isLoading: transactionsLoading } = useTransactionsCount();
+  const { data: totalBlocks, isLoading: blocksLoading } = useBlocksCount();
 
-export const HomeStats = ({
-  totalBlocks,
-  totalTransactions,
-  blocksLoading,
-  transactionsLoading,
-}: HomeStatsProps) => {
   return (
     <section className='flex -mt-px'>
       <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={blocksLoading}>

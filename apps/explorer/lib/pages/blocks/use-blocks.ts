@@ -25,6 +25,7 @@ const BlocksQuery = graphql(`
       logsBloom
       extraData
       mixHash
+      txCount: _count(transactions: {})
     }
   }
 `)

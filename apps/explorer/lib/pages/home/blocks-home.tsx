@@ -3,25 +3,19 @@
 import Link from "next/link";
 
 import { formatHash } from "@/shared/utils/format-hash";
-import { Block } from "@/shared/graphql/generated/graphql";
 import { TableLayout, TableNullableCell } from "@/shared/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import { Typography } from "@/shared/ui/typography";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from '@/shared/utils/utils';
+import { useShortBlocks } from './use-short-blocks';
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
 
-export interface BlocksHomeProps {
-  blocks: Block[];
-  isLoading: boolean;
-}
+export const BlocksHome = () => {
+  const { data: blocks, isLoading } = useShortBlocks();
 
-export const BlocksHome = ({
-  blocks,
-  isLoading,
-}: BlocksHomeProps) => {
   // needed to fill grid spacing with pink color
   const GAP_BG = cn(
     'after:hidden lg:after:block after:content-[""] after:absolute z-100',

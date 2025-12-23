@@ -33,6 +33,9 @@ const TransactionsQuery = graphql(`
       s
       status
       cumulativeGasUsed
+      block {
+        timestamp
+      }
     }
   }
 `)

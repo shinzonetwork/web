@@ -3,16 +3,13 @@ import Link from 'next/link';
 import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
-import { Transaction } from '@/shared/graphql/generated/graphql';
-import { HALF_CONTAINER_CLASS } from '@/pages/home/blocks-home';
 import { cn } from '@/shared/utils/utils';
+import { HALF_CONTAINER_CLASS } from './blocks-home';
+import { useShortTransactions } from './use-short-transactions';
 
-export interface TransactionsHomeProps {
-  transactions: Transaction[] | [];
-  isLoading: boolean;
-}
+export const TransactionsHome = () => {
+  const { data: transactions, isLoading } = useShortTransactions();
 
-export const TransactionsHome = ({ transactions, isLoading }: TransactionsHomeProps) => {
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18;
     return eth.toFixed(2);
