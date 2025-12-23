@@ -1,6 +1,6 @@
 import BlockContainer from "@/components/block-container";
 import BlockHero from "@/components/block-hero";
-import RichText from "@/components/RichText";
+import RichText from "@/components/rich-text";
 import { generateMeta } from "@/lib/generateMeta";
 import { asPopulated, isPopulated } from "@/lib/utils";
 import configPromise from '@payload-config';
@@ -111,7 +111,17 @@ const queryAdjacentPost = cache(async ({ date, slug, direction = 'next' }: { dat
     const payload = await getPayload({ config: configPromise })
     const operator = direction === 'previous' ? { greater_than: date } : { less_than: date };
     const sort = direction === 'previous' ? 'publishedAt' : '-publishedAt';
-    const post = await payload.find({ collection: 'posts', limit: 1, sort: sort, where: { publishedAt: operator, slug: { not_equals: slug, }, }, });
+
+    const post = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        limit: 1,
+        sort: sort,
+        where: {
+            publishedAt: operator,
+            slug: { not_equals: slug, },
+        },
+    });
 
     return post.docs?.[0] || null;
 })
