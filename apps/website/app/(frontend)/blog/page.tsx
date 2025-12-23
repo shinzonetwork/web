@@ -1,11 +1,12 @@
 import BlockContainer from "@/components/block-container";
 import BlockHero from "@/components/block-hero";
+import { ImageMedia } from "@/components/image-media";
 import SectionTitle from "@/components/section-title";
-import { isPopulated } from "@/lib/utils";
+import { asPopulated, isPopulated } from "@/lib/utils";
+import defaultPostImage from '@/public/post-default.png';
 import configPromise from '@payload-config';
 import { Metadata } from "next";
 import { unstable_cache } from "next/cache";
-import Image from "next/image";
 import Link from "next/link";
 import { getPayload } from "payload";
 
@@ -23,10 +24,11 @@ export async function generateMetadata({ }): Promise<Metadata> {
 
 export default async function Blog() {
     const blogLanding = await queryBlogLandingGlobal();
-    const posts = await queryPosts();
+    const featuredPost = asPopulated(blogLanding?.featuredPost);
+    const posts = await queryPosts(featuredPost?.id);
 
-    const firstPost = posts.docs[0];
-    const morePosts = posts.docs.slice(1);
+    const firstPost = featuredPost ? featuredPost : asPopulated(posts.docs[0]);
+    const morePosts = featuredPost ? posts.docs : posts.docs.slice(1);
 
     return (
         <div>
@@ -39,14 +41,12 @@ export default async function Blog() {
                 {firstPost && (
                     <Link href={`/blog/${firstPost.slug}`} className="md:grid grid-cols-12 group">
                         <div className="col-span-6 order-2 md:order-1 mb-10 md:mb-0">
-                            {isPopulated(firstPost.featuredImage) && (
-                                <Image
-                                    src={firstPost.featuredImage?.url || ''}
-                                    alt={firstPost.featuredImage?.alt || ''}
-                                    width={firstPost.featuredImage?.width || 500}
-                                    height={firstPost.featuredImage?.height || 250}
-                                    className="w-full h-[250px] object-cover border border-szo-border group-hover:border-szo-primary transition-all" />
-                            )}
+                            <ImageMedia
+                                priority
+                                src={!firstPost.featuredImage ? defaultPostImage : undefined}
+                                resource={firstPost.featuredImage}
+                                className="w-full h-[250px] object-cover border border-szo-border group-hover:border-szo-primary transition-all"
+                            />
                         </div>
 
                         <div className="col-span-6 flex flex-col gap-y-4 md:mr-6">
@@ -87,7 +87,7 @@ export default async function Blog() {
     );
 }
 
-const queryPosts = async () => {
+const queryPosts = async (featuredPostId?: number) => {
     const payload = await getPayload({ config: configPromise });
 
     return await payload.find({
@@ -96,6 +96,7 @@ const queryPosts = async () => {
         limit: 1000,
         overrideAccess: false,
         sort: "-publishedAt",
+        where: featuredPostId ? { id: { not_equals: featuredPostId } } : {},
         select: {
             title: true,
             slug: true,

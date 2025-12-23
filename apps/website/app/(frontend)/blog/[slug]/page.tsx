@@ -1,11 +1,11 @@
 import BlockContainer from "@/components/block-container";
 import BlockHero from "@/components/block-hero";
+import { ImageMedia } from "@/components/image-media";
 import RichText from "@/components/rich-text";
 import { generateMeta } from "@/lib/generateMeta";
 import { asPopulated, isPopulated } from "@/lib/utils";
 import configPromise from '@payload-config';
 import { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
@@ -17,19 +17,7 @@ type BlogDetailProps = {
 };
 
 export async function generateStaticParams() {
-    const payload = await getPayload({ config: configPromise });
-
-    const posts = await payload.find({
-        collection: 'posts',
-        draft: false,
-        limit: 1000,
-        overrideAccess: false,
-        pagination: false,
-        select: {
-            slug: true,
-        },
-    })
-
+    const posts = await queryPostSlugs();
     return posts?.docs.map(({ slug }) => ({ slug }));
 }
 
@@ -70,7 +58,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
                     <div className="col-span-2 mb-10"><Link href="/blog" className="font-mono font-bold text-szo-primary text-px-14 text-right">{`{Back}`}</Link></div>
 
                     <div className="col-span-7 col-start-3 richtext">
-                        {image && <Image src={image.url || ''} alt={image.alt || ''} width={image.width || 0} height={image.height || 0} className="w-full aspect-video object-cover border border-szo-border mb-10" />}
+                        {image && <ImageMedia priority resource={image} className="w-full aspect-video object-cover border border-szo-border mb-10" />}
                         {post.content && <RichText data={post.content} />}
 
                         <div className="flex flex-col gap-y-4 not-prose mt-10">
@@ -91,6 +79,23 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
             </BlockContainer>
         </div>
     );
+}
+
+const queryPostSlugs = async () => {
+    const payload = await getPayload({ config: configPromise });
+
+    const posts = await payload.find({
+        collection: 'posts',
+        draft: false,
+        limit: 1000,
+        overrideAccess: false,
+        pagination: false,
+        select: {
+            slug: true,
+        },
+    })
+
+    return posts;
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
