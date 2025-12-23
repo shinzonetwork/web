@@ -5,7 +5,12 @@ import {
 import { sqliteD1Adapter } from "@payloadcms/db-d1-sqlite";
 import { resendAdapter } from "@payloadcms/email-resend";
 import { seoPlugin } from "@payloadcms/plugin-seo";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  BlocksFeature,
+  FixedToolbarFeature,
+  lexicalEditor,
+  LinkFeature,
+} from "@payloadcms/richtext-lexical";
 import { r2Storage } from "@payloadcms/storage-r2";
 import path from "path";
 import { buildConfig } from "payload";
@@ -16,6 +21,7 @@ import { Authors } from "./collections/Authors";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
+import { Code } from "./fields/code";
 import { BlogLanding } from "./globals/BlogLanding";
 
 const filename = fileURLToPath(import.meta.url);
@@ -40,7 +46,19 @@ export default buildConfig({
   },
   collections: [Users, Media, Posts, Authors],
   globals: [BlogLanding],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures, rootFeatures }) => [
+      ...defaultFeatures,
+      ...rootFeatures,
+      FixedToolbarFeature(),
+      LinkFeature({
+        enabledCollections: ["posts"],
+      }),
+      BlocksFeature({
+        blocks: [Code],
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

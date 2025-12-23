@@ -1,6 +1,7 @@
 
 import {
   DefaultNodeTypes,
+  SerializedBlockNode,
   SerializedLinkNode,
   type DefaultTypedEditorState
 } from '@payloadcms/richtext-lexical';
@@ -10,12 +11,13 @@ import {
   LinkJSXConverter,
 } from '@payloadcms/richtext-lexical/react';
 
+import { CodeBlock, CodeBlockProps } from '@/components/blocks/code/block-code';
 import { cn } from "@/lib/utils";
 import type { } from '@/payload/payload-types';
 
-type NodeTypes = DefaultNodeTypes;
+type NodeTypes = DefaultNodeTypes | SerializedBlockNode<CodeBlockProps>;
 // Add custom block types here:
-// | SerializedBlockNode<CodeBlockProps>
+
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const { value, relationTo } = linkNode.fields.doc!
@@ -31,7 +33,9 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
   ...LinkJSXConverter({ internalDocToHref }),
 
   // Custom blocks here:
-  blocks: {},
+  blocks: {
+    code: ({ node }) => <CodeBlock {...node.fields} />,
+  },
 })
 
 type Props = {

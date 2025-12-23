@@ -458,6 +458,54 @@ export interface BlogLandingSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CodeBlock".
+ */
+export interface CodeBlock {
+  language?:
+    | (
+        | 'text'
+        | 'arduino'
+        | 'bash'
+        | 'c'
+        | 'csharp'
+        | 'cpp'
+        | 'docker'
+        | 'git'
+        | 'go'
+        | 'graphql'
+        | 'java'
+        | 'javascript'
+        | 'json'
+        | 'jsx'
+        | 'kotlin'
+        | 'latex'
+        | 'log'
+        | 'makefile'
+        | 'markdown'
+        | 'markup'
+        | 'mermaid'
+        | 'mongodb'
+        | 'objectivec'
+        | 'php'
+        | 'python'
+        | 'ruby'
+        | 'rust'
+        | 'scala'
+        | 'sql'
+        | 'swift'
+        | 'tsx'
+        | 'typescript'
+        | 'yaml'
+        | 'zig'
+      )
+    | null;
+  code: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'code';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
