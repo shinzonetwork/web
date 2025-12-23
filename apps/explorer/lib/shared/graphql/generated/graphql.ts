@@ -16,7 +16,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** The `Blob` scalar type represents a binary large object. */
   Blob: { input: any; output: any; }
-  /** The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string */
+  /** The `DateTime` scalar type represents a DateTime. The DateTime is serialized as an RFC 3339 quoted string. A literal value of `UTC_NOW` is supported, and will be serialized  as the current UTC time. Note that this will be resolved as the UTC time on the server's side. It may not exactly match the resolution of time.Now().UTC() on the client's machine at the time of sending the request. */
   DateTime: { input: any; output: any; }
   /** The `Float32` scalar type represents signed single-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).  */
   Float32: { input: any; output: any; }
@@ -334,6 +334,320 @@ export type AccessListEntry__StorageKeys__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type AttestationRecord = {
+  __typename?: 'AttestationRecord';
+  CIDs?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * Indicates as to whether or not this document has been deleted.
+   *
+   */
+  _deleted?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   *
+   * The immutable identifier/docID (primary key) value for this document.
+   *
+   */
+  _docID?: Maybe<Scalars['ID']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  _group?: Maybe<Array<Maybe<AttestationRecord>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _max?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _min?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  _similarity?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  _sum?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the head commit for this document.
+   *
+   */
+  _version?: Maybe<Array<Maybe<Commit>>>;
+  attested_doc?: Maybe<Scalars['String']['output']>;
+  doc_type?: Maybe<Scalars['String']['output']>;
+  source_doc?: Maybe<Scalars['String']['output']>;
+  vote_count?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type AttestationRecord_AvgArgs = {
+  _group?: InputMaybe<AttestationRecord__NumericSelector>;
+  vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type AttestationRecord_CountArgs = {
+  CIDs?: InputMaybe<AttestationRecord__CiDs__CountSelector>;
+  _group?: InputMaybe<AttestationRecord__CountSelector>;
+  _version?: InputMaybe<AttestationRecord___Version__CountSelector>;
+};
+
+
+export type AttestationRecord_GroupArgs = {
+  docID?: InputMaybe<Array<Scalars['String']['input']>>;
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  groupBy?: InputMaybe<Array<AttestationRecordField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<AttestationRecordOrderArg>>>;
+};
+
+
+export type AttestationRecord_MaxArgs = {
+  _group?: InputMaybe<AttestationRecord__NumericSelector>;
+  vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type AttestationRecord_MinArgs = {
+  _group?: InputMaybe<AttestationRecord__NumericSelector>;
+  vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type AttestationRecord_SumArgs = {
+  _group?: InputMaybe<AttestationRecord__NumericSelector>;
+  vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum AttestationRecordExplicitField {
+  CiDs = 'CIDs',
+  AttestedDoc = 'attested_doc',
+  DocType = 'doc_type',
+  SourceDoc = 'source_doc',
+  VoteCount = 'vote_count'
+}
+
+export enum AttestationRecordField {
+  CiDs = 'CIDs',
+  Deleted = '_deleted',
+  DocId = '_docID',
+  Group = '_group',
+  Version = '_version',
+  AttestedDoc = 'attested_doc',
+  DocType = 'doc_type',
+  SourceDoc = 'source_doc',
+  VoteCount = 'vote_count'
+}
+
+export type AttestationRecordFilterArg = {
+  CIDs?: InputMaybe<StringListOperatorBlock>;
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<AttestationRecordFilterArg>>;
+  _docID?: InputMaybe<IdOperatorBlock>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<AttestationRecordFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<AttestationRecordFilterArg>>;
+  attested_doc?: InputMaybe<StringOperatorBlock>;
+  doc_type?: InputMaybe<StringOperatorBlock>;
+  source_doc?: InputMaybe<StringOperatorBlock>;
+  vote_count?: InputMaybe<IntOperatorBlock>;
+};
+
+export type AttestationRecordMutationInputArg = {
+  CIDs?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  attested_doc?: InputMaybe<Scalars['String']['input']>;
+  doc_type?: InputMaybe<Scalars['String']['input']>;
+  source_doc?: InputMaybe<Scalars['String']['input']>;
+  vote_count?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum AttestationRecordNumericFieldsArg {
+  Avg = '_avg',
+  Count = '_count',
+  Max = '_max',
+  Min = '_min',
+  Sum = '_sum',
+  VoteCount = 'vote_count'
+}
+
+export type AttestationRecordOrderArg = {
+  CIDs?: InputMaybe<Ordering>;
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  _docID?: InputMaybe<Ordering>;
+  attested_doc?: InputMaybe<Ordering>;
+  doc_type?: InputMaybe<Ordering>;
+  source_doc?: InputMaybe<Ordering>;
+  vote_count?: InputMaybe<Ordering>;
+};
+
+export type AttestationRecord__CiDs__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<StringFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AttestationRecord__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AttestationRecord__NumericSelector = {
+  field: AttestationRecordNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<AttestationRecordOrderArg>>>;
+};
+
+export type AttestationRecord___Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type AttestationRecord___Version__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /**
  *
  * These are the set of filter operators available for use when filtering on String
@@ -496,6 +810,7 @@ export type Block = {
 
 export type Block_AvgArgs = {
   _group?: InputMaybe<Block__NumericSelector>;
+  number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Transaction__NumericSelector>;
 };
 
@@ -520,18 +835,21 @@ export type Block_GroupArgs = {
 
 export type Block_MaxArgs = {
   _group?: InputMaybe<Block__NumericSelector>;
+  number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Transaction__NumericSelector>;
 };
 
 
 export type Block_MinArgs = {
   _group?: InputMaybe<Block__NumericSelector>;
+  number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Transaction__NumericSelector>;
 };
 
 
 export type Block_SumArgs = {
   _group?: InputMaybe<Block__NumericSelector>;
+  number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Transaction__NumericSelector>;
 };
 
@@ -979,6 +1297,14 @@ export type Commit = {
   fieldName?: Maybe<Scalars['String']['output']>;
   /**
    *
+   * Child commits in the DAG that contribute to the composition of this commit.
+   *  Composite commits will link to the field commits for the fields modified during
+   *  the single mutation.  Collection commits will link to composites.
+   *
+   */
+  heads?: Maybe<Array<Maybe<Commit>>>;
+  /**
+   *
    * Height represents the location of the commit in the DAG. All commits (collection, composite,
    *  and field level) on create will have a height of '1', each subsequent local update
    *  will increment this by one for the new commits.
@@ -992,7 +1318,7 @@ export type Commit = {
    *  the single mutation.  Collection commits will link to composites.
    *
    */
-  links?: Maybe<Array<Maybe<CommitLink>>>;
+  links?: Maybe<Array<Maybe<Commit>>>;
   /**
    *
    * The ID of the schema version that this commit was committed against. This ID allows one
@@ -1023,27 +1349,87 @@ export type Commit_CountArgs = {
   field?: InputMaybe<CommitCountFieldArg>;
 };
 
+
 /**
  *
- * Child commits in the DAG that contribute to the composition of this commit.
- *  Composite commits will link to the field commits for the fields modified during
- *  the single mutation.  Collection commits will link to composites.
+ * Commit represents an individual commit to a MerkleCRDT, every mutation to a
+ *  document will result in a new commit per modified field, and one composite
+ *  commit composed of the field level commits and, in the case of an update,
+ *  the prior composite commit.  If the collection is branchable, there will
+ *  also be a collection-level commit for each mutation.
  *
  */
-export type CommitLink = {
-  __typename?: 'CommitLink';
+export type CommitHeadsArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  filter?: InputMaybe<CommitsFilterArg>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
+};
+
+
+/**
+ *
+ * Commit represents an individual commit to a MerkleCRDT, every mutation to a
+ *  document will result in a new commit per modified field, and one composite
+ *  commit composed of the field level commits and, in the case of an update,
+ *  the prior composite commit.  If the collection is branchable, there will
+ *  also be a collection-level commit for each mutation.
+ *
+ */
+export type CommitLinksArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  filter?: InputMaybe<CommitsFilterArg>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
+};
+
+/** Filter operators for commit fieldName. */
+export type CommitsFieldNameFilterArg = {
   /**
    *
-   * The CID of this linked commit.
+   * The equality operator - if the target matches the value the check will pass.
    *
    */
-  cid?: Maybe<Scalars['String']['output']>;
+  _eq?: InputMaybe<Scalars['String']['input']>;
   /**
    *
-   * The Name of the field that this linked commit mutated.
+   * The contains operator - if the target value is within the given set the check will pass.
    *
    */
-  name?: Maybe<Scalars['String']['output']>;
+  _in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  /**
+   *
+   * The inequality operator - if the target does not matches the value the check will pass.
+   *
+   */
+  _ne?: InputMaybe<Scalars['String']['input']>;
+  /**
+   *
+   * The does not contains operator - if the target value is not within the given set the
+   *  check will pass.
+   *
+   */
+  _nin?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+/** Filter argument for commits query. */
+export type CommitsFilterArg = {
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<CommitsFilterArg>>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<CommitsFilterArg>>;
+  /** Filter commits by field name. Use "_C" for document composite commits, the field name (e.g. "age") for field commits, or null for collection commits on branchable collections. */
+  fieldName?: InputMaybe<CommitsFieldNameFilterArg>;
 };
 
 /**
@@ -1105,6 +1491,13 @@ export type DateTimeOperatorBlock = {
    *
    */
   _nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+};
+
+/** Result type for encrypted search queries containing matching document IDs */
+export type EncryptedSearchResult = {
+  __typename?: 'EncryptedSearchResult';
+  /** Array of document IDs matching the encrypted search criteria */
+  docIDs: Array<Scalars['String']['output']>;
 };
 
 /** ExplainType is an enum selecting the type of explanation done by the @explain directive. */
@@ -1533,6 +1926,9 @@ export type Log = {
 
 export type Log_AvgArgs = {
   _group?: InputMaybe<Log__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
@@ -1555,16 +1951,25 @@ export type Log_GroupArgs = {
 
 export type Log_MaxArgs = {
   _group?: InputMaybe<Log__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
 export type Log_MinArgs = {
   _group?: InputMaybe<Log__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
 export type Log_SumArgs = {
   _group?: InputMaybe<Log__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
@@ -1829,6 +2234,12 @@ export type Mutation = {
    * Creates one or more documents of this type using the data provided.
    *
    */
+  create_AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
+  /**
+   *
+   * Creates one or more documents of this type using the data provided.
+   *
+   */
   create_Block?: Maybe<Array<Maybe<Block>>>;
   /**
    *
@@ -1849,6 +2260,13 @@ export type Mutation = {
    *
    */
   delete_AccessListEntry?: Maybe<Array<Maybe<AccessListEntry>>>;
+  /**
+   *
+   * Deletes documents in this collection matching any provided criteria. If no
+   *  criteria are provided all documents in the collection will be deleted.
+   *
+   */
+  delete_AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
   /**
    *
    * Deletes documents in this collection matching any provided criteria. If no
@@ -1878,6 +2296,14 @@ export type Mutation = {
    *
    */
   update_AccessListEntry?: Maybe<Array<Maybe<AccessListEntry>>>;
+  /**
+   *
+   * Updates documents in this collection using the data provided. Only documents
+   *  matching any provided criteria will be updated, if no criteria are provided
+   *  the update will be applied to all documents in the collection.
+   *
+   */
+  update_AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
   /**
    *
    * Updates documents in this collection using the data provided. Only documents
@@ -1921,6 +2347,16 @@ export type Mutation = {
    *
    * NOTE: It is highly recommended to create an index on the fields used to filter.
    */
+  upsert_AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
+  /**
+   *
+   * Update or create a document in this collection using the data provided. The provided filter
+   *  must match at most one document. The matching document will be updated with the provided
+   *  update input, or if no matching document is found, a new document will be created with the
+   *  provided create input.
+   *
+   * NOTE: It is highly recommended to create an index on the fields used to filter.
+   */
   upsert_Block?: Maybe<Array<Maybe<Block>>>;
   /**
    *
@@ -1952,6 +2388,13 @@ export type MutationCreate_AccessListEntryArgs = {
 };
 
 
+export type MutationCreate_AttestationRecordArgs = {
+  encrypt?: InputMaybe<Scalars['Boolean']['input']>;
+  encryptFields?: InputMaybe<Array<AttestationRecordExplicitField>>;
+  input?: InputMaybe<Array<AttestationRecordMutationInputArg>>;
+};
+
+
 export type MutationCreate_BlockArgs = {
   encrypt?: InputMaybe<Scalars['Boolean']['input']>;
   encryptFields?: InputMaybe<Array<BlockExplicitField>>;
@@ -1976,6 +2419,12 @@ export type MutationCreate_TransactionArgs = {
 export type MutationDelete_AccessListEntryArgs = {
   docID?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   filter?: InputMaybe<AccessListEntryFilterArg>;
+};
+
+
+export type MutationDelete_AttestationRecordArgs = {
+  docID?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  filter?: InputMaybe<AttestationRecordFilterArg>;
 };
 
 
@@ -2004,6 +2453,13 @@ export type MutationUpdate_AccessListEntryArgs = {
 };
 
 
+export type MutationUpdate_AttestationRecordArgs = {
+  docID?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  input?: InputMaybe<AttestationRecordMutationInputArg>;
+};
+
+
 export type MutationUpdate_BlockArgs = {
   docID?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   filter?: InputMaybe<BlockFilterArg>;
@@ -2029,6 +2485,13 @@ export type MutationUpsert_AccessListEntryArgs = {
   create: AccessListEntryMutationInputArg;
   filter: AccessListEntryFilterArg;
   update: AccessListEntryMutationInputArg;
+};
+
+
+export type MutationUpsert_AttestationRecordArgs = {
+  create: AttestationRecordMutationInputArg;
+  filter: AttestationRecordFilterArg;
+  update: AttestationRecordMutationInputArg;
 };
 
 
@@ -2590,10 +3053,10 @@ export enum Ordering {
 export type Query = {
   __typename?: 'Query';
   AccessListEntry?: Maybe<Array<Maybe<AccessListEntry>>>;
+  AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
   Block?: Maybe<Array<Maybe<Block>>>;
   Log?: Maybe<Array<Maybe<Log>>>;
   Transaction?: Maybe<Array<Maybe<Transaction>>>;
-  _?: Maybe<Scalars['Boolean']['output']>;
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -2602,6 +3065,13 @@ export type Query = {
    *
    */
   _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns a set of commits matching any provided criteria. If no arguments are
+   *  provided all commits in the system will be returned.
+   *
+   */
+  _commits?: Maybe<Array<Maybe<Commit>>>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
@@ -2633,22 +3103,6 @@ export type Query = {
    *
    */
   _sum?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns a set of commits matching any provided criteria. If no arguments are
-   *  provided all commits in the system will be returned.
-   *
-   */
-  commits?: Maybe<Array<Maybe<Commit>>>;
-  /**
-   *
-   * Returns a set of head commits matching any provided criteria. If no arguments are
-   *  provided all head commits in the system will be returned. If no 'field' argument
-   *  is provided only composite commits will be returned. This is equivalent to
-   *  a 'commits' query with Depth: 1, and a differing 'field' default value.
-   *
-   */
-  latestCommits?: Maybe<Array<Maybe<Commit>>>;
 };
 
 
@@ -2660,6 +3114,18 @@ export type QueryAccessListEntryArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<AccessListEntryOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryAttestationRecordArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['String']['input']>>;
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  groupBy?: InputMaybe<Array<AttestationRecordField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<AttestationRecordOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -2702,14 +3168,28 @@ export type QueryTransactionArgs = {
 
 export type Query_AvgArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__NumericSelector>;
+  AttestationRecord?: InputMaybe<AttestationRecord__NumericSelector>;
   Block?: InputMaybe<Block__NumericSelector>;
   Log?: InputMaybe<Log__NumericSelector>;
   Transaction?: InputMaybe<Transaction__NumericSelector>;
 };
 
 
+export type Query_CommitsArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  depth?: InputMaybe<Scalars['Int']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  filter?: InputMaybe<CommitsFilterArg>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
+};
+
+
 export type Query_CountArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__CountSelector>;
+  AttestationRecord?: InputMaybe<AttestationRecord__CountSelector>;
   Block?: InputMaybe<Block__CountSelector>;
   Log?: InputMaybe<Log__CountSelector>;
   Transaction?: InputMaybe<Transaction__CountSelector>;
@@ -2718,6 +3198,7 @@ export type Query_CountArgs = {
 
 export type Query_MaxArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__NumericSelector>;
+  AttestationRecord?: InputMaybe<AttestationRecord__NumericSelector>;
   Block?: InputMaybe<Block__NumericSelector>;
   Log?: InputMaybe<Log__NumericSelector>;
   Transaction?: InputMaybe<Transaction__NumericSelector>;
@@ -2726,6 +3207,7 @@ export type Query_MaxArgs = {
 
 export type Query_MinArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__NumericSelector>;
+  AttestationRecord?: InputMaybe<AttestationRecord__NumericSelector>;
   Block?: InputMaybe<Block__NumericSelector>;
   Log?: InputMaybe<Log__NumericSelector>;
   Transaction?: InputMaybe<Transaction__NumericSelector>;
@@ -2734,27 +3216,26 @@ export type Query_MinArgs = {
 
 export type Query_SumArgs = {
   AccessListEntry?: InputMaybe<AccessListEntry__NumericSelector>;
+  AttestationRecord?: InputMaybe<AttestationRecord__NumericSelector>;
   Block?: InputMaybe<Block__NumericSelector>;
   Log?: InputMaybe<Log__NumericSelector>;
   Transaction?: InputMaybe<Transaction__NumericSelector>;
 };
 
-
-export type QueryCommitsArgs = {
-  cid?: InputMaybe<Scalars['ID']['input']>;
-  depth?: InputMaybe<Scalars['Int']['input']>;
-  docID?: InputMaybe<Scalars['ID']['input']>;
-  fieldName?: InputMaybe<Scalars['String']['input']>;
-  groupBy?: InputMaybe<Array<CommitFields>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
-};
-
-
-export type QueryLatestCommitsArgs = {
-  docID: Scalars['ID']['input'];
-  fieldName?: InputMaybe<Scalars['String']['input']>;
+/**
+ *
+ * The scalar field selection type for aggregate input arguments.
+ *
+ */
+export type ScalarAggregateNumericBlock = {
+  _?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<IntFilterArg>;
 };
 
 /**
@@ -2877,10 +3358,17 @@ export type StringOperatorBlock = {
 export type Subscription = {
   __typename?: 'Subscription';
   AccessListEntry?: Maybe<Array<Maybe<AccessListEntry>>>;
+  AttestationRecord?: Maybe<Array<Maybe<AttestationRecord>>>;
   Block?: Maybe<Array<Maybe<Block>>>;
   Log?: Maybe<Array<Maybe<Log>>>;
   Transaction?: Maybe<Array<Maybe<Transaction>>>;
-  _?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   *
+   * Returns a set of commits matching any provided criteria. If no arguments are
+   *  provided all commits in the system will be returned.
+   *
+   */
+  _commits?: Maybe<Array<Maybe<Commit>>>;
 };
 
 
@@ -2892,6 +3380,18 @@ export type SubscriptionAccessListEntryArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<AccessListEntryOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionAttestationRecordArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['String']['input']>>;
+  filter?: InputMaybe<AttestationRecordFilterArg>;
+  groupBy?: InputMaybe<Array<AttestationRecordField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<AttestationRecordOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -2929,6 +3429,18 @@ export type SubscriptionTransactionArgs = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<TransactionOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type Subscription_CommitsArgs = {
+  cid?: InputMaybe<Scalars['ID']['input']>;
+  depth?: InputMaybe<Scalars['Int']['input']>;
+  docID?: InputMaybe<Scalars['ID']['input']>;
+  filter?: InputMaybe<CommitsFilterArg>;
+  groupBy?: InputMaybe<Array<CommitFields>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
 };
 
 export type Transaction = {
@@ -3033,7 +3545,9 @@ export type Transaction = {
 export type Transaction_AvgArgs = {
   _group?: InputMaybe<Transaction__NumericSelector>;
   accessList?: InputMaybe<AccessListEntry__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Log__NumericSelector>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
@@ -3058,21 +3572,27 @@ export type Transaction_GroupArgs = {
 export type Transaction_MaxArgs = {
   _group?: InputMaybe<Transaction__NumericSelector>;
   accessList?: InputMaybe<AccessListEntry__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Log__NumericSelector>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
 export type Transaction_MinArgs = {
   _group?: InputMaybe<Transaction__NumericSelector>;
   accessList?: InputMaybe<AccessListEntry__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Log__NumericSelector>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
 export type Transaction_SumArgs = {
   _group?: InputMaybe<Transaction__NumericSelector>;
   accessList?: InputMaybe<AccessListEntry__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Log__NumericSelector>;
+  transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
@@ -3423,12 +3943,20 @@ export enum CommitCountFieldArg {
    *  the single mutation.  Collection commits will link to composites.
    *
    */
+  Heads = 'heads',
+  /**
+   *
+   * Child commits in the DAG that contribute to the composition of this commit.
+   *  Composite commits will link to the field commits for the fields modified during
+   *  the single mutation.  Collection commits will link to composites.
+   *
+   */
   Links = 'links'
 }
 
 /**
  *
- * These are the set of fields supported for grouping by in a commits query.
+ * These are the set of fields supported for grouping by in a _commits query.
  *
  */
 export enum CommitFields {
@@ -3505,7 +4033,31 @@ export type BlocksQueryVariables = Exact<{
 }>;
 
 
-export type BlocksQuery = { __typename?: 'Query', blockCount?: number | null, Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null } | null> | null };
+export type BlocksQuery = { __typename?: 'Query', blockCount?: number | null, Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null, txCount?: number | null } | null> | null };
+
+export type BlocksCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BlocksCountQuery = { __typename?: 'Query', count?: number | null };
+
+export type ShortBlocksQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ShortBlocksQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Block', number?: number | null, miner?: string | null, timestamp?: string | null } | null> | null };
+
+export type ShortTransactionsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type ShortTransactionsQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, from?: string | null, to?: string | null, value?: string | null } | null> | null };
+
+export type TransactionsCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TransactionsCountQuery = { __typename?: 'Query', txCount?: number | null };
 
 export type TransactionQueryVariables = Exact<{
   hash?: InputMaybe<Scalars['String']['input']>;
@@ -3521,7 +4073,7 @@ export type TransactionsQueryVariables = Exact<{
 }>;
 
 
-export type TransactionsQuery = { __typename?: 'Query', txCount?: number | null, Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null } | null> | null };
+export type TransactionsQuery = { __typename?: 'Query', txCount?: number | null, Transaction?: Array<{ __typename?: 'Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, block?: { __typename?: 'Block', timestamp?: string | null } | null } | null> | null };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -3590,9 +4142,39 @@ export const BlocksDocument = new TypedDocumentString(`
     logsBloom
     extraData
     mixHash
+    txCount: _count(transactions: {})
   }
 }
     `) as unknown as TypedDocumentString<BlocksQuery, BlocksQueryVariables>;
+export const BlocksCountDocument = new TypedDocumentString(`
+    query BlocksCount {
+  count: _count(Block: {})
+}
+    `) as unknown as TypedDocumentString<BlocksCountQuery, BlocksCountQueryVariables>;
+export const ShortBlocksDocument = new TypedDocumentString(`
+    query ShortBlocks($limit: Int) {
+  Block(limit: $limit, order: {number: DESC}) {
+    number
+    miner
+    timestamp
+  }
+}
+    `) as unknown as TypedDocumentString<ShortBlocksQuery, ShortBlocksQueryVariables>;
+export const ShortTransactionsDocument = new TypedDocumentString(`
+    query ShortTransactions($limit: Int) {
+  Transaction(limit: $limit, order: {blockNumber: DESC}) {
+    hash
+    from
+    to
+    value
+  }
+}
+    `) as unknown as TypedDocumentString<ShortTransactionsQuery, ShortTransactionsQueryVariables>;
+export const TransactionsCountDocument = new TypedDocumentString(`
+    query TransactionsCount {
+  txCount: _count(Transaction: {})
+}
+    `) as unknown as TypedDocumentString<TransactionsCountQuery, TransactionsCountQueryVariables>;
 export const TransactionDocument = new TypedDocumentString(`
     query Transaction($hash: String) {
   Transaction(filter: {hash: {_eq: $hash}}, limit: 1) {
@@ -3655,6 +4237,9 @@ export const TransactionsDocument = new TypedDocumentString(`
     s
     status
     cumulativeGasUsed
+    block {
+      timestamp
+    }
   }
 }
     `) as unknown as TypedDocumentString<TransactionsQuery, TransactionsQueryVariables>;

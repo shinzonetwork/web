@@ -1,6 +1,9 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
-import { GRAPHQL_URL } from '../utils/consts';
 import { customFetch } from './custom-fetch';
+
+// copy of the `utils/consts.ts` but using loadEnvFile beforehand to apply .env file
+process.loadEnvFile('.env');
+const GRAPHQL_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:9181/api/v0/graphql';
 
 const config: CodegenConfig = {
   schema: [
