@@ -91,7 +91,7 @@ export const BlocksHome = () => {
                 </div>
               )}
             </TableNullableCell>
-            <TableNullableCell value={0} align="center">
+            <TableNullableCell value={block?.txCount ?? 0} align="center">
               {(value) => (
                 <div className="flex items-center gap-1">Txns: {value}</div>
               )}

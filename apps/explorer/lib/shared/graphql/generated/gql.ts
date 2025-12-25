@@ -16,9 +16,9 @@ import * as types from './graphql';
  */
 type Documents = {
     "\n  query Block($number: Int!) {\n    Block(filter: { number: { _eq: $number } }, limit: 1) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": typeof types.BlockDocument,
-    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n      txCount: _count(transactions: {})\n    }\n  }\n": typeof types.BlocksDocument,
+    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      gasUsed\n      gasLimit\n      miner\n      size\n      txCount: _count(transactions: {})\n    }\n  }\n": typeof types.BlocksDocument,
     "\n  query BlocksCount {\n    count: _count(Block: {})\n  }\n": typeof types.BlocksCountDocument,
-    "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n    }\n  }\n": typeof types.ShortBlocksDocument,
+    "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n      txCount: _count(transactions: {})\n    }\n  }\n": typeof types.ShortBlocksDocument,
     "\n  query ShortTransactions($limit: Int) {\n    Transaction(\n      limit: $limit, \n      order: { blockNumber: DESC }\n    ) {\n      hash\n      from\n      to\n      value\n    }\n  }\n": typeof types.ShortTransactionsDocument,
     "\n  query TransactionsCount {\n    txCount: _count(Transaction: {})\n  }\n": typeof types.TransactionsCountDocument,
     "\n  query Transaction($hash: String) {\n    Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {\n      hash\n      blockNumber\n      blockHash\n      from\n      to\n      value\n      gas\n      gasPrice\n      gasUsed\n      effectiveGasPrice\n      maxFeePerGas\n      maxPriorityFeePerGas\n      nonce\n      transactionIndex\n      type\n      input\n      chainId\n      v\n      r\n      s\n      status\n      cumulativeGasUsed\n      block {\n        timestamp\n      }\n    }\n  }\n": typeof types.TransactionDocument,
@@ -26,9 +26,9 @@ type Documents = {
 };
 const documents: Documents = {
     "\n  query Block($number: Int!) {\n    Block(filter: { number: { _eq: $number } }, limit: 1) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n    }\n  }\n": types.BlockDocument,
-    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n      txCount: _count(transactions: {})\n    }\n  }\n": types.BlocksDocument,
+    "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      gasUsed\n      gasLimit\n      miner\n      size\n      txCount: _count(transactions: {})\n    }\n  }\n": types.BlocksDocument,
     "\n  query BlocksCount {\n    count: _count(Block: {})\n  }\n": types.BlocksCountDocument,
-    "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n    }\n  }\n": types.ShortBlocksDocument,
+    "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n      txCount: _count(transactions: {})\n    }\n  }\n": types.ShortBlocksDocument,
     "\n  query ShortTransactions($limit: Int) {\n    Transaction(\n      limit: $limit, \n      order: { blockNumber: DESC }\n    ) {\n      hash\n      from\n      to\n      value\n    }\n  }\n": types.ShortTransactionsDocument,
     "\n  query TransactionsCount {\n    txCount: _count(Transaction: {})\n  }\n": types.TransactionsCountDocument,
     "\n  query Transaction($hash: String) {\n    Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {\n      hash\n      blockNumber\n      blockHash\n      from\n      to\n      value\n      gas\n      gasPrice\n      gasUsed\n      effectiveGasPrice\n      maxFeePerGas\n      maxPriorityFeePerGas\n      nonce\n      transactionIndex\n      type\n      input\n      chainId\n      v\n      r\n      s\n      status\n      cumulativeGasUsed\n      block {\n        timestamp\n      }\n    }\n  }\n": types.TransactionDocument,
@@ -42,7 +42,7 @@ export function graphql(source: "\n  query Block($number: Int!) {\n    Block(fil
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      parentHash\n      difficulty\n      totalDifficulty\n      gasUsed\n      gasLimit\n      baseFeePerGas\n      nonce\n      miner\n      size\n      stateRoot\n      sha3Uncles\n      transactionsRoot\n      receiptsRoot\n      logsBloom\n      extraData\n      mixHash\n      txCount: _count(transactions: {})\n    }\n  }\n"): typeof import('./graphql').BlocksDocument;
+export function graphql(source: "\n  query Blocks($offset: Int, $limit: Int) {\n    blockCount: _count(Block: {})\n    Block(offset: $offset, limit: $limit, order: { number: DESC }) {\n      hash\n      number\n      timestamp\n      gasUsed\n      gasLimit\n      miner\n      size\n      txCount: _count(transactions: {})\n    }\n  }\n"): typeof import('./graphql').BlocksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -50,7 +50,7 @@ export function graphql(source: "\n  query BlocksCount {\n    count: _count(Bloc
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n    }\n  }\n"): typeof import('./graphql').ShortBlocksDocument;
+export function graphql(source: "\n  query ShortBlocks($limit: Int) {\n    Block(\n      limit: $limit, \n      order: { number: DESC }\n    ) {\n      number\n      miner\n      timestamp\n      txCount: _count(transactions: {})\n    }\n  }\n"): typeof import('./graphql').ShortBlocksDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

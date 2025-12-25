@@ -4033,7 +4033,7 @@ export type BlocksQueryVariables = Exact<{
 }>;
 
 
-export type BlocksQuery = { __typename?: 'Query', blockCount?: number | null, Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null, txCount?: number | null } | null> | null };
+export type BlocksQuery = { __typename?: 'Query', blockCount?: number | null, Block?: Array<{ __typename?: 'Block', hash?: string | null, number?: number | null, timestamp?: string | null, gasUsed?: string | null, gasLimit?: string | null, miner?: string | null, size?: string | null, txCount?: number | null } | null> | null };
 
 export type BlocksCountQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4045,7 +4045,7 @@ export type ShortBlocksQueryVariables = Exact<{
 }>;
 
 
-export type ShortBlocksQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Block', number?: number | null, miner?: string | null, timestamp?: string | null } | null> | null };
+export type ShortBlocksQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Block', number?: number | null, miner?: string | null, timestamp?: string | null, txCount?: number | null } | null> | null };
 
 export type ShortTransactionsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -4126,22 +4126,10 @@ export const BlocksDocument = new TypedDocumentString(`
     hash
     number
     timestamp
-    parentHash
-    difficulty
-    totalDifficulty
     gasUsed
     gasLimit
-    baseFeePerGas
-    nonce
     miner
     size
-    stateRoot
-    sha3Uncles
-    transactionsRoot
-    receiptsRoot
-    logsBloom
-    extraData
-    mixHash
     txCount: _count(transactions: {})
   }
 }
@@ -4157,6 +4145,7 @@ export const ShortBlocksDocument = new TypedDocumentString(`
     number
     miner
     timestamp
+    txCount: _count(transactions: {})
   }
 }
     `) as unknown as TypedDocumentString<ShortBlocksQuery, ShortBlocksQueryVariables>;
