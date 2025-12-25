@@ -50,7 +50,7 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={undefined}>
+            <TableNullableCell value={tx?.block?.timestamp}>
               {(value) => (
                 formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })
               )}

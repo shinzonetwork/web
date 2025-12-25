@@ -7,6 +7,7 @@ export interface TableCellProps {
   as?: ElementType;
   isHeading?: boolean;
   loading?: boolean;
+  className?: string;
   /** Renders numbers in a monospace font with letters of equal size */
   numeric?: boolean;
   /** Text alignment: 'left', 'center', or 'right' */
@@ -43,10 +44,11 @@ export const TableCell = ({
   numeric,
   isHeading,
   align = 'left',
+  className,
   as: Container = 'div',
 }: TableCellProps) => {
   const alignClass = align === 'center' ? 'text-center justify-center' : align === 'right' ? 'text-right justify-end' : 'text-left justify-start';
-  
+
   return (
     <Container
       className={cn(
@@ -56,6 +58,7 @@ export const TableCell = ({
         alignClass,
         isHeading && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',
+        className,
       )}
     >
       {loading ? (
