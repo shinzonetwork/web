@@ -5,6 +5,7 @@ import { Typography } from '@/shared/ui/typography';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { useTransactionsCount } from './use-transactions-count';
 import { useBlocksCount } from './use-blocks-count';
+import { AnimatedNumber } from '@/shared/ui/animated-number';
 
 export interface StatsBlockProps {
   title: string;
@@ -46,10 +47,10 @@ export const HomeStats = () => {
   return (
     <section className='flex -mt-px'>
       <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={blocksLoading}>
-        {totalBlocks}
+        <AnimatedNumber value={totalBlocks} />
       </StatsBlock>
       <StatsBlock title='Total txns' icon={<ArrowLeftRightIcon />} isLoading={transactionsLoading}>
-        {totalTransactions}
+        <AnimatedNumber value={totalTransactions} />
       </StatsBlock>
     </section>
   );
