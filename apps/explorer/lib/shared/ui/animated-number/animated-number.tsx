@@ -11,7 +11,6 @@ export const AnimatedNumber = ({ value }: AnimatedNumberProps) => {
 
   useEffect(() => {
     if (value !== undefined && value !== prevValue) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsAnimating(true);
 
       const timeout = setTimeout(() => {
