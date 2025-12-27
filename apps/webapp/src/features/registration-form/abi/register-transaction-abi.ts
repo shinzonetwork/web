@@ -1,4 +1,6 @@
-export const REGISTER_TRANSACTION_ABI = [
+import { narrow } from "abitype";
+
+export const REGISTER_TRANSACTION_ABI = narrow([
   {
     name: "register",
     type: "function",
@@ -13,4 +15,4 @@ export const REGISTER_TRANSACTION_ABI = [
     ],
     outputs: [],
   },
-] as const;
+]);
