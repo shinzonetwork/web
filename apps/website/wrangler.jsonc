@@ -15,6 +15,19 @@
   "preview_urls": false,
   "keep_vars": true,
 
+  "routes": [
+    {
+      "pattern": "shinzo.network",
+      "zone_name": "shinzo.network",
+      "custom_domain": true,
+    },
+  ],
+
+  "vars": {
+    "NEXT_PUBLIC_URL": "https://shinzo.network",
+    "ALLOW_INDEXING": "true",
+  },
+
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
