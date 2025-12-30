@@ -73,7 +73,7 @@ export const DataItem = ({
       ) : (
         <div
           className={cn(
-            'flex gap-2 min-w-0 pr-8',
+            'flex gap-2 lg:min-w-0 pr-8',
             allowWrap ? 'items-start' : 'items-center',
           )}
         >
@@ -81,12 +81,13 @@ export const DataItem = ({
             <Link
               href={link}
               className={cn(
-                'min-w-0',
+                'lg:min-w-0',
                 textBehaviorClass,
               )}
               style={wrapStyle}
             >
               <Typography
+                as='div'
                 color='accent'
                 className={cn(
                   'underline',
@@ -99,8 +100,9 @@ export const DataItem = ({
             </Link>
           ) : (
             <Typography
+              as='div'
               className={cn(
-                'min-w-0', 'w-[900px]',
+                'lg:min-w-0 w-[900px]',
                 textBehaviorClass,
               )}
               style={wrapStyle}

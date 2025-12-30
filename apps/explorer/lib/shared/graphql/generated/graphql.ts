@@ -4059,12 +4059,19 @@ export type TransactionsCountQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TransactionsCountQuery = { __typename?: 'Query', txCount?: number | null };
 
+export type AttestationsCountQueryVariables = Exact<{
+  docId: Scalars['String']['input'];
+}>;
+
+
+export type AttestationsCountQuery = { __typename?: 'Query', Attestation?: Array<{ __typename?: 'Ethereum__Mainnet__AttestationRecord', count?: number | null } | null> | null };
+
 export type TransactionQueryVariables = Exact<{
   hash?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, block?: { __typename?: 'Ethereum__Mainnet__Block', timestamp?: string | null } | null } | null> | null };
+export type TransactionQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', _docID?: string | null, hash?: string | null, blockNumber?: number | null, blockHash?: string | null, from?: string | null, to?: string | null, value?: string | null, gas?: string | null, gasPrice?: string | null, gasUsed?: string | null, effectiveGasPrice?: string | null, maxFeePerGas?: string | null, maxPriorityFeePerGas?: string | null, nonce?: string | null, transactionIndex?: number | null, type?: string | null, input?: string | null, chainId?: string | null, v?: string | null, r?: string | null, s?: string | null, status?: boolean | null, cumulativeGasUsed?: string | null, block?: { __typename?: 'Ethereum__Mainnet__Block', timestamp?: string | null } | null } | null> | null };
 
 export type TransactionsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -4171,12 +4178,22 @@ export const TransactionsCountDocument = new TypedDocumentString(`
   txCount: _count(Ethereum__Mainnet__Transaction: {})
 }
     `) as unknown as TypedDocumentString<TransactionsCountQuery, TransactionsCountQueryVariables>;
+export const AttestationsCountDocument = new TypedDocumentString(`
+    query AttestationsCount($docId: String!) {
+  Attestation: Ethereum__Mainnet__AttestationRecord(
+    filter: {attested_doc: {_eq: $docId}}
+  ) {
+    count: vote_count
+  }
+}
+    `) as unknown as TypedDocumentString<AttestationsCountQuery, AttestationsCountQueryVariables>;
 export const TransactionDocument = new TypedDocumentString(`
     query Transaction($hash: String) {
   Transaction: Ethereum__Mainnet__Transaction(
     filter: {hash: {_eq: $hash}}
     limit: 1
   ) {
+    _docID
     hash
     blockNumber
     blockHash

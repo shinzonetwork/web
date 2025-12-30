@@ -5,10 +5,38 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
+import { AttestationsTooltip } from '@/pages/transaction-details/attestations-tooltip';
+import type { ReactNode } from 'react';
 
 export interface TransactionCardProps {
   txHash: string;
 }
+
+const TransactionStatus = ({ status, children }: { status: boolean | undefined, children: ReactNode }) => {
+  if (status) {
+    return (
+      <div className="flex items-center gap-2">
+        <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
+          <CheckCircle2 className="mr-1 h-3 w-3"/>
+          Success
+        </Badge>
+
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
+        <XCircle className="mr-1 h-3 w-3" />
+        Failed
+      </Badge>
+
+      {children}
+    </div>
+  );
+};
 
 export const TransactionCard = ({ txHash }: TransactionCardProps) => {
   const { data: tx, isLoading } = useTransaction({ hash: txHash });
@@ -34,7 +62,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
   return (
     <DataList>
       <DataItem
-        title='Transaction Hash'
+        title='Hash'
         value={tx.hash}
         copyable
         loading={isLoading}
@@ -47,17 +75,9 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         value={tx.status ? 'success' : 'failed'}
         loading={isLoading}
       >
-        {tx.status ? (
-          <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
-            <CheckCircle2 className="mr-1 h-3 w-3" />
-            Success
-          </Badge>
-        ) : (
-          <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
-            <XCircle className="mr-1 h-3 w-3" />
-            Failed
-          </Badge>
-        )}
+        <TransactionStatus status={tx.status || undefined}>
+          <AttestationsTooltip docId={tx?._docID || undefined} />
+        </TransactionStatus>
       </DataItem>
 
       <DataItem
