@@ -7,7 +7,7 @@ import {
   TableLayout,
   TableNullableCell,
 } from '@/shared/ui/table';
-import { Transaction } from '@/shared/graphql/generated/graphql';
+import { Transaction } from '@/shared/graphql';
 
 export const TransactionsList = ({ transactions, isLoading }: { transactions: Transaction[] | undefined, isLoading: boolean }) => {
   const formatValue = (value: string) => {
