@@ -7,7 +7,7 @@ import {
   TableLayout,
   TableNullableCell,
 } from '@/shared/ui/table';
-import { Transaction } from '@/shared/graphql/generated/graphql';
+import { Transaction } from '@/shared/graphql';
 
 export const TransactionsList = ({ transactions, isLoading }: { transactions: Transaction[] | undefined, isLoading: boolean }) => {
   const formatValue = (value: string) => {
@@ -50,7 +50,7 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={undefined}>
+            <TableNullableCell value={tx?.block?.timestamp}>
               {(value) => (
                 formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })
               )}

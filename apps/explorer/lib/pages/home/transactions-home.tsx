@@ -1,18 +1,25 @@
-import { TableLayout, TableNullableCell } from '@/shared/ui/table';
+import { useMemo } from 'react';
 import Link from 'next/link';
+import { TableLayout, TableNullableCell } from '@/shared/ui/table';
 import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
-import { Transaction } from '@/shared/graphql/generated/graphql';
-import { HALF_CONTAINER_CLASS } from '@/pages/home/blocks-home';
 import { cn } from '@/shared/utils/utils';
+import { HALF_CONTAINER_CLASS } from './blocks-home';
+import { useShortTransactions } from './use-short-transactions';
+import { useHighlight } from './use-highlight';
 
-export interface TransactionsHomeProps {
-  transactions: Transaction[] | [];
-  isLoading: boolean;
-}
+export const TransactionsHome = () => {
+  const { data: transactions, isLoading } = useShortTransactions();
 
-export const TransactionsHome = ({ transactions, isLoading }: TransactionsHomeProps) => {
+  const dataIds = useMemo(() => transactions
+    ?.map((transaction) => transaction?.hash)
+    ?.filter(Boolean), [transactions]);
+
+  const { getHighlightClass } = useHighlight(dataIds as string[], {
+    duration: 1000,
+  });
+
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18;
     return eth.toFixed(2);
@@ -37,68 +44,72 @@ export const TransactionsHome = ({ transactions, isLoading }: TransactionsHomePr
         hideHeader
         hideLeftSpacer
         iterable={transactions ?? []}
-        rowRenderer={(tx) => (
-          <>
-            <TableNullableCell value={tx?.hash}>
-              {(value) => (
-                <Link href={`/tx/${value}`} className="flex items-center gap-4">
-                  <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
-                    <ShinzoTxnIcon className="size-4" />
-                  </i>
-                  <Typography color="accent" className="underline">
-                    {formatHash(value)}
-                  </Typography>
-                </Link>
-              )}
-            </TableNullableCell>
+        rowRenderer={(tx) => {
+          const highlightClass = getHighlightClass(tx?.hash);
 
-            <TableNullableCell value={tx?.from} align="center">
-              {(value) => (
-                <div className="flex flex-col gap-1">
-                  {value && (
-                    <div className="flex flex-row gap-2">
-                      <Typography>From</Typography>
-                      <Link
-                        href={`/address/${value}`}
-                        className="font-mono text-sm hover:underline pt-[2]"
-                      >
-                        <Typography
-                          color="accent"
-                          className="font-mono text-sm hover:underline"
+          return (
+            <>
+              <TableNullableCell value={tx?.hash} className={highlightClass}>
+                {(value) => (
+                  <Link href={`/tx/${value}`} className="flex items-center gap-4">
+                    <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
+                      <ShinzoTxnIcon className="size-4" />
+                    </i>
+                    <Typography color="accent" className="underline">
+                      {formatHash(value)}
+                    </Typography>
+                  </Link>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={tx?.from} align="center" className={highlightClass}>
+                {(value) => (
+                  <div className="flex flex-col gap-1">
+                    {value && (
+                      <div className="flex flex-row gap-2">
+                        <Typography>From</Typography>
+                        <Link
+                          href={`/address/${value}`}
+                          className="font-mono text-sm hover:underline pt-[2]"
                         >
-                          {formatHash(value, 8, 6)}
-                        </Typography>
-                      </Link>
-                    </div>
-                  )}
-                  {tx?.to && (
-                    <div className="flex flex-row gap-2">
-                      <Typography>To</Typography>
-                      <Link
-                        href={`/address/${tx?.to}`}
-                        className="font-mono text-sm hover:underline pt-[2]"
-                      >
-                        <Typography
-                          color="accent"
-                          className="font-mono text-sm hover:underline"
+                          <Typography
+                            color="accent"
+                            className="font-mono text-sm hover:underline"
+                          >
+                            {formatHash(value, 8, 6)}
+                          </Typography>
+                        </Link>
+                      </div>
+                    )}
+                    {tx?.to && (
+                      <div className="flex flex-row gap-2">
+                        <Typography>To</Typography>
+                        <Link
+                          href={`/address/${tx?.to}`}
+                          className="font-mono text-sm hover:underline pt-[2]"
                         >
-                          {formatHash(tx?.to, 8, 6)}
-                        </Typography>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              )}
-            </TableNullableCell>
-            <TableNullableCell value={tx?.value} align="center">
-              {(value) => (
-                <div className="flex items-center gap-1 text-sm">
-                  {formatValue(value)}ETH
-                </div>
-              )}
-            </TableNullableCell>
-          </>
-        )}
+                          <Typography
+                            color="accent"
+                            className="font-mono text-sm hover:underline"
+                          >
+                            {formatHash(tx?.to, 8, 6)}
+                          </Typography>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </TableNullableCell>
+              <TableNullableCell value={tx?.value} align="center" className={highlightClass}>
+                {(value) => (
+                  <div className="flex items-center gap-1 text-sm">
+                    {formatValue(value)}ETH
+                  </div>
+                )}
+              </TableNullableCell>
+            </>
+          )
+        }}
       />
 
       <div className='flex'>
