@@ -15,7 +15,6 @@ import {
 } from '@/shared/ui/tabs';
 import {
   TableLayout,
-  TableCell,
   TableNullableCell,
 } from '@/shared/ui/table';
 import { useBlocks } from './use-blocks';
@@ -50,7 +49,8 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound='No blocks found.'
-        headings={['Block', 'Age', 'Txn', 'Miner', 'Gas Used', 'Reward']}
+        headings={['Block', 'Age', 'Txn', 'Miner', 'Gas Used']}
+        gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks?.blocks ?? []}
         rowRenderer={(block) => (
           <>
@@ -67,11 +67,11 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.timestamp}>
+            <TableNullableCell value={block?.timestamp} nowrap>
               {(value) => formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })}
             </TableNullableCell>
 
-            <TableNullableCell value={0}>
+            <TableNullableCell value={block?.txCount ?? 0}>
               {(value) => (
                 <div className="flex items-center gap-1 text-sm text-foreground">
                   {value}
@@ -80,7 +80,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.miner}>
+            <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
                 <Link
                   href={`/address/${value}`}
@@ -91,15 +91,9 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={[block?.gasUsed, block?.gasLimit]}>
+            <TableNullableCell value={[block?.gasUsed, block?.gasLimit]} nowrap>
               {([gasUsed, gasLimit]) => formatGasUsed(gasUsed, gasLimit)}
             </TableNullableCell>
-
-            <TableCell>
-              {/* TODO: replace with actual reward */}
-              {/* eslint-disable-next-line react-hooks/purity */}
-              {(Math.random() * 0.05 + 0.01).toFixed(4)} ETH
-            </TableCell>
           </>
         )}
       />

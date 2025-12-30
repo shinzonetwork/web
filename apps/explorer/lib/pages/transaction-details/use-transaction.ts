@@ -3,11 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const TransactionQuery = graphql(`
   query Transaction($hash: String) {
-    Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {
-      _docID
-      accessList {
-          address
-      }
+    Transaction: Ethereum__Mainnet__Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {
       hash
       blockNumber
       blockHash

@@ -1,10 +1,11 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Transaction } from '@/shared/graphql';
 
 const TransactionsQuery = graphql(`
   query Transactions($offset: Int, $limit: Int, $blockNumber: Int) {
-    txCount: _count(Transaction: {})
-    Transaction(
+    txCount: _count(Ethereum__Mainnet__Transaction: {})
+    Transaction: Ethereum__Mainnet__Transaction(
       offset: $offset, 
       limit: $limit, 
       order: { blockNumber: DESC }
@@ -32,6 +33,9 @@ const TransactionsQuery = graphql(`
       s
       status
       cumulativeGasUsed
+      block {
+        timestamp
+      }
     }
   }
 `)
@@ -50,7 +54,7 @@ export const useTransactions = (options: Partial<UseTransactionsOptions>) => {
     queryFn: async () => {
       const res = await execute(TransactionsQuery, { offset, limit, blockNumber });
       return {
-        transactions: res.Transaction,
+        transactions: res.Transaction?.filter(Boolean) as Transaction[],
         totalCount: res.txCount,
       };
     },

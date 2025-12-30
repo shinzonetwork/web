@@ -3,7 +3,10 @@ import { cn } from '@/shared/utils/utils';
 import { TableCell } from './table-cell';
 
 export interface TableLayoutProps<ROW = unknown> {
-  headings: ReactNode[];
+  headings?: ReactNode[];
+  hideHeader?: boolean;
+  hideLeftSpacer?: boolean;
+  hideRightSpacer?: boolean;
   iterable: ROW[];
   rowRenderer: (row: ROW, rowIndex: number) => ReactNode;
   isLoading?: boolean;
@@ -44,18 +47,28 @@ const SPAN_COLUMN_CLASSES: { [key: number]: string } = {
   12: 'col-span-12',
 };
 
-export const TableLayoutWrapper = ({ children }: { children: ReactNode }) => {
+interface TableLayoutWrapperProps {
+  children: ReactNode;
+  hideHeader: boolean;
+  hideLeftSpacer: boolean;
+  hideRightSpacer: boolean;
+}
+
+export const TableLayoutWrapper = ({ children, hideHeader, hideLeftSpacer, hideRightSpacer }: TableLayoutWrapperProps) => {
   const spacer = (
-    <div className='min-h-18 basis-0 shrink grow grid pt-[71px]'>
-      <div className='bg-background-accent-light bg-[repeating-linear-gradient(to_bottom,_#C7C7C7,_#C7C7C7_1px,_transparent_1px,_transparent_72px)]' />
+    <div className={cn('hidden lg:grid min-h-18 basis-0 shrink grow', hideHeader ? 'border-b border-border' : 'pt-[71px]')}>
+      <div className={cn(
+        'bg-background-accent-light',
+        'bg-[repeating-linear-gradient(to_bottom,#C7C7C7,#C7C7C7_1px,transparent_1px,transparent_72px)]'
+      )} />
     </div>
   );
 
   return (
     <section className='flex w-full'>
-      {spacer}
+      {!hideLeftSpacer && spacer}
       {children}
-      {spacer}
+      {!hideRightSpacer && spacer}
     </section>
   );
 };
@@ -82,6 +95,9 @@ export const TableLayoutWrapper = ({ children }: { children: ReactNode }) => {
  */
 export const TableLayout = <ROW = unknown>({
   headings,
+  hideHeader = false,
+  hideLeftSpacer = false,
+  hideRightSpacer = false,
   iterable,
   rowRenderer,
   notFound,
@@ -90,7 +106,7 @@ export const TableLayout = <ROW = unknown>({
   className,
   gridClass: gridClassName,
 }: TableLayoutProps<ROW>) => {
-  const columns = headings.length;
+  const columns = headings?.length ?? 0;
   const isNotFound = !!(!isLoading && iterable.length === 0 && notFound);
   const gridClass = gridClassName ?? (GRID_COLUMN_CLASSES[columns] || 'grid-cols-1');
   const spanClass = SPAN_COLUMN_CLASSES[columns] || 'col-span-1';
@@ -101,24 +117,26 @@ export const TableLayout = <ROW = unknown>({
   );
 
   return (
-    <TableLayoutWrapper>
-      <div className={cn('grid w-full grow container', gridClass, className)}>
-        <div className={cn('h-18 grid grid-cols-subgrid border-b border-border', spanClass)}>
-          {headings.map((heading, index) => (
-            <TableCell key={index} isHeading>
-              {heading}
-            </TableCell>
-          ))}
-        </div>
+    <TableLayoutWrapper hideHeader={hideHeader} hideLeftSpacer={hideLeftSpacer} hideRightSpacer={hideRightSpacer}>
+      <div className={cn('grid w-full grow container max-lg:overflow-x-auto max-lg:max-w-[100vw]', gridClass, className)}>
+        {!hideHeader && headings && headings.length > 0 && (
+          <div className={cn('h-18 grid grid-cols-subgrid border-b border-border', spanClass)}>
+            {headings?.map((heading, index) => (
+              <TableCell key={index} nowrap>
+                {heading}
+              </TableCell>
+            ))}
+          </div>
+        )}
 
         {isNotFound && (
-          <div className={cn(spanClass, 'min-h-54 border-x border-b border-border flex flex-col items-center justify-center bg-background-accent-light text-md text-text-primary')}>
+          <div className={cn(spanClass, 'min-h-54 border-x border-b border-border flex flex-col items-center justify-center bg-background-accent-light text-md text-text-primary', hideHeader && 'border-t')}>
             {notFound}
           </div>
         )}
 
         {!isNotFound && (
-          <div className={cn('grid grid-cols-subgrid bg-background-accent-light', spanClass)}>
+          <div className={cn('grid grid-cols-subgrid bg-background-accent-light', hideHeader && 'border-t border-border', spanClass)}>
             {isLoading && Array.from({ length: loadingRowCount ?? 5 }).map((_, index) => (
               <div key={index} className={rowClasses}>
                 {Array.from({ length: columns }).map((_, cellIndex) => (

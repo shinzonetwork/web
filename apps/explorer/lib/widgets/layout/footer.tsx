@@ -4,7 +4,7 @@ import ShinzoOutlineIcon from '@/shared/ui/icons/shinzo-outline.svg';
 
 export const Footer = () => {
   return (
-    <footer className='flex justify-between w-full items-center py-8'>
+    <footer className='flex justify-between w-full items-center py-8 px-4 lg:px-0'>
       <div className='flex flex-col gap-1'>
         <Typography variant='sm'>Shinzō</Typography>
         <Typography variant='xs' weight='regular' color='secondary'>
