@@ -50,6 +50,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
         loadingRowCount={DEFAULT_LIMIT}
         notFound='No blocks found.'
         headings={['Block', 'Age', 'Txn', 'Miner', 'Gas Used']}
+        gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks?.blocks ?? []}
         rowRenderer={(block) => (
           <>
@@ -66,7 +67,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.timestamp}>
+            <TableNullableCell value={block?.timestamp} nowrap>
               {(value) => formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })}
             </TableNullableCell>
 
@@ -79,7 +80,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.miner}>
+            <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
                 <Link
                   href={`/address/${value}`}
@@ -90,7 +91,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={[block?.gasUsed, block?.gasLimit]}>
+            <TableNullableCell value={[block?.gasUsed, block?.gasLimit]} nowrap>
               {([gasUsed, gasLimit]) => formatGasUsed(gasUsed, gasLimit)}
             </TableNullableCell>
           </>

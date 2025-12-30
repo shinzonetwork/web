@@ -5,7 +5,8 @@ import { Skeleton } from '../skeleton';
 export interface TableCellProps {
   children?: ReactNode;
   as?: ElementType;
-  isHeading?: boolean;
+  /** Prevents wrapping the text to the next line. Usually used for heading cells */
+  nowrap?: boolean;
   loading?: boolean;
   className?: string;
   /** Renders numbers in a monospace font with letters of equal size */
@@ -22,9 +23,9 @@ export interface TableCellProps {
  * ```tsx
  * <div className='grid grid-cols-3'>
  *   <div className='col-span-3 grid grid-cols-subgrid'>
- *     <TableCell isHeading>Name</TableCell>
- *     <TableCell isHeading>Pill</TableCell>
- *     <TableCell isHeading>Amount</TableCell>
+ *     <TableCell nowrap>Name</TableCell>
+ *     <TableCell nowrap>Pill</TableCell>
+ *     <TableCell nowrap>Amount</TableCell>
  *   </div>
  *   <div className='col-span-3 grid grid-cols-subgrid'>
  *     <TableCell cell loading>Hello</TableCell>
@@ -42,7 +43,7 @@ export const TableCell = ({
   children,
   loading,
   numeric,
-  isHeading,
+  nowrap,
   align = 'left',
   className,
   as: Container = 'div',
@@ -56,7 +57,7 @@ export const TableCell = ({
         'inline-flex items-center gap-2',
         'text-base font-mono font-medium text-text-primary',
         alignClass,
-        isHeading && 'whitespace-nowrap',
+        nowrap && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',
         className,
       )}

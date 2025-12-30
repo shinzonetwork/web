@@ -118,11 +118,11 @@ export const TableLayout = <ROW = unknown>({
 
   return (
     <TableLayoutWrapper hideHeader={hideHeader} hideLeftSpacer={hideLeftSpacer} hideRightSpacer={hideRightSpacer}>
-      <div className={cn('grid w-full grow container max-lg:overflow-x-auto', gridClass, className)}>
+      <div className={cn('grid w-full grow container max-lg:overflow-x-auto max-lg:max-w-[100vw]', gridClass, className)}>
         {!hideHeader && headings && headings.length > 0 && (
           <div className={cn('h-18 grid grid-cols-subgrid border-b border-border', spanClass)}>
             {headings?.map((heading, index) => (
-              <TableCell key={index} isHeading>
+              <TableCell key={index} nowrap>
                 {heading}
               </TableCell>
             ))}
