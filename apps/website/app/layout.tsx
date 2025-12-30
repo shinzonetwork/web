@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased`} >
 
         <div className="flex justify-end gap-3 py-5 px-4 wrapper">
-          <Link href="https://discord.gg/WUxpCb9z" target="_blank" aria-label="Join the Discord">
+          <Link href="https://discord.shinzo.network" target="_blank" aria-label="Join the Discord">
             <DiscordSvg className="size-6" />
           </Link>
           <Link href="https://github.com/shinzonetwork" target="_blank" aria-label="Visit the GitHub repository">
@@ -37,7 +37,7 @@ export default function RootLayout({
 
         <footer className="py-10">
           <div className="flex justify-center gap-3 py-5 px-4 wrapper">
-            <Link href="https://discord.gg/WUxpCb9z" target="_blank" aria-label="Join the Discord">
+            <Link href="https://discord.shinzo.network" target="_blank" aria-label="Join the Discord">
               <DiscordSvg className="size-6" />
             </Link>
             <Link href="https://github.com/shinzonetwork" target="_blank" aria-label="Visit the GitHub repository">

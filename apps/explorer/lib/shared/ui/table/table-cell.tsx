@@ -8,6 +8,7 @@ export interface TableCellProps {
   /** Prevents wrapping the text to the next line. Usually used for heading cells */
   nowrap?: boolean;
   loading?: boolean;
+  className?: string;
   /** Renders numbers in a monospace font with letters of equal size */
   numeric?: boolean;
   /** Text alignment: 'left', 'center', or 'right' */
@@ -44,6 +45,7 @@ export const TableCell = ({
   numeric,
   nowrap,
   align = 'left',
+  className,
   as: Container = 'div',
 }: TableCellProps) => {
   const alignClass = align === 'center' ? 'text-center justify-center' : align === 'right' ? 'text-right justify-end' : 'text-left justify-start';
@@ -57,6 +59,7 @@ export const TableCell = ({
         alignClass,
         nowrap && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',
+        className,
       )}
     >
       {loading ? (

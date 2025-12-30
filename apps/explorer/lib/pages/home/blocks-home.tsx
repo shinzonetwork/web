@@ -1,27 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
 
 import { formatHash } from "@/shared/utils/format-hash";
-import { Block } from "@/shared/graphql/generated/graphql";
 import { TableLayout, TableNullableCell } from "@/shared/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import { Typography } from "@/shared/ui/typography";
-import { formatDistanceToNow } from "date-fns";
 import { cn } from '@/shared/utils/utils';
+import { useShortBlocks } from './use-short-blocks';
+import { useHighlight } from './use-highlight';
+import { useMemo } from 'react';
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
 
-export interface BlocksHomeProps {
-  blocks: Block[];
-  isLoading: boolean;
-}
+export const BlocksHome = () => {
+  const { data: blocks, isLoading } = useShortBlocks();
 
-export const BlocksHome = ({
-  blocks,
-  isLoading,
-}: BlocksHomeProps) => {
+  const dataIds = useMemo(() => blocks
+      ?.map((block) => block?.number)
+      ?.filter((num): num is number => num !== null && num !== undefined), [blocks]);
+
+  const { getHighlightClass } = useHighlight(dataIds, {
+    duration: 1000,
+  });
+
   // needed to fill grid spacing with pink color
   const GAP_BG = cn(
     'after:hidden lg:after:block after:content-[""] after:absolute z-100',
@@ -49,61 +53,65 @@ export const BlocksHome = ({
         hideHeader
         hideRightSpacer
         iterable={blocks ?? []}
-        rowRenderer={(block) => (
-          <>
-            <TableNullableCell value={block?.number}>
-              {(value) => (
-                <Link
-                  href={`/blocks/${value}`}
-                  className="flex items-center gap-4"
-                >
-                  <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
-                    <ShinzoFilledIcon className="size-4 text-[#35353599]" />
-                  </i>
-                  <div className="flex flex-col">
-                    <Typography color="accent" className="underline">
-                      {value}
-                    </Typography>
-                    {block?.timestamp && (
-                      <Typography color="secondary" className="text-xs">
-                        {formatDistanceToNow(
-                          new Date(Number(block.timestamp) * 1000),
-                          {
-                            addSuffix: true,
-                          }
-                        )}
-                      </Typography>
-                    )}
-                  </div>
-                </Link>
-              )}
-            </TableNullableCell>
+        rowRenderer={(block) => {
+          const highlightClass = getHighlightClass(block?.number);
 
-            <TableNullableCell value={block?.miner} align="center">
-              {(value) => (
-                <div className="flex flex-row gap-1">
-                  <Typography>Miner:</Typography>
+          return (
+            <>
+              <TableNullableCell value={block?.number} className={highlightClass}>
+                {(value) => (
                   <Link
-                    href={`/address/${value}`}
-                    className="font-mono text-sm hover:underline pt-[2]"
+                    href={`/blocks/${value}`}
+                    className="flex items-center gap-4"
                   >
-                    <Typography
-                      color="accent"
-                      className="font-mono text-sm hover:underline"
-                    >
-                      {formatHash(value, 8, 6)}
-                    </Typography>
+                    <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
+                      <ShinzoFilledIcon className="size-4 text-[#35353599]" />
+                    </i>
+                    <div className="flex flex-col">
+                      <Typography color="accent" className="underline">
+                        {value}
+                      </Typography>
+                      {block?.timestamp && (
+                        <Typography color="secondary" className="text-xs">
+                          {formatDistanceToNow(
+                            new Date(Number(block.timestamp) * 1000),
+                            {
+                              addSuffix: true,
+                            }
+                          )}
+                        </Typography>
+                      )}
+                    </div>
                   </Link>
-                </div>
-              )}
-            </TableNullableCell>
-            <TableNullableCell value={0} align="center">
-              {(value) => (
-                <div className="flex items-center gap-1">Txns: {value}</div>
-              )}
-            </TableNullableCell>
-          </>
-        )}
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={block?.miner} align="center" className={highlightClass}>
+                {(value) => (
+                  <div className="flex flex-row gap-1">
+                    <Typography>Miner:</Typography>
+                    <Link
+                      href={`/address/${value}`}
+                      className="font-mono text-sm hover:underline pt-[2]"
+                    >
+                      <Typography
+                        color="accent"
+                        className="font-mono text-sm hover:underline"
+                      >
+                        {formatHash(value, 8, 6)}
+                      </Typography>
+                    </Link>
+                  </div>
+                )}
+              </TableNullableCell>
+              <TableNullableCell value={block?.txCount ?? 0} align="center" className={highlightClass}>
+                {(value) => (
+                  <div className="flex items-center gap-1">Txns: {value}</div>
+                )}
+              </TableNullableCell>
+            </>
+          )
+        }}
       />
 
       <div className='flex'>

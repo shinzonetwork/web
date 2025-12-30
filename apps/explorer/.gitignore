@@ -4,3 +4,4 @@
 
 /.open-next/
 .wrangler
+next-env.d.ts
