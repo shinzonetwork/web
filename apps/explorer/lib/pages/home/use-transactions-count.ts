@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const TransactionsCountQuery = graphql(`
   query TransactionsCount {
-    txCount: _count(Transaction: {})
+    txCount: _count(Ethereum__Mainnet__Transaction: {})
   }
 `);
 

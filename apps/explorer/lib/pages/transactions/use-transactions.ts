@@ -1,11 +1,11 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
-import { Transaction } from '@/shared/graphql/generated/graphql';
+import { Transaction } from '@/shared/graphql';
 
 const TransactionsQuery = graphql(`
   query Transactions($offset: Int, $limit: Int, $blockNumber: Int) {
-    txCount: _count(Transaction: {})
-    Transaction(
+    txCount: _count(Ethereum__Mainnet__Transaction: {})
+    Transaction: Ethereum__Mainnet__Transaction(
       offset: $offset, 
       limit: $limit, 
       order: { blockNumber: DESC }

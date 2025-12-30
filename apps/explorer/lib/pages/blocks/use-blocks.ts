@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 
 const BlocksQuery = graphql(`
   query Blocks($offset: Int, $limit: Int) {
-    blockCount: _count(Block: {})
-    Block(offset: $offset, limit: $limit, order: { number: DESC }) {
+    blockCount: _count(Ethereum__Mainnet__Block: {})
+    Block: Ethereum__Mainnet__Block(offset: $offset, limit: $limit, order: { number: DESC }) {
       hash
       number
       timestamp

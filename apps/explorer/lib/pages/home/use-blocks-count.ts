@@ -8,7 +8,7 @@ import { SHORT_TRANSACTIONS_QUERY_NAME } from './use-short-transactions';
 
 const BlocksCountQuery = graphql(`
   query BlocksCount {
-    count: _count(Block: {})
+    count: _count(Ethereum__Mainnet__Block: {})
   }
 `);
 

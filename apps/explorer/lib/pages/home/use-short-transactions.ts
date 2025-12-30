@@ -1,10 +1,10 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
-import { Transaction } from '@/shared/graphql/generated/graphql';
+import { Transaction } from '@/shared/graphql';
 
 const ShortTransactionsQuery = graphql(`
   query ShortTransactions($limit: Int) {
-    Transaction(
+    Transaction: Ethereum__Mainnet__Transaction(
       limit: $limit, 
       order: { blockNumber: DESC }
     ) {

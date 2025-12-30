@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const ShortBlocksQuery = graphql(`
   query ShortBlocks($limit: Int) {
-    Block(
+    Block: Ethereum__Mainnet__Block(
       limit: $limit, 
       order: { number: DESC }
     ) {

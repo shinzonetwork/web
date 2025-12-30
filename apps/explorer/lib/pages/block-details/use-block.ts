@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const BlockQuery = graphql(`
   query Block($number: Int!) {
-    Block(filter: { number: { _eq: $number } }, limit: 1) {
+    Block: Ethereum__Mainnet__Block(filter: { number: { _eq: $number } }, limit: 1) {
       hash
       number
       timestamp
