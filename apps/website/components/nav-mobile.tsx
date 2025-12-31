@@ -19,7 +19,7 @@ const variants: Record<string, Variants> = {
     },
 };
 
-export default function NavMobile({ open = false, onClose }: NavMobileProps) {
+export default function NavMobile({ open = false }: NavMobileProps) {
 
     return (
         <AnimatePresence>

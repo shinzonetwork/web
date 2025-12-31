@@ -27,10 +27,10 @@ export default async function Home() {
             <BlockHero
                 title={<h1>Read <span className="highlight">[</span>blockchain<span className="highlight">]</span><br /><span className="highlight">*</span>as it is<span className="highlight">*</span>, not as someone tells you it is<span className="highlight">/</span></h1>}
                 content={<p>Every block carries truth. Somewhere between the chain and your app, that truth gets repackaged, rate-limited, and resold. Shinzō ends that.</p>}
-                buttons={[
+                buttons={<>
                     <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Build on Shinzō</Link></Button>,
                     <Button variant="outline" asChild><Link href="/">Whitepaper Waitlist ↗</Link></Button>
-                ]}
+                </>}
             />
 
             <BlockLogoCarousel />
@@ -93,9 +93,9 @@ export default async function Home() {
                 eyebrow="The era of trusted APIs is ending."
                 title="Let the blockchain speak for itself."
                 content={<p>Every response can be checked by the client.</p>}
-                buttons={[
+                buttons={<>
                     <Button asChild><Link href="/">Join the Devnet</Link></Button>
-                ]}
+                </>}
             />
         </>
     );

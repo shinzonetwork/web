@@ -85,6 +85,17 @@
   "env": {
     "staging": {
       "name": "shinzo-website-staging",
+      "vars": {
+        "NEXT_PUBLIC_URL": "https://preview-staging.shinzo.network",
+        "ALLOW_INDEXING": "false",
+      },
+      "routes": [
+        {
+          "pattern": "preview-staging.shinzo.network",
+          "zone_name": "preview-staging.shinzo.network",
+          "custom_domain": true,
+        },
+      ],
       "d1_databases": [
         {
           "binding": "D1",

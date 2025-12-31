@@ -2,11 +2,18 @@ import Link from 'next/link';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 
-export interface BlockGhLatestProps {
+type LatestCommitData = {
+    html_url: string;
+    commit: {
+        message: string;
+        author: {
+            name: string;
+            date: string;
+        };
+    };
+} | null;
 
-}
-
-async function getLatestCommit(): Promise<any> {
+async function getLatestCommit(): Promise<LatestCommitData> {
     try {
         const token = process.env.GITHUB_TOKEN;
 
@@ -34,13 +41,13 @@ async function getLatestCommit(): Promise<any> {
                 const errorJson = JSON.parse(errorText);
                 console.error('Error details:', JSON.stringify(errorJson, null, 2));
             } catch (e) {
-                console.error('Error response text:', errorText);
+                console.error('Error response text:', e);
             }
 
             return null;
         }
 
-        const latestCommitData = await res.json();
+        const latestCommitData = await res.json<LatestCommitData>();
 
         return latestCommitData;
     } catch (error) {
@@ -50,7 +57,7 @@ async function getLatestCommit(): Promise<any> {
     }
 }
 
-export default async function BlockGhLatest({ }: BlockGhLatestProps) {
+export default async function BlockGhLatest() {
 
     const latestCommitData = await getLatestCommit();
 

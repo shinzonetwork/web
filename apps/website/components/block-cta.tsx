@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 
@@ -6,7 +6,7 @@ export interface BlockCtaProps {
     eyebrow?: string;
     title?: string;
     content?: ReactNode;
-    buttons?: ReactNode[];
+    buttons?: ReactNode;
 }
 
 export default function BlockCta({ eyebrow, title, content, buttons }: BlockCtaProps) {
@@ -24,7 +24,7 @@ export default function BlockCta({ eyebrow, title, content, buttons }: BlockCtaP
                         {content && <div className="richtext my-4">{content}</div>}
 
                         {buttons && <div className="flex flex-wrap gap-2 mt-12">
-                            {buttons.map((node, index) => <Fragment key={index}>{node}</Fragment>)}
+                            {buttons}
                         </div>}
                     </div>
                 </div>

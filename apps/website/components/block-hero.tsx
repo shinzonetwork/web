@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 
@@ -6,7 +6,7 @@ export interface BlockHeroProps {
     eyebrow?: string;
     title?: ReactNode;
     content?: ReactNode;
-    buttons?: ReactNode[];
+    buttons?: ReactNode;
     spacing?: string;
 }
 
@@ -24,7 +24,7 @@ export default function BlockHero({ eyebrow, title, content, buttons, spacing = 
                         </div>
 
                         {buttons && <div className="flex flex-wrap gap-2">
-                            {buttons.map((node, index) => <Fragment key={index}>{node}</Fragment>)}
+                            {buttons}
                         </div>}
                     </div>
                 </div>

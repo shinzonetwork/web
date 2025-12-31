@@ -3,9 +3,7 @@ import Image from 'next/image';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 
-export interface BlockLogoCarouselProps { }
-
-export default function BlockLogoCarousel({ }: BlockLogoCarouselProps) {
+export default function BlockLogoCarousel() {
 
     return (
         <BlockSpacing spacing="py-0">
