@@ -1,8 +1,6 @@
-import BlockContainer from "@/components/block-container";
+import FooterNew from "@/components/footer-new";
+import HeaderNew from "@/components/header-new";
 import { cn } from "@/lib/utils";
-import ShinzoLogoFull from "@/public/shinzo-logo-full.svg";
-import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 import './styles.css';
 import { Metadata } from "next";
@@ -33,23 +31,57 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body className={fonts}>
         <div className={cn(`min-h-screen flex flex-col`)} >
-          <header className="sticky top-0 z-50 bg-background">
-            <BlockContainer className="flex items-center min-h-header-h">
-              <Link href="/blog"><Image src={ShinzoLogoFull} alt="Shinzō" className="w-[150px] lg:w-[255px]" aria-label="Shinzo" /></Link>
-            </BlockContainer>
-          </header>
+          <HeaderNew navMenu={headerNavMenu} />
 
-          <main>
+          <main className="grow">
             {children}
           </main>
 
-          <footer className="mt-auto">
-            <BlockContainer className="py-10">
-              <p className="text-px-12 font-mono">© {new Date().getFullYear()} Shinzō</p>
-            </BlockContainer>
-          </footer>
+          <FooterNew />
         </div>
       </body>
     </html>
   )
 }
+
+export interface NavLink {
+  label: string;
+  href?: string;
+  items?: {
+    label: string;
+    href: string;
+  }[];
+}
+
+
+const headerNavMenu: NavLink[] = [
+  {
+    label: "Who it's for",
+    items: [
+      {
+        label: "Existing Chain Validators",
+        href: "/chain-validators",
+      },
+      {
+        label: "Data Hosts",
+        href: "/data-hosts",
+      },
+      {
+        label: "Builders",
+        href: "/builders",
+      },
+      {
+        label: "Protocols and Foundations",
+        href: "/protocols-and-foundations",
+      },
+    ],
+  },
+  {
+    label: "About",
+    href: "/about",
+  },
+  {
+    label: "Blog",
+    href: "/blog",
+  }
+]
