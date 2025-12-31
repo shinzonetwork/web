@@ -11,6 +11,7 @@
   --color-szo-border: var(--szo-border);
   --color-szo-border-light: var(--szo-border-light);
   --color-szo-light-gray: var(--szo-light-gray);
+  --color-szo-black: var(--szo-black);
 
   --spacing-container: 1058px; /* 1280px */
   --spacing-header-h: 6.25rem; /* 100px */
@@ -66,6 +67,7 @@
   --szo-border: #aaaaaa;
   --szo-border-light: #e2e2e2;
   --szo-light-gray: #f4f4f4;
+  --szo-black: #000000;
 
   --radius: 0.5rem;
   --background: oklch(1 0 0);
@@ -170,6 +172,43 @@
 
   .text-h6 {
     @apply text-px-16 md:text-px-16 font-mono leading-p110 font-normal;
+  }
+
+  .highlight {
+    @apply text-szo-primary;
+  }
+
+  .text-inline-link {
+    @apply leading-p120 text-szo-primary underline-offset-2 underline;
+    @apply relative;
+
+    &:before {
+      content: " ";
+      @apply absolute left-0 -translate-x-4 top-1/2 -translate-y-1/2 opacity-0;
+      @apply w-0 h-0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid var(--color-szo-primary);
+      transition: all 0.3s ease;
+    }
+
+    &:hover:before {
+      @apply -translate-x-3 opacity-100;
+    }
+  }
+
+  .link-arrow {
+    @apply relative hover:before:translate-x-0 hover:before:opacity-100;
+
+    &:before {
+      content: " ";
+      @apply absolute left-2 top-1/2 -translate-y-1/2 opacity-0;
+      @apply w-0 h-0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid var(--color-white);
+      transition: all 0.3s ease;
+    }
   }
 }
 

@@ -18,7 +18,7 @@ export default function BlockHero({ eyebrow, title, content, buttons, spacing = 
                 <div className="md:grid grid-cols-12">
                     <div className="col-span-10 space-y-12">
                         <div className="richtext">
-                            {eyebrow && <p className="mb-4">{eyebrow}</p>}
+                            {eyebrow && <p className="mb-4 font-mono font-medium">{eyebrow}</p>}
                             {title}
                             {content}
                         </div>
