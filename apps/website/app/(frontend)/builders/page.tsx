@@ -7,9 +7,9 @@ export default function Home() {
     <BlockHero
       eyebrow="For Builders"
       title={<h1>Build<span className="highlight">*</span> on <span className="highlight">*</span>Truth<span className="highlight">*,</span> <br />Not Assumptions<span className="highlight">/</span></h1 >}
-      buttons={[
+      buttons={<>
         <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Indexer Cohort</Link></Button>
-      ]}
+      </>}
     />
   </>
   );

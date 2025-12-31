@@ -3,11 +3,7 @@ import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 import SectionTitle from './section-title';
 
-export interface BlockHomeExplainerProps {
-
-}
-
-export default function BlockHomeExplainer({ }: BlockHomeExplainerProps) {
+export default function BlockHomeExplainer() {
 
     return (
         <BlockSpacing>

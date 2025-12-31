@@ -8,9 +8,9 @@ export default function Home() {
     <BlockHero
       eyebrow="For Existing Chain Validators"
       title={<h1>Secure<span className="highlight">!</span> the Chain<span className="highlight">.</span> <br /> Serve<span className="highlight" >*</span > the Truth<span className="highlight">/</span></h1 >}
-      buttons={[
+      buttons={<>
         <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Indexer Cohort</Link></Button>
-      ]}
+      </>}
     />
 
     <BlockSectionedContent sections={[
