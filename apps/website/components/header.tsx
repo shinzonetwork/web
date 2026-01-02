@@ -1,7 +1,7 @@
 "use client";
 
 
-import { NavLink } from "@/app/(frontend)/layout";
+import { NavLink } from "@/app/(frontend)/_layout";
 import LogoSvg from "@/components/svg/shinzo-logo.svg";
 import { useLockBody } from "@/hooks/useLockBody";
 import { useBreakpointObserver } from "@/hooks/useMediaQuery";

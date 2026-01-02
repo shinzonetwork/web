@@ -3,7 +3,13 @@ import BlockCta from "@/components/block-cta";
 import BlockHero from "@/components/block-hero";
 import BlockSectionedContent from "@/components/block-sectioned-content";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Shinzō | About",
+  description: "",
+};
 
 export default function Page() {
   return (<>

@@ -5,6 +5,12 @@ import BlockSectionedContent from "@/components/block-sectioned-content";
 import { Button } from "@/components/ui/button";
 import TitleValidators from "@/public/title-validators.png";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shinzō | Chain Validators",
+  description: "",
+};
 
 export default function Page() {
   return (<>

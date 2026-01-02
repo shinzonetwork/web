@@ -1,4 +1,4 @@
-import { NavLink } from '@/app/(frontend)/layout';
+import { NavLink } from '@/app/(frontend)/_layout';
 import DiscordIconSvg from "@/components/svg/icon-discord.svg";
 import GithubIconSvg from "@/components/svg/icon-github.svg";
 import { cn } from '@/lib/utils';
