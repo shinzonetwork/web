@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
+import SectionTitle from './section-title';
 
 export interface BlockHomeIntroProps {
     title?: string;
@@ -15,6 +16,8 @@ export default function BlockHomeIntro({ title, titleHighlights, subtitle, image
     return (
         <BlockSpacing>
             <BlockContainer>
+
+                <SectionTitle text="The Unfinished Promise" />
                 <div className="grid grid-cols-12 ">
 
                     {title && <div className="richtext col-span-11 lg:col-span-7 ">

@@ -16,9 +16,14 @@ import Link from "next/link";
 export interface NavDesktopProps {
     className?: string;
     navMenu: NavLink[];
+    socialLinks?: {
+        discord?: string;
+        github?: string;
+    };
+    docsLink?: string;
 }
 
-export function NavDesktop({ className = '', navMenu }: NavDesktopProps) {
+export function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: NavDesktopProps) {
 
     const navItemLvl1Style = "underline-offset-2 hover:underline data-[state=open]:underline";
 
@@ -44,7 +49,7 @@ export function NavDesktop({ className = '', navMenu }: NavDesktopProps) {
                                                 className="px-6 py-1 underline-offset-2 underline border-szo-primary link-arrow
                                         hover:bg-black hover:text-white
                                         ">
-                                                <Link href={item.href} className="">{item.label}</Link>
+                                                <Link href={item.href} target={item.type === 'external' ? '_blank' : '_self'} className="">{item.label}</Link>
                                             </NavigationMenuLink>
                                         ))}
                                     </motion.ul>
@@ -58,16 +63,22 @@ export function NavDesktop({ className = '', navMenu }: NavDesktopProps) {
             <div className="ml-auto">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-4">
-                        <Link href="https://discord.shinzo.network" aria-label="Discord" target="_blank" className="hover:text-szo-primary"><DiscordIconSvg className="size-6" /> </Link>
-                        <Link href="https://github.com/shinzo-io" aria-label="GitHub" target="_blank" className="hover:text-szo-primary"><GithubIconSvg className="size-6" /> </Link>
+                        {socialLinks?.discord && (
+                            <Link href={socialLinks.discord} aria-label="Discord" target="_blank" className="hover:text-szo-primary"><DiscordIconSvg className="size-6" /> </Link>
+                        )}
+                        {socialLinks?.github && (
+                            <Link href={socialLinks.github} aria-label="GitHub" target="_blank" className="hover:text-szo-primary"><GithubIconSvg className="size-6" /> </Link>
+                        )}
                     </div>
 
                     <div className="hidden md:block">
-                        <NavigationMenu>
-                            <NavigationMenuLink href="/" asChild className={cn(navItemLvl1Style)}>
-                                <Link href="http://docs.shinzo.network/" target="_blank">Docs</Link>
-                            </NavigationMenuLink>
-                        </NavigationMenu>
+                        {docsLink && (
+                            <NavigationMenu>
+                                <NavigationMenuLink href={docsLink} asChild className={cn(navItemLvl1Style)}>
+                                    <Link href={docsLink} target="_blank">Docs</Link>
+                                </NavigationMenuLink>
+                            </NavigationMenu>
+                        )}
                     </div>
                 </div>
             </div>

@@ -92,7 +92,7 @@
       "routes": [
         {
           "pattern": "preview-staging.shinzo.network",
-          "zone_name": "preview-staging.shinzo.network",
+          "zone_name": "shinzo.network",
           "custom_domain": true,
         },
       ],

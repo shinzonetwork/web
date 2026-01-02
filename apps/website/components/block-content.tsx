@@ -20,7 +20,7 @@ export default function BlockContent({ sectionTitle, title, content }: BlockCont
                     <h3>{title}</h3>
                 </div>}
 
-                {content && <div className="richtext w-6/12">
+                {content && <div className="richtext w-8/12">
                     {content}
                 </div>}
             </BlockContainer>

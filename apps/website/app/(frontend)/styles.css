@@ -174,8 +174,16 @@
     @apply text-px-16 md:text-px-16 font-mono leading-p110 font-normal;
   }
 
+  .text-raised {
+    @apply text-px-16 md:text-px-18 font-mono leading-p150 font-light;
+  }
+
   .highlight {
     @apply text-szo-primary;
+  }
+
+  .text-jp {
+    @apply text-px-16 md:text-px-18 font-jp-serif leading-p150 font-bold text-szo-primary;
   }
 
   .text-inline-link {
@@ -208,6 +216,26 @@
       border-bottom: 5px solid transparent;
       border-left: 7px solid var(--color-white);
       transition: all 0.3s ease;
+    }
+  }
+
+  .richtext-arrowlist {
+    ul {
+      @apply list-none pl-0 my-10;
+
+      li {
+        @apply relative m-0 pl-5 py-4 border-b border-szo-border last:border-b-0;
+
+        &:before {
+          content: " ";
+          @apply absolute left-0 top-6;
+          @apply w-0 h-0;
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent;
+          border-left: 7px solid var(--color-szo-primary);
+          transition: all 0.3s ease;
+        }
+      }
     }
   }
 }

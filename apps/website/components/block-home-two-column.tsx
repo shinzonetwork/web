@@ -4,7 +4,7 @@ import BlockSpacing from './block-spacing';
 import Image, { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
-export interface BlockTwoColumnProps {
+export interface BlockHomeTwoColumnProps {
     column1: {
         title?: string;
         content?: ReactNode;
@@ -17,7 +17,7 @@ export interface BlockTwoColumnProps {
     };
 }
 
-export default function BlockTwoColumn({ column1, column2 }: BlockTwoColumnProps) {
+export default function BlockHomeTwoColumn({ column1, column2 }: BlockHomeTwoColumnProps) {
 
     return (
         <BlockSpacing>
