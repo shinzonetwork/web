@@ -1,46 +1,22 @@
 import Footer from "@/components/footer";
-import Header from "@/components/header";
+import HeaderNew from "@/components/header";
 import { cn } from "@/lib/utils";
 import React from 'react';
 import './styles.css';
-import { Metadata } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
-
-export const metadata: Metadata = {
-  title: 'Shinzō | The Read Layer of Truth',
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_URL || "https://shinzo.network"
-  ),
-  twitter: {
-    card: "summary_large_image",
-  },
-  robots: {
-    index: process.env.ALLOW_INDEXING === "true",
-    follow: process.env.ALLOW_FOLLOWING === "true",
-  },
-}
-
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], });
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"], });
-const fonts = `${inter.variable} ${geistMono.variable}`;
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
   return (
-    <html lang="en">
-      <body className={fonts}>
-        <div className={cn(`min-h-screen flex flex-col`)} >
-          <Header navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
+    <div className={cn(`min-h-screen flex flex-col`)} >
+      <HeaderNew navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
 
-          <main className="grow">
-            {children}
-          </main>
+      <main className="grow">
+        {children}
+      </main>
 
-          <Footer footerNavMenu={footerNavMenu} />
-        </div>
-      </body>
-    </html>
+      <Footer footerNavMenu={footerNavMenu} />
+    </div>
   )
 }
 

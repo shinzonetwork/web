@@ -1,11 +1,11 @@
-import { NavLink } from "@/app/(frontend)/layout";
+import { NavLink } from "@/app/(frontend)/_layout";
 import FooterLogoSvg from "@/components/svg/logo-footer.svg";
 import type { Variants } from "motion/react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import BlockContainer from "./block-container";
 
-export default function FooterNew({ footerNavMenu }: { footerNavMenu: NavLink[] }) {
+export default function Footer({ footerNavMenu }: { footerNavMenu: NavLink[] }) {
 
     const columnStyle = "w-full md:w-1/2 lg:w-1/3 ";
     const labelStyle = "text-px-14 md:text-px-14 lg:text-base font-mono mb-4";

@@ -5,6 +5,12 @@ import BlockSectionedContent from "@/components/block-sectioned-content";
 import TitleBuilders from "@/public/title-builders.png";
 import BlockEditorialContent from "@/components/block-editorial-content";
 import BlockCta from "@/components/block-cta";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shinzō | Builders",
+  description: "",
+};
 
 export default function Page() {
   return (<>
