@@ -18,7 +18,7 @@ async function getLatestCommit(): Promise<LatestCommitData> {
         const token = process.env.GITHUB_TOKEN;
 
         if (!token) {
-            // console.error('GITHUB_TOKEN is not set');
+            console.warn('GITHUB_TOKEN is not set');
             return null;
         }
 

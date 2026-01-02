@@ -5,7 +5,7 @@ import { NavLink } from "@/app/(frontend)/layout";
 import LogoSvg from "@/components/svg/shinzo-logo.svg";
 import { useLockBody } from "@/hooks/useLockBody";
 import { useBreakpointObserver } from "@/hooks/useMediaQuery";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -15,9 +15,14 @@ import { Button } from "./ui/button";
 
 export interface HeaderProps {
     navMenu: NavLink[];
+    socialLinks: {
+        discord: string;
+        github: string;
+    };
+    docsLink: string;
 }
 
-export default function HeaderNew({ navMenu }: HeaderProps) {
+export default function HeaderNew({ navMenu, socialLinks, docsLink }: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
     const isLarge = useBreakpointObserver('--breakpoint-lg');
     const pathname = usePathname();
@@ -40,16 +45,17 @@ export default function HeaderNew({ navMenu }: HeaderProps) {
             <div className="flex items-center w-full min-h-header-h content-wrapper">
 
                 <Link href="/"><LogoSvg className="w-[150px] lg:w-[255px]" aria-label="Shinzo" /></Link>
-                <NavDesktop className="hidden md:flex grow ml-10" navMenu={navMenu} />
+
+                <NavDesktop className="hidden md:flex grow ml-10" navMenu={navMenu} socialLinks={socialLinks} docsLink={docsLink} />
 
                 <div className="md:hidden flex items-center ml-auto">
                     <Button variant="ghost" size="icon" onClick={toggleMobileMenu}>
-                        <MenuIcon className="size-6" />
+                        {mobileMenuOpen ? <XIcon className="size-6" /> : <MenuIcon className="size-6" />}
                     </Button>
                 </div>
             </div>
 
-            <NavMobile open={mobileMenuOpen} onClose={toggleMobileMenu} />
+            <NavMobile open={mobileMenuOpen} navMenu={navMenu} socialLinks={socialLinks} docsLink={docsLink} />
         </header>
     );
 }

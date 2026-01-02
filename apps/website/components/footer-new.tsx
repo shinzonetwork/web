@@ -1,12 +1,13 @@
+import { NavLink } from "@/app/(frontend)/layout";
 import FooterLogoSvg from "@/components/svg/logo-footer.svg";
 import type { Variants } from "motion/react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import BlockContainer from "./block-container";
 
-export default function FooterNew() {
+export default function FooterNew({ footerNavMenu }: { footerNavMenu: NavLink[] }) {
 
-    const columnStyle = "w-1/2 md:w-1/2 lg:w-1/4 ";
+    const columnStyle = "w-1/2 md:w-1/2 lg:w-1/3 ";
     const labelStyle = "text-px-14 md:text-px-14 lg:text-base font-mono mb-4";
 
     const listVariants: Variants = {
@@ -20,7 +21,7 @@ export default function FooterNew() {
     };
 
     return (
-        <footer className="bg-background">
+        <footer className="bg-background mt-12">
             <BlockContainer>
                 <div className="grid grid-cols-12 my-12">
 
@@ -32,39 +33,17 @@ export default function FooterNew() {
                     </motion.div>
 
                     <motion.ul variants={listVariants} initial="hidden" whileInView="visible" className="col-span-full md:col-start-6 md:col-span-6 lg:col-start-5 lg:col-span-8 flex flex-wrap md:justify-end gap-y-8">
-                        <motion.li variants={itemVariants} className={columnStyle}>
-                            <div className={labelStyle}>Categories</div>
-                            <ul className="text-px-14 space-y-2">
-                                <li><Link href="/" className="text-inline-link ">ShinzoHub</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Shinzo App SDK</Link></li>
-                                <li><Link href="/" className="text-inline-link ">ViewCreator</Link></li>
-                            </ul>
-                        </motion.li>
-                        <motion.li variants={itemVariants} className={columnStyle}>
-                            <div className={labelStyle}>Categories</div>
-                            <ul className="text-px-14 space-y-2">
-                                <li><Link href="/" className="text-inline-link ">Solutions</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Shinzo App SDK</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Explore Apps</Link></li>
-                            </ul>
-                        </motion.li>
-                        <motion.li variants={itemVariants} className={columnStyle}>
-                            <div className={labelStyle}>Categories</div>
-                            <ul className="text-px-14 space-y-2">
-                                <li><Link href="/" className="text-inline-link ">Documentation</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Shinzo App SDK</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Events</Link></li>
-                            </ul>
-                        </motion.li>
 
-                        <motion.li variants={itemVariants} className={columnStyle}>
-                            <div className={labelStyle}>Categories</div>
-                            <ul className="text-px-14 space-y-2">
-                                <li><Link href="/" className="text-inline-link ">Documentation</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Shinzo App SDK</Link></li>
-                                <li><Link href="/" className="text-inline-link ">Events</Link></li>
-                            </ul>
-                        </motion.li>
+                        {footerNavMenu.map((item, index) => (
+                            <motion.li key={index} variants={itemVariants} className={columnStyle}>
+                                <div className={labelStyle}>{item.label}</div>
+                                <ul className="text-px-14 space-y-2">
+                                    {item.items?.map((item, index) => (
+                                        <li key={index}><Link href={item.href} target={item.type === 'external' ? '_blank' : '_self'} className="text-inline-link ">{item.label}</Link></li>
+                                    ))}
+                                </ul>
+                            </motion.li>
+                        ))}
                     </motion.ul>
                 </div>
 

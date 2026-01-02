@@ -31,13 +31,13 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
     <html lang="en">
       <body className={fonts}>
         <div className={cn(`min-h-screen flex flex-col`)} >
-          <HeaderNew navMenu={headerNavMenu} />
+          <HeaderNew navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
 
           <main className="grow">
             {children}
           </main>
 
-          <FooterNew />
+          <FooterNew footerNavMenu={footerNavMenu} />
         </div>
       </body>
     </html>
@@ -46,13 +46,21 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
 export interface NavLink {
   label: string;
+  type?: 'external' | 'internal';
   href?: string;
   items?: {
     label: string;
+    type?: 'external' | 'internal';
     href: string;
   }[];
 }
 
+const socialLinks = {
+  discord: 'https://discord.shinzo.network',
+  github: 'https://github.com/shinzonetwork',
+}
+
+const docsLinks = 'https://docs.shinzo.network/';
 
 const headerNavMenu: NavLink[] = [
   {
@@ -84,4 +92,66 @@ const headerNavMenu: NavLink[] = [
     label: "Blog",
     href: "/blog",
   }
+]
+
+const footerNavMenu: NavLink[] = [
+  {
+    label: "Who it's for",
+    items: [
+      {
+        label: "Existing Chain Validators",
+        href: "/chain-validators",
+      },
+      {
+        label: "Data Hosts",
+        href: "/data-hosts",
+      },
+      {
+        label: "Builders",
+        href: "/builders",
+      },
+      {
+        label: "Protocols and Foundations",
+        href: "/protocols-and-foundations",
+      },
+    ],
+  },
+  {
+    label: "Resources",
+    items: [
+      {
+        label: "Blog",
+        href: "/blog",
+      },
+      {
+        label: "Manifesto",
+        href: "/truth",
+      }
+    ],
+  },
+  {
+    label: "Community",
+    items: [
+      {
+        type: 'external',
+        label: "Discord",
+        href: "https://discord.shinzo.network",
+      },
+      {
+        type: 'external',
+        label: "GitHub",
+        href: "https://github.com/shinzonetwork",
+      },
+      {
+        type: 'external',
+        label: "X / Twitter",
+        href: "https://x.com/shinzonetwork",
+      },
+      {
+        type: 'external',
+        label: 'Telegram',
+        href: 'https://t.me/shinzonetwork'
+      }
+    ],
+  },
 ]

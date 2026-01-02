@@ -33,7 +33,7 @@ export default async function Blog() {
     return (
         <div>
             <BlockHero
-                title={<h1>{blogLanding?.title}</h1>}
+                title={<>{blogLanding?.title}</>}
                 content={<p>{blogLanding?.subtitle}</p>}
             />
 

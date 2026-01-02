@@ -7,25 +7,23 @@ export interface BlockCtaProps {
     title?: string;
     content?: ReactNode;
     buttons?: ReactNode;
+    footerText?: ReactNode;
 }
 
-export default function BlockCta({ eyebrow, title, content, buttons }: BlockCtaProps) {
+export default function BlockCta({ eyebrow, title, content, buttons, footerText }: BlockCtaProps) {
 
     return (
-        <BlockSpacing spacing="py-15 md:pt-30">
+        <BlockSpacing spacing="py-15 md:py-20">
             <BlockContainer>
-                <div className="md:grid grid-cols-12">
-                    <div className="col-span-6 col-start-3 mb-12">
-
+                <div className="md:grid grid-cols-12 mb-12">
+                    <div className="col-span-6 col-start-3 ">
                         {eyebrow && <p className="mb-4">{eyebrow}</p>}
-
                         {title && <h2 className="text-h2 my-4">{title}</h2>}
-
                         {content && <div className="richtext my-4">{content}</div>}
-
-                        {buttons && <div className="flex flex-wrap gap-2 mt-12">
-                            {buttons}
-                        </div>}
+                    </div>
+                    <div className="col-span-9 col-start-3 ">
+                        {buttons && <div className="flex flex-wrap gap-2 mt-12">{buttons}</div>}
+                        {footerText && <div className="richtext mt-12">{footerText}</div>}
                     </div>
                 </div>
             </BlockContainer>

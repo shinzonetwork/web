@@ -19,8 +19,10 @@ export default function BlockHero({ eyebrow, title, content, buttons, spacing = 
                     <div className="col-span-10 space-y-12">
                         <div className="richtext">
                             {eyebrow && <p className="mb-4 font-mono font-medium">{eyebrow}</p>}
-                            {title}
-                            {content}
+                            <h1>{title}</h1>
+                            <div className='lg:max-w-8/12'>
+                                {content}
+                            </div>
                         </div>
 
                         {buttons && <div className="flex flex-wrap gap-2">

@@ -2,6 +2,7 @@ import CharHeartSvg from '@/components/svg/chars-heart.svg';
 import BlockContainer from './block-container';
 import BlockSpacing from './block-spacing';
 import SectionTitle from './section-title';
+import BlockNumbereredList from './block-numbered-list';
 
 export default function BlockHomeExplainer() {
 
@@ -21,62 +22,71 @@ export default function BlockHomeExplainer() {
 
                     <div className="col-span-full lg:col-span-8 lg:col-start-2 mb-15">
                         <div className="richtext mb-10">
-                            <h2 className="">
-                                <span className="text-szo-primary">#</span>Shinzō makes the network its own
-                                <span className="text-szo-primary">_</span>read layer<span className="text-szo-primary">_</span>
-                            </h2>
-                            <p>Validators don’t just sign blocks — they serve cryptographic truth. Data leaves the chain carrying proofs of origin, moves across a peer network that can’t be gatekept, and lands in your app without asking anyone’s permission.</p>
+                            <h2>What Shinzō Is</h2>
+                            <p>Shinzo is a trustless data read layer for blockchains.</p>
+                            <p>Instead of asking you to trust an indexer or API, Shinzo turns the network itself into the data source. Validators become the origin of indexed, provable data. A peer network of Hosts carries that data forward, keeps it available, and provides the views for builders to rely on.</p>
+                            <p>The result is simple: a shared read layer where anyone can access, verify, and build on blockchain data without handing control to a single company.</p>
                         </div>
                     </div>
 
-                    <SectionTitle text="How Shinzō Works" className="col-span-full" />
+                    <SectionTitle text="How Shinzō Flips the Read Layer" className="col-span-full" />
 
                     <div className="col-span-full lg:col-span-8 lg:col-start-2 richtext mb-15 flex flex-col gap-5">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex items-center text-h3">
-                                01<span className="text-szo-primary mr-2">/</span>
-                                <span>At the source</span>
-                            </div>
-                            <p>A lightweight sidecar runs with validators, deriving application-ready views directly from consensus events — and attaching succinct proofs.</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex items-center text-h3">
-                                02<span className="text-szo-primary mr-2">/</span>
-                                <span>Across the mesh</span>
-                            </div>
-                            <p>Multiple sources validate each artifact, so you don’t have to trust any single node. Bad actors are easy to spot, and reliable truth emerges naturally.</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex items-center text-h3">
-                                03<span className="text-szo-primary mr-2">/</span>
-                                <span>Into your app</span>
-                            </div>
-                            <p>Query or subscribe freely. Raw events become balances, trades, and liquidity, and verifiability travels with the data — no approvals needed.</p>
-                        </div>
+                        <BlockNumbereredList items={[
+                            { title: 'At the Source', content: <>A lightweight engine runs with validators, deriving application ready views directly from consensus events and attaching succinct proofs that link those views back to the chain.</> },
+                            { title: 'Across the Network', content: <>Verifiable, content addressed artifacts replicate over a peer to peer fabric of Hosts for durability, resilience, and sovereignty. Hosts store, serve, and operate views over this data so every team does not have to rebuild indexing alone.</> },
+                            {
+                                title: 'Into your App',
+                                content: <>Builders query simple APIs or subscribe to streams. Raw events become balances, positions, histories, and cross chain views, without breaking verifiability or tying you to a single provider.
+                                    <br /><br />From your app&apos;s point of view, it still feels like reading from one place.
+                                    Underneath, you are standing on validators, Hosts, and proofs.
+                                </>
+                            }
+                        ]} />
                     </div>
 
                     <SectionTitle text="Why it matters" className="col-span-full" />
 
                     <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-15 md:grid grid-cols-subgrid">
-                        <div className='col-span-4'>
+                        <div className='col-span-full richtext mb-12'>
+                            <p>Shinzo is built around the same principles blockchains were meant to uphold.</p>
+                        </div>
+                        <div className='col-span-4 mb-10'>
                             <div className='font-jp-serif text-szo-primary text-px-16'>検証可能</div>
                             <h3 className='mt-0'>Verifiable</h3>
-                            <p>Every response can be checked by the client.</p>
+                            <p>Every answer can be checked against cryptographic proofs that tie it back to the blockchain, instead of trusting that an indexer “probably did it right.”</p>
                         </div>
-                        <div className='col-span-4 col-start-6'>
+                        <div className='col-span-4 col-start-6 mb-10'>
                             <div className='font-jp-serif text-szo-primary text-px-16'>真実</div>
                             <h3 className='mt-0'>Trustless</h3>
-                            <p>No faith in vendors; only math.</p>
+                            <p>You are not locked into one vendor&apos;s backend or schema. The network itself produces and carries the data, backed by math, not reputation.</p>
                         </div>
-                        <div className='col-span-4'>
+                        <div className='col-span-4 mb-10'>
                             <div className='font-jp-serif text-szo-primary text-px-16'>パーミッションレス</div>
                             <h3 className='mt-0'>Permissionless</h3>
-                            <p>No keys, quotas, or gatekeepers.</p>
+                            <p>Understanding onchain reality should not depend on credit cards, quotas, or private contracts. Reading the chain becomes as open as writing to it.</p>
                         </div>
-                        <div className='col-span-4 col-start-6'>
+                        <div className='col-span-4 col-start-6 mb-10'>
                             <div className='font-jp-serif text-szo-primary text-px-16'>分散化</div>
                             <h3 className='mt-0'>Decentralized</h3>
-                            <p>Data served by the network, not a company.</p>
+                            <p>Data is served by validators and Hosts across the network, not by a single company sitting between your users and the chain.</p>
+                        </div>
+                        <div className='col-span-full richtext mb-12'>
+                            <p>Shinzo is about giving the data layer the same guarantees the base layer already has.</p>
+                        </div>
+                    </div>
+
+                    <SectionTitle text="Who Shinzo Is For" className="col-span-full" />
+
+                    <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-15 md:grid grid-cols-subgrid">
+                        <div className='col-span-full richtext mb-12'>
+                            <p>Shinzo is for anyone who cares about how blockchains are read, not just how they produce blocks.</p>
+                            <p>Builders who want to ship products based on truth, not assumptions.
+                                <br />Validators who want their work to secure more than just the next block.
+                                <br />Data Hosts who want to carry and shape verifiable data for the ecosystem.
+                                <br />Protocols and foundations who want their chains to be read with the same integrity they are written with.</p>
+                            <p>On the surface, these are different roles.<br />Underneath, they are all answering the same question: who do we trust to tell us what the chain says?</p>
+                            <p>Shinzo&apos;s answer is: the chain itself.</p>
                         </div>
                     </div>
 
