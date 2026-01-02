@@ -18,7 +18,7 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
       </header>
 
       <main>
-        {children}
+        {children} 
       </main>
 
       <footer className="mt-auto">
