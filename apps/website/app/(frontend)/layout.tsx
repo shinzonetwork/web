@@ -1,5 +1,5 @@
-import FooterNew from "@/components/footer-new";
-import HeaderNew from "@/components/header-new";
+import FooterNew from "@/components/footer";
+import HeaderNew from "@/components/header";
 import { cn } from "@/lib/utils";
 import React from 'react';
 import './styles.css';

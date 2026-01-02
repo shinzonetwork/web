@@ -7,7 +7,7 @@ import BlockContainer from "./block-container";
 
 export default function FooterNew({ footerNavMenu }: { footerNavMenu: NavLink[] }) {
 
-    const columnStyle = "w-1/2 md:w-1/2 lg:w-1/3 ";
+    const columnStyle = "w-full md:w-1/2 lg:w-1/3 ";
     const labelStyle = "text-px-14 md:text-px-14 lg:text-base font-mono mb-4";
 
     const listVariants: Variants = {
@@ -33,7 +33,6 @@ export default function FooterNew({ footerNavMenu }: { footerNavMenu: NavLink[] 
                     </motion.div>
 
                     <motion.ul variants={listVariants} initial="hidden" whileInView="visible" className="col-span-full md:col-start-6 md:col-span-6 lg:col-start-5 lg:col-span-8 flex flex-wrap md:justify-end gap-y-8">
-
                         {footerNavMenu.map((item, index) => (
                             <motion.li key={index} variants={itemVariants} className={columnStyle}>
                                 <div className={labelStyle}>{item.label}</div>

@@ -1,22 +1,24 @@
 import BlockContent from "@/components/block-content";
 import BlockCta from "@/components/block-cta";
-// import BlockFeatures from "@/components/block-features";
+import BlockGhLatest from "@/components/block-gh-latest";
 import BlockHero from "@/components/block-hero";
 import BlockHomeExplainer from "@/components/block-home-explainer";
 import BlockHomeIntro from "@/components/block-home-intro";
-// import BlockHomeTwoColumn from "@/components/block-home-two-column";
 import BlockLogoCarousel from "@/components/block-logo-carousel";
+import CharBlockchainSvg from '@/components/svg/chars-blockchain.svg';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-import BlockGhLatest from "@/components/block-gh-latest";
+// import BlockHomeTwoColumn from "@/components/block-home-two-column";
+// import BlockFeatures from "@/components/block-features";
+
 // import Feature1Image from '@/public/feature-1.png';
 // import Feature2Image from '@/public/feature-2.png';
 // import Feature3Image from '@/public/feature-3.png';
 // import Feature4Image from '@/public/feature-4.png';
 // import ForBuildersImage from '@/public/feature-builders.png';
 // import ForValidatorsImage from '@/public/feature-validators.png';
-import CharBlockchainSvg from '@/components/svg/chars-blockchain.svg';
+
 
 export default async function Home() {
 
@@ -61,6 +63,7 @@ export default async function Home() {
             />
 
             <BlockHomeExplainer />
+
             {/* 
             <BlockHomeTwoColumn
                 column1={{

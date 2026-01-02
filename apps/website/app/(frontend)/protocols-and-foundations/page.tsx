@@ -12,7 +12,6 @@ export default function Page() {
       eyebrow="For Protocols and Foundations"
       title={<>Give Your Chain the <span className="highlight">{`<`}</span>Read Layer<span className="highlight">{`>`}</span> <span className="highlight">[</span>It Deserves<span className="highlight">]</span><span className="highlight">{`/`}</span></>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Indexer Cohort</Link></Button>
       </>}
     />
 
@@ -21,9 +20,11 @@ export default function Page() {
         sectionTitle: "Why Protocols Care About Shinzo",
         sectionImage: TitleProtocols,
         sectionContent: <>
-          <h2>Truth on chain only matters if it can be <span className="highlight">[</span>reached<span className="highlight">]</span></h2>
-          <p>Shinzo turns blockchains into sources of verifiable data produced by validators.Hosts take that verified data and make it durable, available, and usable across the ecosystem.</p>
-          <p className="text-raised">You are the infrastructure that carries truth beyond its point of origin.</p>
+          <h2>Your chain already delivers <span className="highlight">[</span>trustless consensus<span className="highlight">]</span></h2>
+          <p>But much of what gets built on top of it is still read through centralized infrastructure.</p>
+          <p>Explorers, wallets, dashboards, analytics, bots. They often depend on a small set of services that sit between your ecosystem and its own data.</p>
+          <p>That gap quietly shapes how your chain is experienced. What builders can trust. What users see. What fails when infrastructure goes down.</p>
+          <p className="text-raised">Shinzo exists so protocols can offer a data read layer that matches the principles the chain is built on: verifiable, trustless, and open.</p>
         </>
       },
       {
@@ -44,6 +45,23 @@ export default function Page() {
 
 
     <BlockEditorialContent sections={[
+      {
+        sectionTitle:
+          <>
+            <p className="text-jp">バリデーター</p>
+            <h3>How This Changes the Builder Experience</h3>
+          </>
+        ,
+        sectionContent: <>
+          <p>Builders do not choose ecosystems only on throughput or fees.<br /> They choose based on how quickly they can build something real and how much they can trust the infrastructure beneath them.</p>
+          <p>A verifiable read layer changes that calculus.</p>
+          <p>Developers no longer need to run bespoke indexers just to answer basic questions.<br />
+            They no longer have to choose between speed and correctness.<br />
+            They no longer have to trust opaque infrastructure to understand onchain reality.</p>
+          <p>Instead, they get application-ready data that can be verified when it matters and reused across the ecosystem.</p>
+          <p>This is the difference between tooling that works and infrastructure that compounds.</p>
+        </>
+      },
       {
         sectionTitle:
           <>
@@ -83,11 +101,8 @@ export default function Page() {
         sectionTitle: "Why Now",
         sectionContent: <>
           <p>The read layer is still forming.</p>
-
           <p>Builders remember outages and silent failures from centralized providers.Validators are looking for deeper ways to contribute.New chains are launching into an ecosystem that expects better defaults.</p>
-
           <p>The choices made now will harden into assumptions later.</p>
-
           <p className="text-raised">This is the moment where protocols decide whether trustlessness stops at consensus or extends all the way to how their chain is read.</p>
 
         </>

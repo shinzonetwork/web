@@ -92,8 +92,8 @@ export default function Page() {
         </>
       }
       buttons={<>
-        <Button asChild><Link href="/">Discord</Link></Button>
-        <Button variant="outline" asChild><Link href="/">Telegram</Link></Button>
+        <Button asChild><Link href="https://discord.shinzo.network" target="_blank">Discord</Link></Button>
+        <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Telegram</Link></Button>
       </>}
       footerText={<p className="text-raised">Shinzo — Read what’s real.<br />Truth made verifiable. Data made free.</p>}
     />
