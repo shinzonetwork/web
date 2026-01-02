@@ -12,7 +12,7 @@ export default function Page() {
       eyebrow="For Existing Chain Validators"
       title={<>Secure<span className="highlight">!</span> the Chain<span className="highlight">.</span> <br /> Serve<span className="highlight" >*</span > the Truth<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Indexer Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appLxPFVDnm3rjqKs/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Indexer Cohort</Link></Button>
       </>}
     />
 
@@ -31,7 +31,7 @@ export default function Page() {
       {
         sectionTitle: "What Running Shinzō Means",
         sectionContent: <>
-          <h2>When you run Shinzō alongside the validator node you already operate, you:</h2>
+          <h3>When you run Shinzō alongside the validator node you already operate, you:</h3>
           <ul>
             <li>Derive structured data directly from the blocks you validate.</li>
             <li>Attach proofs that show this data came from the chain itself.</li>
@@ -98,7 +98,7 @@ export default function Page() {
       {
         sectionTitle: "Who We Are Looking For",
         sectionContent: <>
-          <h3>We are pre mainnet and seeking operators who:</h3>
+          <h3>We are pre mainnet and <br />seeking operators who:</h3>
           <ul>
             <li>Validate at least one production or active testnet chain.</li>
             <li>Believe decentralization is something you practice, not just claim.</li>

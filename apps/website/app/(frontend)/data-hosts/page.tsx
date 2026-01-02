@@ -12,7 +12,7 @@ export default function Page() {
       eyebrow="For Data Hosts"
       title={<>Carry<span className="highlight">!</span> the Truth<span className="highlight">.</span> <br /> Power<span className="highlight" >*</span > the <span className="highlight">/</span>Read Layer<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Host Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appLxPFVDnm3rjqKs/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort</Link></Button>
       </>}
     />
 
