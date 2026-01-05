@@ -68,7 +68,7 @@ export default function Page() {
     ]} />
 
 
-    <BlockSectionedContent sections={[
+    <BlockSectionedContent indented sections={[
       {
         sectionTitle: "The Vision Ahead",
         sectionContent: <>
@@ -79,8 +79,6 @@ export default function Page() {
         </>
       }
     ]} />
-
-
 
     <BlockCta
       title="Join Us"

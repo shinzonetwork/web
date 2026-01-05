@@ -100,7 +100,7 @@ export default function Page() {
       },
     ]} />
 
-    <BlockSectionedContent sections={[
+    <BlockSectionedContent indented sections={[
       {
         sectionTitle: "Who We Are Looking For",
         sectionContent: <>
