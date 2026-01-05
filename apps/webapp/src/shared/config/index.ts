@@ -2,6 +2,7 @@
 
 import { createConfig, http } from "wagmi";
 import { defineChain, type Chain } from "viem";
+import { getRpcUrl } from "./env";
 
 export const Shinzo: Chain = defineChain({
   id: 9000,
@@ -9,10 +10,10 @@ export const Shinzo: Chain = defineChain({
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"],
+      http: [getRpcUrl()],
     },
     public: {
-      http: [process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"],
+      http: [getRpcUrl()],
     },
   },
 });
@@ -20,9 +21,7 @@ export const Shinzo: Chain = defineChain({
 const config = createConfig({
   chains: [Shinzo],
   transports: {
-    [Shinzo.id]: http(
-      process.env.NEXT_PUBLIC_RPC_URL || "http://localhost:8545"
-    ),
+    [Shinzo.id]: http(getRpcUrl()),
   },
 });
 export default config;
