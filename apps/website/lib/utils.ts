@@ -18,3 +18,7 @@ export function isPopulated<T>(
 ): rel is Populated<T> {
   return !!rel && typeof rel === "object";
 }
+
+export function formatDate(dateString: string) {
+  return dateString ? dateString.split("T")[0] : "";
+}

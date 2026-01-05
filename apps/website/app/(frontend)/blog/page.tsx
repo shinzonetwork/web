@@ -2,7 +2,7 @@ import BlockContainer from "@/components/block-container";
 import BlockHero from "@/components/block-hero";
 import { ImageMedia } from "@/components/image-media";
 import SectionTitle from "@/components/section-title";
-import { asPopulated, isPopulated } from "@/lib/utils";
+import { asPopulated, formatDate, isPopulated } from "@/lib/utils";
 import defaultPostImage from '@/public/post-default.png';
 import configPromise from '@payload-config';
 import { Metadata } from "next";
@@ -50,7 +50,7 @@ export default async function Blog() {
                         </div>
 
                         <div className="col-span-6 flex flex-col gap-y-4 md:mr-6">
-                            <p className="text-px-14 text-szo-red font-mono">[{firstPost.publishedAt}]</p>
+                            <p className="text-px-14 text-szo-red font-mono">[{formatDate(firstPost?.publishedAt || '')}]</p>
                             <h2 className="text-h2 group-hover:underline transition-all">{firstPost.title}</h2>
                             <p className="text-px-12 font-mono">{firstPost?.authors?.map((author) => {
                                 if (isPopulated(author)) return author.name;
@@ -69,7 +69,7 @@ export default async function Blog() {
                             <div>
                                 <h2 className="text-h4 group-hover:underline transition-all">{post.title}</h2>
                                 <div className="flex items-center flex-wrap gap-x-2 text-px-12 font-mono">
-                                    <p>[{post.publishedAt}]
+                                    <p>[{formatDate(post?.publishedAt || '')}]
                                         {post?.authors?.length && post?.authors?.length > 0 ? " | " : ""}
                                         {post?.authors?.map((author) => {
                                             if (isPopulated(author)) return author.name;

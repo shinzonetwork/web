@@ -3,7 +3,7 @@ import BlockHero from "@/components/block-hero";
 import { ImageMedia } from "@/components/image-media";
 import RichText from "@/components/rich-text";
 import { generateMeta } from "@/lib/generateMeta";
-import { asPopulated, isPopulated } from "@/lib/utils";
+import { asPopulated, formatDate, isPopulated } from "@/lib/utils";
 import configPromise from '@payload-config';
 import { Metadata } from "next";
 import Link from "next/link";
@@ -44,8 +44,8 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
         <div>
             <BlockHero title={<h1>{post.title}</h1>} content={<div>
                 <h2 className="text-h4">{post.subtitle}</h2>
-                <p className="text-px-12 font-mono">[{post.publishedAt}]
-                    {post?.authors?.length && post?.authors?.length > 0 && " | "}
+                <p className="text-px-12 font-mono">[{formatDate(post?.publishedAt || '')}]
+                    {post?.authors?.length && post?.authors?.length > 0 ? " | " : ""}
                     {post?.authors?.map((author) => {
                         if (isPopulated(author)) return author?.name;
                     }).join(', ')}
@@ -65,13 +65,13 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
                             {previousPost && <Link href={`/blog/${previousPost?.slug || ''}`} className="group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
                                 <p className="text-px-14 mb-2">Previous Post</p>
                                 <h4 className="text-h4 mb-2 group-hover:underline">{previousPost?.title || ''}</h4>
-                                <p className="text-px-12 font-mono">[{previousPost?.publishedAt || ''}]</p>
+                                    <p className="text-px-12 font-mono">[{previousPost?.publishedAt || ''}]</p>
                             </Link>}
 
                             {nextPost && <Link href={`/blog/${nextPost?.slug || ''}`} className="text-right group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
                                 <p className="text-px-14 mb-2">Next Post</p>
                                 <h4 className="text-h4 mb-2 group-hover:underline">{nextPost?.title || ''}</h4>
-                                <p className="text-px-12 font-mono">[{nextPost?.publishedAt || ''}]</p>
+                                <p className="text-px-12 font-mono">[{formatDate(nextPost?.publishedAt || '')}]</p>
                             </Link>}
                         </div>
                     </div>
