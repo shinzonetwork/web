@@ -1,0 +1,207 @@
+import BlockContainer from "@/components/block-container";
+import BlockHero from "@/components/block-hero";
+import { ImageMedia } from "@/components/image-media";
+import RichText from "@/components/rich-text";
+import { generateMeta } from "@/lib/generateMeta";
+import { asPopulated, formatDate, isPopulated } from "@/lib/utils";
+import { Post } from "@/payload/payload-types";
+import configPromise from '@payload-config';
+import { Metadata } from "next";
+import { unstable_cache } from "next/cache";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getPayload } from "payload";
+import { cache } from "react";
+
+type BlogDetailProps = {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export async function generateStaticParams() {
+    const posts = await queryPostSlugs();
+    return posts?.docs.map(({ slug }) => ({ slug }));
+}
+
+export async function generateMetadata({ params: paramsPromise }: BlogDetailProps): Promise<Metadata> {
+    const { slug = '' } = await paramsPromise
+    const decodedSlug = decodeURIComponent(slug)
+    const post = await queryPostBySlug({ slug: decodedSlug });
+
+    return generateMeta({ doc: post, type: 'post' })
+}
+
+export default async function BlogDetail({ params }: BlogDetailProps) {
+    const { slug = '' } = await params;
+    const post = await queryPostBySlug({ slug });
+
+    const blogLanding = await queryBlogLandingGlobal();
+
+    if (!post) return notFound();
+
+    const featuredPost = asPopulated(blogLanding?.featuredPost);
+    const { nextPost, previousPost } = await getPreviousAndNextPosts({ slug, featuredPost, post });
+
+    const image = asPopulated(post.featuredImage);
+
+    return (
+        <div>
+            <BlockHero title={<h1>{post.title}</h1>} content={<div>
+                <h2 className="text-h4">{post.subtitle}</h2>
+                <p className="text-px-12 font-mono">[{formatDate(post?.publishedAt || '')}]
+                    {post?.authors?.length && post?.authors?.length > 0 ? " | " : ""}
+                    {post?.authors?.map((author) => {
+                        if (isPopulated(author)) return author?.name;
+                    }).join(', ')}
+                </p>
+            </div>} spacing="pt-10 md:pt-15" />
+
+            <BlockContainer>
+                <div className="md:grid grid-cols-12 border-t border-szo-border pt-10">
+
+                    <div className="col-span-2 mb-10"><Link href="/blog" className="font-mono font-bold text-szo-primary text-px-14 text-right">{`{Back}`}</Link></div>
+
+                    <div className="col-span-7 col-start-3 richtext">
+                        {image && <ImageMedia priority resource={image} className="w-full aspect-video object-cover border border-szo-border mb-10" />}
+                        {post.content && <RichText data={post.content} />}
+
+                        <div className="flex flex-col gap-y-4 not-prose mt-10">
+                            {previousPost && <Link href={`/blog/${previousPost?.slug || ''}`} className="group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
+                                <p className="text-px-14 mb-2">Previous Post</p>
+                                <h4 className="text-h4 mb-2 group-hover:underline">{previousPost?.title || ''}</h4>
+                                <p className="text-px-12 font-mono">[{formatDate(previousPost?.publishedAt || '')}]</p>
+                            </Link>}
+
+                            {nextPost && <Link href={`/blog/${nextPost?.slug || ''}`} className="text-right group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
+                                <p className="text-px-14 mb-2">Next Post</p>
+                                <h4 className="text-h4 mb-2 group-hover:underline">{nextPost?.title || ''}</h4>
+                                <p className="text-px-12 font-mono">[{formatDate(nextPost?.publishedAt || '')}]</p>
+                            </Link>}
+                        </div>
+                    </div>
+                </div>
+            </BlockContainer>
+        </div>
+    );
+}
+
+const queryPostSlugs = async () => {
+    const payload = await getPayload({ config: configPromise });
+
+    const posts = await payload.find({
+        collection: 'posts',
+        draft: false,
+        limit: 1000,
+        overrideAccess: false,
+        pagination: false,
+        select: {
+            slug: true,
+        },
+    })
+
+    return posts;
+}
+
+const getPreviousAndNextPosts = cache(async ({ slug, featuredPost, post }: { slug: string, featuredPost?: Post | null, post?: Post | null }) => {
+    if (!post) return { previousPost: null, nextPost: null };
+
+    const isFeaturedPost = post?.id === featuredPost?.id;
+    const featuredPostId = featuredPost?.id || null;
+
+    const nextPost = isFeaturedPost
+        ? await queryFirstNonFeaturedPost(featuredPostId)
+        : await queryAdjacentPost({
+            date: post?.publishedAt || '',
+            slug: slug,
+            direction: 'next',
+            featuredPostId
+        });
+
+    let previousPost = null;
+
+    if (!isFeaturedPost) {
+        // First try to get a previous non-featured post
+        previousPost = await queryAdjacentPost({
+            date: post?.publishedAt || '',
+            slug: slug,
+            direction: 'previous',
+            featuredPostId: featuredPost?.id || null
+        });
+
+        // If theres no previous post, but featured is set 
+        if (!previousPost && featuredPost) {
+            previousPost = featuredPost;
+        }
+    }
+
+    return { previousPost, nextPost };
+});
+
+const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+    const payload = await getPayload({ config: configPromise });
+
+    const result = await payload.find({
+        collection: 'posts',
+        limit: 1,
+        overrideAccess: false,
+        pagination: false,
+        where: { slug: { equals: slug, }, },
+    })
+
+    return result.docs?.[0] || null
+});
+
+const queryAdjacentPost = cache(async ({ date, slug, direction = 'next', featuredPostId }: { date: string, slug: string, direction?: 'previous' | 'next', featuredPostId?: number | null }) => {
+    const payload = await getPayload({ config: configPromise });
+    const operator = direction === 'previous' ? { greater_than: date } : { less_than: date };
+    const sort = direction === 'previous' ? 'publishedAt' : '-publishedAt';
+
+    const post = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        limit: 1,
+        sort: sort,
+        where: {
+            publishedAt: operator,
+            slug: { not_equals: slug, },
+            id: { not_equals: featuredPostId || null },
+        },
+    });
+
+    return post.docs?.[0] || null;
+})
+
+const queryBlogLandingGlobal = unstable_cache(
+    async () => {
+        const payload = await getPayload({ config: configPromise });
+        const global = await payload.findGlobal({
+            slug: 'blogLanding',
+            depth: 2,
+            select: {
+                title: true,
+                subtitle: true,
+                featuredPost: true,
+                meta: true,
+            },
+        });
+
+        return global;
+    },
+    ['blogLanding'],
+    { tags: [`global_blogLanding`] }
+);
+
+const queryFirstNonFeaturedPost = cache(async (featuredPostId?: number | null) => {
+    const payload = await getPayload({ config: configPromise });
+    const post = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        limit: 1,
+        sort: '-publishedAt',
+        where: {
+            id: { not_equals: featuredPostId },
+        },
+    });
+
+    return post.docs?.[0] || null;
+});
