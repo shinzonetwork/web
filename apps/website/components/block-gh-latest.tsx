@@ -13,7 +13,18 @@ type LatestCommitData = {
     };
 } | null;
 
-async function getLatestCommit(): Promise<LatestCommitData> {
+type LatestCommit = {
+    data: LatestCommitData;
+    repo: string;
+} | null;
+
+const REPOS = [
+    { owner: 'shinzonetwork', name: 'shinzo-indexer-client' },
+    { owner: 'shinzonetwork', name: 'shinzo-view-creator' },
+    { owner: 'shinzonetwork', name: 'shinzo-host-client' },
+] as const;
+
+async function getLatestCommitForRepo(owner: string, repo: string): Promise<LatestCommit> {
     try {
         const token = process.env.GITHUB_TOKEN;
 
@@ -23,43 +34,69 @@ async function getLatestCommit(): Promise<LatestCommitData> {
         }
 
         const res = await fetch(
-            "https://api.github.com/repos/shinzonetwork/shinzo-host-client/commits/main",
+            `https://api.github.com/repos/${owner}/${repo}/commits/main`,
             {
                 headers: {
                     Accept: "application/vnd.github+json",
-                    Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                    Authorization: `Bearer ${token}`,
                     'User-Agent': 'node-fetch',
                 },
-                next: { revalidate: 3600 }, // cache for 60s
+                next: { revalidate: 3600 }, // revalidate at most every hour
             }
         );
 
         if (!res.ok) {
             const errorText = await res.text();
-
             try {
                 const errorJson = JSON.parse(errorText);
-                console.error('Error details:', JSON.stringify(errorJson, null, 2));
+                console.error(`Error fetching ${owner}/${repo}:`, JSON.stringify(errorJson, null, 2));
             } catch (e) {
-                console.error('Error response text:', e);
+                console.error(`Error response text for ${owner}/${repo}:`, errorText);
             }
-
             return null;
         }
 
-        const latestCommitData = await res.json<LatestCommitData>();
+        const commitData = await res.json<LatestCommitData>();
 
-        return latestCommitData;
+        return {
+            data: commitData,
+            repo: `${repo}`,
+        };
     } catch (error) {
+        console.error(`Error fetching ${owner}/${repo}:`, error);
+        return null;
+    }
+}
 
-        console.error(error);
+async function getLatestCommit(): Promise<LatestCommit> {
+    try {
+        const commits = await Promise.all(
+            REPOS.map(({ owner, name }) => getLatestCommitForRepo(owner, name))
+        );
+
+        const validCommits = commits.filter((commit): commit is NonNullable<LatestCommit> => commit !== null);
+
+        if (validCommits.length === 0) return null;
+
+
+        const latestCommit = validCommits.sort((a, b) => {
+            const da = new Date(a?.data?.commit?.author?.date || '').getTime();
+            const db = new Date(b?.data?.commit?.author?.date || '').getTime();
+            return db - da;
+        })[0];
+
+        return latestCommit;
+    } catch (error) {
+        console.error('Error fetching latest commit:', error);
         return null;
     }
 }
 
 export default async function BlockGhLatest() {
 
-    const latestCommitData = await getLatestCommit();
+    const latestCommit = await getLatestCommit();
+    const latestCommitRepo = latestCommit?.repo;
+    const latestCommitData = latestCommit?.data;
 
     if (!latestCommitData) {
         return null;
@@ -78,7 +115,9 @@ export default async function BlockGhLatest() {
                     <div className="font-mono text-szo-primary border border-szo-primary rounded-full px-4 py-1">Latest</div>
                     <div className=''>
                         <Link href={commitUrl} target="_blank">
-                            <span className="underline underline-offset-2">{commitMessage}</span> - {commitAuthor}
+                            <span className="underline underline-offset-2">
+                                {`[${latestCommitRepo}] ${commitMessage}`}
+                            </span> - {commitAuthor}
                         </Link>
                     </div>
 
