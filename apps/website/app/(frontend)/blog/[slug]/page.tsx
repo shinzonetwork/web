@@ -4,8 +4,10 @@ import { ImageMedia } from "@/components/image-media";
 import RichText from "@/components/rich-text";
 import { generateMeta } from "@/lib/generateMeta";
 import { asPopulated, formatDate, isPopulated } from "@/lib/utils";
+import { Post } from "@/payload/payload-types";
 import configPromise from '@payload-config';
 import { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
@@ -33,10 +35,12 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
     const { slug = '' } = await params;
     const post = await queryPostBySlug({ slug });
 
-    const nextPost = await queryAdjacentPost({ date: post?.publishedAt || '', slug: slug, direction: 'next' });
-    const previousPost = await queryAdjacentPost({ date: post?.publishedAt || '', slug: slug, direction: 'previous' });
+    const blogLanding = await queryBlogLandingGlobal();
 
     if (!post) return notFound();
+
+    const featuredPost = asPopulated(blogLanding?.featuredPost);
+    const { nextPost, previousPost } = await getPreviousAndNextPosts({ slug, featuredPost, post });
 
     const image = asPopulated(post.featuredImage);
 
@@ -65,7 +69,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
                             {previousPost && <Link href={`/blog/${previousPost?.slug || ''}`} className="group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
                                 <p className="text-px-14 mb-2">Previous Post</p>
                                 <h4 className="text-h4 mb-2 group-hover:underline">{previousPost?.title || ''}</h4>
-                                    <p className="text-px-12 font-mono">[{previousPost?.publishedAt || ''}]</p>
+                                <p className="text-px-12 font-mono">[{formatDate(previousPost?.publishedAt || '')}]</p>
                             </Link>}
 
                             {nextPost && <Link href={`/blog/${nextPost?.slug || ''}`} className="text-right group border border-szo-border p-4 hover:bg-szo-light-gray transition-all">
@@ -98,8 +102,43 @@ const queryPostSlugs = async () => {
     return posts;
 }
 
+const getPreviousAndNextPosts = cache(async ({ slug, featuredPost, post }: { slug: string, featuredPost?: Post | null, post?: Post | null }) => {
+    if (!post) return { previousPost: null, nextPost: null };
+
+    const isFeaturedPost = post?.id === featuredPost?.id;
+    const featuredPostId = featuredPost?.id || null;
+
+    const nextPost = isFeaturedPost
+        ? await queryFirstNonFeaturedPost(featuredPostId)
+        : await queryAdjacentPost({
+            date: post?.publishedAt || '',
+            slug: slug,
+            direction: 'next',
+            featuredPostId
+        });
+
+    let previousPost = null;
+
+    if (!isFeaturedPost) {
+        // First try to get a previous non-featured post
+        previousPost = await queryAdjacentPost({
+            date: post?.publishedAt || '',
+            slug: slug,
+            direction: 'previous',
+            featuredPostId: featuredPost?.id || null
+        });
+
+        // If theres no previous post, but featured is set 
+        if (!previousPost && featuredPost) {
+            previousPost = featuredPost;
+        }
+    }
+
+    return { previousPost, nextPost };
+});
+
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
-    const payload = await getPayload({ config: configPromise })
+    const payload = await getPayload({ config: configPromise });
 
     const result = await payload.find({
         collection: 'posts',
@@ -112,8 +151,8 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
     return result.docs?.[0] || null
 });
 
-const queryAdjacentPost = cache(async ({ date, slug, direction = 'next' }: { date: string, slug: string, direction?: 'previous' | 'next' }) => {
-    const payload = await getPayload({ config: configPromise })
+const queryAdjacentPost = cache(async ({ date, slug, direction = 'next', featuredPostId }: { date: string, slug: string, direction?: 'previous' | 'next', featuredPostId?: number | null }) => {
+    const payload = await getPayload({ config: configPromise });
     const operator = direction === 'previous' ? { greater_than: date } : { less_than: date };
     const sort = direction === 'previous' ? 'publishedAt' : '-publishedAt';
 
@@ -125,8 +164,44 @@ const queryAdjacentPost = cache(async ({ date, slug, direction = 'next' }: { dat
         where: {
             publishedAt: operator,
             slug: { not_equals: slug, },
+            id: { not_equals: featuredPostId || null },
         },
     });
 
     return post.docs?.[0] || null;
 })
+
+const queryBlogLandingGlobal = unstable_cache(
+    async () => {
+        const payload = await getPayload({ config: configPromise });
+        const global = await payload.findGlobal({
+            slug: 'blogLanding',
+            depth: 2,
+            select: {
+                title: true,
+                subtitle: true,
+                featuredPost: true,
+                meta: true,
+            },
+        });
+
+        return global;
+    },
+    ['blogLanding'],
+    { tags: [`global_blogLanding`] }
+);
+
+const queryFirstNonFeaturedPost = cache(async (featuredPostId?: number | null) => {
+    const payload = await getPayload({ config: configPromise });
+    const post = await payload.find({
+        collection: 'posts',
+        overrideAccess: false,
+        limit: 1,
+        sort: '-publishedAt',
+        where: {
+            id: { not_equals: featuredPostId },
+        },
+    });
+
+    return post.docs?.[0] || null;
+});
