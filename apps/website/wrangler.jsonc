@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "shinzo-website-cmsdev",
+  "name": "shinzo-website",
   "compatibility_date": "2025-12-03",
   "compatibility_flags": [
     // Enable Node.js API
@@ -36,7 +36,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "shinzo-website-cmsdev",
+      "service": "shinzo-website",
     },
   ],
 
