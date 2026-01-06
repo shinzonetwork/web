@@ -63,7 +63,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">チェーンをまたぐリードレイヤー</p>
             <h3>A Read Layer That Spans Chains</h3>
           </>
         ,
@@ -79,7 +79,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">これがもたらすもの</p>
             <h3>What This Unlocks</h3>
           </>
         ,
@@ -98,7 +98,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">作り直さずに構築</p>
             <h3>Build Without Rebuilding the Stack</h3>
           </>
         ,

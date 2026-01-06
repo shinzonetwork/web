@@ -47,7 +47,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">あなたの役割</p>
             <h3>Your Role in the Network</h3>
           </>
         ,
@@ -64,7 +64,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">ホストがビューを支える</p>
             <h3>Hosts Power the Views Builders Rely On</h3>
           </>
         ,
@@ -78,7 +78,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">軌道に戻る</p>
             <h3>Help Bring Blockchains Back on Course</h3>
           </>
         ,

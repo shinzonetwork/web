@@ -11,7 +11,6 @@ import Link from "next/link";
 
 // import BlockHomeTwoColumn from "@/components/block-home-two-column";
 // import BlockFeatures from "@/components/block-features";
-
 // import Feature1Image from '@/public/feature-1.png';
 // import Feature2Image from '@/public/feature-2.png';
 // import Feature3Image from '@/public/feature-3.png';
