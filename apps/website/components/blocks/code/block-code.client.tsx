@@ -18,7 +18,7 @@ export const Code: React.FC<Props> = ({ code, language = '' }) => {
                 prismIncludeLanguages(Prism, [language]);
             }
         }
-    }, []);
+    }, [language]);
 
     if (!code) return null
 
