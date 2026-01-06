@@ -54,7 +54,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">ビルダー体験の変化</p>
             <h3>How This Changes the Builder Experience</h3>
           </>
         ,
@@ -71,7 +71,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">バリデーター強化</p>
             <h3>A Stronger Role for Validators</h3>
           </>
         ,
@@ -86,7 +86,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">マルチチェーン対応</p>
             <h3>Designed for a Multi-Chain Reality
             </h3>
           </>

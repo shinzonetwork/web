@@ -41,27 +41,27 @@ export default function Page() {
 
     <BlockBeliefs title="Our Beliefs" beliefs={[
       {
-        eyebrow: "公共",
+        eyebrow: "真実",
         title: "Truth is public.",
         content: <p>Data from public blockchains should be accessible to all, not mediated by the few.</p>
       },
       {
-        eyebrow: "自由",
+        eyebrow: "検証",
         title: "Verification is freedom.",
         content: <p>When data can be proven, trust becomes optional.</p>
       },
       {
-        eyebrow: "革新",
+        eyebrow: "許可",
         title: "Permission kills innovation.",
         content: <p>Builders move faster when understanding the chain does not require access, contracts, or approval.</p>
       },
       {
-        eyebrow: "避けられない",
+        eyebrow: "相互運用",
         title: "Interoperability is inevitable.",
         content: <p>The future is not one chain, but many, connected through verifiable data.</p>
       },
       {
-        eyebrow: "真実",
+        eyebrow: "知能",
         title: "Intelligent systems require truth.",
         content: <p>As AI systems increasingly interact with blockchains, verifiable data becomes a prerequisite, not a nice-to-have.</p>
       }

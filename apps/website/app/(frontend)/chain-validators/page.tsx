@@ -55,7 +55,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">あなたがインデクサー</p>
             <h3>In Shinzō, <br />You Are The Indexer</h3>
           </>
         ,
@@ -68,7 +68,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">ShinzoHubとの関係</p>
             <h3>How This Relates to ShinzoHub</h3>
           </>
         ,
@@ -83,7 +83,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">バリデーター</p>
+            <p className="text-jp">軌道に戻る</p>
             <h3>Help Bring Blockchains Back on Course</h3>
           </>
         ,
