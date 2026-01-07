@@ -22,7 +22,7 @@ export default function BlockCta({ eyebrow, title, content, buttons, footerText 
                         {content && <div className="richtext my-4">{content}</div>}
                     </div>
                     <div className="col-span-9 col-start-3 ">
-                        {buttons && <div className="flex flex-wrap gap-2 mt-12">{buttons}</div>}
+                        {buttons && <div className="flex flex-col md:flex-row gap-2 mt-12">{buttons}</div>}
                         {footerText && <div className="richtext mt-12">{footerText}</div>}
                     </div>
                 </div>

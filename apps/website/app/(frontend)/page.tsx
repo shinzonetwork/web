@@ -97,9 +97,8 @@ export default async function Home() {
 
             <BlockContent
                 sectionTitle="Trust & Security"
-                title="Capability-based access when privacy is required,without sacrificing integrity."
+                title="Shinzo is wired for verification from the ground up."
                 content={<>
-                    <p>Shinzo is wired for verification from the ground up.</p>
                     <p>Content addressed data so integrity can be checked at a glance.<br />
                         Merkle linked histories so changes can be traced, not guessed.<br />
                         Recursive proofs that compress months of indexing into a single statement a client can verify.</p>

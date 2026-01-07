@@ -25,7 +25,7 @@ export default function BlockHero({ eyebrow, title, content, buttons, spacing = 
                             </div>
                         </div>
 
-                        {buttons && <div className="flex flex-wrap gap-2">
+                        {buttons && <div className="flex flex-col md:flex-row gap-2">
                             {buttons}
                         </div>}
                     </div>
