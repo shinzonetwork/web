@@ -28,7 +28,7 @@ export default function Page() {
         sectionImage: TitleValidators,
         sectionContent: <>
           <h2>You already secure the chains that <span className="highlight">[</span>power<span className="highlight">]</span> the decentralized world</h2>
-          <p>You already secure the chains that power the decentralized world. You keep networks alive, finalize blocks, and carry the cost of real decentralization.</p>
+          <p>You keep networks alive, finalize blocks, and carry the cost of real decentralization.</p>
           <p>Shinzo extends that role.</p>
           <p>With Shinzo, validators from existing blockchains become the origin points of verifiable data. The same infrastructure you use to secure blocks can also help the world read those blocks as they truly are.</p>
           <p className="text-raised">You are not an observer in Shinzo. <br />You are the source of truth it stands on.</p>
@@ -74,10 +74,8 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>ShinzoHub is Shinzo&apos;s own blockchain for incentives and market mechanics, and it has its own validators.</p>
-          <p>Your role is different.</p>
-          <p>As a validator of an existing blockchain running Shinzo, you secure the data read layer by producing verifiable data from the chains you validate today.</p>
-          <p>You do not validate ShinzoHub blocks. You extend the truth of the networks you already secure.</p>
-          <p>ShinzoHub will dogfood the same model. Its validators will secure incentives and market mechanics and also run the indexing engine, acting as indexers in their own right. We are not asking other networks to adopt a pattern we will not use ourselves.</p>
+          <p>Your role is different. <br />As a validator of an existing blockchain running Shinzo, you secure the data read layer by producing verifiable data from the chains you validate today. <br />You do not validate ShinzoHub blocks. You extend the truth of the networks you already secure.</p>
+          <p>ShinzoHub will dogfood the same model. <br />Its validators will secure incentives and market mechanics and also run the indexing engine, acting as indexers in their own right. <br />We are not asking other networks to adopt a pattern we will not use ourselves.</p>
         </>
       },
       {

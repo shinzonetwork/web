@@ -48,8 +48,6 @@ export default function Page() {
       }
     ]} />
 
-
-
     <BlockEditorialContent sections={[
       {
         sectionTitle:
@@ -93,7 +91,7 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>No two chains look the same anymore.</p>
-          <p>Some are L1s with broad ecosystems. Some are rollups or L3s optimized for specific workloads. Some are app-chains, private networks, or consortium deployments.</p>
+          <p>Some are L1s with broad ecosystems. <br />Some are rollups or L3s optimized for specific workloads. <br />Some are app-chains, private networks, or consortium deployments.</p>
           <p>Shinzo is built for that reality.</p>
           <p>It gives protocols a way to offer verifiable data access regardless of execution model or deployment environment, without fragmenting the developer experience or reintroducing central points of control.</p>
           <p>The read layer stops being an afterthought and becomes part of the protocol story itself.</p>
@@ -117,9 +115,14 @@ export default function Page() {
 
     <BlockCta
       title="Talk With Us"
-      content={<p>If you are thinking seriously about the long-term shape of your ecosystem and how people experience your chain, we should talk.</p>}
+      content={
+        <>
+          <p>If you are thinking seriously about the long-term shape of your ecosystem and how people experience your chain, we should talk. </p>
+          <p>Start a conversation about bringing Shinzō to your protocol:</p>
+        </>
+      }
       buttons={<>
-        <Button asChild><Link href="/">Start a conversation about bringing Shinzō to your protocol</Link></Button>
+        <Button asChild><Link href="/">Start a conversation</Link></Button>
       </>}
       footerText={<p className="text-raised">Your chain already delivers trustless consensus. <br />It deserves a trustless way to be read.</p>}
     />

@@ -30,9 +30,10 @@ export default function Page() {
         sectionContent: <>
           <h2>Blockchains promised a world where anyone could verify what is <span className="highlight">[</span>true<span className="highlight">]</span>.</h2>
           <p>But most applications still read from systems that ask you to trust someone else&apos;s infrastructure.</p>
-          <p>Balances, positions, histories, analytics, feeds. <br />They are usually coming from opaque databases that sit between your app and the chain.<br />Shinzo exists to change that.</p>
-          <p>Shinzo gives builders access to a trustless data read layer where blockchain data can be read, verified, and shared without relying on a single provider or custom backend. <br />You build the product.</p>
-          <p className="text-raised">Shinzo gives you truth you can rely on.</p>
+          <p>Balances, positions, histories, analytics, feeds. <br />Often come from opaque databases sitting between your app and the chain.</p>
+          <p>Shinzo exists to change that.</p>
+          <p>Shinzo provides a trustless read layer that enables blockchain data to be read, verified, and shared without relying on a single provider.</p>
+          <p className="text-raised">You build the product. <br />Shinzo gives you truth you can rely on.</p>
         </>
       },
       {
@@ -132,9 +133,7 @@ export default function Page() {
         sectionTitle: "Why Now",
         sectionContent: <>
           <h3>The read layer is still being defined. </h3>
-          <p>Most of the ecosystem accepts centralized indexing because there has been no real alternative.
-            <br />Shinzo changes that.
-          </p>
+          <p>Most of the ecosystem accepts centralized indexing because there has been no real alternative. Shinzo changes that.</p>
           <p>Joining early means:</p>
           <ul>
             <li>Shaping how builders interact with the read layer.</li>

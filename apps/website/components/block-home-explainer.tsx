@@ -31,7 +31,7 @@ export default function BlockHomeExplainer() {
 
                     <SectionTitle text="How Shinzō Flips the Read Layer" className="col-span-full" />
 
-                    <div className="col-span-full lg:col-span-8 lg:col-start-2 richtext mb-15 flex flex-col gap-5">
+                    <div className="col-span-full lg:col-span-8 lg:col-start-2 richtext mb-10 md:mb-15 flex flex-col gap-5">
                         <BlockNumbereredList items={[
                             { title: 'At the Source', content: <>A lightweight engine runs with validators, deriving application ready views directly from consensus events and attaching succinct proofs that link those views back to the chain.</> },
                             { title: 'Across the Network', content: <>Verifiable, content addressed artifacts replicate over a peer to peer fabric of Hosts for durability, resilience, and sovereignty. Hosts store, serve, and operate views over this data so every team does not have to rebuild indexing alone.</> },
@@ -47,7 +47,7 @@ export default function BlockHomeExplainer() {
 
                     <SectionTitle text="Why it matters" className="col-span-full" />
 
-                    <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-15 md:grid grid-cols-subgrid">
+                    <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-10 md:mb-15 md:grid grid-cols-subgrid">
                         <div className='col-span-full richtext mb-12'>
                             <p>Shinzo is built around the same principles blockchains were meant to uphold.</p>
                         </div>
@@ -78,7 +78,7 @@ export default function BlockHomeExplainer() {
 
                     <SectionTitle text="Who Shinzo Is For" className="col-span-full" />
 
-                    <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-15 md:grid grid-cols-subgrid">
+                    <div className="col-span-full lg:col-span-10 lg:col-start-2 richtext mb-10 md:mb-15 md:grid grid-cols-subgrid">
                         <div className='col-span-full richtext mb-12'>
                             <p>Shinzo is for anyone who cares about how blockchains are read, not just how they produce blocks.</p>
                             <p>Builders who want to ship products based on truth, not assumptions.
