@@ -64,7 +64,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">ホストがビューを支える</p>
+            <p className="text-jp">ホストによる閲覧の実装</p>
             <h3>Hosts Power the Views Builders Rely On</h3>
           </>
         ,
@@ -78,7 +78,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">軌道に戻る</p>
+            <p className="text-jp">軌道修正</p>
             <h3>Help Bring Blockchains Back on Course</h3>
           </>
         ,

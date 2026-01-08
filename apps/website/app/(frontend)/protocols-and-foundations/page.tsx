@@ -59,9 +59,11 @@ export default function Page() {
         sectionContent: <>
           <p>Builders do not choose ecosystems only on throughput or fees.<br /> They choose based on how quickly they can build something real and how much they can trust the infrastructure beneath them.</p>
           <p>A verifiable read layer changes that calculus.</p>
-          <p>Developers no longer need to run bespoke indexers just to answer basic questions.<br />
-            They no longer have to choose between speed and correctness.<br />
-            They no longer have to trust opaque infrastructure to understand onchain reality.</p>
+          <ul>
+            <li>Developers no longer need to run bespoke indexers just to answer basic questions.</li>
+            <li>They no longer have to choose between speed and correctness.</li>
+            <li>They no longer have to trust opaque infrastructure to understand onchain reality.</li>
+          </ul>
           <p>Instead, they get application-ready data that can be verified when it matters and reused across the ecosystem.</p>
           <p>This is the difference between tooling that works and infrastructure that compounds.</p>
         </>
@@ -76,9 +78,12 @@ export default function Page() {
         sectionContent: <>
           <p>In most ecosystems today, validators secure the chain and stop there.</p>
           <p>With Shinzo, their role expands naturally.</p>
-          <p>Validators become the point where raw blockchain data is indexed and proven. Their work feeds directly into the read layer that explorers, wallets, analytics tools, and applications depend on.</p>
+          <ul>
+            <li>Validators become the point where raw blockchain data is indexed and proven.</li>
+            <li>Their work feeds directly into the read layer that explorers, wallets, analytics tools, and applications depend on.</li>
+          </ul>
           <p>This creates a tighter loop between consensus and usage.</p>
-          <p>Validators are no longer invisible to the application layer.They become part of how the ecosystem&apos;s data is trusted and distributed.</p>
+          <p>Validators are no longer invisible to the application layer. They become part of how the ecosystem&apos;s data is trusted and distributed.</p>
         </>
       },
       {
@@ -91,7 +96,11 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>No two chains look the same anymore.</p>
-          <p>Some are L1s with broad ecosystems. <br />Some are rollups or L3s optimized for specific workloads. <br />Some are app-chains, private networks, or consortium deployments.</p>
+          <ul>
+            <li>Some are L1s with broad ecosystems.</li>
+            <li>Some are rollups or L3s optimized for specific workloads.</li>
+            <li>Some are app-chains, private networks, or consortium deployments.</li>
+          </ul>
           <p>Shinzo is built for that reality.</p>
           <p>It gives protocols a way to offer verifiable data access regardless of execution model or deployment environment, without fragmenting the developer experience or reintroducing central points of control.</p>
           <p>The read layer stops being an afterthought and becomes part of the protocol story itself.</p>

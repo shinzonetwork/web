@@ -57,7 +57,7 @@ export default function BlockHomeExplainer() {
                             <p>Every answer can be checked against cryptographic proofs that tie it back to the blockchain, instead of trusting that an indexer “probably did it right.”</p>
                         </div>
                         <div className='col-span-4 col-start-6 mb-10'>
-                            <div className='font-jp-serif text-szo-primary text-px-16'>真実</div>
+                            <div className='font-jp-serif text-szo-primary text-px-16'>トラストレス</div>
                             <h3 className='mt-0'>Trustless</h3>
                             <p>You are not locked into one vendor&apos;s backend or schema. The network itself produces and carries the data, backed by math, not reputation.</p>
                         </div>
