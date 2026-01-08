@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Builders"
       title={<>Build<span className="highlight">*</span> on <span className="highlight">*</span>Truth<span className="highlight">*,</span> <br />Not Assumptions<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://airtable.com/appmPt2PWiJYyMeM2/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Builder Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appArnqHuxhM3H2KF/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Builder Cohort</Link></Button>
       </>}
     />
 
@@ -151,7 +151,7 @@ export default function Page() {
       title="Join the Builder Cohort"
       content={<p>If you are building an application that depends on blockchain data and you want to build on a read layer that matches the ethos of the chains you deploy to, we want to work with you.</p>}
       buttons={<>
-        <Button asChild><Link href="https://airtable.com/appmPt2PWiJYyMeM2/pagm6ZJde3nJmQJgi/form">Apply to the Builder Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appArnqHuxhM3H2KF/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Builder Cohort</Link></Button>
       </>}
       footerText={<p className="text-raised">Blockchains are trustless. <br /> Your users should experience them that way.</p>}
     />

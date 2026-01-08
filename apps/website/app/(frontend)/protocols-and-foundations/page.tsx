@@ -131,7 +131,7 @@ export default function Page() {
         </>
       }
       buttons={<>
-        <Button asChild><Link href="/">Start a conversation</Link></Button>
+        <Button asChild><Link href="https://airtable.com/apppHJIr3VrRtUtK1/pagm6ZJde3nJmQJgi/form" target="_blank">Start a conversation</Link></Button>
       </>}
       footerText={<p className="text-raised">Your chain already delivers trustless consensus. <br />It deserves a trustless way to be read.</p>}
     />

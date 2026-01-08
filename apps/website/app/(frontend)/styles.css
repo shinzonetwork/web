@@ -175,7 +175,7 @@
   }
 
   .text-raised {
-    @apply text-px-16 md:text-px-18 font-mono leading-p150 font-light;
+    @apply text-px-16 md:text-px-18 font-mono leading-p150 font-medium;
   }
 
   .highlight {

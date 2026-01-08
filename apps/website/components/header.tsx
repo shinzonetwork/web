@@ -16,7 +16,6 @@ import { Button } from "./ui/button";
 export interface HeaderProps {
     navMenu: NavLink[];
     socialLinks: {
-        discord: string;
         github: string;
     };
     docsLink: string;

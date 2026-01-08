@@ -1,10 +1,12 @@
+import Analytics from "@/components/analytics";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
 import { cn } from "@/lib/utils";
-import React from 'react';
-import './styles.css';
 import { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
+import localFont from 'next/font/local';
+import React from 'react';
+import './styles.css';
 
 export const metadata: Metadata = {
   title: 'Shinzō | The Read Layer of Truth',
@@ -16,13 +18,15 @@ export const metadata: Metadata = {
   },
   robots: {
     index: process.env.ALLOW_INDEXING === "true",
-    follow: process.env.ALLOW_FOLLOWING === "true",
+    follow: process.env.ALLOW_INDEXING === "true",
   },
 }
 
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], });
-const fonts = `${inter.variable} ${geistMono.variable}`;
+const jpSerif = localFont({ src: '../../fonts/jp-serif.woff2', variable: "--font-jp-serif" });
+
+const fonts = `${inter.variable} ${geistMono.variable} ${jpSerif.variable}`;
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
@@ -30,15 +34,17 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={fonts}>
-        <div className={cn(`min-h-screen flex flex-col`)} >
-          <Header navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
+        <Analytics>
+          <div className={cn(`min-h-screen flex flex-col`)} >
+            <Header navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
 
-          <main className="grow">
-            {children}
-          </main>
+            <main className="grow">
+              {children}
+            </main>
 
-          <Footer footerNavMenu={footerNavMenu} />
-        </div>
+            <Footer footerNavMenu={footerNavMenu} />
+          </div>
+        </Analytics>
       </body>
     </html>
   )
@@ -56,7 +62,6 @@ export interface NavLink {
 }
 
 const socialLinks = {
-  discord: 'https://discord.shinzo.network',
   github: 'https://github.com/shinzonetwork',
 }
 
@@ -91,7 +96,32 @@ const headerNavMenu: NavLink[] = [
   {
     label: "Blog",
     href: "/blog",
-  }
+  },
+  {
+    label: "Community",
+    items: [
+      {
+        type: 'external',
+        label: "Discord",
+        href: "https://discord.shinzo.network",
+      },
+      {
+        type: 'external',
+        label: "GitHub",
+        href: "https://github.com/shinzonetwork",
+      },
+      {
+        type: 'external',
+        label: "X / Twitter",
+        href: "https://x.com/shinzonetwork",
+      },
+      {
+        type: 'external',
+        label: 'Telegram',
+        href: 'https://t.me/shinzonetwork'
+      }
+    ],
+  },
 ]
 
 const footerNavMenu: NavLink[] = [

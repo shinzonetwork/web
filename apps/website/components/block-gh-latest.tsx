@@ -111,9 +111,9 @@ export default async function BlockGhLatest() {
         <BlockSpacing spacing="py-5 bg-szo-light-gray">
             <BlockContainer>
 
-                <div className="flex flex-wrap items-center gap-3 text-px-12 font-medium">
+                <div className="flex whitespace-nowrap items-center gap-3 text-px-12 font-medium">
                     <div className="font-mono text-szo-primary border border-szo-primary rounded-full px-4 py-1">Latest</div>
-                    <div className=''>
+                    <div className='max-w-[500px] overflow-hidden text-ellipsis whitespace-nowrap'>
                         <Link href={commitUrl} target="_blank">
                             <span className="underline underline-offset-2">
                                 {`[${latestCommitRepo}] ${commitMessage}`}
