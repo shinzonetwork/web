@@ -17,7 +17,6 @@ export interface NavDesktopProps {
     className?: string;
     navMenu: NavLink[];
     socialLinks?: {
-        discord?: string;
         github?: string;
     };
     docsLink?: string;
@@ -29,7 +28,7 @@ export function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: N
 
     return (
         <div className={className}>
-            <NavigationMenu >
+            <NavigationMenu viewport={false}>
                 <NavigationMenuList className="flex-wrap" >
                     {navMenu.map((item, index) => (
                         <NavigationMenuItem key={index}>
@@ -63,9 +62,6 @@ export function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: N
             <div className="ml-auto">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-4">
-                        {socialLinks?.discord && (
-                            <Link href={socialLinks.discord} aria-label="Discord" target="_blank" className="hover:text-szo-primary"><DiscordIconSvg className="size-6" /> </Link>
-                        )}
                         {socialLinks?.github && (
                             <Link href={socialLinks.github} aria-label="GitHub" target="_blank" className="hover:text-szo-primary"><GithubIconSvg className="size-6" /> </Link>
                         )}

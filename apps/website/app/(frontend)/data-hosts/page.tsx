@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Data Hosts"
       title={<>Carry<span className="highlight">!</span> the Truth<span className="highlight">.</span> <br /> Power<span className="highlight" >*</span > the <span className="highlight">/</span>Read Layer<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://airtable.com/appLxPFVDnm3rjqKs/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appwvaYNwEJYHSa20/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort</Link></Button>
       </>}
     />
 
@@ -30,7 +30,7 @@ export default function Page() {
           <h2>Truth on chain only matters if it can be <span className="highlight">[</span>reached<span className="highlight">]</span></h2>
           <p>Shinzo turns blockchains into sources of verifiable data produced by validators. <br />Hosts take that verified data and make it durable, available, and usable across the ecosystem.</p>
           <p className="text-raised">You are the infrastructure that carries truth beyond its point of origin.</p>
-          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/docs/intro" target="_blank">Apply to the Host Cohort ↗</a></p>
+          <p><a className="text-inline-link font-mono font-bold" href="https://airtable.com/appwvaYNwEJYHSa20/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort ↗</a></p>
         </>
       },
       {
@@ -139,7 +139,7 @@ export default function Page() {
       title="Join the Host Cohort"
       content={<p>If you run infrastructure and want to become a Host in Shinzo’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
-        <Button asChild><Link href="https://airtable.com/appLxPFVDnm3rjqKs/pagm6ZJde3nJmQJgi/form">Apply to the Host Cohort</Link></Button>
+        <Button asChild><Link href="https://airtable.com/appwvaYNwEJYHSa20/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort</Link></Button>
       </>}
       footerText={<p className="text-raised">Validators prove the data. <br />Hosts carry it forward.</p>}
     />

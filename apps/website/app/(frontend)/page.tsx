@@ -18,7 +18,6 @@ import Link from "next/link";
 // import ForBuildersImage from '@/public/feature-builders.png';
 // import ForValidatorsImage from '@/public/feature-validators.png';
 
-
 export default async function Home() {
 
     return (
@@ -35,8 +34,7 @@ export default async function Home() {
                     <p>A data read layer that speaks in proofs, not permissions.</p>
                 </>}
                 buttons={<>
-                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form">Read the whitepaper</Link></Button>
-                    <Button variant="outline" asChild><Link href="https://discord.shinzo.network" target="_blank">Join Discord</Link></Button>
+                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form">Get the whitepaper first</Link></Button>
                     <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Join Telegram</Link></Button>
                 </>}
             />
@@ -116,7 +114,6 @@ export default async function Home() {
                     </>}
                 buttons={<>
                     <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form">Get the white paper first</Link></Button>
-                    <Button variant="outline" asChild><Link href="https://discord.shinzo.network" target="_blank">Join Discord</Link></Button>
                     <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Join Telegram</Link></Button>
                 </>}
             />
