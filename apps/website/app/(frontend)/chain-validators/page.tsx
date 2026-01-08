@@ -81,7 +81,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">軌道に戻る</p>
+            <p className="text-jp">軌道修正</p>
             <h3>Help Bring Blockchains Back on Course</h3>
           </>
         ,

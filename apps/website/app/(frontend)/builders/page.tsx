@@ -64,7 +64,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">チェーンをまたぐリードレイヤー</p>
+            <p className="text-jp">チェーンをまたぐ読込レイヤー</p>
             <h3>A Read Layer That Spans Chains</h3>
           </>
         ,
@@ -99,7 +99,7 @@ export default function Page() {
       {
         sectionTitle:
           <>
-            <p className="text-jp">作り直さずに構築</p>
+            <p className="text-jp">再構築不要</p>
             <h3>Build Without Rebuilding the Stack</h3>
           </>
         ,
@@ -119,13 +119,14 @@ export default function Page() {
         sectionTitle: "Who This Is For",
         sectionContent: <>
           <h3>Shinzo is built for teams who care about what blockchains were supposed to enable.</h3>
-          <p>Builders who want verification instead of trust.
-            <br />
-            Builders who are tired of having to run their own nodes or indexers because existing providers cannot be trusted to give a complete or accurate view of onchain reality.
-            <br />
-            Builders who do not want their product reliability tied to a single company&apos;s infrastructure.
-            <br />
-            Builders working across chains who are worn down by glue code, custom pipelines, and brittle integrations.</p>
+
+          <ul>
+            <li>Builders who want verification instead of trust.</li>
+            <li>Builders who are tired of having to run their own nodes or indexers because existing providers cannot be trusted to give a complete or accurate view of onchain reality.</li>
+            <li>Builders who do not want their product reliability tied to a single company&apos;s infrastructure.</li>
+            <li>Builders working across chains who are worn down by glue code, custom pipelines, and brittle integrations.</li>
+          </ul>
+
           <p>If your application depends on reading blockchain data, Shinzo is for you.</p>
         </>
       },
