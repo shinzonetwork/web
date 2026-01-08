@@ -1,0 +1,96 @@
+name: Release Webapp
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/webapp/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+          cache-dependency-path: 'apps/webapp/pnpm-lock.yaml'
+
+      - name: Install dependencies
+        working-directory: apps/webapp
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static export
+        working-directory: apps/webapp
+        run: pnpm build
+
+      - name: Generate version
+        id: version
+        run: |
+          # Generate version based on date and short commit hash
+          VERSION="v$(date +'%Y.%m.%d')-$(git rev-parse --short HEAD)"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated version: $VERSION"
+
+      - name: Create zip archive
+        working-directory: apps/webapp
+        run: |
+          zip -r webapp-${{ steps.version.outputs.version }}.zip out/
+          cp webapp-${{ steps.version.outputs.version }}.zip webapp-latest.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: webapp-${{ steps.version.outputs.version }}
+          name: Webapp Release ${{ steps.version.outputs.version }}
+          body: |
+            ## Webapp Static Build
+
+            This release contains the static export of the shinzo-webapp application.
+
+            **Commit:** ${{ github.sha }}
+            **Built at:** ${{ github.event.head_commit.timestamp }}
+
+            ### Changes
+            ${{ github.event.head_commit.message }}
+          files: apps/webapp/webapp-${{ steps.version.outputs.version }}.zip
+          draft: false
+          prerelease: false
+
+      - name: Update latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: webapp-latest
+          name: Webapp Latest
+          body: |
+            ## Webapp Static Build (Latest)
+
+            This release always contains the latest static export of the shinzo-webapp application.
+
+            **Version:** ${{ steps.version.outputs.version }}
+            **Commit:** ${{ github.sha }}
+            **Built at:** ${{ github.event.head_commit.timestamp }}
+
+            ### Changes
+            ${{ github.event.head_commit.message }}
+          files: apps/webapp/webapp-latest.zip
+          draft: false
+          prerelease: false
+          make_latest: true
+
