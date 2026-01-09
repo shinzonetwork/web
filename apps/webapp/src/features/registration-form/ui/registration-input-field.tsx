@@ -10,6 +10,7 @@ interface RegistrationInputFieldProps {
   onChange: (value: string) => void;
   isTextarea?: boolean;
   error?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -22,6 +23,7 @@ export function RegistrationInputField({
   onChange,
   isTextarea = false,
   error,
+  disabled = false,
 }: RegistrationInputFieldProps) {
   return (
     <div className="space-y-2">
@@ -35,9 +37,10 @@ export function RegistrationInputField({
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             onChange(e.target.value)
           }
+          disabled={disabled}
           className={`min-h-[100px] font-mono text-sm ${
             error ? "border-destructive focus-visible:ring-destructive" : ""
-          }`}
+          } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${id}-error` : undefined}
         />
@@ -49,9 +52,10 @@ export function RegistrationInputField({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
+          disabled={disabled}
           className={`font-mono ${
             error ? "border-destructive focus-visible:ring-destructive" : ""
-          }`}
+          } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${id}-error` : undefined}
         />

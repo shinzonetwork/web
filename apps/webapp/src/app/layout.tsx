@@ -5,6 +5,7 @@ import "./globals.css";
 import { AppProviders } from "@/providers";
 import { Toast } from "@/widget";
 import { RegistrationContextProvider } from "@/entities/registration-process";
+import { PrefillScript } from "@/features/registration-form/ui/prefill-script";
 
 export const metadata: Metadata = {
   title: "Shinzo",
@@ -19,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <PrefillScript />
+      </head>
       <body>
         <AppProviders>
           <RegistrationContextProvider>

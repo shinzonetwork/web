@@ -1,21 +1,41 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
 import type { RegistrationFormData } from "@/shared/lib";
 import { isHex } from "viem";
+import { usePrefillData } from "./use-prefill-data";
 
 /**
  * Hook to manage configuration form state with input sanitization
  */
 export function useRegistrationForm() {
+  const prefillData = usePrefillData();
+
+  // Convert prefill role string to EntityRole enum
+  const getInitialEntity = (): EntityRole => {
+    if (prefillData.role === 'host') return EntityRole.Host;
+    if (prefillData.role === 'indexer') return EntityRole.Indexer;
+    return EntityRole.Host;
+  };
+
+  // Determine which fields are prefilled (non-empty values from global data)
+  const prefilledFields = useMemo(() => ({
+    entity: prefillData.role !== undefined,
+    message: prefillData.signedMessage !== undefined,
+    defraPublicKey: prefillData.defraPublicKey !== undefined,
+    defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
+    peerId: prefillData.peerId !== undefined,
+    peerSignedMessage: prefillData.peerSignedMessage !== undefined,
+  }), [prefillData]);
+
   const [formData, setFormData] = useState<RegistrationFormData>({
-    message: undefined,
-    defraPublicKey: undefined,
-    defraSignedMessage: undefined,
-    peerId: undefined,
-    peerSignedMessage: undefined,
-    entity: EntityRole.Host,
+    message: prefillData.signedMessage,
+    defraPublicKey: prefillData.defraPublicKey,
+    defraSignedMessage: prefillData.defraPublicKeySignedMessage,
+    peerId: prefillData.peerId,
+    peerSignedMessage: prefillData.peerSignedMessage,
+    entity: getInitialEntity(),
   });
 
   const [fieldErrors, setFieldErrors] = useState<
@@ -87,5 +107,6 @@ export function useRegistrationForm() {
     handleUserRoleChange,
     fieldErrors,
     validateHexFields,
+    prefilledFields,
   };
 }
