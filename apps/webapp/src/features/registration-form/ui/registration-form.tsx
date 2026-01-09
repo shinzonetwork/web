@@ -21,7 +21,6 @@ export function RegistrationForm() {
     fieldErrors,
     validateHexFields,
     prefilledFields,
-    isPrefillLoading,
   } = useRegistrationForm();
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
@@ -53,17 +52,6 @@ export function RegistrationForm() {
   };
 
   const isRegistrationDisabled = !validateRegistrationForm(formData);
-
-  if (isPrefillLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-          <span className="ml-3 text-muted-foreground">Loading registration data...</span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
