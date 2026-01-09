@@ -10,14 +10,7 @@ import { usePrefillData } from "./use-prefill-data";
  * Hook to manage configuration form state with input sanitization
  */
 export function useRegistrationForm() {
-  const prefillData = usePrefillData();
-
-  // Convert prefill role string to EntityRole enum
-  const getInitialEntity = (): EntityRole => {
-    if (prefillData.role === "host") return EntityRole.Host;
-    if (prefillData.role === "indexer") return EntityRole.Indexer;
-    return EntityRole.Host;
-  };
+  const { isLoading: isPrefillLoading, ...prefillData } = usePrefillData();
 
   // Determine which fields are prefilled (non-empty values from global data)
   const prefilledFields = useMemo(
@@ -32,14 +25,38 @@ export function useRegistrationForm() {
     [prefillData]
   );
 
-  const [formData, setFormData] = useState<RegistrationFormData>({
-    message: prefillData.signedMessage,
-    defraPublicKey: prefillData.defraPublicKey,
-    defraSignedMessage: prefillData.defraPublicKeySignedMessage,
-    peerId: prefillData.peerId,
-    peerSignedMessage: prefillData.peerSignedMessage,
-    entity: getInitialEntity(),
-  });
+  // Compute form data based on prefill state
+  const computedFormData = useMemo((): RegistrationFormData => {
+    if (!isPrefillLoading && prefillData.signedMessage) {
+      return {
+        message: prefillData.signedMessage,
+        defraPublicKey: prefillData.defraPublicKey,
+        defraSignedMessage: prefillData.defraPublicKeySignedMessage,
+        peerId: prefillData.peerId,
+        peerSignedMessage: prefillData.peerSignedMessage,
+        entity: prefillData.role ?? EntityRole.Host,
+      };
+    }
+    return {
+      message: undefined,
+      defraPublicKey: undefined,
+      defraSignedMessage: undefined,
+      peerId: undefined,
+      peerSignedMessage: undefined,
+      entity: EntityRole.Host,
+    };
+  }, [isPrefillLoading, prefillData]);
+
+  const [formData, setFormData] = useState<RegistrationFormData>(computedFormData);
+
+  // Sync form data when computed data changes (prefill loads)
+  const currentFormKey = JSON.stringify(computedFormData);
+  const [lastFormKey, setLastFormKey] = useState(currentFormKey);
+
+  if (currentFormKey !== lastFormKey && computedFormData.message) {
+    setLastFormKey(currentFormKey);
+    setFormData(computedFormData);
+  }
 
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
@@ -111,5 +128,6 @@ export function useRegistrationForm() {
     fieldErrors,
     validateHexFields,
     prefilledFields,
+    isPrefillLoading,
   };
 }

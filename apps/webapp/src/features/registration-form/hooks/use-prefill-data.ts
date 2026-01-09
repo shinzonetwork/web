@@ -1,12 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Hex } from "viem";
-
-const SUPPORTED_ROLES = ["host", "indexer"] as const;
-type SupportedRole = (typeof SUPPORTED_ROLES)[number];
+import { EntityRole } from "@/shared/lib";
 
 export interface PrefillData {
-  role: SupportedRole | undefined;
+  role: EntityRole | undefined;
   signedMessage: Hex | undefined;
   defraPublicKey: Hex | undefined;
   defraPublicKeySignedMessage: Hex | undefined;
@@ -14,18 +13,20 @@ export interface PrefillData {
   peerSignedMessage: Hex | undefined;
 }
 
-/**
- * These values are templatable and can be replaced by an external server.
- *
- * If you change it here, also change `prefill-script.tsx` file
- */
-declare global {
-  var SHINZO_ROLE: SupportedRole;
-  var SHINZO_SIGNED_MESSAGE: string;
-  var SHINZO_DEFRA_PUBLIC_KEY: string;
-  var SHINZO_DEFRA_PUBLIC_KEY_SIGNED_MESSAGE: string;
-  var SHINZO_PEER_ID: string;
-  var SHINZO_PEER_SIGNED_MESSAGE: string;
+interface RegistrationResponse {
+  status: string;
+  registration?: {
+    enabled: boolean;
+    message: string;
+    defra_pk_registration: {
+      public_key: string;
+      signed_pk_message: string;
+    };
+    peer_id_registration: {
+      peer_id: string;
+      signed_peer_message: string;
+    };
+  };
 }
 
 /**
@@ -38,22 +39,86 @@ function toHexOrUndefined(value: string | undefined): Hex | undefined {
   return value as Hex;
 }
 
+function getUrlParams(): { role: EntityRole | undefined; url: string | undefined } {
+  if (typeof window === "undefined") {
+    return { role: undefined, url: undefined };
+  }
+
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const hostUrl = searchParams.get("host");
+  if (hostUrl) {
+    return { role: EntityRole.Host, url: hostUrl };
+  }
+
+  const indexerUrl = searchParams.get("indexer");
+  if (indexerUrl) {
+    return { role: EntityRole.Indexer, url: indexerUrl };
+  }
+
+  return { role: undefined, url: undefined };
+}
+
 /**
- * Hook that returns the prefill data injected by the server.
- * These values are set in the HTML template and can be customized
- * by the server before serving the static export.
+ * Hook that returns the prefill data fetched from the server URL in search params.
+ * The URL should be passed as `?host={url}` or `?indexer={url}`.
  */
-export function usePrefillData(): PrefillData {
-  return {
-    role: SUPPORTED_ROLES.includes(globalThis.SHINZO_ROLE)
-      ? globalThis.SHINZO_ROLE
-      : undefined,
-    signedMessage: toHexOrUndefined(globalThis.SHINZO_SIGNED_MESSAGE),
-    defraPublicKey: toHexOrUndefined(globalThis.SHINZO_DEFRA_PUBLIC_KEY),
-    defraPublicKeySignedMessage: toHexOrUndefined(
-      globalThis.SHINZO_DEFRA_PUBLIC_KEY_SIGNED_MESSAGE
-    ),
-    peerId: toHexOrUndefined(globalThis.SHINZO_PEER_ID),
-    peerSignedMessage: toHexOrUndefined(globalThis.SHINZO_PEER_SIGNED_MESSAGE),
-  };
+export function usePrefillData(): PrefillData & { isLoading: boolean } {
+  const [data, setData] = useState<PrefillData>({
+    role: undefined,
+    signedMessage: undefined,
+    defraPublicKey: undefined,
+    defraPublicKeySignedMessage: undefined,
+    peerId: undefined,
+    peerSignedMessage: undefined,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const { role, url } = getUrlParams();
+
+    if (!role || !url) {
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+          },
+        });
+        if (!response.ok) {
+          console.error(`Failed to fetch registration data: ${response.status}`);
+          return;
+        }
+
+        const json: RegistrationResponse = await response.json();
+
+        if (!json.registration?.enabled) {
+          console.error("Registration is not enabled on this server");
+          return;
+        }
+
+        setData({
+          role,
+          signedMessage: toHexOrUndefined(json.registration.message),
+          defraPublicKey: toHexOrUndefined(json.registration.defra_pk_registration.public_key),
+          defraPublicKeySignedMessage: toHexOrUndefined(json.registration.defra_pk_registration.signed_pk_message),
+          peerId: toHexOrUndefined(json.registration.peer_id_registration.peer_id),
+          peerSignedMessage: toHexOrUndefined(json.registration.peer_id_registration.signed_peer_message),
+        });
+      } catch (err) {
+        console.error("Failed to fetch registration data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { ...data, isLoading };
 }
