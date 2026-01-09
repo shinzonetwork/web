@@ -54,6 +54,26 @@ const getPagesSitemap = unstable_cache(
         loc: `${SITE_URL}/blog`,
         lastmod: dateFallback,
       },
+      {
+        loc: `${SITE_URL}/about`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/chain-validators`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/data-hosts`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/builders`,
+        lastmod: dateFallback,
+      },
+      {
+        loc: `${SITE_URL}/protocols-and-foundations`,
+        lastmod: dateFallback,
+      },
     ];
 
     const sitemap = results
