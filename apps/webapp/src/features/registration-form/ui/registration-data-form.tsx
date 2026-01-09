@@ -19,6 +19,7 @@ interface RegistrationDataFormProps {
   handleInputChange: (field: string, value: string) => void;
   handleUserRoleChange: (value: string) => void;
   fieldErrors?: Record<string, string | undefined>;
+  prefilledFields?: Record<string, boolean>;
 }
 
 export function RegistrationDataForm({
@@ -26,6 +27,7 @@ export function RegistrationDataForm({
   handleInputChange,
   handleUserRoleChange,
   fieldErrors = {},
+  prefilledFields = {},
 }: RegistrationDataFormProps) {
   const { address } = useAccount();
   const isIndexerWhitelisted = isIndexerWhitelistedFunction(
@@ -39,20 +41,27 @@ export function RegistrationDataForm({
           Select a role
         </Label>
         <RadioGroup
-          className="flex gap-4"
+          className={`flex gap-4 ${prefilledFields.entity ? "opacity-70 cursor-not-allowed" : ""}`}
           value={formData.entity.toString()}
           onValueChange={handleUserRoleChange}
+          disabled={prefilledFields.entity}
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="host" />
+            <RadioGroupItem
+              value="1"
+              id="host"
+              disabled={prefilledFields.entity}
+            />
             <Label htmlFor="host">Host</Label>
           </div>
-          {isIndexerWhitelisted && (
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id="indexer" />
-              <Label htmlFor="indexer">Indexer</Label>
-            </div>
-          )}
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem
+              value="2"
+              id="indexer"
+              disabled={!isIndexerWhitelisted || prefilledFields.entity}
+            />
+            <Label htmlFor="indexer">Indexer</Label>
+          </div>
         </RadioGroup>
       </div>
 
@@ -71,6 +80,7 @@ export function RegistrationDataForm({
           onChange={(value) => handleInputChange(input.id, value)}
           isTextarea={input.isTextarea}
           error={fieldErrors[input.id]}
+          disabled={prefilledFields[input.id] ?? false}
         />
       ))}
     </div>

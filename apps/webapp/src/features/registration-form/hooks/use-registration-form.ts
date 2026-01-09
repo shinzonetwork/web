@@ -1,22 +1,39 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
 import type { RegistrationFormData } from "@/shared/lib";
 import { isHex } from "viem";
+import { usePrefillData } from "./use-prefill-data";
 
 /**
  * Hook to manage configuration form state with input sanitization
  */
 export function useRegistrationForm() {
-  const [formData, setFormData] = useState<RegistrationFormData>({
-    message: undefined,
-    defraPublicKey: undefined,
-    defraSignedMessage: undefined,
-    peerId: undefined,
-    peerSignedMessage: undefined,
-    entity: EntityRole.Host,
-  });
+  const prefillData = usePrefillData();
+
+  // Determine which fields are prefilled (non-empty values from query params)
+  const prefilledFields = useMemo(
+    () => ({
+      entity: prefillData.role !== undefined,
+      message: prefillData.signedMessage !== undefined,
+      defraPublicKey: prefillData.defraPublicKey !== undefined,
+      defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
+      peerId: prefillData.peerId !== undefined,
+      peerSignedMessage: prefillData.peerSignedMessage !== undefined,
+    }),
+    [prefillData]
+  );
+
+  // Initialize form data with prefill values
+  const [formData, setFormData] = useState<RegistrationFormData>(() => ({
+    message: prefillData.signedMessage,
+    defraPublicKey: prefillData.defraPublicKey,
+    defraSignedMessage: prefillData.defraPublicKeySignedMessage,
+    peerId: prefillData.peerId,
+    peerSignedMessage: prefillData.peerSignedMessage,
+    entity: prefillData.role ?? EntityRole.Host,
+  }));
 
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
@@ -87,5 +104,6 @@ export function useRegistrationForm() {
     handleUserRoleChange,
     fieldErrors,
     validateHexFields,
+    prefilledFields,
   };
 }

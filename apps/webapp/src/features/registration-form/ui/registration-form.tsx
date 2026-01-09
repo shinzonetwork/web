@@ -20,6 +20,7 @@ export function RegistrationForm() {
     handleUserRoleChange,
     fieldErrors,
     validateHexFields,
+    prefilledFields,
   } = useRegistrationForm();
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
@@ -59,6 +60,7 @@ export function RegistrationForm() {
         handleInputChange={handleInputChange}
         handleUserRoleChange={handleUserRoleChange}
         fieldErrors={fieldErrors}
+        prefilledFields={prefilledFields}
       />
       <Button
         onClick={handleRegister}
