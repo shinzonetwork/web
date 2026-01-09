@@ -16,6 +16,11 @@ export default function Page() {
     <BlockHero
       eyebrow="About Shinzō"
       title={<>Where Truth Becomes Infrastructure<span className="highlight">/</span></>}
+      content={<p>Join the community:</p>}
+      buttons={<>
+        <Button asChild><Link href="https://x.com/shinzonetwork" target="_blank">X</Link></Button>
+        <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Telegram</Link></Button>
+      </>}
     />
 
     <BlockSectionedContent indented sections={[
@@ -96,7 +101,7 @@ export default function Page() {
         </>
       }
       buttons={<>
-        <Button asChild><Link href="https://discord.shinzo.network" target="_blank">Discord</Link></Button>
+        <Button asChild><Link href="https://x.com/shinzonetwork" target="_blank">X</Link></Button>
         <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Telegram</Link></Button>
       </>}
       footerText={<p className="text-raised">Shinzō — Read what’s real.<br />Truth made verifiable. Data made free.</p>}

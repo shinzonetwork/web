@@ -5,6 +5,7 @@ import BlockHero from "@/components/block-hero";
 import BlockHomeExplainer from "@/components/block-home-explainer";
 import BlockHomeIntro from "@/components/block-home-intro";
 import BlockLogoCarousel from "@/components/block-logo-carousel";
+import BlockSectionedContent from "@/components/block-sectioned-content";
 import CharBlockchainSvg from '@/components/svg/chars-blockchain.svg';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -93,19 +94,22 @@ export default async function Home() {
                 ]}
             /> */}
 
-            <BlockContent
-                sectionTitle="Trust & Security"
-                title="Shinzō is wired for verification from the ground up."
-                content={<>
-                    <p>Content addressed data so integrity can be checked at a glance.<br />
-                        Merkle linked histories so changes can be traced, not guessed.<br />
-                        Recursive proofs that compress months of indexing into a single statement a client can verify.</p>
-                    <p>When privacy is required, capability based access control and selective disclosure can limit who sees what, without breaking the integrity of the underlying data. <br />Behind the scenes, Shinzō is supported by a protocol that coordinates participation and incentives around data supply, without interfering with how data is produced or verified.</p>
-                    <p className="text-raised">The goal is simple: your app should never have to choose between usable data and verifiable data.</p>
-                </>}
-            />
+            <BlockSectionedContent sections={[
+                {
+                    sectionTitle: "Trust & Security",
+                    sectionContent: <>
+                        <h3>Shinzō is wired for verification from the ground up.</h3>
+                        <p>Content addressed data so integrity can be checked at a glance.<br />
+                            Merkle linked histories so changes can be traced, not guessed.<br />
+                            Recursive proofs that compress months of indexing into a single statement a client can verify.</p>
+                        <p>When privacy is required, capability based access control and selective disclosure can limit who sees what, without breaking the integrity of the underlying data. <br />Behind the scenes, Shinzō is supported by a protocol that coordinates participation and incentives around data supply, without interfering with how data is produced or verified.</p>
+                        <p className="text-raised">The goal is simple: your app should never have to choose between usable data and verifiable data.</p>
+                    </>
+                }
+            ]} />
 
             <BlockCta
+                indented={false}
                 title="Final Call"
                 content={
                     <>
