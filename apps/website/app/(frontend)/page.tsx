@@ -29,12 +29,12 @@ export default async function Home() {
                 content={<>
                     <p>
                         Every block carries truth. Somewhere between the chain and your app, that truth gets repackaged, rate limited, and resold.<br />
-                        Shinzo removes the middlemen.<br />
+                        Shinzō removes the middlemen.<br />
                     </p>
                     <p>A data read layer that speaks in proofs, not permissions.</p>
                 </>}
                 buttons={<>
-                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form">Get the whitepaper first</Link></Button>
+                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form" target="_blank">Get the whitepaper first</Link></Button>
                     <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Join Telegram</Link></Button>
                 </>}
             />
@@ -54,7 +54,7 @@ export default async function Home() {
                 </>}
                 cta={<>
                     <p>Without verifiable data, blockchains are unfinished.</p>
-                    <h4>Shinzo exists to finish what blockchains started.</h4>
+                    <h4>Shinzō exists to finish what blockchains started.</h4>
                     <p><Link className='font-mono font-bold' href="/about">Read About Shinzō↗</Link></p>
                 </>}
             />
@@ -95,12 +95,12 @@ export default async function Home() {
 
             <BlockContent
                 sectionTitle="Trust & Security"
-                title="Shinzo is wired for verification from the ground up."
+                title="Shinzō is wired for verification from the ground up."
                 content={<>
                     <p>Content addressed data so integrity can be checked at a glance.<br />
                         Merkle linked histories so changes can be traced, not guessed.<br />
                         Recursive proofs that compress months of indexing into a single statement a client can verify.</p>
-                    <p>When privacy is required, capability based access control and selective disclosure can limit who sees what, without breaking the integrity of the underlying data. <br />Behind the scenes, Shinzo is supported by a protocol that coordinates participation and incentives around data supply, without interfering with how data is produced or verified.</p>
+                    <p>When privacy is required, capability based access control and selective disclosure can limit who sees what, without breaking the integrity of the underlying data. <br />Behind the scenes, Shinzō is supported by a protocol that coordinates participation and incentives around data supply, without interfering with how data is produced or verified.</p>
                     <p className="text-raised">The goal is simple: your app should never have to choose between usable data and verifiable data.</p>
                 </>}
             />
@@ -113,7 +113,7 @@ export default async function Home() {
                         <p>Let the chain speak for itself.</p>
                     </>}
                 buttons={<>
-                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form">Get the white paper first</Link></Button>
+                    <Button asChild><Link href="https://airtable.com/app5jcI9cL7LN2TC0/pagm6ZJde3nJmQJgi/form" target="_blank">Get the white paper first</Link></Button>
                     <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Join Telegram</Link></Button>
                 </>}
             />
