@@ -2,8 +2,8 @@
 
 import type { Hex } from "viem";
 
-const SUPPORTED_ROLES = ['host', 'indexer'] as const;
-type SupportedRole = typeof SUPPORTED_ROLES[number];
+const SUPPORTED_ROLES = ["host", "indexer"] as const;
+type SupportedRole = (typeof SUPPORTED_ROLES)[number];
 
 export interface PrefillData {
   role: SupportedRole | undefined;
@@ -32,7 +32,7 @@ declare global {
  * Converts a string to Hex if it's a valid hex string, otherwise returns undefined.
  */
 function toHexOrUndefined(value: string | undefined): Hex | undefined {
-  if (!value || value === '') {
+  if (!value || value === "") {
     return undefined;
   }
   return value as Hex;
@@ -45,12 +45,15 @@ function toHexOrUndefined(value: string | undefined): Hex | undefined {
  */
 export function usePrefillData(): PrefillData {
   return {
-    role: SUPPORTED_ROLES.includes(globalThis.SHINZO_ROLE) ? globalThis.SHINZO_ROLE : undefined,
+    role: SUPPORTED_ROLES.includes(globalThis.SHINZO_ROLE)
+      ? globalThis.SHINZO_ROLE
+      : undefined,
     signedMessage: toHexOrUndefined(globalThis.SHINZO_SIGNED_MESSAGE),
     defraPublicKey: toHexOrUndefined(globalThis.SHINZO_DEFRA_PUBLIC_KEY),
-    defraPublicKeySignedMessage: toHexOrUndefined(globalThis.SHINZO_DEFRA_PUBLIC_KEY_SIGNED_MESSAGE),
+    defraPublicKeySignedMessage: toHexOrUndefined(
+      globalThis.SHINZO_DEFRA_PUBLIC_KEY_SIGNED_MESSAGE
+    ),
     peerId: toHexOrUndefined(globalThis.SHINZO_PEER_ID),
     peerSignedMessage: toHexOrUndefined(globalThis.SHINZO_PEER_SIGNED_MESSAGE),
   };
 }
-

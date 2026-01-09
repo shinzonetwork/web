@@ -14,20 +14,23 @@ export function useRegistrationForm() {
 
   // Convert prefill role string to EntityRole enum
   const getInitialEntity = (): EntityRole => {
-    if (prefillData.role === 'host') return EntityRole.Host;
-    if (prefillData.role === 'indexer') return EntityRole.Indexer;
+    if (prefillData.role === "host") return EntityRole.Host;
+    if (prefillData.role === "indexer") return EntityRole.Indexer;
     return EntityRole.Host;
   };
 
   // Determine which fields are prefilled (non-empty values from global data)
-  const prefilledFields = useMemo(() => ({
-    entity: prefillData.role !== undefined,
-    message: prefillData.signedMessage !== undefined,
-    defraPublicKey: prefillData.defraPublicKey !== undefined,
-    defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
-    peerId: prefillData.peerId !== undefined,
-    peerSignedMessage: prefillData.peerSignedMessage !== undefined,
-  }), [prefillData]);
+  const prefilledFields = useMemo(
+    () => ({
+      entity: prefillData.role !== undefined,
+      message: prefillData.signedMessage !== undefined,
+      defraPublicKey: prefillData.defraPublicKey !== undefined,
+      defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
+      peerId: prefillData.peerId !== undefined,
+      peerSignedMessage: prefillData.peerSignedMessage !== undefined,
+    }),
+    [prefillData]
+  );
 
   const [formData, setFormData] = useState<RegistrationFormData>({
     message: prefillData.signedMessage,

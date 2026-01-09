@@ -47,11 +47,19 @@ export function RegistrationDataForm({
           disabled={prefilledFields.entity}
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="1" id="host" disabled={prefilledFields.entity} />
+            <RadioGroupItem
+              value="1"
+              id="host"
+              disabled={prefilledFields.entity}
+            />
             <Label htmlFor="host">Host</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="2" id="indexer" disabled={!isIndexerWhitelisted || prefilledFields.entity} />
+            <RadioGroupItem
+              value="2"
+              id="indexer"
+              disabled={!isIndexerWhitelisted || prefilledFields.entity}
+            />
             <Label htmlFor="indexer">Indexer</Label>
           </div>
         </RadioGroup>
