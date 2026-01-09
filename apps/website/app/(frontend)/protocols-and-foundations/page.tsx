@@ -23,21 +23,21 @@ export default function Page() {
 
     <BlockSectionedContent indented sections={[
       {
-        sectionTitle: "Why Protocols Care About Shinzo",
+        sectionTitle: "Why Protocols Care About Shinzō",
         sectionImage: TitleProtocols,
         sectionContent: <>
           <h2>Your chain already delivers <span className="highlight">[</span>trustless consensus<span className="highlight">]</span></h2>
           <p>But much of what gets built on top of it is still read through centralized infrastructure.</p>
           <p>Explorers, wallets, dashboards, analytics, bots. They often depend on a small set of services that sit between your ecosystem and its own data.</p>
           <p>That gap quietly shapes how your chain is experienced. What builders can trust. What users see. What fails when infrastructure goes down.</p>
-          <p className="text-raised">Shinzo exists so protocols can offer a data read layer that matches the principles the chain is built on: verifiable, trustless, and open.</p>
+          <p className="text-raised">Shinzō exists so protocols can offer a data read layer that matches the principles the chain is built on: verifiable, trustless, and open.</p>
         </>
       },
       {
         sectionTitle: "Extending the Protocol Beyond Consensus",
         sectionContent: <>
           <p>Consensus determines what is written. The read layer determines what is seen.</p>
-          <p>Bringing Shinzo into your ecosystem extends your protocol beyond block production into how data is accessed, shaped, and shared.</p>
+          <p>Bringing Shinzō into your ecosystem extends your protocol beyond block production into how data is accessed, shaped, and shared.</p>
           <p>Validators on your chain become the source of verifiable indexed data.
             <br />Hosts carry that data forward, keep it available, and operate the views builders rely on.
             <br />Applications read from a shared, trustless data layer instead of stitching together proprietary APIs.
@@ -77,7 +77,7 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>In most ecosystems today, validators secure the chain and stop there.</p>
-          <p>With Shinzo, their role expands naturally.</p>
+          <p>With Shinzō, their role expands naturally.</p>
           <ul>
             <li>Validators become the point where raw blockchain data is indexed and proven.</li>
             <li>Their work feeds directly into the read layer that explorers, wallets, analytics tools, and applications depend on.</li>
@@ -101,7 +101,7 @@ export default function Page() {
             <li>Some are rollups or L3s optimized for specific workloads.</li>
             <li>Some are app-chains, private networks, or consortium deployments.</li>
           </ul>
-          <p>Shinzo is built for that reality.</p>
+          <p>Shinzō is built for that reality.</p>
           <p>It gives protocols a way to offer verifiable data access regardless of execution model or deployment environment, without fragmenting the developer experience or reintroducing central points of control.</p>
           <p>The read layer stops being an afterthought and becomes part of the protocol story itself.</p>
         </>

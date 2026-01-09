@@ -22,7 +22,7 @@ export default function Page() {
       {
         sectionTitle: "Our Mission",
         sectionContent: <>
-          <p>Shinzo exists to make blockchain data as open, verifiable, and permissionless as the networks it comes from. The internet gave us information. Blockchains gave us consensus. Shinzo gives us both, a way to read truth directly from the source.</p>
+          <p>Shinzō exists to make blockchain data as open, verifiable, and permissionless as the networks it comes from. The internet gave us information. Blockchains gave us consensus. Shinzō gives us both, a way to read truth directly from the source.</p>
           <p>We believe data should not be filtered through intermediaries or locked behind APIs. It should flow freely, provably, and without trust.</p>
           <p>Our mission is simple:</p>
           <h3>To make the data layer of the decentralized world as trustless as the chains themselves.</h3>
@@ -31,9 +31,9 @@ export default function Page() {
       {
         sectionTitle: "What We're Building",
         sectionContent: <>
-          <p>Shinzo is a trustless data read layer for blockchains.</p>
+          <p>Shinzō is a trustless data read layer for blockchains.</p>
           <p>It connects applications directly to data produced and verified at the source of consensus, without relying on centralized infrastructure to extract, reshape, or reinterpret it.</p>
-          <p>By turning networks themselves into the place data is read from, Shinzo creates a shared, verifiable fabric where blockchain data can be accessed, proven, and composed across chains without central control.</p>
+          <p>By turning networks themselves into the place data is read from, Shinzō creates a shared, verifiable fabric where blockchain data can be accessed, proven, and composed across chains without central control.</p>
           <p className="text-raised">The result is a foundation where truth is not inferred or trusted, but demonstrated.</p>
         </>
       }
@@ -85,7 +85,7 @@ export default function Page() {
       content={
         <>
           <p>
-            Shinzo is built by developers, researchers, and operators who believe that trust should be optional and verification should be universal.
+            Shinzō is built by developers, researchers, and operators who believe that trust should be optional and verification should be universal.
           </p>
           <p>
             If you are working on the future of blockchain infrastructure, data, or systems that depend on truth, there is a place for you here.
@@ -99,7 +99,7 @@ export default function Page() {
         <Button asChild><Link href="https://discord.shinzo.network" target="_blank">Discord</Link></Button>
         <Button variant="outline" asChild><Link href="https://t.me/shinzonetwork" target="_blank">Telegram</Link></Button>
       </>}
-      footerText={<p className="text-raised">Shinzo — Read what’s real.<br />Truth made verifiable. Data made free.</p>}
+      footerText={<p className="text-raised">Shinzō — Read what’s real.<br />Truth made verifiable. Data made free.</p>}
     />
 
 

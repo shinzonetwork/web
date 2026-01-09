@@ -29,9 +29,9 @@ export default function Page() {
         sectionContent: <>
           <h2>You already secure the chains that <span className="highlight">[</span>power<span className="highlight">]</span> the decentralized world</h2>
           <p>You keep networks alive, finalize blocks, and carry the cost of real decentralization.</p>
-          <p>Shinzo extends that role.</p>
-          <p>With Shinzo, validators from existing blockchains become the origin points of verifiable data. The same infrastructure you use to secure blocks can also help the world read those blocks as they truly are.</p>
-          <p className="text-raised">You are not an observer in Shinzo. <br />You are the source of truth it stands on.</p>
+          <p>Shinzō extends that role.</p>
+          <p>With Shinzō, validators from existing blockchains become the origin points of verifiable data. The same infrastructure you use to secure blocks can also help the world read those blocks as they truly are.</p>
+          <p className="text-raised">You are not an observer in Shinzō. <br />You are the source of truth it stands on.</p>
         </>
       },
       {
@@ -61,8 +61,8 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>On your chain, you are a validator.</p>
-          <p>In Shinzo, when you run the indexing engine, that same role is what we call an indexer.</p>
-          <p>Any time you see “indexer” in Shinzo, it refers to operators like you, validators of existing blockchains who run Shinzo beside their nodes and produce verifiable data from the chains they secure.</p>
+          <p>In Shinzō, when you run the indexing engine, that same role is what we call an indexer.</p>
+          <p>Any time you see “indexer” in Shinzō, it refers to operators like you, validators of existing blockchains who run Shinzō beside their nodes and produce verifiable data from the chains they secure.</p>
         </>
       },
       {
@@ -73,8 +73,8 @@ export default function Page() {
           </>
         ,
         sectionContent: <>
-          <p>ShinzoHub is Shinzo&apos;s own blockchain for incentives and market mechanics, and it has its own validators.</p>
-          <p>Your role is different. <br />As a validator of an existing blockchain running Shinzo, you secure the data read layer by producing verifiable data from the chains you validate today. <br />You do not validate ShinzoHub blocks. You extend the truth of the networks you already secure.</p>
+          <p>ShinzoHub is Shinzō&apos;s own blockchain for incentives and market mechanics, and it has its own validators.</p>
+          <p>Your role is different. <br />As a validator of an existing blockchain running Shinzō, you secure the data read layer by producing verifiable data from the chains you validate today. <br />You do not validate ShinzoHub blocks. You extend the truth of the networks you already secure.</p>
           <p>ShinzoHub will dogfood the same model. <br />Its validators will secure incentives and market mechanics and also run the indexing engine, acting as indexers in their own right. <br />We are not asking other networks to adopt a pattern we will not use ourselves.</p>
         </>
       },
@@ -86,7 +86,7 @@ export default function Page() {
           </>
         ,
         sectionContent: <>
-          <p>Running Shinzo lets validators help restore the trustless, verifiable, permissionless data layer blockchains were always meant to have, while unlocking real benefits along the way.</p>
+          <p>Running Shinzō lets validators help restore the trustless, verifiable, permissionless data layer blockchains were always meant to have, while unlocking real benefits along the way.</p>
           <ul>
             <li>New earning potential from the hardware you already operate.</li>
             <li>A central role in the trustless data read layer.</li>
@@ -121,7 +121,7 @@ export default function Page() {
             <li>Influence which chains and data views are supported first.</li>
             <li>Contribute directly to the protocol, including building indexing engines for new chains if you choose.</li>
             <li>Help refine incentives for indexers and Hosts as the system takes shape.</li>
-            <li>Establish yourself as an early operator and contributor in the Shinzo ecosystem.</li>
+            <li>Establish yourself as an early operator and contributor in the Shinzō ecosystem.</li>
           </ul>
           <p>This is not a wait and see moment. <br />This is a build with us moment.</p>
         </>
@@ -130,7 +130,7 @@ export default function Page() {
 
     <BlockCta
       title="Join the Indexer Cohort"
-      content={<p>If you run validators or node infrastructure and want to become an indexer in Shinzo’s trustless data read layer, we want to work with you.</p>}
+      content={<p>If you run validators or node infrastructure and want to become an indexer in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
         <Button asChild><Link href="https://airtable.com/appgl0TqvkpUCblSB/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Indexer Cohort</Link></Button>
       </>}

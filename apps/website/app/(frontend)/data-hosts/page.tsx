@@ -28,7 +28,7 @@ export default function Page() {
         sectionImage: TitleHosts,
         sectionContent: <>
           <h2>Truth on chain only matters if it can be <span className="highlight">[</span>reached<span className="highlight">]</span></h2>
-          <p>Shinzo turns blockchains into sources of verifiable data produced by validators. <br />Hosts take that verified data and make it durable, available, and usable across the ecosystem.</p>
+          <p>Shinzō turns blockchains into sources of verifiable data produced by validators. <br />Hosts take that verified data and make it durable, available, and usable across the ecosystem.</p>
           <p className="text-raised">You are the infrastructure that carries truth beyond its point of origin.</p>
           <p><a className="text-inline-link font-mono font-bold" href="https://airtable.com/appwvaYNwEJYHSa20/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort ↗</a></p>
         </>
@@ -36,7 +36,7 @@ export default function Page() {
       {
         sectionTitle: "What Running a Host Means",
         sectionContent: <>
-          <p>When you run a Host in Shinzo, you take responsibility for making verifiable blockchain data usable in production.</p>
+          <p>When you run a Host in Shinzō, you take responsibility for making verifiable blockchain data usable in production.</p>
           <p>You ingest verified data produced by validators, persist it reliably, and answer queries from builders who depend on consistent access. Your work ensures the read layer is fast, resilient, and reliable for the builders who depend on it.</p>
           <p className="text-raised">This is operational infrastructure. <br />It is always on, always serving, and always depended on.</p>
         </>
@@ -97,7 +97,7 @@ export default function Page() {
       {
         sectionTitle: "What You Get",
         sectionContent: <>
-          <p>Running a Host in Shinzo creates real upside for infrastructure you already know how to operate.</p>
+          <p>Running a Host in Shinzō creates real upside for infrastructure you already know how to operate.</p>
           <ul>
             <li>Earn from storing and serving verifiable blockchain data.</li>
             <li>Earn more by running views that builders depend on.</li>
@@ -137,7 +137,7 @@ export default function Page() {
 
     <BlockCta
       title="Join the Host Cohort"
-      content={<p>If you run infrastructure and want to become a Host in Shinzo’s trustless data read layer, we want to work with you.</p>}
+      content={<p>If you run infrastructure and want to become a Host in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
         <Button asChild><Link href="https://airtable.com/appwvaYNwEJYHSa20/pagm6ZJde3nJmQJgi/form" target="_blank">Apply to the Host Cohort</Link></Button>
       </>}
