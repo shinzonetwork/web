@@ -51,7 +51,7 @@ jobs:
       - name: Create zip archive
         working-directory: apps/webapp
         run: |
-          zip -r webapp-${{ steps.version.outputs.version }}.zip out/
+          zip -9 -r webapp-${{ steps.version.outputs.version }}.zip out/
           cp webapp-${{ steps.version.outputs.version }}.zip webapp-latest.zip
 
       - name: Create GitHub Release
