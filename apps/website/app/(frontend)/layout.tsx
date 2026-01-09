@@ -112,7 +112,7 @@ const headerNavMenu: NavLink[] = [
       },
       {
         type: 'external',
-        label: "X / Twitter",
+        label: "X",
         href: "https://x.com/shinzonetwork",
       },
       {
@@ -174,7 +174,7 @@ const footerNavMenu: NavLink[] = [
       },
       {
         type: 'external',
-        label: "X / Twitter",
+        label: "X",
         href: "https://x.com/shinzonetwork",
       },
       {

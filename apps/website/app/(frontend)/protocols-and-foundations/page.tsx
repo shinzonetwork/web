@@ -18,6 +18,7 @@ export default function Page() {
       eyebrow="For Protocols and Foundations"
       title={<>Give Your Chain the <span className="highlight">{`<`}</span>Read Layer<span className="highlight">{`>`}</span> <span className="highlight">[</span>It Deserves<span className="highlight">]</span><span className="highlight">{`/`}</span></>}
       buttons={<>
+        <Button asChild><Link href="https://airtable.com/apppHJIr3VrRtUtK1/pagm6ZJde3nJmQJgi/form" target="_blank">Start a conversation</Link></Button>
       </>}
     />
 
