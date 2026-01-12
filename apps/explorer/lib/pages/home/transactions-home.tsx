@@ -8,6 +8,7 @@ import { cn } from '@/shared/utils/utils';
 import { HALF_CONTAINER_CLASS } from './blocks-home';
 import { useShortTransactions } from './use-short-transactions';
 import { useHighlight } from './use-highlight';
+import { CopyButton } from '@/shared/ui/button';
 
 export const TransactionsHome = () => {
   const { data: transactions, isLoading } = useShortTransactions();
@@ -67,34 +68,20 @@ export const TransactionsHome = () => {
                   <div className="flex flex-col gap-1">
                     {value && (
                       <div className="flex flex-row gap-2">
-                        <Typography>From</Typography>
-                        <Link
-                          href={`/address/${value}`}
-                          className="font-mono text-sm hover:underline pt-[2]"
-                        >
-                          <Typography
-                            color="accent"
-                            className="font-mono text-sm hover:underline"
-                          >
-                            {formatHash(value, 8, 6)}
-                          </Typography>
-                        </Link>
-                      </div>
+                        <Typography>From: </Typography>
+                        <div className="flex items-center gap-1 text-sm text-foreground">
+                          {formatHash(value ?? '', 8, 6)}
+                          <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                        </div>
+                     </div>
                     )}
                     {tx?.to && (
                       <div className="flex flex-row gap-2">
-                        <Typography>To</Typography>
-                        <Link
-                          href={`/address/${tx?.to}`}
-                          className="font-mono text-sm hover:underline pt-[2]"
-                        >
-                          <Typography
-                            color="accent"
-                            className="font-mono text-sm hover:underline"
-                          >
-                            {formatHash(tx?.to, 8, 6)}
-                          </Typography>
-                        </Link>
+                        <Typography>To: </Typography>
+                        <div className="flex items-center gap-1 text-sm text-foreground">
+                          {formatHash(value ?? '', 8, 6)}
+                          <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                        </div>
                       </div>
                     )}
                   </div>

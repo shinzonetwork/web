@@ -18,6 +18,7 @@ import {
   TableNullableCell,
 } from '@/shared/ui/table';
 import { useBlocks } from './use-blocks';
+import { CopyButton } from "@/shared/ui/button";
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;
@@ -82,12 +83,10 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
             <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
-                <Link
-                  href={`/address/${value}`}
-                  className="font-mono text-sm hover:underline"
-                >
-                  {formatHash(value, 8, 6)}
-                </Link>
+                <div className="flex items-center gap-1 text-sm text-foreground">
+                  {formatHash(value ?? '', 8, 6)}
+                  <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                </div>
               )}
             </TableNullableCell>
 

@@ -108,8 +108,6 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
       <DataItem
         title='From'
         value={tx.from}
-        link={`/address/${tx.from}`}
-        copyable
         loading={isLoading}
       >
         {tx.from}
@@ -118,8 +116,6 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
       <DataItem
         title="To"
         value={tx.to}
-        link={`/address/${tx.to}`}
-        copyable
         loading={isLoading}
       >
         {tx.to}
@@ -183,7 +179,6 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title="Input Data"
         value={tx.input}
         loading={isLoading}
-        copyable
         allowWrap
         wrapAt={tx.input && tx.input.length > 100 ? 100 : tx.input?.length}
       >

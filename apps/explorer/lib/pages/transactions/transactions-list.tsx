@@ -8,6 +8,7 @@ import {
   TableNullableCell,
 } from '@/shared/ui/table';
 import { Transaction } from '@/shared/graphql';
+import { CopyButton } from '@/shared/ui/button';
 
 export const TransactionsList = ({ transactions, isLoading }: { transactions: Transaction[] | undefined, isLoading: boolean }) => {
   const formatValue = (value: string) => {
@@ -58,17 +59,19 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
 
             <TableNullableCell value={tx?.from}>
               {(value) => (
-                <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
-                  {formatHash(value, 8, 6)}
-                </Link>
+                <div className="flex items-center gap-1 text-sm text-foreground">
+                 {formatHash(value ?? '', 8, 6)}
+                 <CopyButton text={value ?? ''} className="text-muted-foreground" />
+               </div>
               )}
             </TableNullableCell>
 
             <TableNullableCell value={tx?.to}>
               {(value) => (
-                <Link href={`/address/${value}`} className="font-mono text-sm hover:underline">
-                  {formatHash(value, 8, 6)}
-                </Link>
+                <div className="flex items-center gap-1 text-sm text-foreground">
+                  {formatHash(value ?? '', 8, 6)}
+                  <CopyButton text={value ?? ''} className="text-muted-foreground" />
+               </div>
               )}
             </TableNullableCell>
 
