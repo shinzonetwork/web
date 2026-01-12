@@ -11,6 +11,7 @@ import { cn } from '@/shared/utils/utils';
 import { useShortBlocks } from './use-short-blocks';
 import { useHighlight } from './use-highlight';
 import { useMemo } from 'react';
+import { CopyButton } from "@/shared/ui/button";
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
@@ -88,19 +89,9 @@ export const BlocksHome = () => {
 
               <TableNullableCell value={block?.miner} align="center" className={highlightClass}>
                 {(value) => (
-                  <div className="flex flex-row gap-1">
-                    <Typography>Miner:</Typography>
-                    <Link
-                      href={`/address/${value}`}
-                      className="font-mono text-sm hover:underline pt-[2]"
-                    >
-                      <Typography
-                        color="accent"
-                        className="font-mono text-sm hover:underline"
-                      >
-                        {formatHash(value, 8, 6)}
-                      </Typography>
-                    </Link>
+                  <div className="flex items-center gap-1 text-sm text-foreground">
+                    {formatHash(value ?? '', 8, 6)}
+                    <CopyButton text={value ?? ''} className="text-muted-foreground" />
                   </div>
                 )}
               </TableNullableCell>

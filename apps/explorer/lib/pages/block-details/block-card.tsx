@@ -26,7 +26,6 @@ export const BlockCard = ({ height }: BlockCardProps) => {
         <DataItem
           title="Block Height"
           value={block.number}
-          copyable
           loading={isLoading}
         >
           {block.number}
@@ -35,7 +34,6 @@ export const BlockCard = ({ height }: BlockCardProps) => {
         <DataItem
           title="Timestamp"
           value={block.number}
-          copyable
           loading={isLoading}
         >
           {block.timestamp &&
@@ -45,8 +43,6 @@ export const BlockCard = ({ height }: BlockCardProps) => {
         <DataItem
           title="Miner"
           value={block.miner}
-          link={block.miner ? `/address/${block.miner}` : undefined}
-          copyable
           loading={isLoading}
         >
           {block.miner}
