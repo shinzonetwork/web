@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Arbitrum",
+    "slug": "arbitrum",
+    "image": "/network-images/arbitrum.svg",
+    "description": "Arbitrum is a layer-two (L2) scaling solution for Ethereum. It uses optimistic rollups to enhance transaction speed, scalability, and cost-efficiency on the network. Because it settles its data on Ethereum, Arbitrum inherits Ethereum’s security and broad compatibility. At the same time, it delivers higher throughput and lower fees by shifting most computation and storage off-chain."
+  },
+  {
+    "name": "Avalanche",
+    "slug": "avalanche",
+    "image": "/network-images/avalanche.svg",
+    "description": "Avalanche is a decentralized, open-source Layer-1 blockchain platform created by Ava Labs and launched in September 2020. Its design includes three primary blockchains—the X-Chain, C-Chain, and P-Chain—each responsible for a specific function: managing assets, executing smart contracts, and coordinating the network."
+  },
+  {
+    "name": "Bitcoin",
+    "slug": "bitcoin",
+    "image": "/network-images/bitcoin.svg",
+    "description": "Bitcoin is the first decentralized cryptocurrency. Rooted in a free-market philosophy, it was introduced in 2008 when an unknown individual published a white paper under the pseudonym Satoshi Nakamoto. Bitcoin began being used as a currency in 2009 with the release of its open-source software."
+  },
+  {
+    "name": "BNB Chain",
+    "slug": "bnb-chain",
+    "image": "/network-images/bnb-chain.svg",
+    "description": "The BNB Chain ecosystem is decentralized, open-source, and driven by its community. In February 2022, Binance combined the Binance Smart Chain and Binance Chain to create the BNB Chain. It maintains Ethereum Virtual Machine compatibility, supports robust consensus mechanisms, and has grown into a multi-chain hub. Today, it ranks among the world’s largest cryptocurrency ecosystems, with its native token BNB holding the third-largest market cap at $40.9 billion (excluding stablecoins)."
+  },
+  {
+    "name": "Cosmos",
+    "slug": "cosmos",
+    "image": "/network-images/cosmos.svg",
+    "description": "The Cosmos blockchain was developed to enable distributed ledgers to communicate without relying on a central server. With over $151 billion in digital assets under management, Cosmos is the first fully open platform to provide interoperability between different networks, including Binance Chain, Terra, and Crypto.org, among others. Its native cryptocurrency, ATOM, powers and secures an ecosystem of blockchains designed to scale and interact seamlessly with one another."
+  },
+  {
+    "name": "Ethereum",
+    "slug": "ethereum",
+    "image": "/network-images/ethereum.svg",
+    "description": "Ethereum is a decentralized software platform built on blockchain technology. Its native cryptocurrency is ether (ETH), which it’s widely known for. Developers rely on Ethereum to build decentralized digital tools and systems—including smart contracts, tokens, and decentralized applications (DApps). Designed to be scalable, programmable, secure, and decentralized, Ethereum has become a leading blockchain for both developers and enterprises, reshaping industries and influencing the way we interact with digital systems."
+  },
+  {
+    "name": "Optimism",
+    "slug": "optimism",
+    "image": "/network-images/op-mainnet.svg",
+    "description": "Optimism is a Layer-2 scaling solution for Ethereum that uses Optimistic Rollups to process transactions off-chain, improving speed and reducing costs. It is part of a broader vision called the \"Superchain\"—an interconnected network of chains built with its modular OP Stack, enabling seamless interoperability for dApps. Although there isn’t a dedicated Wikipedia page for the project, it is documented on crypto wikis and project sites. Optimism functions as an EVM-compatible environment, securing transactions on Ethereum through fraud proofs and featuring its own governance token, OP."
+  },
+  {
+    "name": "Polkadot",
+    "slug": "polkadot",
+    "image": "/network-images/polkadot.svg",
+    "description": "Polkadot is a decentralized blockchain that uses a nominated proof-of-stake (NPoS) consensus and supports smart contracts. Its native cryptocurrency is DOT."
+  }
+]
