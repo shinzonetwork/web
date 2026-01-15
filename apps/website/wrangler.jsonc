@@ -24,7 +24,7 @@
     "NEXT_PUBLIC_URL": "https://shinzo.network",
     "ALLOW_INDEXING": "true",
     "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "shinzo.network",
-    "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.shinzo.network",
+    "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
   },
   "assets": {
     "directory": ".open-next/assets",
@@ -91,7 +91,7 @@
         "NEXT_PUBLIC_URL": "https://preview-staging.shinzo.network",
         "ALLOW_INDEXING": "false",
         "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "preview-staging.shinzo.network",
-        "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.shinzo.network",
+        "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
       },
       "routes": [
         {
