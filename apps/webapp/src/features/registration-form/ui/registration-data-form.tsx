@@ -1,9 +1,4 @@
-"use client";
-
-import { useAccount } from "wagmi";
-
 import { Label } from "@/shared/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 
 import {
   REGISTRATION_FORM_INPUTS,
@@ -11,8 +6,8 @@ import {
 } from "@/shared/lib";
 import { RegistrationInputField as Inputfield } from "./registration-input-field";
 
-import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
 import { Hex } from "viem";
+import { RegistrationRadioButton } from "./registration-radio-button";
 
 interface RegistrationDataFormProps {
   formData: RegistrationFormData;
@@ -29,40 +24,17 @@ export function RegistrationDataForm({
   fieldErrors = {},
   prefilledFields = {},
 }: RegistrationDataFormProps) {
-  const { address } = useAccount();
-  const isIndexerWhitelisted = isIndexerWhitelistedFunction(
-    address ? address : undefined
-  );
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-6xl">
       <div className="space-y-4">
         <Label htmlFor="userRole" className="text-sm font-medium">
-          Select a role
+          Select a role <span className="text-xs text-red-500">*</span>
         </Label>
-        <RadioGroup
-          className={`flex gap-4 ${prefilledFields.entity ? "opacity-70 cursor-not-allowed" : ""}`}
-          value={formData.entity.toString()}
-          onValueChange={handleUserRoleChange}
-          disabled={prefilledFields.entity}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="1"
-              id="host"
-              disabled={prefilledFields.entity}
-            />
-            <Label htmlFor="host">Host</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem
-              value="2"
-              id="indexer"
-              disabled={!isIndexerWhitelisted || prefilledFields.entity}
-            />
-            <Label htmlFor="indexer">Indexer</Label>
-          </div>
-        </RadioGroup>
+        <RegistrationRadioButton
+          selectedEntityValue={formData.entity.toString()}
+          prefilledEntityValue={prefilledFields.entity}
+          onChange={handleUserRoleChange}
+        />
       </div>
 
       {REGISTRATION_FORM_INPUTS.map((input) => (

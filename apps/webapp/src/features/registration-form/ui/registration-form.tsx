@@ -54,7 +54,7 @@ export function RegistrationForm() {
   const isRegistrationDisabled = !validateRegistrationForm(formData);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ml-10">
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}

@@ -29,6 +29,7 @@ export function RegistrationInputField({
     <div className="space-y-2">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
+        <span className="text-xs text-red-500">*</span>
       </Label>
       {isTextarea ? (
         <Textarea
