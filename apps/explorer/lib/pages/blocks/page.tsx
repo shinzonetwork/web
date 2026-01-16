@@ -19,6 +19,7 @@ import {
 } from '@/shared/ui/table';
 import { useBlocks } from './use-blocks';
 import { CopyButton } from "@/shared/ui/button";
+import { useBlocksCount } from "./use-blocks-count";
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;
@@ -27,6 +28,7 @@ export interface BlocksPageClientProps {
 export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
   const { page, offset, limit } = pageParams;
   const { data: blocks, isLoading } = useBlocks({ limit, offset });
+  const { data: blocksCount } = useBlocksCount();
 
   return (
     <PageLayout title='Blocks'>
@@ -41,7 +43,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
         <Pagination
           page={page}
-          totalItems={blocks?.totalCount ?? 0}
+          totalItems={blocksCount?.totalBlocks ?? 0}
           itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>

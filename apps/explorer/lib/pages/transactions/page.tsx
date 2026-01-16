@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { TransactionsList } from './transactions-list';
 import { useTransactions } from './use-transactions';
+import { useTransactionsCount } from './use-transactions-count';
 
 export interface TransactionPageProps {
   block?: number;
@@ -18,6 +19,7 @@ export const TransactionsPageClient = ({ block, pageParams }: TransactionPagePro
     offset,
     blockNumber: block,
   });
+  const { data: transactionsCount } = useTransactionsCount();
 
   return (
     <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
@@ -32,7 +34,7 @@ export const TransactionsPageClient = ({ block, pageParams }: TransactionPagePro
 
         <Pagination
           page={page}
-          totalItems={transactions?.totalCount ?? 0}
+          totalItems={transactionsCount?.totalTransactions ?? 0}
           itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>
