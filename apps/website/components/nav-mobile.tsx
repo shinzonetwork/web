@@ -1,9 +1,9 @@
-import { NavLink } from '@/app/(frontend)/_layout';
-import DiscordIconSvg from "@/components/svg/icon-discord.svg";
-import GithubIconSvg from "@/components/svg/icon-github.svg";
+import type { NavLink } from "@/app/(frontend)/layout";
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion, Variants } from 'motion/react';
 import Link from 'next/link';
+import DiscordIconSvg from "./svg/icon-discord.svg";
+import GithubIconSvg from "./svg/icon-github.svg";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 
 export interface NavMobileProps {

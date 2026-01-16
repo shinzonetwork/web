@@ -1,6 +1,8 @@
-import { NavLink } from "@/app/(frontend)/_layout";
-import DiscordIconSvg from "@/components/svg/icon-discord.svg";
-import GithubIconSvg from "@/components/svg/icon-github.svg";
+import type { NavLink } from "@/app/(frontend)/layout";
+import { cn } from "@/lib/utils";
+import * as motion from "motion/react-client";
+import Link from "next/link";
+import GithubIconSvg from "./svg/icon-github.svg";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -8,10 +10,7 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
-import * as motion from "motion/react-client";
-import Link from "next/link";
+} from "./ui/navigation-menu";
 
 export interface NavDesktopProps {
     className?: string;
@@ -22,7 +21,7 @@ export interface NavDesktopProps {
     docsLink?: string;
 }
 
-export function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: NavDesktopProps) {
+export default function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: NavDesktopProps) {
 
     const navItemLvl1Style = "underline-offset-2 hover:underline data-[state=open]:underline";
 

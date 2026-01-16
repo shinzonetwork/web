@@ -1,16 +1,15 @@
 "use client";
 
-
-import { NavLink } from "@/app/(frontend)/_layout";
-import LogoSvg from "@/components/svg/shinzo-logo.svg";
+import type { NavLink } from "@/app/(frontend)/layout";
 import { useLockBody } from "@/hooks/useLockBody";
 import { useBreakpointObserver } from "@/hooks/useMediaQuery";
 import { MenuIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { NavDesktop } from "./nav-desktop";
+import NavDesktop from "./nav-desktop";
 import NavMobile from "./nav-mobile";
+import LogoSvg from "./svg/shinzo-logo.svg";
 import { Button } from "./ui/button";
 
 export interface HeaderProps {

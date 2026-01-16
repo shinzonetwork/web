@@ -1,9 +1,9 @@
-import { NavLink } from "@/app/(frontend)/_layout";
-import FooterLogoSvg from "@/components/svg/logo-footer.svg";
+import type { NavLink } from "@/app/(frontend)/layout";
 import type { Variants } from "motion/react";
 import * as motion from "motion/react-client";
 import Link from "next/link";
 import BlockContainer from "./block-container";
+import FooterLogoSvg from "./svg/logo-footer.svg";
 
 export default function Footer({ footerNavMenu }: { footerNavMenu: NavLink[] }) {
 
