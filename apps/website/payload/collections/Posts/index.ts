@@ -1,5 +1,5 @@
-import { anyone } from "@/payload/access/anyone";
 import { authenticated } from "@/payload/access/authenticated";
+import { authenticatedOrPublished } from "@/payload/access/authenticatedOrPublished";
 import {
   MetaDescriptionField,
   MetaImageField,
@@ -9,7 +9,6 @@ import {
 } from "@payloadcms/plugin-seo/fields";
 import { slugField, type CollectionConfig } from "payload";
 import { revalidateDelete, revalidatePost } from "./hooks/revalidatePost";
-import { authenticatedOrPublished } from "@/payload/access/authenticatedOrPublished";
 
 export const Posts: CollectionConfig = {
   slug: "posts",

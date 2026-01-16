@@ -11,7 +11,7 @@ export default function BlockSpacing(props: BlockSpacingProps) {
     const {
         children,
         className,
-        spacing = 'py-15',
+        spacing = 'py-10 md:py-15',
     } = props;
 
     return (
