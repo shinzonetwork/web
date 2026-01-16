@@ -11,22 +11,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
 import { useStore } from "@tanstack/react-form"
 import { Info, XIcon } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "./forms/form-context"
-
-interface DialogIndexerProps {
-    networkName: string
-}
+import { Label } from "./ui/label"
 
 const schema = z.object({
     network: z.string(),
-    validatorAddress: z.string().min(1, "Validator Public Key is required"),
     email: z.email(),
-    domain: z.string(),
     socialMedia: z.array(z.object({
         platform: z.string(),
         link: z.string()
@@ -35,21 +29,16 @@ const schema = z.object({
 
 const defaultFormValues: z.input<typeof schema> = {
     network: "",
-    validatorAddress: "",
     email: "",
-    domain: "",
     socialMedia: [{ platform: "", link: "" }],
 }
 
-export function DialogIndexer({ networkName }: DialogIndexerProps) {
+export function DialogSuggest() {
 
-    const formId = 'indexerRegister';
+    const formId = 'suggestRequest';
 
     const form = useAppForm({
-        defaultValues: {
-            ...defaultFormValues,
-            network: networkName,
-        },
+        defaultValues: defaultFormValues,
         onSubmit: async ({ value }) => {
             try {
                 setFormError(null);
@@ -59,8 +48,6 @@ export function DialogIndexer({ networkName }: DialogIndexerProps) {
                     body: {
                         network: value.network,
                         email: value.email,
-                        "validator pubkey": value.validatorAddress,
-                        website: value.domain,
                         socials: value.socialMedia?.map(entry => `${entry.platform}: ${entry.link}`).join(", "),
                     },
                 })
@@ -95,23 +82,23 @@ export function DialogIndexer({ networkName }: DialogIndexerProps) {
         <Dialog onOpenChange={onOpenChange}>
 
             <DialogTrigger asChild>
-                <Button>Become an Indexer</Button>
+                <Button>Suggest a Network</Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-[900px] w-dvw lg:px-30 lg:py-20">
 
                 <DialogHeader>
-                    <DialogTitle>/ Become an Indexer</DialogTitle>
+                    <DialogTitle>/ Suggest a Network</DialogTitle>
                     <DialogDescription>
-                        Verify you&apos;re an active validator of {networkName} to become an indexer of this network.
+                        Let us know if you want to see a network added to Shinzō.
                     </DialogDescription>
                 </DialogHeader>
 
                 {isSubmitSuccessful ? (
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
-                            <h2 className="text-h4">We got it!</h2>
-                            <p>Thanks for registering. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis metus. Proin sagittis vehicula volutpat.</p>
+                            <h2 className="text-h4">Thanks for suggesting!</h2>
+                            <p>Thanks for suggesting. We&apos;ll review it and get back to you soon.</p>
                         </div>
 
                         <DialogClose asChild>
@@ -123,22 +110,12 @@ export function DialogIndexer({ networkName }: DialogIndexerProps) {
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-3">
                                 <form.AppField name="network" >
-                                    {({ TextField }) => <TextField label="Network" placeholder="Network" readonly disabled />}
-                                </form.AppField>
-                            </div>
-                            <div className="grid gap-3">
-                                <form.AppField name="validatorAddress" >
-                                    {({ TextField }) => <TextField label="Validator Public Key" placeholder="0x..." required />}
+                                    {({ TextField }) => <TextField label="Network" placeholder="Suggest a network" required />}
                                 </form.AppField>
                             </div>
                             <div className="grid gap-3">
                                 <form.AppField name="email" >
                                     {({ TextField }) => <TextField label="Email Address" placeholder="Email Address" required />}
-                                </form.AppField>
-                            </div>
-                            <div className="grid gap-3">
-                                <form.AppField name="domain" >
-                                    {({ TextField }) => <TextField label="Domain" placeholder="Website" />}
                                 </form.AppField>
                             </div>
 

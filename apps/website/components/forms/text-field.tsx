@@ -9,13 +9,17 @@ export function TextField({
     placeholder,
     type = "text",
     autoComplete,
-    required
+    required,
+    readonly,
+    disabled
 }: {
     label: string | boolean
     placeholder?: string
     type?: string
     autoComplete?: string
     required?: boolean
+    readonly?: boolean
+    disabled?: boolean
 }) {
     const field = useFieldContext<string>();
     const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
@@ -38,12 +42,14 @@ export function TextField({
                 placeholder={placeholder}
                 autoComplete={autoComplete}
                 required={required}
+                readOnly={readonly}
+                disabled={disabled}
             />
 
             {isInvalid && (
                 <FieldError errors={field.state.meta.errors} />
             )}
-            
+
             {/* <pre> {JSON.stringify(field.state, null, 2)} </pre> */}
         </Field>
     )

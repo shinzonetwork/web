@@ -1,19 +1,31 @@
 import BlockContainer from "@/components/block-container";
+import BlockCta from "@/components/block-cta";
 import BlockSpacing from "@/components/block-spacing";
 import { DialogIndexer } from "@/components/dialog-indexer";
+import { DialogSuggest } from "@/components/dialog-suggest";
 import networksData from "@/data/networks.json";
 import { Info } from "lucide-react";
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SupportedNetwork } from "../page";
-import BlockCta from "@/components/block-cta";
-import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = {
-  title: "Shinzō | Supported Networks",
-  description: "",
-};
+
+export async function generateStaticParams() {
+  return networksData.map(({ slug }) => ({ slug }));
+}
+
+export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug = '' } = await paramsPromise
+  const decodedSlug = decodeURIComponent(slug)
+  const network = networksData.find((network) => network.slug === decodedSlug);
+
+  return {
+    title: `Shinzō | Supported Networks | ${network?.name}`,
+    description: '',
+  }
+}
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -27,6 +39,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const isSupported = supported.includes(slug);
 
+  const networkImage = network.image;
+  const networkToken = network.token;
+
   return (<>
     <BlockSpacing>
       <BlockContainer>
@@ -39,6 +54,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
           <div className="col-span-full md:grid grid-cols-subgrid py-10">
             <div className="col-span-full border-b border-szo-border-light pb-4">
+              <div className="size-14 rounded-md overflow-hidden z-1 relative border border-szo-border-light bg-white mb-2">
+                {networkImage && <Image src={networkImage} alt={''} fill objectPosition="center" objectFit="contain" className="p-2" />}
+              </div>
               <h1 className="text-h3">{network.name}</h1>
             </div>
 
@@ -46,13 +64,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <p>{network.description}</p>
             </div>
 
-            <div className="col-span-4 col-start-9 md:border-x md:border-b border-szo-border-light md:p-5">
-              <table className="w-full table table-fixed">
+            <div className="col-span-4 col-start-9 md:border-x md:border-b border-szo-border-light md:p-5 richtext">
+              <table className="text-px-14">
                 <tbody>
                   <tr>
                     <td>Status</td>
-                    <td className="font-mono opacity-50">{isSupported ? 'Supported' : 'Planned'}</td>
+                    <td className="font-mono opacity-70">{isSupported ? 'Supported' : 'Planned'}</td>
                   </tr>
+                  {networkToken && (
+                    <tr>
+                      <td>Token</td>
+                      <td className="font-mono opacity-70">{networkToken}</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -68,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <div className="flex gap-x-2 lg:w-1/2">
                   <Info className="size-5 text-szo-primary shrink-0" />
                   <div className="richtext">
-                    <p>Verify you're an active validator of this chain to become an indexer of this network</p>
+                    <p>Verify you&apos;re an active validator of this chain to become an indexer of this network</p>
                     <DialogIndexer networkName="Ethereum" />
                   </div>
                 </div>
@@ -84,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       content={<>
         <p>Let use know by telling us!</p>
       </>}
-      buttons={<Button>Suggest a Network</Button>}
+      buttons={<DialogSuggest />}
       footerText={<>
         <p className="text-raised">Shinzō — Read what’s real.<br />Truth made verifiable. Data made free.</p>
       </>}
