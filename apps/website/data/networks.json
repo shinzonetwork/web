@@ -7,39 +7,11 @@
     "description": "Ethereum is a decentralized Layer 1 smart contract platform that enables programmable blockchain applications, including DeFi, NFTs, DAOs, and more. It transitioned to proof-of-stake with “The Merge,” improving energy efficiency and enabling future scalability upgrades. Its rich developer ecosystem, broad tooling, and strong security make it the foundation for many Layer 2 scaling solutions and onchain innovation."
   },
   {
-    "name": "Arbitrum",
-    "slug": "arbitrum",
-    "image": "/network-images/arbitrum.svg",
-    "token": "ARB",
-    "description": "Arbitrum is a leading Ethereum Layer 2 that uses optimistic rollups to batch and verify transactions off-chain while inheriting Ethereum’s security. It offers low fees, high throughput, and strong EVM compatibility, making it popular for DeFi and gaming."
-  },
-  {
-    "name": "Optimism",
-    "slug": "optimism",
-    "image": "/network-images/op-mainnet.svg",
-    "token": "OP",
-    "description": "Optimism is an Ethereum Layer 2 designed for speed and simplicity, using optimistic rollups to reduce costs and scale throughput. It powers the OP Stack, enabling shared infrastructure across multiple L2s while funding public goods through its governance model."
-  },
-  {
-    "name": "Tron",
-    "slug": "tron",
-    "image": "/network-images/tron.svg",
-    "token": "TRON",
-    "description": "Tron is a high-throughput blockchain optimized for payments and digital assets, offering fast confirmation times and very low fees. It’s widely used for stablecoin transfers and consumer-facing applications."
-  },
-  {
     "name": "Solana",
     "slug": "solana",
     "image": "/network-images/solana.svg",
     "token": "SOL",
     "description": "Solana is a high-performance Layer 1 that combines Proof-of-History with parallel execution to achieve extremely high throughput and sub-second finality. It’s built for high-volume apps such as DeFi, trading, and consumer experiences."
-  },
-  {
-    "name": "Cosmos",
-    "slug": "cosmos",
-    "image": "/network-images/cosmos.svg",
-    "token": "ATOM",
-    "description": "Cosmos is an ecosystem of sovereign blockchains built with the Cosmos SDK and connected through the IBC protocol. It focuses on interoperability, letting chains communicate, transfer assets, and scale independently."
   },
   {
     "name": "BNB Chain",
@@ -49,12 +21,26 @@
     "description": "BNB Chain is a fast, low-cost, EVM-compatible ecosystem consisting of the BNB Smart Chain and BNB Beacon Chain. It’s heavily used for DeFi, trading, and decentralized applications with high user activity."
   },
   {
+    "name": "Base",
+    "slug": "base",
+    "image": "/network-images/base.svg",
+    "description": "Base is an Ethereum Layer 2 created by Coinbase using the OP Stack to deliver low fees, fast transactions, and a secure developer environment. It integrates tightly with Coinbase products to onboard mainstream users into onchain apps."
+  },
+  {
+    "name": "Arbitrum",
+    "slug": "arbitrum",
+    "image": "/network-images/arbitrum.svg",
+    "token": "ARB",
+    "description": "Arbitrum is a leading Ethereum Layer 2 that uses optimistic rollups to batch and verify transactions off-chain while inheriting Ethereum’s security. It offers low fees, high throughput, and strong EVM compatibility, making it popular for DeFi and gaming."
+  },
+  {
     "name": "Avalanche",
     "slug": "avalanche",
     "image": "/network-images/avalanche.svg",
     "token": "AVAX",
     "description": "Avalanche is a scalable Layer 1 known for its sub-second finality and flexible subnet architecture. Developers can deploy custom, interoperable blockchains tailored for specific applications, enterprise use cases, or regulated environments."
   },
+
   {
     "name": "Polygon",
     "slug": "polygon",
@@ -62,25 +48,20 @@
     "token": "POL",
     "description": "Polygon is a multichain scaling ecosystem for Ethereum offering a suite of solutions—including PoS, zkEVM, and supernets—designed to increase throughput and reduce costs. It connects deeply with the Ethereum ecosystem while enabling scalable, secure apps."
   },
+
   {
-    "name": "Berachain",
-    "slug": "berachain",
-    "image": "/network-images/berachain.svg",
-    "token": "BERA",
-    "description": "Berachain is an emerging high-performance EVM-compatible Layer 1 built using Proof-of-Liquidity, a consensus model that aligns validators with liquidity providers. It aims to improve capital efficiency and ecosystem incentives across DeFi."
+    "name": "Cronos",
+    "slug": "cronos",
+    "image": "/network-images/cronos.svg",
+    "token": "CRO",
+    "description": "Cronos is an EVM-compatible blockchain backed by Crypto.com, enabling easy deployment of Ethereum applications with low fees. It focuses on DeFi, payments, and consumer-facing tools within the Crypto.com ecosystem."
   },
   {
-    "name": "Base",
-    "slug": "base",
-    "image": "/network-images/base.svg",
-    "description": "Base is an Ethereum Layer 2 created by Coinbase using the OP Stack to deliver low fees, fast transactions, and a secure developer environment. It integrates tightly with Coinbase products to onboard mainstream users into onchain apps."
-  },
-  {
-    "name": "Sui",
-    "slug": "sui",
-    "image": "/network-images/sui.svg",
-    "token": "SUI",
-    "description": "Sui is a next-generation Layer 1 using an object-based model and parallel execution to achieve very high throughput. Its design enables low-latency transactions, smooth user experiences, and scalable onchain apps such as gaming and payments."
+    "name": "Optimism",
+    "slug": "optimism",
+    "image": "/network-images/op-mainnet.svg",
+    "token": "OP",
+    "description": "Optimism is an Ethereum Layer 2 designed for speed and simplicity, using optimistic rollups to reduce costs and scale throughput. It powers the OP Stack, enabling shared infrastructure across multiple L2s while funding public goods through its governance model."
   },
   {
     "name": "Near",
@@ -90,11 +71,32 @@
     "description": "Near is a user-friendly Layer 1 blockchain using nightshade sharding to scale horizontally as demand grows. It emphasizes simple onboarding, human-readable accounts, and fast, cost-effective transactions for consumer Web3 apps."
   },
   {
-    "name": "Cronos",
-    "slug": "cronos",
-    "image": "/network-images/cronos.svg",
-    "token": "CRO",
-    "description": "Cronos is an EVM-compatible blockchain backed by Crypto.com, enabling easy deployment of Ethereum applications with low fees. It focuses on DeFi, payments, and consumer-facing tools within the Crypto.com ecosystem."
+    "name": "Tron",
+    "slug": "tron",
+    "image": "/network-images/tron.svg",
+    "token": "TRON",
+    "description": "Tron is a high-throughput blockchain optimized for payments and digital assets, offering fast confirmation times and very low fees. It’s widely used for stablecoin transfers and consumer-facing applications."
+  },
+  {
+    "name": "Cosmos",
+    "slug": "cosmos",
+    "image": "/network-images/cosmos.svg",
+    "token": "ATOM",
+    "description": "Cosmos is an ecosystem of sovereign blockchains built with the Cosmos SDK and connected through the IBC protocol. It focuses on interoperability, letting chains communicate, transfer assets, and scale independently."
+  },
+  {
+    "name": "Berachain",
+    "slug": "berachain",
+    "image": "/network-images/berachain.svg",
+    "token": "BERA",
+    "description": "Berachain is an emerging high-performance EVM-compatible Layer 1 built using Proof-of-Liquidity, a consensus model that aligns validators with liquidity providers. It aims to improve capital efficiency and ecosystem incentives across DeFi."
+  },
+  {
+    "name": "Sui",
+    "slug": "sui",
+    "image": "/network-images/sui.svg",
+    "token": "SUI",
+    "description": "Sui is a next-generation Layer 1 using an object-based model and parallel execution to achieve very high throughput. Its design enables low-latency transactions, smooth user experiences, and scalable onchain apps such as gaming and payments."
   },
   {
     "name": "Bitcoin",

@@ -20,17 +20,10 @@ import { Label } from "./ui/label"
 
 const schema = z.object({
     network: z.string(),
-    email: z.email(),
-    socialMedia: z.array(z.object({
-        platform: z.string(),
-        link: z.string()
-    }))
 })
 
 const defaultFormValues: z.input<typeof schema> = {
     network: "",
-    email: "",
-    socialMedia: [{ platform: "", link: "" }],
 }
 
 export function DialogSuggest() {
@@ -47,8 +40,6 @@ export function DialogSuggest() {
                     id: formId,
                     body: {
                         network: value.network,
-                        email: value.email,
-                        socials: value.socialMedia?.map(entry => `${entry.platform}: ${entry.link}`).join(", "),
                     },
                 })
 
@@ -113,49 +104,8 @@ export function DialogSuggest() {
                                     {({ TextField }) => <TextField label="Network" placeholder="Suggest a network" required />}
                                 </form.AppField>
                             </div>
-                            <div className="grid gap-3">
-                                <form.AppField name="email" >
-                                    {({ TextField }) => <TextField label="Email Address" placeholder="Email Address" required />}
-                                </form.AppField>
-                            </div>
 
                             <div className="grid gap-3">
-                                <Label htmlFor="email">Social Media</Label>
-                                <form.AppField name="socialMedia" mode="array" >
-                                    {(field) => {
-                                        return (
-                                            <div className="grid gap-3">
-                                                {field.state.value?.map((entry, index, items) => {
-                                                    const numItems = items.length;
-                                                    return (
-                                                        <div key={index} className="flex items-center gap-3">
-                                                            <form.AppField name={`socialMedia[${index}].platform`}>
-                                                                {({ TextField }) => <TextField label={false} placeholder="Platform (eg. X, Telegram)" />}
-                                                            </form.AppField>
-                                                            <form.AppField name={`socialMedia[${index}].link`}>
-                                                                {({ TextField }) => <TextField label={false} placeholder="Link or handle" />}
-                                                            </form.AppField>
-
-                                                            {numItems > 1 && (
-                                                                <div className="shrink-0">
-                                                                    <Button type="button" size="sm" variant="ghost" className="text-szo-primary" onClick={() => field.removeValue(index)} >
-                                                                        <XIcon className="size-4" aria-label="Remove" />
-                                                                    </Button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )
-                                                })}
-
-                                                <div className="flex justify-end mt-2 mb-5 relative isolate">
-                                                    <div className="border-b border-szo-border-light absolute top-1/2 z-0 w-full" />
-                                                    <Button type="button" size="sm" variant="outline" className="border-szo-black rounded-full text-xs font-mono z-1 relative mr-10" onClick={() => field.pushValue({ platform: "", link: "" })}>+ Add Social</Button>
-                                                </div>
-                                            </div>
-                                        )
-                                    }}
-                                </form.AppField>
-
                                 {formError && <div className="text-szo-primary font-mono text-sm font-normal mt-2 flex items-center gap-2">
                                     <Info className="size-4" />
                                     {formError}</div>}

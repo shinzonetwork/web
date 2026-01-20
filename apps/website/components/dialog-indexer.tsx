@@ -20,6 +20,8 @@ import { useAppForm } from "./forms/form-context"
 
 interface DialogIndexerProps {
     networkName: string
+    supported: boolean
+    label?: string
 }
 
 const schema = z.object({
@@ -41,7 +43,7 @@ const defaultFormValues: z.input<typeof schema> = {
     socialMedia: [{ platform: "", link: "" }],
 }
 
-export function DialogIndexer({ networkName }: DialogIndexerProps) {
+export function DialogIndexer({ networkName, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
 
     const formId = 'indexerRegister';
 
@@ -95,15 +97,19 @@ export function DialogIndexer({ networkName }: DialogIndexerProps) {
         <Dialog onOpenChange={onOpenChange}>
 
             <DialogTrigger asChild>
-                <Button>Become an Indexer</Button>
+                <Button>{label}</Button>
             </DialogTrigger>
 
             <DialogContent className="max-w-[900px] w-dvw lg:px-30 lg:py-20">
 
                 <DialogHeader>
-                    <DialogTitle>/ Become an Indexer</DialogTitle>
+                    <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
                     <DialogDescription>
-                        Verify you&apos;re an active validator of {networkName} to become an indexer of this network.
+                        {supported ? (
+                            <>Verify you&apos;re an active validator of {networkName} to become an indexer of this network.</>
+                        ) : (
+                            <>Claim your spot as a validator of {networkName}</>
+                        )}
                     </DialogDescription>
                 </DialogHeader>
 

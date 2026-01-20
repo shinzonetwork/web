@@ -11,7 +11,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SupportedNetwork } from "../page";
 
-
 export async function generateStaticParams() {
   return networksData.map(({ slug }) => ({ slug }));
 }
@@ -38,7 +37,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   const isSupported = supported.includes(slug);
-
   const networkImage = network.image;
   const networkToken = network.token;
 
@@ -47,7 +45,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <BlockContainer>
         <div className="grid grid-cols-12">
           <div className="col-span-full">
-            <Link href="/supported-networks" className="text-inline-link font-bold font-mono">
+            <Link href="/chains" className="text-inline-link font-bold font-mono">
               {`Back to Supported Networks`}
             </Link>
           </div>
@@ -93,7 +91,25 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                   <Info className="size-5 text-szo-primary shrink-0" />
                   <div className="richtext">
                     <p>Verify you&apos;re an active validator of this chain to become an indexer of this network</p>
-                    <DialogIndexer networkName="Ethereum" />
+                    <DialogIndexer networkName={network.name} supported={isSupported} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!isSupported && (
+            <div className="col-span-full border-t border-szo-border-light py-5 ">
+              <h2 className="text-h4 mb-5">/ Validate this Chain?</h2>
+              <div className="flex gap-10 lg:flex-row flex-col">
+                <div className="richtext lg:w-1/2">
+                  <p>Cta text about claiming a spot. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis metus. Proin sagittis vehicula volutpat.</p>
+                </div>
+                <div className="flex gap-x-2 lg:w-1/2">
+                  <Info className="size-5 text-szo-primary shrink-0" />
+                  <div className="richtext">
+                    <p>Claim your spot as a validator of this chain</p>
+                    <DialogIndexer networkName={network.name} supported={isSupported} label="Claim a Spot" />
                   </div>
                 </div>
               </div>

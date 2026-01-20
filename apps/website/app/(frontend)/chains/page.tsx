@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default function Page() {
+export default async function Page() {
 
   const supported = ['ethereum'];
   const supportedNetworks = (networksData as SupportedNetwork[]).filter(network => supported.includes(network.slug));
@@ -41,7 +41,7 @@ export default function Page() {
       <BlockContainer >
         <div className="grid grid-cols-12 mb-15">
           <div className="col-span-full">
-            <SectionTitle text="Supported" />
+            <SectionTitle text="Live" />
           </div>
           <div className="col-span-full grid lg:grid-cols-4 gap-5">
             {supportedNetworks.map((network) => (
@@ -52,7 +52,7 @@ export default function Page() {
               <p>
                 Help power Ethereum indexing for developers, dApps, and analytics tools. Become an indexer and contribute to global, decentralized data availability.
               </p>
-              <DialogIndexer networkName="Ethereum" />
+              <DialogIndexer networkName="Ethereum" supported={true} />
             </div>
           </div>
         </div>
@@ -92,7 +92,7 @@ const NetworkCard = ({ network }: { network: SupportedNetwork }) => {
   return (
     <div className="relative group h-full">
 
-      <Link href={`/supported-networks/${networkSlug}`} className="h-full block" >
+      <Link href={`/chains/${networkSlug}`} className="h-full block" >
         <div className="relative bg-white border-2 border-szo-border-light p-2 flex flex-col gap-2 group-hover:border-szo-primary transition-all duration-300 h-full">
 
           <div className="relative mb-5">
