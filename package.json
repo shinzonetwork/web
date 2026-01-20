@@ -1,0 +1,27 @@
+{
+  "name": "shinzo-web",
+  "private": true,
+  "packageManager": "pnpm@10.25.0",
+  "scripts": {
+    "dev:webapp": "pnpm --filter shinzo-webapp dev",
+    "dev:website": "pnpm --filter shinzo-website dev",
+    "dev:explorer": "pnpm --filter shinzo-explorer dev",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  }
+}
