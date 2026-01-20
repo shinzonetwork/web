@@ -1,6 +1,6 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from "@payloadcms/db-d1-sqlite";
+import { MigrateUpArgs, MigrateDownArgs } from "@payloadcms/db-d1-sqlite";
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ payload }: MigrateUpArgs): Promise<void> {
   // Migration code
   await payload.update({
     collection: "posts",
@@ -9,10 +9,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   });
 }
 
-export async function down({
-  db,
-  payload,
-  req,
-}: MigrateDownArgs): Promise<void> {
+export async function down({}: MigrateDownArgs): Promise<void> {
   // Migration code
 }
