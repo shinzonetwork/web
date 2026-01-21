@@ -12,11 +12,10 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { useStore } from "@tanstack/react-form"
-import { Info, XIcon } from "lucide-react"
+import { Info } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "./forms/form-context"
-import { Label } from "./ui/label"
 
 const schema = z.object({
     network: z.string(),
