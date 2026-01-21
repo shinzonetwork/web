@@ -1,4 +1,3 @@
-import BlockContent from "@/components/block-content";
 import BlockCta from "@/components/block-cta";
 import BlockGhLatest from "@/components/block-gh-latest";
 import BlockHero from "@/components/block-hero";
@@ -62,7 +61,7 @@ export default async function Home() {
 
             <BlockHomeExplainer />
 
-            {/* 
+            {/*
             <BlockHomeTwoColumn
                 column1={{
                     title: '/ For Builders',

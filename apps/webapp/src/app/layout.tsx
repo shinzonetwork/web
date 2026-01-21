@@ -9,7 +9,8 @@ import { RegistrationContextProvider } from "@/entities/registration-process";
 export const metadata: Metadata = {
   title: "Shinzo",
   description:
-    "The Shinzo webapp allows a user to interact with different parts of the Shinzo ecosystem.",
+    "Sign up your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+  icons: "/images/favicon.png",
 };
 
 export default function RootLayout({

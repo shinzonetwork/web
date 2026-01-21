@@ -50,7 +50,7 @@ async function getLatestCommitForRepo(owner: string, repo: string): Promise<Late
             try {
                 const errorJson = JSON.parse(errorText);
                 console.error(`Error fetching ${owner}/${repo}:`, JSON.stringify(errorJson, null, 2));
-            } catch (e) {
+            } catch (_) {
                 console.error(`Error response text for ${owner}/${repo}:`, errorText);
             }
             return null;
