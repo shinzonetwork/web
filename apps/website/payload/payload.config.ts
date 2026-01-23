@@ -18,6 +18,7 @@ import { fileURLToPath } from "url";
 import { GetPlatformProxyOptions } from "wrangler";
 
 import { Authors } from "./collections/Authors";
+import { Chains } from "./collections/Chains";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
@@ -44,7 +45,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Authors],
+  collections: [Users, Media, Posts, Authors, Chains],
   globals: [BlogLanding],
   editor: lexicalEditor({
     features: ({ defaultFeatures, rootFeatures }) => [
