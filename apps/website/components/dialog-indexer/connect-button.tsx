@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import WalletConnectIcon from "./svg/walletconnect.svg";
+import WalletConnectIcon from "../svg/walletconnect.svg";
 import { Info, Loader2, Wallet } from "lucide-react";
 import { useState } from "react";
 import { Connector, useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
@@ -21,7 +21,7 @@ interface WalletConnectButtonProps {
   onDisconnect: () => void;
 }
 
-export function WalletConnectButton({
+export function ConnectButton({
   onSuccess,
   onDisconnect,
 }: WalletConnectButtonProps) {

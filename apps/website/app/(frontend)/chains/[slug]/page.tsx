@@ -1,7 +1,7 @@
 import BlockContainer from "@/components/block-container";
 import BlockCta from "@/components/block-cta";
 import BlockSpacing from "@/components/block-spacing";
-import { DialogIndexer } from "@/components/dialog-indexer";
+import { DialogIndexer } from "@/components/dialog-indexer/dialog-indexer";
 import { DialogSuggest } from "@/components/dialog-suggest";
 import { ImageMedia } from "@/components/image-media";
 import { isPopulated } from "@/lib/utils";

@@ -16,8 +16,8 @@ import { useStore } from "@tanstack/react-form"
 import { Info, XIcon } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
-import { useAppForm } from "./forms/form-context"
-import { WalletConnectButton } from "./wallet-connect-button"
+import { useAppForm } from "../forms/form-context"
+import { ConnectButton } from "./connect-button"
 
 interface DialogIndexerProps {
     networkName: string
@@ -175,7 +175,7 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                                                 readonly
                                             />
                                             <div className="absolute right-2 top-6.5">
-                                                <WalletConnectButton
+                                                <ConnectButton
                                                     onSuccess={handleWalletSuccess}
                                                     onDisconnect={handleWalletDisconnect}
                                                 />
