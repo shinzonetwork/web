@@ -17,6 +17,7 @@ import { Info, XIcon } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "./forms/form-context"
+import { WalletConnectButton } from "./wallet-connect-button"
 
 interface DialogIndexerProps {
     networkName: string
@@ -27,6 +28,7 @@ interface DialogIndexerProps {
 const schema = z.object({
     network: z.string(),
     validatorAddress: z.string().min(1, "Validator Public Key is required"),
+    signature: z.string().min(1, "Signature is required"),
     email: z.email(),
     domain: z.string(),
     socialMedia: z.array(z.object({
@@ -38,6 +40,7 @@ const schema = z.object({
 const defaultFormValues: z.input<typeof schema> = {
     network: "",
     validatorAddress: "",
+    signature: "",
     email: "",
     domain: "",
     socialMedia: [{ platform: "", link: "" }],
@@ -85,12 +88,24 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
     const [formError, setFormError] = useState<string | null>(null);
 
     const onOpenChange = (open: boolean) => {
-        if (!open) form.reset();
+        if (!open) {
+            form.reset();
+        }
     }
 
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         form.handleSubmit();
+    }
+
+    const handleWalletSuccess = (address: string, signature: string) => {
+        form.setFieldValue("validatorAddress", address);
+        form.setFieldValue("signature", signature);
+    }
+
+    const handleWalletDisconnect = () => {
+        form.setFieldValue("validatorAddress", "");
+        form.setFieldValue("signature", "");
     }
 
     return (
@@ -100,7 +115,23 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                 <Button>{label}</Button>
             </DialogTrigger>
 
-            <DialogContent className="max-w-[900px] w-dvw lg:px-30 lg:py-20">
+            <DialogContent
+                className="max-w-[900px] w-dvw lg:px-30 lg:py-20"
+                onPointerDownOutside={(e) => {
+                    // Prevent closing when clicking on WalletConnect modal or other portaled elements
+                    const target = e.target as HTMLElement;
+                    if (target.closest('[data-radix-portal]') || target.closest('wcm-modal') || target.closest('w3m-modal')) {
+                        e.preventDefault();
+                    }
+                }}
+                onInteractOutside={(e) => {
+                    // Also prevent on interact outside for WalletConnect modals
+                    const target = e.target as HTMLElement;
+                    if (target.closest('[data-radix-portal]') || target.closest('wcm-modal') || target.closest('w3m-modal')) {
+                        e.preventDefault();
+                    }
+                }}
+            >
 
                 <DialogHeader>
                     <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
@@ -134,7 +165,23 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                             </div>
                             <div className="grid gap-3">
                                 <form.AppField name="validatorAddress" >
-                                    {({ TextField }) => <TextField label="Validator Public Key" placeholder="0x..." required />}
+                                    {({ TextField }) => (
+                                        <div className="relative">
+                                            <TextField
+                                                label="Validator Public Key"
+                                                placeholder="Connect wallet to fill"
+                                                required
+                                                disabled
+                                                readonly
+                                            />
+                                            <div className="absolute right-2 top-6.5">
+                                                <WalletConnectButton
+                                                    onSuccess={handleWalletSuccess}
+                                                    onDisconnect={handleWalletDisconnect}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
                                 </form.AppField>
                             </div>
                             <div className="grid gap-3">
@@ -154,7 +201,7 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                                     {(field) => {
                                         return (
                                             <div className="grid gap-3">
-                                                {field.state.value?.map((entry, index, items) => {
+                                                {field.state.value?.map((_, index, items) => {
                                                     const numItems = items.length;
                                                     return (
                                                         <div key={index} className="flex items-center gap-3">

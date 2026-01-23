@@ -24,7 +24,8 @@
     "NEXT_PUBLIC_URL": "https://shinzo.network",
     "ALLOW_INDEXING": "true",
     "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "shinzo.network",
-    "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network"
+    "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
+    "NEXT_PUBLIC_WALLETCONNECT_ID": "6be6a14da11df78dcac5ed4f14b375cd"
   },
   "assets": {
     "directory": ".open-next/assets",
@@ -91,7 +92,8 @@
         "NEXT_PUBLIC_URL": "https://preview-staging.shinzo.network",
         "ALLOW_INDEXING": "false",
         "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "preview-staging.shinzo.network",
-        "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network"
+        "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
+        "NEXT_PUBLIC_WALLETCONNECT_ID": "2bb5fa43d3b3a6f8e74739a3cadefe2c"
       },
       "routes": [
         {
