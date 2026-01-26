@@ -8,7 +8,6 @@ export const { fieldContext, formContext, useFieldContext } =
 const { useAppForm } = createFormHook({
     fieldContext,
     formContext,
-    // We'll learn more about these options later
     fieldComponents: {
         TextField,
     },

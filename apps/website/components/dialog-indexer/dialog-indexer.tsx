@@ -18,6 +18,7 @@ import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "../forms/form-context"
 import { ConnectButton } from "./connect-button"
+import { useAccount } from 'wagmi';
 
 interface DialogIndexerProps {
     networkName: string
@@ -27,7 +28,7 @@ interface DialogIndexerProps {
 
 const schema = z.object({
     network: z.string(),
-    validatorAddress: z.string().min(1, "Validator Public Key is required"),
+    validatorAddress: z.string().min(1, "Validator Address is required"),
     signature: z.string().min(1, "Signature is required"),
     email: z.email(),
     domain: z.string(),
@@ -47,13 +48,14 @@ const defaultFormValues: z.input<typeof schema> = {
 }
 
 export function DialogIndexer({ networkName, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
-
+    const { address } = useAccount();
     const formId = 'indexerRegister';
 
     const form = useAppForm({
         defaultValues: {
             ...defaultFormValues,
             network: networkName,
+            validatorAddress: address as string,
         },
         onSubmit: async ({ value }) => {
             try {
@@ -85,6 +87,7 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
 
     const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
     const isSubmitSuccessful = useStore(form.store, (state) => state.isSubmitSuccessful);
+    const signature = useStore(form.store, (state) => state.values.signature);
     const [formError, setFormError] = useState<string | null>(null);
 
     const onOpenChange = (open: boolean) => {
@@ -159,28 +162,33 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                     <form onSubmit={onFormSubmit} noValidate>
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-3">
-                                <form.AppField name="network" >
-                                    {({ TextField }) => <TextField label="Network" placeholder="Network" readonly disabled />}
-                                </form.AppField>
-                            </div>
-                            <div className="grid gap-3">
-                                <form.AppField name="validatorAddress" >
-                                    {({ TextField }) => (
-                                        <div className="relative">
-                                            <TextField
-                                                label="Validator Public Key"
-                                                placeholder="Connect wallet to fill"
-                                                required
-                                                disabled
-                                                readonly
-                                            />
-                                            <div className="absolute right-2 top-6.5">
-                                                <ConnectButton
-                                                    onSuccess={handleWalletSuccess}
-                                                    onDisconnect={handleWalletDisconnect}
-                                                />
-                                            </div>
-                                        </div>
+                                <form.AppField
+                                    name="validatorAddress"
+                                    validators={{
+                                        onChange: (data) => {
+                                            return data.value.split('Error: ')?.[1];
+                                        },
+                                    }}
+                                >
+                                    {({ TextField, handleChange }) => (
+                                      <TextField
+                                        label="Validator Address"
+                                        placeholder="Connect wallet to fill"
+                                        required
+                                        disabled
+                                        readonly
+                                        endAdornment={(
+                                              <ConnectButton
+                                                signature={signature}
+                                                onSuccess={handleWalletSuccess}
+                                                onDisconnect={handleWalletDisconnect}
+                                                onError={(err) => {
+                                                    if (!err) return;
+                                                    handleChange(`Error: ${err}`);
+                                                }}
+                                              />
+                                        )}
+                                      />
                                     )}
                                 </form.AppField>
                             </div>

@@ -57,10 +57,8 @@ function DialogContent({
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay>
-        <div className="flex justify-center relative h-full w-full overflow-y-auto">
-          <div className="bg-szo-black/30 w-px h-full z-51" />
-          {/*  */}
-          <div className="my-auto relative">
+        <div className="flex justify-center relative h-full w-full overflow-y-auto overflow-x-hidden">
+          <div className="my-auto relative border-x border-szo-black/30">
             <div className="absolute top-0 left-1/2 bg-szo-black/30 h-px w-screen -translate-x-1/2 z-51" />
             <div className="absolute bottom-0 left-1/2 bg-szo-black/30 h-px w-screen -translate-x-1/2 z-51" />
             <div className="absolute bottom-0 left-1/2 bg-szo-black/30 h-px w-screen -translate-x-1/2 translate-y-3 z-51" />
@@ -86,7 +84,6 @@ function DialogContent({
               )}
             </DialogPrimitive.Content>
           </div>
-          <div className="bg-szo-black/30 w-px h-full z-51" />
         </div>
       </DialogOverlay>
     </DialogPortal>
