@@ -19,6 +19,7 @@ import { z } from "zod"
 import { useAppForm } from "../forms/form-context"
 import { ConnectButton } from "./connect-button"
 import { useAccount } from 'wagmi';
+import type { Claim } from '@/payload/payload-types';
 
 interface DialogIndexerProps {
     networkName: string
@@ -49,7 +50,6 @@ const defaultFormValues: z.input<typeof schema> = {
 
 export function DialogIndexer({ networkName, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
     const { address } = useAccount();
-    const formId = 'indexerRegister';
 
     const form = useAppForm({
         defaultValues: {
@@ -61,22 +61,34 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
             try {
                 setFormError(null);
 
-                const body = JSON.stringify({
-                    id: formId,
-                    body: {
-                        network: value.network,
-                        email: value.email,
-                        "validator pubkey": value.validatorAddress,
-                        website: value.domain,
-                        socials: value.socialMedia?.map(entry => `${entry.platform}: ${entry.link}`).join(", "),
+                const body = {
+                    network: value.network,
+                    validatorAddress: value.validatorAddress,
+                    signature: value.signature,
+                    email: value.email,
+                    domain: value.domain,
+                    socialMedia: value.socialMedia?.filter(entry => entry.platform || entry.link),
+                } satisfies Omit<Claim, 'id' | 'updatedAt' | 'createdAt'>;
+
+                const response = await fetch(`/api/claims`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                })
+                    body: JSON.stringify(body),
+                });
 
-                const response = await fetch(`/api/submit`, { method: "POST", body, });
+                if (!response.ok) {
+                    const data: { errors: { message: string }[] } = await response.json();
+                    const message = data?.errors?.[0]?.message;
+                    setFormError(message);
+                    throw new Error(message);
+                }
 
-                if (!response.ok) throw new Error();
             } catch (error: unknown) {
-                setFormError('Something went wrong. Please try again.');
+                if (!formError) {
+                    setFormError(error instanceof Error ? error.name : 'Something went wrong. Please try again.');
+                }
                 throw error;
             }
         },
@@ -240,10 +252,12 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                                     }}
                                 </form.AppField>
 
-                                {formError && <div className="text-szo-primary font-mono text-sm font-normal mt-2 flex items-center gap-2">
-                                    <Info className="size-4" />
-                                    {formError}</div>}
-
+                                {formError && (
+                                    <div className="text-szo-primary font-mono text-sm font-normal mt-2 flex items-center gap-2">
+                                        <Info className="size-4" />
+                                        {formError}
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <DialogFooter>

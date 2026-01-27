@@ -51,7 +51,7 @@ export const Chains: CollectionConfig = {
       },
       defaultValue: false,
     },
-    slugField({ fieldToUse: "name" }),
+    slugField({ useAsSlug: 'name' }),
     {
       name: "spotsLimit",
       type: "number",

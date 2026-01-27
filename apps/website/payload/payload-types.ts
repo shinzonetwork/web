@@ -72,6 +72,7 @@ export interface Config {
     posts: Post;
     authors: Author;
     chains: Chain;
+    claims: Claim;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     chains: ChainsSelect<false> | ChainsSelect<true>;
+    claims: ClaimsSelect<false> | ClaimsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -262,6 +264,34 @@ export interface Chain {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims".
+ */
+export interface Claim {
+  id: number;
+  network: string;
+  validatorAddress: string;
+  /**
+   * Wallet signature proving ownership
+   */
+  signature: string;
+  email: string;
+  domain?: string | null;
+  socialMedia?:
+    | {
+        platform?: string | null;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Whether this claim has been verified by an admin
+   */
+  verified?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -303,6 +333,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'chains';
         value: number | Chain;
+      } | null)
+    | ({
+        relationTo: 'claims';
+        value: number | Claim;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -435,6 +469,27 @@ export interface ChainsSelect<T extends boolean = true> {
   spotsLimit?: T;
   claimedSpots?: T;
   upvotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims_select".
+ */
+export interface ClaimsSelect<T extends boolean = true> {
+  network?: T;
+  validatorAddress?: T;
+  signature?: T;
+  email?: T;
+  domain?: T;
+  socialMedia?:
+    | T
+    | {
+        platform?: T;
+        link?: T;
+        id?: T;
+      };
+  verified?: T;
   updatedAt?: T;
   createdAt?: T;
 }
