@@ -71,6 +71,9 @@ export interface Config {
     media: Media;
     posts: Post;
     authors: Author;
+    chains: Chain;
+    claims: Claim;
+    suggestions: Suggestion;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +85,9 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    chains: ChainsSelect<false> | ChainsSelect<true>;
+    claims: ClaimsSelect<false> | ClaimsSelect<true>;
+    suggestions: SuggestionsSelect<false> | SuggestionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -223,6 +229,88 @@ export interface Author {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chains".
+ */
+export interface Chain {
+  id: number;
+  name: string;
+  icon: number | Media;
+  description?: string | null;
+  /**
+   * Native token symbol (e.g., ETH, SOL)
+   */
+  token?: string | null;
+  /**
+   * Whether this chain is currently supported (live) or planned
+   */
+  isSupported?: boolean | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Maximum number of claimable spots for indexers
+   */
+  spotsLimit: number;
+  /**
+   * Number of spots already claimed (computed from verified submissions)
+   */
+  claimedSpots?: number | null;
+  /**
+   * Number of upvotes from connected wallets
+   */
+  upvotes?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims".
+ */
+export interface Claim {
+  id: number;
+  network: string;
+  validatorAddress: string;
+  /**
+   * Wallet signature proving ownership
+   */
+  signature: string;
+  email: string;
+  domain?: string | null;
+  socialMedia?:
+    | {
+        platform?: string | null;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Whether this claim has been verified by an admin
+   */
+  verified?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions".
+ */
+export interface Suggestion {
+  id: number;
+  /**
+   * Network name (stored lowercase)
+   */
+  name: string;
+  /**
+   * Number of users who suggested this network
+   */
+  count: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -260,6 +348,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'authors';
         value: number | Author;
+      } | null)
+    | ({
+        relationTo: 'chains';
+        value: number | Chain;
+      } | null)
+    | ({
+        relationTo: 'claims';
+        value: number | Claim;
+      } | null)
+    | ({
+        relationTo: 'suggestions';
+        value: number | Suggestion;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -374,6 +474,55 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface AuthorsSelect<T extends boolean = true> {
   name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "chains_select".
+ */
+export interface ChainsSelect<T extends boolean = true> {
+  name?: T;
+  icon?: T;
+  description?: T;
+  token?: T;
+  isSupported?: T;
+  generateSlug?: T;
+  slug?: T;
+  spotsLimit?: T;
+  claimedSpots?: T;
+  upvotes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "claims_select".
+ */
+export interface ClaimsSelect<T extends boolean = true> {
+  network?: T;
+  validatorAddress?: T;
+  signature?: T;
+  email?: T;
+  domain?: T;
+  socialMedia?:
+    | T
+    | {
+        platform?: T;
+        link?: T;
+        id?: T;
+      };
+  verified?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions_select".
+ */
+export interface SuggestionsSelect<T extends boolean = true> {
+  name?: T;
+  count?: T;
   updatedAt?: T;
   createdAt?: T;
 }

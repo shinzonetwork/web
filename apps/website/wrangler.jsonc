@@ -9,7 +9,7 @@
     "nodejs_compat",
     // Allow to fetch URLs in your app
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
-    "global_fetch_strictly_public",
+    "global_fetch_strictly_public"
   ],
   "preview_urls": false,
   "keep_vars": true,
@@ -17,36 +17,37 @@
     {
       "pattern": "shinzo.network",
       "zone_name": "shinzo.network",
-      "custom_domain": true,
-    },
+      "custom_domain": true
+    }
   ],
   "vars": {
     "NEXT_PUBLIC_URL": "https://shinzo.network",
     "ALLOW_INDEXING": "true",
     "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "shinzo.network",
     "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
+    "NEXT_PUBLIC_WALLETCONNECT_ID": "6be6a14da11df78dcac5ed4f14b375cd"
   },
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS",
+    "binding": "ASSETS"
   },
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "shinzo-website",
-    },
+      "service": "shinzo-website"
+    }
   ],
   // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
   // https://opennext.js.org/cloudflare/caching#incremental-cache
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "shinzo-website-r2",
+      "bucket_name": "shinzo-website-r2"
     },
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
-      "bucket_name": "shinzo-website-r2",
-    },
+      "bucket_name": "shinzo-website-r2"
+    }
   ],
   // DO Queue - (Time based revalidation)
   // https://opennext.js.org/cloudflare/caching#queue
@@ -54,33 +55,33 @@
     "bindings": [
       {
         "name": "NEXT_CACHE_DO_QUEUE",
-        "class_name": "DOQueueHandler",
-      },
-    ],
+        "class_name": "DOQueueHandler"
+      }
+    ]
   },
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["DOQueueHandler"],
-    },
+      "new_sqlite_classes": ["DOQueueHandler"]
+    }
   ],
   "d1_databases": [
     {
       "binding": "D1",
       "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
       "database_name": "shinzo-website-db",
-      "remote": true,
+      "remote": true
     },
     // D1 Tag Cache (Next mode)
     // https://opennext.js.org/cloudflare/caching#tag-cache-for-on-demand-revalidation
     {
       "binding": "NEXT_TAG_CACHE_D1",
       "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
-      "database_name": "shinzo-website-db",
-    },
+      "database_name": "shinzo-website-db"
+    }
   ],
   "images": {
-    "binding": "IMAGES",
+    "binding": "IMAGES"
   },
   // Here's how to configure an additional environment
   // It can be deployed with `CLOUDFLARE_ENV=staging pnpm run deploy`
@@ -92,61 +93,62 @@
         "ALLOW_INDEXING": "false",
         "NEXT_PUBLIC_PLAUSIBLE_DOMAIN": "preview-staging.shinzo.network",
         "NEXT_PUBLIC_PLAUSIBLE_URL": "https://plausible.source.network",
+        "NEXT_PUBLIC_WALLETCONNECT_ID": "2bb5fa43d3b3a6f8e74739a3cadefe2c"
       },
       "routes": [
         {
           "pattern": "preview-staging.shinzo.network",
           "zone_name": "shinzo.network",
-          "custom_domain": true,
-        },
+          "custom_domain": true
+        }
       ],
       "d1_databases": [
         {
           "binding": "D1",
           "database_id": "be1c7e5b-8b9e-4cf9-84ab-0eb0451d6871",
           "database_name": "shinzo-website-db-staging",
-          "remote": true,
+          "remote": true
         },
         {
           "binding": "NEXT_TAG_CACHE_D1",
           "database_id": "be1c7e5b-8b9e-4cf9-84ab-0eb0451d6871",
-          "database_name": "shinzo-website-db-staging",
-        },
+          "database_name": "shinzo-website-db-staging"
+        }
       ],
       "services": [
         {
           "binding": "WORKER_SELF_REFERENCE",
-          "service": "shinzo-website-staging",
-        },
+          "service": "shinzo-website-staging"
+        }
       ],
       "r2_buckets": [
         {
           "binding": "R2",
-          "bucket_name": "shinzo-website-r2-staging",
+          "bucket_name": "shinzo-website-r2-staging"
         },
         {
           "binding": "NEXT_INC_CACHE_R2_BUCKET",
-          "bucket_name": "shinzo-website-r2-staging",
-        },
+          "bucket_name": "shinzo-website-r2-staging"
+        }
       ],
       "durable_objects": {
         "bindings": [
           {
             "name": "NEXT_CACHE_DO_QUEUE",
-            "class_name": "DOQueueHandler",
-          },
-        ],
+            "class_name": "DOQueueHandler"
+          }
+        ]
       },
       "migrations": [
         {
           "tag": "v1",
-          "new_sqlite_classes": ["DOQueueHandler"],
-        },
+          "new_sqlite_classes": ["DOQueueHandler"]
+        }
       ],
       "images": {
-        "binding": "IMAGES",
-      },
-    },
+        "binding": "IMAGES"
+      }
+    }
   },
-  "workers_dev": true,
+  "workers_dev": true
 }

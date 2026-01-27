@@ -59,7 +59,7 @@ export const Posts: CollectionConfig = {
         },
       ],
     },
-    slugField({ fieldToUse: "title" }),
+    slugField({ useAsSlug: 'title' }),
     {
       name: "authors",
       type: "relationship",
