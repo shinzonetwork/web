@@ -11,14 +11,46 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import type { Suggestion } from "@/payload/payload-types"
 import { useStore } from "@tanstack/react-form"
 import { Info } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "./forms/form-context"
 
+/** don't allow the same browser to suggest networks twice with the help of LS */
+const STORAGE_KEY = "shinzo_suggested_networks";
+const getSubmittedNetworks = (): string[] => {
+    if (typeof window === "undefined") return [];
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch {
+        return [];
+    }
+};
+
+const addSubmittedNetwork = (network: string): void => {
+    if (typeof window === "undefined") return;
+    try {
+        const networks = getSubmittedNetworks();
+        const normalized = network.toLowerCase().trim();
+        if (!networks.includes(normalized)) {
+            networks.push(normalized);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(networks));
+        }
+    } catch {
+        // ignore localStorage errors
+    }
+};
+
+const hasAlreadySubmitted = (network: string): boolean => {
+    const networks = getSubmittedNetworks();
+    return networks.includes(network.toLowerCase().trim());
+};
+
 const schema = z.object({
-    network: z.string(),
+    network: z.string().min(1, "Network name is required"),
 })
 
 const defaultFormValues: z.input<typeof schema> = {
@@ -26,27 +58,49 @@ const defaultFormValues: z.input<typeof schema> = {
 }
 
 export function DialogSuggest() {
-
-    const formId = 'suggestRequest';
-
     const form = useAppForm({
         defaultValues: defaultFormValues,
         onSubmit: async ({ value }) => {
             try {
                 setFormError(null);
+                const networkName = value.network.toLowerCase().trim();
 
-                const body = JSON.stringify({
-                    id: formId,
-                    body: {
-                        network: value.network,
+                // Check localStorage first
+                if (hasAlreadySubmitted(networkName)) {
+                    throw new Error("You have already suggested this network.");
+                }
+
+                const body = {
+                    name: networkName,
+                } satisfies Omit<Suggestion, 'id' | 'count' | 'updatedAt' | 'createdAt'>;
+
+                const response = await fetch(`/api/suggestions`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
                     },
-                })
+                    body: JSON.stringify(body),
+                });
 
-                const response = await fetch(`/api/submit`, { method: "POST", body, });
+                if (!response.ok) {
+                    const data: { errors: { message: string }[] } = await response.json();
+                    const errorMessage = data?.errors?.[0]?.message;
 
-                if (!response.ok) throw new Error();
+                    // this error is specific to payload CMS implementation, meaning success not error
+                    if (errorMessage === "SUGGESTION_INCREMENTED") {
+                        addSubmittedNetwork(networkName);
+                        return;
+                    }
+
+                    throw new Error(errorMessage);
+                }
+
+                // New suggestion created successfully
+                addSubmittedNetwork(networkName);
             } catch (error: unknown) {
-                setFormError('Something went wrong. Please try again.');
+                if (error instanceof Error) {
+                    setFormError(error.message || "Something went wrong. Please try again.");
+                }
                 throw error;
             }
         },

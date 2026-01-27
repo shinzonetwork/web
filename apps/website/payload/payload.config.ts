@@ -22,6 +22,7 @@ import { Chains } from "./collections/Chains";
 import { Claims } from "./collections/Claims";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
+import { Suggestions } from "./collections/Suggestions";
 import { Users } from "./collections/Users";
 import { Code } from "./fields/code";
 import { BlogLanding } from "./globals/BlogLanding";
@@ -46,7 +47,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Authors, Chains, Claims],
+  collections: [Users, Media, Posts, Authors, Chains, Claims, Suggestions],
   globals: [BlogLanding],
   editor: lexicalEditor({
     features: ({ defaultFeatures, rootFeatures }) => [

@@ -73,6 +73,7 @@ export interface Config {
     authors: Author;
     chains: Chain;
     claims: Claim;
+    suggestions: Suggestion;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -86,6 +87,7 @@ export interface Config {
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     chains: ChainsSelect<false> | ChainsSelect<true>;
     claims: ClaimsSelect<false> | ClaimsSelect<true>;
+    suggestions: SuggestionsSelect<false> | SuggestionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -292,6 +294,23 @@ export interface Claim {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions".
+ */
+export interface Suggestion {
+  id: number;
+  /**
+   * Network name (stored lowercase)
+   */
+  name: string;
+  /**
+   * Number of users who suggested this network
+   */
+  count: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -337,6 +356,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'claims';
         value: number | Claim;
+      } | null)
+    | ({
+        relationTo: 'suggestions';
+        value: number | Suggestion;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -490,6 +513,16 @@ export interface ClaimsSelect<T extends boolean = true> {
         id?: T;
       };
   verified?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "suggestions_select".
+ */
+export interface SuggestionsSelect<T extends boolean = true> {
+  name?: T;
+  count?: T;
   updatedAt?: T;
   createdAt?: T;
 }
