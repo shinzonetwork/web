@@ -4,7 +4,6 @@ import { Transaction } from '@/shared/graphql';
 
 const TransactionsQuery = graphql(`
   query Transactions($offset: Int, $limit: Int, $blockNumber: Int) {
-    txCount: _count(Ethereum__Mainnet__Transaction: {})
     Transaction: Ethereum__Mainnet__Transaction(
       offset: $offset, 
       limit: $limit, 
@@ -55,7 +54,6 @@ export const useTransactions = (options: Partial<UseTransactionsOptions>) => {
       const res = await execute(TransactionsQuery, { offset, limit, blockNumber });
       return {
         transactions: res.Transaction?.filter(Boolean) as Transaction[],
-        totalCount: res.txCount,
       };
     },
   });

@@ -3,10 +3,8 @@ import { ArrowLeftRightIcon } from 'lucide-react';
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { Typography } from '@/shared/ui/typography';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { useTransactionsCount } from './use-transactions-count';
-import { useBlocksCount } from './use-blocks-count';
 import { AnimatedNumber } from '@/shared/ui/animated-number';
-
+import { useBlocksAndTransactionsCount } from './use-blocks-and-transactions-count';
 export interface StatsBlockProps {
   title: string;
   icon: ReactNode;
@@ -41,16 +39,15 @@ export const StatsBlock = ({ children, icon, title, isLoading }: StatsBlockProps
 };
 
 export const HomeStats = () => {
-  const { data: totalTransactions, isLoading: transactionsLoading } = useTransactionsCount();
-  const { data: totalBlocks, isLoading: blocksLoading } = useBlocksCount();
+  const {data: metricsData, isLoading: metricsLoading} = useBlocksAndTransactionsCount();
 
   return (
     <section className='flex -mt-px'>
-      <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={blocksLoading}>
-        <AnimatedNumber value={totalBlocks} />
+      <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={metricsLoading}>
+        <AnimatedNumber value={metricsData?.metrics.blocks_processed} />
       </StatsBlock>
-      <StatsBlock title='Total txns' icon={<ArrowLeftRightIcon />} isLoading={transactionsLoading}>
-        <AnimatedNumber value={totalTransactions} />
+      <StatsBlock title='Total txns' icon={<ArrowLeftRightIcon />} isLoading={metricsLoading}>
+        <AnimatedNumber value={metricsData?.metrics.transactions_processed} />
       </StatsBlock>
     </section>
   );
