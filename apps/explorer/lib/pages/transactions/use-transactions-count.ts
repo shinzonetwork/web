@@ -1,3 +1,4 @@
+import { METRICS_API_URL } from '@/shared/utils/consts';
 import { useQuery } from '@tanstack/react-query';
 
 interface TransactionsCountResponse {
@@ -5,7 +6,6 @@ interface TransactionsCountResponse {
 }
 
 const TRANSACTIONS_COUNT_QUERY_NAME = 'transactions-count';
-const METRICS_API_URL = process.env.NEXT_PUBLIC_METRICS_URL;
 
 export const useTransactionsCount = () => {
 

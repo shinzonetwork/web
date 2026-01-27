@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import { getQueryClient } from '@/shared/utils/get-query-client';
 import { SHORT_BLOCKS_QUERY_NAME } from './use-short-blocks';
 import { SHORT_TRANSACTIONS_QUERY_NAME } from './use-short-transactions';
+import { METRICS_API_URL } from '@/shared/utils/consts';
 
 interface MetricsData {
   attestations_created: number;
@@ -41,7 +42,6 @@ interface MetricsResponse {
 
 const METRICS_QUERY_NAME = 'blocks-transactions-count';
 const METRICS_QUERY_CACHE_TIME = 3 * 1000;
-const METRICS_API_URL = process.env.NEXT_PUBLIC_METRICS_URL;
 
 export const useBlocksAndTransactionsCount = () => {
   const queryClient = getQueryClient();

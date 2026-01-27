@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { METRICS_API_URL } from '@/shared/utils/consts';
 
 interface BlocksCountResponse {
   totalBlocks: number;
 }
 
 const BLOCKS_COUNT_QUERY_NAME = 'blocks-count';
-const METRICS_API_URL = process.env.NEXT_PUBLIC_METRICS_URL;
 
 export const useBlocksCount = () => {
 
