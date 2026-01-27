@@ -2628,6 +2628,898 @@ export type Ethereum__Mainnet__Transaction__Logs__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9 = {
+  __typename?: 'Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  _group?: Maybe<Array<Maybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _max?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _min?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  _similarity?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  _sum?: Maybe<Scalars['Float']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_AvgArgs = {
+  _group?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_CountArgs = {
+  _group?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_GroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  groupBy?: InputMaybe<Array<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg>>>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_MaxArgs = {
+  _group?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_MinArgs = {
+  _group?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9_SumArgs = {
+  _group?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field {
+  Group = '_group',
+  BlockNumber = 'blockNumber',
+  TransactionHash = 'transactionHash'
+}
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  transactionHash?: InputMaybe<StringOperatorBlock>;
+};
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9MutationInputArg = {
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9NumericFieldsArg {
+  Avg = '_avg',
+  Count = '_count',
+  Max = '_max',
+  Min = '_min',
+  Sum = '_sum',
+  BlockNumber = 'blockNumber'
+}
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  blockNumber?: InputMaybe<Ordering>;
+  transactionHash?: InputMaybe<Ordering>;
+};
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector = {
+  field: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9NumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg>>>;
+};
+
+export type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9___Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086 = {
+  __typename?: 'ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  _group?: Maybe<Array<Maybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _max?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _min?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  _similarity?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  _sum?: Maybe<Scalars['Float']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_AvgArgs = {
+  _group?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_CountArgs = {
+  _group?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_GroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg>>>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_MaxArgs = {
+  _group?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_MinArgs = {
+  _group?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086_SumArgs = {
+  _group?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field {
+  Group = '_group',
+  BlockNumber = 'blockNumber',
+  TransactionHash = 'transactionHash'
+}
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  transactionHash?: InputMaybe<StringOperatorBlock>;
+};
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086MutationInputArg = {
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086NumericFieldsArg {
+  Avg = '_avg',
+  Count = '_count',
+  Max = '_max',
+  Min = '_min',
+  Sum = '_sum',
+  BlockNumber = 'blockNumber'
+}
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  blockNumber?: InputMaybe<Ordering>;
+  transactionHash?: InputMaybe<Ordering>;
+};
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector = {
+  field: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086NumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg>>>;
+};
+
+export type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086___Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af = {
+  __typename?: 'ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  _group?: Maybe<Array<Maybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _max?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _min?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  _similarity?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  _sum?: Maybe<Scalars['Float']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_AvgArgs = {
+  _group?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_CountArgs = {
+  _group?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_GroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg>>>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_MaxArgs = {
+  _group?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_MinArgs = {
+  _group?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af_SumArgs = {
+  _group?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField {
+  Group = '_group',
+  BlockNumber = 'blockNumber',
+  TransactionHash = 'transactionHash'
+}
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  transactionHash?: InputMaybe<StringOperatorBlock>;
+};
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afMutationInputArg = {
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afNumericFieldsArg {
+  Avg = '_avg',
+  Count = '_count',
+  Max = '_max',
+  Min = '_min',
+  Sum = '_sum',
+  BlockNumber = 'blockNumber'
+}
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  blockNumber?: InputMaybe<Ordering>;
+  transactionHash?: InputMaybe<Ordering>;
+};
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector = {
+  field: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg>>>;
+};
+
+export type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af___Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a = {
+  __typename?: 'Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  _avg?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  _count?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  _group?: Maybe<Array<Maybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _max?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  _min?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  _similarity?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  _sum?: Maybe<Scalars['Float']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_AvgArgs = {
+  _group?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_CountArgs = {
+  _group?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_GroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  groupBy?: InputMaybe<Array<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg>>>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_MaxArgs = {
+  _group?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_MinArgs = {
+  _group?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a_SumArgs = {
+  _group?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField {
+  Group = '_group',
+  BlockNumber = 'blockNumber',
+  TransactionHash = 'transactionHash'
+}
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  transactionHash?: InputMaybe<StringOperatorBlock>;
+};
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aMutationInputArg = {
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aNumericFieldsArg {
+  Avg = '_avg',
+  Count = '_count',
+  Max = '_max',
+  Min = '_min',
+  Sum = '_sum',
+  BlockNumber = 'blockNumber'
+}
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  blockNumber?: InputMaybe<Ordering>;
+  transactionHash?: InputMaybe<Ordering>;
+};
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector = {
+  field: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg>>>;
+};
+
+export type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a___Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 /** ExplainType is an enum selecting the type of explanation done by the @explain directive. */
 export enum ExplainType {
   /** Like simple explain, but more verbose nodes (no attributes). */
@@ -4977,6 +5869,10 @@ export type Query = {
   Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
   Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: Maybe<Array<Maybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9>>>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: Maybe<Array<Maybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086>>>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: Maybe<Array<Maybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af>>>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: Maybe<Array<Maybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a>>>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb>>>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0>>>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2>>>;
@@ -5104,6 +6000,54 @@ export type QueryEthereum__Mainnet__TransactionArgs = {
 };
 
 
+export type QueryExample2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Args = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  groupBy?: InputMaybe<Array<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Args = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryExample_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  groupBy?: InputMaybe<Array<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QueryFilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbArgs = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -5183,6 +6127,10 @@ export type Query_AvgArgs = {
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: InputMaybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: InputMaybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: InputMaybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector>;
@@ -5211,6 +6159,10 @@ export type Query_CountArgs = {
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: InputMaybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__CountSelector>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: InputMaybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__CountSelector>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: InputMaybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__CountSelector>;
@@ -5227,6 +6179,10 @@ export type Query_MaxArgs = {
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: InputMaybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: InputMaybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: InputMaybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector>;
@@ -5243,6 +6199,10 @@ export type Query_MinArgs = {
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: InputMaybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: InputMaybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: InputMaybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector>;
@@ -5259,6 +6219,10 @@ export type Query_SumArgs = {
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: InputMaybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: InputMaybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: InputMaybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector>;
@@ -5631,6 +6595,10 @@ export type Subscription = {
   Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
   Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
+  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9?: Maybe<Array<Maybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9>>>;
+  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086?: Maybe<Array<Maybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086>>>;
+  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af?: Maybe<Array<Maybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af>>>;
+  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a?: Maybe<Array<Maybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a>>>;
   FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb>>>;
   FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0>>>;
   FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2>>>;
@@ -5715,6 +6683,54 @@ export type SubscriptionEthereum__Mainnet__TransactionArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__TransactionOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionExample2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Args = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg>;
+  groupBy?: InputMaybe<Array<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Args = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg>;
+  groupBy?: InputMaybe<Array<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionExample_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg>;
+  groupBy?: InputMaybe<Array<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -5908,11 +6924,6 @@ export type BlocksQueryVariables = Exact<{
 
 export type BlocksQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Ethereum__Mainnet__Block', hash?: string | null, number?: number | null, timestamp?: string | null, gasUsed?: string | null, gasLimit?: string | null, miner?: string | null, size?: string | null, txCount?: number | null } | null> | null };
 
-export type BlocksCountQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type BlocksCountQuery = { __typename?: 'Query', count?: number | null };
-
 export type ShortBlocksQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -5926,11 +6937,6 @@ export type ShortTransactionsQueryVariables = Exact<{
 
 
 export type ShortTransactionsQuery = { __typename?: 'Query', Transaction?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', hash?: string | null, from?: string | null, to?: string | null, value?: string | null } | null> | null };
-
-export type TransactionsCountQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TransactionsCountQuery = { __typename?: 'Query', txCount?: number | null };
 
 export type AttestationsCountQueryVariables = Exact<{
   docId: Scalars['String']['input'];
@@ -6017,11 +7023,6 @@ export const BlocksDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<BlocksQuery, BlocksQueryVariables>;
-export const BlocksCountDocument = new TypedDocumentString(`
-    query BlocksCount {
-  count: _count(Ethereum__Mainnet__Block: {})
-}
-    `) as unknown as TypedDocumentString<BlocksCountQuery, BlocksCountQueryVariables>;
 export const ShortBlocksDocument = new TypedDocumentString(`
     query ShortBlocks($limit: Int) {
   Block: Ethereum__Mainnet__Block(limit: $limit, order: {number: DESC}) {
@@ -6045,11 +7046,6 @@ export const ShortTransactionsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<ShortTransactionsQuery, ShortTransactionsQueryVariables>;
-export const TransactionsCountDocument = new TypedDocumentString(`
-    query TransactionsCount {
-  txCount: _count(Ethereum__Mainnet__Transaction: {})
-}
-    `) as unknown as TypedDocumentString<TransactionsCountQuery, TransactionsCountQueryVariables>;
 export const AttestationsCountDocument = new TypedDocumentString(`
     query AttestationsCount($docId: String!) {
   Attestation: Ethereum__Mainnet__AttestationRecord(
