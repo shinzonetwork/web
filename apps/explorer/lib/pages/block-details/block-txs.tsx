@@ -1,10 +1,10 @@
 'use client';
 
-import { TransactionsList } from "@/pages/transactions/transactions-list";
 import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
-import { useTransactions } from "@/pages/transactions/use-transactions";
 import { useTransactionsCount } from "../transactions/use-transactions-count";
+import { useBlockTransactions } from "./use-block-transactions";
+import { BlockTransactionsList } from "./block-transactions-list";
 export interface BlockTxsProps {
   blockNumber: number;
   pageParams: PageParams;
@@ -12,20 +12,15 @@ export interface BlockTxsProps {
 
 export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) => {
   const { page, offset, limit } = pageParams;
-  const { data: transactions, isLoading } = useTransactions({
-    limit,
-    offset,
-    blockNumber,
-  });
+  const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useBlockTransactions({ offset, limit, blockNumber });
  const { data: transactionsCount } = useTransactionsCount();
 
   return (
     <>
-      <TransactionsList
-        transactions={
-          transactions?.transactions?.filter((txn): txn is NonNullable<typeof txn> => txn !== null) ?? []
-        }
-        isLoading={isLoading}
+      <BlockTransactionsList
+        transactions={blockTransactions?.transactions ?? []}
+        timestamp={blockTransactions?.timestamp ?? ''}
+        isLoading={isBlockTransactionsLoading}
       />
       <Container className='flex justify-between items-end'>
         <div />
