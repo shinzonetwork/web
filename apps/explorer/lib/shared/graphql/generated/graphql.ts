@@ -5375,6 +5375,15 @@ export type CommitsOrderArg = {
   height?: InputMaybe<Ordering>;
 };
 
+export type BlockTransactionsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type BlockTransactionsQuery = { __typename?: 'Query', BlockTransactions?: Array<{ __typename?: 'Ethereum__Mainnet__Block', timestamp?: string | null, transactions?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', hash?: string | null, from?: string | null, to?: string | null, value?: string | null, gasPrice?: string | null } | null> | null } | null> | null };
+
 export type BlockQueryVariables = Exact<{
   number: Scalars['Int']['input'];
 }>;
@@ -5453,6 +5462,23 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const BlockTransactionsDocument = new TypedDocumentString(`
+    query BlockTransactions($offset: Int, $limit: Int, $blockNumber: Int) {
+  BlockTransactions: Ethereum__Mainnet__Block(
+    filter: {number: {_eq: $blockNumber}}
+    limit: 1
+  ) {
+    timestamp
+    transactions(offset: $offset, limit: $limit) {
+      hash
+      from
+      to
+      value
+      gasPrice
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<BlockTransactionsQuery, BlockTransactionsQueryVariables>;
 export const BlockDocument = new TypedDocumentString(`
     query Block($number: Int!) {
   Block: Ethereum__Mainnet__Block(filter: {number: {_eq: $number}}, limit: 1) {
