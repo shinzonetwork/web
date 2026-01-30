@@ -81,13 +81,12 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                 if (!response.ok) {
                     const data: { errors: { message: string }[] } = await response.json();
                     const message = data?.errors?.[0]?.message;
-                    setFormError(message);
                     throw new Error(message);
                 }
 
             } catch (error: unknown) {
-                if (!formError) {
-                    setFormError(error instanceof Error ? error.name : 'Something went wrong. Please try again.');
+                if (error instanceof Error) {
+                    setFormError(error.message || 'Something went wrong. Please try again.');
                 }
                 throw error;
             }

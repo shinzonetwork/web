@@ -3,6 +3,7 @@ import { slugField } from "payload";
 
 import { authenticated } from "../../access/authenticated";
 import { anyone } from "../../access/anyone";
+import { upvoteEndpoint } from "./endpoints/upvote";
 import { revalidateChain, revalidateDelete } from "./hooks/revalidateChain";
 
 export const Chains: CollectionConfig = {
@@ -81,6 +82,7 @@ export const Chains: CollectionConfig = {
       defaultValue: 0,
     },
   ],
+  endpoints: [upvoteEndpoint],
   hooks: {
     afterChange: [revalidateChain],
     afterDelete: [revalidateDelete],

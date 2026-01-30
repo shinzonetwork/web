@@ -79,7 +79,9 @@ export function ConnectButton({
           }
         },
         onError: () => {
-          onError("Failed to connect wallet");
+          if (!isConnected) {
+            onError("Failed to connect wallet");
+          }
         },
       }
     );

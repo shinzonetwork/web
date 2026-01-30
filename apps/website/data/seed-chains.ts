@@ -46,7 +46,7 @@ async function seed() {
       collection: "media",
       data: { alt: `${network.name} logo` },
       file: {
-        data: uint8,
+        data: uint8 as Buffer,
         mimetype: "image/svg+xml",
         name: imageName,
         size: uint8.length,
