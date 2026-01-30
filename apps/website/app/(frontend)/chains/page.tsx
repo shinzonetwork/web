@@ -127,7 +127,6 @@ const NetworkCard = ({ chain }: { chain: ChainCardData }) => {
             <div className="size-14 rounded-md overflow-hidden z-1 ml-3 mt-3 relative border border-szo-border-light bg-white">
               {chainIcon && (
                 <ImageMedia
-                  fill
                   resource={chainIcon}
                   imgClassName="p-2 object-contain object-center"
                 />

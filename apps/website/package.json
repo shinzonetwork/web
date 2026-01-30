@@ -18,6 +18,7 @@
     "lint": "eslint",
     "payload": "payload",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env=$CLOUDFLARE_ENV",
+    "seed:chains": "pnpx tsx data/seed-chains.ts",
     "start": "next start"
   },
   "dependencies": {
