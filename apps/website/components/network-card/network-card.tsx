@@ -14,9 +14,10 @@ export type ChainCardData = Pick<
   | "token"
   | "isSupported"
   | "spotsLimit"
-  | "claimedSpots"
   | "upvotes"
->;
+> & {
+  claimedSpots: number;
+};
 
 export const NetworkCard = ({
   chain,

@@ -11,6 +11,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
+import { Chain } from '@/payload/payload-types';
 
 export const dynamic = "force-static";
 export const revalidate = 600;
@@ -136,6 +137,7 @@ export default async function Page({
                       </p>
                       <DialogIndexer
                         networkName={chain.name}
+                        chainId={chain.id}
                         supported={chain.isSupported}
                       />
                     </div>
@@ -161,6 +163,7 @@ export default async function Page({
                       <p>Claim your spot as a validator of this chain</p>
                       <DialogIndexer
                         networkName={chain.name}
+                        chainId={chain.id}
                         supported={chain.isSupported ?? false}
                         label="Claim a Spot"
                       />
@@ -205,7 +208,20 @@ const queryChainBySlug = async (slug: string) => {
     where: {
       slug: { equals: slug },
     },
+    joins: {
+      claims: {
+        count: true,
+        where: {
+          verified: { equals: true },
+        }
+      }
+    },
   });
 
-  return result.docs[0] || null;
+  const document = result.docs[0];
+  return document ? {
+    ...document,
+    claims: undefined,
+    claimedSpots: document.claims?.totalDocs ?? 0,
+  } as (Chain & { claimedSpots: number }) : null;
 };

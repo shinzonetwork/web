@@ -79,7 +79,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    chains: {
+      claims: 'claims';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -254,13 +258,14 @@ export interface Chain {
    */
   spotsLimit: number;
   /**
-   * Number of spots already claimed (computed from verified submissions)
-   */
-  claimedSpots?: number | null;
-  /**
    * Number of upvotes from connected wallets
    */
   upvotes?: number | null;
+  claims?: {
+    docs?: (number | Claim)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -270,7 +275,7 @@ export interface Chain {
  */
 export interface Claim {
   id: number;
-  network: string;
+  network: number | Chain;
   validatorAddress: string;
   /**
    * Wallet signature proving ownership
@@ -490,8 +495,8 @@ export interface ChainsSelect<T extends boolean = true> {
   generateSlug?: T;
   slug?: T;
   spotsLimit?: T;
-  claimedSpots?: T;
   upvotes?: T;
+  claims?: T;
   updatedAt?: T;
   createdAt?: T;
 }

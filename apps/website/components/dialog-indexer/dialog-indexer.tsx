@@ -23,12 +23,13 @@ import type { Claim } from '@/payload/payload-types';
 
 interface DialogIndexerProps {
     networkName: string
+    chainId: number
     supported: boolean
     label?: string
 }
 
 const schema = z.object({
-    network: z.string(),
+    network: z.number(),
     validatorAddress: z.string().min(1, "Validator Address is required"),
     signature: z.string().min(1, "Signature is required"),
     email: z.email(),
@@ -40,7 +41,7 @@ const schema = z.object({
 })
 
 const defaultFormValues: z.input<typeof schema> = {
-    network: "",
+    network: 0,
     validatorAddress: "",
     signature: "",
     email: "",
@@ -48,13 +49,13 @@ const defaultFormValues: z.input<typeof schema> = {
     socialMedia: [{ platform: "", link: "" }],
 }
 
-export function DialogIndexer({ networkName, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
+export function DialogIndexer({ networkName, chainId, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
     const { address } = useAccount();
 
     const form = useAppForm({
         defaultValues: {
             ...defaultFormValues,
-            network: networkName,
+            network: chainId,
             validatorAddress: address as string,
         },
         onSubmit: async ({ value }) => {
@@ -162,7 +163,7 @@ export function DialogIndexer({ networkName, supported, label = 'Become an Index
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
                             <h2 className="text-h4">We got it!</h2>
-                            <p>Thanks for registering. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris id venenatis metus. Proin sagittis vehicula volutpat.</p>
+                            <p>Thanks for registering!</p>
                         </div>
 
                         <DialogClose asChild>

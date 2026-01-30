@@ -9,6 +9,7 @@ import SectionTitle from "@/components/section-title";
 import configPromise from "@payload-config";
 import { Metadata } from "next";
 import { BasePayload, getPayload } from 'payload';
+import { Chain } from '@/payload/payload-types';
 
 export const dynamic = "force-static";
 export const revalidate = 600;
@@ -36,13 +37,13 @@ export default async function Page() {
 
       <BlockSpacing spacing="pt-0 pb-15">
         <BlockContainer>
-          {!!supported.docs.length && (
+          {!!supported.length && (
             <div className="grid grid-cols-12 mb-15">
               <div className="col-span-full">
                 <SectionTitle text="Live Chains" />
               </div>
               <div className="col-span-full grid lg:grid-cols-4 gap-5">
-                {supported.docs.map((chain) => (
+                {supported.map((chain) => (
                   <NetworkCard key={chain.slug} chain={chain} highlighted />
                 ))}
                 <div className="lg:col-span-2 richtext lg:p-4">
@@ -53,7 +54,8 @@ export default async function Page() {
                     decentralized data availability.
                   </p>
                   <DialogIndexer
-                    networkName={supported.docs[0]?.name || "Ethereum"}
+                    networkName={supported[0]?.name || "Ethereum"}
+                    chainId={supported[0]?.id}
                     supported={true}
                   />
                 </div>
@@ -61,13 +63,13 @@ export default async function Page() {
             </div>
           )}
 
-          {!!planned.docs.length && (
+          {!!planned.length && (
             <div className="grid grid-cols-12">
               <div className="col-span-full">
                 <SectionTitle text="Planned" />
               </div>
               <div className="col-span-full grid lg:grid-cols-4 gap-5">
-                {planned.docs.map((chain) => (
+                {planned.map((chain) => (
                   <NetworkCard key={chain.slug} chain={chain} />
                 ))}
               </div>
@@ -98,12 +100,12 @@ export default async function Page() {
   );
 }
 
-const queryChainsByType = (payload: BasePayload, supported: boolean) => {
-  return payload.find({
+const queryChainsByType = async (payload: BasePayload, supported: boolean) => {
+  const chains = await payload.find({
     collection: "chains",
     depth: 1,
-    limit: 8,
-    overrideAccess: false,
+    limit: 16,
+    overrideAccess: true,
     sort: "-upvotes",
     where: {
       isSupported: {
@@ -118,10 +120,27 @@ const queryChainsByType = (payload: BasePayload, supported: boolean) => {
       token: true,
       isSupported: true,
       spotsLimit: true,
-      claimedSpots: true,
       upvotes: true,
+      claims: true,
+    },
+    joins: {
+      claims: {
+        count: true,
+        where: {
+          verified: { equals: true },
+        }
+      }
     },
   });
+
+  return chains.docs.map((chain) => {
+    const claims = (chain as unknown as { claims?: { totalDocs?: number } }).claims;
+    return {
+      ...chain,
+      claims: undefined,
+      claimedSpots: claims?.totalDocs ?? 0,
+    };
+  }) as (Chain & { claimedSpots: number })[];
 };
 
 const queryChains = async () => {

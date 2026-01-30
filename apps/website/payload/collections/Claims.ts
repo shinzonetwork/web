@@ -51,7 +51,8 @@ export const Claims: CollectionConfig = {
   fields: [
     {
       name: "network",
-      type: "text",
+      type: "relationship",
+      relationTo: "chains",
       required: true,
     },
     {
