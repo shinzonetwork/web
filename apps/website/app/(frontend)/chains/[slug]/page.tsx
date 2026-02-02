@@ -53,7 +53,6 @@ export default async function Page({
   }
 
   const chainIcon = isPopulated(chain.icon) ? chain.icon : null;
-  const chainToken = chain.token;
 
   return (
     <>
@@ -65,13 +64,13 @@ export default async function Page({
                 href="/chains"
                 className="text-inline-link font-bold font-mono"
               >
-                {`Back to Supported Networks`}
+                {`<- Supported Networks`}
               </Link>
             </div>
 
             <div className="col-span-full md:grid grid-cols-subgrid py-10">
               <div className="col-span-full border-b border-szo-border-light pb-4">
-                <div className="size-14 rounded-md overflow-hidden z-1 relative border border-szo-border-light bg-white mb-2">
+                <div className="size-14 rounded-md overflow-hidden z-1 relative border border-szo-border-light bg-white mb-4">
                   {chainIcon && (
                     <ImageMedia
                       resource={chainIcon}
@@ -96,16 +95,10 @@ export default async function Page({
                         {chain.isSupported ? "Supported" : "Planned"}
                       </td>
                     </tr>
-                    {chainToken && (
-                      <tr>
-                        <td>Token</td>
-                        <td className="font-mono opacity-70">{chainToken}</td>
-                      </tr>
-                    )}
                     <tr>
-                      <td>Spots</td>
+                      <td>Claimed</td>
                       <td className="font-mono opacity-70">
-                        {chain.claimedSpots}/{chain.spotsLimit} claimed
+                        {chain.claimedSpots}/{chain.spotsLimit}
                       </td>
                     </tr>
                     <tr>
@@ -177,7 +170,7 @@ export default async function Page({
       </BlockSpacing>
 
       <BlockCta
-        title="Suggest a network"
+        title="Don't see yours?"
         content={
           <>
             <p>Let use know by telling us!</p>

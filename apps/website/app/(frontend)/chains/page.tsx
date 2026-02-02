@@ -54,7 +54,7 @@ export default async function Page() {
                     decentralized data availability.
                   </p>
                   <DialogIndexer
-                    networkName={supported[0]?.name || "Ethereum"}
+                    networkName={supported[0]?.name}
                     chainId={supported[0]?.id}
                     supported={true}
                   />
@@ -65,9 +65,11 @@ export default async function Page() {
 
           {!!planned.length && (
             <div className="grid grid-cols-12">
-              <div className="col-span-full">
-                <SectionTitle text="Planned" />
+              <div className="col-span-full richtext">
+                <SectionTitle text="Planned Chains (Preview)" className="mb-7" />
+                <p className="mb-10">Not live yet. This page tracks launch priority with two signals: votes + verified validators</p>
               </div>
+
               <div className="col-span-full grid lg:grid-cols-4 gap-5">
                 {planned.map((chain) => (
                   <NetworkCard key={chain.slug} chain={chain} />

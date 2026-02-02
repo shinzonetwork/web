@@ -58,7 +58,7 @@ export const NetworkCard = ({
             )}
           </div>
 
-          <div className="grow mt-4 mb-6">
+          <div className="grow mt-4 mb-8">
             <p className="font-light font-mono text-px-16">/ {chain.name}</p>
           </div>
 
