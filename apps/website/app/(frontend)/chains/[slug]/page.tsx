@@ -166,6 +166,24 @@ export default async function Page({
               </div>
             )}
           </div>
+
+          <div className="col-span-full pt-10">
+            <h2 className="text-h4 mb-8">/ Indexer Spots</h2>
+            <div className="flex gap-10 lg:flex-row flex-col">
+              <p className="whitespace-nowrap text-px-14 text-text-secondary font-mono">Claimed: {chain.claimedSpots}/{chain.spotsLimit}</p>
+
+              <div className="relative grow h-4 w-full border-2 border-szo-primary">
+                <div
+                  style={{ width: `${Math.floor((chain.claimedSpots / chain.spotsLimit) * 100)}%`}}
+                  className="bg-[url('/bg-pattern.png')] bg-no-repeat bg-[length:100%_100%] h-full"
+                />
+                <div
+                  style={{ left: `${Math.floor((chain.claimedSpots / chain.spotsLimit) * 100)}%`}}
+                  className="absolute -top-1.5 w-3 h-6 bg-white border-2 border-szo-primary"
+                />
+              </div>
+            </div>
+          </div>
         </BlockContainer>
       </BlockSpacing>
 
