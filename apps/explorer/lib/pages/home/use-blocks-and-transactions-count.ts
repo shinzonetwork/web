@@ -10,10 +10,6 @@ interface MetricsData {
   attestation_errors: number;
   signature_verifications: number;
   signature_failures: number;
-  documents_received: number;
-  documents_processed: number;
-  documents_dropped: number;
-  documents_skipped: number;
   blocks_processed: number;
   transactions_processed: number;
   logs_processed: number;
@@ -24,8 +20,7 @@ interface MetricsData {
   unique_access_lists: number;
   views_registered: number;
   views_active: number;
-  view_processing_jobs: number;
-  average_processing_time_ms: number;
+  last_processing_time_ms: number;
   start_time: string;
   last_document_time: string;
   most_recent_block: number;
@@ -33,8 +28,9 @@ interface MetricsData {
   schema_type: string;
 }
 
-interface MetricsResponse {
+export interface MetricsResponse {
   metrics: MetricsData;
+  current_block: number;
   timestamp: number;
   uptime_human: string;
   uptime_seconds: number;
