@@ -62,7 +62,7 @@ export default buildConfig({
       }),
     ],
   }),
-  secret: cloudflare.env.PAYLOAD_SECRET || process.env.PAYLOAD_SECRET || "",
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
@@ -82,7 +82,7 @@ export default buildConfig({
   email: resendAdapter({
     defaultFromAddress: "updates@web-mail.shinzo.network",
     defaultFromName: "Shinzo Website",
-    apiKey: cloudflare.env.RESEND_API_KEY || process.env.RESEND_API_KEY || "",
+    apiKey: process.env.RESEND_API_KEY || "",
   }),
 });
 
