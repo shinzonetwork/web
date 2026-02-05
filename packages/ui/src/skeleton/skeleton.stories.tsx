@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { Skeleton } from '.';
+import { Skeleton } from '@shinzo/ui/skeleton';
 
 const meta: Meta<typeof Skeleton> = {
   component: Skeleton,

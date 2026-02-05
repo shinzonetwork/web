@@ -4,7 +4,7 @@ import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
 import { formatHash } from "@/shared/utils/format-hash";
-import { TableLayout, TableNullableCell } from "@/shared/ui/table";
+import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';

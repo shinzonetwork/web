@@ -40,15 +40,12 @@ const config: StorybookConfig = {
     return config;
   },
   "stories": [
-    "../lib/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
   "addons": [],
   "framework": {
     "name": "@storybook/nextjs",
     "options": {}
-  },
-  "staticDirs": [
-    "../public"
-  ]
+  }
 };
 export default config;

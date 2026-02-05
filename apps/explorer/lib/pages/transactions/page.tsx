@@ -1,6 +1,6 @@
 "use client"
 
-import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { TransactionsList } from './transactions-list';

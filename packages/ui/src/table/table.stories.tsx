@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 import { formatDistanceToNow } from 'date-fns';
-import { formatHash } from '@/shared/utils/format-hash';
+const formatHash = (hash: string, start = 5, end = 5) =>
+  `${hash.slice(0, start)}...${hash.slice(-end)}`;
 import { useEffect, useState } from 'react';
 import { TableCell } from './table-cell';
 import { TableLayout } from './table-layout';

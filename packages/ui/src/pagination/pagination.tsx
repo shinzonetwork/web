@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from "react";
 import {
   ChevronLeftIcon,
@@ -7,8 +9,7 @@ import {
 import Link from 'next/link'
 import type { ComponentProps } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { Typography } from '@/shared/ui/typography';
-import { cn } from '@/shared/utils/utils';
+import { cn } from '../cn';
 import { DEFAULT_LIMIT } from './get-server-page';
 
 export interface PaginationProps extends ComponentProps<"nav"> {
@@ -136,7 +137,7 @@ function PaginationFirst({
       className={cn(className)}
       {...props}
     >
-      <Typography className='underline'>First</Typography>
+      <span className='underline'>First</span>
     </PaginationLink>
   )
 }
@@ -181,7 +182,7 @@ function PaginationLast({
       className={cn(className)}
       {...props}
     >
-      <Typography className='underline'>Last</Typography>
+      <span className='underline'>Last</span>
     </PaginationLink>
   )
 }

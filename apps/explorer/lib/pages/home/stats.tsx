@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { ArrowLeftRightIcon } from 'lucide-react';
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { Typography } from '@/shared/ui/typography';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Skeleton } from '@shinzo/ui/skeleton';
 import { useTransactionsCount } from './use-transactions-count';
 import { useBlocksCount } from './use-blocks-count';
 import { AnimatedNumber } from '@/shared/ui/animated-number';

@@ -1,8 +1,7 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 /* make sure Tailwind parses classes defined in UI package */
-@source "../../../packages/ui/src";
+@source "../src";
 
 @theme inline {
   --font-sans: "Geist", "Geist Fallback";
@@ -61,9 +60,6 @@
   --color-dark-hover: #1e1e1e;
 
   --animate-shimmer: shimmer 2s infinite;
-  --animate-slide-up: slide-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  --animate-slide-in: slide-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  --animate-highlight: highlight 1s ease-out forwards;
 
   @keyframes shimmer {
     0% {
@@ -73,42 +69,6 @@
       left: 150%;
     }
   }
-
-  @keyframes highlight {
-    0% {
-      background-color: #fef9c3;
-    }
-    100% {
-      background-color: transparent;
-    }
-  }
-
-  @keyframes slide-up {
-    0% {
-      transform: translateY(0) rotateX(0deg);
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-    100% {
-      transform: translateY(-100%) rotateX(-90deg);
-      opacity: 0;
-    }
-  }
-  @keyframes slide-in {
-    0% {
-      transform: translateY(100%) rotateX(90deg);
-      opacity: 0;
-    }
-    50% {
-      opacity: 0.5;
-    }
-    100% {
-      transform: translateY(0) rotateX(0deg);
-      opacity: 1;
-    }
-  }
 }
 
 @layer base {
@@ -116,7 +76,6 @@
     @apply border-light;
   }
 
-  /* Ensure body has pure white background and black text */
   body {
     @apply bg-white text-black;
   }

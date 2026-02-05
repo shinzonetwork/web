@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cn } from '@/shared/utils/utils';
+import { cn } from '../cn';
 import { TableCell } from './table-cell';
 
 export interface TableLayoutProps<ROW = unknown> {

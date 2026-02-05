@@ -1,7 +1,7 @@
 'use server';
 
 import { BlocksPageClient } from './page';
-import { PageParamsOptions, getServerPage } from '@/shared/ui/pagination/get-server-page';
+import { PageParamsOptions, getServerPage } from '@shinzo/ui/pagination';
 
 export interface BlocksPageProps {
   searchParams: Promise<PageParamsOptions>
