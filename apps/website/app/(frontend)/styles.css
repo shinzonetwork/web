@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../../../../packages/ui/src/theme.css";
 @plugin "@tailwindcss/typography";
+
+/* make sure Tailwind parses classes defined in UI package */
+@source "../../../../packages/ui/src";
 
 @custom-variant dark (&:is(.dark *));
 

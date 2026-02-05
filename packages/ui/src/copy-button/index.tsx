@@ -25,7 +25,7 @@ export const CopyButton = ({ text, className }: CopyButtonProps) => {
     <button
       onClick={copy}
       className={cn(
-        'size-6 flex items-center justify-center text-text-accent cursor-pointer rounded-full hover:bg-background-accent-hover',
+        'size-6 flex items-center justify-center text-ui-text-accent cursor-pointer rounded-full hover:bg-ui-bg-accent-hover',
         className,
       )}
     >

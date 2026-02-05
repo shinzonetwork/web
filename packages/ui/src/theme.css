@@ -1,0 +1,26 @@
+/*
+ * Default theme tokens for @shinzo/ui components.
+ * Import this file in your app's CSS before your own @theme block.
+ * Override any token in your app's @theme inline { ... } to customize.
+ */
+@theme inline {
+  --color-ui-bg: #ffffff;
+  --color-ui-bg-muted: #f5f5f5;
+  --color-ui-bg-accent: #FFFBFB;
+  --color-ui-bg-accent-hover: #FFF5F5;
+
+  --color-ui-border: #C7C7C7;
+  --color-ui-accent: #d01f27;
+
+  --color-ui-text: #353535;
+  --color-ui-text-accent: #D32C34;
+
+  --color-ui-shimmer: #e5e5e5;
+
+  --animate-shimmer: shimmer 2s infinite;
+
+  @keyframes shimmer {
+    0% { left: -50%; }
+    100% { left: 150%; }
+  }
+}

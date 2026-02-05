@@ -55,7 +55,7 @@ export const TableCell = ({
       className={cn(
         'h-18 py-1 px-2',
         'inline-flex items-center gap-2',
-        'text-base font-mono font-medium text-text-primary',
+        'text-base font-mono font-medium text-ui-text',
         alignClass,
         nowrap && 'whitespace-nowrap',
         numeric && 'font-mono tabular-nums',

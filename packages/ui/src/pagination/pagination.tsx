@@ -116,10 +116,10 @@ function PaginationLink({
       data-slot="pagination-link"
       data-active={isActive}
       className={cn(
-        'h-full flex items-center justify-center gap-1 py-2.5 px-3 border border-border',
-        'hover:bg-background-accent-hover cursor-pointer transition-all',
-        'data-[active=true]:min-w-16 data-[active=true]:border-accent data-[active=true]:text-text-accent data-[active=true]:bg-background-accent-light',
-        'focus-visible:border-transparent focus-visible:ring-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:outline-1',
+        'h-full flex items-center justify-center gap-1 py-2.5 px-3 border border-ui-border',
+        'hover:bg-ui-bg-accent-hover cursor-pointer transition-all',
+        'data-[active=true]:min-w-16 data-[active=true]:border-ui-accent data-[active=true]:text-ui-text-accent data-[active=true]:bg-ui-bg-accent',
+        'focus-visible:border-transparent focus-visible:ring-ui-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:outline-1',
         className
       )}
       {...props}
