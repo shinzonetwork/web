@@ -1,7 +1,7 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-d1-sqlite'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.run(sql`CREATE TABLE \`chains\` (
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`chains\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`name\` text NOT NULL,
   	\`icon_id\` integer NOT NULL,
@@ -17,11 +17,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`icon_id\`) REFERENCES \`media\`(\`id\`) ON UPDATE no action ON DELETE set null
   );
   `)
-  await db.run(sql`CREATE INDEX \`chains_icon_idx\` ON \`chains\` (\`icon_id\`);`)
-  await db.run(sql`CREATE UNIQUE INDEX \`chains_slug_idx\` ON \`chains\` (\`slug\`);`)
-  await db.run(sql`CREATE INDEX \`chains_updated_at_idx\` ON \`chains\` (\`updated_at\`);`)
-  await db.run(sql`CREATE INDEX \`chains_created_at_idx\` ON \`chains\` (\`created_at\`);`)
-  await db.run(sql`CREATE TABLE \`claims_social_media\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`chains_icon_idx\` ON \`chains\` (\`icon_id\`);`)
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`chains_slug_idx\` ON \`chains\` (\`slug\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`chains_updated_at_idx\` ON \`chains\` (\`updated_at\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`chains_created_at_idx\` ON \`chains\` (\`created_at\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`claims_social_media\` (
   	\`_order\` integer NOT NULL,
   	\`_parent_id\` integer NOT NULL,
   	\`id\` text PRIMARY KEY NOT NULL,
@@ -30,9 +30,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`_parent_id\`) REFERENCES \`claims\`(\`id\`) ON UPDATE no action ON DELETE cascade
   );
   `)
-  await db.run(sql`CREATE INDEX \`claims_social_media_order_idx\` ON \`claims_social_media\` (\`_order\`);`)
-  await db.run(sql`CREATE INDEX \`claims_social_media_parent_id_idx\` ON \`claims_social_media\` (\`_parent_id\`);`)
-  await db.run(sql`CREATE TABLE \`claims\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`claims_social_media_order_idx\` ON \`claims_social_media\` (\`_order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`claims_social_media_parent_id_idx\` ON \`claims_social_media\` (\`_parent_id\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`claims\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`network_id\` integer NOT NULL,
   	\`validator_address\` text NOT NULL,
@@ -45,10 +45,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	FOREIGN KEY (\`network_id\`) REFERENCES \`chains\`(\`id\`) ON UPDATE no action ON DELETE set null
   );
   `)
-  await db.run(sql`CREATE INDEX \`claims_network_idx\` ON \`claims\` (\`network_id\`);`)
-  await db.run(sql`CREATE INDEX \`claims_updated_at_idx\` ON \`claims\` (\`updated_at\`);`)
-  await db.run(sql`CREATE INDEX \`claims_created_at_idx\` ON \`claims\` (\`created_at\`);`)
-  await db.run(sql`CREATE TABLE \`suggestions\` (
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`claims_network_idx\` ON \`claims\` (\`network_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`claims_updated_at_idx\` ON \`claims\` (\`updated_at\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`claims_created_at_idx\` ON \`claims\` (\`created_at\`);`)
+  await db.run(sql`CREATE TABLE IF NOT EXISTS \`suggestions\` (
   	\`id\` integer PRIMARY KEY NOT NULL,
   	\`name\` text NOT NULL,
   	\`count\` numeric DEFAULT 1 NOT NULL,
@@ -56,15 +56,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	\`created_at\` text DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')) NOT NULL
   );
   `)
-  await db.run(sql`CREATE UNIQUE INDEX \`suggestions_name_idx\` ON \`suggestions\` (\`name\`);`)
-  await db.run(sql`CREATE INDEX \`suggestions_updated_at_idx\` ON \`suggestions\` (\`updated_at\`);`)
-  await db.run(sql`CREATE INDEX \`suggestions_created_at_idx\` ON \`suggestions\` (\`created_at\`);`)
-  await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`chains_id\` integer REFERENCES chains(id);`)
-  await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`claims_id\` integer REFERENCES claims(id);`)
-  await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`suggestions_id\` integer REFERENCES suggestions(id);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_chains_id_idx\` ON \`payload_locked_documents_rels\` (\`chains_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_claims_id_idx\` ON \`payload_locked_documents_rels\` (\`claims_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_suggestions_id_idx\` ON \`payload_locked_documents_rels\` (\`suggestions_id\`);`)
+  await db.run(sql`CREATE UNIQUE INDEX IF NOT EXISTS \`suggestions_name_idx\` ON \`suggestions\` (\`name\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`suggestions_updated_at_idx\` ON \`suggestions\` (\`updated_at\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`suggestions_created_at_idx\` ON \`suggestions\` (\`created_at\`);`)
+  try { await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`chains_id\` integer REFERENCES chains(id);`) } catch (_) { /* column may already exist */ }
+  try { await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`claims_id\` integer REFERENCES claims(id);`) } catch (_) { /* column may already exist */ }
+  try { await db.run(sql`ALTER TABLE \`payload_locked_documents_rels\` ADD \`suggestions_id\` integer REFERENCES suggestions(id);`) } catch (_) { /* column may already exist */ }
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_chains_id_idx\` ON \`payload_locked_documents_rels\` (\`chains_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_claims_id_idx\` ON \`payload_locked_documents_rels\` (\`claims_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_suggestions_id_idx\` ON \`payload_locked_documents_rels\` (\`suggestions_id\`);`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -93,11 +93,11 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   await db.run(sql`DROP TABLE \`payload_locked_documents_rels\`;`)
   await db.run(sql`ALTER TABLE \`__new_payload_locked_documents_rels\` RENAME TO \`payload_locked_documents_rels\`;`)
   await db.run(sql`PRAGMA foreign_keys=ON;`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_order_idx\` ON \`payload_locked_documents_rels\` (\`order\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_parent_idx\` ON \`payload_locked_documents_rels\` (\`parent_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_path_idx\` ON \`payload_locked_documents_rels\` (\`path\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_users_id_idx\` ON \`payload_locked_documents_rels\` (\`users_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_media_id_idx\` ON \`payload_locked_documents_rels\` (\`media_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_posts_id_idx\` ON \`payload_locked_documents_rels\` (\`posts_id\`);`)
-  await db.run(sql`CREATE INDEX \`payload_locked_documents_rels_authors_id_idx\` ON \`payload_locked_documents_rels\` (\`authors_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_order_idx\` ON \`payload_locked_documents_rels\` (\`order\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_parent_idx\` ON \`payload_locked_documents_rels\` (\`parent_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_path_idx\` ON \`payload_locked_documents_rels\` (\`path\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_users_id_idx\` ON \`payload_locked_documents_rels\` (\`users_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_media_id_idx\` ON \`payload_locked_documents_rels\` (\`media_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_posts_id_idx\` ON \`payload_locked_documents_rels\` (\`posts_id\`);`)
+  await db.run(sql`CREATE INDEX IF NOT EXISTS \`payload_locked_documents_rels_authors_id_idx\` ON \`payload_locked_documents_rels\` (\`authors_id\`);`)
 }
