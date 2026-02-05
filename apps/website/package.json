@@ -22,6 +22,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@shinzo/ui": "workspace:*",
     "@payloadcms/db-d1-sqlite": "3.70.0",
     "@payloadcms/email-resend": "3.70.0",
     "@payloadcms/next": "3.70.0",

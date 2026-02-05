@@ -5,6 +5,7 @@ import { DialogIndexer } from "@/components/dialog-indexer/dialog-indexer";
 import { DialogSuggest } from "@/components/dialog-suggest";
 import { ImageMedia } from "@/components/image-media";
 import { isPopulated } from "@/lib/utils";
+import { getServerPage } from "@shinzo/ui/pagination";
 import configPromise from "@payload-config";
 import { Info } from "lucide-react";
 import { Metadata } from "next";
@@ -12,8 +13,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
 import { Chain } from '@/payload/payload-types';
+import { IndexerSpots } from "./indexer-spots";
 
-export const dynamic = "force-static";
 export const revalidate = 600;
 
 export async function generateStaticParams() {
@@ -42,11 +43,18 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
+  searchParams: searchParamsPromise,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string; limit?: string }>;
 }) {
   const { slug } = await params;
-  const chain = await queryChainBySlug(slug);
+  const searchParams = await searchParamsPromise;
+  const { page, limit } = getServerPage({
+    page: searchParams.page ?? '1',
+    limit: searchParams.limit ?? '20',
+  });
+  const chain = await queryChainBySlug(slug, { page, limit });
 
   if (!chain) {
     notFound();
@@ -187,6 +195,13 @@ export default async function Page({
         </BlockContainer>
       </BlockSpacing>
 
+      <IndexerSpots
+        claims={chain.claims?.docs ?? []}
+        totalClaims={chain.claimedSpots}
+        page={page}
+        limit={limit}
+      />
+
       <BlockCta
         title="Don't see yours?"
         content={
@@ -209,7 +224,7 @@ export default async function Page({
   );
 }
 
-const queryChainBySlug = async (slug: string) => {
+const queryChainBySlug = async (slug: string, pagination?: { page: number; limit: number }) => {
   const payload = await getPayload({ config: configPromise });
 
   const result = await payload.find({
@@ -222,6 +237,8 @@ const queryChainBySlug = async (slug: string) => {
     joins: {
       claims: {
         count: true,
+        limit: pagination?.limit ?? 20,
+        page: pagination?.page ?? 1,
         where: {
           verified: { equals: true },
         }
@@ -232,7 +249,6 @@ const queryChainBySlug = async (slug: string) => {
   const document = result.docs[0];
   return document ? {
     ...document,
-    claims: undefined,
     claimedSpots: document.claims?.totalDocs ?? 0,
   } as (Chain & { claimedSpots: number }) : null;
 };
