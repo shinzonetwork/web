@@ -2,7 +2,7 @@ import * as migration_20251219_182153_add_posts from './20251219_182153_add_post
 import * as migration_20251222_232308_enable from './20251222_232308_enable';
 import * as migration_20251222_232332_update_posts from './20251222_232332_update_posts';
 import * as migration_20251223_171559_add_blog_landing_global from './20251223_171559_add_blog_landing_global';
-import * as migration_20260203_160129_add_indexer_directory from './20260203_160129_add_indexer_directory';
+import * as migration_20260205_134002_add_indexer_directory from './20260205_134002_add_indexer_directory';
 
 export const migrations = [
   {
@@ -26,8 +26,8 @@ export const migrations = [
     name: '20251223_171559_add_blog_landing_global',
   },
   {
-    up: migration_20260203_160129_add_indexer_directory.up,
-    down: migration_20260203_160129_add_indexer_directory.down,
-    name: '20260203_160129_add_indexer_directory'
+    up: migration_20260205_134002_add_indexer_directory.up,
+    down: migration_20260205_134002_add_indexer_directory.down,
+    name: '20260205_134002_add_indexer_directory'
   },
 ];
