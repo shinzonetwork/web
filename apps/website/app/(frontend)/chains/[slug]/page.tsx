@@ -103,15 +103,23 @@ export default async function Page({
                         {chain.isSupported ? "Supported" : "Planned"}
                       </td>
                     </tr>
+                    {chain.token && (
+                      <tr>
+                        <td>Token</td>
+                        <td className="font-mono opacity-70">
+                          {chain.token}
+                        </td>
+                      </tr>
+                    )}
                     <tr>
                       <td>Claimed</td>
                       <td className="font-mono opacity-70">
-                        {chain.claimedSpots}/{chain.spotsLimit}
+                        {chain.claimedSpots || '0'}/{chain.spotsLimit || '0'}
                       </td>
                     </tr>
                     <tr>
                       <td>Upvotes</td>
-                      <td className="font-mono opacity-70">{chain.upvotes}</td>
+                      <td className="font-mono opacity-70">{chain.upvotes || '0'}</td>
                     </tr>
                   </tbody>
                 </table>
