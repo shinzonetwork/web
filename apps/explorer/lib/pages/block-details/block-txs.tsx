@@ -4,6 +4,7 @@ import { TransactionsList } from "@/pages/transactions/transactions-list";
 import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { useTransactions } from "@/pages/transactions/use-transactions";
+import { useTransactionsCount } from "../transactions/use-transactions-count";
 export interface BlockTxsProps {
   blockNumber: number;
   pageParams: PageParams;
@@ -16,6 +17,7 @@ export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) =>
     offset,
     blockNumber,
   });
+ const { data: transactionsCount } = useTransactionsCount();
 
   return (
     <>
@@ -29,7 +31,7 @@ export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) =>
         <div />
         <Pagination
           page={page}
-          totalItems={transactions?.totalCount ?? 0}
+          totalItems={transactionsCount?.totalTransactions ?? 0}
           itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>
