@@ -13,7 +13,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
 import { Chain } from '@/payload/payload-types';
-import { IndexerSpots } from "./indexer-spots";
+import { IndexerSpots, type ShortClaim } from "./indexer-spots";
 
 export const revalidate = 600;
 
@@ -182,11 +182,11 @@ export default async function Page({
 
               <div className="relative grow h-4 w-full border-2 border-szo-primary">
                 <div
-                  style={{ width: `${Math.floor((chain.claimedSpots / chain.spotsLimit) * 100)}%`}}
+                  style={{ width: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
                   className="bg-[url('/bg-pattern.png')] bg-no-repeat bg-[length:100%_100%] h-full"
                 />
                 <div
-                  style={{ left: `${Math.floor((chain.claimedSpots / chain.spotsLimit) * 100)}%`}}
+                  style={{ left: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
                   className="absolute -top-1.5 w-3 h-6 bg-white border-2 border-szo-primary"
                 />
               </div>
@@ -196,7 +196,7 @@ export default async function Page({
       </BlockSpacing>
 
       <IndexerSpots
-        claims={chain.claims?.docs ?? []}
+        claims={chain.claims ?? []}
         totalClaims={chain.claimedSpots}
         page={page}
         limit={limit}
@@ -250,5 +250,15 @@ const queryChainBySlug = async (slug: string, pagination?: { page: number; limit
   return document ? {
     ...document,
     claimedSpots: document.claims?.totalDocs ?? 0,
-  } as (Chain & { claimedSpots: number }) : null;
+    // do not return the full claim objects for user privacy
+    claims: document.claims?.docs?.map((claim) => {
+      if (typeof claim === 'object' && claim !== null) {
+        return {
+          id: claim.id,
+          validatorAddress: claim.validatorAddress,
+        };
+      }
+      return null;
+    }),
+  } as (Chain & { claimedSpots: number; claims: ShortClaim[] }) : null;
 };

@@ -6,14 +6,16 @@ import { CopyButton } from '@shinzo/ui/copy-button';
 import type { Claim } from '@/payload/payload-types';
 import { cn } from '@/lib/utils';
 
+export type ShortClaim = Pick<Claim, 'id' | 'validatorAddress'>;
+
 interface IndexerSpotsProps {
-  claims: (number | Claim)[];
+  claims: ShortClaim[];
   totalClaims: number;
   page: number;
   limit: number;
 }
 
-const isPopulatedClaim = (claim: number | Claim): claim is Claim =>
+const isPopulatedClaim = (claim: ShortClaim): claim is ShortClaim =>
   typeof claim === 'object' && claim !== null;
 
 export const IndexerSpots = ({ claims, totalClaims, page, limit }: IndexerSpotsProps) => {
