@@ -148,16 +148,18 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                 }}
             >
 
-                <DialogHeader>
-                    <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
-                    <DialogDescription>
-                        {supported ? (
+                {!isSubmitSuccessful && (
+                  <DialogHeader>
+                      <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
+                      <DialogDescription>
+                          {supported ? (
                             <>Verify you&apos;re an active validator of {networkName} to become an indexer of this network.</>
-                        ) : (
+                          ) : (
                             <>Claim your spot as a validator of {networkName}</>
-                        )}
-                    </DialogDescription>
-                </DialogHeader>
+                          )}
+                      </DialogDescription>
+                  </DialogHeader>
+                )}
 
                 {isSubmitSuccessful ? (
                     <div className="pt-15 ">

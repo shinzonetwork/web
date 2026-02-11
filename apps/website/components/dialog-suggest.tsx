@@ -131,18 +131,20 @@ export function DialogSuggest() {
 
             <DialogContent className="max-w-[900px] w-dvw lg:px-30 lg:py-20">
 
-                <DialogHeader>
-                    <DialogTitle>/ Suggest a Network</DialogTitle>
-                    <DialogDescription>
-                        Let us know if you want to see a network added to Shinzō.
-                    </DialogDescription>
-                </DialogHeader>
+                {!isSubmitSuccessful && (
+                  <DialogHeader>
+                      <DialogTitle>/ Suggest a Network</DialogTitle>
+                      <DialogDescription>
+                          Let us know if you want to see a network added to Shinzō.
+                      </DialogDescription>
+                  </DialogHeader>
+                )}
 
                 {isSubmitSuccessful ? (
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
                             <h2 className="text-h4">Thanks for suggesting!</h2>
-                            <p>Thanks for suggesting. We&apos;ll review it and get back to you soon.</p>
+                            <p>We&apos;ll review it and get back to you soon.</p>
                         </div>
 
                         <DialogClose asChild>
