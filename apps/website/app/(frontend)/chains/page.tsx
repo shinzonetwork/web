@@ -11,8 +11,7 @@ import { Metadata } from "next";
 import { BasePayload, getPayload } from 'payload';
 import { Chain } from '@/payload/payload-types';
 
-export const dynamic = "force-static";
-export const revalidate = 600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Shinzō | Supported Networks",

@@ -4,7 +4,6 @@ import { slugField } from "payload";
 import { authenticated } from "../../access/authenticated";
 import { anyone } from "../../access/anyone";
 import { upvoteEndpoint } from "./endpoints/upvote";
-import { revalidateChain, revalidateDelete } from "./hooks/revalidateChain";
 
 export const Chains: CollectionConfig = {
   slug: "chains",
@@ -80,8 +79,4 @@ export const Chains: CollectionConfig = {
     },
   ],
   endpoints: [upvoteEndpoint],
-  hooks: {
-    afterChange: [revalidateChain],
-    afterDelete: [revalidateDelete],
-  },
 };

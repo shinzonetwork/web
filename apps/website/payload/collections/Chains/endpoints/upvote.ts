@@ -22,7 +22,6 @@ export const upvoteEndpoint: Endpoint = {
     const updated = await req.payload.update({
       id,
       collection: "chains",
-      context: { disableRevalidate: true },
       data: {
         upvotes: (chain.upvotes || 0) + 1,
       },

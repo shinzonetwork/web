@@ -15,17 +15,7 @@ import { getPayload } from "payload";
 import { Chain } from '@/payload/payload-types';
 import { IndexerSpots, type ShortClaim } from "./indexer-spots";
 
-export const revalidate = 600;
-
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise });
-  const chains = await payload.find({
-    collection: "chains",
-    limit: 1000,
-    select: { slug: true },
-  });
-  return chains.docs.map(({ slug }) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params: paramsPromise,
