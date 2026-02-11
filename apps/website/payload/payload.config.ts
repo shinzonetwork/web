@@ -11,7 +11,7 @@ import {
   lexicalEditor,
   LinkFeature,
 } from "@payloadcms/richtext-lexical";
-import { r2Storage } from "@payloadcms/storage-r2";
+import { r2Storage, R2StorageOptions } from "@payloadcms/storage-r2";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -69,7 +69,7 @@ export default buildConfig({
   db: sqliteD1Adapter({ binding: cloudflare.env.D1 }),
   plugins: [
     r2Storage({
-      bucket: cloudflare.env.R2,
+      bucket: cloudflare.env.R2 as R2StorageOptions['bucket'],
       collections: { media: true },
     }),
     seoPlugin({
