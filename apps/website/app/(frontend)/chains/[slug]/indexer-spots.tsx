@@ -40,7 +40,7 @@ export const IndexerSpots = ({ claims, totalClaims, page, limit }: IndexerSpotsP
           <div key={claim.id} className={cn('flex h-18 last:border-b border-t border-szo-border-light')}>
             <div className="h-full border-r border-szo-border-light grow" />
             <TableCell className={cn('content-wrapper px-5 overflow-x-hidden flex gap-2')}>
-              <span className="text-px-16 text-szo-primary underline text-ellipsis whitespace-nowrap max-w-full overflow-x-hidden">
+              <span className="text-px-16 text-ellipsis whitespace-nowrap max-w-full overflow-x-hidden">
                 {claim.validatorAddress}
               </span>
               <CopyButton text={claim.validatorAddress} />

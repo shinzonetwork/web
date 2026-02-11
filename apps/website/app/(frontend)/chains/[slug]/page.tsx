@@ -62,7 +62,7 @@ export default async function Page({
                 href="/chains"
                 className="text-inline-link font-bold font-mono"
               >
-                {`<- Supported Networks`}
+                Supported Networks
               </Link>
             </div>
 
