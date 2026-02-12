@@ -5,7 +5,7 @@ import { defineChain, type Chain } from "viem";
 import { getRpcUrl } from "./env";
 
 export const Shinzo: Chain = defineChain({
-  id: 9000,
+  id: 91273002,
   name: "Shinzo",
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {
