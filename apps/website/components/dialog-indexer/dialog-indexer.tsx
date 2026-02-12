@@ -110,6 +110,11 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
 
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!signature) {
+            setFormError("Please sign the message.");
+            return;
+        }
+
         form.handleSubmit();
     }
 
@@ -176,6 +181,10 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                     <form onSubmit={onFormSubmit} noValidate>
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-3">
+                                <form.AppField name="signature">
+                                    {() => null}
+                                </form.AppField>
+
                                 <form.AppField
                                     name="validatorAddress"
                                     validators={{
