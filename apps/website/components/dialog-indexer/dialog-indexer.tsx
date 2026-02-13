@@ -158,9 +158,9 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                       <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
                       <DialogDescription>
                           {supported ? (
-                            <>Verify you&apos;re an active validator of {networkName} to become an indexer of this network.</>
+                            <>Verify you&apos;re an active validator of {networkName} to become an indexer of this network. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
                           ) : (
-                            <>Claim your spot as a validator of {networkName}</>
+                            <>Claim your spot as a validator of {networkName}. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
                           )}
                       </DialogDescription>
                   </DialogHeader>
