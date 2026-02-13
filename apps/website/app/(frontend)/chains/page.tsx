@@ -105,7 +105,7 @@ const queryChainsByType = async (payload: BasePayload, supported: boolean) => {
   const chains = await payload.find({
     collection: "chains",
     depth: 1,
-    limit: 16,
+    limit: 60,
     overrideAccess: true,
     sort: "-upvotes",
     where: {

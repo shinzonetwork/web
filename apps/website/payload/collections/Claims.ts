@@ -58,8 +58,17 @@ export const Claims: CollectionConfig = {
     {
       name: "validatorAddress",
       type: "text",
-      label: "Validator Address",
+      label: "Validator Withdrawal Address",
       required: true,
+    },
+    {
+      name: "validatorPublicKey",
+      type: "text",
+      label: "Validator Public Key",
+      required: true,
+      admin: {
+        description: "BLS public key of the validator (96 hex characters, 0x-prefixed)",
+      },
     },
     {
       name: "signature",

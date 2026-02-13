@@ -277,6 +277,10 @@ export interface Claim {
   network: number | Chain;
   validatorAddress: string;
   /**
+   * BLS public key of the validator (96 hex characters, 0x-prefixed)
+   */
+  validatorPublicKey: string;
+  /**
    * Wallet signature proving ownership
    */
   signature: string;
@@ -506,6 +510,7 @@ export interface ChainsSelect<T extends boolean = true> {
 export interface ClaimsSelect<T extends boolean = true> {
   network?: T;
   validatorAddress?: T;
+  validatorPublicKey?: T;
   signature?: T;
   email?: T;
   domain?: T;

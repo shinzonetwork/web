@@ -28,9 +28,12 @@ interface DialogIndexerProps {
     label?: string
 }
 
+const validatorPubkeyRegex = /^0x[0-9a-fA-F]{96}$/;
+
 const schema = z.object({
     network: z.number(),
     validatorAddress: z.string().min(1, "Validator Address is required"),
+    validatorPublicKey: z.string().regex(validatorPubkeyRegex, "Must be a valid BLS public key (0x-prefixed, 96 hex characters)"),
     signature: z.string().min(1, "Signature is required"),
     email: z.email(),
     domain: z.string(),
@@ -43,6 +46,7 @@ const schema = z.object({
 const defaultFormValues: z.input<typeof schema> = {
     network: 0,
     validatorAddress: "",
+    validatorPublicKey: "",
     signature: "",
     email: "",
     domain: "",
@@ -65,6 +69,7 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                 const body = {
                     network: value.network,
                     validatorAddress: value.validatorAddress,
+                    validatorPublicKey: value.validatorPublicKey,
                     signature: value.signature,
                     email: value.email,
                     domain: value.domain,
@@ -195,7 +200,7 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                                 >
                                     {({ TextField, handleChange }) => (
                                       <TextField
-                                        label="Validator Address"
+                                        label="Validator Withdrawal Address"
                                         placeholder="Connect wallet to fill"
                                         required
                                         disabled
@@ -213,6 +218,11 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                                         )}
                                       />
                                     )}
+                                </form.AppField>
+                            </div>
+                            <div className="grid gap-3">
+                                <form.AppField name="validatorPublicKey">
+                                    {({ TextField }) => <TextField label="Validator Public Key" placeholder="0x..." required />}
                                 </form.AppField>
                             </div>
                             <div className="grid gap-3">
