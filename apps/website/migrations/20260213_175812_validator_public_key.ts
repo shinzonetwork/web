@@ -1,7 +1,7 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-d1-sqlite'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
-  await db.run(sql`ALTER TABLE \`claims\` ADD \`validator_public_key\` text NOT NULL;`)
+  await db.run(sql`ALTER TABLE \`claims\` ADD \`validator_public_key\` text NOT NULL DEFAULT '';`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
