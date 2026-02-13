@@ -122,9 +122,9 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Cta text about becoming an indexer. Lorem ipsum dolor sit
-                      amet, consectetur adipiscing elit. Mauris id venenatis
-                      metus. Proin sagittis vehicula volutpat.
+                      Indexer spots are limited. Claim yours now to secure
+                      your position in the network — early indexers shape the protocol and
+                      earn priority access to rewards. Once all spots are taken, the window closes.
                     </p>
                   </div>
                   <div className="flex gap-x-2 lg:w-1/2">
@@ -151,9 +151,9 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Cta text about claiming a spot. Lorem ipsum dolor sit
-                      amet, consectetur adipiscing elit. Mauris id venenatis
-                      metus. Proin sagittis vehicula volutpat.
+                      Indexer spots are limited. Claim yours now to secure
+                      your position in the network — early indexers shape the protocol and
+                      earn priority access to rewards. Once all spots are taken, the window closes.
                     </p>
                   </div>
                   <div className="flex gap-x-2 lg:w-1/2">

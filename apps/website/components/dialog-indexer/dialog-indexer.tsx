@@ -170,7 +170,7 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
                             <h2 className="text-h4">We got it!</h2>
-                            <p>Thanks for registering!</p>
+                            <p>Thanks for registering! Our team will review your claim and get back to you shortly.</p>
                         </div>
 
                         <DialogClose asChild>
