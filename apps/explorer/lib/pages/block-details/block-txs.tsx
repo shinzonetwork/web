@@ -2,7 +2,7 @@
 
 import { TransactionsList } from "@/pages/transactions/transactions-list";
 import { Container } from '@/widgets/layout';
-import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { useTransactions } from "@/pages/transactions/use-transactions";
 import { useTransactionsCount } from "../transactions/use-transactions-count";
 export interface BlockTxsProps {

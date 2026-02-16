@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 import { ArrowLeftRightIcon } from 'lucide-react';
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { Typography } from '@/shared/ui/typography';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Skeleton } from '@shinzo/ui/skeleton';
 import { AnimatedNumber } from '@/shared/ui/animated-number';
 import { useBlocksAndTransactionsCount } from './use-blocks-and-transactions-count';
+
 export interface StatsBlockProps {
   title: string;
   icon: ReactNode;

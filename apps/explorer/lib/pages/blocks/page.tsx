@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
-import { Pagination, DEFAULT_LIMIT, PageParams } from '@/shared/ui/pagination'
+import { Pagination, DEFAULT_LIMIT, PageParams } from '@shinzo/ui/pagination'
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatGasUsed } from '@/shared/utils/format-gas';
 import { formatHash } from '@/shared/utils/format-hash';
@@ -16,7 +16,7 @@ import {
 import {
   TableLayout,
   TableNullableCell,
-} from '@/shared/ui/table';
+} from '@shinzo/ui/table';
 import { useBlocks } from './use-blocks';
 import { CopyButton } from "@/shared/ui/button";
 import { useBlocksCount } from "./use-blocks-count";

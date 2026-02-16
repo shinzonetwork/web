@@ -8,7 +8,6 @@ import {
   PreviewField,
 } from "@payloadcms/plugin-seo/fields";
 import { slugField, type CollectionConfig } from "payload";
-import { revalidateDelete, revalidatePost } from "./hooks/revalidatePost";
 
 export const Posts: CollectionConfig = {
   slug: "posts",
@@ -59,7 +58,7 @@ export const Posts: CollectionConfig = {
         },
       ],
     },
-    slugField({ fieldToUse: "title" }),
+    slugField({ useAsSlug: 'title' }),
     {
       name: "authors",
       type: "relationship",
@@ -88,10 +87,6 @@ export const Posts: CollectionConfig = {
       },
     },
   ],
-  hooks: {
-    afterChange: [revalidatePost],
-    afterDelete: [revalidateDelete],
-  },
   versions: {
     drafts: {
       schedulePublish: false,

@@ -1,3 +1,8 @@
 import config from "@shinzo/eslint-config";
 
-export default config;
+const rules = [
+  { ignores: ["migrations/**"] },
+  ...config,
+];
+
+export default rules;

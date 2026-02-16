@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { BlockCard } from './block-card';
 import { BlockTransactions } from './block-txs';
-import { PageParams } from '@/shared/ui/pagination';
+import { PageParams } from '@shinzo/ui/pagination';
 
 export interface BlockTabsProps {
   height: number;

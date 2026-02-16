@@ -5,7 +5,6 @@ import {
   OverviewField,
 } from "@payloadcms/plugin-seo/fields";
 import type { GlobalConfig } from "payload";
-import { revalidateBlogLanding } from "./hooks/revalidateBlogLanding";
 
 export const BlogLanding: GlobalConfig = {
   label: "Blog Global",
@@ -49,7 +48,4 @@ export const BlogLanding: GlobalConfig = {
       ],
     },
   ],
-  hooks: {
-    afterChange: [revalidateBlogLanding],
-  },
 };

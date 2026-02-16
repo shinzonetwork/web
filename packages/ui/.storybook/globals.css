@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "../src/theme.css";
+
+/* make sure Tailwind parses classes defined in UI package */
+@source "../src";
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+
+  /* main colors */
+  --color-foreground: #000000;
+  --color-accent: #d01f27;
+
+  --color-text-secondary: #525252;
+  --color-text-inverted: #fff;
+
+  --color-border: #C7C7C7;
+
+  --color-background: #ffffff;
+
+  /* legacy colors */
+  --color-card: #fafafa;
+  --color-muted-foreground: #666666;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* custom typography */
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 140%;
+
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 140%;
+
+  --text-md: 1.125rem;
+  --text-md--line-height: 140%;
+
+  --text-base: 1rem;
+  --text-base--line-height: 140%;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 140%;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 160%;
+
+  /* custom animations */
+  --color-dark: #0D0D0D;
+  --color-dark-hover: #1e1e1e;
+}
+
+@layer base {
+  * {
+    @apply border-ui-shimmer;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
+
+  html {
+    @apply antialiased;
+  }
+}

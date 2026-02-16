@@ -11,15 +11,18 @@ import {
   lexicalEditor,
   LinkFeature,
 } from "@payloadcms/richtext-lexical";
-import { r2Storage } from "@payloadcms/storage-r2";
+import { r2Storage, R2StorageOptions } from "@payloadcms/storage-r2";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import { GetPlatformProxyOptions } from "wrangler";
 
 import { Authors } from "./collections/Authors";
+import { Chains } from "./collections/Chains";
+import { Claims } from "./collections/Claims";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
+import { Suggestions } from "./collections/Suggestions";
 import { Users } from "./collections/Users";
 import { Code } from "./fields/code";
 import { BlogLanding } from "./globals/BlogLanding";
@@ -44,7 +47,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Authors],
+  collections: [Users, Media, Posts, Authors, Chains, Claims, Suggestions],
   globals: [BlogLanding],
   editor: lexicalEditor({
     features: ({ defaultFeatures, rootFeatures }) => [
@@ -66,7 +69,7 @@ export default buildConfig({
   db: sqliteD1Adapter({ binding: cloudflare.env.D1 }),
   plugins: [
     r2Storage({
-      bucket: cloudflare.env.R2,
+      bucket: cloudflare.env.R2 as R2StorageOptions['bucket'],
       collections: { media: true },
     }),
     seoPlugin({

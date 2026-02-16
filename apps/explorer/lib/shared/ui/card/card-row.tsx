@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Skeleton } from '@/shared/ui/skeleton';
+import { Skeleton } from '@shinzo/ui/skeleton';
 import Link from 'next/link';
 import { CopyButton } from '@/shared/ui/button';
 

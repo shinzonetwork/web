@@ -1,6 +1,6 @@
 import { PageLayout } from '@/widgets/layout'
 import { BlockTabs } from './block-tabs';
-import { PageParamsOptions, getServerPage } from '@/shared/ui/pagination/get-server-page';
+import { PageParamsOptions, getServerPage } from '@shinzo/ui/pagination';
 
 
 export interface BlockDetailPageProps {

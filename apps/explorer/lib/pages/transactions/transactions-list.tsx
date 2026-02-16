@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
-import { DEFAULT_LIMIT } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
 import { formatHash } from '@/shared/utils/format-hash';
 import { Typography } from '@/shared/ui/typography';
 import {
   TableLayout,
   TableNullableCell,
-} from '@/shared/ui/table';
+} from '@shinzo/ui/table';
 import { Transaction } from '@/shared/graphql';
 import { CopyButton } from '@/shared/ui/button';
 

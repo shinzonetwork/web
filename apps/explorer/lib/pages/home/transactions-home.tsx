@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { TableLayout, TableNullableCell } from '@/shared/ui/table';
+import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
 import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
