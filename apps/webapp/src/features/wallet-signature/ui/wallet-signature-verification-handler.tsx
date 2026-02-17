@@ -1,8 +1,8 @@
 "use client";
 
-import { useAccount, useVerifyMessage } from "wagmi";
 import { useEffect } from "react";
-import { Hex } from "viem";
+import { useAccount } from "wagmi";
+import { verifyMessage, type Hex } from "viem";
 
 import { useRegistrationContext } from "@/entities/registration-process";
 
@@ -16,18 +16,25 @@ export function SignatureVerificationHandler({
   const { address } = useAccount();
   const { handleSignedWithWallet } = useRegistrationContext();
 
-  const { data } = useVerifyMessage({
-    address,
-    message: MESSAGE_TO_SIGN,
-    signature: signature,
-  });
-
+  // Verify with viem directly so we run as soon as we have address + signature,
   useEffect(() => {
-    const verified = Boolean(data);
-    if (verified && address) {
-      handleSignedWithWallet(verified);
+    if (address === undefined) {
+      return;
     }
-  }, [data, address, handleSignedWithWallet]);
+    let unmounted = false;
+    verifyMessage({
+      address,
+      message: MESSAGE_TO_SIGN,
+      signature,
+    }).then((result) => {
+      if (!unmounted) {
+        handleSignedWithWallet(result);
+      }
+    });
+    return () => {
+      unmounted = true;
+    };
+  }, [address, signature, handleSignedWithWallet]);
 
   return null;
 }
