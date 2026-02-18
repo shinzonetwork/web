@@ -17,7 +17,6 @@ export const RegistrationContextProvider = ({
   const { address, isConnected } = useAccount();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [signedState, setSignedState] = useState<Record<string, boolean>>({});
-  const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false);
 
   useEffect(() => {
     const loadSignedState = () => {
@@ -76,19 +75,14 @@ export const RegistrationContextProvider = ({
     return {
       isRegistered,
       isSignedWithWallet,
-      showRegisterForm,
       setRegistered: (registered: boolean) => setIsRegistered(registered),
       handleSignedWithWallet: handleSignedWithWallet,
-      handleRegisterFormVisibility: (visible: boolean) =>
-        setShowRegisterForm(visible),
     };
   }, [
     isRegistered,
     isSignedWithWallet,
-    showRegisterForm,
     setIsRegistered,
     handleSignedWithWallet,
-    setShowRegisterForm,
   ]);
 
   return (
