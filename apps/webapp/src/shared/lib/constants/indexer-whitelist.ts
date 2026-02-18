@@ -1,1 +1,6 @@
-export const INDEXER_WHITELIST = ["0x0A9f1E5Ff7AA5Dab6004E00BFD8Bd940C0d85584","0x83e3057F7B619FFE340bB8157356E3Eb4aEcC40F","0xa6B705f5978c0f542B67908039B90791b569b7cF","0x8Af5Ec5c581E34657e01658F2dd87e1C6B56eD56"] as const;
+export const INDEXER_WHITELIST = ["0x0A9f1E5Ff7AA5Dab6004E00BFD8Bd940C0d85584",
+                                  "0x83e3057F7B619FFE340bB8157356E3Eb4aEcC40F",
+                                  "0xa6B705f5978c0f542B67908039B90791b569b7cF",
+                                  "0x8Af5Ec5c581E34657e01658F2dd87e1C6B56eD56",
+                                  "0x1D0bFD1ECc6ecd9Af73a8ca661Fc17FeD3236266"
+                                 ] as const;
