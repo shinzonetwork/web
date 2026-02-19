@@ -176,7 +176,7 @@ input BlobOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Blob
+  _neq: Blob
   """
   
   The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
@@ -206,7 +206,7 @@ input BooleanFilterArg {
   _and: [BooleanFilterArg!]
   _eq: Boolean
   _in: [Boolean]
-  _ne: Boolean
+  _neq: Boolean
   _nin: [Boolean]
   _or: [BooleanFilterArg!]
 }
@@ -227,6 +227,18 @@ input BooleanListOperatorBlock {
   
   """
   _any: BooleanOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Boolean]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Boolean]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -259,7 +271,7 @@ input BooleanOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Boolean
+  _neq: Boolean
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -474,7 +486,7 @@ input CommitsFieldNameFilterArg {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: String
+  _neq: String
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -836,7 +848,7 @@ input DateTimeOperatorBlock {
    given value the check will pass.
   
   """
-  _ge: DateTime
+  _geq: DateTime
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -856,7 +868,7 @@ input DateTimeOperatorBlock {
    given value the check will pass.
   
   """
-  _le: DateTime
+  _leq: DateTime
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -868,7 +880,7 @@ input DateTimeOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: DateTime
+  _neq: DateTime
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -894,7 +906,15 @@ type Ethereum__Mainnet__AccessListEntry {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(_group: Ethereum__Mainnet__AccessListEntry__NumericSelector): Float
+  _avg(
+    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
   """
   
   Returns the total number of items within the specified child sets. If multiple child
@@ -981,7 +1001,15 @@ type Ethereum__Mainnet__AccessListEntry {
    will be returned as a single value.
   
   """
-  _max(_group: Ethereum__Mainnet__AccessListEntry__NumericSelector): Float
+  _max(
+    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
   """
   
   Returns the minimum of the specified field values within the specified child sets. If
@@ -989,7 +1017,15 @@ type Ethereum__Mainnet__AccessListEntry {
    will be returned as a single value.
   
   """
-  _min(_group: Ethereum__Mainnet__AccessListEntry__NumericSelector): Float
+  _min(
+    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
@@ -1001,7 +1037,15 @@ type Ethereum__Mainnet__AccessListEntry {
    a single value.
   
   """
-  _sum(_group: Ethereum__Mainnet__AccessListEntry__NumericSelector): Float
+  _sum(
+    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
   _transactionID: ID
   """
   
@@ -1010,6 +1054,7 @@ type Ethereum__Mainnet__AccessListEntry {
   """
   _version: [Commit]
   address: String
+  blockNumber: Int
   storageKeys: [String]
   transaction(
     """
@@ -1025,6 +1070,7 @@ type Ethereum__Mainnet__AccessListEntry {
 
 enum Ethereum__Mainnet__AccessListEntryExplicitField {
   address
+  blockNumber
   storageKeys
   transaction
 }
@@ -1036,6 +1082,7 @@ enum Ethereum__Mainnet__AccessListEntryField {
   _transactionID
   _version
   address
+  blockNumber
   storageKeys
   transaction
 }
@@ -1064,6 +1111,7 @@ input Ethereum__Mainnet__AccessListEntryFilterArg {
   _or: [Ethereum__Mainnet__AccessListEntryFilterArg!]
   _transactionID: IDOperatorBlock
   address: StringOperatorBlock
+  blockNumber: IntOperatorBlock
   storageKeys: StringListOperatorBlock
   transaction: Ethereum__Mainnet__TransactionFilterArg
 }
@@ -1071,6 +1119,7 @@ input Ethereum__Mainnet__AccessListEntryFilterArg {
 input Ethereum__Mainnet__AccessListEntryMutationInputArg {
   _transactionID: ID
   address: String
+  blockNumber: Int
   storageKeys: [String]
   transaction: ID
 }
@@ -1081,6 +1130,7 @@ enum Ethereum__Mainnet__AccessListEntryNumericFieldsArg {
   _max
   _min
   _sum
+  blockNumber
 }
 
 input Ethereum__Mainnet__AccessListEntryOrderArg {
@@ -1089,6 +1139,7 @@ input Ethereum__Mainnet__AccessListEntryOrderArg {
   _docID: Ordering
   _transactionID: Ordering
   address: Ordering
+  blockNumber: Ordering
   storageKeys: Ordering
   transaction: Ethereum__Mainnet__TransactionOrderArg
 }
@@ -1552,6 +1603,381 @@ input Ethereum__Mainnet__AttestationRecord___group__CountSelector {
 }
 
 input Ethereum__Mainnet__AttestationRecord___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+type Ethereum__Mainnet__BatchSignature {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  _avg(
+    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  _count(_group: Ethereum__Mainnet__BatchSignature__CountSelector, _version: Ethereum__Mainnet__BatchSignature___version__CountSelector): Int
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  _group(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
+  ): [Ethereum__Mainnet__BatchSignature]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _max(
+    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  _min(
+    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  _similarity: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  _sum(
+    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  blockHash: String
+  blockNumber: Int
+  cidCount: Int
+  createdAt: String
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+}
+
+enum Ethereum__Mainnet__BatchSignatureExplicitField {
+  blockHash
+  blockNumber
+  cidCount
+  createdAt
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+}
+
+enum Ethereum__Mainnet__BatchSignatureField {
+  _deleted
+  _docID
+  _group
+  _version
+  blockHash
+  blockNumber
+  cidCount
+  createdAt
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+}
+
+input Ethereum__Mainnet__BatchSignatureFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [Ethereum__Mainnet__BatchSignatureFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: Ethereum__Mainnet__BatchSignatureFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [Ethereum__Mainnet__BatchSignatureFilterArg!]
+  blockHash: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  cidCount: IntOperatorBlock
+  createdAt: StringOperatorBlock
+  merkleRoot: StringOperatorBlock
+  signatureIdentity: StringOperatorBlock
+  signatureType: StringOperatorBlock
+  signatureValue: StringOperatorBlock
+}
+
+input Ethereum__Mainnet__BatchSignatureMutationInputArg {
+  blockHash: String
+  blockNumber: Int
+  cidCount: Int
+  createdAt: String
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+}
+
+enum Ethereum__Mainnet__BatchSignatureNumericFieldsArg {
+  _avg
+  _count
+  _max
+  _min
+  _sum
+  blockNumber
+  cidCount
+}
+
+input Ethereum__Mainnet__BatchSignatureOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  blockHash: Ordering
+  blockNumber: Ordering
+  cidCount: Ordering
+  createdAt: Ordering
+  merkleRoot: Ordering
+  signatureIdentity: Ordering
+  signatureType: Ordering
+  signatureValue: Ordering
+}
+
+input Ethereum__Mainnet__BatchSignature__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__BatchSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__BatchSignature__NumericSelector {
+  field: Ethereum__Mainnet__BatchSignatureNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__BatchSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [Ethereum__Mainnet__BatchSignatureOrderArg]
+}
+
+input Ethereum__Mainnet__BatchSignature___group__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__BatchSignature___version__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -3197,1078 +3623,6 @@ input Ethereum__Mainnet__Transaction__logs__CountSelector {
   offset: Int
 }
 
-type Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg]
-  ): [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector {
-  field: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg]
-}
-
-input Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg]
-  ): [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector {
-  field: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg]
-}
-
-input ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg]
-  ): [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afMutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector {
-  field: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afNumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg]
-}
-
-input ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg]
-  ): [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aMutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector {
-  field: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aNumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg]
-}
-
-input Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 """
 ExplainType is an enum selecting the type of explanation done by the @explain directive.
 """
@@ -4281,1346 +3635,6 @@ enum ExplainType {
   simple
 }
 
-type FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbOrderArg]
-  ): [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbField {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbMutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbOrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector {
-  field: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbNumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbOrderArg]
-}
-
-input FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0OrderArg]
-  ): [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector {
-  field: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0OrderArg]
-}
-
-input FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2OrderArg]
-  ): [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector {
-  field: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2OrderArg]
-}
-
-input FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85OrderArg]
-  ): [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector {
-  field: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85OrderArg]
-}
-
-input FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fOrderArg]
-  ): [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fField {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fMutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fOrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector {
-  field: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fNumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fOrderArg]
-}
-
-input FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 """
 The `Float32` scalar type represents signed single-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
 """
@@ -5629,12 +3643,12 @@ scalar Float32
 input Float32FilterArg {
   _and: [Float32FilterArg!]
   _eq: Float32
-  _ge: Float32
+  _geq: Float32
   _gt: Float32
   _in: [Float32]
-  _le: Float32
+  _leq: Float32
   _lt: Float32
-  _ne: Float32
+  _neq: Float32
   _nin: [Float32]
   _or: [Float32FilterArg!]
 }
@@ -5655,6 +3669,18 @@ input Float32ListOperatorBlock {
   
   """
   _any: Float32OperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Float32]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Float32]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -5682,7 +3708,7 @@ input Float32OperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Float32
+  _geq: Float32
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -5702,7 +3728,7 @@ input Float32OperatorBlock {
    given value the check will pass.
   
   """
-  _le: Float32
+  _leq: Float32
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -5714,7 +3740,7 @@ input Float32OperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Float32
+  _neq: Float32
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -5732,12 +3758,12 @@ scalar Float64
 input Float64FilterArg {
   _and: [Float64FilterArg!]
   _eq: Float64
-  _ge: Float64
+  _geq: Float64
   _gt: Float64
   _in: [Float64]
-  _le: Float64
+  _leq: Float64
   _lt: Float64
-  _ne: Float64
+  _neq: Float64
   _nin: [Float64]
   _or: [Float64FilterArg!]
 }
@@ -5758,6 +3784,18 @@ input Float64ListOperatorBlock {
   
   """
   _any: Float64OperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Float64]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Float64]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -5785,7 +3823,7 @@ input Float64OperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Float64
+  _geq: Float64
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -5805,7 +3843,7 @@ input Float64OperatorBlock {
    given value the check will pass.
   
   """
-  _le: Float64
+  _leq: Float64
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -5817,7 +3855,7 @@ input Float64OperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Float64
+  _neq: Float64
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -5851,7 +3889,7 @@ input IDOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: ID
+  _neq: ID
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -5870,12 +3908,12 @@ input IndexField {
 input IntFilterArg {
   _and: [IntFilterArg!]
   _eq: Int
-  _ge: Int
+  _geq: Int
   _gt: Int
   _in: [Int]
-  _le: Int
+  _leq: Int
   _lt: Int
-  _ne: Int
+  _neq: Int
   _nin: [Int]
   _or: [IntFilterArg!]
 }
@@ -5896,6 +3934,18 @@ input IntListOperatorBlock {
   
   """
   _any: IntOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Int]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Int]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -5923,7 +3973,7 @@ input IntOperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Int
+  _geq: Int
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -5943,7 +3993,7 @@ input IntOperatorBlock {
    given value the check will pass.
   
   """
-  _le: Int
+  _leq: Int
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -5955,7 +4005,7 @@ input IntOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Int
+  _neq: Int
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -6048,6 +4098,32 @@ type Mutation {
     """Create Ethereum__Mainnet__AttestationRecord documents"""
     input: [Ethereum__Mainnet__AttestationRecordMutationInputArg!]
   ): [Ethereum__Mainnet__AttestationRecord]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_Ethereum__Mainnet__BatchSignature(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [Ethereum__Mainnet__BatchSignatureExplicitField!]
+    """Create Ethereum__Mainnet__BatchSignature documents"""
+    input: [Ethereum__Mainnet__BatchSignatureMutationInputArg!]
+  ): [Ethereum__Mainnet__BatchSignature]
   """
   
   Creates one or more documents of this type using the data provided.
@@ -6201,6 +4277,31 @@ type Mutation {
     """
     filter: Ethereum__Mainnet__AttestationRecordFilterArg
   ): [Ethereum__Mainnet__AttestationRecord]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_Ethereum__Mainnet__BatchSignature(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg
+  ): [Ethereum__Mainnet__BatchSignature]
   """
   
   Deletes documents in this collection matching any provided criteria. If no
@@ -6364,6 +4465,33 @@ type Mutation {
    the update will be applied to all documents in the collection.
   
   """
+  update_Ethereum__Mainnet__BatchSignature(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg
+    """Update field values"""
+    input: Ethereum__Mainnet__BatchSignatureMutationInputArg
+  ): [Ethereum__Mainnet__BatchSignature]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
   update_Ethereum__Mainnet__Block(
     """
     
@@ -6516,6 +4644,29 @@ type Mutation {
   
   NOTE: It is highly recommended to create an index on the fields used to filter.
   """
+  upsert_Ethereum__Mainnet__BatchSignature(
+    """Create field values"""
+    create: Ethereum__Mainnet__BatchSignatureMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg!
+    """Update field values"""
+    update: Ethereum__Mainnet__BatchSignatureMutationInputArg!
+  ): [Ethereum__Mainnet__BatchSignature]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
   upsert_Ethereum__Mainnet__Block(
     """Create field values"""
     create: Ethereum__Mainnet__BlockMutationInputArg!
@@ -6580,7 +4731,7 @@ type Mutation {
 
 """
 
-These are the set of filter operators available for use when filtering on String!
+These are the set of filter operators available for use when filtering on Blob!
  values.
 
 """
@@ -6618,7 +4769,7 @@ input NotNullBlobOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Blob
+  _neq: Blob
   """
   
   The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
@@ -6648,7 +4799,7 @@ input NotNullBooleanFilterArg {
   _and: [NotNullBooleanFilterArg!]
   _eq: Boolean
   _in: [Boolean!]
-  _ne: Boolean
+  _neq: Boolean
   _nin: [Boolean!]
   _or: [NotNullBooleanFilterArg!]
 }
@@ -6669,6 +4820,18 @@ input NotNullBooleanListOperatorBlock {
   
   """
   _any: NotNullBooleanOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Boolean!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Boolean!]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -6701,7 +4864,7 @@ input NotNullBooleanOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Boolean
+  _neq: Boolean
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -6714,12 +4877,12 @@ input NotNullBooleanOperatorBlock {
 input NotNullFloat32FilterArg {
   _and: [NotNullFloat32FilterArg!]
   _eq: Float32
-  _ge: Float32
+  _geq: Float32
   _gt: Float32
   _in: [Float32!]
-  _le: Float32
+  _leq: Float32
   _lt: Float32
-  _ne: Float32
+  _neq: Float32
   _nin: [Float32!]
   _or: [NotNullFloat32FilterArg!]
 }
@@ -6740,6 +4903,18 @@ input NotNullFloat32ListOperatorBlock {
   
   """
   _any: NotNullFloat32OperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Float32!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Float32!]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -6767,7 +4942,7 @@ input NotNullFloat32OperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Float32
+  _geq: Float32
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -6787,7 +4962,7 @@ input NotNullFloat32OperatorBlock {
    given value the check will pass.
   
   """
-  _le: Float32
+  _leq: Float32
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -6799,7 +4974,7 @@ input NotNullFloat32OperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Float32
+  _neq: Float32
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -6812,12 +4987,12 @@ input NotNullFloat32OperatorBlock {
 input NotNullFloat64FilterArg {
   _and: [NotNullFloat64FilterArg!]
   _eq: Float64
-  _ge: Float64
+  _geq: Float64
   _gt: Float64
   _in: [Float64!]
-  _le: Float64
+  _leq: Float64
   _lt: Float64
-  _ne: Float64
+  _neq: Float64
   _nin: [Float64!]
   _or: [NotNullFloat64FilterArg!]
 }
@@ -6838,6 +5013,18 @@ input NotNullFloat64ListOperatorBlock {
   
   """
   _any: NotNullFloat64OperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Float64!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Float64!]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -6865,7 +5052,7 @@ input NotNullFloat64OperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Float64
+  _geq: Float64
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -6885,7 +5072,7 @@ input NotNullFloat64OperatorBlock {
    given value the check will pass.
   
   """
-  _le: Float64
+  _leq: Float64
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -6897,7 +5084,7 @@ input NotNullFloat64OperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Float64
+  _neq: Float64
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -6910,12 +5097,12 @@ input NotNullFloat64OperatorBlock {
 input NotNullIntFilterArg {
   _and: [NotNullIntFilterArg!]
   _eq: Int
-  _ge: Int
+  _geq: Int
   _gt: Int
   _in: [Int!]
-  _le: Int
+  _leq: Int
   _lt: Int
-  _ne: Int
+  _neq: Int
   _nin: [Int!]
   _or: [NotNullIntFilterArg!]
 }
@@ -6936,6 +5123,18 @@ input NotNullIntListOperatorBlock {
   
   """
   _any: NotNullIntOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [Int!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [Int!]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -6963,7 +5162,7 @@ input NotNullIntOperatorBlock {
    given value the check will pass.
   
   """
-  _ge: Int
+  _geq: Int
   """
   
   The greater than operator - if the target value is greater than the given value the
@@ -6983,7 +5182,7 @@ input NotNullIntOperatorBlock {
    given value the check will pass.
   
   """
-  _le: Int
+  _leq: Int
   """
   
   The less than operator - if the target value is less than the given value the check will pass.
@@ -6995,7 +5194,7 @@ input NotNullIntOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: Int
+  _neq: Int
   """
   
   The does not contains operator - if the target value is not within the given set the
@@ -7011,7 +5210,7 @@ input NotNullStringFilterArg {
   _ilike: String
   _in: [String!]
   _like: String
-  _ne: String
+  _neq: String
   _nilike: String
   _nin: [String!]
   _nlike: String
@@ -7034,6 +5233,18 @@ input NotNullStringListOperatorBlock {
   
   """
   _any: NotNullStringOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [String!]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [String!]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -7082,7 +5293,7 @@ input NotNullStringOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: String
+  _neq: String
   """
   
   The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
@@ -7325,6 +5536,73 @@ type Query {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__AttestationRecord]
+  Ethereum__Mainnet__BatchSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__BatchSignature]
   Ethereum__Mainnet__Block(
     """
     
@@ -7526,676 +5804,6 @@ type Query {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Transaction]
-  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9]
-  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086]
-  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af]
-  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a]
-  FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb]
-  FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0]
-  FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2]
-  FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85]
-  FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f]
-  SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343]
   """
   
   Returns the average of the specified field values within the specified child sets. If
@@ -8203,7 +5811,7 @@ type Query {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector, ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector, ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector, Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector, FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector, FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector, FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector, FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector, FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector, SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector): Float
+  _avg(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
   """
   
   Returns a set of commits matching any provided criteria. If no arguments are
@@ -8275,7 +5883,7 @@ type Query {
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector, Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__CountSelector, ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__CountSelector, ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__CountSelector, Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__CountSelector, FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__CountSelector, FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__CountSelector, FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__CountSelector, FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__CountSelector, FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__CountSelector, SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__CountSelector): Int
+  _count(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector): Int
   """
   
   Returns the maximum of the specified field values within the specified child sets. If
@@ -8283,7 +5891,7 @@ type Query {
    will be returned as a single value.
   
   """
-  _max(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector, ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector, ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector, Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector, FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector, FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector, FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector, FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector, FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector, SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector): Float
+  _max(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
   """
   
   Returns the minimum of the specified field values within the specified child sets. If
@@ -8291,7 +5899,7 @@ type Query {
    will be returned as a single value.
   
   """
-  _min(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector, ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector, ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector, Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector, FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector, FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector, FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector, FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector, FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector, SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector): Float
+  _min(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -8299,7 +5907,7 @@ type Query {
    a single value.
   
   """
-  _sum(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9__NumericSelector, ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086__NumericSelector, ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af__NumericSelector, Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a__NumericSelector, FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb__NumericSelector, FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0__NumericSelector, FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2__NumericSelector, FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85__NumericSelector, FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f__NumericSelector, SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector): Float
+  _sum(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
 }
 
 """
@@ -8326,7 +5934,7 @@ The signature of the commit, if one exists. This is used to verify the integrity
 """
 type Signature {
   """
-  The identity of the signer, which is used to determine the public key used to verify the signature.ureIdentityFieldDescription
+  The identity of the signer, which is used to determine the public key used to verify the signature.
   """
   identity: String
   """
@@ -8339,281 +5947,13 @@ type Signature {
   value: String
 }
 
-type SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343 {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__CountSelector): Int
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343OrderArg]
-  ): [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-  ): Float
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343Field {
-  _group
-  blockNumber
-  transactionHash
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg!]
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg!]
-  blockNumber: IntOperatorBlock
-  transactionHash: StringOperatorBlock
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343MutationInputArg {
-  blockNumber: Int
-  transactionHash: String
-}
-
-enum SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343NumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343OrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  blockNumber: Ordering
-  transactionHash: Ordering
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343__NumericSelector {
-  field: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343NumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343OrderArg]
-}
-
-input SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 input StringFilterArg {
   _and: [StringFilterArg!]
   _eq: String
   _ilike: String
   _in: [String]
   _like: String
-  _ne: String
+  _neq: String
   _nilike: String
   _nin: [String]
   _nlike: String
@@ -8636,6 +5976,18 @@ input StringListOperatorBlock {
   
   """
   _any: StringOperatorBlock
+  """
+  
+  The equality operator - if the target matches the value the check will pass.
+  
+  """
+  _eq: [String]
+  """
+  
+  The inequality operator - if the target does not matches the value the check will pass.
+  
+  """
+  _neq: [String]
   """
   
   The none operator - only one check within this clause must fail on one item in order for this check to pass.	
@@ -8684,7 +6036,7 @@ input StringOperatorBlock {
   The inequality operator - if the target does not matches the value the check will pass.
   
   """
-  _ne: String
+  _neq: String
   """
   
   The case insensitive not-like operator - if the target value does not contain the given case insensitive sub-string
@@ -8912,6 +6264,73 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__AttestationRecord]
+  Ethereum__Mainnet__BatchSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__BatchSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the '_group' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__BatchSignature]
   Ethereum__Mainnet__Block(
     """
     
@@ -9113,676 +6532,6 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Transaction]
-  Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Example2_0x7d3e09bece3975bc3d931ba5fee5f1588f66a191670442ecbd05b5aaf065d7c9]
-  ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [ExampleLogFile_0x4bb02a86c8402ec9c942a8a947592d0be6d836b0479c504938964f7b91a0b086]
-  ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389afOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [ExampleLogFilter_0x7e4684bc6c30c48ae5753d3af937263ccd9ec81de48f35c1888d38e5c23389af]
-  Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032aOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Example_0x3cca2684c7decef0bdadb6e1d013d1d0ebe447a139df5d63d5b63222e46d032a]
-  FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fbOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x0fbb6d7f0049bc17bb2cdb9cf41151611e2d0bdefa76b95daeea0386f3c670fb]
-  FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x42e7bca7e7c627f101adad926f22f0b839cd151f156d71caa1678ff58db622c0]
-  FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0x8787d934a9c586505e244cd7e9a8f9a4726eef0f9e6dc633dc79946aa3d754a2]
-  FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0xdc0812f6a7ea5d7b3bf2ee7362e4ed87e7c070eb6d2852c7aaa9589a85dcdd85]
-  FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1fOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [FilteredAndDecodedLogs_0xff478c9bf34ad9b58f97aaf873315b1aa6af2e55c3634572c095a98f8de05e1f]
-  SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343FilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343Field!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343OrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [SimpleFilteredLogs_0xe0cf9efb543b0dba0d00ddbb2f7b83620f789b916e68783691ffb40264264343]
   """
   
   Returns a set of commits matching any provided criteria. If no arguments are

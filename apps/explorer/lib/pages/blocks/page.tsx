@@ -52,7 +52,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound='No blocks found.'
-        headings={['Block', 'Age', 'Txn', 'Miner', 'Gas Used']}
+        headings={['Block', 'Age', 'Transactions', 'Miner', 'Gas Used']}
         gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks?.blocks ?? []}
         rowRenderer={(block) => (
@@ -74,7 +74,11 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
               {(value) => formatDistanceToNow(new Date(Number(value) * 1000), { addSuffix: true })}
             </TableNullableCell>
 
-            <TableNullableCell value={block?.txCount ?? 0}>
+            <TableNullableCell 
+              value={block?.transactions?.[0]?.transactionIndex != null
+                ? block.transactions[0].transactionIndex + 1
+                : 0}
+            >
               {(value) => (
                 <div className="flex items-center gap-1 text-sm text-foreground">
                   {value}

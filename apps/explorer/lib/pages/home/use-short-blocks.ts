@@ -10,7 +10,9 @@ const ShortBlocksQuery = graphql(`
       number
       miner
       timestamp
-      txCount: _count(transactions: {})
+      transactions(limit: 1, order: { transactionIndex: DESC }) {
+        transactionIndex
+      }
     }
   }
 `);
