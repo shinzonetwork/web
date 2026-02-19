@@ -95,7 +95,15 @@ export const BlocksHome = () => {
                   </div>
                 )}
               </TableNullableCell>
-              <TableNullableCell value={block?.txCount ?? 0} align="center" className={highlightClass}>
+              <TableNullableCell
+                value={
+                  block?.transactions?.[0]?.transactionIndex != null
+                    ? block.transactions[0].transactionIndex + 1
+                    : 0
+                }
+                align="center"
+                className={highlightClass}
+              >
                 {(value) => (
                   <div className="flex items-center gap-1">Txns: {value}</div>
                 )}
