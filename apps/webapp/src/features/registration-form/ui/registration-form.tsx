@@ -10,10 +10,13 @@ import {
   TOAST_CONFIG,
   validateRegistrationForm,
   validateRequiredFields,
+  validateEntity,
 } from "@/shared/lib";
 import { toast } from "react-toastify";
+import { useAccount } from "wagmi";
 
 export function RegistrationForm() {
+  const { address } = useAccount();
   const {
     formData,
     handleInputChange,
@@ -51,7 +54,7 @@ export function RegistrationForm() {
     }
   };
 
-  const isRegistrationDisabled = !validateRegistrationForm(formData);
+  const isRegistrationDisabled = !validateRegistrationForm(address, formData);
 
   return (
     <div className="space-y-6 ml-10">
@@ -69,6 +72,12 @@ export function RegistrationForm() {
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
       </Button>
+      {!validateEntity(address, formData.entity) && (
+        <div className="text-sm text-red-500">
+          You are not whitelisted as an indexer. Please contact the Shinzo team
+          to be whitelisted.
+        </div>
+      )}
     </div>
   );
 }

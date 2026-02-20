@@ -5,6 +5,7 @@ import "./globals.css";
 import { AppProviders } from "@/providers";
 import { Toast } from "@/widget";
 import { RegistrationContextProvider } from "@/entities/registration-process";
+import { TooltipProvider } from "@/shared/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Shinzo",
@@ -23,8 +24,10 @@ export default function RootLayout({
       <body>
         <AppProviders>
           <RegistrationContextProvider>
-            <main className="min-h-screen">{children}</main>
-            <Toast />
+            <TooltipProvider>
+              <main className="min-h-screen">{children}</main>
+              <Toast />
+            </TooltipProvider>
           </RegistrationContextProvider>
         </AppProviders>
       </body>

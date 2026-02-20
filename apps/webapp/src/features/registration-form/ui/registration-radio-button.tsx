@@ -8,6 +8,7 @@ import {
   cn,
   isIndexerWhitelisted as isIndexerWhitelistedFunction,
 } from "@/shared/lib";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 interface RegistrationRadioButtonProps {
   selectedEntityValue: string;
@@ -39,59 +40,77 @@ export function RegistrationRadioButton({
       onValueChange={onChange}
       disabled={prefilledEntityValue}
     >
-      <label
-        htmlFor="host"
-        className={cn(
-          "flex flex-1 items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
-          "border shadow-xs outline-none",
-          selectedEntityValue === "1"
-            ? "bg-primary/60 border-accent text-white"
-            : "bg-background hover:bg-accent hover:text-accent-foreground"
-        )}
-      >
-        <span className="flex items-center justify-center size-7 border border-border rounded-sm">
-          <ShinzoFilledIcon
-            className={cn(
-              "size-4",
-              selectedEntityValue === "1" ? "text-white" : "text-primary/60"
-            )}
+      <div className="flex flex-col flex-1">
+        <label
+          htmlFor="host"
+          className={cn(
+            "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
+            "border shadow-xs outline-none",
+            selectedEntityValue === "1"
+              ? "bg-primary/60 border-accent text-white"
+              : "bg-background hover:bg-accent hover:text-accent-foreground"
+          )}
+        >
+          <span className="flex items-center justify-center size-7 border border-border rounded-sm">
+            <ShinzoFilledIcon
+              className={cn(
+                "size-4",
+                selectedEntityValue === "1" ? "text-white" : "text-primary/60"
+              )}
+            />
+          </span>
+          <RadioGroupItem
+            value="1"
+            id="host"
+            disabled={prefilledEntityValue}
+            className="sr-only"
           />
-        </span>
-        <RadioGroupItem
-          value="1"
-          id="host"
-          disabled={prefilledEntityValue}
-          className="sr-only"
-        />
-        <span>Host</span>
-      </label>
-      <label
-        htmlFor="indexer"
-        className={cn(
-          "flex flex-1 items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
-          "border shadow-xs outline-none disabled:pointer-events-none disabled:opacity-50",
-          selectedEntityValue === "2"
-            ? "bg-primary/60 border-accent text-white"
-            : "bg-background hover:bg-accent hover:text-accent-foreground",
-          !isIndexerWhitelisted ? "opacity-50 cursor-not-allowed" : ""
-        )}
-      >
-        <span className="flex items-center justify-center size-7 border border-border rounded-sm">
-          <ShinzoFilledIcon
-            className={cn(
-              "size-4",
-              selectedEntityValue === "2" ? "text-white" : "text-primary/60"
-            )}
-          />
-        </span>
-        <RadioGroupItem
-          value="2"
-          id="indexer"
-          disabled={!isIndexerWhitelisted || prefilledEntityValue}
-          className="sr-only"
-        />
-        <span>Indexer</span>
-      </label>
+          <span>Host</span>
+        </label>
+      </div>
+      <div className="flex flex-col gap-2 flex-1">
+        <Tooltip>
+          <TooltipTrigger>
+            <label
+              htmlFor="indexer"
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
+                "border shadow-xs outline-none disabled:pointer-events-none disabled:opacity-50",
+                selectedEntityValue === "2"
+                  ? "bg-primary/60 border-accent text-white"
+                  : "bg-background hover:bg-accent hover:text-accent-foreground",
+                !isIndexerWhitelisted ? "opacity-50 cursor-not-allowed" : ""
+              )}
+            >
+              <span className="flex items-center justify-center size-7 border border-border rounded-sm">
+                <ShinzoFilledIcon
+                  className={cn(
+                    "size-4",
+                    selectedEntityValue === "2"
+                      ? "text-white"
+                      : "text-primary/60"
+                  )}
+                />
+              </span>
+              <RadioGroupItem
+                value="2"
+                id="indexer"
+                disabled={!isIndexerWhitelisted || prefilledEntityValue}
+                className="sr-only"
+              />
+              <span>Indexer</span>
+            </label>
+          </TooltipTrigger>
+          {!isIndexerWhitelisted && (
+            <TooltipContent>
+              <p>
+                Not a whitelisted indexer? Please contact the Shinzo team to be
+                whitelisted.
+              </p>
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </div>
     </RadioGroup>
   );
 }

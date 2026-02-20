@@ -1,4 +1,4 @@
-import type { EntityRole } from "../constants";
+import { EntityRole } from "../constants";
 import { Hex, getAddress, isAddress, isHex } from "viem";
 import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
 
@@ -44,9 +44,11 @@ export const REGISTRATION_FORM_INPUTS = [
  * Validate registration form data
  */
 export function validateRegistrationForm(
+  address: Hex | undefined,
   formData: RegistrationFormData
 ): boolean {
   return (
+    validateEntity(address, formData.entity) &&
     Boolean(formData.message?.trim()) &&
     Boolean(formData.defraPublicKey?.trim()) &&
     Boolean(formData.defraSignedMessage?.trim()) &&
@@ -55,6 +57,18 @@ export function validateRegistrationForm(
   );
 }
 
+export function validateEntity(
+  address: Hex | undefined,
+  entity: EntityRole
+): boolean {
+  if (entity === EntityRole.Host) {
+    return true;
+  }
+  if (entity === EntityRole.Indexer) {
+    return isIndexerWhitelisted(address);
+  }
+  return false;
+}
 /**
  * Get button text based on transaction state
  */
