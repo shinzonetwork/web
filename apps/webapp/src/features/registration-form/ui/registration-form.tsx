@@ -10,7 +10,7 @@ import {
   TOAST_CONFIG,
   validateRegistrationForm,
   validateRequiredFields,
-  isIndexerWhitelisted,
+  validateEntity,
 } from "@/shared/lib";
 import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
@@ -72,9 +72,10 @@ export function RegistrationForm() {
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
       </Button>
-      {!isIndexerWhitelisted(address) && (
+      {!validateEntity(address, formData.entity) && (
         <div className="text-sm text-red-500">
-          You are not whitelisted as an indexer. Please contact the Shinzo team to be whitelisted.
+          You are not whitelisted as an indexer. Please contact the Shinzo team
+          to be whitelisted.
         </div>
       )}
     </div>
