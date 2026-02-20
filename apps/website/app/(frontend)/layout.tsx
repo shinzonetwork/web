@@ -104,6 +104,10 @@ const headerNavMenu: NavLink[] = [
     href: "/blog",
   },
   {
+    label: "Chains",
+    href: "/chains",
+  },
+  {
     label: "Community",
     items: [
       {
@@ -162,6 +166,10 @@ const footerNavMenu: NavLink[] = [
       {
         label: "Manifesto",
         href: "/truth",
+      },
+      {
+        label: "Chains",
+        href: "/chains",
       }
     ],
   },
