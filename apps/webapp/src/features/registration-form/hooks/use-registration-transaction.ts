@@ -34,8 +34,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
   });
 
   const { address } = useAccount();
-  const { isRegistered, setRegistered, handleRegisterFormVisibility } =
-    useRegistrationContext();
+  const { isRegistered, setRegistered } = useRegistrationContext();
 
   // Handle transaction receipt errors (transaction reverted, etc.)
   useEffect(() => {
@@ -62,20 +61,12 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
   useEffect(() => {
     if (isConfirmed && txHash && address && !isRegistered) {
       setRegistered(true);
-      handleRegisterFormVisibility(false);
       toast.success(
         "Registration successful! Your transaction has been confirmed.",
         TOAST_CONFIG
       );
     }
-  }, [
-    isConfirmed,
-    txHash,
-    address,
-    isRegistered,
-    handleRegisterFormVisibility,
-    setRegistered,
-  ]);
+  }, [isConfirmed, txHash, address, isRegistered, setRegistered]);
 
   const sendRegisterTransaction = useCallback(async () => {
     if (

@@ -4,7 +4,6 @@ import { useAccount, useDisconnect } from "wagmi";
 import { Copy } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { useRegistrationContext } from "@/entities";
 import { shortenAddress, TOAST_CONFIG } from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
 
@@ -12,10 +11,7 @@ export function DisconnectWallet() {
   const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
 
-  const { handleRegisterFormVisibility } = useRegistrationContext();
-
   const handleDisconnectWallet = () => {
-    handleRegisterFormVisibility(false);
     disconnect();
   };
 
