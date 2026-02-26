@@ -6,6 +6,7 @@
 @theme inline {
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
+  --font-jp-serif: var(--font-jp-serif);
 
   --color-szo-primary: oklch(0.5512 0.2083 25.95);
   --color-szo-border: #aaaaaa;
