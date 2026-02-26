@@ -5,6 +5,7 @@ import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useBlock } from "./use-block";
+import { formatTimestamp } from "@/shared/utils/format-timestamp";
 
 export interface BlockCardProps {
   height: number;
@@ -33,15 +34,14 @@ export const BlockCard = ({ height }: BlockCardProps) => {
 
         <DataItem
           title="Timestamp"
-          value={block.number}
+          value={block.timestamp}
           loading={isLoading}
         >
-          {block.timestamp &&
-            new Date(Number(block.timestamp) * 1000).toLocaleString()}
+          {block.timestamp && formatTimestamp(block.timestamp)}
         </DataItem>
 
         <DataItem
-          title="Miner"
+          title="Validator"
           value={block.miner}
           loading={isLoading}
         >
@@ -73,7 +73,8 @@ export const BlockCard = ({ height }: BlockCardProps) => {
           value={block.baseFeePerGas}
           loading={isLoading}
         >
-          {block.baseFeePerGas} Gwei
+          {block.baseFeePerGas &&
+            `${(Number(block.baseFeePerGas) / 1e9)} Gwei`}
         </DataItem>
 
         <DataItem title="Nonce" value={block.nonce} loading={isLoading} />
@@ -86,7 +87,7 @@ export const BlockCard = ({ height }: BlockCardProps) => {
 
         <DataItem
           title="Total Difficulty"
-          value={block.totalDifficulty}
+          value={block.totalDifficulty || 0}
           loading={isLoading}
         />
       </DataList>
