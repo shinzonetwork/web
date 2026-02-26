@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../../../packages/ui/src/theme.css";
+@source "../../../packages/ui/src";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+
+  --color-szo-primary: oklch(0.5512 0.2083 25.95);
+  --color-szo-border: #aaaaaa;
+  --color-szo-black: #000000;
+  --color-szo-bg: #ffffff;
+}
+
+@layer base {
+  body { @apply bg-szo-bg font-sans; }
+  html { @apply antialiased; }
+}
