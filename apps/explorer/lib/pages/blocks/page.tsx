@@ -52,7 +52,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound='No blocks found.'
-        headings={['Block', 'Age', 'Transactions', 'Miner', 'Gas Used']}
+        headings={['Block', 'Age', 'Transactions', 'Validator', 'Gas Used']}
         gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks?.blocks ?? []}
         rowRenderer={(block) => (
