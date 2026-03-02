@@ -7,6 +7,7 @@
     "dev:webapp": "pnpm --filter shinzo-webapp dev",
     "dev:website": "pnpm --filter shinzo-website dev",
     "dev:explorer": "pnpm --filter shinzo-explorer dev",
+    "dev:faucet": "pnpm --filter shinzo-faucet dev",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"
   },

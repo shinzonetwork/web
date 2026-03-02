@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], });
-const jpSerif = localFont({ src: '../../fonts/jp-serif.woff2', variable: "--font-jp-serif" });
+const jpSerif = localFont({ src: '../../../../packages/ui/src/fonts/jp-serif.woff2', variable: "--font-jp-serif" });
 
 const fonts = `${inter.variable} ${geistMono.variable} ${jpSerif.variable}`;
 

@@ -9,6 +9,7 @@
     "./pagination": "./src/pagination/index.ts",
     "./table": "./src/table/index.ts",
     "./copy-button": "./src/copy-button/index.tsx",
+    "./search-input": "./src/search-input/index.tsx",
     "./theme.css": "./src/theme.css"
   },
   "scripts": {
