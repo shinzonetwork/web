@@ -6,14 +6,18 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
     "lint": "eslint",
-    "build-and-deploy": "pnpm build && wrangler deploy",
-    "build-and-upload": "pnpm build && wrangler versions upload"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
   },
   "dependencies": {
-    "@shinzo/ui": "workspace:*",
+    "@cosmjs/crypto": "^0.32.4",
+    "@cosmjs/encoding": "^0.32.4",
+    "@cosmjs/proto-signing": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
     "@radix-ui/react-slot": "^1.2.4",
+    "@shinzo/ui": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next": "^16.0.10",
