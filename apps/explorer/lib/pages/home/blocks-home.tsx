@@ -50,7 +50,7 @@ export const BlocksHome = () => {
         className={cn(HALF_CONTAINER_CLASS, 'relative', GAP_BG, 'after:border-t')}
         notFound="No blocks found."
         gridClass="grid-cols-[1fr_270px_150px]"
-        headings={["Block number", "Miner", "Txns"]}
+        headings={["Block number", "Validator", "Txns"]}
         hideHeader
         hideRightSpacer
         iterable={blocks ?? []}
