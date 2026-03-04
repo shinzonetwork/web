@@ -65,12 +65,6 @@ export function FaucetPage() {
     }
   };
 
-  const handleReset = () => {
-    setStatus('idle');
-    setMessage('');
-    setAddress('');
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <ShinzoFrame />
@@ -83,8 +77,7 @@ export function FaucetPage() {
         {status === 'success' ? (
           <div className="flex flex-col items-center gap-6 w-full text-center">
             <p className="text-sm text-szo-black/60">Tokens sent successfully!</p>
-            <p className="font-mono text-xs text-szo-black/40 break-all">{message}</p>
-            <Button variant="secondary" onClick={handleReset}>Send to another address</Button>
+            <p className="font-mono text-xs text-szo-black/40 break-all">Transaction hash {message}</p>
           </div>
         ) : (
           <>
