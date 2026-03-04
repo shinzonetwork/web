@@ -38,6 +38,7 @@ export function FaucetPage() {
   const [address, setAddress] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
+  const [shinzoAddress, setShinzoAddress] = useState<string>();
 
   const handleSubmit = async () => {
     if (!address.trim() || status === 'loading') return;
@@ -46,6 +47,7 @@ export function FaucetPage() {
       setMessage('You already received tokens today. Try again in 24 hours.');
       return;
     }
+    setShinzoAddress(undefined);
     setStatus('loading');
     try {
       const token = await recaptchaRef.current?.executeAsync() ?? '';
@@ -57,6 +59,7 @@ export function FaucetPage() {
       } else {
         setStatus('success');
         markRequested();
+        setShinzoAddress(result.address);
         setMessage(result.txHash);
       }
     } catch {
@@ -78,6 +81,10 @@ export function FaucetPage() {
           <div className="flex flex-col items-center gap-6 w-full text-center">
             <p className="text-sm text-szo-black/60">Tokens sent successfully!</p>
             <p className="font-mono text-xs text-szo-black/40 break-all">Tx hash {message}</p>
+            {/* todo: update link */}
+            <a href={`http://rpc.devnet.shinzo.network:1317/cosmos/bank/v1beta1/balances/${shinzoAddress}`} className="font-mono text-xs text-szo-black/40 break-all underline cursor-pointer">
+              Check my balance
+            </a>
           </div>
         ) : (
           <>

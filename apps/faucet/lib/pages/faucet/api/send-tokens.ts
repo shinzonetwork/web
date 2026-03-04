@@ -92,5 +92,7 @@ export const sendFaucetTokens = async (toAddress: string) => {
   })).finish();
 
   const result = await broadcast(txRaw);
-  return result.hash;
+
+  const shinzoAddress = toAddress.startsWith(PREFIX) ? toAddress : toBech32(PREFIX, fromHex(toAddress.replace(/^0x/, "")));
+  return { txHash: result.hash, address: shinzoAddress };
 }
