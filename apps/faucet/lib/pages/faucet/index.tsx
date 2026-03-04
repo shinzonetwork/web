@@ -10,6 +10,29 @@ import { ShinzoFrame } from './shinzo-frame';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
+const RATE_LIMIT_KEY = 'faucet_requested';
+const RATE_LIMIT_MS  = 24 * 60 * 60 * 1000;
+
+function getRateLimitTs(): number | null {
+  try {
+    const v = localStorage.getItem(RATE_LIMIT_KEY);
+    if (v) return parseInt(v, 10);
+  } catch {}
+  const m = document.cookie.match(/(?:^|;\s*)faucet_requested=(\d+)/);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function isRateLimited(): boolean {
+  const ts = getRateLimitTs();
+  return ts !== null && Date.now() - ts < RATE_LIMIT_MS;
+}
+
+function markRequested() {
+  const now = Date.now().toString();
+  try { localStorage.setItem(RATE_LIMIT_KEY, now); } catch {}
+  document.cookie = `faucet_requested=${now}; max-age=86400; SameSite=Strict; path=/`;
+}
+
 export function FaucetPage() {
   const recaptchaRef = useRef<RecaptchaRef>(null);
   const [address, setAddress] = useState('');
@@ -18,6 +41,11 @@ export function FaucetPage() {
 
   const handleSubmit = async () => {
     if (!address.trim() || status === 'loading') return;
+    if (isRateLimited()) {
+      setStatus('error');
+      setMessage('You already received tokens today. Try again in 24 hours.');
+      return;
+    }
     setStatus('loading');
     try {
       const token = await recaptchaRef.current?.executeAsync() ?? '';
@@ -28,6 +56,7 @@ export function FaucetPage() {
         setMessage(result.error);
       } else {
         setStatus('success');
+        markRequested();
         setMessage(result.txHash);
       }
     } catch {
