@@ -77,7 +77,7 @@ export function FaucetPage() {
         {status === 'success' ? (
           <div className="flex flex-col items-center gap-6 w-full text-center">
             <p className="text-sm text-szo-black/60">Tokens sent successfully!</p>
-            <p className="font-mono text-xs text-szo-black/40 break-all">Transaction hash {message}</p>
+            <p className="font-mono text-xs text-szo-black/40 break-all">Tx hash {message}</p>
           </div>
         ) : (
           <>
