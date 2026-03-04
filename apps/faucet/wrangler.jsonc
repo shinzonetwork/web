@@ -1,8 +1,8 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "shinzo-faucet",
-  "compatibility_date": "2026-01-04",
+  "name": "faucet",
+  "compatibility_date": "2026-03-03",
   "compatibility_flags": [
     "nodejs_compat"
   ],
