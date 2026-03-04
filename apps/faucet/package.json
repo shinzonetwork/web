@@ -12,14 +12,16 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
   },
   "dependencies": {
-    "@cosmjs/crypto": "^0.32.4",
-    "@cosmjs/encoding": "^0.32.4",
-    "@cosmjs/proto-signing": "^0.32.4",
-    "@cosmjs/stargate": "^0.32.4",
+    "@cosmjs/amino": "^0.38.1",
+    "@cosmjs/crypto": "^0.38.1",
+    "@cosmjs/encoding": "^0.38.1",
+    "@cosmjs/proto-signing": "^0.38.1",
+    "@cosmjs/stargate": "^0.38.1",
     "@radix-ui/react-slot": "^1.2.4",
     "@shinzo/ui": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cosmjs-types": "^0.11.0",
     "next": "^16.0.10",
     "react-google-recaptcha": "^3.1.0"
   },
