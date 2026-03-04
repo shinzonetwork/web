@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { SearchInput } from '@shinzo/ui/search-input';
 import { Button } from '@/shared/button';
@@ -7,6 +7,7 @@ import { requestFaucetDrop } from './api/request-airdrop';
 import ShinzoLogo from './shinzo-logo.svg';
 import { RecaptchaWidget, type RecaptchaRef } from './recaptcha-widget';
 import { ShinzoFrame } from './shinzo-frame';
+import { SHINZO_RPC } from '@/shared/envs';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -39,6 +40,13 @@ export function FaucetPage() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
   const [shinzoAddress, setShinzoAddress] = useState<string>();
+
+  const successLink = useMemo(() => {
+    if (!shinzoAddress) return null;
+
+    const rpcHost = SHINZO_RPC.replace(/:[0-9]+$/, ':1317');
+    return `${rpcHost}/cosmos/bank/v1beta1/balances/${shinzoAddress}`;
+  }, [shinzoAddress]);
 
   const handleSubmit = async () => {
     if (!address.trim() || status === 'loading') return;
@@ -81,10 +89,15 @@ export function FaucetPage() {
           <div className="flex flex-col items-center gap-6 w-full text-center">
             <p className="text-sm text-szo-black/60">Tokens sent successfully!</p>
             <p className="font-mono text-xs text-szo-black/40 break-all">Tx hash {message}</p>
-            {/* todo: update link */}
-            <a href={`http://rpc.devnet.shinzo.network:1317/cosmos/bank/v1beta1/balances/${shinzoAddress}`} className="font-mono text-xs text-szo-black/40 break-all underline cursor-pointer">
-              Check my balance
-            </a>
+            {successLink && (
+              <a
+                href={successLink}
+                className="font-mono text-xs text-szo-black/40 break-all underline cursor-pointer"
+                target="_blank"
+              >
+                Check my balance
+              </a>
+            )}
           </div>
         ) : (
           <>
