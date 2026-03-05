@@ -1,10 +1,11 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { METRICS_API_URL } from "@/lib/shared/utils/consts";
 import { MetricsData, MetricsResponse } from "../types/types";
 
 async function fetchMetrics(): Promise<MetricsData> {
-  const response = await fetch("/api/metrics");
+  const response = await fetch(METRICS_API_URL ?? '');
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
   const data: MetricsResponse = await response.json();
