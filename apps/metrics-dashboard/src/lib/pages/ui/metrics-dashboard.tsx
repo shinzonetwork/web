@@ -1,27 +1,17 @@
-import {
-  Overview,
-  PerformanceAnalytics,
-  ErrorStatus,
-  DocumentsStatistics,
-  SystemAnalytics,
-} from "@/lib/features";
+import { useMetricsContext } from "@/lib/context";
+import { MetricsDashboardComponents } from "./metrics-dashboard-components";
+import { MetricsDashboardSkeleton } from "./metrics-dashboard-skeleton";
 
-export function MetricsDashboard() {
+
+export default function MetricsDashboard() {
+  const { isLoading, currentMetricsData } = useMetricsContext();
+  const showSkeleton = isLoading || !currentMetricsData;
+
+  if (showSkeleton) return <MetricsDashboardSkeleton />;
+
   return (
     <>
-      {/* Overview Section */}
-      <Overview />
-      {/* Performance Charts Section */}
-      <PerformanceAnalytics />
-      {/* TODO: Add Processing Analytics once the metrics api is wired with uptodate last_processing_time_ms */}
-      {/* Processing Time Section */}
-      {/* <ProcessingAnalytics /> */}
-      {/* Error Status Section */}
-      <ErrorStatus />
-      {/* Documents Statistics Section */}
-      <DocumentsStatistics />
-      {/* System Analytics Section */}
-      <SystemAnalytics />
+      <MetricsDashboardComponents />
     </>
   );
 }
