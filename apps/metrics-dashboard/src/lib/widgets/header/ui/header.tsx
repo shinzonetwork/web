@@ -4,8 +4,9 @@ import { useMetricsContext } from "@/lib/context";
 import { formatTimeAgo } from "@/lib/shared/utils/utils";
 
 export function Header() {
-  const { currentMetricsData } = useMetricsContext();
+  const { currentMetricsData, isLoading } = useMetricsContext();
   if (!currentMetricsData) return null;
+  const showLoading = isLoading || !currentMetricsData;
 
   const { last_document_time } = currentMetricsData;
   return (
@@ -25,12 +26,12 @@ export function Header() {
               Last Document Received
             </p>
             <p className="text-sm text-foreground">
-              {currentMetricsData
+              {showLoading
                 ? new Date(last_document_time).toLocaleString()
                 : "waiting for metrics..."}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              {currentMetricsData
+              {showLoading
                 ? formatTimeAgo(new Date(last_document_time))
                 : "--"}
             </p>
