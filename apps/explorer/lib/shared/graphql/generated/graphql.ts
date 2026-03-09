@@ -208,7 +208,7 @@ export type Commit = {
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
   /**
    *
    * The group field may be used to return a set of records belonging to the group.
@@ -217,7 +217,7 @@ export type Commit = {
    *  groupBy.
    *
    */
-  _group?: Maybe<Array<Maybe<Commit>>>;
+  GROUP?: Maybe<Array<Maybe<Commit>>>;
   /**
    *
    * The unique CID of this commit, and the primary means through which to safely identify
@@ -294,7 +294,7 @@ export type Commit = {
  *  also be a collection-level commit for each mutation.
  *
  */
-export type Commit_CountArgs = {
+export type CommitCountArgs = {
   field?: InputMaybe<CommitCountFieldArg>;
 };
 
@@ -390,14 +390,49 @@ export type Config__LastProcessedPage = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -412,41 +447,6 @@ export type Config__LastProcessedPage = {
   _docID?: Maybe<Scalars['ID']['output']>;
   /**
    *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
    * Returns the head commit for this document.
    *
    */
@@ -455,19 +455,19 @@ export type Config__LastProcessedPage = {
 };
 
 
-export type Config__LastProcessedPage_AvgArgs = {
-  _group?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+export type Config__LastProcessedPageAvgArgs = {
+  GROUP?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
   page?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Config__LastProcessedPage_CountArgs = {
-  _group?: InputMaybe<Config__LastProcessedPage__CountSelector>;
+export type Config__LastProcessedPageCountArgs = {
+  GROUP?: InputMaybe<Config__LastProcessedPage__CountSelector>;
   _version?: InputMaybe<Config__LastProcessedPage___Version__CountSelector>;
 };
 
 
-export type Config__LastProcessedPage_GroupArgs = {
+export type Config__LastProcessedPageGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Config__LastProcessedPageFilterArg>;
   groupBy?: InputMaybe<Array<Config__LastProcessedPageField>>;
@@ -477,20 +477,20 @@ export type Config__LastProcessedPage_GroupArgs = {
 };
 
 
-export type Config__LastProcessedPage_MaxArgs = {
-  _group?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+export type Config__LastProcessedPageMaxArgs = {
+  GROUP?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
   page?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Config__LastProcessedPage_MinArgs = {
-  _group?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+export type Config__LastProcessedPageMinArgs = {
+  GROUP?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
   page?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Config__LastProcessedPage_SumArgs = {
-  _group?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+export type Config__LastProcessedPageSumArgs = {
+  GROUP?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
   page?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
@@ -499,9 +499,9 @@ export enum Config__LastProcessedPageExplicitField {
 }
 
 export enum Config__LastProcessedPageField {
+  Group = 'GROUP',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   Version = '_version',
   Page = 'page'
 }
@@ -536,11 +536,11 @@ export type Config__LastProcessedPageMutationInputArg = {
 };
 
 export enum Config__LastProcessedPageNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   Page = 'page'
 }
 
@@ -559,6 +559,24 @@ export type Config__LastProcessedPage__CountSelector = {
    *
    */
   filter?: InputMaybe<Config__LastProcessedPageFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Config__LastProcessedPage__Group__CountSelector = {
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -607,24 +625,6 @@ export type Config__LastProcessedPage__NumericSelector = {
    *
    */
   order?: InputMaybe<Array<InputMaybe<Config__LastProcessedPageOrderArg>>>;
-};
-
-export type Config__LastProcessedPage___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Config__LastProcessedPage___Version__CountSelector = {
@@ -722,14 +722,49 @@ export type Ethereum__Mainnet__AccessListEntry = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -742,41 +777,6 @@ export type Ethereum__Mainnet__AccessListEntry = {
    *
    */
   _docID?: Maybe<Scalars['ID']['output']>;
-  /**
-   *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
   _transactionID?: Maybe<Scalars['ID']['output']>;
   /**
    *
@@ -791,20 +791,20 @@ export type Ethereum__Mainnet__AccessListEntry = {
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+export type Ethereum__Mainnet__AccessListEntryAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_CountArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
+export type Ethereum__Mainnet__AccessListEntryCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
   _version?: InputMaybe<Ethereum__Mainnet__AccessListEntry___Version__CountSelector>;
   storageKeys?: InputMaybe<Ethereum__Mainnet__AccessListEntry__StorageKeys__CountSelector>;
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_GroupArgs = {
+export type Ethereum__Mainnet__AccessListEntryGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__AccessListEntryFilterArg>;
   groupBy?: InputMaybe<Array<Ethereum__Mainnet__AccessListEntryField>>;
@@ -814,20 +814,20 @@ export type Ethereum__Mainnet__AccessListEntry_GroupArgs = {
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+export type Ethereum__Mainnet__AccessListEntryMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+export type Ethereum__Mainnet__AccessListEntryMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AccessListEntry_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+export type Ethereum__Mainnet__AccessListEntrySumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
@@ -844,9 +844,9 @@ export enum Ethereum__Mainnet__AccessListEntryExplicitField {
 }
 
 export enum Ethereum__Mainnet__AccessListEntryField {
+  Group = 'GROUP',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   TransactionId = '_transactionID',
   Version = '_version',
   Address = 'address',
@@ -893,11 +893,11 @@ export type Ethereum__Mainnet__AccessListEntryMutationInputArg = {
 };
 
 export enum Ethereum__Mainnet__AccessListEntryNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   BlockNumber = 'blockNumber'
 }
 
@@ -920,6 +920,24 @@ export type Ethereum__Mainnet__AccessListEntry__CountSelector = {
    *
    */
   filter?: InputMaybe<Ethereum__Mainnet__AccessListEntryFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__AccessListEntry__Group__CountSelector = {
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -970,24 +988,6 @@ export type Ethereum__Mainnet__AccessListEntry__NumericSelector = {
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__AccessListEntryOrderArg>>>;
 };
 
-export type Ethereum__Mainnet__AccessListEntry___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type Ethereum__Mainnet__AccessListEntry___Version__CountSelector = {
   /**
    *
@@ -1033,7 +1033,6 @@ export type Ethereum__Mainnet__AccessListEntry__StorageKeys__CountSelector = {
 
 export type Ethereum__Mainnet__AttestationRecord = {
   __typename?: 'Ethereum__Mainnet__AttestationRecord';
-  CIDs?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -1041,14 +1040,50 @@ export type Ethereum__Mainnet__AttestationRecord = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
+  CIDs?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -1063,41 +1098,6 @@ export type Ethereum__Mainnet__AttestationRecord = {
   _docID?: Maybe<Scalars['ID']['output']>;
   /**
    *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
    * Returns the head commit for this document.
    *
    */
@@ -1109,20 +1109,20 @@ export type Ethereum__Mainnet__AttestationRecord = {
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+export type Ethereum__Mainnet__AttestationRecordAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_CountArgs = {
+export type Ethereum__Mainnet__AttestationRecordCountArgs = {
   CIDs?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CiDs__CountSelector>;
-  _group?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CountSelector>;
+  GROUP?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CountSelector>;
   _version?: InputMaybe<Ethereum__Mainnet__AttestationRecord___Version__CountSelector>;
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_GroupArgs = {
+export type Ethereum__Mainnet__AttestationRecordGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__AttestationRecordFilterArg>;
   groupBy?: InputMaybe<Array<Ethereum__Mainnet__AttestationRecordField>>;
@@ -1132,20 +1132,20 @@ export type Ethereum__Mainnet__AttestationRecord_GroupArgs = {
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+export type Ethereum__Mainnet__AttestationRecordMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+export type Ethereum__Mainnet__AttestationRecordMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__AttestationRecord_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+export type Ethereum__Mainnet__AttestationRecordSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   vote_count?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
@@ -1159,9 +1159,9 @@ export enum Ethereum__Mainnet__AttestationRecordExplicitField {
 
 export enum Ethereum__Mainnet__AttestationRecordField {
   CiDs = 'CIDs',
+  Group = 'GROUP',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   Version = '_version',
   AttestedDoc = 'attested_doc',
   DocType = 'doc_type',
@@ -1207,11 +1207,11 @@ export type Ethereum__Mainnet__AttestationRecordMutationInputArg = {
 };
 
 export enum Ethereum__Mainnet__AttestationRecordNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   VoteCount = 'vote_count'
 }
 
@@ -1276,6 +1276,24 @@ export type Ethereum__Mainnet__AttestationRecord__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Ethereum__Mainnet__AttestationRecord__Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Ethereum__Mainnet__AttestationRecord__NumericSelector = {
   field: Ethereum__Mainnet__AttestationRecordNumericFieldsArg;
   /**
@@ -1309,336 +1327,7 @@ export type Ethereum__Mainnet__AttestationRecord__NumericSelector = {
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__AttestationRecordOrderArg>>>;
 };
 
-export type Ethereum__Mainnet__AttestationRecord___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type Ethereum__Mainnet__AttestationRecord___Version__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type Ethereum__Mainnet__BatchSignature = {
-  __typename?: 'Ethereum__Mainnet__BatchSignature';
-  /**
-   *
-   * Returns the average of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined average of all items within each set
-   *  (true average, not an average of averages) will be returned as a single value.
-   *
-   */
-  _avg?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total number of items within the specified child sets. If multiple child
-   *  sets are specified, the combined total of all of them will be returned as a single value.
-   *
-   */
-  _count?: Maybe<Scalars['Int']['output']>;
-  /**
-   *
-   * Indicates as to whether or not this document has been deleted.
-   *
-   */
-  _deleted?: Maybe<Scalars['Boolean']['output']>;
-  /**
-   *
-   * The immutable identifier/docID (primary key) value for this document.
-   *
-   */
-  _docID?: Maybe<Scalars['ID']['output']>;
-  /**
-   *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the head commit for this document.
-   *
-   */
-  _version?: Maybe<Array<Maybe<Commit>>>;
-  blockHash?: Maybe<Scalars['String']['output']>;
-  blockNumber?: Maybe<Scalars['Int']['output']>;
-  cidCount?: Maybe<Scalars['Int']['output']>;
-  createdAt?: Maybe<Scalars['String']['output']>;
-  merkleRoot?: Maybe<Scalars['String']['output']>;
-  signatureIdentity?: Maybe<Scalars['String']['output']>;
-  signatureType?: Maybe<Scalars['String']['output']>;
-  signatureValue?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
-  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_CountArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__BatchSignature__CountSelector>;
-  _version?: InputMaybe<Ethereum__Mainnet__BatchSignature___Version__CountSelector>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_GroupArgs = {
-  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureField>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BatchSignatureOrderArg>>>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
-  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
-  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
-};
-
-
-export type Ethereum__Mainnet__BatchSignature_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
-  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
-};
-
-export enum Ethereum__Mainnet__BatchSignatureExplicitField {
-  BlockHash = 'blockHash',
-  BlockNumber = 'blockNumber',
-  CidCount = 'cidCount',
-  CreatedAt = 'createdAt',
-  MerkleRoot = 'merkleRoot',
-  SignatureIdentity = 'signatureIdentity',
-  SignatureType = 'signatureType',
-  SignatureValue = 'signatureValue'
-}
-
-export enum Ethereum__Mainnet__BatchSignatureField {
-  Deleted = '_deleted',
-  DocId = '_docID',
-  Group = '_group',
-  Version = '_version',
-  BlockHash = 'blockHash',
-  BlockNumber = 'blockNumber',
-  CidCount = 'cidCount',
-  CreatedAt = 'createdAt',
-  MerkleRoot = 'merkleRoot',
-  SignatureIdentity = 'signatureIdentity',
-  SignatureType = 'signatureType',
-  SignatureValue = 'signatureValue'
-}
-
-export type Ethereum__Mainnet__BatchSignatureFilterArg = {
-  /** The alias operator allows filters to target aliased fields. */
-  _alias?: InputMaybe<Scalars['JSON']['input']>;
-  /**
-   *
-   * The and operator - all checks within this clause must pass in order for this check to pass.
-   *
-   */
-  _and?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureFilterArg>>;
-  _docID?: InputMaybe<IdOperatorBlock>;
-  /**
-   *
-   * The negative operator - this check will only pass if all checks within it fail.
-   *
-   */
-  _not?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  /**
-   *
-   * The or operator - only one check within this clause must pass in order for this check to pass.
-   *
-   */
-  _or?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureFilterArg>>;
-  blockHash?: InputMaybe<StringOperatorBlock>;
-  blockNumber?: InputMaybe<IntOperatorBlock>;
-  cidCount?: InputMaybe<IntOperatorBlock>;
-  createdAt?: InputMaybe<StringOperatorBlock>;
-  merkleRoot?: InputMaybe<StringOperatorBlock>;
-  signatureIdentity?: InputMaybe<StringOperatorBlock>;
-  signatureType?: InputMaybe<StringOperatorBlock>;
-  signatureValue?: InputMaybe<StringOperatorBlock>;
-};
-
-export type Ethereum__Mainnet__BatchSignatureMutationInputArg = {
-  blockHash?: InputMaybe<Scalars['String']['input']>;
-  blockNumber?: InputMaybe<Scalars['Int']['input']>;
-  cidCount?: InputMaybe<Scalars['Int']['input']>;
-  createdAt?: InputMaybe<Scalars['String']['input']>;
-  merkleRoot?: InputMaybe<Scalars['String']['input']>;
-  signatureIdentity?: InputMaybe<Scalars['String']['input']>;
-  signatureType?: InputMaybe<Scalars['String']['input']>;
-  signatureValue?: InputMaybe<Scalars['String']['input']>;
-};
-
-export enum Ethereum__Mainnet__BatchSignatureNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
-  BlockNumber = 'blockNumber',
-  CidCount = 'cidCount'
-}
-
-export type Ethereum__Mainnet__BatchSignatureOrderArg = {
-  /** The alias field allows ordering by aliased fields. */
-  _alias?: InputMaybe<Scalars['JSON']['input']>;
-  _docID?: InputMaybe<Ordering>;
-  blockHash?: InputMaybe<Ordering>;
-  blockNumber?: InputMaybe<Ordering>;
-  cidCount?: InputMaybe<Ordering>;
-  createdAt?: InputMaybe<Ordering>;
-  merkleRoot?: InputMaybe<Ordering>;
-  signatureIdentity?: InputMaybe<Ordering>;
-  signatureType?: InputMaybe<Ordering>;
-  signatureValue?: InputMaybe<Ordering>;
-};
-
-export type Ethereum__Mainnet__BatchSignature__CountSelector = {
-  /**
-   *
-   * An optional filter for this aggregate, only documents matching the given criteria
-   *  will be aggregated.
-   *
-   */
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type Ethereum__Mainnet__BatchSignature__NumericSelector = {
-  field: Ethereum__Mainnet__BatchSignatureNumericFieldsArg;
-  /**
-   *
-   * An optional filter for this aggregate, only documents matching the given criteria
-   *  will be aggregated.
-   *
-   */
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional set of field-orders which may be used to sort the results. An
-   *  empty set will be ignored.
-   *
-   */
-  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BatchSignatureOrderArg>>>;
-};
-
-export type Ethereum__Mainnet__BatchSignature___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type Ethereum__Mainnet__BatchSignature___Version__CountSelector = {
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -1665,14 +1354,49 @@ export type Ethereum__Mainnet__Block = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -1685,41 +1409,6 @@ export type Ethereum__Mainnet__Block = {
    *
    */
   _docID?: Maybe<Scalars['ID']['output']>;
-  /**
-   *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the head commit for this document.
@@ -1750,22 +1439,22 @@ export type Ethereum__Mainnet__Block = {
 };
 
 
-export type Ethereum__Mainnet__Block_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+export type Ethereum__Mainnet__BlockAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
 
 
-export type Ethereum__Mainnet__Block_CountArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
+export type Ethereum__Mainnet__BlockCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
   _version?: InputMaybe<Ethereum__Mainnet__Block___Version__CountSelector>;
   transactions?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
   uncles?: InputMaybe<Ethereum__Mainnet__Block__Uncles__CountSelector>;
 };
 
 
-export type Ethereum__Mainnet__Block_GroupArgs = {
+export type Ethereum__Mainnet__BlockGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__BlockFilterArg>;
   groupBy?: InputMaybe<Array<Ethereum__Mainnet__BlockField>>;
@@ -1775,22 +1464,22 @@ export type Ethereum__Mainnet__Block_GroupArgs = {
 };
 
 
-export type Ethereum__Mainnet__Block_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+export type Ethereum__Mainnet__BlockMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
 
 
-export type Ethereum__Mainnet__Block_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+export type Ethereum__Mainnet__BlockMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
 
 
-export type Ethereum__Mainnet__Block_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+export type Ethereum__Mainnet__BlockSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
   number?: InputMaybe<ScalarAggregateNumericBlock>;
   transactions?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
@@ -1830,9 +1519,9 @@ export enum Ethereum__Mainnet__BlockExplicitField {
 }
 
 export enum Ethereum__Mainnet__BlockField {
+  Group = 'GROUP',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   Version = '_version',
   BaseFeePerGas = 'baseFeePerGas',
   Difficulty = 'difficulty',
@@ -1926,11 +1615,11 @@ export type Ethereum__Mainnet__BlockMutationInputArg = {
 };
 
 export enum Ethereum__Mainnet__BlockNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   Number = 'number'
 }
 
@@ -1960,6 +1649,349 @@ export type Ethereum__Mainnet__BlockOrderArg = {
   uncles?: InputMaybe<Ordering>;
 };
 
+export type Ethereum__Mainnet__BlockSignature = {
+  __typename?: 'Ethereum__Mainnet__BlockSignature';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  AVG?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Indicates as to whether or not this document has been deleted.
+   *
+   */
+  _deleted?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   *
+   * The immutable identifier/docID (primary key) value for this document.
+   *
+   */
+  _docID?: Maybe<Scalars['ID']['output']>;
+  /**
+   *
+   * Returns the head commit for this document.
+   *
+   */
+  _version?: Maybe<Array<Maybe<Commit>>>;
+  blockHash?: Maybe<Scalars['String']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  cidCount?: Maybe<Scalars['Int']['output']>;
+  cids?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  createdAt?: Maybe<Scalars['String']['output']>;
+  merkleRoot?: Maybe<Scalars['String']['output']>;
+  signatureIdentity?: Maybe<Scalars['String']['output']>;
+  signatureType?: Maybe<Scalars['String']['output']>;
+  signatureValue?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__BlockSignature__CountSelector>;
+  _version?: InputMaybe<Ethereum__Mainnet__BlockSignature___Version__CountSelector>;
+  cids?: InputMaybe<Ethereum__Mainnet__BlockSignature__Cids__CountSelector>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureGroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockSignatureOrderArg>>>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__BlockSignatureSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+  cidCount?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum Ethereum__Mainnet__BlockSignatureExplicitField {
+  BlockHash = 'blockHash',
+  BlockNumber = 'blockNumber',
+  CidCount = 'cidCount',
+  Cids = 'cids',
+  CreatedAt = 'createdAt',
+  MerkleRoot = 'merkleRoot',
+  SignatureIdentity = 'signatureIdentity',
+  SignatureType = 'signatureType',
+  SignatureValue = 'signatureValue'
+}
+
+export enum Ethereum__Mainnet__BlockSignatureField {
+  Group = 'GROUP',
+  Deleted = '_deleted',
+  DocId = '_docID',
+  Version = '_version',
+  BlockHash = 'blockHash',
+  BlockNumber = 'blockNumber',
+  CidCount = 'cidCount',
+  Cids = 'cids',
+  CreatedAt = 'createdAt',
+  MerkleRoot = 'merkleRoot',
+  SignatureIdentity = 'signatureIdentity',
+  SignatureType = 'signatureType',
+  SignatureValue = 'signatureValue'
+}
+
+export type Ethereum__Mainnet__BlockSignatureFilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureFilterArg>>;
+  _docID?: InputMaybe<IdOperatorBlock>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureFilterArg>>;
+  blockHash?: InputMaybe<StringOperatorBlock>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  cidCount?: InputMaybe<IntOperatorBlock>;
+  cids?: InputMaybe<StringListOperatorBlock>;
+  createdAt?: InputMaybe<StringOperatorBlock>;
+  merkleRoot?: InputMaybe<StringOperatorBlock>;
+  signatureIdentity?: InputMaybe<StringOperatorBlock>;
+  signatureType?: InputMaybe<StringOperatorBlock>;
+  signatureValue?: InputMaybe<StringOperatorBlock>;
+};
+
+export type Ethereum__Mainnet__BlockSignatureMutationInputArg = {
+  blockHash?: InputMaybe<Scalars['String']['input']>;
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  cidCount?: InputMaybe<Scalars['Int']['input']>;
+  cids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdAt?: InputMaybe<Scalars['String']['input']>;
+  merkleRoot?: InputMaybe<Scalars['String']['input']>;
+  signatureIdentity?: InputMaybe<Scalars['String']['input']>;
+  signatureType?: InputMaybe<Scalars['String']['input']>;
+  signatureValue?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum Ethereum__Mainnet__BlockSignatureNumericFieldsArg {
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
+  BlockNumber = 'blockNumber',
+  CidCount = 'cidCount'
+}
+
+export type Ethereum__Mainnet__BlockSignatureOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  _docID?: InputMaybe<Ordering>;
+  blockHash?: InputMaybe<Ordering>;
+  blockNumber?: InputMaybe<Ordering>;
+  cidCount?: InputMaybe<Ordering>;
+  cids?: InputMaybe<Ordering>;
+  createdAt?: InputMaybe<Ordering>;
+  merkleRoot?: InputMaybe<Ordering>;
+  signatureIdentity?: InputMaybe<Ordering>;
+  signatureType?: InputMaybe<Ordering>;
+  signatureValue?: InputMaybe<Ordering>;
+};
+
+export type Ethereum__Mainnet__BlockSignature__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__BlockSignature__Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__BlockSignature__NumericSelector = {
+  field: Ethereum__Mainnet__BlockSignatureNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockSignatureOrderArg>>>;
+};
+
+export type Ethereum__Mainnet__BlockSignature___Version__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__BlockSignature__Cids__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<StringFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Ethereum__Mainnet__Block__CountSelector = {
   /**
    *
@@ -1968,6 +2000,24 @@ export type Ethereum__Mainnet__Block__CountSelector = {
    *
    */
   filter?: InputMaybe<Ethereum__Mainnet__BlockFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__Block__Group__CountSelector = {
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -2016,24 +2066,6 @@ export type Ethereum__Mainnet__Block__NumericSelector = {
    *
    */
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockOrderArg>>>;
-};
-
-export type Ethereum__Mainnet__Block___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Ethereum__Mainnet__Block___Version__CountSelector = {
@@ -2106,15 +2138,50 @@ export type Ethereum__Mainnet__Log = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
-  _blockID?: Maybe<Scalars['ID']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
+  _blockID?: Maybe<Scalars['ID']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -2127,41 +2194,6 @@ export type Ethereum__Mainnet__Log = {
    *
    */
   _docID?: Maybe<Scalars['ID']['output']>;
-  /**
-   *
-   * The group field may be used to return a set of records belonging to the group.
-   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
-   *  contain any field on the type being grouped, including those used by the
-   *  groupBy.
-   *
-   */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
-  /**
-   *
-   * Returns the maximum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined maximum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _max?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the minimum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined minimum of all items within each set
-   *  will be returned as a single value.
-   *
-   */
-  _min?: Maybe<Scalars['Float']['output']>;
-  /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns the total sum of the specified field values within the specified child sets. If
-   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
-   *  a single value.
-   *
-   */
-  _sum?: Maybe<Scalars['Float']['output']>;
   _transactionID?: Maybe<Scalars['ID']['output']>;
   /**
    *
@@ -2183,22 +2215,22 @@ export type Ethereum__Mainnet__Log = {
 };
 
 
-export type Ethereum__Mainnet__Log_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+export type Ethereum__Mainnet__LogAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
   transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__Log_CountArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
+export type Ethereum__Mainnet__LogCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
   _version?: InputMaybe<Ethereum__Mainnet__Log___Version__CountSelector>;
   topics?: InputMaybe<Ethereum__Mainnet__Log__Topics__CountSelector>;
 };
 
 
-export type Ethereum__Mainnet__Log_GroupArgs = {
+export type Ethereum__Mainnet__LogGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__LogFilterArg>;
   groupBy?: InputMaybe<Array<Ethereum__Mainnet__LogField>>;
@@ -2208,24 +2240,24 @@ export type Ethereum__Mainnet__Log_GroupArgs = {
 };
 
 
-export type Ethereum__Mainnet__Log_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+export type Ethereum__Mainnet__LogMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
   transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__Log_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+export type Ethereum__Mainnet__LogMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
   transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
-export type Ethereum__Mainnet__Log_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+export type Ethereum__Mainnet__LogSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logIndex?: InputMaybe<ScalarAggregateNumericBlock>;
   transactionIndex?: InputMaybe<ScalarAggregateNumericBlock>;
@@ -2256,10 +2288,10 @@ export enum Ethereum__Mainnet__LogExplicitField {
 }
 
 export enum Ethereum__Mainnet__LogField {
+  Group = 'GROUP',
   BlockId = '_blockID',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   TransactionId = '_transactionID',
   Version = '_version',
   Address = 'address',
@@ -2329,11 +2361,11 @@ export type Ethereum__Mainnet__LogMutationInputArg = {
 };
 
 export enum Ethereum__Mainnet__LogNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   BlockNumber = 'blockNumber',
   LogIndex = 'logIndex',
   TransactionIndex = 'transactionIndex'
@@ -2366,6 +2398,24 @@ export type Ethereum__Mainnet__Log__CountSelector = {
    *
    */
   filter?: InputMaybe<Ethereum__Mainnet__LogFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__Log__Group__CountSelector = {
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -2416,24 +2466,6 @@ export type Ethereum__Mainnet__Log__NumericSelector = {
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__LogOrderArg>>>;
 };
 
-export type Ethereum__Mainnet__Log___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type Ethereum__Mainnet__Log___Version__CountSelector = {
   /**
    *
@@ -2477,8 +2509,8 @@ export type Ethereum__Mainnet__Log__Topics__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type Ethereum__Mainnet__Transaction = {
-  __typename?: 'Ethereum__Mainnet__Transaction';
+export type Ethereum__Mainnet__SnapshotSignature = {
+  __typename?: 'Ethereum__Mainnet__SnapshotSignature';
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -2486,15 +2518,49 @@ export type Ethereum__Mainnet__Transaction = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
-  _blockID?: Maybe<Scalars['ID']['output']>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Indicates as to whether or not this document has been deleted.
@@ -2509,13 +2575,320 @@ export type Ethereum__Mainnet__Transaction = {
   _docID?: Maybe<Scalars['ID']['output']>;
   /**
    *
+   * Returns the head commit for this document.
+   *
+   */
+  _version?: Maybe<Array<Maybe<Commit>>>;
+  blockCount?: Maybe<Scalars['Int']['output']>;
+  blockSigMerkleRoots?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  createdAt?: Maybe<Scalars['String']['output']>;
+  endBlock?: Maybe<Scalars['Int']['output']>;
+  merkleRoot?: Maybe<Scalars['String']['output']>;
+  signatureIdentity?: Maybe<Scalars['String']['output']>;
+  signatureType?: Maybe<Scalars['String']['output']>;
+  signatureValue?: Maybe<Scalars['String']['output']>;
+  snapshotFile?: Maybe<Scalars['String']['output']>;
+  startBlock?: Maybe<Scalars['Int']['output']>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  blockCount?: InputMaybe<ScalarAggregateNumericBlock>;
+  endBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+  startBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__CountSelector>;
+  _version?: InputMaybe<Ethereum__Mainnet__SnapshotSignature___Version__CountSelector>;
+  blockSigMerkleRoots?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__BlockSigMerkleRoots__CountSelector>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureGroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__SnapshotSignatureOrderArg>>>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  blockCount?: InputMaybe<ScalarAggregateNumericBlock>;
+  endBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+  startBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  blockCount?: InputMaybe<ScalarAggregateNumericBlock>;
+  endBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+  startBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type Ethereum__Mainnet__SnapshotSignatureSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  blockCount?: InputMaybe<ScalarAggregateNumericBlock>;
+  endBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+  startBlock?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum Ethereum__Mainnet__SnapshotSignatureExplicitField {
+  BlockCount = 'blockCount',
+  BlockSigMerkleRoots = 'blockSigMerkleRoots',
+  CreatedAt = 'createdAt',
+  EndBlock = 'endBlock',
+  MerkleRoot = 'merkleRoot',
+  SignatureIdentity = 'signatureIdentity',
+  SignatureType = 'signatureType',
+  SignatureValue = 'signatureValue',
+  SnapshotFile = 'snapshotFile',
+  StartBlock = 'startBlock'
+}
+
+export enum Ethereum__Mainnet__SnapshotSignatureField {
+  Group = 'GROUP',
+  Deleted = '_deleted',
+  DocId = '_docID',
+  Version = '_version',
+  BlockCount = 'blockCount',
+  BlockSigMerkleRoots = 'blockSigMerkleRoots',
+  CreatedAt = 'createdAt',
+  EndBlock = 'endBlock',
+  MerkleRoot = 'merkleRoot',
+  SignatureIdentity = 'signatureIdentity',
+  SignatureType = 'signatureType',
+  SignatureValue = 'signatureValue',
+  SnapshotFile = 'snapshotFile',
+  StartBlock = 'startBlock'
+}
+
+export type Ethereum__Mainnet__SnapshotSignatureFilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureFilterArg>>;
+  _docID?: InputMaybe<IdOperatorBlock>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureFilterArg>>;
+  blockCount?: InputMaybe<IntOperatorBlock>;
+  blockSigMerkleRoots?: InputMaybe<StringListOperatorBlock>;
+  createdAt?: InputMaybe<StringOperatorBlock>;
+  endBlock?: InputMaybe<IntOperatorBlock>;
+  merkleRoot?: InputMaybe<StringOperatorBlock>;
+  signatureIdentity?: InputMaybe<StringOperatorBlock>;
+  signatureType?: InputMaybe<StringOperatorBlock>;
+  signatureValue?: InputMaybe<StringOperatorBlock>;
+  snapshotFile?: InputMaybe<StringOperatorBlock>;
+  startBlock?: InputMaybe<IntOperatorBlock>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignatureMutationInputArg = {
+  blockCount?: InputMaybe<Scalars['Int']['input']>;
+  blockSigMerkleRoots?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  createdAt?: InputMaybe<Scalars['String']['input']>;
+  endBlock?: InputMaybe<Scalars['Int']['input']>;
+  merkleRoot?: InputMaybe<Scalars['String']['input']>;
+  signatureIdentity?: InputMaybe<Scalars['String']['input']>;
+  signatureType?: InputMaybe<Scalars['String']['input']>;
+  signatureValue?: InputMaybe<Scalars['String']['input']>;
+  snapshotFile?: InputMaybe<Scalars['String']['input']>;
+  startBlock?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum Ethereum__Mainnet__SnapshotSignatureNumericFieldsArg {
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
+  BlockCount = 'blockCount',
+  EndBlock = 'endBlock',
+  StartBlock = 'startBlock'
+}
+
+export type Ethereum__Mainnet__SnapshotSignatureOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  _docID?: InputMaybe<Ordering>;
+  blockCount?: InputMaybe<Ordering>;
+  blockSigMerkleRoots?: InputMaybe<Ordering>;
+  createdAt?: InputMaybe<Ordering>;
+  endBlock?: InputMaybe<Ordering>;
+  merkleRoot?: InputMaybe<Ordering>;
+  signatureIdentity?: InputMaybe<Ordering>;
+  signatureType?: InputMaybe<Ordering>;
+  signatureValue?: InputMaybe<Ordering>;
+  snapshotFile?: InputMaybe<Ordering>;
+  startBlock?: InputMaybe<Ordering>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignature__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignature__Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignature__NumericSelector = {
+  field: Ethereum__Mainnet__SnapshotSignatureNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__SnapshotSignatureOrderArg>>>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignature___Version__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__SnapshotSignature__BlockSigMerkleRoots__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<StringFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type Ethereum__Mainnet__Transaction = {
+  __typename?: 'Ethereum__Mainnet__Transaction';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  AVG?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
    * The group field may be used to return a set of records belonging to the group.
    *  It must be used alongside a 'groupBy' argument on the parent selector. It may
    *  contain any field on the type being grouped, including those used by the
    *  groupBy.
    *
    */
-  _group?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
+  GROUP?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
   /**
    *
    * Returns the maximum of the specified field values within the specified child sets. If
@@ -2523,7 +2896,7 @@ export type Ethereum__Mainnet__Transaction = {
    *  will be returned as a single value.
    *
    */
-  _max?: Maybe<Scalars['Float']['output']>;
+  MAX?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the minimum of the specified field values within the specified child sets. If
@@ -2531,9 +2904,9 @@ export type Ethereum__Mainnet__Transaction = {
    *  will be returned as a single value.
    *
    */
-  _min?: Maybe<Scalars['Float']['output']>;
+  MIN?: Maybe<Scalars['Float']['output']>;
   /** Returns the cosine similarity between the specified field and the provided vector. */
-  _similarity?: Maybe<Scalars['Float']['output']>;
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total sum of the specified field values within the specified child sets. If
@@ -2541,7 +2914,20 @@ export type Ethereum__Mainnet__Transaction = {
    *  a single value.
    *
    */
-  _sum?: Maybe<Scalars['Float']['output']>;
+  SUM?: Maybe<Scalars['Float']['output']>;
+  _blockID?: Maybe<Scalars['ID']['output']>;
+  /**
+   *
+   * Indicates as to whether or not this document has been deleted.
+   *
+   */
+  _deleted?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   *
+   * The immutable identifier/docID (primary key) value for this document.
+   *
+   */
+  _docID?: Maybe<Scalars['ID']['output']>;
   /**
    *
    * Returns the head commit for this document.
@@ -2576,8 +2962,8 @@ export type Ethereum__Mainnet__Transaction = {
 };
 
 
-export type Ethereum__Mainnet__Transaction_AvgArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+export type Ethereum__Mainnet__TransactionAvgArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
   accessList?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
@@ -2585,15 +2971,15 @@ export type Ethereum__Mainnet__Transaction_AvgArgs = {
 };
 
 
-export type Ethereum__Mainnet__Transaction_CountArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
+export type Ethereum__Mainnet__TransactionCountArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
   _version?: InputMaybe<Ethereum__Mainnet__Transaction___Version__CountSelector>;
   accessList?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
   logs?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
 };
 
 
-export type Ethereum__Mainnet__Transaction_GroupArgs = {
+export type Ethereum__Mainnet__TransactionGroupArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__TransactionFilterArg>;
   groupBy?: InputMaybe<Array<Ethereum__Mainnet__TransactionField>>;
@@ -2603,8 +2989,8 @@ export type Ethereum__Mainnet__Transaction_GroupArgs = {
 };
 
 
-export type Ethereum__Mainnet__Transaction_MaxArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+export type Ethereum__Mainnet__TransactionMaxArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
   accessList?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
@@ -2612,8 +2998,8 @@ export type Ethereum__Mainnet__Transaction_MaxArgs = {
 };
 
 
-export type Ethereum__Mainnet__Transaction_MinArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+export type Ethereum__Mainnet__TransactionMinArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
   accessList?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
@@ -2621,8 +3007,8 @@ export type Ethereum__Mainnet__Transaction_MinArgs = {
 };
 
 
-export type Ethereum__Mainnet__Transaction_SumArgs = {
-  _group?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+export type Ethereum__Mainnet__TransactionSumArgs = {
+  GROUP?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
   accessList?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
   logs?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
@@ -2683,10 +3069,10 @@ export enum Ethereum__Mainnet__TransactionExplicitField {
 }
 
 export enum Ethereum__Mainnet__TransactionField {
+  Group = 'GROUP',
   BlockId = '_blockID',
   Deleted = '_deleted',
   DocId = '_docID',
-  Group = '_group',
   Version = '_version',
   AccessList = 'accessList',
   Block = 'block',
@@ -2793,11 +3179,11 @@ export type Ethereum__Mainnet__TransactionMutationInputArg = {
 };
 
 export enum Ethereum__Mainnet__TransactionNumericFieldsArg {
-  Avg = '_avg',
-  Count = '_count',
-  Max = '_max',
-  Min = '_min',
-  Sum = '_sum',
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
   BlockNumber = 'blockNumber',
   TransactionIndex = 'transactionIndex'
 }
@@ -2857,6 +3243,24 @@ export type Ethereum__Mainnet__Transaction__CountSelector = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Ethereum__Mainnet__Transaction__Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type Ethereum__Mainnet__Transaction__NumericSelector = {
   field: Ethereum__Mainnet__TransactionNumericFieldsArg;
   /**
@@ -2888,24 +3292,6 @@ export type Ethereum__Mainnet__Transaction__NumericSelector = {
    *
    */
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__TransactionOrderArg>>>;
-};
-
-export type Ethereum__Mainnet__Transaction___Group__CountSelector = {
-  /**
-   *
-   * An optional value that caps the number of results to the number provided.
-   *  A limit of zero will be ignored.
-   *
-   */
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  /**
-   *
-   * An optional value that skips the given number of results that would have
-   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
-   *  this argument will still work on its own.
-   *
-   */
-  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Ethereum__Mainnet__Transaction___Version__CountSelector = {
@@ -3362,19 +3748,25 @@ export type Mutation = {
    * Creates one or more documents of this type using the data provided.
    *
    */
-  create_Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  /**
-   *
-   * Creates one or more documents of this type using the data provided.
-   *
-   */
   create_Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   /**
    *
    * Creates one or more documents of this type using the data provided.
    *
    */
+  create_Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  /**
+   *
+   * Creates one or more documents of this type using the data provided.
+   *
+   */
   create_Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  /**
+   *
+   * Creates one or more documents of this type using the data provided.
+   *
+   */
+  create_Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   /**
    *
    * Creates one or more documents of this type using the data provided.
@@ -3408,13 +3800,6 @@ export type Mutation = {
    *  criteria are provided all documents in the collection will be deleted.
    *
    */
-  delete_Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  /**
-   *
-   * Deletes documents in this collection matching any provided criteria. If no
-   *  criteria are provided all documents in the collection will be deleted.
-   *
-   */
   delete_Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   /**
    *
@@ -3422,7 +3807,21 @@ export type Mutation = {
    *  criteria are provided all documents in the collection will be deleted.
    *
    */
+  delete_Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  /**
+   *
+   * Deletes documents in this collection matching any provided criteria. If no
+   *  criteria are provided all documents in the collection will be deleted.
+   *
+   */
   delete_Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  /**
+   *
+   * Deletes documents in this collection matching any provided criteria. If no
+   *  criteria are provided all documents in the collection will be deleted.
+   *
+   */
+  delete_Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   /**
    *
    * Deletes documents in this collection matching any provided criteria. If no
@@ -3461,14 +3860,6 @@ export type Mutation = {
    *  the update will be applied to all documents in the collection.
    *
    */
-  update_Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  /**
-   *
-   * Updates documents in this collection using the data provided. Only documents
-   *  matching any provided criteria will be updated, if no criteria are provided
-   *  the update will be applied to all documents in the collection.
-   *
-   */
   update_Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   /**
    *
@@ -3477,7 +3868,23 @@ export type Mutation = {
    *  the update will be applied to all documents in the collection.
    *
    */
+  update_Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  /**
+   *
+   * Updates documents in this collection using the data provided. Only documents
+   *  matching any provided criteria will be updated, if no criteria are provided
+   *  the update will be applied to all documents in the collection.
+   *
+   */
   update_Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  /**
+   *
+   * Updates documents in this collection using the data provided. Only documents
+   *  matching any provided criteria will be updated, if no criteria are provided
+   *  the update will be applied to all documents in the collection.
+   *
+   */
+  update_Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   /**
    *
    * Updates documents in this collection using the data provided. Only documents
@@ -3525,16 +3932,6 @@ export type Mutation = {
    *
    * NOTE: It is highly recommended to create an index on the fields used to filter.
    */
-  upsert_Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  /**
-   *
-   * Update or create a document in this collection using the data provided. The provided filter
-   *  must match at most one document. The matching document will be updated with the provided
-   *  update input, or if no matching document is found, a new document will be created with the
-   *  provided create input.
-   *
-   * NOTE: It is highly recommended to create an index on the fields used to filter.
-   */
   upsert_Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
   /**
    *
@@ -3545,7 +3942,27 @@ export type Mutation = {
    *
    * NOTE: It is highly recommended to create an index on the fields used to filter.
    */
+  upsert_Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  /**
+   *
+   * Update or create a document in this collection using the data provided. The provided filter
+   *  must match at most one document. The matching document will be updated with the provided
+   *  update input, or if no matching document is found, a new document will be created with the
+   *  provided create input.
+   *
+   * NOTE: It is highly recommended to create an index on the fields used to filter.
+   */
   upsert_Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  /**
+   *
+   * Update or create a document in this collection using the data provided. The provided filter
+   *  must match at most one document. The matching document will be updated with the provided
+   *  update input, or if no matching document is found, a new document will be created with the
+   *  provided create input.
+   *
+   * NOTE: It is highly recommended to create an index on the fields used to filter.
+   */
+  upsert_Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   /**
    *
    * Update or create a document in this collection using the data provided. The provided filter
@@ -3580,13 +3997,6 @@ export type MutationCreate_Ethereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type MutationCreate_Ethereum__Mainnet__BatchSignatureArgs = {
-  encrypt?: InputMaybe<Scalars['Boolean']['input']>;
-  encryptFields?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureExplicitField>>;
-  input?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureMutationInputArg>>;
-};
-
-
 export type MutationCreate_Ethereum__Mainnet__BlockArgs = {
   encrypt?: InputMaybe<Scalars['Boolean']['input']>;
   encryptFields?: InputMaybe<Array<Ethereum__Mainnet__BlockExplicitField>>;
@@ -3594,10 +4004,24 @@ export type MutationCreate_Ethereum__Mainnet__BlockArgs = {
 };
 
 
+export type MutationCreate_Ethereum__Mainnet__BlockSignatureArgs = {
+  encrypt?: InputMaybe<Scalars['Boolean']['input']>;
+  encryptFields?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureExplicitField>>;
+  input?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureMutationInputArg>>;
+};
+
+
 export type MutationCreate_Ethereum__Mainnet__LogArgs = {
   encrypt?: InputMaybe<Scalars['Boolean']['input']>;
   encryptFields?: InputMaybe<Array<Ethereum__Mainnet__LogExplicitField>>;
   input?: InputMaybe<Array<Ethereum__Mainnet__LogMutationInputArg>>;
+};
+
+
+export type MutationCreate_Ethereum__Mainnet__SnapshotSignatureArgs = {
+  encrypt?: InputMaybe<Scalars['Boolean']['input']>;
+  encryptFields?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureExplicitField>>;
+  input?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureMutationInputArg>>;
 };
 
 
@@ -3626,21 +4050,27 @@ export type MutationDelete_Ethereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type MutationDelete_Ethereum__Mainnet__BatchSignatureArgs = {
-  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-};
-
-
 export type MutationDelete_Ethereum__Mainnet__BlockArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__BlockFilterArg>;
 };
 
 
+export type MutationDelete_Ethereum__Mainnet__BlockSignatureArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+};
+
+
 export type MutationDelete_Ethereum__Mainnet__LogArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__LogFilterArg>;
+};
+
+
+export type MutationDelete_Ethereum__Mainnet__SnapshotSignatureArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
 };
 
 
@@ -3671,13 +4101,6 @@ export type MutationUpdate_Ethereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type MutationUpdate_Ethereum__Mainnet__BatchSignatureArgs = {
-  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  input?: InputMaybe<Ethereum__Mainnet__BatchSignatureMutationInputArg>;
-};
-
-
 export type MutationUpdate_Ethereum__Mainnet__BlockArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__BlockFilterArg>;
@@ -3685,10 +4108,24 @@ export type MutationUpdate_Ethereum__Mainnet__BlockArgs = {
 };
 
 
+export type MutationUpdate_Ethereum__Mainnet__BlockSignatureArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  input?: InputMaybe<Ethereum__Mainnet__BlockSignatureMutationInputArg>;
+};
+
+
 export type MutationUpdate_Ethereum__Mainnet__LogArgs = {
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
   filter?: InputMaybe<Ethereum__Mainnet__LogFilterArg>;
   input?: InputMaybe<Ethereum__Mainnet__LogMutationInputArg>;
+};
+
+
+export type MutationUpdate_Ethereum__Mainnet__SnapshotSignatureArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  input?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureMutationInputArg>;
 };
 
 
@@ -3720,13 +4157,6 @@ export type MutationUpsert_Ethereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type MutationUpsert_Ethereum__Mainnet__BatchSignatureArgs = {
-  create: Ethereum__Mainnet__BatchSignatureMutationInputArg;
-  filter: Ethereum__Mainnet__BatchSignatureFilterArg;
-  update: Ethereum__Mainnet__BatchSignatureMutationInputArg;
-};
-
-
 export type MutationUpsert_Ethereum__Mainnet__BlockArgs = {
   create: Ethereum__Mainnet__BlockMutationInputArg;
   filter: Ethereum__Mainnet__BlockFilterArg;
@@ -3734,10 +4164,24 @@ export type MutationUpsert_Ethereum__Mainnet__BlockArgs = {
 };
 
 
+export type MutationUpsert_Ethereum__Mainnet__BlockSignatureArgs = {
+  create: Ethereum__Mainnet__BlockSignatureMutationInputArg;
+  filter: Ethereum__Mainnet__BlockSignatureFilterArg;
+  update: Ethereum__Mainnet__BlockSignatureMutationInputArg;
+};
+
+
 export type MutationUpsert_Ethereum__Mainnet__LogArgs = {
   create: Ethereum__Mainnet__LogMutationInputArg;
   filter: Ethereum__Mainnet__LogFilterArg;
   update: Ethereum__Mainnet__LogMutationInputArg;
+};
+
+
+export type MutationUpsert_Ethereum__Mainnet__SnapshotSignatureArgs = {
+  create: Ethereum__Mainnet__SnapshotSignatureMutationInputArg;
+  filter: Ethereum__Mainnet__SnapshotSignatureFilterArg;
+  update: Ethereum__Mainnet__SnapshotSignatureMutationInputArg;
 };
 
 
@@ -4344,13 +4788,6 @@ export enum Ordering {
 
 export type Query = {
   __typename?: 'Query';
-  Config__LastProcessedPage?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
-  Ethereum__Mainnet__AccessListEntry?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
-  Ethereum__Mainnet__AttestationRecord?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
-  Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
-  Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
-  Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
-  Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -4358,21 +4795,22 @@ export type Query = {
    *  (true average, not an average of averages) will be returned as a single value.
    *
    */
-  _avg?: Maybe<Scalars['Float']['output']>;
-  /**
-   *
-   * Returns a set of commits matching any provided criteria. If no arguments are
-   *  provided all commits in the system will be returned.
-   *
-   */
-  _commits?: Maybe<Array<Maybe<Commit>>>;
+  AVG?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total number of items within the specified child sets. If multiple child
    *  sets are specified, the combined total of all of them will be returned as a single value.
    *
    */
-  _count?: Maybe<Scalars['Int']['output']>;
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  Config__LastProcessedPage?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
+  Ethereum__Mainnet__AccessListEntry?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
+  Ethereum__Mainnet__AttestationRecord?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
+  Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
+  Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
+  Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
+  Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
   /**
    *
    * Returns the maximum of the specified field values within the specified child sets. If
@@ -4380,7 +4818,7 @@ export type Query = {
    *  will be returned as a single value.
    *
    */
-  _max?: Maybe<Scalars['Float']['output']>;
+  MAX?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the minimum of the specified field values within the specified child sets. If
@@ -4388,7 +4826,7 @@ export type Query = {
    *  will be returned as a single value.
    *
    */
-  _min?: Maybe<Scalars['Float']['output']>;
+  MIN?: Maybe<Scalars['Float']['output']>;
   /**
    *
    * Returns the total sum of the specified field values within the specified child sets. If
@@ -4396,7 +4834,38 @@ export type Query = {
    *  a single value.
    *
    */
-  _sum?: Maybe<Scalars['Float']['output']>;
+  SUM?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns a set of commits matching any provided criteria. If no arguments are
+   *  provided all commits in the system will be returned.
+   *
+   */
+  _commits?: Maybe<Array<Maybe<Commit>>>;
+};
+
+
+export type QueryAvgArgs = {
+  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+  Ethereum__Mainnet__BlockSignature?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+  Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+};
+
+
+export type QueryCountArgs = {
+  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__CountSelector>;
+  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
+  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CountSelector>;
+  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
+  Ethereum__Mainnet__BlockSignature?: InputMaybe<Ethereum__Mainnet__BlockSignature__CountSelector>;
+  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
+  Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__CountSelector>;
+  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
 };
 
 
@@ -4436,18 +4905,6 @@ export type QueryEthereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type QueryEthereum__Mainnet__BatchSignatureArgs = {
-  cid?: InputMaybe<Scalars['String']['input']>;
-  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureField>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BatchSignatureOrderArg>>>;
-  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
 export type QueryEthereum__Mainnet__BlockArgs = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4456,6 +4913,18 @@ export type QueryEthereum__Mainnet__BlockArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryEthereum__Mainnet__BlockSignatureArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockSignatureOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -4472,6 +4941,18 @@ export type QueryEthereum__Mainnet__LogArgs = {
 };
 
 
+export type QueryEthereum__Mainnet__SnapshotSignatureArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__SnapshotSignatureOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type QueryEthereum__Mainnet__TransactionArgs = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4484,13 +4965,38 @@ export type QueryEthereum__Mainnet__TransactionArgs = {
 };
 
 
-export type Query_AvgArgs = {
+export type QueryMaxArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
-  Ethereum__Mainnet__BatchSignature?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+  Ethereum__Mainnet__BlockSignature?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+  Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+};
+
+
+export type QueryMinArgs = {
+  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+  Ethereum__Mainnet__BlockSignature?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+  Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
+  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+};
+
+
+export type QuerySumArgs = {
+  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
+  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
+  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
+  Ethereum__Mainnet__BlockSignature?: InputMaybe<Ethereum__Mainnet__BlockSignature__NumericSelector>;
+  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
+  Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
 
@@ -4504,50 +5010,6 @@ export type Query_CommitsArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<CommitsOrderArg>>>;
-};
-
-
-export type Query_CountArgs = {
-  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__CountSelector>;
-  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
-  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CountSelector>;
-  Ethereum__Mainnet__BatchSignature?: InputMaybe<Ethereum__Mainnet__BatchSignature__CountSelector>;
-  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
-  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
-  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
-};
-
-
-export type Query_MaxArgs = {
-  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
-  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
-  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
-  Ethereum__Mainnet__BatchSignature?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
-  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
-  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
-};
-
-
-export type Query_MinArgs = {
-  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
-  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
-  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
-  Ethereum__Mainnet__BatchSignature?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
-  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
-  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
-};
-
-
-export type Query_SumArgs = {
-  Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
-  Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
-  Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
-  Ethereum__Mainnet__BatchSignature?: InputMaybe<Ethereum__Mainnet__BatchSignature__NumericSelector>;
-  Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
-  Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
-  Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
 };
 
 /**
@@ -4700,9 +5162,10 @@ export type Subscription = {
   Config__LastProcessedPage?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
   Ethereum__Mainnet__AccessListEntry?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
   Ethereum__Mainnet__AttestationRecord?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
-  Ethereum__Mainnet__BatchSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BatchSignature>>>;
   Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
+  Ethereum__Mainnet__BlockSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__BlockSignature>>>;
   Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
+  Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
   /**
    *
@@ -4750,18 +5213,6 @@ export type SubscriptionEthereum__Mainnet__AttestationRecordArgs = {
 };
 
 
-export type SubscriptionEthereum__Mainnet__BatchSignatureArgs = {
-  cid?: InputMaybe<Scalars['String']['input']>;
-  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
-  filter?: InputMaybe<Ethereum__Mainnet__BatchSignatureFilterArg>;
-  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BatchSignatureField>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BatchSignatureOrderArg>>>;
-  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
 export type SubscriptionEthereum__Mainnet__BlockArgs = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4774,6 +5225,18 @@ export type SubscriptionEthereum__Mainnet__BlockArgs = {
 };
 
 
+export type SubscriptionEthereum__Mainnet__BlockSignatureArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__BlockSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__BlockSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__BlockSignatureOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
 export type SubscriptionEthereum__Mainnet__LogArgs = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -4782,6 +5245,18 @@ export type SubscriptionEthereum__Mainnet__LogArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__LogOrderArg>>>;
+  showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type SubscriptionEthereum__Mainnet__SnapshotSignatureArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Ethereum__Mainnet__SnapshotSignatureFilterArg>;
+  groupBy?: InputMaybe<Array<Ethereum__Mainnet__SnapshotSignatureField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Ethereum__Mainnet__SnapshotSignatureOrderArg>>>;
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -4936,6 +5411,13 @@ export type AttestationsCountQueryVariables = Exact<{
 
 export type AttestationsCountQuery = { __typename?: 'Query', Attestation?: Array<{ __typename?: 'Ethereum__Mainnet__AttestationRecord', count?: number | null } | null> | null };
 
+export type TransactionLogsQueryVariables = Exact<{
+  hash?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type TransactionLogsQuery = { __typename?: 'Query', Logs?: Array<{ __typename?: 'Ethereum__Mainnet__Log', logIndex?: number | null, address?: string | null, topics?: Array<string | null> | null, data?: string | null, transactionHash?: string | null, blockNumber?: number | null } | null> | null };
+
 export type TransactionQueryVariables = Exact<{
   hash?: InputMaybe<Scalars['String']['input']>;
 }>;
@@ -5048,6 +5530,21 @@ export const AttestationsCountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<AttestationsCountQuery, AttestationsCountQueryVariables>;
+export const TransactionLogsDocument = new TypedDocumentString(`
+    query TransactionLogs($hash: String) {
+  Logs: Ethereum__Mainnet__Log(
+    filter: {transactionHash: {_eq: $hash}}
+    order: [{logIndex: ASC}]
+  ) {
+    logIndex
+    address
+    topics
+    data
+    transactionHash
+    blockNumber
+  }
+}
+    `) as unknown as TypedDocumentString<TransactionLogsQuery, TransactionLogsQueryVariables>;
 export const TransactionDocument = new TypedDocumentString(`
     query Transaction($hash: String) {
   Transaction: Ethereum__Mainnet__Transaction(
