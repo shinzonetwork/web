@@ -319,7 +319,7 @@ type Commit {
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(field: commitCountFieldArg): Int
+  COUNT(field: commitCountFieldArg): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -328,7 +328,7 @@ type Commit {
    groupBy.
   
   """
-  _group: [Commit]
+  GROUP: [Commit]
   """
   
   The unique CID of this commit, and the primary means through which to safely identify
@@ -392,7 +392,7 @@ type Commit {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -444,7 +444,7 @@ type Commit {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -524,8 +524,8 @@ type Config__LastProcessedPage {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Config__LastProcessedPage__NumericSelector
+  AVG(
+    GROUP: Config__LastProcessedPage__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -539,19 +539,7 @@ type Config__LastProcessedPage {
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(_group: Config__LastProcessedPage__CountSelector, _version: Config__LastProcessedPage___version__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(GROUP: Config__LastProcessedPage__CountSelector, _version: Config__LastProcessedPage___version__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -560,7 +548,7 @@ type Config__LastProcessedPage {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -583,7 +571,7 @@ type Config__LastProcessedPage {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -619,8 +607,8 @@ type Config__LastProcessedPage {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Config__LastProcessedPage__NumericSelector
+  MAX(
+    GROUP: Config__LastProcessedPage__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -635,8 +623,8 @@ type Config__LastProcessedPage {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Config__LastProcessedPage__NumericSelector
+  MIN(
+    GROUP: Config__LastProcessedPage__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -647,7 +635,7 @@ type Config__LastProcessedPage {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -655,8 +643,8 @@ type Config__LastProcessedPage {
    a single value.
   
   """
-  _sum(
-    _group: Config__LastProcessedPage__NumericSelector
+  SUM(
+    GROUP: Config__LastProcessedPage__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -664,6 +652,18 @@ type Config__LastProcessedPage {
     """
     page: ScalarAggregateNumericBlock
   ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   """
   
   Returns the head commit for this document.
@@ -678,9 +678,9 @@ enum Config__LastProcessedPageExplicitField {
 }
 
 enum Config__LastProcessedPageField {
+  GROUP
   _deleted
   _docID
-  _group
   _version
   page
 }
@@ -715,11 +715,11 @@ input Config__LastProcessedPageMutationInputArg {
 }
 
 enum Config__LastProcessedPageNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   page
 }
 
@@ -738,6 +738,24 @@ input Config__LastProcessedPage__CountSelector {
   
   """
   filter: Config__LastProcessedPageFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Config__LastProcessedPage__GROUP__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -786,24 +804,6 @@ input Config__LastProcessedPage__NumericSelector {
   
   """
   order: [Config__LastProcessedPageOrderArg]
-}
-
-input Config__LastProcessedPage___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
 }
 
 input Config__LastProcessedPage___version__CountSelector {
@@ -906,8 +906,8 @@ type Ethereum__Mainnet__AccessListEntry {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+  AVG(
+    GROUP: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -921,19 +921,7 @@ type Ethereum__Mainnet__AccessListEntry {
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(_group: Ethereum__Mainnet__AccessListEntry__CountSelector, _version: Ethereum__Mainnet__AccessListEntry___version__CountSelector, storageKeys: Ethereum__Mainnet__AccessListEntry__storageKeys__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(GROUP: Ethereum__Mainnet__AccessListEntry__CountSelector, _version: Ethereum__Mainnet__AccessListEntry___version__CountSelector, storageKeys: Ethereum__Mainnet__AccessListEntry__storageKeys__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -942,7 +930,7 @@ type Ethereum__Mainnet__AccessListEntry {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -965,7 +953,7 @@ type Ethereum__Mainnet__AccessListEntry {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -1001,8 +989,8 @@ type Ethereum__Mainnet__AccessListEntry {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+  MAX(
+    GROUP: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1017,8 +1005,8 @@ type Ethereum__Mainnet__AccessListEntry {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+  MIN(
+    GROUP: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1029,7 +1017,7 @@ type Ethereum__Mainnet__AccessListEntry {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -1037,8 +1025,8 @@ type Ethereum__Mainnet__AccessListEntry {
    a single value.
   
   """
-  _sum(
-    _group: Ethereum__Mainnet__AccessListEntry__NumericSelector
+  SUM(
+    GROUP: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1046,6 +1034,18 @@ type Ethereum__Mainnet__AccessListEntry {
     """
     blockNumber: ScalarAggregateNumericBlock
   ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   _transactionID: ID
   """
   
@@ -1076,9 +1076,9 @@ enum Ethereum__Mainnet__AccessListEntryExplicitField {
 }
 
 enum Ethereum__Mainnet__AccessListEntryField {
+  GROUP
   _deleted
   _docID
-  _group
   _transactionID
   _version
   address
@@ -1125,11 +1125,11 @@ input Ethereum__Mainnet__AccessListEntryMutationInputArg {
 }
 
 enum Ethereum__Mainnet__AccessListEntryNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   blockNumber
 }
 
@@ -1152,6 +1152,24 @@ input Ethereum__Mainnet__AccessListEntry__CountSelector {
   
   """
   filter: Ethereum__Mainnet__AccessListEntryFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__AccessListEntry__GROUP__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -1202,24 +1220,6 @@ input Ethereum__Mainnet__AccessListEntry__NumericSelector {
   order: [Ethereum__Mainnet__AccessListEntryOrderArg]
 }
 
-input Ethereum__Mainnet__AccessListEntry___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 input Ethereum__Mainnet__AccessListEntry___version__CountSelector {
   """
   
@@ -1264,7 +1264,6 @@ input Ethereum__Mainnet__AccessListEntry__storageKeys__CountSelector {
 }
 
 type Ethereum__Mainnet__AttestationRecord {
-  CIDs: [String]
   """
   
   Returns the average of the specified field values within the specified child sets. If
@@ -1272,8 +1271,8 @@ type Ethereum__Mainnet__AttestationRecord {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Ethereum__Mainnet__AttestationRecord__NumericSelector
+  AVG(
+    GROUP: Ethereum__Mainnet__AttestationRecord__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1281,25 +1280,14 @@ type Ethereum__Mainnet__AttestationRecord {
     """
     vote_count: ScalarAggregateNumericBlock
   ): Float
+  CIDs: [String]
   """
   
   Returns the total number of items within the specified child sets. If multiple child
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(CIDs: Ethereum__Mainnet__AttestationRecord__CIDs__CountSelector, _group: Ethereum__Mainnet__AttestationRecord__CountSelector, _version: Ethereum__Mainnet__AttestationRecord___version__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(CIDs: Ethereum__Mainnet__AttestationRecord__CIDs__CountSelector, GROUP: Ethereum__Mainnet__AttestationRecord__CountSelector, _version: Ethereum__Mainnet__AttestationRecord___version__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -1308,7 +1296,7 @@ type Ethereum__Mainnet__AttestationRecord {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -1331,7 +1319,7 @@ type Ethereum__Mainnet__AttestationRecord {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -1367,8 +1355,8 @@ type Ethereum__Mainnet__AttestationRecord {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Ethereum__Mainnet__AttestationRecord__NumericSelector
+  MAX(
+    GROUP: Ethereum__Mainnet__AttestationRecord__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1383,8 +1371,8 @@ type Ethereum__Mainnet__AttestationRecord {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Ethereum__Mainnet__AttestationRecord__NumericSelector
+  MIN(
+    GROUP: Ethereum__Mainnet__AttestationRecord__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1395,7 +1383,7 @@ type Ethereum__Mainnet__AttestationRecord {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -1403,8 +1391,8 @@ type Ethereum__Mainnet__AttestationRecord {
    a single value.
   
   """
-  _sum(
-    _group: Ethereum__Mainnet__AttestationRecord__NumericSelector
+  SUM(
+    GROUP: Ethereum__Mainnet__AttestationRecord__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -1412,6 +1400,18 @@ type Ethereum__Mainnet__AttestationRecord {
     """
     vote_count: ScalarAggregateNumericBlock
   ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   """
   
   Returns the head commit for this document.
@@ -1434,9 +1434,9 @@ enum Ethereum__Mainnet__AttestationRecordExplicitField {
 
 enum Ethereum__Mainnet__AttestationRecordField {
   CIDs
+  GROUP
   _deleted
   _docID
-  _group
   _version
   attested_doc
   doc_type
@@ -1482,11 +1482,11 @@ input Ethereum__Mainnet__AttestationRecordMutationInputArg {
 }
 
 enum Ethereum__Mainnet__AttestationRecordNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   vote_count
 }
 
@@ -1551,6 +1551,24 @@ input Ethereum__Mainnet__AttestationRecord__CountSelector {
   offset: Int
 }
 
+input Ethereum__Mainnet__AttestationRecord__GROUP__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
 input Ethereum__Mainnet__AttestationRecord__NumericSelector {
   field: Ethereum__Mainnet__AttestationRecordNumericFieldsArg!
   """
@@ -1584,400 +1602,7 @@ input Ethereum__Mainnet__AttestationRecord__NumericSelector {
   order: [Ethereum__Mainnet__AttestationRecordOrderArg]
 }
 
-input Ethereum__Mainnet__AttestationRecord___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 input Ethereum__Mainnet__AttestationRecord___version__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-type Ethereum__Mainnet__BatchSignature {
-  """
-  
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
-  
-  """
-  _avg(
-    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    cidCount: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(_group: Ethereum__Mainnet__BatchSignature__CountSelector, _version: Ethereum__Mainnet__BatchSignature___version__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
-  """
-  
-  The group field may be used to return a set of records belonging to the group.
-   It must be used alongside a 'groupBy' argument on the parent selector. It may
-   contain any field on the type being grouped, including those used by the
-   groupBy.
-  
-  """
-  _group(
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this join, if none of the related records meet the filter
-     criteria the host record will still be returned, but the value of this field will
-     be empty.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
-  ): [Ethereum__Mainnet__BatchSignature]
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(
-    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    cidCount: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(
-    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    cidCount: ScalarAggregateNumericBlock
-  ): Float
-  """
-  Returns the cosine similarity between the specified field and the provided vector.
-  """
-  _similarity: Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(
-    _group: Ethereum__Mainnet__BatchSignature__NumericSelector
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    blockNumber: ScalarAggregateNumericBlock
-    """
-    
-    The scalar field selection type for aggregate input arguments.
-    
-    """
-    cidCount: ScalarAggregateNumericBlock
-  ): Float
-  """
-  
-  Returns the head commit for this document.
-  
-  """
-  _version: [Commit]
-  blockHash: String
-  blockNumber: Int
-  cidCount: Int
-  createdAt: String
-  merkleRoot: String
-  signatureIdentity: String
-  signatureType: String
-  signatureValue: String
-}
-
-enum Ethereum__Mainnet__BatchSignatureExplicitField {
-  blockHash
-  blockNumber
-  cidCount
-  createdAt
-  merkleRoot
-  signatureIdentity
-  signatureType
-  signatureValue
-}
-
-enum Ethereum__Mainnet__BatchSignatureField {
-  _deleted
-  _docID
-  _group
-  _version
-  blockHash
-  blockNumber
-  cidCount
-  createdAt
-  merkleRoot
-  signatureIdentity
-  signatureType
-  signatureValue
-}
-
-input Ethereum__Mainnet__BatchSignatureFilterArg {
-  """The alias operator allows filters to target aliased fields."""
-  _alias: JSON
-  """
-  
-  The and operator - all checks within this clause must pass in order for this check to pass.
-  
-  """
-  _and: [Ethereum__Mainnet__BatchSignatureFilterArg!]
-  _docID: IDOperatorBlock
-  """
-  
-  The negative operator - this check will only pass if all checks within it fail.
-  
-  """
-  _not: Ethereum__Mainnet__BatchSignatureFilterArg
-  """
-  
-  The or operator - only one check within this clause must pass in order for this check to pass.
-  
-  """
-  _or: [Ethereum__Mainnet__BatchSignatureFilterArg!]
-  blockHash: StringOperatorBlock
-  blockNumber: IntOperatorBlock
-  cidCount: IntOperatorBlock
-  createdAt: StringOperatorBlock
-  merkleRoot: StringOperatorBlock
-  signatureIdentity: StringOperatorBlock
-  signatureType: StringOperatorBlock
-  signatureValue: StringOperatorBlock
-}
-
-input Ethereum__Mainnet__BatchSignatureMutationInputArg {
-  blockHash: String
-  blockNumber: Int
-  cidCount: Int
-  createdAt: String
-  merkleRoot: String
-  signatureIdentity: String
-  signatureType: String
-  signatureValue: String
-}
-
-enum Ethereum__Mainnet__BatchSignatureNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
-  blockNumber
-  cidCount
-}
-
-input Ethereum__Mainnet__BatchSignatureOrderArg {
-  """The alias field allows ordering by aliased fields."""
-  _alias: JSON
-  _docID: Ordering
-  blockHash: Ordering
-  blockNumber: Ordering
-  cidCount: Ordering
-  createdAt: Ordering
-  merkleRoot: Ordering
-  signatureIdentity: Ordering
-  signatureType: Ordering
-  signatureValue: Ordering
-}
-
-input Ethereum__Mainnet__BatchSignature__CountSelector {
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Ethereum__Mainnet__BatchSignatureFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input Ethereum__Mainnet__BatchSignature__NumericSelector {
-  field: Ethereum__Mainnet__BatchSignatureNumericFieldsArg!
-  """
-  
-  An optional filter for this aggregate, only documents matching the given criteria
-   will be aggregated.
-  
-  """
-  filter: Ethereum__Mainnet__BatchSignatureFilterArg
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-  """
-  
-  An optional set of field-orders which may be used to sort the results. An
-   empty set will be ignored.
-  
-  """
-  order: [Ethereum__Mainnet__BatchSignatureOrderArg]
-}
-
-input Ethereum__Mainnet__BatchSignature___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
-input Ethereum__Mainnet__BatchSignature___version__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2003,8 +1628,8 @@ type Ethereum__Mainnet__Block {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Ethereum__Mainnet__Block__NumericSelector
+  AVG(
+    GROUP: Ethereum__Mainnet__Block__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2019,19 +1644,7 @@ type Ethereum__Mainnet__Block {
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(_group: Ethereum__Mainnet__Block__CountSelector, _version: Ethereum__Mainnet__Block___version__CountSelector, transactions: Ethereum__Mainnet__Transaction__CountSelector, uncles: Ethereum__Mainnet__Block__uncles__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(GROUP: Ethereum__Mainnet__Block__CountSelector, _version: Ethereum__Mainnet__Block___version__CountSelector, transactions: Ethereum__Mainnet__Transaction__CountSelector, uncles: Ethereum__Mainnet__Block__uncles__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -2040,7 +1653,7 @@ type Ethereum__Mainnet__Block {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -2063,7 +1676,7 @@ type Ethereum__Mainnet__Block {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -2099,8 +1712,8 @@ type Ethereum__Mainnet__Block {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Ethereum__Mainnet__Block__NumericSelector
+  MAX(
+    GROUP: Ethereum__Mainnet__Block__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2116,8 +1729,8 @@ type Ethereum__Mainnet__Block {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Ethereum__Mainnet__Block__NumericSelector
+  MIN(
+    GROUP: Ethereum__Mainnet__Block__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2129,7 +1742,7 @@ type Ethereum__Mainnet__Block {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -2137,8 +1750,8 @@ type Ethereum__Mainnet__Block {
    a single value.
   
   """
-  _sum(
-    _group: Ethereum__Mainnet__Block__NumericSelector
+  SUM(
+    GROUP: Ethereum__Mainnet__Block__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2147,6 +1760,18 @@ type Ethereum__Mainnet__Block {
     number: ScalarAggregateNumericBlock
     transactions: Ethereum__Mainnet__Transaction__NumericSelector
   ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   """
   
   Returns the head commit for this document.
@@ -2194,7 +1819,7 @@ type Ethereum__Mainnet__Block {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -2252,9 +1877,9 @@ enum Ethereum__Mainnet__BlockExplicitField {
 }
 
 enum Ethereum__Mainnet__BlockField {
+  GROUP
   _deleted
   _docID
-  _group
   _version
   baseFeePerGas
   difficulty
@@ -2348,11 +1973,11 @@ input Ethereum__Mainnet__BlockMutationInputArg {
 }
 
 enum Ethereum__Mainnet__BlockNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   number
 }
 
@@ -2382,6 +2007,412 @@ input Ethereum__Mainnet__BlockOrderArg {
   uncles: Ordering
 }
 
+type Ethereum__Mainnet__BlockSignature {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  AVG(
+    GROUP: Ethereum__Mainnet__BlockSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  COUNT(GROUP: Ethereum__Mainnet__BlockSignature__CountSelector, _version: Ethereum__Mainnet__BlockSignature___version__CountSelector, cids: Ethereum__Mainnet__BlockSignature__cids__CountSelector): Int
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  GROUP(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BlockSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BlockSignatureOrderArg]
+  ): [Ethereum__Mainnet__BlockSignature]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MAX(
+    GROUP: Ethereum__Mainnet__BlockSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MIN(
+    GROUP: Ethereum__Mainnet__BlockSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  SIMILARITY: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  SUM(
+    GROUP: Ethereum__Mainnet__BlockSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    cidCount: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  blockHash: String
+  blockNumber: Int
+  cidCount: Int
+  cids: [String]
+  createdAt: String
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+}
+
+enum Ethereum__Mainnet__BlockSignatureExplicitField {
+  blockHash
+  blockNumber
+  cidCount
+  cids
+  createdAt
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+}
+
+enum Ethereum__Mainnet__BlockSignatureField {
+  GROUP
+  _deleted
+  _docID
+  _version
+  blockHash
+  blockNumber
+  cidCount
+  cids
+  createdAt
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+}
+
+input Ethereum__Mainnet__BlockSignatureFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [Ethereum__Mainnet__BlockSignatureFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: Ethereum__Mainnet__BlockSignatureFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [Ethereum__Mainnet__BlockSignatureFilterArg!]
+  blockHash: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  cidCount: IntOperatorBlock
+  cids: StringListOperatorBlock
+  createdAt: StringOperatorBlock
+  merkleRoot: StringOperatorBlock
+  signatureIdentity: StringOperatorBlock
+  signatureType: StringOperatorBlock
+  signatureValue: StringOperatorBlock
+}
+
+input Ethereum__Mainnet__BlockSignatureMutationInputArg {
+  blockHash: String
+  blockNumber: Int
+  cidCount: Int
+  cids: [String]
+  createdAt: String
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+}
+
+enum Ethereum__Mainnet__BlockSignatureNumericFieldsArg {
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
+  blockNumber
+  cidCount
+}
+
+input Ethereum__Mainnet__BlockSignatureOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  blockHash: Ordering
+  blockNumber: Ordering
+  cidCount: Ordering
+  cids: Ordering
+  createdAt: Ordering
+  merkleRoot: Ordering
+  signatureIdentity: Ordering
+  signatureType: Ordering
+  signatureValue: Ordering
+}
+
+input Ethereum__Mainnet__BlockSignature__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__BlockSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__BlockSignature__GROUP__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__BlockSignature__NumericSelector {
+  field: Ethereum__Mainnet__BlockSignatureNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__BlockSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [Ethereum__Mainnet__BlockSignatureOrderArg]
+}
+
+input Ethereum__Mainnet__BlockSignature___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__BlockSignature__cids__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
 input Ethereum__Mainnet__Block__CountSelector {
   """
   
@@ -2390,6 +2421,24 @@ input Ethereum__Mainnet__Block__CountSelector {
   
   """
   filter: Ethereum__Mainnet__BlockFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__Block__GROUP__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2438,24 +2487,6 @@ input Ethereum__Mainnet__Block__NumericSelector {
   
   """
   order: [Ethereum__Mainnet__BlockOrderArg]
-}
-
-input Ethereum__Mainnet__Block___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
 }
 
 input Ethereum__Mainnet__Block___version__CountSelector {
@@ -2527,8 +2558,8 @@ type Ethereum__Mainnet__Log {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Ethereum__Mainnet__Log__NumericSelector
+  AVG(
+    GROUP: Ethereum__Mainnet__Log__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2548,26 +2579,13 @@ type Ethereum__Mainnet__Log {
     """
     transactionIndex: ScalarAggregateNumericBlock
   ): Float
-  _blockID: ID
   """
   
   Returns the total number of items within the specified child sets. If multiple child
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(_group: Ethereum__Mainnet__Log__CountSelector, _version: Ethereum__Mainnet__Log___version__CountSelector, topics: Ethereum__Mainnet__Log__topics__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(GROUP: Ethereum__Mainnet__Log__CountSelector, _version: Ethereum__Mainnet__Log___version__CountSelector, topics: Ethereum__Mainnet__Log__topics__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -2576,7 +2594,7 @@ type Ethereum__Mainnet__Log {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -2599,7 +2617,7 @@ type Ethereum__Mainnet__Log {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -2635,8 +2653,8 @@ type Ethereum__Mainnet__Log {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Ethereum__Mainnet__Log__NumericSelector
+  MAX(
+    GROUP: Ethereum__Mainnet__Log__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2663,8 +2681,8 @@ type Ethereum__Mainnet__Log {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Ethereum__Mainnet__Log__NumericSelector
+  MIN(
+    GROUP: Ethereum__Mainnet__Log__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2687,7 +2705,7 @@ type Ethereum__Mainnet__Log {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -2695,8 +2713,8 @@ type Ethereum__Mainnet__Log {
    a single value.
   
   """
-  _sum(
-    _group: Ethereum__Mainnet__Log__NumericSelector
+  SUM(
+    GROUP: Ethereum__Mainnet__Log__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2716,6 +2734,19 @@ type Ethereum__Mainnet__Log {
     """
     transactionIndex: ScalarAggregateNumericBlock
   ): Float
+  _blockID: ID
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   _transactionID: ID
   """
   
@@ -2769,10 +2800,10 @@ enum Ethereum__Mainnet__LogExplicitField {
 }
 
 enum Ethereum__Mainnet__LogField {
+  GROUP
   _blockID
   _deleted
   _docID
-  _group
   _transactionID
   _version
   address
@@ -2842,11 +2873,11 @@ input Ethereum__Mainnet__LogMutationInputArg {
 }
 
 enum Ethereum__Mainnet__LogNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   blockNumber
   logIndex
   transactionIndex
@@ -2879,6 +2910,24 @@ input Ethereum__Mainnet__Log__CountSelector {
   
   """
   filter: Ethereum__Mainnet__LogFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__Log__GROUP__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2929,24 +2978,6 @@ input Ethereum__Mainnet__Log__NumericSelector {
   order: [Ethereum__Mainnet__LogOrderArg]
 }
 
-input Ethereum__Mainnet__Log___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
-}
-
 input Ethereum__Mainnet__Log___version__CountSelector {
   """
   
@@ -2990,6 +3021,443 @@ input Ethereum__Mainnet__Log__topics__CountSelector {
   offset: Int
 }
 
+type Ethereum__Mainnet__SnapshotSignature {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  AVG(
+    GROUP: Ethereum__Mainnet__SnapshotSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockCount: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    endBlock: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    startBlock: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  COUNT(GROUP: Ethereum__Mainnet__SnapshotSignature__CountSelector, _version: Ethereum__Mainnet__SnapshotSignature___version__CountSelector, blockSigMerkleRoots: Ethereum__Mainnet__SnapshotSignature__blockSigMerkleRoots__CountSelector): Int
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  GROUP(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__SnapshotSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__SnapshotSignatureOrderArg]
+  ): [Ethereum__Mainnet__SnapshotSignature]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MAX(
+    GROUP: Ethereum__Mainnet__SnapshotSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockCount: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    endBlock: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    startBlock: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MIN(
+    GROUP: Ethereum__Mainnet__SnapshotSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockCount: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    endBlock: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    startBlock: ScalarAggregateNumericBlock
+  ): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  SIMILARITY: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  SUM(
+    GROUP: Ethereum__Mainnet__SnapshotSignature__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockCount: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    endBlock: ScalarAggregateNumericBlock
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    startBlock: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
+  """
+  
+  Returns the head commit for this document.
+  
+  """
+  _version: [Commit]
+  blockCount: Int
+  blockSigMerkleRoots: [String]
+  createdAt: String
+  endBlock: Int
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+  snapshotFile: String
+  startBlock: Int
+}
+
+enum Ethereum__Mainnet__SnapshotSignatureExplicitField {
+  blockCount
+  blockSigMerkleRoots
+  createdAt
+  endBlock
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+  snapshotFile
+  startBlock
+}
+
+enum Ethereum__Mainnet__SnapshotSignatureField {
+  GROUP
+  _deleted
+  _docID
+  _version
+  blockCount
+  blockSigMerkleRoots
+  createdAt
+  endBlock
+  merkleRoot
+  signatureIdentity
+  signatureType
+  signatureValue
+  snapshotFile
+  startBlock
+}
+
+input Ethereum__Mainnet__SnapshotSignatureFilterArg {
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+  _and: [Ethereum__Mainnet__SnapshotSignatureFilterArg!]
+  _docID: IDOperatorBlock
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+  _not: Ethereum__Mainnet__SnapshotSignatureFilterArg
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+  _or: [Ethereum__Mainnet__SnapshotSignatureFilterArg!]
+  blockCount: IntOperatorBlock
+  blockSigMerkleRoots: StringListOperatorBlock
+  createdAt: StringOperatorBlock
+  endBlock: IntOperatorBlock
+  merkleRoot: StringOperatorBlock
+  signatureIdentity: StringOperatorBlock
+  signatureType: StringOperatorBlock
+  signatureValue: StringOperatorBlock
+  snapshotFile: StringOperatorBlock
+  startBlock: IntOperatorBlock
+}
+
+input Ethereum__Mainnet__SnapshotSignatureMutationInputArg {
+  blockCount: Int
+  blockSigMerkleRoots: [String]
+  createdAt: String
+  endBlock: Int
+  merkleRoot: String
+  signatureIdentity: String
+  signatureType: String
+  signatureValue: String
+  snapshotFile: String
+  startBlock: Int
+}
+
+enum Ethereum__Mainnet__SnapshotSignatureNumericFieldsArg {
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
+  blockCount
+  endBlock
+  startBlock
+}
+
+input Ethereum__Mainnet__SnapshotSignatureOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  _docID: Ordering
+  blockCount: Ordering
+  blockSigMerkleRoots: Ordering
+  createdAt: Ordering
+  endBlock: Ordering
+  merkleRoot: Ordering
+  signatureIdentity: Ordering
+  signatureType: Ordering
+  signatureValue: Ordering
+  snapshotFile: Ordering
+  startBlock: Ordering
+}
+
+input Ethereum__Mainnet__SnapshotSignature__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__SnapshotSignature__GROUP__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__SnapshotSignature__NumericSelector {
+  field: Ethereum__Mainnet__SnapshotSignatureNumericFieldsArg!
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+  order: [Ethereum__Mainnet__SnapshotSignatureOrderArg]
+}
+
+input Ethereum__Mainnet__SnapshotSignature___version__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+input Ethereum__Mainnet__SnapshotSignature__blockSigMerkleRoots__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
 type Ethereum__Mainnet__Transaction {
   """
   
@@ -2998,8 +3466,8 @@ type Ethereum__Mainnet__Transaction {
    (true average, not an average of averages) will be returned as a single value.
   
   """
-  _avg(
-    _group: Ethereum__Mainnet__Transaction__NumericSelector
+  AVG(
+    GROUP: Ethereum__Mainnet__Transaction__NumericSelector
     accessList: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
@@ -3015,26 +3483,13 @@ type Ethereum__Mainnet__Transaction {
     """
     transactionIndex: ScalarAggregateNumericBlock
   ): Float
-  _blockID: ID
   """
   
   Returns the total number of items within the specified child sets. If multiple child
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
-  _count(_group: Ethereum__Mainnet__Transaction__CountSelector, _version: Ethereum__Mainnet__Transaction___version__CountSelector, accessList: Ethereum__Mainnet__AccessListEntry__CountSelector, logs: Ethereum__Mainnet__Log__CountSelector): Int
-  """
-  
-  Indicates as to whether or not this document has been deleted.
-  
-  """
-  _deleted: Boolean
-  """
-  
-  The immutable identifier/docID (primary key) value for this document.
-  
-  """
-  _docID: ID
+  COUNT(GROUP: Ethereum__Mainnet__Transaction__CountSelector, _version: Ethereum__Mainnet__Transaction___version__CountSelector, accessList: Ethereum__Mainnet__AccessListEntry__CountSelector, logs: Ethereum__Mainnet__Log__CountSelector): Int
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -3043,7 +3498,7 @@ type Ethereum__Mainnet__Transaction {
    groupBy.
   
   """
-  _group(
+  GROUP(
     """
     
     An optional set of docIDs for this field. Only documents with a docID
@@ -3066,7 +3521,7 @@ type Ethereum__Mainnet__Transaction {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -3102,8 +3557,8 @@ type Ethereum__Mainnet__Transaction {
    will be returned as a single value.
   
   """
-  _max(
-    _group: Ethereum__Mainnet__Transaction__NumericSelector
+  MAX(
+    GROUP: Ethereum__Mainnet__Transaction__NumericSelector
     accessList: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
@@ -3126,8 +3581,8 @@ type Ethereum__Mainnet__Transaction {
    will be returned as a single value.
   
   """
-  _min(
-    _group: Ethereum__Mainnet__Transaction__NumericSelector
+  MIN(
+    GROUP: Ethereum__Mainnet__Transaction__NumericSelector
     accessList: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
@@ -3146,7 +3601,7 @@ type Ethereum__Mainnet__Transaction {
   """
   Returns the cosine similarity between the specified field and the provided vector.
   """
-  _similarity: Float
+  SIMILARITY: Float
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -3154,8 +3609,8 @@ type Ethereum__Mainnet__Transaction {
    a single value.
   
   """
-  _sum(
-    _group: Ethereum__Mainnet__Transaction__NumericSelector
+  SUM(
+    GROUP: Ethereum__Mainnet__Transaction__NumericSelector
     accessList: Ethereum__Mainnet__AccessListEntry__NumericSelector
     """
     
@@ -3171,6 +3626,19 @@ type Ethereum__Mainnet__Transaction {
     """
     transactionIndex: ScalarAggregateNumericBlock
   ): Float
+  _blockID: ID
+  """
+  
+  Indicates as to whether or not this document has been deleted.
+  
+  """
+  _deleted: Boolean
+  """
+  
+  The immutable identifier/docID (primary key) value for this document.
+  
+  """
+  _docID: ID
   """
   
   Returns the head commit for this document.
@@ -3200,7 +3668,7 @@ type Ethereum__Mainnet__Transaction {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -3273,7 +3741,7 @@ type Ethereum__Mainnet__Transaction {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -3344,10 +3812,10 @@ enum Ethereum__Mainnet__TransactionExplicitField {
 }
 
 enum Ethereum__Mainnet__TransactionField {
+  GROUP
   _blockID
   _deleted
   _docID
-  _group
   _version
   accessList
   block
@@ -3454,11 +3922,11 @@ input Ethereum__Mainnet__TransactionMutationInputArg {
 }
 
 enum Ethereum__Mainnet__TransactionNumericFieldsArg {
-  _avg
-  _count
-  _max
-  _min
-  _sum
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
   blockNumber
   transactionIndex
 }
@@ -3518,6 +3986,24 @@ input Ethereum__Mainnet__Transaction__CountSelector {
   offset: Int
 }
 
+input Ethereum__Mainnet__Transaction__GROUP__CountSelector {
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
 input Ethereum__Mainnet__Transaction__NumericSelector {
   field: Ethereum__Mainnet__TransactionNumericFieldsArg!
   """
@@ -3549,24 +4035,6 @@ input Ethereum__Mainnet__Transaction__NumericSelector {
   
   """
   order: [Ethereum__Mainnet__TransactionOrderArg]
-}
-
-input Ethereum__Mainnet__Transaction___group__CountSelector {
-  """
-  
-  An optional value that caps the number of results to the number provided.
-   A limit of zero will be ignored.
-  
-  """
-  limit: Int
-  """
-  
-  An optional value that skips the given number of results that would have
-   otherwise been returned.  Commonly used alongside the 'limit' argument,
-   this argument will still work on its own.
-  
-  """
-  offset: Int
 }
 
 input Ethereum__Mainnet__Transaction___version__CountSelector {
@@ -4103,32 +4571,6 @@ type Mutation {
   Creates one or more documents of this type using the data provided.
   
   """
-  create_Ethereum__Mainnet__BatchSignature(
-    """
-    
-    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
-     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
-     use it to encrypt all fields' values.
-    
-    """
-    encrypt: Boolean
-    """
-    
-    An optional list of individual fields that should be encrypted. For every field
-     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
-     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
-     be encrypted with the same key.
-    
-    """
-    encryptFields: [Ethereum__Mainnet__BatchSignatureExplicitField!]
-    """Create Ethereum__Mainnet__BatchSignature documents"""
-    input: [Ethereum__Mainnet__BatchSignatureMutationInputArg!]
-  ): [Ethereum__Mainnet__BatchSignature]
-  """
-  
-  Creates one or more documents of this type using the data provided.
-  
-  """
   create_Ethereum__Mainnet__Block(
     """
     
@@ -4155,6 +4597,32 @@ type Mutation {
   Creates one or more documents of this type using the data provided.
   
   """
+  create_Ethereum__Mainnet__BlockSignature(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [Ethereum__Mainnet__BlockSignatureExplicitField!]
+    """Create Ethereum__Mainnet__BlockSignature documents"""
+    input: [Ethereum__Mainnet__BlockSignatureMutationInputArg!]
+  ): [Ethereum__Mainnet__BlockSignature]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
   create_Ethereum__Mainnet__Log(
     """
     
@@ -4176,6 +4644,32 @@ type Mutation {
     """Create Ethereum__Mainnet__Log documents"""
     input: [Ethereum__Mainnet__LogMutationInputArg!]
   ): [Ethereum__Mainnet__Log]
+  """
+  
+  Creates one or more documents of this type using the data provided.
+  
+  """
+  create_Ethereum__Mainnet__SnapshotSignature(
+    """
+    
+    Encrypt flag specifies if the input document(s) needs to be encrypted. If set, 
+     DefraDB will generate a symmetric key for encryption using AES-GCM, and will 
+     use it to encrypt all fields' values.
+    
+    """
+    encrypt: Boolean
+    """
+    
+    An optional list of individual fields that should be encrypted. For every field
+     in the list DefraDB will generate a symmetric key for encryption using AES-GCM.
+     If 'encrypt' is set to true, it all fields not listed in 'encryptedFields' will
+     be encrypted with the same key.
+    
+    """
+    encryptFields: [Ethereum__Mainnet__SnapshotSignatureExplicitField!]
+    """Create Ethereum__Mainnet__SnapshotSignature documents"""
+    input: [Ethereum__Mainnet__SnapshotSignatureMutationInputArg!]
+  ): [Ethereum__Mainnet__SnapshotSignature]
   """
   
   Creates one or more documents of this type using the data provided.
@@ -4283,31 +4777,6 @@ type Mutation {
    criteria are provided all documents in the collection will be deleted.
   
   """
-  delete_Ethereum__Mainnet__BatchSignature(
-    """
-    
-    An optional set of docID values that will limit the delete to documents with
-     a matching docID. If no matching documents are found, the operation will
-     succeed, but no documents will be deleted. If an empty set is provided, no
-     documents will be deleted.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this delete that will limit the delete to documents
-     matching the given criteria. If no matching documents are found, the operation
-     will succeed, but no documents will be deleted.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg
-  ): [Ethereum__Mainnet__BatchSignature]
-  """
-  
-  Deletes documents in this collection matching any provided criteria. If no
-   criteria are provided all documents in the collection will be deleted.
-  
-  """
   delete_Ethereum__Mainnet__Block(
     """
     
@@ -4333,6 +4802,31 @@ type Mutation {
    criteria are provided all documents in the collection will be deleted.
   
   """
+  delete_Ethereum__Mainnet__BlockSignature(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg
+  ): [Ethereum__Mainnet__BlockSignature]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
   delete_Ethereum__Mainnet__Log(
     """
     
@@ -4352,6 +4846,31 @@ type Mutation {
     """
     filter: Ethereum__Mainnet__LogFilterArg
   ): [Ethereum__Mainnet__Log]
+  """
+  
+  Deletes documents in this collection matching any provided criteria. If no
+   criteria are provided all documents in the collection will be deleted.
+  
+  """
+  delete_Ethereum__Mainnet__SnapshotSignature(
+    """
+    
+    An optional set of docID values that will limit the delete to documents with
+     a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be deleted. If an empty set is provided, no
+     documents will be deleted.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this delete that will limit the delete to documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be deleted.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+  ): [Ethereum__Mainnet__SnapshotSignature]
   """
   
   Deletes documents in this collection matching any provided criteria. If no
@@ -4465,33 +4984,6 @@ type Mutation {
    the update will be applied to all documents in the collection.
   
   """
-  update_Ethereum__Mainnet__BatchSignature(
-    """
-    
-    An optional set of docID values that will limit the update to documents
-     with a matching docID. If no matching documents are found, the operation will
-     succeed, but no documents will be updated.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this update that will limit the update to the documents
-     matching the given criteria. If no matching documents are found, the operation
-     will succeed, but no documents will be updated.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg
-    """Update field values"""
-    input: Ethereum__Mainnet__BatchSignatureMutationInputArg
-  ): [Ethereum__Mainnet__BatchSignature]
-  """
-  
-  Updates documents in this collection using the data provided. Only documents
-   matching any provided criteria will be updated, if no criteria are provided
-   the update will be applied to all documents in the collection.
-  
-  """
   update_Ethereum__Mainnet__Block(
     """
     
@@ -4519,6 +5011,33 @@ type Mutation {
    the update will be applied to all documents in the collection.
   
   """
+  update_Ethereum__Mainnet__BlockSignature(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg
+    """Update field values"""
+    input: Ethereum__Mainnet__BlockSignatureMutationInputArg
+  ): [Ethereum__Mainnet__BlockSignature]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
   update_Ethereum__Mainnet__Log(
     """
     
@@ -4539,6 +5058,33 @@ type Mutation {
     """Update field values"""
     input: Ethereum__Mainnet__LogMutationInputArg
   ): [Ethereum__Mainnet__Log]
+  """
+  
+  Updates documents in this collection using the data provided. Only documents
+   matching any provided criteria will be updated, if no criteria are provided
+   the update will be applied to all documents in the collection.
+  
+  """
+  update_Ethereum__Mainnet__SnapshotSignature(
+    """
+    
+    An optional set of docID values that will limit the update to documents
+     with a matching docID. If no matching documents are found, the operation will
+     succeed, but no documents will be updated.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this update that will limit the update to the documents
+     matching the given criteria. If no matching documents are found, the operation
+     will succeed, but no documents will be updated.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+    """Update field values"""
+    input: Ethereum__Mainnet__SnapshotSignatureMutationInputArg
+  ): [Ethereum__Mainnet__SnapshotSignature]
   """
   
   Updates documents in this collection using the data provided. Only documents
@@ -4644,29 +5190,6 @@ type Mutation {
   
   NOTE: It is highly recommended to create an index on the fields used to filter.
   """
-  upsert_Ethereum__Mainnet__BatchSignature(
-    """Create field values"""
-    create: Ethereum__Mainnet__BatchSignatureMutationInputArg!
-    """
-    
-    A required filter for this upsert that must match one or zero documents.
-     If a matching document is found it will be updated, otherwise a new
-     document will be created.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg!
-    """Update field values"""
-    update: Ethereum__Mainnet__BatchSignatureMutationInputArg!
-  ): [Ethereum__Mainnet__BatchSignature]
-  """
-  
-  Update or create a document in this collection using the data provided. The provided filter
-   must match at most one document. The matching document will be updated with the provided 
-   update input, or if no matching document is found, a new document will be created with the
-   provided create input.
-  
-  NOTE: It is highly recommended to create an index on the fields used to filter.
-  """
   upsert_Ethereum__Mainnet__Block(
     """Create field values"""
     create: Ethereum__Mainnet__BlockMutationInputArg!
@@ -4690,6 +5213,29 @@ type Mutation {
   
   NOTE: It is highly recommended to create an index on the fields used to filter.
   """
+  upsert_Ethereum__Mainnet__BlockSignature(
+    """Create field values"""
+    create: Ethereum__Mainnet__BlockSignatureMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg!
+    """Update field values"""
+    update: Ethereum__Mainnet__BlockSignatureMutationInputArg!
+  ): [Ethereum__Mainnet__BlockSignature]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
   upsert_Ethereum__Mainnet__Log(
     """Create field values"""
     create: Ethereum__Mainnet__LogMutationInputArg!
@@ -4704,6 +5250,29 @@ type Mutation {
     """Update field values"""
     update: Ethereum__Mainnet__LogMutationInputArg!
   ): [Ethereum__Mainnet__Log]
+  """
+  
+  Update or create a document in this collection using the data provided. The provided filter
+   must match at most one document. The matching document will be updated with the provided 
+   update input, or if no matching document is found, a new document will be created with the
+   provided create input.
+  
+  NOTE: It is highly recommended to create an index on the fields used to filter.
+  """
+  upsert_Ethereum__Mainnet__SnapshotSignature(
+    """Create field values"""
+    create: Ethereum__Mainnet__SnapshotSignatureMutationInputArg!
+    """
+    
+    A required filter for this upsert that must match one or zero documents.
+     If a matching document is found it will be updated, otherwise a new
+     document will be created.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg!
+    """Update field values"""
+    update: Ethereum__Mainnet__SnapshotSignatureMutationInputArg!
+  ): [Ethereum__Mainnet__SnapshotSignature]
   """
   
   Update or create a document in this collection using the data provided. The provided filter
@@ -5335,6 +5904,21 @@ enum Ordering {
 }
 
 type Query {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  AVG(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  COUNT(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector): Int
   Config__LastProcessedPage(
     """
     
@@ -5366,7 +5950,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5433,7 +6017,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5500,7 +6084,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5536,73 +6120,6 @@ type Query {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__AttestationRecord]
-  Ethereum__Mainnet__BatchSignature(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Ethereum__Mainnet__BatchSignature]
   Ethereum__Mainnet__Block(
     """
     
@@ -5634,7 +6151,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5670,6 +6187,73 @@ type Query {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Block]
+  Ethereum__Mainnet__BlockSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BlockSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BlockSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__BlockSignature]
   Ethereum__Mainnet__Log(
     """
     
@@ -5701,7 +6285,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5737,6 +6321,73 @@ type Query {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Log]
+  Ethereum__Mainnet__SnapshotSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__SnapshotSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__SnapshotSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__SnapshotSignature]
   Ethereum__Mainnet__Transaction(
     """
     
@@ -5768,7 +6419,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5806,12 +6457,28 @@ type Query {
   ): [Ethereum__Mainnet__Transaction]
   """
   
-  Returns the average of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined average of all items within each set
-   (true average, not an average of averages) will be returned as a single value.
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
   
   """
-  _avg(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
+  MAX(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MIN(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  SUM(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
   """
   
   Returns a set of commits matching any provided criteria. If no arguments are
@@ -5848,7 +6515,7 @@ type Query {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -5877,37 +6544,6 @@ type Query {
     """
     order: [commitsOrderArg]
   ): [Commit]
-  """
-  
-  Returns the total number of items within the specified child sets. If multiple child
-   sets are specified, the combined total of all of them will be returned as a single value.
-  
-  """
-  _count(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector): Int
-  """
-  
-  Returns the maximum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined maximum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _max(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
-  """
-  
-  Returns the minimum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined minimum of all items within each set
-   will be returned as a single value.
-  
-  """
-  _min(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
-  """
-  
-  Returns the total sum of the specified field values within the specified child sets. If
-   multiple fields/sets are specified, the combined sum of all of them will be returned as
-   a single value.
-  
-  """
-  _sum(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__BatchSignature: Ethereum__Mainnet__BatchSignature__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector): Float
 }
 
 """
@@ -6094,7 +6730,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6161,7 +6797,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6228,7 +6864,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6264,73 +6900,6 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__AttestationRecord]
-  Ethereum__Mainnet__BatchSignature(
-    """
-    
-    An optional value that specifies the commit ID of a document or a branchable collection.
-     This CID does not need to be the most recent. If it corresponds to an older version
-     the document(s) will be returned at the state they were in at the time of that commit.
-     If a matching commit is not found then an empty set will be returned.
-    
-    """
-    cid: String
-    """
-    
-    An optional set of docIDs for this field. Only documents with a docID
-     matching a docID in the given set will be returned.  If no documents match,
-     the result will be null/empty. If an empty set is provided, this argument will
-     be ignored.
-    
-    """
-    docID: [ID!]
-    """
-    
-    An optional filter for this select, only documents matching the given criteria
-     will be returned.
-    
-    """
-    filter: Ethereum__Mainnet__BatchSignatureFilterArg
-    """
-    
-    An optional set of fields for which to group the contents of this field by.
-     If this argument is provided, only fields used to group may be rendered in
-     the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
-     is provided, the restrictions mentioned still apply, although all results
-     will appear within the same group.
-    
-    """
-    groupBy: [Ethereum__Mainnet__BatchSignatureField!]
-    """
-    
-    An optional value that caps the number of results to the number provided.
-     A limit of zero will be ignored.
-    
-    """
-    limit: Int
-    """
-    
-    An optional value that skips the given number of results that would have
-     otherwise been returned.  Commonly used alongside the 'limit' argument,
-     this argument will still work on its own.
-    
-    """
-    offset: Int
-    """
-    
-    An optional set of field-orders which may be used to sort the results. An
-     empty set will be ignored.
-    
-    """
-    order: [Ethereum__Mainnet__BatchSignatureOrderArg]
-    """
-    
-    An optional value that specifies as to whether deleted documents may be
-     returned. This argument will propagate down through any child selects/joins.
-    
-    """
-    showDeleted: Boolean
-  ): [Ethereum__Mainnet__BatchSignature]
   Ethereum__Mainnet__Block(
     """
     
@@ -6362,7 +6931,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6398,6 +6967,73 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Block]
+  Ethereum__Mainnet__BlockSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__BlockSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__BlockSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__BlockSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__BlockSignature]
   Ethereum__Mainnet__Log(
     """
     
@@ -6429,7 +7065,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6465,6 +7101,73 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Log]
+  Ethereum__Mainnet__SnapshotSignature(
+    """
+    
+    An optional value that specifies the commit ID of a document or a branchable collection.
+     This CID does not need to be the most recent. If it corresponds to an older version
+     the document(s) will be returned at the state they were in at the time of that commit.
+     If a matching commit is not found then an empty set will be returned.
+    
+    """
+    cid: String
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this select, only documents matching the given criteria
+     will be returned.
+    
+    """
+    filter: Ethereum__Mainnet__SnapshotSignatureFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [Ethereum__Mainnet__SnapshotSignatureField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [Ethereum__Mainnet__SnapshotSignatureOrderArg]
+    """
+    
+    An optional value that specifies as to whether deleted documents may be
+     returned. This argument will propagate down through any child selects/joins.
+    
+    """
+    showDeleted: Boolean
+  ): [Ethereum__Mainnet__SnapshotSignature]
   Ethereum__Mainnet__Transaction(
     """
     
@@ -6496,7 +7199,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     
@@ -6568,7 +7271,7 @@ type Subscription {
     An optional set of fields for which to group the contents of this field by.
      If this argument is provided, only fields used to group may be rendered in
      the immediate child selector.  Additional fields may be selected by using
-     the '_group' selector within the immediate child selector. If an empty set
+     the 'GROUP' selector within the immediate child selector. If an empty set
      is provided, the restrictions mentioned still apply, although all results
      will appear within the same group.
     

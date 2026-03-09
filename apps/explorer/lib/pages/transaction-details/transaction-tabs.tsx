@@ -3,13 +3,20 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { TransactionCard } from './transaction-card';
-import { Typography } from '@/shared/ui/typography';
+import { TransactionLogs } from './transaction-logs';
+import { useTransaction } from './use-transaction';
+import { useTransactionLogs } from './use-transaction-logs';
 
 export interface TxTabsProps {
   hash: string;
 }
 
 export const TxTabs = ({ hash }: TxTabsProps) => {
+  const { data: tx } = useTransaction({ hash });
+
+  // preload logs when page is loaded
+  useTransactionLogs({ hash, enabled: !!tx });
+
   return (
     <Tabs defaultValue='overview'>
       <Container wrapperClassName='mt-12' borderB>
@@ -20,9 +27,6 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
           <TabsTrigger value='logs'>
             Logs
           </TabsTrigger>
-          <TabsTrigger value='raw'>
-            Raw Trace
-          </TabsTrigger>
         </TabsList>
       </Container>
 
@@ -32,15 +36,7 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
         </TabsContent>
 
         <TabsContent asChild value='logs'>
-          <Container className='py-10'>
-            <Typography variant='md'>Nothing here yet.</Typography>
-          </Container>
-        </TabsContent>
-
-        <TabsContent value='raw'>
-          <Container className='py-10'>
-            <Typography variant='md'>Nothing here yet.</Typography>
-          </Container>
+          <TransactionLogs txHash={hash} />
         </TabsContent>
       </div>
     </Tabs>
