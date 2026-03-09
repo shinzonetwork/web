@@ -3,8 +3,6 @@ export * from "./documents-breakdown";
 export * from "./error-alerts";
 export * from "./header";
 export * from "./processed-per-hour";
-export * from "./processing-time-gauge";
-export * from "./processing-time-chart";
 export * from "./section-header";
 export * from "./server-uptime";
 export * from "./stat-card";

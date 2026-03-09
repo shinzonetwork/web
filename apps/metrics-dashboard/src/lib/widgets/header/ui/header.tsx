@@ -27,13 +27,14 @@ export function Header() {
             </p>
             <p className="text-sm text-foreground">
               {showLoading
-                ? new Date(last_document_time).toLocaleString()
-                : "waiting for metrics..."}
+                ? "--"
+                : new Date(last_document_time).toLocaleString()}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {showLoading
-                ? formatTimeAgo(new Date(last_document_time))
-                : "--"}
+                ? "--"
+                : formatTimeAgo(new Date(last_document_time))
+              }
             </p>
           </div>
         </div>

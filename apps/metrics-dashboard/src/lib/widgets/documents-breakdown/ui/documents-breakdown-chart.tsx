@@ -38,13 +38,6 @@ export function DocumentsBreakdownChart() {
     },
   ];
 
-  const sum =
-    blocks_processed +
-    transactions_processed +
-    logs_processed +
-    access_lists_processed;
-  const diff = Math.abs(documents_received - sum);
-
   return (
     <div className="font-mono font-medium bg-background p-8 border border-border transition-all duration-300 hover:border-primary">
       <div className="flex items-start justify-between mb-6">
@@ -55,24 +48,6 @@ export function DocumentsBreakdownChart() {
           <div className="text-base text-muted-foreground">
             Total: {documents_received?.toLocaleString() ?? 0} documents
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-bold ${
-              diff === 0
-                ? "bg-success text-success-foreground"
-                : "bg-white border-2 border-warning text-warning"
-            }`}
-          >
-            {diff === 0 ? "✓" : "!"}
-          </span>
-          <span
-            className={`text-xs ${diff === 0 ? "text-success" : "text-warning"}`}
-          >
-            {diff === 0
-              ? "All processed"
-              : `To be processed: ${diff?.toLocaleString() ?? 0}`}
-          </span>
         </div>
       </div>
       <div className="h-[200px]">

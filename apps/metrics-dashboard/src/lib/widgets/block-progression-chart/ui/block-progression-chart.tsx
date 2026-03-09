@@ -35,7 +35,7 @@ export function BlockProgressionChart() {
             Block Progression
           </div>
           <div className="text-xs text-muted-foreground">
-            Blockchain height over time
+            Blockchain height over time (1 hour)
           </div>
         </div>
         <div className="text-right">

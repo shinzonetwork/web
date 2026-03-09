@@ -14,8 +14,6 @@ import {
         {/* Performance Charts Section */}
         <PerformanceAnalytics />
         {/* TODO: Add Processing Analytics once the metrics api is wired with uptodate last_processing_time_ms */}
-        {/* Processing Time Section */}
-        {/* <ProcessingAnalytics /> */}
         {/* Error Status Section */}
         <ErrorStatus />
         {/* Documents Statistics Section */}

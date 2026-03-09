@@ -31,22 +31,7 @@ export function ValidationCards() {
           labelB="Created"
         />
         {/* TODO: Add validation cards once the metrics api is wired with uptodate batch_sig_events_received and batch_signatures_processed */}
-        {/* <ValidationItem
-          label="Batch Signatures"
-          valueA={batch_sig_events_received ?? 0}
-          valueB={batch_signatures_processed ?? 0}
-          labelA="Received"
-          labelB="Processed"
-        /> */}
         {/* TODO: Add validation cards once the metrics api is wired with uptodate blocks_receive */}
-        {/* <ValidationItem
-          label="Blocks Received = Processed"
-          valueA={blocks_received ?? 0}
-          valueB={blocks_processed ?? 0}
-          labelA="Received"
-          labelB="Processed"
-          tolerance={10}
-        /> */}
       </div>
     </div>
   );

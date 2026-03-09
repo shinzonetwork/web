@@ -35,7 +35,7 @@ export function ThroughputChart() {
         Throughput Over Time
       </div>
       <div className="text-xs text-muted-foreground mb-6">
-        Documents processed per 5 secs
+        Documents processed per 5 secs (1 hour)
       </div>
       <div className="h-[250px]">
         <ResponsiveContainer width="100%" height="100%">
