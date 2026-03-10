@@ -19,6 +19,7 @@ export const Shinzo: Chain = defineChain({
 });
 
 const config = createConfig({
+  ssr: true,
   chains: [Shinzo],
   transports: {
     [Shinzo.id]: http(getRpcUrl()),
