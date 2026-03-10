@@ -48,6 +48,10 @@ export function FaucetPage() {
     return `${rpcHost}/cosmos/bank/v1beta1/balances/${shinzoAddress}`;
   }, [shinzoAddress]);
 
+  const txLink = useMemo(() => {
+    return `${SHINZO_RPC}/tx?hash=0x${message}`;
+  }, [message]);
+
   const handleSubmit = async () => {
     if (!address.trim() || status === 'loading') return;
     if (isRateLimited()) {
@@ -88,7 +92,18 @@ export function FaucetPage() {
         {status === 'success' ? (
           <div className="flex flex-col items-center gap-6 w-full text-center">
             <p className="text-sm text-szo-black/60">Tokens sent successfully!</p>
-            <p className="font-mono text-xs text-szo-black/40 break-all">Tx hash {message}</p>
+
+            <p className="font-mono text-xs text-szo-black/40 break-all">
+              Tx hash{' '}
+              <a
+                href={txLink}
+                className="underline cursor-pointer"
+                target="_blank"
+              >
+                {message}
+              </a>
+            </p>
+
             {successLink && (
               <a
                 href={successLink}
@@ -131,7 +146,7 @@ export function FaucetPage() {
                 {status === 'loading' ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  'Get 0.01 $SHN'
+                  'Get 0.001 $SHN'
                 )}
               </Button>
             </div>
