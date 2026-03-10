@@ -70,7 +70,7 @@ export function RegistrationRadioButton({
       </div>
       <div className="flex flex-col gap-2 flex-1">
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <label
               htmlFor="indexer"
               className={cn(
