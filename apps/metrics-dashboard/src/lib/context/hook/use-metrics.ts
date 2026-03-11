@@ -5,7 +5,10 @@ import { METRICS_API_URL } from "@/lib/shared/utils/consts";
 import { MetricsData, MetricsResponse } from "../types/types";
 
 async function fetchMetrics(): Promise<MetricsData> {
-  const response = await fetch(METRICS_API_URL ?? "");
+  const search = new URLSearchParams(window.location.search);
+  const metricsUrl = search.get("metricsUrl");
+  
+  const response = await fetch(metricsUrl ?? METRICS_API_URL ?? "");
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
   const data: MetricsResponse = await response.json();
