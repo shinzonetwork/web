@@ -39,10 +39,9 @@ export const MetricsContextProvider = ({
   const [throughputDataPoints, setThroughputDataPoints] = useState<
     ThroughputDataPoint[]
   >(() => getStoredSnapshot()?.throughputDataPoints ?? []);
-  const [blockProgressionDataPoints, setBlockProgressionDataPoints] =
-    useState<BlockProgressionDataPoint[]>(
-      () => getStoredSnapshot()?.blockProgressionDataPoints ?? [],
-    );
+  const [blockProgressionDataPoints, setBlockProgressionDataPoints] = useState<
+    BlockProgressionDataPoint[]
+  >(() => getStoredSnapshot()?.blockProgressionDataPoints ?? []);
   const [processingTimeHistoryDataPoints, setProcessingTimeHistoryDataPoints] =
     useState<ProcessingTimeHistoryDataPoint[]>(
       () => getStoredSnapshot()?.processingTimeHistoryDataPoints ?? [],
@@ -55,7 +54,9 @@ export const MetricsContextProvider = ({
   const { data: currentMetricsData, isLoading, error } = useMetrics();
 
   // On refresh, show stored currentMetricsData until the first fetch resolves.
-  const [hydratedCurrentData, setHydratedCurrentData] = useState<MetricsData | undefined>(() => getStoredSnapshot()?.currentMetricsData ?? undefined);
+  const [hydratedCurrentData, setHydratedCurrentData] = useState<
+    MetricsData | undefined
+  >(() => getStoredSnapshot()?.currentMetricsData ?? undefined);
   const effectiveCurrentData = currentMetricsData ?? hydratedCurrentData;
   useEffect(() => {
     if (currentMetricsData) setHydratedCurrentData(undefined);
@@ -74,7 +75,10 @@ export const MetricsContextProvider = ({
     } = effectiveCurrentData;
 
     const timeFromTimestamp = new Date();
-    const hours = timeFromTimestamp.getHours() >= 12 ? timeFromTimestamp.getHours() - 12 : timeFromTimestamp.getHours();
+    const hours =
+      timeFromTimestamp.getHours() >= 12
+        ? timeFromTimestamp.getHours() - 12
+        : timeFromTimestamp.getHours();
     const ampm = timeFromTimestamp.getHours() >= 12 ? "PM" : "AM";
 
     const time: string =

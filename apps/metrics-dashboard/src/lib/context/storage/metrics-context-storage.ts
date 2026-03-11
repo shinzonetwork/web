@@ -1,13 +1,9 @@
 "use client";
 
-import type {
-  PersistedMetricsState,
-} from "../types/types";
+import type { PersistedMetricsState } from "../types/types";
 
 const LOCAL_STORAGE_KEY = "metrics-dashboard-state";
 const SESSION_STORAGE_KEY = "metrics-dashboard-session";
-
-
 
 function isPersistedState(value: unknown): value is PersistedMetricsState {
   if (!value || typeof value !== "object") return false;
