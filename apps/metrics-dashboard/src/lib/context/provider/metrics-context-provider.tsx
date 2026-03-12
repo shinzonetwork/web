@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 import { ReactNode, useMemo, useEffect, useState } from "react";
 import { MetricsContext } from "../model/metrics-context";
 import {

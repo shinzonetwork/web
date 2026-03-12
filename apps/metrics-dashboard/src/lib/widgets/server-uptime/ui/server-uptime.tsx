@@ -54,8 +54,8 @@ export function ServerUptime({
         <span className="text-muted-foreground">:</span>
         <span>{secs.toString().padStart(2, "0")}</span>
       </div>
-      <p className="text-sm text-muted-foreground pt-2">
-        Started: {startDate.toLocaleString()}
+      <p className="text-xs text-muted-foreground pt-4">
+        From: {startDate.toLocaleString()}
       </p>
     </div>
   );

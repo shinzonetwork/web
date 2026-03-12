@@ -31,10 +31,7 @@ export function Header() {
                 : new Date(last_document_time).toLocaleString()}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              {showLoading
-                ? "--"
-                : formatTimeAgo(new Date(last_document_time))
-              }
+              {showLoading ? "--" : formatTimeAgo(new Date(last_document_time))}
             </p>
           </div>
         </div>

@@ -24,17 +24,21 @@ export function DocumentsBreakdownChart() {
   } = currentMetricsData;
 
   const data = [
-    { name: "Blocks", value: blocks_processed, color: "#D01F27" },
+    {
+      name: "Blocks",
+      value: blocks_processed,
+      color: "var(--color-ui-chart-1)",
+    },
     {
       name: "Transactions",
       value: transactions_processed,
-      color: "#10b981",
+      color: "var(--color-ui-chart-2)",
     },
-    { name: "Logs", value: logs_processed, color: "#f59e0b" },
+    { name: "Logs", value: logs_processed, color: "var(--color-ui-chart-3)" },
     {
       name: "Access Lists",
       value: access_lists_processed,
-      color: "#6366f1",
+      color: "var(--color-ui-chart-4)",
     },
   ];
 

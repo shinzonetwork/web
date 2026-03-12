@@ -9,6 +9,7 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
+  Legend,
 } from "recharts";
 
 export function BlockProgressionChart() {
@@ -26,6 +27,11 @@ export function BlockProgressionChart() {
       ? Math.max(...cumulativeBlocksProcessed)
       : 0;
   const blocksProcessed = maxBlock - minBlock;
+
+  const xAxisInterval = Math.max(
+    0,
+    Math.floor(blockProgressionDataPoints.length / 5),
+  );
 
   return (
     <div className="font-mono font-medium bg-background p-8 border border-border transition-all duration-300 hover:border-primary">
@@ -45,7 +51,7 @@ export function BlockProgressionChart() {
           <div className="text-xs text-muted-foreground">blocks synced</div>
         </div>
       </div>
-      <div className="h-[200px]">
+      <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={blockProgressionDataPoints}
@@ -53,13 +59,19 @@ export function BlockProgressionChart() {
           >
             <XAxis
               dataKey="time"
-              tick={{ fill: "#666", fontSize: 10 }}
+              tick={{
+                fill: "var(--color-muted-foreground)",
+                fontSize: "var(--text-xs)",
+              }}
               axisLine={false}
               tickLine={false}
-              interval="preserveStartEnd"
+              interval={xAxisInterval}
             />
             <YAxis
-              tick={{ fill: "#666", fontSize: 10 }}
+              tick={{
+                fill: "var(--color-muted-foreground)",
+                fontSize: "var(--text-xs)",
+              }}
               axisLine={false}
               tickLine={false}
               domain={domainFromDataPoints<BlockProgressionDataPoint>(
@@ -70,21 +82,31 @@ export function BlockProgressionChart() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#fff",
-                border: "1px solid #e5e5e5",
-                borderRadius: "0",
-                fontFamily: "monospace",
-                fontSize: "12px",
+                backgroundColor: "var(--color-ui-bg-muted)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-sm)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
               }}
-              labelStyle={{ color: "#000" }}
+              labelStyle={{
+                color: "var(--color-muted-foreground)",
+                marginBottom: "4px",
+              }}
+            />
+            <Legend
+              wrapperStyle={{
+                fontSize: "var(--text-xs)",
+                fontFamily: "var(--font-mono)",
+              }}
+              iconType="square"
             />
             <Line
               type="monotone"
-              dataKey="block"
-              stroke="#D01F27"
+              dataKey="Blocks Processed"
+              stroke="var(--color-primary)"
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 4, fill: "#D01F27" }}
+              activeDot={{ r: 4, fill: "var(--color-primary)" }}
             />
           </LineChart>
         </ResponsiveContainer>

@@ -20,14 +20,10 @@ export function ThroughputChart() {
     throughputDataPoints,
     "documents_received",
   );
-  const domainDataProcessed = domainFromDataPoints<ThroughputDataPoint>(
-    throughputDataPoints,
-    "documents_processed",
+  const xAxisInterval = Math.max(
+    0,
+    Math.floor(throughputDataPoints.length / 5),
   );
-  const domainData = [domainDataReceived, domainDataProcessed];
-  const domainMin = Math.min(...domainData.map((d) => d[0]));
-  const domainMax = Math.max(...domainData.map((d) => d[1]));
-  const domain = [domainMin, domainMax];
 
   return (
     <div className="font-mono font-medium bg-background p-8 border border-border transition-all duration-300 hover:border-primary">
@@ -37,54 +33,78 @@ export function ThroughputChart() {
       <div className="text-xs text-muted-foreground mb-6">
         Documents processed per 5 secs (1 hour)
       </div>
-      <div className="h-[250px]">
+      <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={throughputDataPoints}
             margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
           >
+            <defs>
+              <linearGradient
+                id="documentsGradient"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-primary)"
+                  stopOpacity={0.3}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-primary)"
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <XAxis
               dataKey="time"
-              tick={{ fill: "#666", fontSize: 10 }}
+              tick={{
+                fill: "var(--color-muted-foreground)",
+                fontSize: "var(--text-xs)",
+              }}
               axisLine={false}
               tickLine={false}
-              interval="preserveStartEnd"
+              interval={xAxisInterval}
             />
             <YAxis
-              tick={{ fill: "#666", fontSize: 10 }}
+              tick={{
+                fill: "var(--color-muted-foreground)",
+                fontSize: "var(--text-xs)",
+              }}
               axisLine={false}
               tickLine={false}
-              domain={domain}
+              domain={domainDataReceived}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#fff",
-                border: "1px solid #e5e5e5",
-                borderRadius: "0",
-                fontFamily: "monospace",
-                fontSize: "12px",
+                backgroundColor: "var(--color-muted)",
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-sm)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
               }}
-              labelStyle={{ color: "#000", marginBottom: "4px" }}
+              labelStyle={{
+                color: "var(--color-muted-foreground)",
+                marginBottom: "4px",
+              }}
             />
             <Legend
-              wrapperStyle={{ fontSize: "11px", fontFamily: "monospace" }}
+              wrapperStyle={{
+                fontSize: "var(--text-xs)",
+                fontFamily: "var(--font-mono)",
+              }}
               iconType="square"
             />
             <Area
               type="monotone"
               dataKey="documents_received"
-              stroke="#D01F27"
-              fill="none"
+              stroke="var(--color-ui-primary)"
+              fill="url(#documentsGradient)"
               strokeWidth={2}
               name="Documents Received"
-            />
-            <Area
-              type="monotone"
-              dataKey="documents_processed"
-              stroke="#10b981"
-              fill="none"
-              strokeWidth={2}
-              name="Documents Processed"
             />
           </AreaChart>
         </ResponsiveContainer>
