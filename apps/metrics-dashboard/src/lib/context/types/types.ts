@@ -75,3 +75,15 @@ export type MetricsContextType = {
   isLoading: boolean;
   error: Error | null;
 };
+
+/**
+ * Serializable snapshot of metrics context used for persistence.
+ * Used to hydrate state on page refresh (not on initial load or after tab close).
+ */
+export type PersistedMetricsState = {
+  currentMetricsData: MetricsData | null;
+  throughputDataPoints: ThroughputDataPoint[];
+  blockProgressionDataPoints: BlockProgressionDataPoint[];
+  processingTimeHistoryDataPoints: ProcessingTimeHistoryDataPoint[];
+  historicalMetricsData: HistoricalMetricsData;
+};

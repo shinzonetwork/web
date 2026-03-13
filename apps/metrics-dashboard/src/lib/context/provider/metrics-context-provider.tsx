@@ -7,33 +7,63 @@ import {
   BlockProgressionDataPoint,
   ProcessingTimeHistoryDataPoint,
   HistoricalMetricsData,
+  MetricsData,
 } from "../types/types";
 import { useMetrics } from "../hook/use-metrics";
+import {
+  getPersistedState,
+  savePersistedState,
+  clearPersistedState,
+  hasMetricsSession,
+  setMetricsSession,
+} from "../storage/metrics-context-storage";
 
 const MAX_DATA_POINTS = 720; // 720 points = 12 hours
+
+function getStoredSnapshot(): ReturnType<typeof getPersistedState> {
+  if (typeof window === "undefined" || !hasMetricsSession()) return null;
+  return getPersistedState();
+}
+
 /**
  * The provider for the metrics dashboard context.
+ * - Initial load (new tab): no sessionStorage flag → clear any stale localStorage, then set session; no hydrate.
+ * - Page refresh: sessionStorage flag present → hydrate from localStorage; live fetch then takes over.
+ * - Tab close: sessionStorage is cleared by the browser; localStorage is cleared on next initial load (new tab).
  */
 export const MetricsContextProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const { data: currentMetricsData, isLoading, error } = useMetrics();
-
   const [throughputDataPoints, setThroughputDataPoints] = useState<
     ThroughputDataPoint[]
-  >([]);
+  >(() => getStoredSnapshot()?.throughputDataPoints ?? []);
   const [blockProgressionDataPoints, setBlockProgressionDataPoints] = useState<
     BlockProgressionDataPoint[]
-  >([]);
+  >(() => getStoredSnapshot()?.blockProgressionDataPoints ?? []);
   const [processingTimeHistoryDataPoints, setProcessingTimeHistoryDataPoints] =
-    useState<ProcessingTimeHistoryDataPoint[]>([]);
+    useState<ProcessingTimeHistoryDataPoint[]>(
+      () => getStoredSnapshot()?.processingTimeHistoryDataPoints ?? [],
+    );
   const [historicalMetricsData, setHistoricalMetricsData] =
-    useState<HistoricalMetricsData>([]);
+    useState<HistoricalMetricsData>(
+      () => getStoredSnapshot()?.historicalMetricsData ?? [],
+    );
+
+  const { data: currentMetricsData, isLoading, error } = useMetrics();
+
+  // On refresh, show stored currentMetricsData until the first fetch resolves.
+  const [hydratedCurrentData, setHydratedCurrentData] = useState<
+    MetricsData | undefined
+  >(() => getStoredSnapshot()?.currentMetricsData ?? undefined);
+  const effectiveCurrentData = currentMetricsData ?? hydratedCurrentData;
+  useEffect(() => {
+    if (currentMetricsData) setHydratedCurrentData(undefined);
+  }, [currentMetricsData]);
 
   useEffect(() => {
-    if (!currentMetricsData) return;
+    if (!effectiveCurrentData) return;
 
     const {
       blocks_processed,
@@ -42,13 +72,17 @@ export const MetricsContextProvider = ({
       access_lists_processed,
       documents_received,
       last_processing_time_ms,
-    } = currentMetricsData;
+    } = effectiveCurrentData;
 
     const timeFromTimestamp = new Date();
+    const hours =
+      timeFromTimestamp.getHours() >= 12
+        ? timeFromTimestamp.getHours() - 12
+        : timeFromTimestamp.getHours();
     const ampm = timeFromTimestamp.getHours() >= 12 ? "PM" : "AM";
 
     const time: string =
-      timeFromTimestamp.getHours().toString().padStart(2, "0") +
+      hours.toString().padStart(2, "0") +
       ":" +
       timeFromTimestamp.getMinutes().toString().padStart(2, "0") +
       ":" +
@@ -86,13 +120,37 @@ export const MetricsContextProvider = ({
       [...prev, processingTimePoint].slice(-MAX_DATA_POINTS),
     );
     setHistoricalMetricsData((prev) =>
-      [...prev, currentMetricsData].slice(-MAX_DATA_POINTS),
+      [...prev, effectiveCurrentData].slice(-MAX_DATA_POINTS),
     );
-  }, [currentMetricsData]);
+  }, [effectiveCurrentData]);
+
+  // Set session flag so refresh is detected next time. On initial load (no session
+  // yet), clear any stale localStorage from a previous tab that was closed.
+  useEffect(() => {
+    if (!hasMetricsSession()) clearPersistedState();
+    setMetricsSession();
+  }, []);
+
+  // Persist state to localStorage for hydration on refresh.
+  useEffect(() => {
+    savePersistedState({
+      currentMetricsData: effectiveCurrentData ?? null,
+      throughputDataPoints,
+      blockProgressionDataPoints,
+      processingTimeHistoryDataPoints,
+      historicalMetricsData,
+    });
+  }, [
+    effectiveCurrentData,
+    throughputDataPoints,
+    blockProgressionDataPoints,
+    processingTimeHistoryDataPoints,
+    historicalMetricsData,
+  ]);
 
   const context: MetricsContextType = useMemo(() => {
     return {
-      currentMetricsData,
+      currentMetricsData: effectiveCurrentData,
       throughputDataPoints,
       blockProgressionDataPoints,
       processingTimeHistoryDataPoints,
@@ -101,7 +159,7 @@ export const MetricsContextProvider = ({
       error,
     };
   }, [
-    currentMetricsData,
+    effectiveCurrentData,
     isLoading,
     error,
     throughputDataPoints,
