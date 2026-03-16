@@ -6,14 +6,13 @@ import { keccak256, Secp256k1 } from "@cosmjs/crypto";
 import { toBech32, fromHex } from "@cosmjs/encoding";
 import { BaseAccount } from "cosmjs-types/cosmos/auth/v1beta1/auth";
 import { QueryAccountRequest, QueryAccountResponse } from "cosmjs-types/cosmos/auth/v1beta1/query";
-// import { QueryBalanceRequest, QueryBalanceResponse } from "cosmjs-types/cosmos/bank/v1beta1/query";
 import { TxRaw, TxBody } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { MsgSend } from "cosmjs-types/cosmos/bank/v1beta1/tx";
 import { PubKey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 
 const PREFIX = 'shinzo';
 const DENOM  = 'ushinzo';
-const AMOUNT = '10000000000000000'; // 0.01 SHN
+const AMOUNT = '1000000000000000'; // 0.001 SHN
 const PUBKEY_TYPE = "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey";
 
 async function abciQuery(path: string, data: Uint8Array): Promise<Uint8Array> {
@@ -36,12 +35,6 @@ async function getAccount(address: string) {
   return { accountNumber: Number(base.accountNumber), sequence: Number(base.sequence) };
 }
 
-// async function getBalance(address: string, denom: string): Promise<string> {
-//   const bytes = await abciQuery("/cosmos.bank.v1beta1.Query/Balance", QueryBalanceRequest.encode({ address, denom }).finish());
-//   const { balance } = QueryBalanceResponse.decode(bytes);
-//   return balance?.amount ?? "0";
-// }
-
 async function broadcast(txBytes: Uint8Array): Promise<{ hash: string; code: number; log: string }> {
   const res = await fetch(SHINZO_RPC, {
     method: "POST",
@@ -61,13 +54,14 @@ export const sendFaucetTokens = async (toAddress: string) => {
   const chainId = await getChainId();
   const { accountNumber, sequence } = await getAccount(address);
   const pubkey = { typeUrl: PUBKEY_TYPE, value: PubKey.encode({ key: compressedPubkey }).finish() };
+  const shinzoAddress = toAddress.startsWith(PREFIX) ? toAddress : toBech32(PREFIX, fromHex(toAddress.replace(/^0x/, "")));
 
   const txBodyBytes = TxBody.encode(TxBody.fromPartial({
     messages: [{
       typeUrl: "/cosmos.bank.v1beta1.MsgSend",
       value: MsgSend.encode(MsgSend.fromPartial({
         fromAddress: address,
-        toAddress: toAddress,
+        toAddress: shinzoAddress,
         amount: [{ denom: DENOM, amount: AMOUNT }],
       })).finish(),
     }],
@@ -93,6 +87,5 @@ export const sendFaucetTokens = async (toAddress: string) => {
 
   const result = await broadcast(txRaw);
 
-  const shinzoAddress = toAddress.startsWith(PREFIX) ? toAddress : toBech32(PREFIX, fromHex(toAddress.replace(/^0x/, "")));
   return { txHash: result.hash, address: shinzoAddress };
 }
