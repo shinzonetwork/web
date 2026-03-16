@@ -86,7 +86,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         link={`/blocks/${tx.blockNumber}`}
         loading={isLoading}
       >
-            {tx.blockNumber}
+        {tx.blockNumber}
       </DataItem>
 
       <DataItem

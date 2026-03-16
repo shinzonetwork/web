@@ -7,12 +7,13 @@ import { cn } from '@/shared/utils/utils';
 
 export interface DataItemProps {
   title: string;
-  value?: string | number | null;
+  value?: ReactNode;
   copyable?: boolean;
   link?: string;
   loading?: boolean;
   children?: ReactNode;
   className?: string;
+  childClassName?: string;
   allowWrap?: boolean;
   wrapAt?: number;
   truncate?: boolean;
@@ -26,6 +27,7 @@ export const DataItem = ({
   link,
   children,
   className,
+  childClassName,
   allowWrap,
   wrapAt,
   truncate = true,
@@ -83,6 +85,7 @@ export const DataItem = ({
               className={cn(
                 'lg:min-w-0',
                 textBehaviorClass,
+                childClassName,
               )}
               style={wrapStyle}
             >
@@ -104,6 +107,7 @@ export const DataItem = ({
               className={cn(
                 'lg:min-w-0 w-[900px]',
                 textBehaviorClass,
+                childClassName,
               )}
               style={wrapStyle}
             >
