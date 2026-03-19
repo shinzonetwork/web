@@ -4,6 +4,10 @@ import { Table } from "@/lib/widget/table/ui/table";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
+const entryKey = (entry: { walletAddress: string; ip: string }) =>
+  `${entry.walletAddress}-${entry.ip}`;
+
+
 export function IndexerList() {
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -60,55 +64,53 @@ export function IndexerList() {
 
     let alive = true;
 
-    const tick = () => {
+    const tick = async () => {
       const current = entriesRef.current;
       const pageEntries = current;
 
-      const keySet = new Set(
-        pageEntries.map((e) => `${e.walletAddress}-${e.ip}`),
-      );
+      const keySet = new Set(pageEntries.map((e) => entryKey(e)));
 
       // Mark visible peers as "Checking..." immediately, then update each row
       // as requests finish.
       setEntries((prev) =>
         prev.map((e) =>
-          keySet.has(`${e.walletAddress}-${e.ip}`)
-            ? { ...e, health: "unknown" }
-            : e,
+          keySet.has(entryKey(e)) ? { ...e, health: "unknown" } : e,
         ),
       );
 
-      pageEntries.forEach((entry) => {
-        fetch(`/api/health?ip=${encodeURIComponent(entry.ip)}`)
-          .then((res) => res.json())
-          .then((data: { healthy: boolean }) => {
-            if (!alive) return;
-            const health: IndexerWithHealth["health"] = data.healthy
-              ? "healthy"
-              : "unhealthy";
-            setEntries((prev) =>
-              prev.map((e) =>
-                e.walletAddress === entry.walletAddress && e.ip === entry.ip
-                  ? { ...e, health }
-                  : e,
-              ),
-            );
-          })
-          .catch(() => {
-            if (!alive) return;
-            setEntries((prev) =>
-              prev.map((e) =>
-                e.walletAddress === entry.walletAddress && e.ip === entry.ip
-                  ? { ...e, health: "unhealthy" as const }
-                  : e,
-              ),
-            );
-          });
+      const checks = pageEntries.map(async (entry) => {
+        try {
+          const res = await fetch(`/api/health?ip=${encodeURIComponent(entry.ip)}`);
+          const data = (await res.json()) as { healthy?: string };
+          return { key: entryKey(entry), health: data.healthy as IndexerWithHealth["health"] };
+        } catch {
+          return { key: entryKey(entry), health: "unhealthy" as const };
+        }
       });
+
+      const results = await Promise.allSettled(checks);
+      if (!alive) return;
+
+      const healthByKey = new Map<string, IndexerWithHealth["health"]>();
+      for (const result of results) {
+        if (result.status === "fulfilled") {
+          healthByKey.set(result.value.key, result.value.health);
+          console.log(result.value.key, result.value.health);
+        }
+      }
+
+      setEntries((prev) =>
+        prev.map((entry) => {
+          const nextHealth = healthByKey.get(entryKey(entry));
+          return nextHealth ? { ...entry, health: nextHealth } : entry;
+        }),
+      );
     };
 
-    tick();
-    const intervalId = setInterval(tick, 60_000); // 1 minute
+    void tick();
+    const intervalId = setInterval(() => {
+      void tick();
+    }, 60_000); // 1 minute
 
     return () => {
       alive = false;

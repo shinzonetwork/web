@@ -67,7 +67,8 @@ export function IndexerForm({ handleBack }: IndexerFormProps) {
         </div>
         <div className="col-span-2">
           <label className="block text-sm mb-1">
-            IP address<span className="text-destructive">*</span>
+            Public IP Address of your node{" "}
+            <span className="text-destructive">*</span>
           </label>
           <input
             value={ip}

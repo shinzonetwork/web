@@ -22,12 +22,12 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
     const healthy = data.status;
 
-    return new Response(JSON.stringify({ healthy: true }), {
+    return new Response(JSON.stringify({ healthy }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
-    return new Response(JSON.stringify({ healthy: false }), {
+    return new Response(JSON.stringify({ healthy: "unhealthy" }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
