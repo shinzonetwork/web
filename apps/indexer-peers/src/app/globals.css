@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@import "../../../../packages/ui/src/theme.css";
+
+/* make sure Tailwind parses classes defined in UI package */
+@source "../../../../packages/ui/src/";
+
+:root {
+  --color-ui-primary: #d32c34;
+  --color-ui-primary-foreground: #ffffff;
+  --color-ui-success: #10b981;
+  --color-ui-success-foreground: #ffffff;
+  --color-ui-warning: #f59e0b;
+  --color-ui-warning-foreground: #ffffff;
+  --color-ui-destructive: #d32c34;
+  --color-ui-destructive-foreground: #ffffff;
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+
+  /* main colors */
+  --color-background: var(--color-ui-bg);
+  --color-foreground: var(--color-ui-text);
+  --color-muted: var(--color-ui-bg-muted);
+  --color-muted-foreground: var(--color-ui-text-muted);
+  --color-accent: var(--color-ui-accent);
+  --color-accent-foreground: var(--color-ui-text-accent);
+
+  --color-primary: var(--color-ui-primary);
+  --color-primary-foreground: var(--color-ui-primary-foreground);
+  --color-success: var(--color-ui-success);
+  --color-success-foreground: var(--color-ui-success-foreground);
+  --color-warning: var(--color-ui-warning);
+  --color-warning-foreground: var(--color-ui-warning-foreground);
+  --color-destructive: var(--color-ui-destructive);
+  --color-destructive-foreground: var(--color-ui-destructive-foreground);
+
+  --color-border: var(--color-ui-border);
+
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--color-ui-chart-1);
+  --color-chart-2: var(--color-ui-chart-2);
+  --color-chart-3: var(--color-ui-chart-3);
+  --color-chart-4: var(--color-ui-chart-4);
+  --color-chart-5: var(--color-ui-chart-5);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* custom typography */
+  --text-h2: 1.875rem;
+  --text-h2--line-height: 140%;
+
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 140%;
+
+  --text-md: 1.125rem;
+  --text-md--line-height: 140%;
+
+  --text-base: 1rem;
+  --text-base--line-height: 140%;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 140%;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 160%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply bg-background;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
