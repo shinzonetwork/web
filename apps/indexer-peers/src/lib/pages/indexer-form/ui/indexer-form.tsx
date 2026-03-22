@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { X } from "lucide-react";
+import { useIndexerContext } from "@/lib/context";
+import { useAccount } from "wagmi";
+import { Banner } from "@/lib/widget";
+import { IndexerEntry } from "@/lib/shared/types";
+import type { Address } from "viem";
 
-type IndexerFormProps = {
-  handleBack: () => void;
-};
+export function IndexerForm() {
+  const { isPortOpen, showIndexerForm } = useIndexerContext();
+  const { address } = useAccount();
 
-export function IndexerForm({ handleBack }: IndexerFormProps) {
-  const [walletAddress, setWalletAddress] = useState("");
-  const [ip, setIp] = useState("");
-  const [discord, setDiscord] = useState("");
+  const [formData, setFormData] = useState<IndexerEntry>({
+    validatorAddress: address as Address,
+    validatorName: "",
+    ip: "",
+    discord: "",
+  });
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,16 +28,19 @@ export function IndexerForm({ handleBack }: IndexerFormProps) {
       const res = await fetch("/api/indexers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walletAddress, ip, discord }),
+        body: JSON.stringify(formData),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error ?? "Failed to submit entry");
       }
-      setIp("");
-      setDiscord("");
-      setWalletAddress("");
-      handleBack();
+      setFormData({
+        validatorAddress: address as Address,
+        validatorName: "",
+        ip: "",
+        discord: "",
+      });
+      showIndexerForm(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
@@ -38,72 +48,88 @@ export function IndexerForm({ handleBack }: IndexerFormProps) {
     }
   };
 
+  const isFormValid = useMemo(() => {
+    return isPortOpen && formData.validatorAddress && formData.ip.trim() !== "";
+  }, [isPortOpen, formData.validatorAddress, formData.ip]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   return (
-    <section className="bg-background rounded-lg border border-border p-6">
-      <div className="flex justify-between items-center mb-12 mt-2">
-        <h2 className="text-lg font-bold">Add indexer peer</h2>
-        <button
-          className="text-foreground hover:text-foreground/80"
-          onClick={handleBack}
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-2 gap-4 items-end"
-      >
-        <div className="col-span-2">
-          <label className="block text-sm mb-1">
-            Wallet address<span className="text-destructive">*</span>
-          </label>
-          <input
-            value={walletAddress}
-            onChange={(e) => setWalletAddress(e.target.value)}
-            required
-            placeholder="0x..."
-            className="w-full p-2 rounded-md border border-border bg-background text-foreground"
-          />
-        </div>
-        <div className="col-span-2">
-          <label className="block text-sm mb-1">
-            Public IP Address of your node{" "}
-            <span className="text-destructive">*</span>
-          </label>
-          <input
-            value={ip}
-            onChange={(e) => setIp(e.target.value)}
-            required
-            placeholder="192.168.0.1"
-            className="w-full p-2 rounded-md border border-border bg-background text-foreground"
-          />
-        </div>
-        <div className="col-span-2">
-          <label className="block text-sm mb-1">Discord handle</label>
-          <input
-            value={discord}
-            onChange={(e) => setDiscord(e.target.value)}
-            placeholder="@user"
-            className="w-full p-2 rounded-md border border-border bg-background text-foreground"
-          />
-        </div>
-        <div
-          style={{
-            gridColumn: "1 / span 2",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
+    <>
+      <Banner />
+      <section className="bg-background rounded-lg border border-border p-6">
+        <div className="flex justify-between items-center mb-12 mt-2">
+          <h2 className="text-lg font-bold">Add indexer peer</h2>
           <button
-            type="submit"
-            disabled={submitting}
-            className="px-6 py-2 rounded-md border-none bg-primary text-primary-foreground font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="text-foreground hover:text-foreground/80"
+            onClick={() => showIndexerForm(false)}
           >
-            {submitting ? "Saving..." : "Save"}
+            <X className="w-4 h-4" />
           </button>
         </div>
-      </form>
-      {error && <p className="mt-3 text-sm text-destructive">Error: {error}</p>}
-    </section>
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-2 gap-4 items-end"
+        >
+          <div className="col-span-2">
+            <label className="block text-sm mb-1">Validator address</label>
+            <input
+              value={address}
+              name="validatorAddress"
+              onChange={handleChange}
+              disabled
+              className="w-full p-2 rounded-md border border-border bg-muted text-muted-foreground cursor-not-allowed"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block text-sm mb-1">Validator Name</label>
+            <input
+              value={formData.validatorName}
+              name="validatorName"
+              onChange={handleChange}
+              className="w-full p-2 rounded-md border border-border bg-background text-foreground"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block text-sm mb-1">
+              Public IP Address of your node{" "}
+              <span className="text-destructive">*</span>
+            </label>
+            <input
+              value={formData.ip}
+              name="ip"
+              onChange={handleChange}
+              required
+              placeholder="192.168.0.1"
+              className="w-full p-2 rounded-md border border-border bg-background text-foreground"
+            />
+          </div>
+          <div className="col-span-2">
+            <label className="block text-sm mb-1">Discord handle</label>
+            <input
+              value={formData.discord}
+              name="discord"
+              onChange={handleChange}
+              placeholder="@user"
+              className="w-full p-2 rounded-md border border-border bg-background text-foreground"
+            />
+          </div>
+          <div className="col-span-2 flex justify-end">
+            <button
+              type="submit"
+              disabled={submitting || !isFormValid}
+              className="px-6 py-2 rounded-md border-none bg-primary text-primary-foreground font-bold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {submitting ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
+        {error && (
+          <p className="mt-3 text-sm text-destructive">Error: {error}</p>
+        )}
+      </section>
+    </>
   );
 }

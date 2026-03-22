@@ -10,9 +10,9 @@ export function Table({ entries }: TableProps) {
     <table className="w-full border-collapse text-sm">
       <thead>
         <tr className="text-left border-b border-border">
-          <th className="p-2">Wallet address</th>
-          <th className="p-2">IP</th>
-          <th className="p-2">Discord</th>
+          <th className="p-2">Indexer Public IP</th>
+          <th className="p-2">Validator Name</th>
+          <th className="p-2">Validator Discord</th>
           <th className="p-2">Health</th>
         </tr>
       </thead>
@@ -26,11 +26,11 @@ export function Table({ entries }: TableProps) {
         ) : (
           entries.map((entry) => (
             <tr
-              key={`${entry.walletAddress}-${entry.ip}`}
+              key={`${entry.validatorAddress}-${entry.ip}`}
               className="border-b border-border"
             >
-              <td className="p-2">{entry.walletAddress}</td>
               <td className="p-2">{entry.ip}</td>
+              <td className="p-2">{entry.validatorName}</td>
               <td className="p-2">{entry.discord}</td>
               <td className="p-2">
                 {entry.health !== "unknown" && (

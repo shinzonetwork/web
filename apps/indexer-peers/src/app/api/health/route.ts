@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (err) {
+  } catch {
     return new Response(JSON.stringify({ healthy: "unhealthy" }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

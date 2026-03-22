@@ -14,12 +14,17 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.19.0",
     "@shinzo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.12",
+    "@wagmi/core": "2.22.1",
+    "lucide-react": "^0.575.0",
     "next": "16.0.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "@google-cloud/storage": "^7.19.0",
-    "lucide-react": "^0.575.0"
+    "react-toastify": "^11.0.5",
+    "viem": "2.47.4",
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@shinzo/eslint-config": "workspace:*",
@@ -29,8 +34,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "prettier": "^3.8.1"
+    "typescript": "^5"
   }
 }

@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ChainProviders } from "@/lib/providers";
+import { IndexerContextProvider } from "@/lib/context/provider/indexer-context-provider";
+import { Toast, WalletChangeGuard } from "@/lib/widget";
 
 export const metadata: Metadata = {
   title: "Indexer Peers",
@@ -25,7 +28,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ChainProviders>
+          <IndexerContextProvider>
+            <Toast />
+            <WalletChangeGuard />
+            {children}
+          </IndexerContextProvider>
+        </ChainProviders>
       </body>
     </html>
   );

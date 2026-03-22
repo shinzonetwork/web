@@ -1,5 +1,8 @@
+import type { Address } from "viem";
+
 export type IndexerEntry = {
-  walletAddress: string;
+  validatorName?: string;
+  validatorAddress: Address;
   ip: string;
   discord?: string;
 };

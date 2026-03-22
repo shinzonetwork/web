@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { Storage } from "@google-cloud/storage";
+import { isAddress } from "viem";
 import { IndexerEntry } from "@/lib/shared/types";
 
 const storage = new Storage({
@@ -14,9 +15,9 @@ const bucketName = process.env.GCP_BUCKET_NAME;
 const FILE_PREFIX = "indexer-";
 const FILE_SUFFIX = ".json";
 
-/** Safe object name: indexer-<walletAddress>.json (only alphanumeric, dash, underscore) */
-function objectNameForWallet(walletAddress: string): string {
-  const safe = walletAddress.replace(/[^a-zA-Z0-9-_]/g, "_");
+/** Safe object name: indexer-<validatorAddress>.json (only alphanumeric, dash, underscore) */
+function objectNameForWallet(address: string): string {
+  const safe = address.replace(/[^a-zA-Z0-9-_]/g, "_");
   return `${FILE_PREFIX}${safe}${FILE_SUFFIX}`;
 }
 
@@ -54,25 +55,27 @@ async function readPageFromBucket(
       if (
         parsed &&
         typeof parsed === "object" &&
-        "walletAddress" in parsed &&
+        "validatorAddress" in parsed &&
         "ip" in parsed
       ) {
         entries.push(parsed as IndexerEntry);
       }
     } catch (err) {
-      console.warn(`Skipping invalid file ${name}:`, err);
+      if (process.env.NODE_ENV === "development") {
+        console.warn(`Skipping invalid file ${name}:`, err);
+      }
     }
   }
 
   return { entries, total, totalPages };
 }
 
-/** Save a single entry to indexer-<walletAddress>.json (overwrites if exists). */
+/** Save a single entry to indexer-<validatorAddress>.json (overwrites if exists). */
 async function saveOne(entry: IndexerEntry): Promise<void> {
   if (!bucketName) {
     throw new Error("GCP_BUCKET_NAME is not configured");
   }
-  const objectName = objectNameForWallet(entry.walletAddress);
+  const objectName = objectNameForWallet(entry.validatorAddress);
   const file = storage.bucket(bucketName).file(objectName);
   await file.save(JSON.stringify(entry, null, 2), {
     contentType: "application/json",
@@ -107,8 +110,7 @@ export async function GET(req: NextRequest) {
         headers: { "Content-Type": "application/json" },
       },
     );
-  } catch (err) {
-    console.error("Error reading indexers from GCS:", err);
+  } catch {
     return new Response(JSON.stringify({ error: "Failed to load indexers" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -119,9 +121,20 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as Partial<IndexerEntry>;
-    if (!body.ip || !body.walletAddress) {
+    if (!body.ip || !body.validatorAddress) {
       return new Response(
-        JSON.stringify({ error: "ip and walletAddress are required" }),
+        JSON.stringify({ error: "ip and validatorAddress are required" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+
+    const validatorAddress = body.validatorAddress.trim();
+    if (!isAddress(validatorAddress)) {
+      return new Response(
+        JSON.stringify({ error: "validatorAddress must be a valid address" }),
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
@@ -130,9 +143,10 @@ export async function POST(req: NextRequest) {
     }
 
     const entry: IndexerEntry = {
-      ip: body.ip,
-      walletAddress: body.walletAddress,
-      discord: body.discord,
+      ip: body.ip.trim(),
+      validatorAddress,
+      discord: body.discord?.trim(),
+      validatorName: body.validatorName?.trim(),
     };
     await saveOne(entry);
 
@@ -140,8 +154,7 @@ export async function POST(req: NextRequest) {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (err) {
-    console.error("Error saving indexer to GCS:", err);
+  } catch {
     return new Response(JSON.stringify({ error: "Failed to save indexer" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },

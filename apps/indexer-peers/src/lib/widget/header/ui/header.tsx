@@ -1,17 +1,19 @@
-type HeaderProps = {
-  handleIndexerForm: () => void;
-};
+"use client";
 
-export function Header({ handleIndexerForm }: HeaderProps) {
+import { useAccount } from "wagmi";
+import { ConnectWallet } from "../../connect-wallet/ui/connect-wallet";
+import WalletSignatureHandler from "@/lib/pages/wallet-signature/ui/wallet-signature-handler";
+import { useIndexerContext } from "@/lib/context";
+
+export function Header() {
+  const { isConnected } = useAccount();
+  const { isSignedWithWallet } = useIndexerContext();
+
   return (
     <header className="flex justify-between items-center mb-4 mt-8">
       <h1 className="text-2xl font-bold mb-2">Devnet Indexers</h1>
-      <button
-        className="bg-primary text-primary-foreground px-4 py-2 rounded-md"
-        onClick={handleIndexerForm}
-      >
-        Join Devnet
-      </button>
+      <ConnectWallet title="Join Devnet" />
+      {isConnected && !isSignedWithWallet && <WalletSignatureHandler />}
     </header>
   );
 }

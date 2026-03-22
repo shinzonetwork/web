@@ -4,9 +4,8 @@ import { Table } from "@/lib/widget/table/ui/table";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const entryKey = (entry: { walletAddress: string; ip: string }) =>
-  `${entry.walletAddress}-${entry.ip}`;
-
+const entryKey = (entry: { validatorAddress: string; ip: string }) =>
+  `${entry.validatorAddress}-${entry.ip}`;
 
 export function IndexerList() {
   const [page, setPage] = useState(1);
@@ -68,21 +67,16 @@ export function IndexerList() {
       const current = entriesRef.current;
       const pageEntries = current;
 
-      const keySet = new Set(pageEntries.map((e) => entryKey(e)));
-
-      // Mark visible peers as "Checking..." immediately, then update each row
-      // as requests finish.
-      setEntries((prev) =>
-        prev.map((e) =>
-          keySet.has(entryKey(e)) ? { ...e, health: "unknown" } : e,
-        ),
-      );
-
       const checks = pageEntries.map(async (entry) => {
         try {
-          const res = await fetch(`/api/health?ip=${encodeURIComponent(entry.ip)}`);
+          const res = await fetch(
+            `/api/health?ip=${encodeURIComponent(entry.ip)}`,
+          );
           const data = (await res.json()) as { healthy?: string };
-          return { key: entryKey(entry), health: data.healthy as IndexerWithHealth["health"] };
+          return {
+            key: entryKey(entry),
+            health: data.healthy as IndexerWithHealth["health"],
+          };
         } catch {
           return { key: entryKey(entry), health: "unhealthy" as const };
         }
@@ -95,7 +89,6 @@ export function IndexerList() {
       for (const result of results) {
         if (result.status === "fulfilled") {
           healthByKey.set(result.value.key, result.value.health);
-          console.log(result.value.key, result.value.health);
         }
       }
 
@@ -116,7 +109,7 @@ export function IndexerList() {
       alive = false;
       clearInterval(intervalId);
     };
-  }, [entries.length, page]);
+  }, [entries, page]);
 
   const totalPages = useMemo(() => {
     if (totalEntries === 0) return 1;
