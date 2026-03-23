@@ -86,7 +86,7 @@ export function IndexerList() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold mb-4">Indexer Peers</h2>
           <span className="text-sm text-muted-foreground">
-            Showing {page} of {totalPages}
+            Showing {page} of {totalPages} pages
           </span>
         </div>
 

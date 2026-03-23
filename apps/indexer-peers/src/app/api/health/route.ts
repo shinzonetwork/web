@@ -26,7 +26,10 @@ export async function GET(req: NextRequest) {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to check health:", err);
+    }
     return new Response(JSON.stringify({ healthy: "unhealthy" }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

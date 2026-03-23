@@ -1,6 +1,6 @@
 import { IndexerEntry, IndexerWithHealth } from "@/lib/shared/types";
 import { useCallback, useState } from "react";
-import { indexerEntryKey } from "./use-health-check";
+import { indexerEntryKey } from "@/lib/shared/helpers";
 
 const DEFAULT_PAGE_SIZE = 10;
 

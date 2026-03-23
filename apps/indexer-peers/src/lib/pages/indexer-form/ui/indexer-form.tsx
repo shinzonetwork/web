@@ -40,7 +40,7 @@ export function IndexerForm() {
           <div className="col-span-2">
             <label className="block text-sm mb-1">Validator address</label>
             <input
-              value={address}
+              value={address ?? ""}
               name="validatorAddress"
               onChange={handleChange}
               disabled

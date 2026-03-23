@@ -110,7 +110,10 @@ export async function GET(req: NextRequest) {
         headers: { "Content-Type": "application/json" },
       },
     );
-  } catch {
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to load indexers:", err);
+    }
     return new Response(JSON.stringify({ error: "Failed to load indexers" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -154,7 +157,10 @@ export async function POST(req: NextRequest) {
       status: 201,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
+  } catch (err) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Failed to save indexer:", err);
+    }
     return new Response(JSON.stringify({ error: "Failed to save indexer" }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
