@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { headers } from "next/headers";
 import "./globals.css";
+import Providers from "./providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,17 +26,19 @@ export const metadata: Metadata = {
   icons: "/favicon.png",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookies = (await headers()).get("cookie");
+
   return (
     <html lang="en">
       <body
         className={`${inter.variable} ${geistMono.variable} ${jpSerif.variable}`}
       >
-        {children}
+        <Providers cookies={cookies}>{children}</Providers>
       </body>
     </html>
   );

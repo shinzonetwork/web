@@ -15,8 +15,15 @@
   },
   "dependencies": {
     "@shinzo/ui": "workspace:*",
+    "@tanstack/react-query": "^5.90.19",
+    "@wagmi/connectors": "^7.1.5",
+    "@wagmi/core": "^3.3.1",
+    "@walletconnect/ethereum-provider": "^2.23.4",
     "clsx": "^2.1.1",
-    "next": "^16.0.10"
+    "lucide-react": "^0.562.0",
+    "next": "^16.0.10",
+    "viem": "~2.44.4",
+    "wagmi": "^2.19.5"
   },
   "devDependencies": {
     "@shinzo/eslint-config": "workspace:*",
