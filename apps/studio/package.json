@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@shinzo/ui": "workspace:*",
+    "@shinzonetwork/viewbundle": "file:../../../viewbundle-js/shinzonetwork-viewbundle-1.0.0.tgz",
     "@tanstack/react-query": "^5.90.19",
     "@wagmi/connectors": "^7.1.5",
     "@wagmi/core": "^3.3.1",
