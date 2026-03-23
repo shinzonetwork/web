@@ -10,3 +10,8 @@ export type IndexerEntry = {
 export type IndexerWithHealth = IndexerEntry & {
   health: "healthy" | "unhealthy" | "unknown";
 };
+
+export type HealthCheck = {
+  key: string;
+  health: "healthy" | "unhealthy" | "unknown";
+};

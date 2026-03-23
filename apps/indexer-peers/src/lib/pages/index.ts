@@ -1,2 +1,2 @@
-export { IndexerForm } from "./indexer-form";
-export { IndexerList } from "./indexer-list";
+export { IndexerForm, useAddIndexer } from "./indexer-form";
+export { IndexerList, useHealthCheck, useLoadIndexers } from "./indexer-list";

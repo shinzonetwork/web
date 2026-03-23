@@ -1,60 +1,24 @@
-import { useMemo, useState } from "react";
-import { X } from "lucide-react";
+import { useMemo } from "react";
+import { CheckCircle, LoaderCircle, X, XCircle } from "lucide-react";
 import { useIndexerContext } from "@/lib/context";
 import { useAccount } from "wagmi";
 import { Banner } from "@/lib/widget";
-import { IndexerEntry } from "@/lib/shared/types";
-import type { Address } from "viem";
+import { useAddIndexer } from "../hook/use-add-indexer";
 
 export function IndexerForm() {
   const { isPortOpen, showIndexerForm } = useIndexerContext();
   const { address } = useAccount();
-
-  const [formData, setFormData] = useState<IndexerEntry>({
-    validatorAddress: address as Address,
-    validatorName: "",
-    ip: "",
-    discord: "",
-  });
-
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/indexers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body.error ?? "Failed to submit entry");
-      }
-      setFormData({
-        validatorAddress: address as Address,
-        validatorName: "",
-        ip: "",
-        discord: "",
-      });
-      showIndexerForm(false);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  const { formData, ipHealth, submitting, error, handleSubmit, handleChange } =
+    useAddIndexer();
 
   const isFormValid = useMemo(() => {
-    return isPortOpen && formData.validatorAddress && formData.ip.trim() !== "";
-  }, [isPortOpen, formData.validatorAddress, formData.ip]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    return (
+      isPortOpen &&
+      ipHealth === "healthy" &&
+      formData.validatorAddress &&
+      formData.ip.trim() !== ""
+    );
+  }, [isPortOpen, ipHealth, formData.validatorAddress, formData.ip]);
 
   return (
     <>
@@ -93,10 +57,27 @@ export function IndexerForm() {
             />
           </div>
           <div className="col-span-2">
-            <label className="block text-sm mb-1">
-              Public IP Address of your node{" "}
-              <span className="text-destructive">*</span>
-            </label>
+            <div className="flex items-center gap-4">
+              <label className="block text-sm mb-1">
+                Public IP Address of your node{" "}
+                <span className="text-destructive">*</span>
+              </label>
+              {ipHealth === "checking" && (
+                <LoaderCircle className="w-6 h-6 animate-spin text-muted-foreground" />
+              )}
+              {ipHealth === "healthy" && (
+                <CheckCircle
+                  fill="var(--color-success)"
+                  className="w-6 h-6 text-success-foreground"
+                />
+              )}
+              {ipHealth === "unhealthy" && (
+                <XCircle
+                  fill="var(--color-destructive)"
+                  className="w-6 h-6 text-destructive-foreground"
+                />
+              )}
+            </div>
             <input
               value={formData.ip}
               name="ip"

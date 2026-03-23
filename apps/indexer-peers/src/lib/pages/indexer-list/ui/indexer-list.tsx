@@ -1,56 +1,29 @@
-import { IndexerEntry, IndexerWithHealth } from "@/lib/shared/types";
+import { IndexerWithHealth } from "@/lib/shared/types";
 import { Pagination } from "@/lib/widget";
 import { Table } from "@/lib/widget/table/ui/table";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-
-const entryKey = (entry: { validatorAddress: string; ip: string }) =>
-  `${entry.validatorAddress}-${entry.ip}`;
+import { useHealthCheck } from "../hook/use-health-check";
+import { useLoadIndexers } from "../hook/use-load-indexers";
 
 export function IndexerList() {
   const [page, setPage] = useState(1);
-  const pageSize = 10;
-
-  const [entries, setEntries] = useState<IndexerWithHealth[]>([]);
-  const [totalEntries, setTotalEntries] = useState(0);
+  const {
+    entries,
+    totalEntries,
+    defaultPageSize,
+    loading,
+    error,
+    listRevision,
+    loadIndexers,
+    updateEntriesWithHealth,
+  } = useLoadIndexers();
+  const { fetchHealth } = useHealthCheck();
   const entriesRef = useRef(entries);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await fetch(
-          `/api/indexers?page=${page}&pageSize=${pageSize}`,
-        );
-        if (!res.ok) {
-          throw new Error(`Failed to load entries: ${res.statusText}`);
-        }
-
-        const data = (await res.json()) as {
-          entries: IndexerEntry[];
-          total: number;
-          totalPages: number;
-          page: number;
-          pageSize: number;
-        };
-
-        setTotalEntries(data.total);
-        const withHealth: IndexerWithHealth[] = data.entries.map((e) => ({
-          ...e,
-          health: "unknown",
-        }));
-        setEntries(withHealth);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Unknown error");
-      } finally {
-        setLoading(false);
-      }
-    };
-    void load();
-  }, [page]);
+    void loadIndexers(page);
+  }, [page, loadIndexers]);
 
   // Keep a ref in sync so the polling tick always uses the latest entries,
   // without re-creating the interval on every health update.
@@ -68,18 +41,7 @@ export function IndexerList() {
       const pageEntries = current;
 
       const checks = pageEntries.map(async (entry) => {
-        try {
-          const res = await fetch(
-            `/api/health?ip=${encodeURIComponent(entry.ip)}`,
-          );
-          const data = (await res.json()) as { healthy?: string };
-          return {
-            key: entryKey(entry),
-            health: data.healthy as IndexerWithHealth["health"],
-          };
-        } catch {
-          return { key: entryKey(entry), health: "unhealthy" as const };
-        }
+        return await fetchHealth(entry);
       });
 
       const results = await Promise.allSettled(checks);
@@ -92,12 +54,7 @@ export function IndexerList() {
         }
       }
 
-      setEntries((prev) =>
-        prev.map((entry) => {
-          const nextHealth = healthByKey.get(entryKey(entry));
-          return nextHealth ? { ...entry, health: nextHealth } : entry;
-        }),
-      );
+      updateEntriesWithHealth(healthByKey);
     };
 
     void tick();
@@ -109,19 +66,25 @@ export function IndexerList() {
       alive = false;
       clearInterval(intervalId);
     };
-  }, [entries, page]);
+  }, [
+    listRevision,
+    entries.length,
+    page,
+    fetchHealth,
+    updateEntriesWithHealth,
+  ]);
 
   const totalPages = useMemo(() => {
     if (totalEntries === 0) return 1;
-    return Math.max(1, Math.ceil(totalEntries / pageSize));
-  }, [totalEntries]);
+    return Math.max(1, Math.ceil(totalEntries / defaultPageSize));
+  }, [totalEntries, defaultPageSize]);
 
   return (
     <>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <section className="bg-background rounded-lg border border-border p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold mb-4">Peers</h2>
+          <h2 className="text-lg font-bold mb-4">Indexer Peers</h2>
           <span className="text-sm text-muted-foreground">
             Showing {page} of {totalPages}
           </span>
