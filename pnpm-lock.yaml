@@ -252,6 +252,9 @@ importers:
 
   apps/webapp:
     dependencies:
+      '@google-cloud/storage':
+        specifier: ^7.19.0
+        version: 7.19.0
       '@radix-ui/react-label':
         specifier: ^2.1.8
         version: 2.1.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -264,6 +267,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.8))(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@shinzo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@tanstack/react-query':
         specifier: ^5.90.12
         version: 5.90.19(react@19.2.3)
@@ -273,6 +279,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      lucide-react:
+        specifier: ^0.575.0
+        version: 0.575.0(react@19.2.3)
       next:
         specifier: ^16.0.10
         version: 16.0.10(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4)
@@ -10541,6 +10550,9 @@ packages:
 
   strnum@2.1.2:
     resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
+
+  strnum@2.2.2:
+    resolution: {integrity: sha512-DnR90I+jtXNSTXWdwrEy9FakW7UX+qUZg28gj5fk2vxxl7uS/3bpI4fjFYVmdK9etptYBPNkpahuQnEwhwECqA==}
 
   strtok3@8.1.0:
     resolution: {integrity: sha512-ExzDvHYPj6F6QkSNe/JxSlBxTh3OrI6wrAIz53ulxo1c4hBJ1bT9C/JrAthEKHWG9riVH3Xzg7B03Oxty6S2Lw==}
@@ -25345,6 +25357,8 @@ snapshots:
   strnum@1.1.2: {}
 
   strnum@2.1.2: {}
+
+  strnum@2.2.2: {}
 
   strtok3@8.1.0:
     dependencies:

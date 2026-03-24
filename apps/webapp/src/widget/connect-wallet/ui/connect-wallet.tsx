@@ -12,12 +12,12 @@ export function ConnectWallet() {
     return null;
   }
   return (
-    <div className="my-2">
+    <div>
       <Button
         onClick={() => connect({ connector: injected() })}
-        className="w-fit rounded-full"
+        className="ml-2 w-fit rounded-md  bg-primary text-primary-foreground"
       >
-        Connect Wallet
+        Connect
       </Button>
     </div>
   );
