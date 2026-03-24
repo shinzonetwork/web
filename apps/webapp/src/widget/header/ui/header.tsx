@@ -34,7 +34,7 @@ export function Header() {
           </Link>
           <Link href="/indexers">
             <Button variant="link" className=" text-md text-muted-foreground ">
-              Indexers
+              Validators
             </Button>
           </Link>
         </div>
