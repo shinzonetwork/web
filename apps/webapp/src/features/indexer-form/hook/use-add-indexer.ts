@@ -1,9 +1,10 @@
 "use client";
 
 import { IndexerEntry } from "@/shared/types";
+import { buildIndexerSubmissionMessage } from "@/shared/lib";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Address, zeroAddress } from "viem";
-import { useAccount } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { useHealthCheck } from "../../indexer-list";
 import { useRouter } from "next/navigation";
 
@@ -13,6 +14,7 @@ export type IpHealthStatus = "idle" | "checking" | "healthy" | "unhealthy";
 
 export const useAddIndexer = () => {
   const { address } = useAccount();
+  const { signMessageAsync } = useSignMessage();
   const router = useRouter();
   const { fetchHealth } = useHealthCheck();
 
@@ -42,7 +44,7 @@ export const useAddIndexer = () => {
     () => () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     },
-    [],
+    []
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,10 +52,24 @@ export const useAddIndexer = () => {
     setSubmitting(true);
     setError(null);
     try {
+      if (!address) {
+        throw new Error("Wallet not connected");
+      }
+
+      const message = buildIndexerSubmissionMessage({
+        validatorAddress: address,
+        ip: formData.ip,
+      });
+      const signature = await signMessageAsync({ message });
+
       const res = await fetch("/api/indexers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          message,
+          signature,
+        }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -103,7 +119,7 @@ export const useAddIndexer = () => {
         setIpHealth(result.health === "healthy" ? "healthy" : "unhealthy");
       }, IP_HEALTH_DEBOUNCE_MS);
     },
-    [address, fetchHealth],
+    [address, fetchHealth]
   );
 
   return {

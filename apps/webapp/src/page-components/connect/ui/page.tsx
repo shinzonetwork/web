@@ -9,9 +9,10 @@ export function Connect() {
   const { isSignedWithWallet } = useRegistrationContext();
 
   if (isConnected && isSignedWithWallet) {
-    return (<div className="flex flex-row items-center justify-end">
-      <DisconnectWallet />
-    </div>
+    return (
+      <div className="flex flex-row items-center justify-end">
+        <DisconnectWallet />
+      </div>
     );
   }
   return (

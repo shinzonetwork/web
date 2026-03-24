@@ -14,10 +14,10 @@ export default function Register() {
   return (
     <>
       <Header />
-    <div className="mx-12 my-12 flex flex-col gap-4">
-      <FormHeader />
-      {isConnected && isSignedWithWallet && <Registration />}
-    </div>
+      <div className="mx-12 my-12 flex flex-col gap-4">
+        <FormHeader />
+        {isConnected && isSignedWithWallet && <Registration />}
+      </div>
     </>
   );
 }

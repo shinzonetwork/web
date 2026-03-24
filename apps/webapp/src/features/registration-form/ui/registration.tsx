@@ -24,17 +24,17 @@ export default function Registration() {
   return (
     <>
       <div className="flex flex-row items-center justify-end">
-      <button
-            onClick={handleCopyAddress}
-            className="font-mono text-sm underline hover:text-[#D32C34] cursor-pointer transition-colors"
-            type="button"
-            title="Click to copy address"
-          >
-            <div className="flex items-center gap-1">
-              {shortenAddress(address)}
-              <Copy className="w-4 h-4" />
-            </div>
-          </button>
+        <button
+          onClick={handleCopyAddress}
+          className="font-mono text-sm underline hover:text-[#D32C34] cursor-pointer transition-colors"
+          type="button"
+          title="Click to copy address"
+        >
+          <div className="flex items-center gap-1">
+            {shortenAddress(address)}
+            <Copy className="w-4 h-4" />
+          </div>
+        </button>
       </div>
       <RegistrationForm />
     </>

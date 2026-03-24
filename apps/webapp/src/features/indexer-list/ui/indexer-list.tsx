@@ -101,10 +101,10 @@ export function IndexerList() {
           <>
             {(() => {
               const onlineEntries = entries.filter(
-                (e) => e.health === "healthy",
+                (e) => e.health === "healthy"
               );
               const offlineEntries = entries.filter(
-                (e) => e.health !== "healthy",
+                (e) => e.health !== "healthy"
               );
 
               return (

@@ -39,7 +39,7 @@ export function Table({ entries }: TableProps) {
                       "px-2 py-1 rounded-md text-xs",
                       entry.health === "healthy"
                         ? "bg-success/20 text-success"
-                        : "bg-destructive/20 text-destructive",
+                        : "bg-destructive/20 text-destructive"
                     )}
                   >
                     {entry.health === "healthy" ? "Online" : "Offline"}

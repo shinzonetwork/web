@@ -6,13 +6,9 @@ import { RegistrationContext as RegistrationContextType } from "./types";
  */
 export const RegistrationContext = createContext<RegistrationContextType>({
   isPortOpen: false,
-  isIndexerFormOpen: false,
-  isRegistrationFormOpen: false,
   isRegistered: false,
   isSignedWithWallet: false,
   setRegistered: () => {},
   handleSignedWithWallet: () => {},
-  handleRegistrationFormOpen: () => {},
-  showIndexerForm: () => {},
   showPortOpen: () => {},
 });

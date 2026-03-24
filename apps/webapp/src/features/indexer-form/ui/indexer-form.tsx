@@ -26,7 +26,7 @@ export function IndexerForm() {
 
   const handleFormClose = () => {
     router.push("/indexers");
-  }
+  };
   return (
     <>
       <Banner />

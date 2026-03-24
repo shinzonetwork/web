@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { watchAccount } from "@wagmi/core";
 import { disconnect } from "@wagmi/core";
 import config from "@/shared/config";
-import { useRegistrationContext } from "@/entities/registration-process";
 import { toast } from "react-toastify";
 import { TOAST_CONFIG } from "@/shared/lib";
 
@@ -13,8 +13,8 @@ function shortAddress(address: string) {
 }
 
 export function WalletChangeGuard() {
+  const router = useRouter();
   const mountedRef = useRef(false);
-  const { showIndexerForm } = useRegistrationContext();
 
   useEffect(() => {
     const unwatch = watchAccount(config, {
@@ -29,17 +29,17 @@ export function WalletChangeGuard() {
 
         if (prev && next && prev !== next) {
           disconnect(config);
-          showIndexerForm(false);
+          router.push("/");
           toast.error(
             `Wallet changed to ${shortAddress(account.address ?? "")}. Please reconnect.`,
-            TOAST_CONFIG,
+            TOAST_CONFIG
           );
         }
       },
     });
 
     return () => unwatch();
-  }, [showIndexerForm]);
+  }, [router]);
 
   return null;
 }

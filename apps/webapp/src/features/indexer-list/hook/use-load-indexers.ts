@@ -19,7 +19,7 @@ export const useLoadIndexers = () => {
       setError(null);
       try {
         const res = await fetch(
-          `/api/indexers?page=${page}&pageSize=${pageSize}`,
+          `/api/indexers?page=${page}&pageSize=${pageSize}`
         );
         if (!res.ok) {
           throw new Error(`Failed to load entries: ${res.statusText}`);
@@ -46,7 +46,7 @@ export const useLoadIndexers = () => {
         setLoading(false);
       }
     },
-    [],
+    []
   );
 
   const updateEntriesWithHealth = useCallback(
@@ -55,10 +55,10 @@ export const useLoadIndexers = () => {
         prev.map((entry) => {
           const nextHealth = healthByKey.get(indexerEntryKey(entry));
           return nextHealth ? { ...entry, health: nextHealth } : entry;
-        }),
+        })
       );
     },
-    [],
+    []
   );
 
   return {

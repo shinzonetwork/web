@@ -1,1 +1,1 @@
-export { Indexers as default } from '@/page-components/indexers';
+export { Indexers as default } from "@/page-components/indexers";
