@@ -26,10 +26,10 @@ async function fetchIndexerHealth(
   );
 
   try {
-    const res = await fetch(`http://${host}:8080/health`, {
+    const res = await fetch(`https://${host}/health`, {
       method: "GET",
       cache: "no-store",
-      redirect: "error",
+      redirect: "follow",
       signal: controller.signal,
     });
 

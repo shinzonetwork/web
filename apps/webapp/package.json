@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:next": "next build",
+    "build:worker": "opennextjs-cloudflare build --skipNextBuild",
+    "build": "pnpm build:next && pnpm build:worker",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "build-and-deploy": "pnpm build && wrangler deploy",
-    "build-and-upload": "pnpm build && wrangler versions upload"
+    "cf:dev": "pnpm build && npx wrangler dev",
+    "cf:deploy": "pnpm build && npx wrangler deploy",
+    "upload": "pnpm build && opennextjs-cloudflare upload"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
@@ -32,6 +35,7 @@
 
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250320.0",
     "@shinzo/eslint-config": "workspace:*",
     "abitype": "^1.2.3",
     "prettier": "^3.7.4",

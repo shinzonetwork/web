@@ -14,7 +14,6 @@ export function IndexerList() {
     totalEntries,
     defaultPageSize,
     loading,
-    error,
     listRevision,
     loadIndexers,
     updateEntriesWithHealth,
@@ -82,7 +81,6 @@ export function IndexerList() {
 
   return (
     <>
-      {error && <p className="text-sm text-destructive">{error}</p>}
       <section className="bg-background rounded-lg border border-border p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold mb-4">Devnet Indexers</h2>

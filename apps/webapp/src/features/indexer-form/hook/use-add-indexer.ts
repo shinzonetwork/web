@@ -62,7 +62,7 @@ export const useAddIndexer = () => {
       });
       const signature = await signMessageAsync({ message });
 
-      const res = await fetch("/api/indexers", {
+      const res = await fetch("/api/saveIndexer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -73,7 +73,9 @@ export const useAddIndexer = () => {
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error ?? "Failed to submit entry");
+        throw new Error(
+          (body as { error?: string }).error ?? "Failed to submit entry"
+        );
       }
       setFormData({
         validatorAddress: address as Address,

@@ -19,7 +19,7 @@ export const useLoadIndexers = () => {
       setError(null);
       try {
         const res = await fetch(
-          `/api/indexers?page=${page}&pageSize=${pageSize}`
+          `/api/getIndexers?page=${page}&pageSize=${pageSize}`
         );
         if (!res.ok) {
           throw new Error(`Failed to load entries: ${res.statusText}`);

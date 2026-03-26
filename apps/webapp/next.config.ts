@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
-  output: 'export',
+  output: "standalone",
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
