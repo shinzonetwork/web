@@ -11,7 +11,7 @@
     // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
     "global_fetch_strictly_public"
   ],
-  "preview_urls": false,
+  "preview_urls": true,
   "keep_vars": true,
   "routes": [
     {
