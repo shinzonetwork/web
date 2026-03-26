@@ -47,15 +47,17 @@ export function RegistrationRadioButton({
             "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
             "border shadow-xs outline-none",
             selectedEntityValue === "1"
-              ? "bg-primary/60 border-accent text-white"
-              : "bg-background hover:bg-accent hover:text-accent-foreground"
+              ? "bg-muted-foreground border-muted text-muted"
+              : "bg-background hover:bg-muted-foreground/20 hover:text-muted-foreground/70"
           )}
         >
           <span className="flex items-center justify-center size-7 border border-border rounded-sm">
             <ShinzoFilledIcon
               className={cn(
                 "size-4",
-                selectedEntityValue === "1" ? "text-white" : "text-primary/60"
+                selectedEntityValue === "1"
+                  ? "text-white"
+                  : "text-muted-foreground"
               )}
             />
           </span>
@@ -77,8 +79,8 @@ export function RegistrationRadioButton({
                 "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all cursor-pointer",
                 "border shadow-xs outline-none disabled:pointer-events-none disabled:opacity-50",
                 selectedEntityValue === "2"
-                  ? "bg-primary/60 border-accent text-white"
-                  : "bg-background hover:bg-accent hover:text-accent-foreground",
+                  ? "bg-muted-foreground border-muted text-muted"
+                  : "bg-background hover:bg-muted-foreground/20 hover:text-muted-foreground/70",
                 !isIndexerWhitelisted ? "opacity-50 cursor-not-allowed" : ""
               )}
             >
@@ -88,7 +90,7 @@ export function RegistrationRadioButton({
                     "size-4",
                     selectedEntityValue === "2"
                       ? "text-white"
-                      : "text-primary/60"
+                      : "text-muted-foreground"
                   )}
                 />
               </span>

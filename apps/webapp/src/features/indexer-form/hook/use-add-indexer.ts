@@ -2,6 +2,7 @@
 
 import { IndexerEntry } from "@/shared/types";
 import { buildIndexerSubmissionMessage } from "@/shared/lib";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Address, zeroAddress } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
@@ -16,11 +17,10 @@ export const useAddIndexer = () => {
   const { address } = useAccount();
   const { signMessageAsync } = useSignMessage();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { fetchHealth } = useHealthCheck();
 
   const [ipHealth, setIpHealth] = useState<IpHealthStatus>("idle");
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<IndexerEntry>({
     validatorAddress: address as Address,
     validatorName: "",
@@ -47,18 +47,15 @@ export const useAddIndexer = () => {
     []
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setError(null);
-    try {
+  const submitMutation = useMutation({
+    mutationFn: async (payload: IndexerEntry) => {
       if (!address) {
         throw new Error("Wallet not connected");
       }
 
       const message = buildIndexerSubmissionMessage({
         validatorAddress: address,
-        ip: formData.ip,
+        ip: payload.ip,
       });
       const signature = await signMessageAsync({ message });
 
@@ -66,7 +63,7 @@ export const useAddIndexer = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
+          ...payload,
           message,
           signature,
         }),
@@ -77,6 +74,8 @@ export const useAddIndexer = () => {
           (body as { error?: string }).error ?? "Failed to submit entry"
         );
       }
+    },
+    onSuccess: async () => {
       setFormData({
         validatorAddress: address as Address,
         validatorName: "",
@@ -84,12 +83,14 @@ export const useAddIndexer = () => {
         discord: "",
       });
       setIpHealth("idle");
-      router.push("/indexers");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error");
-    } finally {
-      setSubmitting(false);
-    }
+      await queryClient.invalidateQueries({ queryKey: ["indexers"] });
+      router.push("/validators");
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await submitMutation.mutateAsync(formData);
   };
 
   const handleChange = useCallback(
@@ -127,8 +128,11 @@ export const useAddIndexer = () => {
   return {
     formData,
     ipHealth,
-    submitting,
-    error,
+    submitting: submitMutation.isPending,
+    error:
+      submitMutation.error instanceof Error
+        ? submitMutation.error.message
+        : null,
     handleSubmit,
     handleChange,
   };

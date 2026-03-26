@@ -51,7 +51,7 @@ export async function GET(req: NextRequest) {
         `SELECT validator_id, validator_address, validator_name, validator_public_ip, validator_discord_handle
          FROM validator_details
          ORDER BY validator_id DESC
-         LIMIT ? OFFSET ?`,
+         LIMIT ? OFFSET ?`
       )
       .bind(pageSize, offset)
       .all();
@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
+      }
     );
   } catch (err) {
     if (process.env.NODE_ENV === "development") {

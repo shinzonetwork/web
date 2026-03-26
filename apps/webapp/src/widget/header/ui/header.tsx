@@ -32,7 +32,7 @@ export function Header() {
               Registration
             </Button>
           </Link>
-          <Link href="/indexers">
+          <Link href="/validators">
             <Button variant="link" className=" text-md text-muted-foreground ">
               Validators
             </Button>

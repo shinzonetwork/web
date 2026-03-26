@@ -25,7 +25,7 @@ export function IndexerForm() {
   }, [isPortOpen, ipHealth, formData.validatorAddress, formData.ip]);
 
   const handleFormClose = () => {
-    router.push("/indexers");
+    router.push("/validators");
   };
   return (
     <>
@@ -93,6 +93,12 @@ export function IndexerForm() {
               placeholder="192.168.0.1"
               className="w-full p-2 rounded-md border border-border bg-background text-foreground"
             />
+            {ipHealth === "unhealthy" && (
+              <p className="mt-2 text-sm text-destructive">
+                IP address is not healthy. Please check if your node is running
+                and accessible.
+              </p>
+            )}
           </div>
           <div className="col-span-2">
             <label className="block text-sm mb-1">Discord handle</label>
