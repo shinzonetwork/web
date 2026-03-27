@@ -12,6 +12,6 @@ export const UI_TEXT_CONTENT = {
   registration: {
     title: "/ Register on the Shinzo Network",
     description:
-      "Please fill in the following information to register on the Shinzo Network.",
+      "Sign up your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
   },
 } as const;

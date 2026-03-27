@@ -17,6 +17,7 @@ export const RegistrationContextProvider = ({
   const { address, isConnected } = useAccount();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [signedState, setSignedState] = useState<Record<string, boolean>>({});
+  const [isPortOpen, setIsPortOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const loadSignedState = () => {
@@ -73,16 +74,20 @@ export const RegistrationContextProvider = ({
 
   const context: RegistrationContextType = useMemo(() => {
     return {
+      isPortOpen,
       isRegistered,
       isSignedWithWallet,
       setRegistered: (registered: boolean) => setIsRegistered(registered),
       handleSignedWithWallet: handleSignedWithWallet,
+      showPortOpen: (open: boolean) => setIsPortOpen(open),
     };
   }, [
     isRegistered,
     isSignedWithWallet,
     setIsRegistered,
     handleSignedWithWallet,
+    isPortOpen,
+    setIsPortOpen,
   ]);
 
   return (
