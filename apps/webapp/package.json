@@ -5,17 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build:next": "next build",
-    "build:worker": "opennextjs-cloudflare build --skipNextBuild",
-    "build": "pnpm build:next && pnpm build:worker",
-    "start": "next start",
+    "build": "next build",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "build-and-upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "cf:dev": "pnpm build && wrangler dev",
-    "cf:deploy": "pnpm build && wrangler deploy",
-    "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "build-and-upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",
