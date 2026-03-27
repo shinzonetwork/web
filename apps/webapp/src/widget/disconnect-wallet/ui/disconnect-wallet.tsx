@@ -17,7 +17,7 @@ export function DisconnectWallet() {
         <div className="gap-4">
           <Button
             onClick={handleDisconnectWallet}
-            className="ml-4 w-fit rounded-md"
+            className="ml-4 w-fit rounded-md bg-muted-foreground text-muted hover:bg-muted-foreground/90"
           >
             Disconnect
           </Button>

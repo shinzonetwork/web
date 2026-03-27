@@ -15,7 +15,7 @@ export function ConnectWallet() {
     <div>
       <Button
         onClick={() => connect({ connector: injected() })}
-        className="ml-2 w-fit rounded-md  bg-primary text-primary-foreground"
+        className="ml-2 w-fit rounded-md  bg-muted-foreground text-muted hover:bg-muted-foreground/90"
       >
         Connect
       </Button>
