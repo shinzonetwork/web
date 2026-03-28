@@ -1,23 +1,13 @@
 import { NextRequest } from "next/server";
 import type { Address } from "viem";
 import { getDb } from "@/shared/lib/database/db";
-import type { IndexerEntry } from "@/shared/types";
-
-type ValidatorRow = {
-  validator_address: string;
-  validator_name: string | null;
-  validator_public_ip: string;
-  validator_discord_handle: string | null;
-};
+import type { IndexerEntry, ValidatorRow } from "@/shared/types";
 
 function rowToIndexerEntry(row: ValidatorRow): IndexerEntry {
   return {
     validatorAddress: row.validator_address as Address,
     ip: row.validator_public_ip,
     ...(row.validator_name ? { validatorName: row.validator_name } : {}),
-    ...(row.validator_discord_handle
-      ? { discord: row.validator_discord_handle }
-      : {}),
   };
 }
 
@@ -48,7 +38,7 @@ export async function GET(req: NextRequest) {
     const offset = (page - 1) * pageSize;
     const { results } = await db
       .prepare(
-        `SELECT validator_id, validator_address, validator_name, validator_public_ip, validator_discord_handle
+        `SELECT validator_id, validator_address, validator_name, validator_public_ip
          FROM validator_details
          ORDER BY validator_id DESC
          LIMIT ? OFFSET ?`
