@@ -26,7 +26,6 @@ async function fetchIndexerHealth(
   entry: IndexerHealthEntry
 ): Promise<LiveDataWithKey> {
   const key = indexerEntryKey(entry);
-  const host = entry.ip.includes(":") ? `[${entry.ip}]` : entry.ip;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(
@@ -35,10 +34,9 @@ async function fetchIndexerHealth(
   );
 
   try {
-    const res = await fetch(`http://${host}:8080/health`, {
+    const res = await fetch(`/api/health?ip=${encodeURIComponent(entry.ip)}`, {
       method: "GET",
       cache: "no-store",
-      redirect: "follow",
       signal: controller.signal,
     });
 
