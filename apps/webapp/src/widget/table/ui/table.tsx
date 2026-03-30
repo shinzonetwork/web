@@ -89,10 +89,12 @@ export function Table({ entries }: TableProps) {
                 <td className="p-2 align-top min-w-0 max-w-0 whitespace-normal break-all text-xs font-mono">
                   <div className="flex items-center gap-1">
                     {peerConnectionString(entry) ?? "—"}
-                    <CopyToClipboard
-                      text={peerConnectionString(entry) ?? ""}
-                      className="text-muted-foreground/50"
-                    />
+                    {entry.peers?.id && (
+                      <CopyToClipboard
+                        text={peerConnectionString(entry) ?? ""}
+                        className="text-muted-foreground/50"
+                      />
+                    )}
                   </div>
                 </td>
                 <td className="p-2 align-top whitespace-nowrap">
