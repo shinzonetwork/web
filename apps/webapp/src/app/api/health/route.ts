@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   );
 
   try {
-    const res = await fetch(`http://${ip}:8080/health`, {
+    const res = await fetch(`http://${ip}:443/health`, {
       method: "GET",
       cache: "no-store",
       redirect: "follow",
