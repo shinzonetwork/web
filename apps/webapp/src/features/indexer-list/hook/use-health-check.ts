@@ -35,10 +35,9 @@ async function fetchIndexerHealth(
   );
 
   try {
-    const res = await fetch(`http://${host}:8080/health`, {
+    const res = await fetch(`/api/health?ip=${entry.ip}`, {
       method: "GET",
       cache: "no-store",
-      redirect: "follow",
       signal: controller.signal,
     });
 
