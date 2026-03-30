@@ -9,16 +9,16 @@ export async function GET(request: NextRequest) {
   const ip = request.nextUrl.searchParams.get("ip")?.trim() ?? "";
 
   if (!ip) {
-    return new Response(JSON.stringify({ error: "Missing ip parameter" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      { error: "Missing ip parameter" },
+      { status: 400 }
+    );
   }
   if (isIP(ip) === 0) {
-    return new Response(JSON.stringify({ error: "ip must be a valid IP" }), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json(
+      { error: "ip must be a valid IP" },
+      { status: 400 }
+    );
   }
 
   const controller = new AbortController();
@@ -35,25 +35,18 @@ export async function GET(request: NextRequest) {
       signal: controller.signal,
     });
     if (!res.ok) {
-      return new Response(JSON.stringify({ status: "unhealthy" }), {
-        status: res.status,
-        headers: { "Content-Type": "application/json" },
-      });
+      return NextResponse.json({ status: "unhealthy" }, { status: res.status });
     }
 
     const data = await res.json();
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
+    return NextResponse.json(data, {
+      status: res.status,
     });
   } catch (err) {
     if (process.env.NODE_ENV === "development") {
       console.error("Failed to check health:", err);
     }
-    return new Response(JSON.stringify({ status: "unhealthy" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ status: "unhealthy" }, { status: 502 });
   } finally {
     clearTimeout(timeoutId);
   }
