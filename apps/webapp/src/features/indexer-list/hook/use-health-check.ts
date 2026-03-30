@@ -35,7 +35,7 @@ async function fetchIndexerHealth(
   );
 
   try {
-    const res = await fetch(`https://${host}/health`, {
+    const res = await fetch(`http://${host}:8080/health`, {
       method: "GET",
       cache: "no-store",
       redirect: "follow",
