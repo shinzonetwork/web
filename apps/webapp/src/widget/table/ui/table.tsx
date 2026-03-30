@@ -79,7 +79,14 @@ export function Table({ entries }: TableProps) {
                   {entry.validatorName}
                 </td>
                 <td className="p-2 align-top whitespace-nowrap font-mono text-xs">
-                  {entry.ip}
+                  <a
+                    href={`https://${entry.ip}/health`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-500 underline hover:text-blue-600"
+                  >
+                    {entry.ip}
+                  </a>
                 </td>
                 <td className="p-2 align-top min-w-0 max-w-0 whitespace-normal break-all text-xs font-mono">
                   <div className="flex items-center gap-1">
