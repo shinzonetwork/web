@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getDb } from "@/shared/lib/database/db";
 import { Hex, getAddress, isAddress, verifyMessage } from "viem";
-import { IndexerEntry } from "@/shared/types";
+import { IndexerEntry, ValidatorRow } from "@/shared/types";
 import {
   buildIndexerSubmissionMessage,
   isIndexerWhitelisted,
@@ -108,6 +108,19 @@ export async function POST(request: NextRequest) {
 
     const db = getDb();
 
+    const validatorRow = await db
+      .prepare("SELECT * FROM validator_details WHERE validator_address = ?")
+      .bind(validatorAddress)
+      .first<ValidatorRow>();
+    if (validatorRow) {
+      return new Response(
+        JSON.stringify({ error: "Validator already exists" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
     await db
       .prepare(
         "INSERT INTO validator_details (validator_address, validator_public_ip, validator_discord_handle, validator_name) VALUES (?, ?, ?, ?)"

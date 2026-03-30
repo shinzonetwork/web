@@ -27,6 +27,7 @@ export function IndexerForm() {
   const handleFormClose = () => {
     router.push("/validators");
   };
+
   return (
     <>
       <Banner />
@@ -45,7 +46,12 @@ export function IndexerForm() {
           className="grid grid-cols-2 gap-4 items-end"
         >
           <div className="col-span-2">
-            <label className="block text-sm mb-1">Validator address</label>
+            <span className="text-sm flex items-center gap-2 text-muted-foreground">
+              <label className="block text-sm mb-1">Validator address</label>
+              <span className="text-sm text-bold text-primary">
+                {error === "Validator already exists" ? `${error}` : ""}
+              </span>
+            </span>
             <input
               value={address ?? ""}
               name="validatorAddress"
@@ -120,7 +126,7 @@ export function IndexerForm() {
             </button>
           </div>
         </form>
-        {error && (
+        {error !== "Validator already exists" && error !== null && (
           <p className="mt-3 text-sm text-destructive">Error: {error}</p>
         )}
       </section>
