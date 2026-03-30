@@ -119,7 +119,7 @@ export const useAddIndexer = () => {
           ip: trimmed,
         });
         if (id !== healthRequestIdRef.current) return;
-        setIpHealth(result.health === "healthy" ? "healthy" : "unhealthy");
+        setIpHealth(result.data.health === "healthy" ? "healthy" : "unhealthy");
       }, IP_HEALTH_DEBOUNCE_MS);
     },
     [address, fetchHealth]

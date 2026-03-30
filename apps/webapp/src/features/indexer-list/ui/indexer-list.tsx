@@ -1,6 +1,6 @@
 "use client";
 
-import { IndexerWithHealth } from "@/shared/types";
+import { LiveData, LiveDataWithKey } from "@/shared/types";
 import { Pagination, Table } from "@/widget";
 import { LoaderCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -16,7 +16,7 @@ export function IndexerList() {
     loading,
     listRevision,
     loadIndexers,
-    updateEntriesWithHealth,
+    updateEntriesWithLiveData,
   } = useLoadIndexers();
   const { fetchHealth } = useHealthCheck();
   const entriesRef = useRef(entries);
@@ -44,17 +44,17 @@ export function IndexerList() {
         return await fetchHealth(entry);
       });
 
-      const results = await Promise.allSettled(checks);
+      const results = await Promise.allSettled<LiveDataWithKey>(checks);
       if (!alive) return;
 
-      const healthByKey = new Map<string, IndexerWithHealth["health"]>();
+      const liveDataByKey = new Map<string, LiveData>();
       for (const result of results) {
         if (result.status === "fulfilled") {
-          healthByKey.set(result.value.key, result.value.health);
+          liveDataByKey.set(result.value.key, result.value.data);
         }
       }
 
-      updateEntriesWithHealth(healthByKey);
+      updateEntriesWithLiveData(liveDataByKey);
     };
 
     void tick();
@@ -71,7 +71,7 @@ export function IndexerList() {
     entries.length,
     page,
     fetchHealth,
-    updateEntriesWithHealth,
+    updateEntriesWithLiveData,
   ]);
 
   const totalPages = useMemo(() => {

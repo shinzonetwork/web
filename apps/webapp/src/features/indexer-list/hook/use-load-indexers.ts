@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { IndexerEntry, IndexerWithHealth } from "@/shared/types";
+import { IndexerEntry, LiveData, LiveIndexer } from "@/shared/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { indexerEntryKey } from "@/shared/lib";
 
@@ -16,7 +16,7 @@ type IndexerResponse = {
 const DEFAULT_PAGE_SIZE = 10;
 
 export const useLoadIndexers = () => {
-  const [entries, setEntries] = useState<IndexerWithHealth[]>([]);
+  const [entries, setEntries] = useState<LiveIndexer[]>([]);
   const [listRevision, setListRevision] = useState(0);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -40,7 +40,7 @@ export const useLoadIndexers = () => {
 
   useEffect(() => {
     if (!query.data) return;
-    const withHealth: IndexerWithHealth[] = query.data.entries.map((e) => ({
+    const withHealth: LiveIndexer[] = query.data.entries.map((e) => ({
       ...e,
       health: "unknown",
     }));
@@ -56,12 +56,12 @@ export const useLoadIndexers = () => {
     []
   );
 
-  const updateEntriesWithHealth = useCallback(
-    (healthByKey: Map<string, IndexerWithHealth["health"]>) => {
+  const updateEntriesWithLiveData = useCallback(
+    (liveDataByKey: Map<string, LiveData>) => {
       setEntries((prev) =>
         prev.map((entry) => {
-          const nextHealth = healthByKey.get(indexerEntryKey(entry));
-          return nextHealth ? { ...entry, health: nextHealth } : entry;
+          const nextLiveData = liveDataByKey.get(indexerEntryKey(entry));
+          return nextLiveData ? { ...entry, ...nextLiveData } : entry;
         })
       );
     },
@@ -81,6 +81,6 @@ export const useLoadIndexers = () => {
     error,
     listRevision,
     loadIndexers,
-    updateEntriesWithHealth,
+    updateEntriesWithLiveData,
   };
 };

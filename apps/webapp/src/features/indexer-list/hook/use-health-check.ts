@@ -1,11 +1,20 @@
 import { useQueryClient, type QueryKey } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { IndexerWithHealth } from "@/shared/types";
+import { LiveDataWithKey, HealthStatus, Peer } from "@/shared/types";
 import { indexerEntryKey } from "@/shared/lib";
 
-export type IndexerHealthEntry = {
+type IndexerHealthEntry = {
   validatorAddress: string;
   ip: string;
+};
+
+type IndexerHealthResponse = {
+  status?: string;
+  p2p: {
+    enabled: boolean;
+    peers: Peer[];
+    self: Peer;
+  };
 };
 
 export const indexerHealthQueryKey = (entry: IndexerHealthEntry): QueryKey =>
@@ -15,7 +24,7 @@ const HEALTH_CHECK_TIMEOUT_MS = 5000;
 
 async function fetchIndexerHealth(
   entry: IndexerHealthEntry
-): Promise<{ key: string; health: IndexerWithHealth["health"] }> {
+): Promise<LiveDataWithKey> {
   const key = indexerEntryKey(entry);
   const host = entry.ip.includes(":") ? `[${entry.ip}]` : entry.ip;
 
@@ -34,17 +43,17 @@ async function fetchIndexerHealth(
     });
 
     if (!res.ok) {
-      return { key, health: "unhealthy" };
+      return { key, data: { health: "unhealthy", peers: null } };
     }
 
-    const data = (await res.json()) as { status?: string };
-    const raw = data.status;
-    const health: IndexerWithHealth["health"] =
-      raw === "healthy" ? "healthy" : "unhealthy";
+    const data = (await res.json()) as IndexerHealthResponse;
+    const peers = data.p2p?.self ? data.p2p.self : null;
+    const health: HealthStatus =
+      data.status === "healthy" ? "healthy" : "unhealthy";
 
-    return { key, health };
+    return { key, data: { health, peers } };
   } catch {
-    return { key, health: "unhealthy" };
+    return { key, data: { health: "unhealthy", peers: null } };
   } finally {
     clearTimeout(timeoutId);
   }

@@ -7,17 +7,28 @@ export type IndexerEntry = {
   discord?: string;
 };
 
-export type IndexerWithHealth = IndexerEntry & {
-  health: "healthy" | "unhealthy" | "unknown";
+export type HealthStatus = "healthy" | "unhealthy" | "unknown";
+
+export type Peer = {
+  id: string;
+  addresses: string[];
+  public_key: string;
 };
 
-export type HealthCheck = {
-  key: string;
-  health: "healthy" | "unhealthy" | "unknown";
+export type LiveData = {
+  health?: HealthStatus;
+  peers?: Peer | null;
 };
+
+export type LiveDataWithKey = {
+  key: string;
+  data: LiveData;
+};
+
+export type LiveIndexer = IndexerEntry & LiveData;
 
 export type ValidatorRow = {
-  validator_address: string;
-  validator_name: string | null;
+  validator_address: Address;
   validator_public_ip: string;
+  validator_name?: string;
 };
