@@ -1,17 +1,19 @@
 "use client";
 
-import { IndexerEntry } from "@/shared/types";
-import { buildIndexerSubmissionMessage } from "@/shared/lib";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
-import { type Address } from "viem";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { type Address, zeroAddress } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
 import { useRouter } from "next/navigation";
+
 import { useRegistrationContext } from "@/entities";
+import { useHealthCheck } from "@/features/indexer-list";
+import { IndexerEntry } from "@/shared/types";
+import { buildIndexerSubmissionMessage } from "@/shared/lib";
 
-// const IP_HEALTH_DEBOUNCE_MS = 450;
+const IP_HEALTH_DEBOUNCE_MS = 450;
 
-// export type IpHealthStatus = "idle" | "checking" | "healthy" | "unhealthy";
+export type IpHealthStatus = "idle" | "checking" | "healthy" | "unhealthy";
 
 export const useAddIndexer = () => {
   const { address } = useAccount();
@@ -19,9 +21,9 @@ export const useAddIndexer = () => {
   const { showPortOpen } = useRegistrationContext();
   const router = useRouter();
   const queryClient = useQueryClient();
-  // const { fetchHealth } = useHealthCheck();
+  const { fetchHealth } = useHealthCheck();
 
-  // const [ipHealth, setIpHealth] = useState<IpHealthStatus>("idle");
+  const [ipHealth, setIpHealth] = useState<IpHealthStatus>("idle");
   const [formData, setFormData] = useState<IndexerEntry>({
     validatorAddress: address as Address,
     validatorName: "",
@@ -29,8 +31,8 @@ export const useAddIndexer = () => {
     discord: "",
   });
 
-  // const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // const healthRequestIdRef = useRef(0);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const healthRequestIdRef = useRef(0);
 
   useEffect(() => {
     if (address) {
@@ -41,12 +43,12 @@ export const useAddIndexer = () => {
     }
   }, [address]);
 
-  // useEffect(
-  //   () => () => {
-  //     if (debounceRef.current) clearTimeout(debounceRef.current);
-  //   },
-  //   []
-  // );
+  useEffect(
+    () => () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    },
+    []
+  );
 
   const submitMutation = useMutation({
     mutationFn: async (payload: IndexerEntry) => {
@@ -83,7 +85,7 @@ export const useAddIndexer = () => {
         ip: "",
         discord: "",
       });
-      // setIpHealth("idle");
+      setIpHealth("idle");
       showPortOpen(false);
       await queryClient.invalidateQueries({ queryKey: ["indexers"] });
       router.push("/validators");
@@ -95,38 +97,41 @@ export const useAddIndexer = () => {
     await submitMutation.mutateAsync(formData);
   };
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // if (name !== "ip") return;
+      if (name !== "ip") return;
 
-    // if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    // const trimmed = value.trim();
-    // if (!trimmed) {
-    //   setIpHealth("idle");
-    //   return;
-    // }
+      const trimmed = value.trim();
+      if (!trimmed) {
+        setIpHealth("idle");
+        return;
+      }
 
-    // setIpHealth("checking");
+      setIpHealth("checking");
 
-    // debounceRef.current = setTimeout(async () => {
-    //   const id = ++healthRequestIdRef.current;
-    //   const validatorAddress = address ?? zeroAddress;
-    //   const result = await fetchHealth({
-    //     validatorAddress,
-    //     ip: trimmed,
-    //   });
-    //   if (id !== healthRequestIdRef.current) return;
-    //   setIpHealth(result.data.health === "healthy" ? "healthy" : "unhealthy");
-    // }, IP_HEALTH_DEBOUNCE_MS);
-  }, []);
+      debounceRef.current = setTimeout(async () => {
+        const id = ++healthRequestIdRef.current;
+        const validatorAddress = address ?? zeroAddress;
+        const result = await fetchHealth({
+          validatorAddress,
+          ip: trimmed,
+        });
+        if (id !== healthRequestIdRef.current) return;
+        setIpHealth(result.data.health === "healthy" ? "healthy" : "unhealthy");
+      }, IP_HEALTH_DEBOUNCE_MS);
+    },
+    [address, fetchHealth]
+  );
 
   return {
     formData,
-    // ipHealth,
+    ipHealth,
     submitting: submitMutation.isPending,
     error:
       submitMutation.error instanceof Error

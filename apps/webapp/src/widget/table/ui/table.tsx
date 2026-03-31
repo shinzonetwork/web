@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
+import { cn } from "@/shared/lib";
 import { LiveIndexer } from "@/shared/types";
 import { Button } from "@/shared/ui/button";
 import { CopyToClipboard } from "@/widget/copy-to-clipboard";
-import { useState } from "react";
 
 type TableProps = {
   entries: LiveIndexer[];
@@ -40,30 +42,34 @@ export function Table({ entries }: TableProps) {
   };
 
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full table-fixed border-collapse text-sm">
+    <div className="w-full max-w-full overflow-x-auto">
+      <table className="w-full min-w-2xl table-fixed border-collapse text-sm md:min-w-0">
         <colgroup>
-          <col className="w-[15%]" />
+          {/* Narrow outer columns; wide middle (Peer ID + Connection string). */}
           <col className="w-[12%]" />
-          <col className="w-[20%]" />
-          <col className="w-[37%]" />
-          <col className="w-[9%]" />
-          <col className="w-[9%]" />
+          <col className="w-[14%]" />
+          <col className="w-[27%]" />
+          <col className="w-[31%]" />
+          <col className="w-[8%]" />
+          <col className="w-[8%]" />
         </colgroup>
         <thead>
           <tr className="text-left border-b border-border">
-            <th className="p-2">Validator Name</th>
-            <th className="p-2">Indexer Public IP</th>
-            <th className="p-2">Peer ID</th>
-            <th className="p-2">Connection String</th>
-            {/* <th className="p-2">Health</th> */}
-            <th className="p-2">Select</th>
+            <th className="px-1.5 py-2 sm:px-2">Validator Name</th>
+            <th className="px-1.5 py-2 sm:px-2">Indexer Public IP</th>
+            <th className="px-1.5 py-2 sm:px-2">Peer ID</th>
+            <th className="px-1.5 py-2 sm:px-2">Connection String</th>
+            <th className="px-1.5 py-2 sm:px-2">Health</th>
+            <th className="px-1.5 py-2 sm:px-2">Select</th>
           </tr>
         </thead>
         <tbody>
           {entries.length === 0 ? (
             <tr>
-              <td colSpan={6} className="p-2 text-muted-foreground">
+              <td
+                colSpan={6}
+                className="px-1.5 py-2 sm:px-2 text-muted-foreground"
+              >
                 No peers available.
               </td>
             </tr>
@@ -73,10 +79,10 @@ export function Table({ entries }: TableProps) {
                 key={`${entry.validatorAddress}-${entry.ip}`}
                 className="border-b border-border"
               >
-                <td className="p-2 align-top font-mono text-xs">
+                <td className="min-w-0 px-1.5 py-2 align-top wrap-break-word font-mono text-xs sm:px-2">
                   {entry.validatorName}
                 </td>
-                <td className="p-2 align-top whitespace-nowrap font-mono text-xs">
+                <td className="min-w-0 px-1.5 py-2 align-top whitespace-nowrap font-mono text-xs sm:px-2">
                   <a
                     href={`http://${entry.ip}:443/health`}
                     target="_blank"
@@ -86,13 +92,13 @@ export function Table({ entries }: TableProps) {
                     {entry.ip}
                   </a>
                 </td>
-                <td className="p-2 align-top min-w-0 max-w-0 whitespace-normal break-all text-xs font-mono">
-                  <div className="flex items-center gap-1">
+                <td className="min-w-0 px-1.5 py-2 align-top whitespace-normal break-all text-xs font-mono sm:px-2">
+                  <div className="flex min-w-0 items-center gap-1">
                     {entry.peers?.id ?? "—"}
                   </div>
                 </td>
-                <td className="p-2 align-top min-w-0 max-w-0 whitespace-normal break-all text-xs font-mono">
-                  <div className="flex items-center gap-1">
+                <td className="min-w-0 px-1.5 py-2 align-top whitespace-normal break-all text-xs font-mono sm:px-2">
+                  <div className="flex min-w-0 items-center gap-1">
                     {peerConnectionString(entry) ?? "—"}
                     {entry.peers?.id && (
                       <CopyToClipboard
@@ -102,7 +108,7 @@ export function Table({ entries }: TableProps) {
                     )}
                   </div>
                 </td>
-                {/* <td className="p-2 align-top whitespace-nowrap">
+                <td className="min-w-0 px-1.5 py-2 align-top whitespace-nowrap sm:px-2">
                   {entry.health !== "unknown" && (
                     <span
                       className={cn(
@@ -120,8 +126,8 @@ export function Table({ entries }: TableProps) {
                       <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
                     </span>
                   )}
-                </td> */}
-                <td className="p-2 align-top whitespace-nowrap">
+                </td>
+                <td className="min-w-0 px-1.5 py-2 align-top whitespace-nowrap sm:px-2">
                   <input
                     type="checkbox"
                     checked={selectedPeers.includes(
@@ -141,13 +147,21 @@ export function Table({ entries }: TableProps) {
           <tfoot>
             <tr>
               <td colSpan={4} />
-              <td colSpan={2} className="p-2 text-end text-muted-foreground">
-                <span>{selectedPeers.length} connection strings selected</span>
+              <td
+                colSpan={2}
+                className="px-1.5 py-2 text-end text-muted-foreground sm:px-2"
+              >
+                <span className="whitespace-nowrap">
+                  {selectedPeers.length} connection strings selected
+                </span>
               </td>
             </tr>
             <tr>
               <td colSpan={4} />
-              <td colSpan={2} className="p-2 text-end align-middle">
+              <td
+                colSpan={2}
+                className="px-1.5 py-2 text-end align-middle sm:px-2"
+              >
                 <Button
                   type="button"
                   onClick={() => void copy(selectedPeers.join("\n\t\t"))}

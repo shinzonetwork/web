@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { X } from "lucide-react";
+import { CheckCircle, LoaderCircle, X, XCircle } from "lucide-react";
 import { useRegistrationContext } from "@/entities/registration-process";
 import { useAccount } from "wagmi";
 import { Banner } from "@/widget";
@@ -12,17 +12,17 @@ export function IndexerForm() {
   const router = useRouter();
   const { isPortOpen } = useRegistrationContext();
   const { address } = useAccount();
-  const { formData, submitting, error, handleSubmit, handleChange } =
+  const { formData, ipHealth, submitting, error, handleSubmit, handleChange } =
     useAddIndexer();
 
   const isFormValid = useMemo(() => {
     return (
       isPortOpen &&
-      // ipHealth === "healthy" &&
+      ipHealth === "healthy" &&
       formData.validatorAddress &&
       formData.ip.trim() !== ""
     );
-  }, [isPortOpen, formData.validatorAddress, formData.ip]);
+  }, [isPortOpen, ipHealth, formData.validatorAddress, formData.ip]);
 
   const handleFormClose = () => {
     router.push("/validators");
@@ -75,7 +75,7 @@ export function IndexerForm() {
                 Public IP Address of your node{" "}
                 <span className="text-destructive">*</span>
               </label>
-              {/* {ipHealth === "checking" && (
+              {ipHealth === "checking" && (
                 <LoaderCircle className="w-6 h-6 animate-spin text-muted-foreground" />
               )}
               {ipHealth === "healthy" && (
@@ -89,7 +89,7 @@ export function IndexerForm() {
                   fill="var(--color-destructive)"
                   className="w-6 h-6 text-destructive-foreground"
                 />
-              )} */}
+              )}
             </div>
             <input
               value={formData.ip}
@@ -99,12 +99,12 @@ export function IndexerForm() {
               placeholder="192.168.0.1"
               className="w-full p-2 rounded-md border border-border bg-background text-foreground"
             />
-            {/* {ipHealth === "unhealthy" && (
+            {ipHealth === "unhealthy" && (
               <p className="mt-2 text-sm text-destructive">
                 IP address is not healthy. Please check if your node is running
                 and accessible.
               </p>
-            )} */}
+            )}
           </div>
           <div className="col-span-2">
             <label className="block text-sm mb-1">Discord handle</label>
