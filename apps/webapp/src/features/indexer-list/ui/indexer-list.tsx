@@ -108,7 +108,7 @@ export function IndexerList() {
               return (
                 <div className="flex flex-col gap-4">
                   <div>
-                    <h3 className="text-sm font-bold mb-2">Online</h3>
+                    {/* <h3 className="text-sm font-bold mb-2">Online</h3> */}
                     <div className="overflow-x-auto">
                       <Table entries={entries} />
                     </div>
