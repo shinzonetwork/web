@@ -2,17 +2,24 @@ import { isIP } from "node:net";
 
 const PORT = Number(process.env.PORT) || 3001;
 const TIMEOUT_MS = 5000;
-const ALLOWED_ORIGINS = new Set([
-  "https://registration.shinzo.network",
-  "http://localhost:3000",
-]);
+function isAllowedOrigin(origin: string): boolean {
+  try {
+    const { hostname } = new URL(origin);
+    return (
+      hostname === "shinzo.network" ||
+      hostname.endsWith(".shinzo.network")
+    );
+  } catch {
+    return false;
+  }
+}
 
 function corsHeaders(origin: string | null) {
   const headers: Record<string, string> = {
     "Access-Control-Allow-Methods": "GET, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
-  if (origin && ALLOWED_ORIGINS.has(origin)) {
+  if (origin && isAllowedOrigin(origin)) {
     headers["Access-Control-Allow-Origin"] = origin;
   }
   return headers;
