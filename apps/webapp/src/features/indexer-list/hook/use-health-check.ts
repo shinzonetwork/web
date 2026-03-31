@@ -20,27 +20,20 @@ type IndexerHealthResponse = {
 export const indexerHealthQueryKey = (entry: IndexerHealthEntry): QueryKey =>
   ["indexer-health", indexerEntryKey(entry)] as const;
 
-const HEALTH_CHECK_TIMEOUT_MS = 5000;
+const HEALTH_PROXY_URL =
+  process.env.NEXT_PUBLIC_HEALTH_PROXY_URL ||
+  "https://shinzo-health-proxy.fly.dev";
 
 async function fetchIndexerHealth(
   entry: IndexerHealthEntry
 ): Promise<LiveDataWithKey> {
   const key = indexerEntryKey(entry);
-  const host = entry.ip.includes(":") ? `[${entry.ip}]` : entry.ip;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(
-    () => controller.abort(),
-    HEALTH_CHECK_TIMEOUT_MS
-  );
 
   try {
-    const res = await fetch(`https://${host}/health`, {
-      method: "GET",
-      cache: "no-store",
-      redirect: "follow",
-      signal: controller.signal,
-    });
+    const res = await fetch(
+      `${HEALTH_PROXY_URL}/health?ip=${encodeURIComponent(entry.ip)}`,
+      { method: "GET", cache: "no-store" }
+    );
 
     if (!res.ok) {
       return { key, data: { health: "unhealthy", peers: null } };
@@ -54,8 +47,6 @@ async function fetchIndexerHealth(
     return { key, data: { health, peers } };
   } catch {
     return { key, data: { health: "unhealthy", peers: null } };
-  } finally {
-    clearTimeout(timeoutId);
   }
 }
 

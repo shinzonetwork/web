@@ -1,13 +1,15 @@
 "use client";
 
-import { IndexerEntry } from "@/shared/types";
-import { buildIndexerSubmissionMessage } from "@/shared/lib";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type Address, zeroAddress } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
-import { useHealthCheck } from "../../indexer-list";
 import { useRouter } from "next/navigation";
+
+import { useRegistrationContext } from "@/entities";
+import { useHealthCheck } from "@/features/indexer-list";
+import { IndexerEntry } from "@/shared/types";
+import { buildIndexerSubmissionMessage } from "@/shared/lib";
 
 const IP_HEALTH_DEBOUNCE_MS = 450;
 
@@ -16,6 +18,7 @@ export type IpHealthStatus = "idle" | "checking" | "healthy" | "unhealthy";
 export const useAddIndexer = () => {
   const { address } = useAccount();
   const { signMessageAsync } = useSignMessage();
+  const { showPortOpen } = useRegistrationContext();
   const router = useRouter();
   const queryClient = useQueryClient();
   const { fetchHealth } = useHealthCheck();
@@ -83,6 +86,7 @@ export const useAddIndexer = () => {
         discord: "",
       });
       setIpHealth("idle");
+      showPortOpen(false);
       await queryClient.invalidateQueries({ queryKey: ["indexers"] });
       router.push("/validators");
     },
