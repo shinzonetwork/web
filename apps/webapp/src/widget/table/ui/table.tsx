@@ -3,8 +3,6 @@
 import { LiveIndexer } from "@/shared/types";
 import { Button } from "@/shared/ui/button";
 import { CopyToClipboard } from "@/widget/copy-to-clipboard";
-import { cn } from "@shinzo/ui/cn";
-import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
 
 type TableProps = {
@@ -58,7 +56,7 @@ export function Table({ entries }: TableProps) {
             <th className="p-2">Indexer Public IP</th>
             <th className="p-2">Peer ID</th>
             <th className="p-2">Connection String</th>
-            <th className="p-2">Health</th>
+            {/* <th className="p-2">Health</th> */}
             <th className="p-2">Select</th>
           </tr>
         </thead>
@@ -80,7 +78,7 @@ export function Table({ entries }: TableProps) {
                 </td>
                 <td className="p-2 align-top whitespace-nowrap font-mono text-xs">
                   <a
-                    href={`https://${entry.ip}/health`}
+                    href={`http://${entry.ip}:443/health`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-blue-500 underline hover:text-blue-600"
@@ -104,7 +102,7 @@ export function Table({ entries }: TableProps) {
                     )}
                   </div>
                 </td>
-                <td className="p-2 align-top whitespace-nowrap">
+                {/* <td className="p-2 align-top whitespace-nowrap">
                   {entry.health !== "unknown" && (
                     <span
                       className={cn(
@@ -122,7 +120,7 @@ export function Table({ entries }: TableProps) {
                       <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
                     </span>
                   )}
-                </td>
+                </td> */}
                 <td className="p-2 align-top whitespace-nowrap">
                   <input
                     type="checkbox"

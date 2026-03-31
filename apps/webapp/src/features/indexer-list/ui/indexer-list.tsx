@@ -98,28 +98,28 @@ export function IndexerList() {
         ) : (
           <>
             {(() => {
-              const onlineEntries = entries.filter(
-                (e) => e.health === "healthy"
-              );
-              const offlineEntries = entries.filter(
-                (e) => e.health !== "healthy"
-              );
+              // const onlineEntries = entries.filter(
+              //   (e) => e.health === "healthy"
+              // );
+              // const offlineEntries = entries.filter(
+              //   (e) => e.health !== "healthy"
+              // );
 
               return (
                 <div className="flex flex-col gap-4">
                   <div>
                     <h3 className="text-sm font-bold mb-2">Online</h3>
                     <div className="overflow-x-auto">
-                      <Table entries={onlineEntries} />
+                      <Table entries={entries} />
                     </div>
                   </div>
 
-                  <div>
+                  {/* <div>
                     <h3 className="text-sm font-bold mb-2">Offline</h3>
                     <div className="overflow-x-auto">
                       <Table entries={offlineEntries} />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               );
             })()}
