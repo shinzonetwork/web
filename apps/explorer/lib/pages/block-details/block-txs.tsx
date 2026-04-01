@@ -2,9 +2,9 @@
 
 import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
-import { useTransactionsCount } from "../transactions/use-transactions-count";
 import { useBlockTransactions } from "./use-block-transactions";
 import { BlockTransactionsList } from "./block-transactions-list";
+import { useBlockTransactionsCount } from './use-block-transactions-count';
 export interface BlockTxsProps {
   blockNumber: number;
   pageParams: PageParams;
@@ -13,8 +13,7 @@ export interface BlockTxsProps {
 export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) => {
   const { page, offset, limit } = pageParams;
   const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useBlockTransactions({ offset, limit, blockNumber });
- const { data: transactionsCount } = useTransactionsCount();
-
+  const { data: blockTransactionsCount } = useBlockTransactionsCount({ blockNumber });
   return (
     <>
       <BlockTransactionsList
@@ -26,7 +25,7 @@ export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) =>
         <div />
         <Pagination
           page={page}
-          totalItems={transactionsCount?.totalTransactions ?? 0}
+          totalItems={blockTransactionsCount?.txCount ?? 0}
           itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>

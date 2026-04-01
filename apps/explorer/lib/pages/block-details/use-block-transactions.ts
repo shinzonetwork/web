@@ -28,7 +28,7 @@ export const useBlockTransactions = (options: UseBlockTransactionsOptions) => {
   const { offset, limit, blockNumber } = options;
 
   return useQuery({
-    queryKey: ['block-transactions', blockNumber],
+    queryKey: ['block-transactions', blockNumber, offset, limit],
     enabled: !!blockNumber,
     staleTime: 1000 * 60,
     queryFn: async () => {
