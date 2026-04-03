@@ -1,0 +1,9 @@
+{
+  "name": "shinzo-health-proxy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch index.ts",
+    "start": "bun run index.ts"
+  }
+}

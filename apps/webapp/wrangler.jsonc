@@ -1,13 +1,20 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "main": "worker.js",
-  "name": "shinzo-webapp",
-  "compatibility_date": "2025-12-15",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "assets": {
-    "directory": "./out",
-    "binding": "ASSETS"
-  }
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "shinzo-webapp",
+	"compatibility_date": "2026-03-26",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"d1_databases": [
+		{
+			"binding": "shinzo_indexer_db",
+			"database_name": "shinzo-indexer-db",
+			"database_id": "06692941-66a9-4f60-b57a-44e09c4e6727"
+		}
+	]
 }
