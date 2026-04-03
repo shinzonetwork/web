@@ -1,0 +1,18 @@
+{
+  "name": "@shinzo/lenses",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm run build:decode_log",
+    "build:decode_log": "asc decode_log/index.ts --target decode_log",
+    "build:decode_log:debug": "asc decode_log/index.ts --target decode_log_debug",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "assemblyscript-json": "^1.1.0"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.28.10",
+    "vitest": "^3.1.1"
+  }
+}
