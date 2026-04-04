@@ -1,7 +1,7 @@
 'use client';
 
 import { Container } from '@/widgets/layout';
-import { DEFAULT_LIMIT, PageParams, Pagination } from '@/shared/ui/pagination';
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { useBlockTransactions } from "./use-block-transactions";
 import { BlockTransactionsList } from "./block-transactions-list";
 import { useBlockTransactionsCount } from './use-block-transactions-count';
