@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
@@ -9,10 +11,13 @@ import { HALF_CONTAINER_CLASS } from './blocks-home';
 import { useShortTransactions } from './use-short-transactions';
 import { useHighlight } from './use-highlight';
 import { CopyButton } from '@/shared/ui/button';
+import { getPageLink } from "@/shared/utils/links";
+import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
 
 export const TransactionsHome = () => {
   const { data: transactions, isLoading } = useShortTransactions();
-
+  const chain = useChainPathSegment();
+  
   const dataIds = useMemo(() => transactions
     ?.map((transaction) => transaction?.hash)
     ?.filter(Boolean), [transactions]);
@@ -52,7 +57,7 @@ export const TransactionsHome = () => {
             <>
               <TableNullableCell value={tx?.hash} className={highlightClass}>
                 {(value) => (
-                  <Link href={`/tx/${value}`} className="flex items-center gap-4">
+                  <Link href={`${getPageLink('tx', { param: value, chain})}`} className="flex items-center gap-4">
                     <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
                       <ShinzoTxnIcon className="size-4" />
                     </i>
@@ -102,7 +107,7 @@ export const TransactionsHome = () => {
       <div className='flex'>
         <div className={cn('relative flex justify-center border-r border-b border-l border-border bg-background py-4', HALF_CONTAINER_CLASS)}>
           <Link
-            href="/tx"
+            href={`${getPageLink('txs', { chain })}`}
             className="flex items-center gap-7 text-sm text-secondary hover:underline"
           >
             <Typography color="accent" font='mono' className="underline">

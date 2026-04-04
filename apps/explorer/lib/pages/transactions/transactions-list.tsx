@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
@@ -9,8 +11,13 @@ import {
 } from '@shinzo/ui/table';
 import { Transaction } from '@/shared/graphql';
 import { CopyButton } from '@/shared/ui/button';
+import { getPageLink } from "@/shared/utils/links";
+import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { get } from 'node:http';
 
 export const TransactionsList = ({ transactions, isLoading }: { transactions: Transaction[] | undefined, isLoading: boolean }) => {
+  const chain = useChainPathSegment();
+  
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18;
     return eth.toFixed(6);
@@ -33,7 +40,7 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
           <>
             <TableNullableCell value={tx?.hash}>
               {(value) => (
-                <Link href={`/tx/${value}`}>
+                <Link href={`${getPageLink('tx', { param: value, chain})}`}>
                   <Typography color='accent' className='underline'>
                     {formatHash(value, 12, 8)}
                   </Typography>
@@ -43,7 +50,7 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
 
             <TableNullableCell value={tx?.blockNumber}>
               {(value) => (
-                <Link href={`/blocks/${value}`}>
+                <Link href={`${getPageLink('block', { param: value.toString(), chain})}`}>
                   <Typography color='accent' className='underline'>
                     {value}
                   </Typography>
