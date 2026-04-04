@@ -1,1 +1,5 @@
-export { HomePage as default } from '@/pages/home/home-page';
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  return redirect("/ethereum");
+}

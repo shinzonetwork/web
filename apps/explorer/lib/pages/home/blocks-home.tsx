@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo } from 'react';
 import { formatDistanceToNow } from "date-fns";
 
 import { formatHash } from "@/shared/utils/format-hash";
@@ -10,14 +11,16 @@ import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';
 import { useShortBlocks } from './use-short-blocks';
 import { useHighlight } from './use-highlight';
-import { useMemo } from 'react';
 import { CopyButton } from "@/shared/ui/button";
+import { getPageLink } from "@/shared/utils/links";
+import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
 
 export const BlocksHome = () => {
   const { data: blocks, isLoading } = useShortBlocks();
+  const chain = useChainPathSegment();
 
   const dataIds = useMemo(() => blocks
       ?.map((block) => block?.number)
@@ -62,7 +65,7 @@ export const BlocksHome = () => {
               <TableNullableCell value={block?.number} className={highlightClass}>
                 {(value) => (
                   <Link
-                    href={`/blocks/${value}`}
+                    href={`${getPageLink('block', { param: value.toString(), chain})}`}
                     className="flex items-center gap-4"
                   >
                     <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
@@ -117,7 +120,7 @@ export const BlocksHome = () => {
         <div className='flex grow shrink' />
         <div className={cn('relative flex justify-center border-r border-b border-l border-border bg-background py-4', HALF_CONTAINER_CLASS, GAP_BG, 'after:left-[calc(100%+1px)] after:border-b')}>
           <Link
-            href="/blocks"
+            href={`${getPageLink('blocks', { chain})}`}
             className="flex items-center gap-7 text-sm text-secondary hover:underline"
           >
             <Typography color="accent" font='mono' className="underline">
