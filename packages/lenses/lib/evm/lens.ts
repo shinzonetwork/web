@@ -34,6 +34,7 @@ export const AbiArgs = new AbiArgsSchema();
 export class EvmLogLensConfig<A, O> {
   args: ArgsSchema<A> | null = null;
   abiField: string | null = null;
+  abiJson: string | null = null;
   event: string | null = null;
   init: ((ctx: LensContext<A>) => void) | null = null;
   transform: (log: EvmLogDocument, decoded: DecodedLog, ctx: LensContext<A>) => LensOutput<O> | null;
@@ -58,13 +59,17 @@ class EvmLogHandler<A, O> extends JsonLensHandler<A, O> {
   }
 
   init(ctx: LensContext<A>): void {
-    const abi = schema.parseJsonString(ctx.rawArgs, this.abiFieldValue);
-    if (abi.error != null) {
-      ctx.fail(abi.error!);
-      return;
+    let abiJson = this.config.abiJson;
+    if (abiJson == null) {
+      const abi = schema.parseJsonString(ctx.rawArgs, this.abiFieldValue);
+      if (abi.error != null) {
+        ctx.fail(abi.error!);
+        return;
+      }
+      abiJson = abi.value;
     }
 
-    this.events = parseAbi(abi.value);
+    this.events = parseAbi(abiJson);
     if (this.eventName.length > 0 && findEventByName(this.events, this.eventName) == null) {
       ctx.fail("event '" + this.eventName + "' not found in ABI");
       return;
@@ -117,6 +122,7 @@ export function createEvmLens<A, O>(
   abiField: string | null = null,
   init: ((ctx: LensContext<A>) => void) | null = null,
   finalize: ((ctx: LensContext<A>) => LensOutput<O> | null) | null = null,
+  abiJson: string | null = null,
 ): EvmLogLensConfig<A, O> {
   const config = new EvmLogLensConfig<A, O>(transform);
   config.args = argsSchema;
@@ -124,5 +130,6 @@ export function createEvmLens<A, O>(
   config.abiField = abiField;
   config.init = init;
   config.finalize = finalize;
+  config.abiJson = abiJson;
   return defineEvmLogLens(config);
 }

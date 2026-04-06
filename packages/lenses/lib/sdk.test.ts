@@ -1,6 +1,7 @@
 import { describe, test } from "vitest";
 import { expectLens } from "./testing";
-import { ERC20_ABI, SAMPLE_LOG } from "../decode_log/test-data";
+import { ERC20_ABI, SAMPLE_LOG } from "../erc20-transfers/test-data";
+import { join } from "path";
 
 describe("@shinzo/lenses runtime", () => {
   test("parses args and skips filtered rows", async () => {
@@ -16,6 +17,19 @@ describe("@shinzo/lenses runtime", () => {
       .expectNoError()
       .expectRows([{ label: "pre-one", category: "keep" }])
       .expectNoWarnings();
+  });
+
+  test("can load a lens from an explicit wasmPath", async () => {
+    const result = await expectLens({
+      wasmPath: join(process.cwd(), "build", "sdk_map", "sdk_map.wasm"),
+    })
+      .withArgs({ prefix: "path-" })
+      .withInput([{ value: "one", category: "keep" }])
+      .run();
+
+    result
+      .expectNoError()
+      .expectRows([{ label: "path-one", category: "keep" }]);
   });
 
   test("captures warnings without failing the lens", async () => {

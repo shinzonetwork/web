@@ -7,5 +7,5 @@
     "strict": true,
     "noEmit": true
   },
-  "include": ["./**/*.test.ts", "./decode_log/test-helpers.ts", "./decode_log/test-data.ts", "./lib/testing/**/*.ts"]
+  "include": ["./**/*.test.ts", "./erc20-transfers/test-data.ts", "./lib/testing/**/*.ts"]
 }

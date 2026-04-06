@@ -1,0 +1,58 @@
+export { ERC20_ABI } from "./abi";
+
+// keccak256("Transfer(address,address,uint256)")
+export const TRANSFER_TOPIC0 = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
+export const ERC20_TOKEN_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+export const DIFFERENT_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000001";
+export const DECODED_FROM_ADDRESS = "0xab5801a7d398351b8be11c439e05c5b3259aec9b";
+export const DECODED_TO_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+export const RAW_TOPIC_FROM = "0x000000000000000000000000ab5801a7d398351b8be11c439e05c5b3259aec9b";
+export const RAW_TOPIC_TO = "0x000000000000000000000000c02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
+export const TRANSFER_AMOUNT = "2000000000";
+export const RAW_TRANSFER_DATA = "0x0000000000000000000000000000000000000000000000000000000077359400";
+export const BLOCK_NUMBER = 18500000;
+export const TRANSACTION_HASH = "0xabc123";
+export const TRANSACTION_FROM = "0xsender";
+export const TRANSACTION_TO = "0xreceiver";
+export const UNKNOWN_TOPIC0 = "0x0000000000000000000000000000000000000000000000000000000000000000";
+export const UNKNOWN_LOG_ADDRESS = "0x1234";
+export const UNKNOWN_BLOCK_NUMBER = 100;
+export const UNKNOWN_TRANSACTION_HASH = "0xdef";
+export const UNKNOWN_TRANSACTION_FROM = "0xa";
+export const UNKNOWN_TRANSACTION_TO = "0xb";
+
+export const TOKEN_ARGS = {
+  tokenAddress: ERC20_TOKEN_ADDRESS,
+};
+
+export const DIFFERENT_TOKEN_ARGS = {
+  tokenAddress: DIFFERENT_TOKEN_ADDRESS,
+};
+
+export const UNKNOWN_LOG = {
+  address: UNKNOWN_LOG_ADDRESS,
+  topics: [UNKNOWN_TOPIC0],
+  data: "0x",
+  blockNumber: UNKNOWN_BLOCK_NUMBER,
+  transaction: {
+    hash: UNKNOWN_TRANSACTION_HASH,
+    from: UNKNOWN_TRANSACTION_FROM,
+    to: UNKNOWN_TRANSACTION_TO,
+  },
+};
+
+export const SAMPLE_LOG = {
+  address: ERC20_TOKEN_ADDRESS,
+  topics: [
+    TRANSFER_TOPIC0,
+    RAW_TOPIC_FROM,
+    RAW_TOPIC_TO,
+  ],
+  data: RAW_TRANSFER_DATA,
+  blockNumber: BLOCK_NUMBER,
+  transaction: {
+    hash: TRANSACTION_HASH,
+    from: TRANSACTION_FROM,
+    to: TRANSACTION_TO,
+  },
+};

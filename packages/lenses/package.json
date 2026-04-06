@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "pnpm run build:decode_log && pnpm run build:sdk_map && pnpm run build:sdk_fanout && pnpm run build:sdk_aggregate && pnpm run build:sdk_error && pnpm run build:sdk_evm",
-    "build:decode_log": "asc decode_log/index.ts --target decode_log",
-    "build:decode_log:debug": "asc decode_log/index.ts --target decode_log_debug",
+    "build": "pnpm run build:erc20-transfers && pnpm run build:sdk_map && pnpm run build:sdk_fanout && pnpm run build:sdk_aggregate && pnpm run build:sdk_error && pnpm run build:sdk_evm",
+    "build:erc20-transfers": "asc erc20-transfers/index.ts --target erc20-transfers",
+    "build:erc20-transfers:debug": "asc erc20-transfers/index.ts --target erc20-transfers-debug",
     "build:sdk_map": "asc lib/fixtures/sdk_map/index.ts --target sdk_map",
     "build:sdk_fanout": "asc lib/fixtures/sdk_fanout/index.ts --target sdk_fanout",
     "build:sdk_aggregate": "asc lib/fixtures/sdk_aggregate/index.ts --target sdk_aggregate",
