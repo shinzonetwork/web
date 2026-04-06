@@ -8,7 +8,7 @@
       "textFile": "build/decode_log/debug.wat",
       "sourceMap": true,
       "debug": true,
-      "use": ["abort=decode_log/index/abort"]
+      "use": ["abort=lib/abort/abort"]
     },
     "decode_log": {
       "outFile": "build/decode_log/decode_log.wasm",
@@ -18,7 +18,57 @@
       "shrinkLevel": 0,
       "converge": false,
       "noAssert": false,
-      "use": ["abort=decode_log/index/abort"]
+      "use": ["abort=lib/abort/abort"]
+    },
+    "sdk_map": {
+      "outFile": "build/sdk_map/sdk_map.wasm",
+      "textFile": "build/sdk_map/sdk_map.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
+    },
+    "sdk_fanout": {
+      "outFile": "build/sdk_fanout/sdk_fanout.wasm",
+      "textFile": "build/sdk_fanout/sdk_fanout.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
+    },
+    "sdk_aggregate": {
+      "outFile": "build/sdk_aggregate/sdk_aggregate.wasm",
+      "textFile": "build/sdk_aggregate/sdk_aggregate.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
+    },
+    "sdk_error": {
+      "outFile": "build/sdk_error/sdk_error.wasm",
+      "textFile": "build/sdk_error/sdk_error.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
+    },
+    "sdk_evm": {
+      "outFile": "build/sdk_evm/sdk_evm.wasm",
+      "textFile": "build/sdk_evm/sdk_evm.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
     }
   }
 }

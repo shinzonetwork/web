@@ -7,5 +7,5 @@
     "strict": true,
     "noEmit": true
   },
-  "include": ["./**/*.test.ts", "./lib/test-helpers.ts", "./lib/test-data.ts"]
+  "include": ["./**/*.test.ts", "./decode_log/test-helpers.ts", "./decode_log/test-data.ts", "./lib/testing/**/*.ts"]
 }

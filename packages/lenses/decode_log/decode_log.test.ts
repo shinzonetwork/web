@@ -3,8 +3,8 @@ import {
   JSON_TYPE_ID, EOS_TYPE_ID,
   encodeTransport, decodeTransport, writeToMemory,
   loadWasm, setNextQueue,
-} from "../lib/test-helpers";
-import { ERC20_ABI, SAMPLE_LOG } from "../lib/test-data";
+} from "./test-helpers";
+import { ERC20_ABI, SAMPLE_LOG } from "./test-data";
 
 describe("decode_log wasm", () => {
   test("exports alloc, set_param, transform and imports lens.next", async () => {
@@ -84,7 +84,7 @@ describe("decode_log wasm", () => {
     expect(result.typeId).toBe(EOS_TYPE_ID);
   });
 
-  test("transform returns Unknown event when topic0 does not match ABI", async () => {
+  test("transform skips logs when topic0 does not match the ABI", async () => {
     const exports = await loadWasm(import.meta.dirname);
 
     // Set ABI
@@ -98,15 +98,14 @@ describe("decode_log wasm", () => {
       blockNumber: 100,
       transaction: { hash: "0xdef", from: "0xa", to: "0xb" },
     });
-    setNextQueue([encodeTransport(JSON_TYPE_ID, unknownLog)]);
+    setNextQueue([
+      encodeTransport(JSON_TYPE_ID, unknownLog),
+      encodeTransport(EOS_TYPE_ID, ""),
+    ]);
 
     const resultPtr = exports.transform();
     const result = decodeTransport(exports.memory, resultPtr);
 
-    expect(result.typeId).toBe(JSON_TYPE_ID);
-    const output = JSON.parse(result.payload);
-    expect(output.event).toBe("Unknown");
-    expect(output.signature).toBe("");
-    expect(output.arguments).toHaveLength(0);
+    expect(result.typeId).toBe(EOS_TYPE_ID);
   });
 });
