@@ -1,7 +1,24 @@
 {
   "name": "@shinzo/lenses",
   "version": "0.1.0",
+  "description": "AssemblyScript SDK for authoring Shinzo LensVM modules.",
   "type": "module",
+  "sideEffects": false,
+  "types": "./lib/index.ts",
+  "exports": {
+    ".": "./lib/index.ts",
+    "./evm": "./lib/evm/index.ts",
+    "./testing": "./lib/testing/index.ts",
+    "./exports": "./lib/exports.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "erc20-transfers",
+    "erc20-account-balances",
+    "README.md",
+    "ADR.md"
+  ],
   "scripts": {
     "build": "pnpm run build:erc20-transfers && pnpm run build:erc20-account-balances && pnpm run build:sdk_map && pnpm run build:sdk_fanout && pnpm run build:sdk_aggregate && pnpm run build:sdk_error && pnpm run build:sdk_evm",
     "build:erc20-transfers": "asc erc20-transfers/index.ts --target erc20-transfers",
