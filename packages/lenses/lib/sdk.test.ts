@@ -101,7 +101,7 @@ describe("@shinzo/lenses runtime", () => {
   test("decodes EVM logs with event filtering and named arg access", async () => {
     const result = await expectLens("sdk_evm")
       .withArgs({ abi: ERC20_ABI })
-      .withInput([JSON.parse(SAMPLE_LOG)])
+      .withInput([SAMPLE_LOG])
       .run();
 
     result

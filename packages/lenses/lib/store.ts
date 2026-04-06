@@ -94,17 +94,16 @@ export class EntityStore<K, T> {
 }
 
 export class StoreApi {
-  stores: Map<string, usize> = new Map<string, usize>();
+  stores: Map<string, EntityStore<usize, usize>> = new Map<string, EntityStore<usize, usize>>();
 
   entity<K, T>(name: string): EntityStore<K, T> {
-    const existing = this.stores.has(name) ? this.stores.get(name) : 0;
-    if (existing != 0) {
-      return changetype<EntityStore<K, T>>(existing);
+    if (this.stores.has(name)) {
+      return changetype<EntityStore<K, T>>(this.stores.get(name));
     }
 
     const bucket = new EntityStoreBucket<K, T>();
     const store = new EntityStore<K, T>(bucket);
-    this.stores.set(name, changetype<usize>(store));
+    this.stores.set(name, changetype<EntityStore<usize, usize>>(store));
     return store;
   }
 }

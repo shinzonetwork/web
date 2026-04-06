@@ -3,14 +3,13 @@ import { expectEvmLens } from "../lib/testing";
 import { loadLensModule } from "../lib/testing/internal";
 import {
   BLOCK_NUMBER,
-  DECODED_FROM_ADDRESS,
-  DECODED_TO_ADDRESS,
+  ALICE_ADDRESS,
+  BOB_ADDRESS,
   DIFFERENT_TOKEN_ARGS,
   SAMPLE_LOG,
   TOKEN_ARGS,
   ERC20_TOKEN_ADDRESS,
-  TRANSACTION_HASH,
-  TRANSFER_AMOUNT,
+  SINGLE_TRANSFER_ROWS,
   UNKNOWN_LOG,
 } from "./test-data";
 
@@ -41,10 +40,10 @@ describe("erc20-transfers wasm", () => {
       .expectNoError()
       .expectSingleRow({
         tokenAddress: ERC20_TOKEN_ADDRESS,
-        hash: TRANSACTION_HASH,
-        from: DECODED_FROM_ADDRESS,
-        to: DECODED_TO_ADDRESS,
-        amount: TRANSFER_AMOUNT,
+        hash: SINGLE_TRANSFER_ROWS.hash,
+        from: ALICE_ADDRESS,
+        to: BOB_ADDRESS,
+        amount: SINGLE_TRANSFER_ROWS.amount,
         blockNumber: BLOCK_NUMBER,
       });
   });

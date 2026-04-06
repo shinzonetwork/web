@@ -20,6 +20,16 @@
       "noAssert": false,
       "use": ["abort=lib/abort/abort"]
     },
+    "erc20-account-balances": {
+      "outFile": "build/erc20-account-balances/erc20-account-balances.wasm",
+      "textFile": "build/erc20-account-balances/erc20-account-balances.wat",
+      "sourceMap": true,
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false,
+      "use": ["abort=lib/abort/abort"]
+    },
     "sdk_map": {
       "outFile": "build/sdk_map/sdk_map.wasm",
       "textFile": "build/sdk_map/sdk_map.wat",
