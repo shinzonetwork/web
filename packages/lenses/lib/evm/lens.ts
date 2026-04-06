@@ -29,6 +29,11 @@ class AbiArgsSchema implements ArgsSchema<AbiArgValues> {
   }
 }
 
+/**
+ * Ready-made args schema for lenses that accept an `abi` argument.
+ *
+ * The `abi` field may be passed either as a JSON string or as inline JSON.
+ */
 export const AbiArgs = new AbiArgsSchema();
 
 export class EvmLogLensConfig<A, O> {
@@ -109,12 +114,55 @@ class EvmLogHandler<A, O> extends JsonLensHandler<A, O> {
   }
 }
 
+/**
+ * Registers an EVM log lens against the JSON lens runtime.
+ *
+ * Most users should prefer {@link createEvmLens}, which provides a smaller,
+ * copy-paste friendly surface.
+ */
 export function defineEvmLogLens<A, O>(config: EvmLogLensConfig<A, O>): EvmLogLensConfig<A, O> {
   const handler = new EvmLogHandler<A, O>(config);
   registerJsonLens<A, O>(config.args, handler);
   return config;
 }
 
+/**
+ * Creates an EVM log lens that decodes logs before calling user logic.
+ *
+ * The runtime automatically:
+ * - parses ABI once during init
+ * - decodes each input log
+ * - optionally filters by a single event name
+ * - passes both the raw log and decoded event into `transform`
+ *
+ * @param transform Per-log business logic. `log` is the raw query document
+ * converted into an `EvmLogDocument`, `decoded` contains the matched ABI event
+ * and decoded arguments, and `ctx` exposes parsed args plus the lens store.
+ * @param argsSchema Optional args parser for custom lens arguments. Use
+ * `AbiArgs` when the ABI should be supplied at runtime, or `null` when using a
+ * built-in `abiJson`.
+ * @param event Optional event name filter such as `"Transfer"`. When provided,
+ * only matching decoded events reach `transform`.
+ * @param abiField Optional raw args field name that contains the ABI. Defaults
+ * to `"abi"`.
+ * @param init Optional setup hook run once after args parsing and ABI parsing.
+ * @param finalize Optional flush hook run once after end-of-stream.
+ * @param abiJson Optional built-in ABI JSON string. Use this when a lens ships
+ * with a predefined ABI and should not require callers to pass one.
+ *
+ * @example
+ * ```ts
+ * const lens = createEvmLens<TokenAddressArgValues, JSON.Obj>((log, decoded, ctx) => {
+ *   if (log.address.toLowerCase() != ctx.args.tokenAddress) return skip<JSON.Obj>();
+ *
+ *   const out = json.object();
+ *   out.set("from", decoded.getArg("from"));
+ *   out.set("to", decoded.getArg("to"));
+ *   out.set("amount", decoded.getArg("value"));
+ *   return row(out);
+ * }, TokenAddressArgs, "Transfer", null, null, null, ERC20_ABI);
+ * ```
+ */
 export function createEvmLens<A, O>(
   transform: (log: EvmLogDocument, decoded: DecodedLog, ctx: LensContext<A>) => LensOutput<O> | null,
   argsSchema: ArgsSchema<A> | null = null,

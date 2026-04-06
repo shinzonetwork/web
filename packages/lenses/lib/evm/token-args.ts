@@ -26,4 +26,9 @@ class TokenAddressArgsSchema implements ArgsSchema<TokenAddressArgValues> {
   }
 }
 
+/**
+ * Ready-made args schema for the common `{ tokenAddress }` EVM lens pattern.
+ *
+ * The parsed address is validated and normalized to lowercase.
+ */
 export const TokenAddressArgs = new TokenAddressArgsSchema();

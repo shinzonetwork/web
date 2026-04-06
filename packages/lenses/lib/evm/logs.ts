@@ -9,6 +9,7 @@ export class EvmLogLike {
   data: string = "";
 }
 
+/** Parses an ABI JSON array and returns only event definitions. */
 export function parseAbi(abiJson: string): AbiEvent[] {
   const events = new Array<AbiEvent>();
   const items = <JSON.Arr>JSON.parse(abiJson);
@@ -50,21 +51,25 @@ export function parseAbi(abiJson: string): AbiEvent[] {
   return events;
 }
 
+/** Returns `true` when the provided ABI can be parsed successfully. */
 export function validateAbi(abiJson: string): bool {
   parseAbi(abiJson);
   return true;
 }
 
+/** Computes the Keccak-derived topic0 selector for an event signature. */
 export function computeSelector(signature: string): string {
   const sigBytes = String.UTF8.encode(signature, false);
   const hash = keccak256(Uint8Array.wrap(sigBytes));
   return "0x" + hexEncode(hash);
 }
 
+/** Compares two topics/selectors case-insensitively. */
 export function topicEquals(topic: string, selector: string): bool {
   return topic.toLowerCase() == selector.toLowerCase();
 }
 
+/** Finds the ABI event whose selector matches `topic0`. */
 export function findMatchingEvent(events: AbiEvent[], topic0: string): AbiEvent | null {
   for (let i = 0; i < events.length; i++) {
     if (topicEquals(topic0, events[i].selector)) {
@@ -75,12 +80,19 @@ export function findMatchingEvent(events: AbiEvent[], topic0: string): AbiEvent 
   return null;
 }
 
+/**
+ * Decodes a log using the provided ABI JSON string.
+ *
+ * This is the simplest entrypoint when you do not need to cache parsed ABI
+ * events yourself.
+ */
 export function decodeLog(abiJson: string, log: EvmLogLike): DecodedLog | null {
   if (log.topics.length == 0) return null;
 
   return decodeLogWithEvents(parseAbi(abiJson), log);
 }
 
+/** Finds an ABI event definition by its event name. */
 export function findEventByName(events: AbiEvent[], eventName: string): AbiEvent | null {
   for (let i = 0; i < events.length; i++) {
     if (events[i].name == eventName) {
@@ -91,6 +103,7 @@ export function findEventByName(events: AbiEvent[], eventName: string): AbiEvent
   return null;
 }
 
+/** Decodes a log using pre-parsed ABI events. */
 export function decodeLogWithEvents(events: AbiEvent[], log: EvmLogLike): DecodedLog | null {
   if (log.topics.length == 0) return null;
 
@@ -106,6 +119,7 @@ export function decodeLogWithEvents(events: AbiEvent[], log: EvmLogLike): Decode
   return decoded;
 }
 
+/** Decodes one event payload from its topics and data. */
 export function decodeEvent(event: AbiEvent, topics: string[], data: string): DecodedArgument[] {
   const args = new Array<DecodedArgument>();
   const nonIndexed = new Array<AbiInput>();
@@ -142,6 +156,12 @@ export function decodeEvent(event: AbiEvent, topics: string[], data: string): De
   return args;
 }
 
+/**
+ * Decodes one ABI-encoded parameter into a normalized string form.
+ *
+ * Numeric values are returned as decimal strings, addresses are normalized to
+ * `0x`-prefixed lowercase, and fixed bytes stay hex-encoded.
+ */
 export function decodeParam(typeName: string, hexData: string): string {
   let clean = hexData;
   if (clean.length >= 2 && clean.charCodeAt(0) == 48 && (clean.charCodeAt(1) == 120 || clean.charCodeAt(1) == 88)) {

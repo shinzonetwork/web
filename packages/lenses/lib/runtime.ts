@@ -15,16 +15,37 @@ export class LensOutput<T> {
   }
 }
 
+/**
+ * Wraps a single output row so the runtime can enqueue it for emission.
+ *
+ * @example
+ * ```ts
+ * const out = json.object();
+ * out.set("id", "alice");
+ * return row(out);
+ * ```
+ */
 export function row<T>(value: T): LensOutput<T> {
   const out = new Array<T>(1);
   out[0] = value;
   return new LensOutput<T>(out);
 }
 
+/**
+ * Wraps multiple output rows so the runtime can emit them in order.
+ *
+ * Use this when one input document expands into many output rows, or when
+ * `finalize` flushes an aggregated result set.
+ */
 export function rows<T>(values: T[]): LensOutput<T> {
   return new LensOutput<T>(values);
 }
 
+/**
+ * Skips output for the current document.
+ *
+ * Returning `skip()` is the idiomatic way to say "this input produced no rows".
+ */
 export function skip<T>(): LensOutput<T> | null {
   return null;
 }
@@ -220,12 +241,47 @@ function defineRawLens<Q, O, A>(config: RawLensConfig<Q, O, A>): void {
   }
 }
 
+/**
+ * Registers a JSON-first lens definition against the LensVM runtime.
+ *
+ * Most users should prefer {@link createLens}, which is a smaller wrapper around
+ * this lower-level config object.
+ */
 export function defineLens<A, O>(config: LensDefinition<A, O>): LensDefinition<A, O> {
   const handler = new CallbackLensHandler<O, A>(config);
   registerJsonLens<A, O>(config.args, handler);
   return config;
 }
 
+/**
+ * Creates a JSON-first Shinzo lens.
+ *
+ * The runtime automatically:
+ * - parses each incoming document as JSON
+ * - calls `transform(doc, ctx)` once per document
+ * - buffers rows returned by `row(...)` or `rows(...)`
+ * - calls `finalize(ctx)` once after end-of-stream
+ *
+ * @param transform Per-document business logic. Return `row(...)`, `rows(...)`,
+ * or `skip()` depending on how many output rows should be emitted.
+ * @param argsSchema Optional parser for view arguments passed through LensVM
+ * `set_param`. Use `null` when the lens takes no arguments.
+ * @param init Optional setup hook that runs once after args are parsed and
+ * before the first input document is processed.
+ * @param finalize Optional hook that runs once after the input stream ends.
+ * This is the preferred place to flush aggregated state from `ctx.store`.
+ *
+ * @example
+ * ```ts
+ * const lens = createLens<MyArgs, JSON.Obj>((doc, ctx) => {
+ *   if (json.getString(doc, "kind") != "keep") return skip<JSON.Obj>();
+ *
+ *   const out = json.object();
+ *   out.set("label", ctx.args.prefix + json.getString(doc, "value"));
+ *   return row(out);
+ * }, MyArgsSchema);
+ * ```
+ */
 export function createLens<A, O>(
   transform: (doc: JSON.Obj, ctx: LensContext<A>) => LensOutput<O> | null,
   argsSchema: ArgsSchema<A> | null = null,
@@ -239,6 +295,12 @@ export function createLens<A, O>(
   return defineLens(config);
 }
 
+/**
+ * Registers a custom JSON handler against the LensVM runtime.
+ *
+ * This is part of the lower-level runtime surface used by helper wrappers like
+ * `createLens` and `createEvmLens`. Most lens authors should not need it.
+ */
 export function registerJsonLens<A, O>(argsSchema: ArgsSchema<A> | null, handler: JsonLensHandler<A, O>): void {
   const raw = new RawLensConfig<JSON.Obj, O, A>(
     (doc): JSON.Obj => doc,
@@ -249,10 +311,23 @@ export function registerJsonLens<A, O>(argsSchema: ArgsSchema<A> | null, handler
   defineRawLens(raw);
 }
 
+/**
+ * LensVM memory allocation entrypoint.
+ *
+ * This is exported for LensVM compatibility and normally re-exported through
+ * `../lib/exports` in a lens entry file. Application code should not call it
+ * directly.
+ */
 export function alloc(size: usize): usize {
   return heap.alloc(size);
 }
 
+/**
+ * LensVM parameter initialization entrypoint.
+ *
+ * It receives the transport-encoded argument payload, parses it through the
+ * configured args schema, and runs the optional `init(ctx)` hook.
+ */
 export function set_param(ptr: usize): usize {
   const lens = currentLens;
   if (lens == null) {
@@ -274,6 +349,13 @@ export function set_param(ptr: usize): usize {
   return nilPtr();
 }
 
+/**
+ * LensVM streaming transform entrypoint.
+ *
+ * LensVM repeatedly calls this function until it returns EOS. The runtime owns
+ * iteration over `lens.next()`, document parsing, output queue draining, and
+ * the `finalize(ctx)` lifecycle.
+ */
 export function transform(): usize {
   const lens = currentLens;
   if (lens == null) {
@@ -327,6 +409,12 @@ export function transform(): usize {
   return toTransportVec(EOS_TYPE_ID, "");
 }
 
+/**
+ * Testing-only helper that returns any warnings collected during a run.
+ *
+ * This is intentionally exported so the JS test harness can inspect warnings
+ * without exposing low-level transport details to normal lens authors.
+ */
 export function __testing_get_warnings(): usize {
   const lens = currentLens;
   if (lens == null) {

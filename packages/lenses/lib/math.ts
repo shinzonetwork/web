@@ -88,6 +88,12 @@ function splitSign(value: string): string[] {
   return ["+", normalized];
 }
 
+/**
+ * Adds two signed integer strings of arbitrary size.
+ *
+ * This is intended for token amounts, balances, and other values that may not
+ * fit safely in native AssemblyScript numeric types.
+ */
 export function add(a: string, b: string): string {
   const left = splitSign(a);
   const right = splitSign(b);
@@ -109,11 +115,13 @@ export function add(a: string, b: string): string {
   return right[0] == "-" ? "-" + diff : diff;
 }
 
+/** Subtracts `b` from `a` using signed integer string arithmetic. */
 export function sub(a: string, b: string): string {
   if (b.length == 0) return normalizeSigned(a);
   return add(a, b.charCodeAt(0) == 45 ? b.substring(1) : "-" + b);
 }
 
+/** Multiplies two signed integer strings of arbitrary size. */
 export function mul(a: string, b: string): string {
   const left = splitSign(a);
   const right = splitSign(b);

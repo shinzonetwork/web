@@ -35,6 +35,15 @@ function isValidAddress(value: string): bool {
 }
 
 export namespace schema {
+  /**
+   * Parses a string argument from a JSON object.
+   *
+   * @param obj Raw JSON args object passed to the lens.
+   * @param fieldName Name of the field to read.
+   * @param optional When `true`, missing values return an empty string instead
+   * of an error.
+   * @param defaultValue Optional fallback value to use when the field is absent.
+   */
   export function parseString(obj: JSON.Obj, fieldName: string, optional: bool = false, defaultValue: string | null = null): ParseResult<string> {
     const value = obj.get(fieldName);
     if (value == null) {
@@ -50,6 +59,12 @@ export namespace schema {
     return new ParseResult<string>((<JSON.Str>value).valueOf());
   }
 
+  /**
+   * Parses an argument that may be provided either as a string or as inline JSON.
+   *
+   * This is useful for arguments like `abi`, where callers may pass either a
+   * serialized JSON string or an inline JSON array/object.
+   */
   export function parseJsonString(obj: JSON.Obj, fieldName: string, optional: bool = false): ParseResult<string> {
     const value = obj.get(fieldName);
     if (value == null) {
@@ -64,6 +79,7 @@ export namespace schema {
     return new ParseResult<string>(value.stringify());
   }
 
+  /** Parses an integer argument from a JSON object. */
   export function parseInt(obj: JSON.Obj, fieldName: string, defaultValue: i32 = 0, hasDefault: bool = false): ParseResult<i32> {
     const value = obj.get(fieldName);
     if (value == null) {
@@ -82,6 +98,7 @@ export namespace schema {
     return new ParseResult<i32>(0, "argument '" + fieldName + "' must be an integer");
   }
 
+  /** Parses and validates a `0x`-prefixed EVM address argument. */
   export function parseAddress(obj: JSON.Obj, fieldName: string, optional: bool = false): ParseResult<string> {
     const parsed = parseString(obj, fieldName, optional);
     if (parsed.error != null || parsed.value.length == 0) {
