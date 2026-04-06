@@ -1,119 +1,114 @@
-# Shinzo Lenses — AssemblyScript
+# Shinzo Lenses
 
-AssemblyScript [LensVM](https://docs.source.network/lensvm) lenses for the [Shinzo](https://github.com/shinzonetwork) indexing infrastructure. Each lens is a WASM module that transforms blockchain data inside the LensVM runtime.
+`@shinzo/lenses` is the AssemblyScript SDK for authoring Shinzo LensVM modules.
 
-## Prerequisites
+A Shinzo lens is a WASM transform that runs inside a view pipeline. The view `Query` defines the input stream, the `SDL` defines the final output contract, and the lens applies business logic between those two boundaries. The SDK exists to make that transform layer practical to write in AssemblyScript without repeating raw LensVM plumbing in every module.
 
-- [pnpm](https://pnpm.io/) >= 10
-- Node.js >= 24 (used by AssemblyScript compiler)
+The best description of the API and its design decisions is the [ADR](./ADR.md).
 
-## Setup
+## Running locally
+
+From this package:
 
 ```bash
-cd as
 pnpm install
-```
-
-## Build
-
-```bash
-# Build all lenses
-pnpm run build
-
-# Build a specific lens
-pnpm run build:decode_log
-
-# Build with debug output (includes WAT + source maps)
-pnpm run build:decode_log:debug
-```
-
-Output goes to `build/<lens_name>/`.
-
-Then, a WASM file from the `build` directory can be used with a `viewkit` CLI to deplo
-
-## Test
-
-```bash
 pnpm test
 ```
 
-Tests live alongside their lens in each lens directory (e.g. `decode_log/decode_log.test.ts`).
+This builds the example lenses and runs the package test suite.
 
-## Adding a new lens
+Compiled artifacts are written to `build/<lens-name>/`.
 
-1. **Create a directory** for the lens:
+## Writing lenses
 
-   ```bash
-   mkdir -p my_lens/types
-   ```
+The package exposes two authoring styles:
 
-2. **Add an entry point** at `my_lens/index.ts`. It must export the LensVM interface:
+- generic JSON-first lenses with `createLens(...)`
+- EVM log lenses with `createEvmLens(...)`
 
-   ```ts
-   import { fromTransportVec, toTransportVec, nilPtr, JSON_TYPE_ID, EOS_TYPE_ID, ERROR_TYPE_ID } from "../lib/transport";
+Lens entrypoints export the created lens as default and re-export the shared LensVM symbols from `@shinzo/lenses/exports`.
 
-   @external("lens", "next")
-   declare function next(): usize;
+### Generic lens
 
-   function abort(message: string | null, fileName: string | null, lineNumber: u32, columnNumber: u32): void {
-     unreachable();
-   }
+Use `createLens(...)` when the input stream is already in the shape you want to process.
 
-   export function alloc(size: usize): usize {
-     return heap.alloc(size);
-   }
+```ts
+import { JSON } from "assemblyscript-json/assembly";
+import { createLens, json, row, skip } from "@shinzo/lenses";
 
-   export function set_param(ptr: usize): usize {
-     // Parse params, return nilPtr() on success
-     return nilPtr();
-   }
+const lens = createLens<JSON.Obj, JSON.Obj>((doc, _ctx) => {
+  if (json.getString(doc, "kind") != "keep") return skip<JSON.Obj>();
 
-   export function transform(): usize {
-     const ptr = next();
-     const msg = fromTransportVec(ptr);
-     if (msg.isEndOfStream) {
-       heap.free(ptr);
-       return toTransportVec(EOS_TYPE_ID, "");
-     }
-     // Transform msg.payload and return result
-     heap.free(ptr);
-     return toTransportVec(JSON_TYPE_ID, result);
-   }
-   ```
+  const out = json.object();
+  out.set("value", json.getString(doc, "value"));
+  return row(out);
+});
 
-3. **Add build targets** in `asconfig.json`:
+export default lens;
+export * from "@shinzo/lenses/exports";
+```
 
-   ```json
-   {
-     "targets": {
-       "my_lens": {
-         "outFile": "build/my_lens/my_lens.wasm",
-         "textFile": "build/my_lens/my_lens.wat",
-         "sourceMap": true,
-         "optimizeLevel": 3,
-         "shrinkLevel": 0,
-         "use": ["abort=my_lens/index/abort"]
-       }
-     }
-   }
-   ```
+The runtime:
 
-4. **Add build scripts** in `package.json`:
+- parses each input document as JSON
+- calls `transform(doc, ctx)` once per document
+- buffers rows returned from `row(...)` or `rows(...)`
+- calls `finalize(ctx)` once after end-of-stream when provided
 
-   ```json
-   {
-     "scripts": {
-       "build": "pnpm run build:decode_log && pnpm run build:my_lens",
-       "build:my_lens": "asc my_lens/index.ts --target my_lens"
-     }
-   }
-   ```
+### EVM log lens
 
-5. **Add tests** at `my_lens/my_lens.test.ts`.
+Use `createEvmLens(...)` when the query root is EVM logs and the lens should decode ABI events before applying its own mapping logic.
 
-## References
+```ts
+import { JSON } from "assemblyscript-json/assembly";
+import { createEvmLens, ERC20_ABI, TokenAddressArgs, TokenAddressArgValues } from "@shinzo/lenses/evm";
+import { json, row, skip } from "@shinzo/lenses";
 
-- [LensVM documentation](https://docs.source.network/lensvm)
+const lens = createEvmLens<TokenAddressArgValues, JSON.Obj>((log, decoded, ctx) => {
+  if (log.address.toLowerCase() != ctx.args.tokenAddress) return skip<JSON.Obj>();
+
+  const out = json.object();
+  out.set("tokenAddress", ctx.args.tokenAddress);
+  out.set("from", decoded.getArg("from"));
+  out.set("to", decoded.getArg("to"));
+  out.set("amount", decoded.getArg("value"));
+  return row(out);
+}, TokenAddressArgs, "Transfer", null, null, null, ERC20_ABI);
+
+export default lens;
+export * from "@shinzo/lenses/exports";
+```
+
+The EVM layer handles:
+
+- ABI parsing
+- selector matching
+- optional event-name filtering
+- decoded argument access through `decoded.getArg(...)`
+
+## Existing examples
+
+- [ERC-20 Transfers](./erc20-transfers)
+- [ERC-20 Account Balances](./erc20-account-balances)
+
+## Testing
+
+The package also exports high-level test helpers from `@shinzo/lenses/testing`.
+
+The intended style is behavior-first:
+
+```ts
+const result = await expectEvmLens("erc20-transfers")
+  .withTokenAddress("0xdac17f958d2ee523a2206206994597c13d831ec7")
+  .withLog(sampleLog)
+  .run();
+
+result.expectNoError().expectSingleRow(expectedRow);
+```
+
+This keeps normal lens tests focused on inputs and outputs rather than transport vectors or raw WASM memory.
+
+## Further reading
+
+- [API ADR](./ADR.md)
 - [AssemblyScript](https://www.assemblyscript.org/)
-- [assemblyscript-json](https://github.com/aspect-build/assemblyscript-json)
-- [Source Network](https://source.network/)
