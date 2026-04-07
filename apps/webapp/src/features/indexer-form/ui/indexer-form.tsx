@@ -33,7 +33,7 @@ export function IndexerForm() {
       <Banner />
       <section className="bg-background rounded-lg border border-border p-6 mt-6">
         <div className="flex justify-between items-center mb-12 mt-2">
-          <h2 className="text-lg font-bold">Add Vadlidator</h2>
+          <h2 className="text-lg font-bold">Add Validator</h2>
           <button
             className="text-foreground hover:text-foreground/80"
             onClick={handleFormClose}
