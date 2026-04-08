@@ -1,11 +1,16 @@
 "use client";
 
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
+import ShinzoLogo from "./shinzo-logo.svg";
 
 export function Header() {
   return (
     <header className="flex items-center justify-between border-b border-szo-border px-6 py-4">
-      <h1 className="font-jp-serif text-xl font-bold">Shinzo Studio</h1>
+      <ShinzoLogo
+        className="h-8 w-auto shrink-0"
+        aria-label="Shinzo"
+        role="img"
+      />
       <ConnectDialog />
     </header>
   );

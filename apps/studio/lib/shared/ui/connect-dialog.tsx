@@ -3,6 +3,15 @@
 import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
 import { type Connector, useAccount, useConnect, useDisconnect } from "wagmi";
+import { Button } from "@/shared/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui/dialog";
+import WalletConnectIcon from "./walletconnect.svg";
+import { cn } from "@shinzo/ui/cn";
 
 export function ConnectDialog() {
   const { address, isConnected } = useAccount();
@@ -25,93 +34,111 @@ export function ConnectDialog() {
 
   const availableConnectors = connectors.filter((c) => c.id !== "injected");
 
+  const getConnectorIcon = useCallback((connector: Connector) => {
+    if (connector.id === "walletConnect") {
+      return <WalletConnectIcon className="size-6" />;
+    }
+
+    if (connector.icon) {
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={connector.icon}
+          alt={connector.name}
+          width={24}
+          height={24}
+          className="object-contain"
+        />
+      );
+    }
+
+    return <Wallet className="size-5 text-szo-black/50" />;
+  }, []);
+
   if (isConnecting) {
     return (
-      <button
-        type="button"
+      <Button
         disabled
-        className="flex items-center gap-2 rounded-none border border-szo-border bg-szo-bg px-4 py-2 text-sm font-medium opacity-60"
+        variant="secondary"
+        className="gap-2 opacity-60"
       >
         <Loader2 className="size-4 animate-spin" />
         Connecting...
-      </button>
+      </Button>
     );
   }
 
   if (isConnected && address) {
     return (
-      <button
+      <Button
         type="button"
         onClick={handleDisconnect}
-        className="rounded-none border border-szo-border bg-szo-bg px-4 py-2 text-sm font-medium transition-colors hover:border-szo-black"
+        variant="secondary"
+        className="min-w-[10.5rem]"
       >
         {address.slice(0, 6)}...{address.slice(-4)}
-      </button>
+      </Button>
     );
   }
 
   return (
     <>
-      <button
+      <Button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 rounded-none border border-szo-black bg-szo-black px-4 py-2 text-sm font-medium text-szo-bg transition-colors hover:bg-szo-bg hover:text-szo-black"
+        className="gap-2"
       >
         <Wallet className="size-4" />
         Connect Wallet
-      </button>
+      </Button>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div
-            className="fixed inset-0 bg-szo-black/50"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="relative z-10 w-full max-w-sm border border-szo-border bg-szo-bg p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-medium">Connect Wallet</h2>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="text-szo-border transition-colors hover:text-szo-black"
-              >
-                &times;
-              </button>
-            </div>
-            <div className="flex flex-col gap-2">
-              {availableConnectors.map((connector) => (
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="w-[min(calc(100dvw-2rem),900px)] px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-14">
+          <DialogHeader>
+            <DialogTitle id="studio-connect-wallet-title">
+              Connect Wallet
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="relative flex max-h-[75vh] h-full flex-col gap-3 overflow-y-auto overflow-x-hidden py-3">
+            <div className="pointer-events-none sticky -top-3 left-0 z-10 -mb-6 h-6 w-full shrink-0 bg-gradient-to-t from-transparent to-white" />
+
+            {availableConnectors.map((connector) => (
+              <div key={connector.uid} className="relative group">
                 <button
-                  key={connector.uid}
                   type="button"
                   onClick={() => handleConnect(connector)}
-                  className="flex items-center gap-3 border border-szo-border p-3 text-left transition-colors hover:border-szo-black"
+                  className={cn(
+                    "relative flex w-full items-center gap-3 border-2 border-ui-border bg-white p-4 text-left",
+                    "transition-all duration-300",
+                    "hover:border-szo-primary focus:border-szo-primary",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-szo-primary focus-visible:ring-offset-2"
+                  )}
                 >
-                  <div className="flex size-8 items-center justify-center overflow-hidden">
-                    {connector.icon ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={connector.icon}
-                        alt={connector.name}
-                        width={32}
-                        height={32}
-                        className="object-contain"
-                      />
-                    ) : (
-                      <Wallet className="size-5" />
-                    )}
+                  <div className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-md border border-ui-border bg-white">
+                    {getConnectorIcon(connector)}
                   </div>
-                  <span className="text-sm font-medium">{connector.name}</span>
+                  <span className="font-mono text-sm">/ {connector.name}</span>
                 </button>
-              ))}
-              {availableConnectors.length === 0 && (
-                <p className="py-4 text-center text-sm text-szo-border">
-                  No wallets available
-                </p>
-              )}
-            </div>
+
+                {/* Pattern background on hover */}
+                <div
+                  className={cn(
+                    "bg-[url('/bg-pattern.png')] bg-repeat-y bg-no-repeat-x bg-right absolute inset-0 translate-0 -z-1 opacity-0",
+                    "group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-300 group-hover:translate-1 group-focus-within:translate-1"
+                  )}
+                />
+              </div>
+            ))}
+
+            {availableConnectors.length === 0 && (
+              <p className="py-4 text-center font-mono text-sm text-szo-black/50">
+                No wallets available
+              </p>
+            )}
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
