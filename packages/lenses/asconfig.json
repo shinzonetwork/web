@@ -1,14 +1,15 @@
 {
   "options": {
-    "path": ["node_modules"]
+    "path": ["node_modules"],
+    "initialMemory": 4,
+    "use": ["abort=lib/abort/abort"]
   },
   "targets": {
     "erc20-transfers-debug": {
       "outFile": "build/erc20-transfers/debug.wasm",
       "textFile": "build/erc20-transfers/debug.wat",
       "sourceMap": true,
-      "debug": true,
-      "use": ["abort=lib/abort/abort"]
+      "debug": true
     },
     "erc20-transfers": {
       "outFile": "build/erc20-transfers/erc20-transfers.wasm",
@@ -17,8 +18,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "erc20-account-balances": {
       "outFile": "build/erc20-account-balances/erc20-account-balances.wasm",
@@ -27,8 +27,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "sdk_map": {
       "outFile": "build/sdk_map/sdk_map.wasm",
@@ -37,8 +36,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "sdk_fanout": {
       "outFile": "build/sdk_fanout/sdk_fanout.wasm",
@@ -47,8 +45,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "sdk_aggregate": {
       "outFile": "build/sdk_aggregate/sdk_aggregate.wasm",
@@ -57,8 +54,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "sdk_error": {
       "outFile": "build/sdk_error/sdk_error.wasm",
@@ -67,8 +63,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     },
     "sdk_evm": {
       "outFile": "build/sdk_evm/sdk_evm.wasm",
@@ -77,8 +72,7 @@
       "optimizeLevel": 3,
       "shrinkLevel": 0,
       "converge": false,
-      "noAssert": false,
-      "use": ["abort=lib/abort/abort"]
+      "noAssert": false
     }
   }
 }
