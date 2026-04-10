@@ -1,4 +1,5 @@
-import type { Address } from "viem";
+import type { Address, Hex } from "viem";
+import { EntityRole } from "../lib";
 
 export type IndexerEntry = {
   validatorName?: string;
@@ -32,3 +33,24 @@ export type ValidatorRow = {
   validator_public_ip: string;
   validator_name?: string;
 };
+
+// Shinzohub v2
+
+export type RegistrationFormDataV2 = {
+  entity: EntityRole;
+  message: Hex | string;
+  defraPublicKey: Hex | string;
+  defraSignedMessage: Hex | string;
+};  
+
+export type IndexerRegistrationFormData = RegistrationFormDataV2 & {
+  connectionString: string;
+  sourceChain: string;
+  sourceChainId: number;
+};
+
+export type HostRegistrationFormData = RegistrationFormDataV2 & {
+  connectionString?: string | undefined;
+};
+
+export type RegistrationFormDataByEntity<T extends EntityRole> = T extends EntityRole.Indexer ? IndexerRegistrationFormData : HostRegistrationFormData;
