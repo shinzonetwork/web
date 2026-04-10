@@ -1,0 +1,41 @@
+{
+  "name": "@shinzo/lenses",
+  "version": "0.1.0",
+  "description": "AssemblyScript SDK for authoring Shinzo LensVM modules.",
+  "type": "module",
+  "sideEffects": false,
+  "types": "./lib/index.ts",
+  "exports": {
+    ".": "./lib/index.ts",
+    "./evm": "./lib/evm/index.ts",
+    "./testing": "./lib/testing/index.ts",
+    "./exports": "./lib/exports.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "erc20-transfers",
+    "erc20-account-balances",
+    "README.md",
+    "ADR.md"
+  ],
+  "scripts": {
+    "build": "pnpm run build:erc20-transfers && pnpm run build:erc20-account-balances && pnpm run build:sdk_map && pnpm run build:sdk_fanout && pnpm run build:sdk_aggregate && pnpm run build:sdk_error && pnpm run build:sdk_evm",
+    "build:erc20-transfers": "asc erc20-transfers/index.ts --target erc20-transfers",
+    "build:erc20-transfers:debug": "asc erc20-transfers/index.ts --target erc20-transfers-debug",
+    "build:erc20-account-balances": "asc erc20-account-balances/index.ts --target erc20-account-balances",
+    "build:sdk_map": "asc lib/fixtures/sdk_map/index.ts --target sdk_map",
+    "build:sdk_fanout": "asc lib/fixtures/sdk_fanout/index.ts --target sdk_fanout",
+    "build:sdk_aggregate": "asc lib/fixtures/sdk_aggregate/index.ts --target sdk_aggregate",
+    "build:sdk_error": "asc lib/fixtures/sdk_error/index.ts --target sdk_error",
+    "build:sdk_evm": "asc lib/fixtures/sdk_evm/index.ts --target sdk_evm",
+    "test": "pnpm run build && vitest run"
+  },
+  "dependencies": {
+    "assemblyscript-json": "^1.1.0"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.28.10",
+    "vitest": "^3.1.1"
+  }
+}
