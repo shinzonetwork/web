@@ -9,6 +9,8 @@ export const APP_PAGES = {
   home: '',
   blocks: '/blocks',
   block: '/block/{param}',
+  address: '/address/{param}',
+  token: '/token/{param}',
   txs: '/txs',
   tx: '/tx/{param}',
 } as const;
@@ -22,6 +24,8 @@ type OptionsByPage = {
   txs: undefined,
   block: { param: string },
   tx: { param: string },
+  address: { param: string },
+  token: { param: string },
 };
 
 export type PageOptions<PAGE extends AppPage> = OptionsByPage[PAGE];

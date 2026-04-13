@@ -92,10 +92,12 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
             <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
-                <div className="flex items-center gap-1 text-sm text-foreground">
-                  {formatHash(value ?? '', 8, 6)}
-                  <CopyButton text={value ?? ''} className="text-muted-foreground" />
-                </div>
+                <Link href={`${getPageLink('address', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
+                  <Typography color='accent' className='underline'>
+                    {formatHash(value ?? '', 8, 6)}
+                  </Typography>
+                  <CopyButton text={value ?? ''} className="text-muted-foreground" />  
+                </Link>
               )}
             </TableNullableCell>
 

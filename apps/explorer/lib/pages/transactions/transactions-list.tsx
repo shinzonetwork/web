@@ -65,19 +65,27 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Tr
 
             <TableNullableCell value={tx?.from}>
               {(value) => (
-                <div className="flex items-center gap-1 text-sm text-foreground">
-                 {formatHash(value ?? '', 8, 6)}
-                 <CopyButton text={value ?? ''} className="text-muted-foreground" />
-               </div>
+                <Link href={`${getPageLink('address', { param: value, chain})}`}>
+                  <div className="flex items-center gap-1 text-sm text-foreground">
+                    <Typography color='accent' className='underline'>
+                      {formatHash(value ?? '', 8, 6)}
+                    </Typography>
+                    <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                  </div>
+                </Link>
               )}
             </TableNullableCell>
 
             <TableNullableCell value={tx?.to}>
               {(value) => (
-                <div className="flex items-center gap-1 text-sm text-foreground">
-                  {formatHash(value ?? '', 8, 6)}
-                  <CopyButton text={value ?? ''} className="text-muted-foreground" />
-               </div>
+                <Link href={`${getPageLink('address', { param: value, chain})}`}>
+                  <div className="flex items-center gap-1 text-sm text-foreground">
+                    <Typography color='accent' className='underline'>
+                      {formatHash(value ?? '', 8, 6)}
+                    </Typography>
+                    <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                  </div>
+                </Link>
               )}
             </TableNullableCell>
 

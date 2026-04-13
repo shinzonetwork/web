@@ -11,6 +11,9 @@ import { useDecodedLog } from './use-decoded-log';
 import { useTokenMetadata, getTokenIconUrl, type TokenMetadata } from './use-token-metadata';
 import { isTokenEvent } from './known-events';
 import { formatUnits, getAddress } from 'viem';
+import Link from 'next/link';
+import { getPageLink } from '@/shared/utils/links';
+import { useChainPathSegment } from '@/widgets/chain-path-segment/use-chain-path-segment';
 
 interface LogEntryProps {
   logIndex: number | null | undefined;
@@ -44,6 +47,7 @@ const TokenInfo = ({ token }: { token: TokenMetadata }) => {
 const LogEntry = ({ logIndex, address, topics, data }: LogEntryProps) => {
   const nonNullTopics = (topics?.filter(Boolean) as string[]) ?? [];
   const { data: decoded } = useDecodedLog(nonNullTopics, data);
+  const chain = useChainPathSegment();
 
   const isToken = isTokenEvent(nonNullTopics);
   const { data: token } = useTokenMetadata(isToken ? (address ?? undefined) : undefined);
@@ -66,10 +70,12 @@ const LogEntry = ({ logIndex, address, topics, data }: LogEntryProps) => {
         )}
         {checksumAddress && (
           <>
-            <Typography variant='sm' font='mono' className='truncate'>
-              {checksumAddress}
-            </Typography>
-            <CopyButton text={checksumAddress} />
+            <Link href={`${getPageLink('address', { param: checksumAddress, chain})}`}>
+              <Typography variant='sm' font='mono' className='truncate'>
+                {checksumAddress}
+              </Typography>
+              <CopyButton text={checksumAddress} />
+            </Link>
           </>
         )}
       </DataItem>

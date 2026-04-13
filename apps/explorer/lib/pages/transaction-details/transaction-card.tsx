@@ -112,6 +112,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title='From'
         value={tx.from}
         loading={isLoading}
+        link={tx.from != null ? `${getPageLink('address', { param: tx.from, chain})}` : undefined}
       >
         {tx.from}
       </DataItem>
@@ -120,6 +121,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title="To"
         value={tx.to}
         loading={isLoading}
+        link={tx.to != null ? `${getPageLink('address', { param: tx.to, chain})}` : undefined}
       >
         {tx.to}
       </DataItem>

@@ -45,6 +45,7 @@ export const BlockCard = (options: BlockCardProps) => {
           title="Validator"
           value={block.miner}
           loading={isLoading}
+          link={block.miner != null ? `${getPageLink('address', { param: block.miner, chain})}` : undefined}
         >
           {block.miner}
         </DataItem>
