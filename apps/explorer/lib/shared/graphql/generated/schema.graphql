@@ -2489,7 +2489,11 @@ type EncryptedSearchResult {
   docIDs: [ID!]!
 }
 
+<<<<<<< HEAD
 type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4 {
+=======
+type Erc20Transfer {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the average of the specified field values within the specified child sets. If
@@ -2498,7 +2502,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
   
   """
   AVG(
+<<<<<<< HEAD
     GROUP: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector
+=======
+    GROUP: Erc20Transfer__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2512,7 +2520,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
+<<<<<<< HEAD
   COUNT(GROUP: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector): Int
+=======
+  COUNT(GROUP: Erc20Transfer__CountSelector): Int
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -2538,7 +2550,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
      be empty.
     
     """
+<<<<<<< HEAD
     filter: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg
+=======
+    filter: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -2549,7 +2565,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4Field!]
+=======
+    groupBy: [Erc20TransferField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -2571,8 +2591,13 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg]
   ): [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4]
+=======
+    order: [Erc20TransferOrderArg]
+  ): [Erc20Transfer]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the maximum of the specified field values within the specified child sets. If
@@ -2581,7 +2606,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
   
   """
   MAX(
+<<<<<<< HEAD
     GROUP: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector
+=======
+    GROUP: Erc20Transfer__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2597,7 +2626,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
   
   """
   MIN(
+<<<<<<< HEAD
     GROUP: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector
+=======
+    GROUP: Erc20Transfer__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2617,7 +2650,11 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
   
   """
   SUM(
+<<<<<<< HEAD
     GROUP: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector
+=======
+    GROUP: Erc20Transfer__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -2625,6 +2662,7 @@ type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
     """
     blockNumber: ScalarAggregateNumericBlock
   ): Float
+<<<<<<< HEAD
   arguments: String
   blockNumber: Int
   event: String
@@ -2648,6 +2686,27 @@ enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
 }
 
 input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg {
+=======
+  amount: String
+  blockNumber: Int
+  from: String
+  hash: String
+  to: String
+  tokenAddress: String
+}
+
+enum Erc20TransferField {
+  GROUP
+  amount
+  blockNumber
+  from
+  hash
+  to
+  tokenAddress
+}
+
+input Erc20TransferFilterArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """The alias operator allows filters to target aliased fields."""
   _alias: JSON
   """
@@ -2655,18 +2714,27 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
   The and operator - all checks within this clause must pass in order for this check to pass.
   
   """
+<<<<<<< HEAD
   _and: [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg!]
+=======
+  _and: [Erc20TransferFilterArg!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   The negative operator - this check will only pass if all checks within it fail.
   
   """
+<<<<<<< HEAD
   _not: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg
+=======
+  _not: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   The or operator - only one check within this clause must pass in order for this check to pass.
   
   """
+<<<<<<< HEAD
   _or: [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg!]
   arguments: StringOperatorBlock
   blockNumber: IntOperatorBlock
@@ -2690,6 +2758,27 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
 }
 
 enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4NumericFieldsArg {
+=======
+  _or: [Erc20TransferFilterArg!]
+  amount: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  from: StringOperatorBlock
+  hash: StringOperatorBlock
+  to: StringOperatorBlock
+  tokenAddress: StringOperatorBlock
+}
+
+input Erc20TransferMutationInputArg {
+  amount: String
+  blockNumber: Int
+  from: String
+  hash: String
+  to: String
+  tokenAddress: String
+}
+
+enum Erc20TransferNumericFieldsArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   AVG
   COUNT
   MAX
@@ -2698,6 +2787,7 @@ enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7d
   blockNumber
 }
 
+<<<<<<< HEAD
 input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg {
   """The alias field allows ordering by aliased fields."""
   _alias: JSON
@@ -2712,13 +2802,31 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
 }
 
 input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector {
+=======
+input Erc20TransferOrderArg {
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  amount: Ordering
+  blockNumber: Ordering
+  from: Ordering
+  hash: Ordering
+  to: Ordering
+  tokenAddress: Ordering
+}
+
+input Erc20Transfer__CountSelector {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   An optional filter for this aggregate, only documents matching the given criteria
    will be aggregated.
   
   """
+<<<<<<< HEAD
   filter: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg
+=======
+  filter: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2736,7 +2844,11 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
   offset: Int
 }
 
+<<<<<<< HEAD
 input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__GROUP__CountSelector {
+=======
+input Erc20Transfer__GROUP__CountSelector {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2754,15 +2866,24 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
   offset: Int
 }
 
+<<<<<<< HEAD
 input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector {
   field: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4NumericFieldsArg!
+=======
+input Erc20Transfer__NumericSelector {
+  field: Erc20TransferNumericFieldsArg!
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   An optional filter for this aggregate, only documents matching the given criteria
    will be aggregated.
   
   """
+<<<<<<< HEAD
   filter: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg
+=======
+  filter: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   An optional value that caps the number of results to the number provided.
@@ -2784,7 +2905,11 @@ input Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7
    empty set will be ignored.
   
   """
+<<<<<<< HEAD
   order: [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg]
+=======
+  order: [Erc20TransferOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 }
 
 type Ethereum__Mainnet__AccessListEntry {
@@ -8515,14 +8640,22 @@ type Query {
    (true average, not an average of averages) will be returned as a single value.
   
   """
+<<<<<<< HEAD
   AVG(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector, DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62: DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector, DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1: DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector, DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6: DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector, DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a: DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector, Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector, FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector, FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c: FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector, StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector, StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector, UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0: UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector, UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3: UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector): Float
+=======
+  AVG(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Erc20Transfer: Erc20Transfer__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, SimpleLog: SimpleLog__NumericSelector, StablecoinEvent: StablecoinEvent__NumericSelector): Float
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the total number of items within the specified child sets. If multiple child
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
+<<<<<<< HEAD
   COUNT(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__CountSelector, DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62: DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__CountSelector, DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1: DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__CountSelector, DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6: DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__CountSelector, DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a: DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__CountSelector, Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector, FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__CountSelector, FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__CountSelector, FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c: FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__CountSelector, StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector, StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__CountSelector, UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0: UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__CountSelector, UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3: UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__CountSelector): Int
+=======
+  COUNT(Config__LastProcessedPage: Config__LastProcessedPage__CountSelector, Erc20Transfer: Erc20Transfer__CountSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__CountSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__CountSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__CountSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__CountSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__CountSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__CountSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__CountSelector, SimpleLog: SimpleLog__CountSelector, StablecoinEvent: StablecoinEvent__CountSelector): Int
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Config__LastProcessedPage(
     """
     
@@ -8590,7 +8723,11 @@ type Query {
     """
     showDeleted: Boolean
   ): [Config__LastProcessedPage]
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9(
+=======
+  Erc20Transfer(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -8615,7 +8752,11 @@ type Query {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9FilterArg
+=======
+    filter: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -8626,7 +8767,11 @@ type Query {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9Field!]
+=======
+    groupBy: [Erc20TransferField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -8648,7 +8793,11 @@ type Query {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9OrderArg]
+=======
+    order: [Erc20TransferOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -8656,6 +8805,7 @@ type Query {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9]
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62(
     """
@@ -8992,6 +9142,9 @@ type Query {
     """
     showDeleted: Boolean
   ): [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4]
+=======
+  ): [Erc20Transfer]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry(
     """
     
@@ -9669,7 +9822,11 @@ type Query {
    will be returned as a single value.
   
   """
+<<<<<<< HEAD
   MAX(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector, DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62: DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector, DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1: DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector, DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6: DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector, DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a: DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector, Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector, FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector, FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c: FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector, StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector, StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector, UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0: UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector, UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3: UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector): Float
+=======
+  MAX(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Erc20Transfer: Erc20Transfer__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, SimpleLog: SimpleLog__NumericSelector, StablecoinEvent: StablecoinEvent__NumericSelector): Float
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the minimum of the specified field values within the specified child sets. If
@@ -9677,7 +9834,11 @@ type Query {
    will be returned as a single value.
   
   """
+<<<<<<< HEAD
   MIN(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector, DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62: DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector, DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1: DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector, DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6: DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector, DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a: DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector, Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector, FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector, FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c: FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector, StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector, StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector, UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0: UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector, UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3: UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector): Float
+=======
+  MIN(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Erc20Transfer: Erc20Transfer__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, SimpleLog: SimpleLog__NumericSelector, StablecoinEvent: StablecoinEvent__NumericSelector): Float
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the total sum of the specified field values within the specified child sets. If
@@ -9685,8 +9846,13 @@ type Query {
    a single value.
   
   """
+<<<<<<< HEAD
   SUM(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector, DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62: DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector, DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1: DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector, DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6: DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector, DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a: DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector, Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector, FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector, FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c: FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector, StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector, StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector, UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0: UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector, UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3: UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector): Float
   StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831(
+=======
+  SUM(Config__LastProcessedPage: Config__LastProcessedPage__NumericSelector, Erc20Transfer: Erc20Transfer__NumericSelector, Ethereum__Mainnet__AccessListEntry: Ethereum__Mainnet__AccessListEntry__NumericSelector, Ethereum__Mainnet__AttestationRecord: Ethereum__Mainnet__AttestationRecord__NumericSelector, Ethereum__Mainnet__Block: Ethereum__Mainnet__Block__NumericSelector, Ethereum__Mainnet__BlockSignature: Ethereum__Mainnet__BlockSignature__NumericSelector, Ethereum__Mainnet__Log: Ethereum__Mainnet__Log__NumericSelector, Ethereum__Mainnet__SnapshotSignature: Ethereum__Mainnet__SnapshotSignature__NumericSelector, Ethereum__Mainnet__Transaction: Ethereum__Mainnet__Transaction__NumericSelector, SimpleLog: SimpleLog__NumericSelector, StablecoinEvent: StablecoinEvent__NumericSelector): Float
+  SimpleLog(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -9711,7 +9877,11 @@ type Query {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+=======
+    filter: SimpleLogFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -9722,7 +9892,11 @@ type Query {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831Field!]
+=======
+    groupBy: [SimpleLogField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -9744,7 +9918,11 @@ type Query {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg]
+=======
+    order: [SimpleLogOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -9752,8 +9930,13 @@ type Query {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831]
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767(
+=======
+  ): [SimpleLog]
+  StablecoinEvent(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -9778,7 +9961,11 @@ type Query {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767FilterArg
+=======
+    filter: StablecoinEventFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -9789,7 +9976,11 @@ type Query {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767Field!]
+=======
+    groupBy: [StablecoinEventField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -9811,7 +10002,11 @@ type Query {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767OrderArg]
+=======
+    order: [StablecoinEventOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -9819,6 +10014,7 @@ type Query {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767]
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0(
     """
@@ -9954,6 +10150,9 @@ type Query {
     """
     showDeleted: Boolean
   ): [UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3]
+=======
+  ): [StablecoinEvent]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns a set of commits matching any provided criteria. If no arguments are
@@ -10058,7 +10257,11 @@ type Signature {
   value: String
 }
 
+<<<<<<< HEAD
 type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831 {
+=======
+type SimpleLog {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the average of the specified field values within the specified child sets. If
@@ -10067,7 +10270,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
   
   """
   AVG(
+<<<<<<< HEAD
     GROUP: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector
+=======
+    GROUP: SimpleLog__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -10081,7 +10288,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
    sets are specified, the combined total of all of them will be returned as a single value.
   
   """
+<<<<<<< HEAD
   COUNT(GROUP: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector): Int
+=======
+  COUNT(GROUP: SimpleLog__CountSelector, topics: SimpleLog__topics__CountSelector): Int
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   The group field may be used to return a set of records belonging to the group.
@@ -10107,7 +10318,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
      be empty.
     
     """
+<<<<<<< HEAD
     filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+=======
+    filter: SimpleLogFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -10118,7 +10333,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831Field!]
+=======
+    groupBy: [SimpleLogField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -10140,8 +10359,13 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg]
   ): [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831]
+=======
+    order: [SimpleLogOrderArg]
+  ): [SimpleLog]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns the maximum of the specified field values within the specified child sets. If
@@ -10150,7 +10374,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
   
   """
   MAX(
+<<<<<<< HEAD
     GROUP: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector
+=======
+    GROUP: SimpleLog__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -10166,7 +10394,11 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
   
   """
   MIN(
+<<<<<<< HEAD
     GROUP: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector
+=======
+    GROUP: SimpleLog__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -10186,7 +10418,10 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
   
   """
   SUM(
+<<<<<<< HEAD
     GROUP: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector
+=======
+    GROUP: SimpleLog__NumericSelector
     """
     
     The scalar field selection type for aggregate input arguments.
@@ -10194,29 +10429,23 @@ type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
     """
     blockNumber: ScalarAggregateNumericBlock
   ): Float
-  arguments: String
+  address: String
   blockNumber: Int
-  event: String
-  from: String
-  hash: String
-  logAddress: String
-  signature: String
-  to: String
+  data: String
+  topics: [String]
+  transactionHash: String
 }
 
-enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831Field {
+enum SimpleLogField {
   GROUP
-  arguments
+  address
   blockNumber
-  event
-  from
-  hash
-  logAddress
-  signature
-  to
+  data
+  topics
+  transactionHash
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg {
+input SimpleLogFilterArg {
   """The alias operator allows filters to target aliased fields."""
   _alias: JSON
   """
@@ -10224,41 +10453,35 @@ input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec
   The and operator - all checks within this clause must pass in order for this check to pass.
   
   """
-  _and: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg!]
+  _and: [SimpleLogFilterArg!]
   """
   
   The negative operator - this check will only pass if all checks within it fail.
   
   """
-  _not: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+  _not: SimpleLogFilterArg
   """
   
   The or operator - only one check within this clause must pass in order for this check to pass.
   
   """
-  _or: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg!]
-  arguments: StringOperatorBlock
+  _or: [SimpleLogFilterArg!]
+  address: StringOperatorBlock
   blockNumber: IntOperatorBlock
-  event: StringOperatorBlock
-  from: StringOperatorBlock
-  hash: StringOperatorBlock
-  logAddress: StringOperatorBlock
-  signature: StringOperatorBlock
-  to: StringOperatorBlock
+  data: StringOperatorBlock
+  topics: StringListOperatorBlock
+  transactionHash: StringOperatorBlock
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831MutationInputArg {
-  arguments: String
+input SimpleLogMutationInputArg {
+  address: String
   blockNumber: Int
-  event: String
-  from: String
-  hash: String
-  logAddress: String
-  signature: String
-  to: String
+  data: String
+  topics: [String]
+  transactionHash: String
 }
 
-enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg {
+enum SimpleLogNumericFieldsArg {
   AVG
   COUNT
   MAX
@@ -10267,27 +10490,24 @@ enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec0
   blockNumber
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg {
+input SimpleLogOrderArg {
   """The alias field allows ordering by aliased fields."""
   _alias: JSON
-  arguments: Ordering
+  address: Ordering
   blockNumber: Ordering
-  event: Ordering
-  from: Ordering
-  hash: Ordering
-  logAddress: Ordering
-  signature: Ordering
-  to: Ordering
+  data: Ordering
+  topics: Ordering
+  transactionHash: Ordering
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector {
+input SimpleLog__CountSelector {
   """
   
   An optional filter for this aggregate, only documents matching the given criteria
    will be aggregated.
   
   """
-  filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+  filter: SimpleLogFilterArg
   """
   
   An optional value that caps the number of results to the number provided.
@@ -10305,7 +10525,7 @@ input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec
   offset: Int
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__GROUP__CountSelector {
+input SimpleLog__GROUP__CountSelector {
   """
   
   An optional value that caps the number of results to the number provided.
@@ -10323,15 +10543,15 @@ input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec
   offset: Int
 }
 
-input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector {
-  field: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg!
+input SimpleLog__NumericSelector {
+  field: SimpleLogNumericFieldsArg!
   """
   
   An optional filter for this aggregate, only documents matching the given criteria
    will be aggregated.
   
   """
-  filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+  filter: SimpleLogFilterArg
   """
   
   An optional value that caps the number of results to the number provided.
@@ -10353,6 +10573,384 @@ input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec
    empty set will be ignored.
   
   """
+  order: [SimpleLogOrderArg]
+}
+
+input SimpleLog__topics__CountSelector {
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+  filter: StringFilterArg
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+type StablecoinEvent {
+  """
+  
+  Returns the average of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined average of all items within each set
+   (true average, not an average of averages) will be returned as a single value.
+  
+  """
+  AVG(
+    GROUP: StablecoinEvent__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the total number of items within the specified child sets. If multiple child
+   sets are specified, the combined total of all of them will be returned as a single value.
+  
+  """
+  COUNT(GROUP: StablecoinEvent__CountSelector): Int
+  """
+  
+  The group field may be used to return a set of records belonging to the group.
+   It must be used alongside a 'groupBy' argument on the parent selector. It may
+   contain any field on the type being grouped, including those used by the
+   groupBy.
+  
+  """
+  GROUP(
+    """
+    
+    An optional set of docIDs for this field. Only documents with a docID
+     matching a docID in the given set will be returned.  If no documents match,
+     the result will be null/empty. If an empty set is provided, this argument will
+     be ignored.
+    
+    """
+    docID: [ID!]
+    """
+    
+    An optional filter for this join, if none of the related records meet the filter
+     criteria the host record will still be returned, but the value of this field will
+     be empty.
+    
+    """
+    filter: StablecoinEventFilterArg
+    """
+    
+    An optional set of fields for which to group the contents of this field by.
+     If this argument is provided, only fields used to group may be rendered in
+     the immediate child selector.  Additional fields may be selected by using
+     the 'GROUP' selector within the immediate child selector. If an empty set
+     is provided, the restrictions mentioned still apply, although all results
+     will appear within the same group.
+    
+    """
+    groupBy: [StablecoinEventField!]
+    """
+    
+    An optional value that caps the number of results to the number provided.
+     A limit of zero will be ignored.
+    
+    """
+    limit: Int
+    """
+    
+    An optional value that skips the given number of results that would have
+     otherwise been returned.  Commonly used alongside the 'limit' argument,
+     this argument will still work on its own.
+    
+    """
+    offset: Int
+    """
+    
+    An optional set of field-orders which may be used to sort the results. An
+     empty set will be ignored.
+    
+    """
+    order: [StablecoinEventOrderArg]
+  ): [StablecoinEvent]
+  """
+  
+  Returns the maximum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined maximum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MAX(
+    GROUP: StablecoinEvent__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
+  """
+  
+  Returns the minimum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined minimum of all items within each set
+   will be returned as a single value.
+  
+  """
+  MIN(
+    GROUP: StablecoinEvent__NumericSelector
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
+  """
+  Returns the cosine similarity between the specified field and the provided vector.
+  """
+  SIMILARITY: Float
+  """
+  
+  Returns the total sum of the specified field values within the specified child sets. If
+   multiple fields/sets are specified, the combined sum of all of them will be returned as
+   a single value.
+  
+  """
+  SUM(
+    GROUP: StablecoinEvent__NumericSelector
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+    """
+    
+    The scalar field selection type for aggregate input arguments.
+    
+    """
+    blockNumber: ScalarAggregateNumericBlock
+  ): Float
+  arguments: String
+  blockNumber: Int
+  event: String
+  from: String
+  hash: String
+  logAddress: String
+  signature: String
+  to: String
+}
+
+<<<<<<< HEAD
+enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831Field {
+=======
+enum StablecoinEventField {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  GROUP
+  arguments
+  blockNumber
+  event
+  from
+  hash
+  logAddress
+  signature
+  to
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg {
+=======
+input StablecoinEventFilterArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """The alias operator allows filters to target aliased fields."""
+  _alias: JSON
+  """
+  
+  The and operator - all checks within this clause must pass in order for this check to pass.
+  
+  """
+<<<<<<< HEAD
+  _and: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg!]
+=======
+  _and: [StablecoinEventFilterArg!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  The negative operator - this check will only pass if all checks within it fail.
+  
+  """
+<<<<<<< HEAD
+  _not: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+=======
+  _not: StablecoinEventFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  The or operator - only one check within this clause must pass in order for this check to pass.
+  
+  """
+<<<<<<< HEAD
+  _or: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg!]
+=======
+  _or: [StablecoinEventFilterArg!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  arguments: StringOperatorBlock
+  blockNumber: IntOperatorBlock
+  event: StringOperatorBlock
+  from: StringOperatorBlock
+  hash: StringOperatorBlock
+  logAddress: StringOperatorBlock
+  signature: StringOperatorBlock
+  to: StringOperatorBlock
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831MutationInputArg {
+=======
+input StablecoinEventMutationInputArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  arguments: String
+  blockNumber: Int
+  event: String
+  from: String
+  hash: String
+  logAddress: String
+  signature: String
+  to: String
+}
+
+<<<<<<< HEAD
+enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg {
+=======
+enum StablecoinEventNumericFieldsArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  AVG
+  COUNT
+  MAX
+  MIN
+  SUM
+  blockNumber
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg {
+=======
+input StablecoinEventOrderArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """The alias field allows ordering by aliased fields."""
+  _alias: JSON
+  arguments: Ordering
+  blockNumber: Ordering
+  event: Ordering
+  from: Ordering
+  hash: Ordering
+  logAddress: Ordering
+  signature: Ordering
+  to: Ordering
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector {
+=======
+input StablecoinEvent__CountSelector {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+<<<<<<< HEAD
+  filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+=======
+  filter: StablecoinEventFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__GROUP__CountSelector {
+=======
+input StablecoinEvent__GROUP__CountSelector {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+}
+
+<<<<<<< HEAD
+input StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector {
+  field: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg!
+=======
+input StablecoinEvent__NumericSelector {
+  field: StablecoinEventNumericFieldsArg!
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  An optional filter for this aggregate, only documents matching the given criteria
+   will be aggregated.
+  
+  """
+<<<<<<< HEAD
+  filter: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg
+=======
+  filter: StablecoinEventFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
+  """
+  
+  An optional value that caps the number of results to the number provided.
+   A limit of zero will be ignored.
+  
+  """
+  limit: Int
+  """
+  
+  An optional value that skips the given number of results that would have
+   otherwise been returned.  Commonly used alongside the 'limit' argument,
+   this argument will still work on its own.
+  
+  """
+  offset: Int
+  """
+  
+  An optional set of field-orders which may be used to sort the results. An
+   empty set will be ignored.
+  
+  """
+<<<<<<< HEAD
   order: [StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg]
 }
 
@@ -10647,6 +11245,9 @@ input StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1
   
   """
   order: [StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767OrderArg]
+=======
+  order: [StablecoinEventOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 }
 
 input StringFilterArg {
@@ -10832,7 +11433,11 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Config__LastProcessedPage]
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9(
+=======
+  Erc20Transfer(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -10857,7 +11462,11 @@ type Subscription {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9FilterArg
+=======
+    filter: Erc20TransferFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -10868,7 +11477,11 @@ type Subscription {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9Field!]
+=======
+    groupBy: [Erc20TransferField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -10890,7 +11503,11 @@ type Subscription {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9OrderArg]
+=======
+    order: [Erc20TransferOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -10898,6 +11515,7 @@ type Subscription {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9]
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62(
     """
@@ -11234,6 +11852,9 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4]
+=======
+  ): [Erc20Transfer]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry(
     """
     
@@ -11703,7 +12324,11 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [Ethereum__Mainnet__Transaction]
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7(
+=======
+  SimpleLog(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -11728,7 +12353,11 @@ type Subscription {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7FilterArg
+=======
+    filter: SimpleLogFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -11739,7 +12368,11 @@ type Subscription {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7Field!]
+=======
+    groupBy: [SimpleLogField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -11761,7 +12394,11 @@ type Subscription {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7OrderArg]
+=======
+    order: [SimpleLogOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -11769,8 +12406,13 @@ type Subscription {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7]
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90(
+=======
+  ): [SimpleLog]
+  StablecoinEvent(
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies the commit ID of a document or a branchable collection.
@@ -11795,7 +12437,11 @@ type Subscription {
      will be returned.
     
     """
+<<<<<<< HEAD
     filter: FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90FilterArg
+=======
+    filter: StablecoinEventFilterArg
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional set of fields for which to group the contents of this field by.
@@ -11806,7 +12452,11 @@ type Subscription {
      will appear within the same group.
     
     """
+<<<<<<< HEAD
     groupBy: [FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90Field!]
+=======
+    groupBy: [StablecoinEventField!]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that caps the number of results to the number provided.
@@ -11828,7 +12478,11 @@ type Subscription {
      empty set will be ignored.
     
     """
+<<<<<<< HEAD
     order: [FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90OrderArg]
+=======
+    order: [StablecoinEventOrderArg]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
     """
     
     An optional value that specifies as to whether deleted documents may be
@@ -11836,6 +12490,7 @@ type Subscription {
     
     """
     showDeleted: Boolean
+<<<<<<< HEAD
   ): [FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90]
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c(
     """
@@ -12172,6 +12827,9 @@ type Subscription {
     """
     showDeleted: Boolean
   ): [UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3]
+=======
+  ): [StablecoinEvent]
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   """
   
   Returns a set of commits matching any provided criteria. If no arguments are

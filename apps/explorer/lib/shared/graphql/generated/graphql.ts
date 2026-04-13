@@ -2061,8 +2061,13 @@ export type EncryptedSearchResult = {
   docIDs: Array<Scalars['ID']['output']>;
 };
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4 = {
   __typename?: 'Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4';
+=======
+export type Erc20Transfer = {
+  __typename?: 'Erc20Transfer';
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -2086,7 +2091,11 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
    *  groupBy.
    *
    */
+<<<<<<< HEAD
   GROUP?: Maybe<Array<Maybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4>>>;
+=======
+  GROUP?: Maybe<Array<Maybe<Erc20Transfer>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns the maximum of the specified field values within the specified child sets. If
@@ -2113,6 +2122,7 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
    *
    */
   SUM?: Maybe<Scalars['Float']['output']>;
+<<<<<<< HEAD
   arguments?: Maybe<Scalars['String']['output']>;
   blockNumber?: Maybe<Scalars['Int']['output']>;
   event?: Maybe<Scalars['String']['output']>;
@@ -2126,10 +2136,24 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
 
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4AvgArgs = {
   GROUP?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+  amount?: Maybe<Scalars['String']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  from?: Maybe<Scalars['String']['output']>;
+  hash?: Maybe<Scalars['String']['output']>;
+  to?: Maybe<Scalars['String']['output']>;
+  tokenAddress?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type Erc20TransferAvgArgs = {
+  GROUP?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4CountArgs = {
   GROUP?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector>;
 };
@@ -2147,16 +2171,41 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
 
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4MaxArgs = {
   GROUP?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+export type Erc20TransferCountArgs = {
+  GROUP?: InputMaybe<Erc20Transfer__CountSelector>;
+};
+
+
+export type Erc20TransferGroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Erc20TransferFilterArg>;
+  groupBy?: InputMaybe<Array<Erc20TransferField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Erc20TransferOrderArg>>>;
+};
+
+
+export type Erc20TransferMaxArgs = {
+  GROUP?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4MinArgs = {
   GROUP?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+export type Erc20TransferMinArgs = {
+  GROUP?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4SumArgs = {
   GROUP?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
@@ -2175,6 +2224,24 @@ export enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
 }
 
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg = {
+=======
+export type Erc20TransferSumArgs = {
+  GROUP?: InputMaybe<Erc20Transfer__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum Erc20TransferField {
+  Group = 'GROUP',
+  Amount = 'amount',
+  BlockNumber = 'blockNumber',
+  From = 'from',
+  Hash = 'hash',
+  To = 'to',
+  TokenAddress = 'tokenAddress'
+}
+
+export type Erc20TransferFilterArg = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /** The alias operator allows filters to target aliased fields. */
   _alias?: InputMaybe<Scalars['JSON']['input']>;
   /**
@@ -2182,18 +2249,27 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
    * The and operator - all checks within this clause must pass in order for this check to pass.
    *
    */
+<<<<<<< HEAD
   _and?: InputMaybe<Array<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg>>;
+=======
+  _and?: InputMaybe<Array<Erc20TransferFilterArg>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * The negative operator - this check will only pass if all checks within it fail.
    *
    */
+<<<<<<< HEAD
   _not?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg>;
+=======
+  _not?: InputMaybe<Erc20TransferFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * The or operator - only one check within this clause must pass in order for this check to pass.
    *
    */
+<<<<<<< HEAD
   _or?: InputMaybe<Array<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg>>;
   arguments?: InputMaybe<StringOperatorBlock>;
   blockNumber?: InputMaybe<IntOperatorBlock>;
@@ -2217,6 +2293,27 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
 };
 
 export enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4NumericFieldsArg {
+=======
+  _or?: InputMaybe<Array<Erc20TransferFilterArg>>;
+  amount?: InputMaybe<StringOperatorBlock>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  from?: InputMaybe<StringOperatorBlock>;
+  hash?: InputMaybe<StringOperatorBlock>;
+  to?: InputMaybe<StringOperatorBlock>;
+  tokenAddress?: InputMaybe<StringOperatorBlock>;
+};
+
+export type Erc20TransferMutationInputArg = {
+  amount?: InputMaybe<Scalars['String']['input']>;
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  hash?: InputMaybe<Scalars['String']['input']>;
+  to?: InputMaybe<Scalars['String']['input']>;
+  tokenAddress?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum Erc20TransferNumericFieldsArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Avg = 'AVG',
   Count = 'COUNT',
   Max = 'MAX',
@@ -2225,6 +2322,7 @@ export enum Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
   BlockNumber = 'blockNumber'
 }
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg = {
   /** The alias field allows ordering by aliased fields. */
   _alias?: InputMaybe<Scalars['JSON']['input']>;
@@ -2239,13 +2337,31 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
 };
 
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector = {
+=======
+export type Erc20TransferOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  amount?: InputMaybe<Ordering>;
+  blockNumber?: InputMaybe<Ordering>;
+  from?: InputMaybe<Ordering>;
+  hash?: InputMaybe<Ordering>;
+  to?: InputMaybe<Ordering>;
+  tokenAddress?: InputMaybe<Ordering>;
+};
+
+export type Erc20Transfer__CountSelector = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional filter for this aggregate, only documents matching the given criteria
    *  will be aggregated.
    *
    */
+<<<<<<< HEAD
   filter?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg>;
+=======
+  filter?: InputMaybe<Erc20TransferFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -2263,7 +2379,11 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__Group__CountSelector = {
+=======
+export type Erc20Transfer__Group__CountSelector = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -2281,15 +2401,24 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+<<<<<<< HEAD
 export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector = {
   field: Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4NumericFieldsArg;
+=======
+export type Erc20Transfer__NumericSelector = {
+  field: Erc20TransferNumericFieldsArg;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional filter for this aggregate, only documents matching the given criteria
    *  will be aggregated.
    *
    */
+<<<<<<< HEAD
   filter?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4FilterArg>;
+=======
+  filter?: InputMaybe<Erc20TransferFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -2311,7 +2440,11 @@ export type Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e
    *  empty set will be ignored.
    *
    */
+<<<<<<< HEAD
   order?: InputMaybe<Array<InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg>>>;
+=======
+  order?: InputMaybe<Array<InputMaybe<Erc20TransferOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 export type Ethereum__Mainnet__AccessListEntry = {
@@ -7070,12 +7203,16 @@ export type Query = {
    */
   COUNT?: Maybe<Scalars['Int']['output']>;
   Config__LastProcessedPage?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: Maybe<Array<Maybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9>>>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: Maybe<Array<Maybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62>>>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: Maybe<Array<Maybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1>>>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: Maybe<Array<Maybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6>>>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: Maybe<Array<Maybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a>>>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: Maybe<Array<Maybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4>>>;
+=======
+  Erc20Transfer?: Maybe<Array<Maybe<Erc20Transfer>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
   Ethereum__Mainnet__AttestationRecord?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
   Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
@@ -7110,10 +7247,15 @@ export type Query = {
    *
    */
   SUM?: Maybe<Scalars['Float']['output']>;
+<<<<<<< HEAD
   StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831?: Maybe<Array<Maybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831>>>;
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: Maybe<Array<Maybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767>>>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: Maybe<Array<Maybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0>>>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: Maybe<Array<Maybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3>>>;
+=======
+  SimpleLog?: Maybe<Array<Maybe<SimpleLog>>>;
+  StablecoinEvent?: Maybe<Array<Maybe<StablecoinEvent>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns a set of commits matching any provided criteria. If no arguments are
@@ -7126,12 +7268,16 @@ export type Query = {
 
 export type QueryAvgArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: InputMaybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: InputMaybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: InputMaybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: InputMaybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: InputMaybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+  Erc20Transfer?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
@@ -7139,6 +7285,7 @@ export type QueryAvgArgs = {
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: InputMaybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: InputMaybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector>;
@@ -7146,17 +7293,25 @@ export type QueryAvgArgs = {
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: InputMaybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: InputMaybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector>;
+=======
+  SimpleLog?: InputMaybe<SimpleLog__NumericSelector>;
+  StablecoinEvent?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 
 export type QueryCountArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__CountSelector>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: InputMaybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__CountSelector>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: InputMaybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__CountSelector>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: InputMaybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__CountSelector>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: InputMaybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__CountSelector>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: InputMaybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__CountSelector>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__CountSelector>;
+=======
+  Erc20Transfer?: InputMaybe<Erc20Transfer__CountSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__CountSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__CountSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__CountSelector>;
@@ -7164,6 +7319,7 @@ export type QueryCountArgs = {
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__CountSelector>;
   Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__CountSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__CountSelector>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__CountSelector>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: InputMaybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__CountSelector>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: InputMaybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__CountSelector>;
@@ -7171,6 +7327,10 @@ export type QueryCountArgs = {
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: InputMaybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__CountSelector>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: InputMaybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__CountSelector>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__CountSelector>;
+=======
+  SimpleLog?: InputMaybe<SimpleLog__CountSelector>;
+  StablecoinEvent?: InputMaybe<StablecoinEvent__CountSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 
@@ -7186,6 +7346,7 @@ export type QueryConfig__LastProcessedPageArgs = {
 };
 
 
+<<<<<<< HEAD
 export type QueryDecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9Args = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -7254,6 +7415,16 @@ export type QueryErc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fb
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg>>>;
+=======
+export type QueryErc20TransferArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Erc20TransferFilterArg>;
+  groupBy?: InputMaybe<Array<Erc20TransferField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Erc20TransferOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -7380,12 +7551,16 @@ export type QueryFilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f
 
 export type QueryMaxArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: InputMaybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: InputMaybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: InputMaybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: InputMaybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: InputMaybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+  Erc20Transfer?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
@@ -7393,6 +7568,7 @@ export type QueryMaxArgs = {
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: InputMaybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: InputMaybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector>;
@@ -7400,17 +7576,25 @@ export type QueryMaxArgs = {
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: InputMaybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: InputMaybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector>;
+=======
+  SimpleLog?: InputMaybe<SimpleLog__NumericSelector>;
+  StablecoinEvent?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 
 export type QueryMinArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: InputMaybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: InputMaybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: InputMaybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: InputMaybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: InputMaybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+  Erc20Transfer?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
@@ -7418,6 +7602,7 @@ export type QueryMinArgs = {
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: InputMaybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: InputMaybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector>;
@@ -7425,17 +7610,25 @@ export type QueryMinArgs = {
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: InputMaybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767__NumericSelector>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: InputMaybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0__NumericSelector>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3__NumericSelector>;
+=======
+  SimpleLog?: InputMaybe<SimpleLog__NumericSelector>;
+  StablecoinEvent?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 
 export type QuerySumArgs = {
   Config__LastProcessedPage?: InputMaybe<Config__LastProcessedPage__NumericSelector>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: InputMaybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9__NumericSelector>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: InputMaybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62__NumericSelector>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: InputMaybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1__NumericSelector>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: InputMaybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6__NumericSelector>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: InputMaybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a__NumericSelector>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4__NumericSelector>;
+=======
+  Erc20Transfer?: InputMaybe<Erc20Transfer__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: InputMaybe<Ethereum__Mainnet__AccessListEntry__NumericSelector>;
   Ethereum__Mainnet__AttestationRecord?: InputMaybe<Ethereum__Mainnet__AttestationRecord__NumericSelector>;
   Ethereum__Mainnet__Block?: InputMaybe<Ethereum__Mainnet__Block__NumericSelector>;
@@ -7443,6 +7636,7 @@ export type QuerySumArgs = {
   Ethereum__Mainnet__Log?: InputMaybe<Ethereum__Mainnet__Log__NumericSelector>;
   Ethereum__Mainnet__SnapshotSignature?: InputMaybe<Ethereum__Mainnet__SnapshotSignature__NumericSelector>;
   Ethereum__Mainnet__Transaction?: InputMaybe<Ethereum__Mainnet__Transaction__NumericSelector>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7__NumericSelector>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: InputMaybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90__NumericSelector>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: InputMaybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c__NumericSelector>;
@@ -7461,10 +7655,26 @@ export type QueryStablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg>>>;
+=======
+  SimpleLog?: InputMaybe<SimpleLog__NumericSelector>;
+  StablecoinEvent?: InputMaybe<StablecoinEvent__NumericSelector>;
+};
+
+
+export type QuerySimpleLogArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<SimpleLogFilterArg>;
+  groupBy?: InputMaybe<Array<SimpleLogField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<SimpleLogOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+<<<<<<< HEAD
 export type QueryStablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767Args = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -7497,6 +7707,16 @@ export type QueryUsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3OrderArg>>>;
+=======
+export type QueryStablecoinEventArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<StablecoinEventFilterArg>;
+  groupBy?: InputMaybe<Array<StablecoinEventField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<StablecoinEventOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -7544,8 +7764,13 @@ export type Signature = {
   value?: Maybe<Scalars['String']['output']>;
 };
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831 = {
   __typename?: 'StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831';
+=======
+export type SimpleLog = {
+  __typename?: 'SimpleLog';
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns the average of the specified field values within the specified child sets. If
@@ -7569,7 +7794,275 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
    *  groupBy.
    *
    */
+<<<<<<< HEAD
   GROUP?: Maybe<Array<Maybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831>>>;
+=======
+  GROUP?: Maybe<Array<Maybe<SimpleLog>>>;
+  /**
+   *
+   * Returns the maximum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined maximum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MAX?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the minimum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined minimum of all items within each set
+   *  will be returned as a single value.
+   *
+   */
+  MIN?: Maybe<Scalars['Float']['output']>;
+  /** Returns the cosine similarity between the specified field and the provided vector. */
+  SIMILARITY?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total sum of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined sum of all of them will be returned as
+   *  a single value.
+   *
+   */
+  SUM?: Maybe<Scalars['Float']['output']>;
+  address?: Maybe<Scalars['String']['output']>;
+  blockNumber?: Maybe<Scalars['Int']['output']>;
+  data?: Maybe<Scalars['String']['output']>;
+  topics?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  transactionHash?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type SimpleLogAvgArgs = {
+  GROUP?: InputMaybe<SimpleLog__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type SimpleLogCountArgs = {
+  GROUP?: InputMaybe<SimpleLog__CountSelector>;
+  topics?: InputMaybe<SimpleLog__Topics__CountSelector>;
+};
+
+
+export type SimpleLogGroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<SimpleLogFilterArg>;
+  groupBy?: InputMaybe<Array<SimpleLogField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<SimpleLogOrderArg>>>;
+};
+
+
+export type SimpleLogMaxArgs = {
+  GROUP?: InputMaybe<SimpleLog__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type SimpleLogMinArgs = {
+  GROUP?: InputMaybe<SimpleLog__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+
+export type SimpleLogSumArgs = {
+  GROUP?: InputMaybe<SimpleLog__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum SimpleLogField {
+  Group = 'GROUP',
+  Address = 'address',
+  BlockNumber = 'blockNumber',
+  Data = 'data',
+  Topics = 'topics',
+  TransactionHash = 'transactionHash'
+}
+
+export type SimpleLogFilterArg = {
+  /** The alias operator allows filters to target aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  /**
+   *
+   * The and operator - all checks within this clause must pass in order for this check to pass.
+   *
+   */
+  _and?: InputMaybe<Array<SimpleLogFilterArg>>;
+  /**
+   *
+   * The negative operator - this check will only pass if all checks within it fail.
+   *
+   */
+  _not?: InputMaybe<SimpleLogFilterArg>;
+  /**
+   *
+   * The or operator - only one check within this clause must pass in order for this check to pass.
+   *
+   */
+  _or?: InputMaybe<Array<SimpleLogFilterArg>>;
+  address?: InputMaybe<StringOperatorBlock>;
+  blockNumber?: InputMaybe<IntOperatorBlock>;
+  data?: InputMaybe<StringOperatorBlock>;
+  topics?: InputMaybe<StringListOperatorBlock>;
+  transactionHash?: InputMaybe<StringOperatorBlock>;
+};
+
+export type SimpleLogMutationInputArg = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  blockNumber?: InputMaybe<Scalars['Int']['input']>;
+  data?: InputMaybe<Scalars['String']['input']>;
+  topics?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  transactionHash?: InputMaybe<Scalars['String']['input']>;
+};
+
+export enum SimpleLogNumericFieldsArg {
+  Avg = 'AVG',
+  Count = 'COUNT',
+  Max = 'MAX',
+  Min = 'MIN',
+  Sum = 'SUM',
+  BlockNumber = 'blockNumber'
+}
+
+export type SimpleLogOrderArg = {
+  /** The alias field allows ordering by aliased fields. */
+  _alias?: InputMaybe<Scalars['JSON']['input']>;
+  address?: InputMaybe<Ordering>;
+  blockNumber?: InputMaybe<Ordering>;
+  data?: InputMaybe<Ordering>;
+  topics?: InputMaybe<Ordering>;
+  transactionHash?: InputMaybe<Ordering>;
+};
+
+export type SimpleLog__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<SimpleLogFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SimpleLog__Group__CountSelector = {
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SimpleLog__NumericSelector = {
+  field: SimpleLogNumericFieldsArg;
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<SimpleLogFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional set of field-orders which may be used to sort the results. An
+   *  empty set will be ignored.
+   *
+   */
+  order?: InputMaybe<Array<InputMaybe<SimpleLogOrderArg>>>;
+};
+
+export type SimpleLog__Topics__CountSelector = {
+  /**
+   *
+   * An optional filter for this aggregate, only documents matching the given criteria
+   *  will be aggregated.
+   *
+   */
+  filter?: InputMaybe<StringFilterArg>;
+  /**
+   *
+   * An optional value that caps the number of results to the number provided.
+   *  A limit of zero will be ignored.
+   *
+   */
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   *
+   * An optional value that skips the given number of results that would have
+   *  otherwise been returned.  Commonly used alongside the 'limit' argument,
+   *  this argument will still work on its own.
+   *
+   */
+  offset?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type StablecoinEvent = {
+  __typename?: 'StablecoinEvent';
+  /**
+   *
+   * Returns the average of the specified field values within the specified child sets. If
+   *  multiple fields/sets are specified, the combined average of all items within each set
+   *  (true average, not an average of averages) will be returned as a single value.
+   *
+   */
+  AVG?: Maybe<Scalars['Float']['output']>;
+  /**
+   *
+   * Returns the total number of items within the specified child sets. If multiple child
+   *  sets are specified, the combined total of all of them will be returned as a single value.
+   *
+   */
+  COUNT?: Maybe<Scalars['Int']['output']>;
+  /**
+   *
+   * The group field may be used to return a set of records belonging to the group.
+   *  It must be used alongside a 'groupBy' argument on the parent selector. It may
+   *  contain any field on the type being grouped, including those used by the
+   *  groupBy.
+   *
+   */
+  GROUP?: Maybe<Array<Maybe<StablecoinEvent>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns the maximum of the specified field values within the specified child sets. If
@@ -7607,12 +8100,18 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
 };
 
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831AvgArgs = {
   GROUP?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector>;
+=======
+export type StablecoinEventAvgArgs = {
+  GROUP?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831CountArgs = {
   GROUP?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector>;
 };
@@ -7630,22 +8129,55 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
 
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831MaxArgs = {
   GROUP?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector>;
+=======
+export type StablecoinEventCountArgs = {
+  GROUP?: InputMaybe<StablecoinEvent__CountSelector>;
+};
+
+
+export type StablecoinEventGroupArgs = {
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<StablecoinEventFilterArg>;
+  groupBy?: InputMaybe<Array<StablecoinEventField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<StablecoinEventOrderArg>>>;
+};
+
+
+export type StablecoinEventMaxArgs = {
+  GROUP?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831MinArgs = {
   GROUP?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector>;
+=======
+export type StablecoinEventMinArgs = {
+  GROUP?: InputMaybe<StablecoinEvent__NumericSelector>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831SumArgs = {
   GROUP?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector>;
   blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
 };
 
 export enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831Field {
+=======
+export type StablecoinEventSumArgs = {
+  GROUP?: InputMaybe<StablecoinEvent__NumericSelector>;
+  blockNumber?: InputMaybe<ScalarAggregateNumericBlock>;
+};
+
+export enum StablecoinEventField {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Group = 'GROUP',
   Arguments = 'arguments',
   BlockNumber = 'blockNumber',
@@ -7657,7 +8189,11 @@ export enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   To = 'to'
 }
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg = {
+=======
+export type StablecoinEventFilterArg = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /** The alias operator allows filters to target aliased fields. */
   _alias?: InputMaybe<Scalars['JSON']['input']>;
   /**
@@ -7665,19 +8201,31 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
    * The and operator - all checks within this clause must pass in order for this check to pass.
    *
    */
+<<<<<<< HEAD
   _and?: InputMaybe<Array<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg>>;
+=======
+  _and?: InputMaybe<Array<StablecoinEventFilterArg>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * The negative operator - this check will only pass if all checks within it fail.
    *
    */
+<<<<<<< HEAD
   _not?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg>;
+=======
+  _not?: InputMaybe<StablecoinEventFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * The or operator - only one check within this clause must pass in order for this check to pass.
    *
    */
+<<<<<<< HEAD
   _or?: InputMaybe<Array<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg>>;
+=======
+  _or?: InputMaybe<Array<StablecoinEventFilterArg>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   arguments?: InputMaybe<StringOperatorBlock>;
   blockNumber?: InputMaybe<IntOperatorBlock>;
   event?: InputMaybe<StringOperatorBlock>;
@@ -7688,7 +8236,11 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   to?: InputMaybe<StringOperatorBlock>;
 };
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831MutationInputArg = {
+=======
+export type StablecoinEventMutationInputArg = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   arguments?: InputMaybe<Scalars['String']['input']>;
   blockNumber?: InputMaybe<Scalars['Int']['input']>;
   event?: InputMaybe<Scalars['String']['input']>;
@@ -7699,7 +8251,11 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   to?: InputMaybe<Scalars['String']['input']>;
 };
 
+<<<<<<< HEAD
 export enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg {
+=======
+export enum StablecoinEventNumericFieldsArg {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Avg = 'AVG',
   Count = 'COUNT',
   Max = 'MAX',
@@ -7708,7 +8264,11 @@ export enum StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   BlockNumber = 'blockNumber'
 }
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg = {
+=======
+export type StablecoinEventOrderArg = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /** The alias field allows ordering by aliased fields. */
   _alias?: InputMaybe<Scalars['JSON']['input']>;
   arguments?: InputMaybe<Ordering>;
@@ -7721,14 +8281,22 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   to?: InputMaybe<Ordering>;
 };
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__CountSelector = {
+=======
+export type StablecoinEvent__CountSelector = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional filter for this aggregate, only documents matching the given criteria
    *  will be aggregated.
    *
    */
+<<<<<<< HEAD
   filter?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg>;
+=======
+  filter?: InputMaybe<StablecoinEventFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -7746,7 +8314,11 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__Group__CountSelector = {
+=======
+export type StablecoinEvent__Group__CountSelector = {
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -7764,15 +8336,24 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+<<<<<<< HEAD
 export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831__NumericSelector = {
   field: StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831NumericFieldsArg;
+=======
+export type StablecoinEvent__NumericSelector = {
+  field: StablecoinEventNumericFieldsArg;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional filter for this aggregate, only documents matching the given criteria
    *  will be aggregated.
    *
    */
+<<<<<<< HEAD
   filter?: InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831FilterArg>;
+=======
+  filter?: InputMaybe<StablecoinEventFilterArg>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * An optional value that caps the number of results to the number provided.
@@ -7794,6 +8375,7 @@ export type StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfa
    *  empty set will be ignored.
    *
    */
+<<<<<<< HEAD
   order?: InputMaybe<Array<InputMaybe<StablecoinEvent_0xafd45b62b5472957490b7da4f8c97ced4496210c87ef6e5dfaffcbec02d0c831OrderArg>>>;
 };
 
@@ -8043,6 +8625,9 @@ export type StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0
    *
    */
   order?: InputMaybe<Array<InputMaybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767OrderArg>>>;
+=======
+  order?: InputMaybe<Array<InputMaybe<StablecoinEventOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
 };
 
 export type StringFilterArg = {
@@ -8161,12 +8746,16 @@ export type StringOperatorBlock = {
 export type Subscription = {
   __typename?: 'Subscription';
   Config__LastProcessedPage?: Maybe<Array<Maybe<Config__LastProcessedPage>>>;
+<<<<<<< HEAD
   DecodedERC20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9?: Maybe<Array<Maybe<DecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9>>>;
   DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62?: Maybe<Array<Maybe<DecodedLog_0x509a1984f010351390a30da88900ba6f9edfc10bb95b5960300d314830b4cf62>>>;
   DecodedUSDCLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1?: Maybe<Array<Maybe<DecodedUsdcLogs_0x24fc121717868fb26e7453fee1ef1d4389cd38ac876511533f820472d68c80e1>>>;
   DecodedUSDCLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6?: Maybe<Array<Maybe<DecodedUsdcLogs_0x5599bae4a4120b763132c0ae482d8fd30748ba0d040038e9b904e2145678f2a6>>>;
   DecodedUSDCTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a?: Maybe<Array<Maybe<DecodedUsdcTxs_0xf577dd9fc0950148a8b43a381ebced2dc54dc982976bfffe7122709d65686f4a>>>;
   Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4?: Maybe<Array<Maybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4>>>;
+=======
+  Erc20Transfer?: Maybe<Array<Maybe<Erc20Transfer>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   Ethereum__Mainnet__AccessListEntry?: Maybe<Array<Maybe<Ethereum__Mainnet__AccessListEntry>>>;
   Ethereum__Mainnet__AttestationRecord?: Maybe<Array<Maybe<Ethereum__Mainnet__AttestationRecord>>>;
   Ethereum__Mainnet__Block?: Maybe<Array<Maybe<Ethereum__Mainnet__Block>>>;
@@ -8174,6 +8763,7 @@ export type Subscription = {
   Ethereum__Mainnet__Log?: Maybe<Array<Maybe<Ethereum__Mainnet__Log>>>;
   Ethereum__Mainnet__SnapshotSignature?: Maybe<Array<Maybe<Ethereum__Mainnet__SnapshotSignature>>>;
   Ethereum__Mainnet__Transaction?: Maybe<Array<Maybe<Ethereum__Mainnet__Transaction>>>;
+<<<<<<< HEAD
   FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7?: Maybe<Array<Maybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7>>>;
   FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90?: Maybe<Array<Maybe<FilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90>>>;
   FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c?: Maybe<Array<Maybe<FilteredAndDecodedLogs_0x7c889dfa0de6ea3e18b8dc0650d65c49a64f1f30d18ce615ee13e2b4e7e5223c>>>;
@@ -8181,6 +8771,10 @@ export type Subscription = {
   StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767?: Maybe<Array<Maybe<StablecoinFunction_0x18415d7b8d092cb8285d882feb0d4571a89ebfc0c05c0e0ef6de1db986244767>>>;
   UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0?: Maybe<Array<Maybe<UsdcEvent_0x1bd1afe59e721667b09f9997bff449c3f199531d1aba2bac206fe8132356eda0>>>;
   UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3?: Maybe<Array<Maybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3>>>;
+=======
+  SimpleLog?: Maybe<Array<Maybe<SimpleLog>>>;
+  StablecoinEvent?: Maybe<Array<Maybe<StablecoinEvent>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   /**
    *
    * Returns a set of commits matching any provided criteria. If no arguments are
@@ -8203,6 +8797,7 @@ export type SubscriptionConfig__LastProcessedPageArgs = {
 };
 
 
+<<<<<<< HEAD
 export type SubscriptionDecodedErc20Transfers_0x091d0be2ff98419362dac49afeada8a8c98c12b32f49d14df618e2012955e6c9Args = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -8271,6 +8866,16 @@ export type SubscriptionErc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4ff
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<Erc20Event_0x9c3455147dfe9a5aca44797a2481fefa51bf00dd4fff7af9fbdfd1e4d4dc7de4OrderArg>>>;
+=======
+export type SubscriptionErc20TransferArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<Erc20TransferFilterArg>;
+  groupBy?: InputMaybe<Array<Erc20TransferField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<Erc20TransferOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -8359,6 +8964,7 @@ export type SubscriptionEthereum__Mainnet__TransactionArgs = {
 };
 
 
+<<<<<<< HEAD
 export type SubscriptionFilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7Args = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -8367,10 +8973,21 @@ export type SubscriptionFilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<FilteredAndDecodedLogs1_0x73cc38a87e9e0df86f54971e00556a184f8279c9ae9a79f144e9c6a95799a1f7OrderArg>>>;
+=======
+export type SubscriptionSimpleLogArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<SimpleLogFilterArg>;
+  groupBy?: InputMaybe<Array<SimpleLogField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<SimpleLogOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
+<<<<<<< HEAD
 export type SubscriptionFilteredAndDecodedLogs2_0x0e8910a1a3470363c4c9cde7e3226eb01fff24e7af24f99539ac07125712ba90Args = {
   cid?: InputMaybe<Scalars['String']['input']>;
   docID?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -8439,6 +9056,16 @@ export type SubscriptionUsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d93
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<InputMaybe<UsdcFunction_0x557d05012fce640f5a50ed56ff6cde8d529e23d934c6ed0e0c01d4817a8b51c3OrderArg>>>;
+=======
+export type SubscriptionStablecoinEventArgs = {
+  cid?: InputMaybe<Scalars['String']['input']>;
+  docID?: InputMaybe<Array<Scalars['ID']['input']>>;
+  filter?: InputMaybe<StablecoinEventFilterArg>;
+  groupBy?: InputMaybe<Array<StablecoinEventField>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InputMaybe<StablecoinEventOrderArg>>>;
+>>>>>>> 56156cc (updating block details to be displayed via hash)
   showDeleted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
@@ -9069,6 +9696,13 @@ export type BlockQueryVariables = Exact<{
 
 export type BlockQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Ethereum__Mainnet__Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null } | null> | null };
 
+export type BlockByHashQueryVariables = Exact<{
+  hash: Scalars['String']['input'];
+}>;
+
+
+export type BlockByHashQuery = { __typename?: 'Query', Block?: Array<{ __typename?: 'Ethereum__Mainnet__Block', hash?: string | null, number?: number | null, timestamp?: string | null, parentHash?: string | null, difficulty?: string | null, totalDifficulty?: string | null, gasUsed?: string | null, gasLimit?: string | null, baseFeePerGas?: string | null, nonce?: string | null, miner?: string | null, size?: string | null, stateRoot?: string | null, sha3Uncles?: string | null, transactionsRoot?: string | null, receiptsRoot?: string | null, logsBloom?: string | null, extraData?: string | null, mixHash?: string | null } | null> | null };
+
 export type BlocksQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -9194,6 +9828,31 @@ export const BlockDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<BlockQuery, BlockQueryVariables>;
+export const BlockByHashDocument = new TypedDocumentString(`
+    query BlockByHash($hash: String!) {
+  Block: Ethereum__Mainnet__Block(filter: {hash: {_eq: $hash}}, limit: 1) {
+    hash
+    number
+    timestamp
+    parentHash
+    difficulty
+    totalDifficulty
+    gasUsed
+    gasLimit
+    baseFeePerGas
+    nonce
+    miner
+    size
+    stateRoot
+    sha3Uncles
+    transactionsRoot
+    receiptsRoot
+    logsBloom
+    extraData
+    mixHash
+  }
+}
+    `) as unknown as TypedDocumentString<BlockByHashQuery, BlockByHashQueryVariables>;
 export const BlocksDocument = new TypedDocumentString(`
     query Blocks($offset: Int, $limit: Int) {
   Block: Ethereum__Mainnet__Block(

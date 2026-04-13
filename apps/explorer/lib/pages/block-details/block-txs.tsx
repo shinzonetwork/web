@@ -6,7 +6,7 @@ import { useBlockTransactions } from "./use-block-transactions";
 import { BlockTransactionsList } from "./block-transactions-list";
 import { useBlockTransactionsCount } from './use-block-transactions-count';
 export interface BlockTxsProps {
-  blockNumber: number;
+  blockNumber: number | undefined;
   pageParams: PageParams;
 }
 
