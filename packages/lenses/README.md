@@ -17,7 +17,7 @@ pnpm test
 
 This builds the example lenses and runs the package test suite.
 
-Compiled artifacts are written to `build/<lens-name>/`.
+Compiled artifacts are written to `<lens-name>/lens.wasm`.
 
 ## Writing lenses
 
@@ -107,6 +107,113 @@ result.expectNoError().expectSingleRow(expectedRow);
 ```
 
 This keeps normal lens tests focused on inputs and outputs rather than transport vectors or raw WASM memory.
+
+## View validation
+
+The package provides `validateView()` — a static validation layer that checks the consistency of a complete view definition (query + SDL + WASM lenses) without requiring a running DefraDB instance. It's available from two entry points:
+
+- `@shinzo/lenses/testing` — Node.js, includes `loadWasmBytes()` for reading `.wasm` files from disk
+- `@shinzo/lenses/validate` — browser-safe, no Node.js dependencies
+
+### Usage in Node.js / vitest
+
+```ts
+import { validateView, loadWasmBytes } from "@shinzo/lenses/testing";
+import { join } from "node:path";
+
+const wasmBytes = loadWasmBytes(join(process.cwd(), "erc20-transfers/lens.wasm"));
+
+const result = await validateView({
+  query: "Ethereum__Mainnet__Log { address topics data blockNumber transaction { hash from to } }",
+  sdl: `type ERC20Transfer @materialized(if: false) {
+    tokenAddress: String
+    hash: String
+    from: String
+    to: String
+    amount: String
+    blockNumber: Int
+  }`,
+  lenses: [{
+    wasmBytes,
+    args: { tokenAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7" },
+    testInputs: [sampleLog],  // optional — enables output field checks
+  }],
+});
+
+if (!result.ok) {
+  console.error("Validation failed:", result.issues);
+}
+```
+
+### Usage in browser
+
+```ts
+import { validateView } from "@shinzo/lenses/validate";
+
+const wasmBytes = new Uint8Array(
+  await fetch("/erc20-transfers.wasm").then((r) => r.arrayBuffer())
+);
+
+const result = await validateView({
+  query: "...",
+  sdl: "...",
+  lenses: [{ wasmBytes }],
+});
+```
+
+### Validation codes
+
+`validateView()` returns a `ViewValidationResult` with `ok: boolean` and an `issues` array. Each issue has a `severity` ("error" or "warning"), a machine-readable `code`, and a human-readable `message`. Errors prevent deployment; warnings are informational.
+
+#### WASM binary health (Check 1)
+
+| Code | Severity | Description |
+|---|---|---|
+| `WASM_MISSING_EXPORT` | error | WASM module is missing a required export (`alloc`, `set_param`, `transform`, or `memory`). The binary was not compiled with the Shinzo LensVM SDK. |
+| `WASM_INSUFFICIENT_MEMORY` | error | WASM has only 1 initial memory page (64KB). Will OOM in DefraDB's lens runtime. Set `initialMemory` to at least 4 in `asconfig.json`. |
+| `WASM_LOW_MEMORY` | warning | WASM has fewer than 4 initial memory pages. May work but leaves little headroom for heap growth. |
+| `WASM_INSTANTIATION_FAILED` | error | `WebAssembly.instantiate()` threw. The binary is malformed or has unsatisfied imports. |
+
+#### SDL parsing (Check 2)
+
+| Code | Severity | Description |
+|---|---|---|
+| `SDL_PARSE_FAILED` | error | Could not extract a type name and field list from the SDL string. Check that the SDL contains a valid `type Name { ... }` definition. |
+
+#### Output field coverage (Check 3)
+
+Requires `testInputs` on the first lens. Skipped if not provided.
+
+| Code | Severity | Description |
+|---|---|---|
+| `OUTPUT_FIELD_NOT_IN_SDL` | error | The lens output contains a field not declared in the SDL. The host will reject or silently drop it. |
+| `SDL_FIELD_NOT_EMITTED` | warning | The SDL declares a field that no output row produced. The field will always be null at query time. |
+| `OUTPUT_TYPE_MISMATCH` | warning | An output value's JS type doesn't match the SDL type (e.g., SDL says `Int` but the value is a string). |
+
+#### Query field coverage (Check 4)
+
+| Code | Severity | Description |
+|---|---|---|
+| `QUERY_MISSING_EVM_FIELD` | error | A required EVM log field (`address`, `topics`, `data`, or `blockNumber`) is missing from the query. |
+| `QUERY_MISSING_EVM_RELATION` | error | The query has no `transaction { ... }` nested object. EVM lenses need `log.transaction.hash` etc. |
+| `QUERY_FLAT_FIELD_INSTEAD_OF_RELATION` | error | The query uses `transactionHash` as a flat field instead of `transaction { hash }`. The lens reads from `log.transaction.hash` and will break. |
+| `QUERY_MISSING_TRANSACTION_FIELD` | warning | A transaction sub-field (`from` or `to`) is missing. The lens may work but will see empty strings for the missing fields. |
+
+#### Lens chain validation (Check 5)
+
+Only runs when `testInputs` are provided and there are multiple lenses.
+
+| Code | Severity | Description |
+|---|---|---|
+| `CHAIN_INCOMPATIBLE` | error | Lens N+1 errored when fed the output of lens N. The lenses are not compatible in sequence. |
+| `CHAIN_NO_TEST_DATA` | warning | Lens N produced zero output rows, so lens N+1 could not be validated. |
+
+#### Memory budget estimation (Check 6)
+
+| Code | Severity | Description |
+|---|---|---|
+| `WASM_MEMORY_CRITICAL` | error | The data section uses more than 80% of initial memory. The lens will likely OOM under real workloads. |
+| `WASM_MEMORY_PRESSURE` | warning | The data section uses more than 50% of initial memory. The lens may OOM with large documents. |
 
 ## Further reading
 
