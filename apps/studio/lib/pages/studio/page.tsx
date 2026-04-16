@@ -31,14 +31,17 @@ import {
   StoredViewsPanel,
   type StoredCallState,
 } from "./stored-views-panel";
+import type { ValidationIssue } from "@shinzo/lenses/validate";
 import {
   callStoredLensView,
   deployAndQueryLens,
   requeryLens,
+  ViewValidationError,
 } from "./studio-actions";
 
 type DeployStatus =
   | "idle"
+  | "validating"
   | "building"
   | "deploying"
   | "propagating"
@@ -48,6 +51,7 @@ type DeployStatus =
 
 const STATUS_LABELS: Record<DeployStatus, string> = {
   idle: "",
+  validating: "Validating view definition...",
   building: "Building view bundle...",
   deploying: "Deploying to ShinzoHub...",
   propagating: "Waiting for host propagation...",
@@ -66,6 +70,9 @@ export function StudioPage() {
   const [error, setError] = useState("");
   const [results, setResults] = useState<Erc20TransferResult[]>([]);
   const [storedViews, setStoredViews] = useState<StoredDeployedView[]>([]);
+  const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>(
+    []
+  );
   const [storedCallState, setStoredCallState] = useState<StoredCallState>({
     status: "idle",
   });
@@ -75,6 +82,7 @@ export function StudioPage() {
   }, []);
 
   const isInProgress =
+    status === "validating" ||
     status === "building" ||
     status === "deploying" ||
     status === "propagating" ||
@@ -98,20 +106,23 @@ export function StudioPage() {
 
     setError("");
     setResults([]);
+    setValidationIssues([]);
 
     try {
-      setStatus("building");
-      const { deployedView, payload } = await deployAndQueryLens({
-        senderAddress: walletAddress,
-        lens: ERC20_TRANSFER_LENS,
-        args: runtimeArgs,
-        chainId: shinzoDevnet.id,
-        hostUrl: HOST_GRAPHQL_PROXY_PATH,
-        switchChainAsync,
-        sendTransactionAsync,
-        onStatusChange: setStatus,
-      });
+      setStatus("validating");
+      const { deployedView, payload, validationWarnings } =
+        await deployAndQueryLens({
+          senderAddress: walletAddress,
+          lens: ERC20_TRANSFER_LENS,
+          args: runtimeArgs,
+          chainId: shinzoDevnet.id,
+          hostUrl: HOST_GRAPHQL_PROXY_PATH,
+          switchChainAsync,
+          sendTransactionAsync,
+          onStatusChange: setStatus,
+        });
 
+      setValidationIssues(validationWarnings);
       setStoredViews(appendStoredDeployedView(deployedView));
       setResults(
         Array.isArray(payload) ? (payload as Erc20TransferResult[]) : []
@@ -120,7 +131,12 @@ export function StudioPage() {
     } catch (err) {
       console.error(err);
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Unexpected error");
+      if (err instanceof ViewValidationError) {
+        setValidationIssues(err.result.issues);
+        setError("");
+      } else {
+        setError(err instanceof Error ? err.message : "Unexpected error");
+      }
     }
   }, [
     address,
@@ -286,6 +302,31 @@ export function StudioPage() {
 
             {status === "error" && error && (
               <p className="text-sm text-red-500">{error}</p>
+            )}
+
+            {validationIssues.length > 0 && (
+              <div className="flex flex-col gap-2">
+                {validationIssues.some((i) => i.severity === "error") && (
+                  <p className="text-sm font-medium text-red-600">
+                    Validation failed — deployment was stopped.
+                  </p>
+                )}
+                {validationIssues.map((issue, idx) => (
+                  <div
+                    key={idx}
+                    className={`rounded-lg border p-3 text-sm ${
+                      issue.severity === "error"
+                        ? "border-red-200 bg-red-50 text-red-700"
+                        : "border-amber-200 bg-amber-50 text-amber-700"
+                    }`}
+                  >
+                    <span className="font-mono text-xs opacity-60">
+                      {issue.code}
+                    </span>{" "}
+                    {issue.message}
+                  </div>
+                ))}
+              </div>
             )}
 
             {status === "done" && <Results results={results} />}

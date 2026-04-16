@@ -22,7 +22,7 @@ function extractRootTypeName(sdl: string): string {
   return m[1];
 }
 
-async function downloadWasm(url: string): Promise<Uint8Array> {
+export async function downloadWasm(url: string): Promise<Uint8Array> {
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to download WASM: ${res.status} ${res.statusText}`);
@@ -33,15 +33,16 @@ async function downloadWasm(url: string): Promise<Uint8Array> {
 export async function buildDeployTransaction<TArgs extends LensArgs>(
   senderAddress: string,
   lens: LensDefinition<TArgs>,
-  args: TArgs
+  args: TArgs,
+  preloadedWasmBytes?: Uint8Array,
 ): Promise<{
   to: typeof VIEW_REGISTRY_ADDRESS;
   data: Hex;
   viewName: string;
   viewHash: Hex;
 }> {
-  // 1. Download and base64-encode the WASM lens
-  const wasmBytes = await downloadWasm(lens.wasmUrl);
+  // 1. Use pre-loaded WASM or download it
+  const wasmBytes = preloadedWasmBytes ?? await downloadWasm(lens.wasmUrl);
 
   // 2. Bundle the view (protobuf + zstd)
   const bundler = new Bundler(makeBrowserZstd());

@@ -1,5 +1,16 @@
 import { expect } from "vitest";
 import { LensModuleRef, runLens } from "./internal";
+export {
+  validateView,
+  parseQueryFields,
+  type ViewDefinition,
+  type LensEntry,
+  type ValidationIssue,
+  type ViewValidationResult,
+} from "./validate";
+export { loadWasmBytes } from "./internal";
+export { inspectWasm, type WasmInspection } from "./wasm-inspect";
+export { parseSdl, type SdlField, type SdlType } from "./sdl-parse";
 
 export class LensRunResult {
   rows: unknown[];

@@ -1,5 +1,6 @@
 import type { Hex } from "viem";
-import { buildDeployTransaction } from "./deploy-view";
+import { validateView, type ViewValidationResult } from "@shinzo/lenses/validate";
+import { buildDeployTransaction, downloadWasm } from "./deploy-view";
 import { queryLensView, pollForView } from "./query-view";
 import {
   createStoredDeployedView,
@@ -18,7 +19,18 @@ type SendTransactionFn = (args: {
   data: Hex;
   chainId: number;
 }) => Promise<unknown>;
-type DeployProgressStatus = "deploying" | "propagating" | "querying";
+type DeployProgressStatus = "validating" | "deploying" | "propagating" | "querying";
+
+export class ViewValidationError extends Error {
+  result: ViewValidationResult;
+
+  constructor(result: ViewValidationResult) {
+    const errorCount = result.issues.filter((i) => i.severity === "error").length;
+    super(`View validation failed with ${errorCount} error(s)`);
+    this.name = "ViewValidationError";
+    this.result = result;
+  }
+}
 
 export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
   senderAddress: string;
@@ -32,6 +44,7 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
 }): Promise<{
   deployedView: StoredDeployedView;
   payload: unknown;
+  validationWarnings: ViewValidationResult["issues"];
 }> {
   const {
     senderAddress,
@@ -44,7 +57,20 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
     onStatusChange,
   } = params;
 
-  const tx = await buildDeployTransaction(senderAddress, lens, args);
+  // Download WASM and validate before deploying
+  onStatusChange?.("validating");
+  const wasmBytes = await downloadWasm(lens.wasmUrl);
+  const validation = await validateView({
+    query: lens.query,
+    sdl: lens.sdl,
+    lenses: [{ wasmBytes, args: lens.buildDeployArgs(args) }],
+  });
+
+  if (!validation.ok) {
+    throw new ViewValidationError(validation);
+  }
+
+  const tx = await buildDeployTransaction(senderAddress, lens, args, wasmBytes);
 
   onStatusChange?.("deploying");
   await switchChainAsync({ chainId });
@@ -69,6 +95,7 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
   return {
     deployedView,
     payload,
+    validationWarnings: validation.issues.filter((i) => i.severity === "warning"),
   };
 }
 
