@@ -1,13 +1,12 @@
-import { buildTransferQuery } from "@/shared/consts/view-config";
+import type { LensArgs, LensDefinition } from "./lens-catalog";
 
-export type TransferResult = {
+export type Erc20TransferResult = {
+  tokenAddress: string;
   hash: string;
   blockNumber: number;
   from: string;
   to: string;
-  logAddress: string;
-  event: string;
-  signature: string;
+  amount: string;
 };
 
 function delay(ms: number): Promise<void> {
@@ -60,17 +59,15 @@ export async function pollForView(
   );
 }
 
-/**
- * Query the host for decoded ERC-20 transfers matching the given address.
- */
-export async function queryTransfers(
+export async function queryLensView<TArgs extends LensArgs>(
+  lens: LensDefinition<TArgs>,
   viewName: string,
-  address: string,
+  args: TArgs,
   hostUrl: string
-): Promise<TransferResult[]> {
-  const query = buildTransferQuery(viewName, address);
+): Promise<unknown> {
+  const query = lens.buildHostQuery(viewName, args);
   const result = (await graphqlFetch(hostUrl, query)) as {
-    data?: Record<string, TransferResult[]>;
+    data?: Record<string, unknown>;
     errors?: Array<{ message: string }>;
   };
 
@@ -80,5 +77,5 @@ export async function queryTransfers(
 
   // The result key matches the view name
   const data = result.data?.[viewName];
-  return data ?? [];
+  return data ?? null;
 }

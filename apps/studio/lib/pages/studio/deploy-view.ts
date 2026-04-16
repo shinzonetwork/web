@@ -9,13 +9,10 @@ import {
   type Hex,
 } from "viem";
 import {
-  VIEW_QUERY,
-  VIEW_SDL,
-  ERC20_TRANSFER_ABI,
-  DECODE_LOG_WASM_URL,
   VIEW_REGISTRY_ADDRESS,
   VIEW_REGISTRY_ABI,
 } from "@/shared/consts/view-config";
+import type { LensArgs, LensDefinition } from "./lens-catalog";
 
 function extractRootTypeName(sdl: string): string {
   const m = sdl.match(/type\s+([A-Za-z0-9_]+)/);
@@ -33,25 +30,29 @@ async function downloadWasm(url: string): Promise<Uint8Array> {
   return new Uint8Array(await res.arrayBuffer());
 }
 
-export async function buildDeployTransaction(senderAddress: string): Promise<{
+export async function buildDeployTransaction<TArgs extends LensArgs>(
+  senderAddress: string,
+  lens: LensDefinition<TArgs>,
+  args: TArgs
+): Promise<{
   to: typeof VIEW_REGISTRY_ADDRESS;
   data: Hex;
-  viewId: string;
+  viewName: string;
   viewHash: Hex;
 }> {
   // 1. Download and base64-encode the WASM lens
-  const wasmBytes = await downloadWasm(DECODE_LOG_WASM_URL);
+  const wasmBytes = await downloadWasm(lens.wasmUrl);
 
   // 2. Bundle the view (protobuf + zstd)
   const bundler = new Bundler(makeBrowserZstd());
   const payloadBytes = await bundler.BundleView({
-    Query: VIEW_QUERY,
-    Sdl: VIEW_SDL,
+    Query: lens.query,
+    Sdl: lens.sdl,
     Transform: {
       Lenses: [
         {
           Path: bytesToBase64(wasmBytes),
-          Arguments: JSON.stringify({ abi: ERC20_TRANSFER_ABI }),
+          Arguments: JSON.stringify(lens.buildDeployArgs(args)),
         },
       ],
     },
@@ -63,12 +64,11 @@ export async function buildDeployTransaction(senderAddress: string): Promise<{
   );
 
   // 4. Build view ID: {RootTypeName}_{viewHash}
-  const rootType = extractRootTypeName(VIEW_SDL);
-  const viewId = `${rootType}_${viewHash}`;
+  const rootType = extractRootTypeName(lens.sdl);
+  const viewName = `${rootType}_${viewHash}`;
 
   // 5. Encode the register(bytes) calldata
   const payloadHex = toHex(payloadBytes);
-  console.log(payloadHex);
   const data = encodeFunctionData({
     abi: VIEW_REGISTRY_ABI,
     functionName: "register",
@@ -78,7 +78,7 @@ export async function buildDeployTransaction(senderAddress: string): Promise<{
   return {
     to: VIEW_REGISTRY_ADDRESS,
     data,
-    viewId,
+    viewName,
     viewHash,
   };
 }

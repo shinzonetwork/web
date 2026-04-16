@@ -1,17 +1,17 @@
 "use client";
 
-import type { TransferResult } from "./query-view";
+import type { Erc20TransferResult } from "./query-view";
 
 function truncate(str: string, len = 10): string {
   if (str.length <= len) return str;
   return `${str.slice(0, 6)}...${str.slice(-4)}`;
 }
 
-export function Results({ results }: { results: TransferResult[] }) {
+export function Results({ results }: { results: Erc20TransferResult[] }) {
   if (results.length === 0) {
     return (
       <div className="border border-szo-border p-6 text-center text-sm text-szo-border">
-        No ERC-20 transfers found for this address
+        No ERC-20 transfers found for this token
       </div>
     );
   }
@@ -25,8 +25,8 @@ export function Results({ results }: { results: TransferResult[] }) {
             <th className="px-4 py-3 font-medium">Tx Hash</th>
             <th className="px-4 py-3 font-medium">From</th>
             <th className="px-4 py-3 font-medium">To</th>
-            <th className="px-4 py-3 font-medium">Event</th>
-            <th className="px-4 py-3 font-medium">Contract</th>
+            <th className="px-4 py-3 font-medium">Amount</th>
+            <th className="px-4 py-3 font-medium">Token</th>
           </tr>
         </thead>
         <tbody>
@@ -45,9 +45,9 @@ export function Results({ results }: { results: TransferResult[] }) {
               <td className="px-4 py-3 font-mono text-xs">
                 {truncate(row.to)}
               </td>
-              <td className="px-4 py-3 text-xs">{row.event}</td>
+              <td className="px-4 py-3 font-mono text-xs">{row.amount}</td>
               <td className="px-4 py-3 font-mono text-xs">
-                {truncate(row.logAddress)}
+                {truncate(row.tokenAddress)}
               </td>
             </tr>
           ))}

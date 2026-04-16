@@ -6,15 +6,34 @@ import { SearchInput } from "@shinzo/ui/search-input";
 import { useAccount, useSendTransaction, useSwitchChain } from "wagmi";
 import { Header } from "./header";
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
-import { buildDeployTransaction } from "./deploy-view";
-import { pollForView, queryTransfers, type TransferResult } from "./query-view";
+import { type Erc20TransferResult } from "./query-view";
 import { Results } from "./results";
-import { HOST_GRAPHQL_URL } from "@/shared/consts/envs";
+import { HOST_GRAPHQL_PROXY_PATH } from "@/shared/consts/envs";
 import { shinzoDevnet } from "@/shared/wagmi";
 import {
-  VITALIK_ADDRESS,
-  DEPLOYED_VIEW_KEY,
+  USDC_TOKEN_ADDRESS,
+  USDT_TOKEN_ADDRESS,
 } from "@/shared/consts/view-config";
+import { Button } from "@/shared/button";
+import {
+  appendStoredDeployedView,
+  loadStoredDeployedViews,
+  type StoredDeployedView,
+} from "./deployed-views-storage";
+import {
+  ERC20_TRANSFER_LENS,
+  isStudioSupportedLens,
+  type TokenAddressLensArgs,
+} from "./lens-catalog";
+import {
+  StoredViewsPanel,
+  type StoredCallState,
+} from "./stored-views-panel";
+import {
+  callStoredLensView,
+  deployAndQueryLens,
+  requeryLens,
+} from "./studio-actions";
 
 type DeployStatus =
   | "idle"
@@ -35,26 +54,6 @@ const STATUS_LABELS: Record<DeployStatus, string> = {
   error: "",
 };
 
-type DeployedView = {
-  viewId: string;
-  address: string;
-  timestamp: number;
-};
-
-function loadDeployedView(): DeployedView | null {
-  try {
-    const raw = localStorage.getItem(DEPLOYED_VIEW_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    // ignore parse errors
-  }
-  return null;
-}
-
-function saveDeployedView(view: DeployedView): void {
-  localStorage.setItem(DEPLOYED_VIEW_KEY, JSON.stringify(view));
-}
-
 export function StudioPage() {
   const { address: walletAddress, isConnected } = useAccount();
   const { sendTransactionAsync } = useSendTransaction();
@@ -63,12 +62,14 @@ export function StudioPage() {
   const [address, setAddress] = useState("");
   const [status, setStatus] = useState<DeployStatus>("idle");
   const [error, setError] = useState("");
-  const [results, setResults] = useState<TransferResult[]>([]);
-  const [deployedView, setDeployedView] = useState<DeployedView | null>(null);
+  const [results, setResults] = useState<Erc20TransferResult[]>([]);
+  const [storedViews, setStoredViews] = useState<StoredDeployedView[]>([]);
+  const [storedCallState, setStoredCallState] = useState<StoredCallState>({
+    status: "idle",
+  });
 
-  // Load previously deployed view from localStorage
   useEffect(() => {
-    setDeployedView(loadDeployedView());
+    setStoredViews(loadStoredDeployedViews());
   }, []);
 
   const isInProgress =
@@ -77,48 +78,42 @@ export function StudioPage() {
     status === "propagating" ||
     status === "querying";
 
+  const latestDeployedView =
+    storedViews.find((view) => view.lensKey === ERC20_TRANSFER_LENS.lensKey) ??
+    null;
+  const visibleStoredViews = storedViews.filter((view) =>
+    isStudioSupportedLens(view.lensKey)
+  );
+
   const handleSubmit = useCallback(async () => {
     if (!address.trim() || !isConnected || !walletAddress || isInProgress) {
       return;
     }
 
+    const runtimeArgs: TokenAddressLensArgs = {
+      tokenAddress: address.trim().toLowerCase(),
+    };
+
     setError("");
     setResults([]);
 
     try {
-      // Step 1: Build the view bundle
       setStatus("building");
-      const tx = await buildDeployTransaction(walletAddress);
-
-      // Step 2: Switch to ShinzoHub chain and send the transaction
-      setStatus("deploying");
-      await switchChainAsync({ chainId: shinzoDevnet.id });
-      await sendTransactionAsync({
-        to: tx.to,
-        data: tx.data,
+      const { deployedView, payload } = await deployAndQueryLens({
+        senderAddress: walletAddress,
+        lens: ERC20_TRANSFER_LENS,
+        args: runtimeArgs,
         chainId: shinzoDevnet.id,
+        hostUrl: HOST_GRAPHQL_PROXY_PATH,
+        switchChainAsync,
+        sendTransactionAsync,
+        onStatusChange: setStatus,
       });
 
-      // Step 3: Save deployed view and poll for propagation
-      const deployed: DeployedView = {
-        viewId: tx.viewId,
-        address: address.trim(),
-        timestamp: Date.now(),
-      };
-      saveDeployedView(deployed);
-      setDeployedView(deployed);
-
-      setStatus("propagating");
-      await pollForView(tx.viewId, HOST_GRAPHQL_URL);
-
-      // Step 4: Query the transfers
-      setStatus("querying");
-      const data = await queryTransfers(
-        tx.viewId,
-        address.trim(),
-        HOST_GRAPHQL_URL
+      setStoredViews(appendStoredDeployedView(deployedView));
+      setResults(
+        Array.isArray(payload) ? (payload as Erc20TransferResult[]) : []
       );
-      setResults(data);
       setStatus("done");
     } catch (err) {
       console.error(err);
@@ -131,54 +126,86 @@ export function StudioPage() {
     walletAddress,
     isInProgress,
     sendTransactionAsync,
+    setStoredViews,
     switchChainAsync,
   ]);
 
   const handleRequery = useCallback(async () => {
-    if (!deployedView || isInProgress) return;
+    if (!latestDeployedView || isInProgress) return;
 
     setError("");
     setResults([]);
 
     try {
       setStatus("querying");
-      const data = await queryTransfers(
-        deployedView.viewId,
-        address.trim() || deployedView.address,
-        HOST_GRAPHQL_URL
+      const payload = await requeryLens({
+        lens: ERC20_TRANSFER_LENS,
+        viewName: latestDeployedView.viewName,
+        args: latestDeployedView.args as TokenAddressLensArgs,
+        hostUrl: HOST_GRAPHQL_PROXY_PATH,
+      });
+      setResults(
+        Array.isArray(payload) ? (payload as Erc20TransferResult[]) : []
       );
-      setResults(data);
       setStatus("done");
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Unexpected error");
     }
-  }, [deployedView, address, isInProgress]);
+  }, [latestDeployedView, isInProgress]);
+
+  const handleStoredCall = useCallback(async (view: StoredDeployedView) => {
+    setStoredCallState({
+      status: "loading",
+      viewName: view.viewName,
+    });
+
+    try {
+      const { payload } = await callStoredLensView({
+        view,
+        hostUrl: HOST_GRAPHQL_PROXY_PATH,
+      });
+      setStoredCallState({
+        status: "success",
+        viewName: view.viewName,
+        payload,
+      });
+    } catch (err) {
+      setStoredCallState({
+        status: "error",
+        viewName: view.viewName,
+        error: err instanceof Error ? err.message : "Unexpected error",
+      });
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
 
       <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-6 py-12">
+        <StoredViewsPanel
+          storedViews={visibleStoredViews}
+          callState={storedCallState}
+          onCall={handleStoredCall}
+        />
+
         {/* Title & description */}
         <div className="flex flex-col gap-3">
           <h2 className="text-2xl font-semibold text-szo-black">
-            ERC-20 Transfers by Address
+            {ERC20_TRANSFER_LENS.title}
           </h2>
           <p className="text-sm leading-relaxed text-szo-black/60">
-            This demo deploys a Shinzo View that uses the{" "}
-            <span className="font-mono">decode_log</span> lens to decode raw
-            Ethereum event logs. It filters transactions by a given address,
-            finds ERC-20 Transfer events, and decodes them to reveal sender,
-            receiver, and token contract. The view is registered on-chain to
-            ShinzoHub and queried from a Shinzo Host.
+            {ERC20_TRANSFER_LENS.description} Deploy a view for a specific
+            token contract, then re-query it from a Shinzo Host after
+            propagation.
           </p>
         </div>
 
         {/* Address input */}
         <div className="flex flex-col gap-3">
           <SearchInput
-            placeholder="Enter Ethereum address (0x...)"
+            placeholder="Enter ERC-20 token address (0x...)"
             showHint={false}
             enableSlashKey={false}
             autoFocus
@@ -193,20 +220,18 @@ export function StudioPage() {
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => setAddress(VITALIK_ADDRESS)}
+              onClick={() => setAddress(USDT_TOKEN_ADDRESS)}
               className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
             >
-              vitalik.eth
+              USDT
             </button>
-            {isConnected && walletAddress && (
-              <button
-                type="button"
-                onClick={() => setAddress(walletAddress)}
-                className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
-              >
-                My Wallet
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setAddress(USDC_TOKEN_ADDRESS)}
+              className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
+            >
+              USDC
+            </button>
           </div>
         </div>
 
@@ -216,24 +241,25 @@ export function StudioPage() {
             <ConnectDialog />
           ) : (
             <>
-              <button
+              <Button
                 type="button"
                 onClick={handleSubmit}
                 disabled={!address.trim() || isInProgress}
-                className="flex items-center gap-2 border border-szo-black bg-szo-black px-5 py-2.5 text-sm font-medium text-szo-bg transition-colors hover:bg-szo-bg hover:text-szo-black disabled:cursor-not-allowed disabled:opacity-50"
+                className="gap-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isInProgress && <Loader2 className="size-4 animate-spin" />}
                 {isInProgress ? STATUS_LABELS[status] : "Deploy & Query"}
-              </button>
-              {deployedView && status !== "querying" && (
-                <button
+              </Button>
+              {latestDeployedView && status !== "querying" && (
+                <Button
                   type="button"
                   onClick={handleRequery}
                   disabled={isInProgress}
-                  className="border border-szo-border px-5 py-2.5 text-sm font-medium transition-colors hover:border-szo-black disabled:cursor-not-allowed disabled:opacity-50"
+                  variant="secondary"
+                  className="disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Re-query
-                </button>
+                </Button>
               )}
             </>
           )}
