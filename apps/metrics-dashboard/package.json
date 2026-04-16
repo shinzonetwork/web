@@ -9,8 +9,9 @@
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "build-and-deploy": "pnpm build && wrangler deploy",
-    "build-and-upload": "pnpm build && wrangler versions upload"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "build-and-upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload"
   },
   "dependencies": {
     "@shinzo/ui": "workspace:*",
