@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { SearchInput } from "@shinzo/ui/search-input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shinzo/ui/tabs";
 import { useAccount, useSendTransaction, useSwitchChain } from "wagmi";
 import { Header } from "./header";
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
@@ -21,6 +22,7 @@ import {
   type StoredDeployedView,
 } from "./deployed-views-storage";
 import {
+  ERC20_ACCOUNT_BALANCES_LENS,
   ERC20_TRANSFER_LENS,
   isStudioSupportedLens,
   type TokenAddressLensArgs,
@@ -183,95 +185,114 @@ export function StudioPage() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-6 py-12">
-        <StoredViewsPanel
-          storedViews={visibleStoredViews}
-          callState={storedCallState}
-          onCall={handleStoredCall}
-        />
-
-        {/* Title & description */}
-        <div className="flex flex-col gap-3">
-          <h2 className="text-2xl font-semibold text-szo-black">
-            {ERC20_TRANSFER_LENS.title}
-          </h2>
-          <p className="text-sm leading-relaxed text-szo-black/60">
-            {ERC20_TRANSFER_LENS.description} Deploy a view for a specific
-            token contract, then re-query it from a Shinzo Host after
-            propagation.
-          </p>
-        </div>
-
-        {/* Address input */}
-        <div className="flex flex-col gap-3">
-          <SearchInput
-            placeholder="Enter ERC-20 token address (0x...)"
-            showHint={false}
-            enableSlashKey={false}
-            autoFocus
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSubmit();
-            }}
-          />
-
-          {/* Badge buttons */}
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setAddress(USDT_TOKEN_ADDRESS)}
-              className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
-            >
-              USDT
-            </button>
-            <button
-              type="button"
-              onClick={() => setAddress(USDC_TOKEN_ADDRESS)}
-              className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
-            >
-              USDC
-            </button>
+      <main className="mx-auto flex w-full max-w-2xl flex-col px-6 py-12">
+        <Tabs
+          defaultValue={ERC20_TRANSFER_LENS.lensKey}
+          className="gap-8"
+        >
+          <div className="w-full border-b border-ui-border">
+            <TabsList className="[&>*]:translate-y-[1px]">
+              <TabsTrigger value={ERC20_TRANSFER_LENS.lensKey}>
+                ERC20 Transfers
+              </TabsTrigger>
+              <TabsTrigger value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
+                ERC20 Balances
+              </TabsTrigger>
+            </TabsList>
           </div>
-        </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-wrap gap-3">
-          {!isConnected ? (
-            <ConnectDialog />
-          ) : (
-            <>
-              <Button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!address.trim() || isInProgress}
-                className="gap-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isInProgress && <Loader2 className="size-4 animate-spin" />}
-                {isInProgress ? STATUS_LABELS[status] : "Deploy & Query"}
-              </Button>
-              {latestDeployedView && status !== "querying" && (
-                <Button
+          <TabsContent
+            value={ERC20_TRANSFER_LENS.lensKey}
+            className="flex flex-col gap-8"
+          >
+            <StoredViewsPanel
+              storedViews={visibleStoredViews}
+              callState={storedCallState}
+              onCall={handleStoredCall}
+            />
+
+            <div className="flex flex-col gap-3">
+              <h2 className="text-2xl font-semibold text-szo-black">
+                {ERC20_TRANSFER_LENS.title}
+              </h2>
+              <p className="text-sm leading-relaxed text-szo-black/60">
+                {ERC20_TRANSFER_LENS.description} Deploy a view for a specific
+                token contract, then re-query it from a Shinzo Host after
+                propagation.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3">
+              <SearchInput
+                placeholder="Enter ERC-20 token address (0x...)"
+                showHint={false}
+                enableSlashKey={false}
+                autoFocus
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSubmit();
+                }}
+              />
+
+              <div className="flex gap-2">
+                <button
                   type="button"
-                  onClick={handleRequery}
-                  disabled={isInProgress}
-                  variant="secondary"
-                  className="disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={() => setAddress(USDT_TOKEN_ADDRESS)}
+                  className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
                 >
-                  Re-query
-                </Button>
+                  USDT
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAddress(USDC_TOKEN_ADDRESS)}
+                  className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
+                >
+                  USDC
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+              {!isConnected ? (
+                <ConnectDialog />
+              ) : (
+                <>
+                  <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={!address.trim() || isInProgress}
+                    className="gap-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isInProgress && (
+                      <Loader2 className="size-4 animate-spin" />
+                    )}
+                    {isInProgress ? STATUS_LABELS[status] : "Deploy & Query"}
+                  </Button>
+                  {latestDeployedView && status !== "querying" && (
+                    <Button
+                      type="button"
+                      onClick={handleRequery}
+                      disabled={isInProgress}
+                      variant="secondary"
+                      className="disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Re-query
+                    </Button>
+                  )}
+                </>
               )}
-            </>
-          )}
-        </div>
+            </div>
 
-        {/* Error */}
-        {status === "error" && error && (
-          <p className="text-sm text-red-500">{error}</p>
-        )}
+            {status === "error" && error && (
+              <p className="text-sm text-red-500">{error}</p>
+            )}
 
-        {/* Results */}
-        {status === "done" && <Results results={results} />}
+            {status === "done" && <Results results={results} />}
+          </TabsContent>
+
+          <TabsContent value={ERC20_ACCOUNT_BALANCES_LENS.lensKey} />
+        </Tabs>
       </main>
     </div>
   );

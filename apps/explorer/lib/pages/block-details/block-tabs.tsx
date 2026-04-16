@@ -1,6 +1,6 @@
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { BlockCard } from './block-card';
 import { BlockTransactions } from './block-txs';
@@ -14,7 +14,10 @@ export interface BlockTabsProps {
 export const BlockTabs = ({ height, pageParams }: BlockTabsProps) => {
   return (
     <Tabs defaultValue='overview'>
-      <Container wrapperClassName='mt-12' borderB>
+      <Container
+        wrapperClassName='mt-12 border-b border-ui-border'
+        className='[&>*]:translate-y-[1px]'
+      >
         <TabsList>
           <TabsTrigger value='overview'>
             Overview
@@ -25,7 +28,7 @@ export const BlockTabs = ({ height, pageParams }: BlockTabsProps) => {
         </TabsList>
       </Container>
 
-      <div className='mt-2 border-t border-border'>
+      <div className='mt-2 border-t border-ui-border'>
         <TabsContent value='overview'>
           <BlockCard height={height} />
         </TabsContent>
