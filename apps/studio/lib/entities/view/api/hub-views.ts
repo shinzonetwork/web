@@ -1,45 +1,45 @@
-type HubViewWire = {
+import { SHINZOHUB_LCD_URL } from "@/shared/consts/envs";
+
+interface HubViewWire {
   name?: string;
   creator?: string;
   contract_address?: string;
   data?: string | null;
   height?: string;
-};
+}
 
-type HubViewsResponse = {
+interface HubViewsResponse {
   views?: HubViewWire[];
   pagination?: {
     next_key?: string | null;
   };
-};
+}
 
-type HubViewResponse = {
+interface HubViewResponse {
   view?: HubViewWire | null;
-};
+}
 
-export type HubViewRecord = {
+export interface HubViewRecord {
   name: string;
   creator: string;
   contractAddress: string;
   data: string | null;
   height: string;
-};
+}
 
-function normalizeHubBaseUrl(hubUrl: string): string {
-  const trimmed = hubUrl.trim();
+const normalizeHubBaseUrl = (): string => {
+  const trimmed = SHINZOHUB_LCD_URL.trim();
 
   if (!trimmed) {
     throw new Error("NEXT_PUBLIC_SHINZOHUB_LCD_URL is not set.");
   }
 
   return trimmed.endsWith("/") ? trimmed : `${trimmed}/`;
-}
+};
 
-function buildHubUrl(hubUrl: string, path: string): URL {
-  return new URL(path, normalizeHubBaseUrl(hubUrl));
-}
+const buildHubUrl = (path: string): URL => new URL(path, normalizeHubBaseUrl());
 
-async function hubFetch(url: URL): Promise<Response> {
+const hubFetch = async (url: URL): Promise<Response> => {
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok && response.status !== 404) {
@@ -49,9 +49,11 @@ async function hubFetch(url: URL): Promise<Response> {
   }
 
   return response;
-}
+};
 
-function toHubViewRecord(view: HubViewWire | null | undefined): HubViewRecord | null {
+const toHubViewRecord = (
+  view: HubViewWire | null | undefined
+): HubViewRecord | null => {
   if (!view?.name || !view.contract_address) {
     return null;
   }
@@ -63,12 +65,12 @@ function toHubViewRecord(view: HubViewWire | null | undefined): HubViewRecord | 
     data: view.data ?? null,
     height: view.height ?? "",
   };
-}
+};
 
-function findMatchingHubView(
+const findMatchingHubView = (
   views: HubViewWire[] | undefined,
   entityName: string
-): HubViewRecord | null {
+): HubViewRecord | null => {
   if (!views) {
     return null;
   }
@@ -82,16 +84,15 @@ function findMatchingHubView(
   }
 
   return null;
-}
+};
 
-export async function findHubViewByEntityName(
-  hubUrl: string,
+export const findHubViewByEntityName = async (
   entityName: string
-): Promise<HubViewRecord | null> {
+): Promise<HubViewRecord | null> => {
   let nextKey: string | null = null;
 
   while (true) {
-    const url = buildHubUrl(hubUrl, "/shinzonetwork/view/v1/views");
+    const url = buildHubUrl("/shinzonetwork/view/v1/views");
     url.searchParams.set("pagination.limit", "200");
 
     if (nextKey) {
@@ -115,16 +116,12 @@ export async function findHubViewByEntityName(
       return null;
     }
   }
-}
+};
 
-export async function getHubViewByContractAddress(
-  hubUrl: string,
+export const getHubViewByContractAddress = async (
   contractAddress: string
-): Promise<HubViewRecord | null> {
-  const url = buildHubUrl(
-    hubUrl,
-    `/shinzonetwork/view/v1/views/${contractAddress}`
-  );
+): Promise<HubViewRecord | null> => {
+  const url = buildHubUrl(`/shinzonetwork/view/v1/views/${contractAddress}`);
   const response = await hubFetch(url);
 
   if (response.status === 404) {
@@ -133,4 +130,4 @@ export async function getHubViewByContractAddress(
 
   const payload = (await response.json()) as HubViewResponse;
   return toHubViewRecord(payload.view);
-}
+};

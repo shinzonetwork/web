@@ -3,8 +3,8 @@
 import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
 import { type Connector, useAccount, useConnect, useDisconnect } from "wagmi";
-import { Button } from "@/shared/button";
-import { shinzoDevnet } from "@/shared/wagmi";
+import { Button } from "@/shared/ui/button";
+import { shinzoDevnet } from "@/shared/consts/wagmi";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
 import WalletConnectIcon from "./walletconnect.svg";
 import { cn } from "@shinzo/ui/cn";
 
-export function ConnectDialog() {
+export const ConnectDialog = () => {
   const { address, isConnected } = useAccount();
   const {
     connect,
@@ -153,4 +153,4 @@ export function ConnectDialog() {
       </Dialog>
     </>
   );
-}
+};

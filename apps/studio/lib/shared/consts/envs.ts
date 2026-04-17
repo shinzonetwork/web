@@ -1,10 +1,10 @@
 export const WALLETCONNECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_ID ?? "";
 export const APP_URL = process.env.NEXT_PUBLIC_URL ?? "http://localhost:3000";
 
-function parseBooleanEnv(
+const parseBooleanEnv = (
   value: string | undefined,
   defaultValue: boolean
-): boolean {
+): boolean => {
   if (!value) return defaultValue;
 
   switch (value.trim().toLowerCase()) {
@@ -21,7 +21,7 @@ function parseBooleanEnv(
     default:
       return defaultValue;
   }
-}
+};
 
 export const HOST_GRAPHQL_URL =
   process.env.NEXT_PUBLIC_HOST_GRAPHQL_URL ??

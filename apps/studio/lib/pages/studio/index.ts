@@ -1,1 +1,1 @@
-export { StudioPage } from "./page";
+export { StudioPage } from "./ui/page";

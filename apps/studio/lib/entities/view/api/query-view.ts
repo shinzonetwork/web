@@ -1,0 +1,90 @@
+import {
+  getLensDefinition,
+  type AnyLensDefinition,
+  type LensArgs,
+  type ResolvedLensView,
+} from "@/entities/lens";
+import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
+import {
+  STUDIO_QUERY_LIMIT,
+  type LensQueryPage,
+  type StoredDeployedView,
+} from "../model/types";
+
+const graphqlFetch = async (query: string): Promise<Record<string, unknown>> => {
+  const res = await fetch(HOST_GRAPHQL_REQUEST_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+  if (!res.ok) {
+    throw new Error(`Host returned ${res.status}: ${res.statusText}`);
+  }
+  return res.json();
+};
+
+interface QueryLensViewOptions {
+  entityName?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export const queryLensView = async <TArgs extends LensArgs>(
+  view: ResolvedLensView<TArgs>,
+  options?: QueryLensViewOptions
+): Promise<LensQueryPage> => {
+  const entityName = options?.entityName ?? view.entityName;
+  const limit = options?.limit ?? STUDIO_QUERY_LIMIT;
+  const offset = options?.offset ?? 0;
+  const query = view.buildHostQuery({ entityName, limit, offset });
+  const result = (await graphqlFetch(query)) as {
+    data?: Record<string, unknown>;
+    errors?: Array<{ message: string }>;
+  };
+
+  if (result.errors?.length) {
+    throw new Error(result.errors.map((error) => error.message).join(", "));
+  }
+
+  const items = Array.isArray(result.data?.[entityName])
+    ? (result.data?.[entityName] as unknown[])
+    : [];
+  const totalItems =
+    typeof result.data?.totalItems === "number"
+      ? result.data.totalItems
+      : items.length;
+
+  return { items, totalItems, limit, offset };
+};
+
+interface CallStoredLensViewOptions {
+  limit?: number;
+  offset?: number;
+}
+
+export interface CallStoredLensViewResult {
+  lens: AnyLensDefinition;
+  result: LensQueryPage;
+}
+
+export const callStoredLensView = async (
+  view: StoredDeployedView,
+  options?: CallStoredLensViewOptions
+): Promise<CallStoredLensViewResult> => {
+  const lens = getLensDefinition(view.lensKey);
+
+  if (!lens?.uiSupported) {
+    throw new Error(`Lens "${view.lensKey}" is not supported in Studio right now.`);
+  }
+
+  const result = await queryLensView(
+    lens.resolveView(lens.parseStoredArgs(view.args)),
+    {
+      entityName: view.entityName,
+      limit: options?.limit,
+      offset: options?.offset,
+    }
+  );
+
+  return { lens, result };
+};

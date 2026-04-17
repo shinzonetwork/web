@@ -23,16 +23,15 @@ export const VIEW_REGISTRY_ABI = [
   },
 ] as const;
 
-export type Erc20TokenPreset = {
+export interface Erc20TokenPreset {
   symbol: string;
   name: string;
   address: string;
   entitySuffix: string;
-};
-
-export function normalizeErc20TokenAddress(tokenAddress: string): string {
-  return tokenAddress.trim().toLowerCase();
 }
+
+export const normalizeErc20TokenAddress = (tokenAddress: string): string =>
+  tokenAddress.trim().toLowerCase();
 
 // Top 10 ERC-20s on Ethereum by circulating market cap from Etherscan on 2026-04-17.
 export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
@@ -87,13 +86,5 @@ const erc20TokenPresetByAddress = new Map(
   ])
 );
 
-export function getErc20TokenPresetByAddress(tokenAddress: string) {
-  return erc20TokenPresetByAddress.get(normalizeErc20TokenAddress(tokenAddress));
-}
-
-export const USDT_TOKEN_ADDRESS =
-  TOP_ETHEREUM_ERC20_TOKEN_PRESETS.find((token) => token.symbol === "USDT")
-    ?.address ?? "";
-export const USDC_TOKEN_ADDRESS =
-  TOP_ETHEREUM_ERC20_TOKEN_PRESETS.find((token) => token.symbol === "USDC")
-    ?.address ?? "";
+export const getErc20TokenPresetByAddress = (tokenAddress: string) =>
+  erc20TokenPresetByAddress.get(normalizeErc20TokenAddress(tokenAddress));

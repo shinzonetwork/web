@@ -1,31 +1,17 @@
-import type { LensArgs, ResolvedLensView } from "./lens-catalog";
-
-type StoredLensArgs = LensArgs;
-
-export type StoredDeployedViewSource = "deployed" | "hub-existing";
-
-export type StoredDeployedView = {
-  entityName: string;
-  contractAddress?: string;
-  txHash?: string;
-  source: StoredDeployedViewSource;
-  lensKey: string;
-  definitionKey: string;
-  args: StoredLensArgs;
-  deployedAt: number;
-};
+import type { LensArgs, ResolvedLensView } from "@/entities/lens";
+import type { StoredDeployedView, StoredDeployedViewSource } from "./types";
 
 export const DEPLOYED_VIEWS_STORAGE_KEY = "shinzo_studio_deployed_views_v3";
 
-function isStoredLensArgs(value: unknown): value is StoredLensArgs {
+const isStoredLensArgs = (value: unknown): value is LensArgs => {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return false;
   }
 
   return Object.values(value).every((entry) => typeof entry === "string");
-}
+};
 
-function isStoredDeployedView(value: unknown): value is StoredDeployedView {
+const isStoredDeployedView = (value: unknown): value is StoredDeployedView => {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return false;
   }
@@ -43,32 +29,29 @@ function isStoredDeployedView(value: unknown): value is StoredDeployedView {
     typeof candidate.deployedAt === "number" &&
     isStoredLensArgs(candidate.args)
   );
-}
+};
 
-function sortStoredDeployedViews(
+const sortStoredDeployedViews = (
   views: StoredDeployedView[]
-): StoredDeployedView[] {
-  return [...views].sort((left, right) => right.deployedAt - left.deployedAt);
-}
+): StoredDeployedView[] =>
+  [...views].sort((left, right) => right.deployedAt - left.deployedAt);
 
-function mergeStoredDeployedView(
+const mergeStoredDeployedView = (
   existing: StoredDeployedView,
   incoming: StoredDeployedView
-): StoredDeployedView {
-  return {
-    ...existing,
-    ...incoming,
-    source:
-      existing.source === "deployed" || incoming.source === "deployed"
-        ? "deployed"
-        : "hub-existing",
-    contractAddress: incoming.contractAddress ?? existing.contractAddress,
-    txHash: incoming.txHash ?? existing.txHash,
-    deployedAt: Math.max(existing.deployedAt, incoming.deployedAt),
-  };
-}
+): StoredDeployedView => ({
+  ...existing,
+  ...incoming,
+  source:
+    existing.source === "deployed" || incoming.source === "deployed"
+      ? "deployed"
+      : "hub-existing",
+  contractAddress: incoming.contractAddress ?? existing.contractAddress,
+  txHash: incoming.txHash ?? existing.txHash,
+  deployedAt: Math.max(existing.deployedAt, incoming.deployedAt),
+});
 
-export function loadStoredDeployedViews(): StoredDeployedView[] {
+export const loadStoredDeployedViews = (): StoredDeployedView[] => {
   try {
     const raw = localStorage.getItem(DEPLOYED_VIEWS_STORAGE_KEY);
     if (!raw) return [];
@@ -80,11 +63,11 @@ export function loadStoredDeployedViews(): StoredDeployedView[] {
   } catch {
     return [];
   }
-}
+};
 
-export function upsertStoredDeployedView(
+export const upsertStoredDeployedView = (
   view: StoredDeployedView
-): StoredDeployedView[] {
+): StoredDeployedView[] => {
   const currentViews = loadStoredDeployedViews();
   const existingView = currentViews.find(
     (candidate) =>
@@ -102,24 +85,24 @@ export function upsertStoredDeployedView(
 
   localStorage.setItem(DEPLOYED_VIEWS_STORAGE_KEY, JSON.stringify(next));
   return next;
+};
+
+interface CreateStoredDeployedViewInput {
+  source: StoredDeployedViewSource;
+  contractAddress?: string;
+  txHash?: string;
 }
 
-export function createStoredDeployedView<TArgs extends StoredLensArgs>(
+export const createStoredDeployedView = <TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>,
-  input: {
-    source: StoredDeployedViewSource;
-    contractAddress?: string;
-    txHash?: string;
-  }
-): StoredDeployedView {
-  return {
-    entityName: view.entityName,
-    contractAddress: input.contractAddress,
-    txHash: input.txHash,
-    source: input.source,
-    lensKey: view.lensKey,
-    definitionKey: view.definitionKey,
-    args: view.args,
-    deployedAt: Date.now(),
-  };
-}
+  input: CreateStoredDeployedViewInput
+): StoredDeployedView => ({
+  entityName: view.entityName,
+  contractAddress: input.contractAddress,
+  txHash: input.txHash,
+  source: input.source,
+  lensKey: view.lensKey,
+  definitionKey: view.definitionKey,
+  args: view.args,
+  deployedAt: Date.now(),
+});

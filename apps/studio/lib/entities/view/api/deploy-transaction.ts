@@ -11,23 +11,25 @@ import {
   VIEW_REGISTRY_ABI,
   VIEW_REGISTRY_ADDRESS,
 } from "@/shared/consts/view-config";
-import type { LensArgs, ResolvedLensView } from "./lens-catalog";
+import type { LensArgs, ResolvedLensView } from "@/entities/lens";
 
-export async function downloadWasm(url: string): Promise<Uint8Array> {
+export const downloadWasm = async (url: string): Promise<Uint8Array> => {
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to download WASM: ${res.status} ${res.statusText}`);
   }
   return new Uint8Array(await res.arrayBuffer());
-}
+};
 
-export async function buildDeployTransaction<TArgs extends LensArgs>(
-  view: ResolvedLensView<TArgs>,
-  preloadedWasmBytes?: Uint8Array
-): Promise<{
+export interface DeployTransaction {
   to: typeof VIEW_REGISTRY_ADDRESS;
   data: Hex;
-}> {
+}
+
+export const buildDeployTransaction = async <TArgs extends LensArgs>(
+  view: ResolvedLensView<TArgs>,
+  preloadedWasmBytes?: Uint8Array
+): Promise<DeployTransaction> => {
   const wasmBytes = preloadedWasmBytes ?? (await downloadWasm(view.wasmUrl));
 
   const bundler = new Bundler(makeBrowserZstd());
@@ -55,11 +57,11 @@ export async function buildDeployTransaction<TArgs extends LensArgs>(
     to: VIEW_REGISTRY_ADDRESS,
     data,
   };
-}
+};
 
-export function extractDeployedViewContractAddress(
+export const extractDeployedViewContractAddress = (
   receipt: TransactionReceipt
-): Hex {
+): Hex => {
   for (const log of receipt.logs) {
     if (log.address.toLowerCase() !== VIEW_REGISTRY_ADDRESS.toLowerCase()) {
       continue;
@@ -90,4 +92,4 @@ export function extractDeployedViewContractAddress(
   throw new Error(
     "Deployment transaction succeeded, but no ViewCreated log was found."
   );
-}
+};
