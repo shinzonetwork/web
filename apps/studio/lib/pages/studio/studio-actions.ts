@@ -1,7 +1,18 @@
-import type { Hex } from "viem";
-import { validateView, type ViewValidationResult } from "@shinzo/lenses/validate";
-import { buildDeployTransaction, downloadWasm } from "./deploy-view";
-import { queryLensView, pollForView } from "./query-view";
+import type { Address, Hex, TransactionReceipt } from "viem";
+import {
+  validateView,
+  type ViewValidationResult,
+} from "@shinzo/lenses/validate";
+import {
+  buildDeployTransaction,
+  downloadWasm,
+  extractDeployedViewContractAddress,
+} from "./deploy-view";
+import {
+  findHubViewByEntityName,
+  getHubViewByContractAddress,
+} from "./hub-views";
+import { pollForEntity, queryLensView } from "./query-view";
 import {
   createStoredDeployedView,
   type StoredDeployedView,
@@ -11,21 +22,43 @@ import {
   type AnyLensDefinition,
   type LensArgs,
   type LensDefinition,
+  type ResolvedLensView,
 } from "./lens-catalog";
 
 type SwitchChainFn = (args: { chainId: number }) => Promise<unknown>;
 type SendTransactionFn = (args: {
+  account: Address;
   to: Hex;
   data: Hex;
   chainId: number;
-}) => Promise<unknown>;
-type DeployProgressStatus = "validating" | "deploying" | "propagating" | "querying";
+  gas?: bigint;
+  gasPrice?: bigint;
+}) => Promise<Hex>;
+type WaitForTransactionReceiptFn = (args: {
+  hash: Hex;
+}) => Promise<TransactionReceipt>;
+type EstimateGasFn = (args: {
+  account: Address;
+  to: Hex;
+  data: Hex;
+  chainId: number;
+}) => Promise<bigint>;
+type GetGasPriceFn = (args: { chainId: number }) => Promise<bigint>;
+type DeployProgressStatus =
+  | "checking"
+  | "validating"
+  | "deploying"
+  | "confirming"
+  | "propagating"
+  | "querying";
 
 export class ViewValidationError extends Error {
   result: ViewValidationResult;
 
   constructor(result: ViewValidationResult) {
-    const errorCount = result.issues.filter((i) => i.severity === "error").length;
+    const errorCount = result.issues.filter(
+      (issue) => issue.severity === "error"
+    ).length;
     super(`View validation failed with ${errorCount} error(s)`);
     this.name = "ViewValidationError";
     this.result = result;
@@ -33,13 +66,17 @@ export class ViewValidationError extends Error {
 }
 
 export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
-  senderAddress: string;
   lens: LensDefinition<TArgs>;
   args: TArgs;
+  account: Address;
   chainId: number;
+  hubUrl: string;
   hostUrl: string;
   switchChainAsync: SwitchChainFn;
   sendTransactionAsync: SendTransactionFn;
+  estimateGas?: EstimateGasFn;
+  getGasPrice?: GetGasPriceFn;
+  waitForTransactionReceipt?: WaitForTransactionReceiptFn;
   onStatusChange?: (status: DeployProgressStatus) => void;
 }): Promise<{
   deployedView: StoredDeployedView;
@@ -47,66 +84,144 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
   validationWarnings: ViewValidationResult["issues"];
 }> {
   const {
-    senderAddress,
     lens,
     args,
+    account,
     chainId,
+    hubUrl,
     hostUrl,
     switchChainAsync,
     sendTransactionAsync,
+    estimateGas,
+    getGasPrice,
+    waitForTransactionReceipt,
     onStatusChange,
   } = params;
+  const resolvedView = lens.resolveView(args);
 
-  // Download WASM and validate before deploying
+  onStatusChange?.("checking");
+  const existingHubView = await findHubViewByEntityName(
+    hubUrl,
+    resolvedView.entityName
+  );
+
+  if (existingHubView) {
+    const deployedView = createStoredDeployedView(resolvedView, {
+      source: "hub-existing",
+      contractAddress: existingHubView.contractAddress,
+    });
+
+    onStatusChange?.("propagating");
+    await pollForEntity(resolvedView.entityName, hostUrl);
+
+    onStatusChange?.("querying");
+    const payload = await queryLensView(resolvedView, hostUrl);
+
+    return {
+      deployedView,
+      payload,
+      validationWarnings: [],
+    };
+  }
+
   onStatusChange?.("validating");
-  const wasmBytes = await downloadWasm(lens.wasmUrl);
+  const wasmBytes = await downloadWasm(resolvedView.wasmUrl);
   const validation = await validateView({
-    query: lens.query,
-    sdl: lens.sdl,
-    lenses: [{ wasmBytes, args: lens.buildDeployArgs(args) }],
+    query: resolvedView.query,
+    sdl: resolvedView.sdl,
+    lenses: [{ wasmBytes, args: resolvedView.deployArgs }],
   });
 
   if (!validation.ok) {
     throw new ViewValidationError(validation);
   }
 
-  const tx = await buildDeployTransaction(senderAddress, lens, args, wasmBytes);
+  const tx = await buildDeployTransaction(resolvedView, wasmBytes);
 
-  onStatusChange?.("deploying");
-  await switchChainAsync({ chainId });
-  await sendTransactionAsync({
+  if (!waitForTransactionReceipt) {
+    throw new Error(
+      "Shinzo public client is unavailable. Check NEXT_PUBLIC_SHINZOHUB_EVM_RPC."
+    );
+  }
+
+  if (!estimateGas) {
+    throw new Error(
+      "Gas estimation is unavailable. Check NEXT_PUBLIC_SHINZOHUB_EVM_RPC."
+    );
+  }
+
+  const estimatedGas = await estimateGas({
+    account,
     to: tx.to,
     data: tx.data,
     chainId,
   });
+  const gas = estimatedGas + estimatedGas / BigInt(5);
+  const gasPrice = getGasPrice ? await getGasPrice({ chainId }) : undefined;
 
-  const deployedView = createStoredDeployedView(lens, {
-    viewHash: tx.viewHash,
-    viewName: tx.viewName,
-    args,
+  onStatusChange?.("deploying");
+  await switchChainAsync({ chainId });
+  const txHash = await sendTransactionAsync({
+    account,
+    to: tx.to,
+    data: tx.data,
+    chainId,
+    gas,
+    gasPrice: gasPrice && gasPrice > BigInt(0) ? gasPrice : undefined,
+  });
+
+  onStatusChange?.("confirming");
+  const receipt = await waitForTransactionReceipt({ hash: txHash });
+  if (receipt.status !== "success") {
+    throw new Error("Deployment transaction reverted on-chain.");
+  }
+
+  const contractAddress = extractDeployedViewContractAddress(receipt);
+  const registeredHubView = await getHubViewByContractAddress(
+    hubUrl,
+    contractAddress
+  );
+
+  if (!registeredHubView) {
+    throw new Error(
+      `Deployment transaction succeeded, but ShinzoHub LCD did not return a registered view for contract ${contractAddress}.`
+    );
+  }
+
+  if (registeredHubView.name !== resolvedView.entityName) {
+    throw new Error(
+      `ShinzoHub registered "${registeredHubView.name}", but Studio expected "${resolvedView.entityName}".`
+    );
+  }
+
+  const deployedView = createStoredDeployedView(resolvedView, {
+    source: "deployed",
+    contractAddress: registeredHubView.contractAddress,
+    txHash,
   });
 
   onStatusChange?.("propagating");
-  await pollForView(tx.viewName, hostUrl);
+  await pollForEntity(resolvedView.entityName, hostUrl);
 
   onStatusChange?.("querying");
-  const payload = await queryLensView(lens, tx.viewName, args, hostUrl);
+  const payload = await queryLensView(resolvedView, hostUrl);
 
   return {
     deployedView,
     payload,
-    validationWarnings: validation.issues.filter((i) => i.severity === "warning"),
+    validationWarnings: validation.issues.filter(
+      (issue) => issue.severity === "warning"
+    ),
   };
 }
 
 export async function requeryLens<TArgs extends LensArgs>(params: {
-  lens: LensDefinition<TArgs>;
-  viewName: string;
-  args: TArgs;
+  resolvedView: ResolvedLensView<TArgs>;
   hostUrl: string;
+  entityName?: string;
 }): Promise<unknown> {
-  const { lens, viewName, args, hostUrl } = params;
-  return queryLensView(lens, viewName, args, hostUrl);
+  const { resolvedView, hostUrl, entityName } = params;
+  return queryLensView(resolvedView, hostUrl, entityName);
 }
 
 export async function callStoredLensView(params: {
@@ -124,10 +239,9 @@ export async function callStoredLensView(params: {
   }
 
   const payload = await queryLensView(
-    lens,
-    view.viewName,
-    lens.parseStoredArgs(view.args),
-    hostUrl
+    lens.resolveView(lens.parseStoredArgs(view.args)),
+    hostUrl,
+    view.entityName
   );
 
   return { lens, payload };

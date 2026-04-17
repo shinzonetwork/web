@@ -1,26 +1,17 @@
 import { Bundler, bytesToBase64 } from "@shinzonetwork/viewbundle";
 import { makeBrowserZstd } from "@shinzonetwork/viewbundle/browser";
 import {
-  keccak256,
-  concat,
-  toBytes,
-  toHex,
+  decodeEventLog,
   encodeFunctionData,
+  toHex,
   type Hex,
+  type TransactionReceipt,
 } from "viem";
 import {
-  VIEW_REGISTRY_ADDRESS,
   VIEW_REGISTRY_ABI,
+  VIEW_REGISTRY_ADDRESS,
 } from "@/shared/consts/view-config";
-import type { LensArgs, LensDefinition } from "./lens-catalog";
-
-function extractRootTypeName(sdl: string): string {
-  const m = sdl.match(/type\s+([A-Za-z0-9_]+)/);
-  if (!m?.[1]) {
-    throw new Error("Invalid SDL: could not find a type declaration");
-  }
-  return m[1];
-}
+import type { LensArgs, ResolvedLensView } from "./lens-catalog";
 
 export async function downloadWasm(url: string): Promise<Uint8Array> {
   const res = await fetch(url);
@@ -31,44 +22,28 @@ export async function downloadWasm(url: string): Promise<Uint8Array> {
 }
 
 export async function buildDeployTransaction<TArgs extends LensArgs>(
-  senderAddress: string,
-  lens: LensDefinition<TArgs>,
-  args: TArgs,
-  preloadedWasmBytes?: Uint8Array,
+  view: ResolvedLensView<TArgs>,
+  preloadedWasmBytes?: Uint8Array
 ): Promise<{
   to: typeof VIEW_REGISTRY_ADDRESS;
   data: Hex;
-  viewName: string;
-  viewHash: Hex;
 }> {
-  // 1. Use pre-loaded WASM or download it
-  const wasmBytes = preloadedWasmBytes ?? await downloadWasm(lens.wasmUrl);
+  const wasmBytes = preloadedWasmBytes ?? (await downloadWasm(view.wasmUrl));
 
-  // 2. Bundle the view (protobuf + zstd)
   const bundler = new Bundler(makeBrowserZstd());
   const payloadBytes = await bundler.BundleView({
-    Query: lens.query,
-    Sdl: lens.sdl,
+    Query: view.query,
+    Sdl: view.sdl,
     Transform: {
       Lenses: [
         {
           Path: bytesToBase64(wasmBytes),
-          Arguments: JSON.stringify(lens.buildDeployArgs(args)),
+          Arguments: JSON.stringify(view.deployArgs),
         },
       ],
     },
   });
 
-  // 3. Compute view hash: keccak256(senderAddressBytes + payloadBytes)
-  const viewHash = keccak256(
-    concat([toBytes(senderAddress as Hex), payloadBytes])
-  );
-
-  // 4. Build view ID: {RootTypeName}_{viewHash}
-  const rootType = extractRootTypeName(lens.sdl);
-  const viewName = `${rootType}_${viewHash}`;
-
-  // 5. Encode the register(bytes) calldata
   const payloadHex = toHex(payloadBytes);
   const data = encodeFunctionData({
     abi: VIEW_REGISTRY_ABI,
@@ -79,7 +54,40 @@ export async function buildDeployTransaction<TArgs extends LensArgs>(
   return {
     to: VIEW_REGISTRY_ADDRESS,
     data,
-    viewName,
-    viewHash,
   };
+}
+
+export function extractDeployedViewContractAddress(
+  receipt: TransactionReceipt
+): Hex {
+  for (const log of receipt.logs) {
+    if (log.address.toLowerCase() !== VIEW_REGISTRY_ADDRESS.toLowerCase()) {
+      continue;
+    }
+
+    try {
+      const decoded = decodeEventLog({
+        abi: VIEW_REGISTRY_ABI,
+        eventName: "ViewCreated",
+        topics: log.topics,
+        data: log.data,
+        strict: false,
+      });
+
+      if (decoded.eventName !== "ViewCreated") {
+        continue;
+      }
+
+      const { viewAddress } = decoded.args;
+      if (typeof viewAddress === "string") {
+        return viewAddress as Hex;
+      }
+    } catch {
+      // Ignore unrelated logs emitted by the same transaction.
+    }
+  }
+
+  throw new Error(
+    "Deployment transaction succeeded, but no ViewCreated log was found."
+  );
 }

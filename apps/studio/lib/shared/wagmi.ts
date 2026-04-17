@@ -6,6 +6,7 @@ import {
   WALLETCONNECT_ID,
   APP_URL,
   SHINZOHUB_CHAIN_ID,
+  SHINZOHUB_BLOCK_EXPLORER_URL,
 } from "@/shared/consts/envs";
 
 if (!WALLETCONNECT_ID) {
@@ -16,6 +17,17 @@ export const shinzoDevnet = defineChain({
   id: SHINZOHUB_CHAIN_ID,
   name: "Shinzo Devnet",
   nativeCurrency: { name: "SHN", symbol: "SHN", decimals: 18 },
+  testnet: true,
+  ...(SHINZOHUB_BLOCK_EXPLORER_URL
+    ? {
+        blockExplorers: {
+          default: {
+            name: "Shinzo Explorer",
+            url: SHINZOHUB_BLOCK_EXPLORER_URL,
+          },
+        },
+      }
+    : {}),
   rpcUrls: {
     default: {
       http: [process.env.NEXT_PUBLIC_SHINZOHUB_EVM_RPC ?? ""],

@@ -8,12 +8,17 @@ import { getLensDefinition } from "./lens-catalog";
 
 export type StoredCallState =
   | { status: "idle" }
-  | { status: "loading"; viewName: string }
-  | { status: "success"; viewName: string; payload: unknown }
-  | { status: "error"; viewName: string; error: string };
+  | { status: "loading"; entityName: string }
+  | { status: "success"; entityName: string; payload: unknown }
+  | { status: "error"; entityName: string; error: string };
 
 function formatTimestamp(timestamp: number): string {
   return new Date(timestamp).toLocaleString();
+}
+
+function truncateHex(value: string, visible = 12): string {
+  if (value.length <= visible) return value;
+  return `${value.slice(0, 8)}...${value.slice(-4)}`;
 }
 
 type StoredViewsPanelProps = {
@@ -34,7 +39,8 @@ export function StoredViewsPanel({
   const selectedView =
     callState.status === "idle"
       ? null
-      : storedViews.find((view) => view.viewName === callState.viewName) ?? null;
+      : storedViews.find((view) => view.entityName === callState.entityName) ??
+        null;
 
   return (
     <section className="flex flex-col gap-4">
@@ -43,8 +49,8 @@ export function StoredViewsPanel({
           Stored Deployments
         </h2>
         <p className="text-sm leading-relaxed text-szo-black/60">
-          Deployed views saved in this browser stay available after reload so
-          you can call them again against the current host.
+          Saved registrations stay available after reload so you can call them
+          again against the current host after ShinzoHub propagation.
         </p>
       </div>
 
@@ -52,12 +58,13 @@ export function StoredViewsPanel({
         {storedViews.map((view) => {
           const lens = getLensDefinition(view.lensKey);
           const isLoading =
-            callState.status === "loading" && callState.viewName === view.viewName;
+            callState.status === "loading" &&
+            callState.entityName === view.entityName;
           const canCall = Boolean(lens?.uiSupported);
 
           return (
             <article
-              key={`${view.viewName}-${view.deployedAt}`}
+              key={`${view.entityName}-${view.deployedAt}`}
               className="relative overflow-hidden border border-ui-border bg-white p-5"
             >
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[url('/bg-pattern.png')] bg-repeat-x bg-bottom opacity-30" />
@@ -69,7 +76,7 @@ export function StoredViewsPanel({
                       {lens?.title ?? view.lensKey}
                     </h3>
                     <p className="font-mono text-xs text-szo-black/50">
-                      {view.viewName}
+                      {view.entityName}
                     </p>
                   </div>
 
@@ -100,12 +107,45 @@ export function StoredViewsPanel({
                 <dl className="flex flex-col gap-2 text-sm">
                   <div className="flex flex-col gap-1">
                     <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
-                      Deployed
+                      Source
+                    </dt>
+                    <dd className="text-szo-black/70">
+                      {view.source === "deployed"
+                        ? "Registered by this Studio session"
+                        : "Already registered on ShinzoHub"}
+                    </dd>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
+                      Saved
                     </dt>
                     <dd className="text-szo-black/70">
                       {formatTimestamp(view.deployedAt)}
                     </dd>
                   </div>
+
+                  {view.contractAddress && (
+                    <div className="flex flex-col gap-1">
+                      <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
+                        Contract
+                      </dt>
+                      <dd className="font-mono text-xs text-szo-black/70">
+                        {truncateHex(view.contractAddress)}
+                      </dd>
+                    </div>
+                  )}
+
+                  {view.txHash && (
+                    <div className="flex flex-col gap-1">
+                      <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
+                        Tx Hash
+                      </dt>
+                      <dd className="font-mono text-xs text-szo-black/70">
+                        {truncateHex(view.txHash)}
+                      </dd>
+                    </div>
+                  )}
 
                   <div className="flex flex-col gap-1">
                     <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
@@ -132,7 +172,7 @@ export function StoredViewsPanel({
             </h3>
             <p className="font-mono text-xs text-szo-black/50">
               {selectedView
-                ? selectedView.viewName
+                ? selectedView.entityName
                 : "Call a stored deployment to inspect its host response."}
             </p>
           </div>

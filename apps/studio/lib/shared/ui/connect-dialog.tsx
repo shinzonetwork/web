@@ -4,6 +4,7 @@ import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
 import { type Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 import { Button } from "@/shared/button";
+import { shinzoDevnet } from "@/shared/wagmi";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +16,12 @@ import { cn } from "@shinzo/ui/cn";
 
 export function ConnectDialog() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending: isConnecting } = useConnect();
+  const {
+    connect,
+    connectors,
+    error: connectError,
+    isPending: isConnecting,
+  } = useConnect();
   const { disconnect } = useDisconnect();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +29,7 @@ export function ConnectDialog() {
   const handleConnect = useCallback(
     (connector: Connector) => {
       setIsOpen(false);
-      connect({ connector });
+      connect({ connector, chainId: shinzoDevnet.id });
     },
     [connect]
   );
@@ -134,6 +140,12 @@ export function ConnectDialog() {
             {availableConnectors.length === 0 && (
               <p className="py-4 text-center font-mono text-sm text-szo-black/50">
                 No wallets available
+              </p>
+            )}
+
+            {connectError && (
+              <p className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {connectError.message}
               </p>
             )}
           </div>
