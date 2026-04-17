@@ -1,6 +1,7 @@
 import { JSON } from "assemblyscript-json/assembly";
 import { keccak256 } from "../keccak256";
-import { hexEncode, hexToDecimalString } from "../hex";
+import { hexEncode } from "../hex";
+import { decodeAbiWord } from "./decoder";
 import { AbiEvent, AbiInput, DecodedArgument, DecodedLog } from "./types";
 
 export class EvmLogLike {
@@ -163,34 +164,5 @@ export function decodeEvent(event: AbiEvent, topics: string[], data: string): De
  * `0x`-prefixed lowercase, and fixed bytes stay hex-encoded.
  */
 export function decodeParam(typeName: string, hexData: string): string {
-  let clean = hexData;
-  if (clean.length >= 2 && clean.charCodeAt(0) == 48 && (clean.charCodeAt(1) == 120 || clean.charCodeAt(1) == 88)) {
-    clean = clean.substring(2);
-  }
-
-  if (
-    typeName == "uint256" || typeName == "uint128" || typeName == "uint64" ||
-    typeName == "uint32" || typeName == "uint16" || typeName == "uint8" ||
-    typeName == "int256" || typeName == "int128" || typeName == "int64" ||
-    typeName == "int32" || typeName == "int16" || typeName == "int8"
-  ) {
-    return hexToDecimalString(clean);
-  }
-
-  if (typeName == "address") {
-    if (clean.length >= 40) {
-      return "0x" + clean.substring(clean.length - 40);
-    }
-    return "0x" + clean;
-  }
-
-  if (typeName == "bool") {
-    return clean.endsWith("1") ? "true" : "false";
-  }
-
-  if (typeName == "bytes32" || typeName == "bytes20" || typeName == "bytes16" || typeName == "bytes4") {
-    return "0x" + clean;
-  }
-
-  return "unsupported type: " + typeName;
+  return decodeAbiWord(typeName, hexData);
 }

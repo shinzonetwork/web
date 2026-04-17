@@ -86,6 +86,19 @@ The EVM layer handles:
 - optional event-name filtering
 - decoded argument access through `decoded.getArg(...)`
 
+Supported decoded ABI word types:
+
+- `uintN` for `N` in `8..256` step `8`, emitted as decimal strings
+- `intN` for `N` in `8..256` step `8`, emitted as signed decimal strings
+- `address`, `bool`, and `bytesN` for `N` in `1..32`
+- `string` and `bytes`, emitted as raw `0x...` slot values
+
+Still out of scope:
+
+- arrays, tuples, and other unsupported ABI shapes remain `"unsupported type: ..."`
+- full dynamic tail decoding for `string` and `bytes` is not implemented
+- the current SDK surface covers EVM logs only; transaction-input decoding is a future extension
+
 ## Existing examples
 
 - [ERC-20 Transfers](./erc20-transfers)

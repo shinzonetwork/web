@@ -261,6 +261,19 @@ It simplifies:
 - decoded argument access
 - standard EVM argument validation
 
+Current ABI decoding support mirrors the Rust `decode_log` lens behavior for log payload words:
+
+- `uintN` for `N` in `8..256` step `8`, as decimal strings
+- `intN` for `N` in `8..256` step `8`, as signed decimal strings
+- `address`, `bool`, and `bytesN` for `N` in `1..32`
+- `string` and `bytes` as raw `0x...` slot values
+
+Still intentionally unsupported in this layer:
+
+- arrays, tuples, and invalid ABI width specifiers
+- full dynamic tail decoding for `string` and `bytes`
+- transaction-input decoding APIs, which should reuse the same internal helpers when added later
+
 It also exports reusable helpers for:
 
 - ABI definitions such as `ERC20_ABI`
