@@ -23,7 +23,7 @@ export type DeployStatus = DeployProgressStatus | "idle" | "done" | "error";
 
 export interface LensQueryPage {
   items: unknown[];
-  totalItems: number;
+  hasMore: boolean;
   limit: number;
   offset: number;
 }

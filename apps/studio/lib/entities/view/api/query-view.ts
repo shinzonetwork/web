@@ -5,11 +5,14 @@ import {
   type ResolvedLensView,
 } from "@/entities/lens";
 import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
+import { getQueryClient } from "@/shared/consts/query";
 import {
   STUDIO_QUERY_LIMIT,
   type LensQueryPage,
   type StoredDeployedView,
 } from "../model/types";
+
+const LENS_QUERY_STALE_TIME_MS = 5 * 60 * 1000;
 
 const graphqlFetch = async (query: string): Promise<Record<string, unknown>> => {
   const res = await fetch(HOST_GRAPHQL_REQUEST_URL, {
@@ -36,25 +39,28 @@ export const queryLensView = async <TArgs extends LensArgs>(
   const entityName = options?.entityName ?? view.entityName;
   const limit = options?.limit ?? STUDIO_QUERY_LIMIT;
   const offset = options?.offset ?? 0;
-  const query = view.buildHostQuery({ entityName, limit, offset });
-  const result = (await graphqlFetch(query)) as {
-    data?: Record<string, unknown>;
-    errors?: Array<{ message: string }>;
-  };
 
-  if (result.errors?.length) {
-    throw new Error(result.errors.map((error) => error.message).join(", "));
-  }
+  return getQueryClient().fetchQuery<LensQueryPage>({
+    queryKey: ["lens-view", entityName, limit, offset],
+    staleTime: LENS_QUERY_STALE_TIME_MS,
+    queryFn: async () => {
+      const query = view.buildHostQuery({ entityName, limit, offset });
+      const result = (await graphqlFetch(query)) as {
+        data?: Record<string, unknown>;
+        errors?: Array<{ message: string }>;
+      };
 
-  const items = Array.isArray(result.data?.[entityName])
-    ? (result.data?.[entityName] as unknown[])
-    : [];
-  const totalItems =
-    typeof result.data?.totalItems === "number"
-      ? result.data.totalItems
-      : items.length;
+      if (result.errors?.length) {
+        throw new Error(result.errors.map((error) => error.message).join(", "));
+      }
 
-  return { items, totalItems, limit, offset };
+      const items = Array.isArray(result.data?.[entityName])
+        ? (result.data?.[entityName] as unknown[])
+        : [];
+
+      return { items, hasMore: items.length >= limit, limit, offset };
+    },
+  });
 };
 
 interface CallStoredLensViewOptions {

@@ -1,16 +1,12 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { Pagination } from "@shinzo/ui/pagination";
+import { Pager } from "./pager";
 import { Button } from "@/shared/ui/button";
 import { getErc20TokenPresetByAddress } from "@/shared/consts/view-config";
 import { formatTimestamp, truncateHex } from "@/shared/utils/format";
 import { getLensDefinition } from "@/entities/lens";
-import {
-  STUDIO_QUERY_LIMIT,
-  type LensQueryPage,
-  type StoredDeployedView,
-} from "../model/types";
+import type { LensQueryPage, StoredDeployedView } from "../model/types";
 import { Erc20TransfersResult } from "./result-renderers/erc20-transfers-result";
 import { GenericResult } from "./result-renderers/generic-result";
 
@@ -61,14 +57,14 @@ const getStoredViewTokenMeta = (view: StoredDeployedView): string | null => {
 };
 
 const formatResultRange = (result: LensQueryPage): string => {
-  if (result.items.length === 0 || result.totalItems === 0) {
+  if (result.items.length === 0) {
     return "No documents found.";
   }
 
   const start = result.offset + 1;
   const end = result.offset + result.items.length;
 
-  return `Showing ${start}-${end} of ${result.totalItems} documents`;
+  return `Showing ${start}-${end}`;
 };
 
 interface StoredViewCardProps {
@@ -181,26 +177,19 @@ export const StoredViewCard = ({
 
         {isSelected && (
           <div className="flex flex-col gap-3 border-t border-ui-border pt-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 className="font-mono text-sm font-light text-szo-black">
-                  Query Results
-                </h4>
-                {callState.status === "success" && (
-                  <p className="text-xs text-szo-black/50">
-                    {formatResultRange(callState.result)}
-                  </p>
-                )}
-              </div>
-
-              <p className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
-                Limit {STUDIO_QUERY_LIMIT} / Offset{" "}
-                {(page - 1) * STUDIO_QUERY_LIMIT}
-              </p>
+            <div>
+              <h4 className="font-mono text-sm font-light text-szo-black">
+                Query Results
+              </h4>
+              {callState.status === "success" && (
+                <p className="text-xs text-szo-black/50">
+                  {formatResultRange(callState.result)}
+                </p>
+              )}
             </div>
 
             {callState.status === "loading" && (
-              <div className="flex h-80 items-center justify-center gap-2 border border-ui-border bg-szo-bg p-4 text-sm text-szo-black/70">
+              <div className="flex h-80 min-h-80 items-center justify-center gap-2 border border-ui-border bg-szo-bg p-4 text-sm text-szo-black/70">
                 <Loader2 className="size-4 animate-spin" />
                 Calling stored deployment...
               </div>
@@ -224,12 +213,11 @@ export const StoredViewCard = ({
               ))}
 
             {callState.status === "success" &&
-              callState.result.totalItems > STUDIO_QUERY_LIMIT && (
-                <Pagination
+              (page > 1 || callState.result.hasMore) && (
+                <Pager
                   className="justify-end"
                   page={page}
-                  itemsPerPage={STUDIO_QUERY_LIMIT}
-                  totalItems={callState.result.totalItems}
+                  hasMore={callState.result.hasMore}
                 />
               )}
           </div>
