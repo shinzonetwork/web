@@ -73,8 +73,16 @@ export const DeployForm = () => {
               type="button"
               onClick={() => setAddress(token.address)}
               title={`${token.name} (${token.symbol})`}
-              className="rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
+              className="inline-flex items-center gap-1.5 rounded-full border border-szo-border px-3 py-1 text-xs font-medium transition-colors hover:border-szo-black"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={token.icon}
+                alt=""
+                width={14}
+                height={14}
+                className="shrink-0"
+              />
               {token.symbol}
             </button>
           ))}

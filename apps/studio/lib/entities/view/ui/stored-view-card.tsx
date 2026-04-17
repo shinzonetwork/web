@@ -213,8 +213,12 @@ export const StoredViewCard = ({
             )}
 
             {callState.status === "success" &&
-              (lens?.resultKind === "erc20-transfers" ? (
-                <Erc20TransfersResult result={callState.result} />
+              (lens?.resultKind === "erc20-transfers" &&
+              typeof view.args.tokenAddress === "string" ? (
+                <Erc20TransfersResult
+                  result={callState.result}
+                  tokenAddress={view.args.tokenAddress}
+                />
               ) : (
                 <GenericResult result={callState.result} />
               ))}

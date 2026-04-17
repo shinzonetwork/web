@@ -23,11 +23,21 @@ export const VIEW_REGISTRY_ABI = [
   },
 ] as const;
 
+import usdtIcon from "./token-icons/usdt.svg?url";
+import usdcIcon from "./token-icons/usdc.svg?url";
+import usdsIcon from "./token-icons/usds.svg?url";
+import bnbIcon from "./token-icons/bnb.svg?url";
+import stethIcon from "./token-icons/steth.svg?url";
+import leoIcon from "./token-icons/leo.svg?url";
+import wbtcIcon from "./token-icons/wbtc.png";
+
 export interface Erc20TokenPreset {
   symbol: string;
   name: string;
   address: string;
   entitySuffix: string;
+  decimals: number;
+  icon: string;
 }
 
 export const normalizeErc20TokenAddress = (tokenAddress: string): string =>
@@ -40,42 +50,56 @@ export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
     name: "Tether USD",
     address: "0xdac17f958d2ee523a2206206994597c13d831ec7",
     entitySuffix: "USDT",
+    decimals: 6,
+    icon: usdtIcon,
   },
   {
     symbol: "USDC",
     name: "USDC",
     address: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     entitySuffix: "USDC",
+    decimals: 6,
+    icon: usdcIcon,
   },
   {
     symbol: "USDS",
     name: "USDS Stablecoin",
     address: "0xdc035d45d973e3ec169d2276ddab16f1e407384f",
     entitySuffix: "USDS",
+    decimals: 18,
+    icon: usdsIcon,
   },
   {
     symbol: "BNB",
     name: "BNB",
     address: "0xb8c77482e45f1f44de1745f52c74426c631bdd52",
     entitySuffix: "BNB",
+    decimals: 18,
+    icon: bnbIcon,
   },
   {
     symbol: "stETH",
     name: "stETH",
     address: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
     entitySuffix: "StETH",
+    decimals: 18,
+    icon: stethIcon,
   },
   {
     symbol: "LEO",
     name: "Bitfinex LEO Token",
     address: "0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3",
     entitySuffix: "LEO",
+    decimals: 18,
+    icon: leoIcon,
   },
   {
     symbol: "WBTC",
     name: "Wrapped BTC",
     address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
     entitySuffix: "WBTC",
+    decimals: 8,
+    icon: wbtcIcon.src,
   },
 ] as const satisfies readonly Erc20TokenPreset[];
 

@@ -1,4 +1,5 @@
-import { truncateHex } from "@/shared/utils/format";
+import { getErc20TokenPresetByAddress } from "@/shared/consts/view-config";
+import { formatTokenAmount, truncateHex } from "@/shared/utils/format";
 import type { LensQueryPage } from "../../model/types";
 import { GenericResult } from "./generic-result";
 
@@ -33,9 +34,15 @@ const isErc20TransferResult = (items: unknown[]): items is Erc20TransferRow[] =>
 
 interface Erc20TransfersResultProps {
   result: LensQueryPage;
+  tokenAddress: string;
 }
 
-export const Erc20TransfersResult = ({ result }: Erc20TransfersResultProps) => {
+export const Erc20TransfersResult = ({
+  result,
+  tokenAddress,
+}: Erc20TransfersResultProps) => {
+  const preset = getErc20TokenPresetByAddress(tokenAddress);
+
   if (result.items.length === 0) {
     return (
       <div className="flex h-80 items-center justify-center border border-ui-border bg-szo-bg p-4 text-sm text-szo-black/60">
@@ -70,7 +77,24 @@ export const Erc20TransfersResult = ({ result }: Erc20TransfersResultProps) => {
               <td className="px-4 py-3">{truncateHex(row.hash, 18)}</td>
               <td className="px-4 py-3">{truncateHex(row.from, 18)}</td>
               <td className="px-4 py-3">{truncateHex(row.to, 18)}</td>
-              <td className="px-4 py-3">{row.amount}</td>
+              <td className="px-4 py-3">
+                <span className="inline-flex items-center gap-1.5">
+                  {preset?.icon && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={preset.icon}
+                      alt=""
+                      width={14}
+                      height={14}
+                      className="shrink-0"
+                    />
+                  )}
+                  <span>{formatTokenAmount(row.amount, preset?.decimals)}</span>
+                  {preset?.symbol && (
+                    <span className="text-szo-black/50">{preset.symbol}</span>
+                  )}
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -4,6 +4,11 @@ declare module "*.svg" {
   export default ReactComponent;
 }
 
+declare module "*.svg?url" {
+  const url: string;
+  export default url;
+}
+
 declare module "*.png" {
   const image: { src: string; height: number; width: number };
   export default image;
