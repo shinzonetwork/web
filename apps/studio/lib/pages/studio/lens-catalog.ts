@@ -1,7 +1,7 @@
 import { keccak256, toBytes } from "viem";
 import {
-  USDC_TOKEN_ADDRESS,
-  USDT_TOKEN_ADDRESS,
+  getErc20TokenPresetByAddress,
+  normalizeErc20TokenAddress,
 } from "@/shared/consts/view-config";
 
 export type LensArgs = Record<string, string>;
@@ -83,10 +83,6 @@ function createLensDefinition<TArgs extends LensArgs>(
   return input;
 }
 
-function normalizeTokenAddress(tokenAddress: string): string {
-  return tokenAddress.trim().toLowerCase();
-}
-
 function extractRootTypeName(sdl: string): string {
   const match = sdl.match(/\btype\s+([A-Za-z0-9_]+)\b/);
 
@@ -117,7 +113,7 @@ ${fields}
 
 function buildTokenAddressDeployArgs(args: TokenAddressLensArgs) {
   return {
-    tokenAddress: normalizeTokenAddress(args.tokenAddress),
+    tokenAddress: normalizeErc20TokenAddress(args.tokenAddress),
   };
 }
 
@@ -129,22 +125,18 @@ function parseTokenAddressArgs(args: LensArgs): TokenAddressLensArgs {
   }
 
   return {
-    tokenAddress: normalizeTokenAddress(tokenAddress),
+    tokenAddress: normalizeErc20TokenAddress(tokenAddress),
   };
 }
 
 function buildTokenAddressSuffix(tokenAddress: string): string {
-  const normalizedTokenAddress = normalizeTokenAddress(tokenAddress);
+  const tokenPreset = getErc20TokenPresetByAddress(tokenAddress);
 
-  if (normalizedTokenAddress === normalizeTokenAddress(USDT_TOKEN_ADDRESS)) {
-    return "USDT";
+  if (tokenPreset) {
+    return tokenPreset.entitySuffix;
   }
 
-  if (normalizedTokenAddress === normalizeTokenAddress(USDC_TOKEN_ADDRESS)) {
-    return "USDC";
-  }
-
-  return normalizedTokenAddress;
+  return normalizeErc20TokenAddress(tokenAddress);
 }
 
 function resolveTokenAddressView(

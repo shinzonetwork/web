@@ -12,7 +12,7 @@ import {
   findHubViewByEntityName,
   getHubViewByContractAddress,
 } from "./hub-views";
-import { pollForEntity, queryLensView } from "./query-view";
+import { queryLensView } from "./query-view";
 import {
   createStoredDeployedView,
   type StoredDeployedView,
@@ -22,7 +22,6 @@ import {
   type AnyLensDefinition,
   type LensArgs,
   type LensDefinition,
-  type ResolvedLensView,
 } from "./lens-catalog";
 
 type SwitchChainFn = (args: { chainId: number }) => Promise<unknown>;
@@ -48,9 +47,7 @@ type DeployProgressStatus =
   | "checking"
   | "validating"
   | "deploying"
-  | "confirming"
-  | "propagating"
-  | "querying";
+  | "confirming";
 
 export class ViewValidationError extends Error {
   result: ViewValidationResult;
@@ -65,13 +62,12 @@ export class ViewValidationError extends Error {
   }
 }
 
-export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
+export async function deployLens<TArgs extends LensArgs>(params: {
   lens: LensDefinition<TArgs>;
   args: TArgs;
   account: Address;
   chainId: number;
   hubUrl: string;
-  hostUrl: string;
   switchChainAsync: SwitchChainFn;
   sendTransactionAsync: SendTransactionFn;
   estimateGas?: EstimateGasFn;
@@ -80,7 +76,6 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
   onStatusChange?: (status: DeployProgressStatus) => void;
 }): Promise<{
   deployedView: StoredDeployedView;
-  payload: unknown;
   validationWarnings: ViewValidationResult["issues"];
 }> {
   const {
@@ -89,7 +84,6 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
     account,
     chainId,
     hubUrl,
-    hostUrl,
     switchChainAsync,
     sendTransactionAsync,
     estimateGas,
@@ -111,15 +105,8 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
       contractAddress: existingHubView.contractAddress,
     });
 
-    onStatusChange?.("propagating");
-    await pollForEntity(resolvedView.entityName, hostUrl);
-
-    onStatusChange?.("querying");
-    const payload = await queryLensView(resolvedView, hostUrl);
-
     return {
       deployedView,
-      payload,
       validationWarnings: [],
     };
   }
@@ -200,28 +187,12 @@ export async function deployAndQueryLens<TArgs extends LensArgs>(params: {
     txHash,
   });
 
-  onStatusChange?.("propagating");
-  await pollForEntity(resolvedView.entityName, hostUrl);
-
-  onStatusChange?.("querying");
-  const payload = await queryLensView(resolvedView, hostUrl);
-
   return {
     deployedView,
-    payload,
     validationWarnings: validation.issues.filter(
       (issue) => issue.severity === "warning"
     ),
   };
-}
-
-export async function requeryLens<TArgs extends LensArgs>(params: {
-  resolvedView: ResolvedLensView<TArgs>;
-  hostUrl: string;
-  entityName?: string;
-}): Promise<unknown> {
-  const { resolvedView, hostUrl, entityName } = params;
-  return queryLensView(resolvedView, hostUrl, entityName);
 }
 
 export async function callStoredLensView(params: {

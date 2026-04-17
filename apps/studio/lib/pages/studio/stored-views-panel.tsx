@@ -1,12 +1,14 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/shared/button";
 import { cn } from "@shinzo/ui/cn";
 import type { StoredDeployedView } from "./deployed-views-storage";
 import { getLensDefinition } from "./lens-catalog";
+import { callStoredLensView } from "./studio-actions";
 
-export type StoredCallState =
+type StoredCallState =
   | { status: "idle" }
   | { status: "loading"; entityName: string }
   | { status: "success"; entityName: string; payload: unknown }
@@ -23,15 +25,45 @@ function truncateHex(value: string, visible = 12): string {
 
 type StoredViewsPanelProps = {
   storedViews: StoredDeployedView[];
-  callState: StoredCallState;
-  onCall: (view: StoredDeployedView) => void;
+  hostUrl: string;
 };
 
 export function StoredViewsPanel({
   storedViews,
-  callState,
-  onCall,
+  hostUrl,
 }: StoredViewsPanelProps) {
+  const [callState, setCallState] = useState<StoredCallState>({
+    status: "idle",
+  });
+
+  const handleCall = useCallback(
+    async (view: StoredDeployedView) => {
+      setCallState({
+        status: "loading",
+        entityName: view.entityName,
+      });
+
+      try {
+        const { payload } = await callStoredLensView({
+          view,
+          hostUrl,
+        });
+        setCallState({
+          status: "success",
+          entityName: view.entityName,
+          payload,
+        });
+      } catch (err) {
+        setCallState({
+          status: "error",
+          entityName: view.entityName,
+          error: err instanceof Error ? err.message : "Unexpected error",
+        });
+      }
+    },
+    [hostUrl]
+  );
+
   if (storedViews.length === 0) {
     return null;
   }
@@ -54,7 +86,7 @@ export function StoredViewsPanel({
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="flex flex-col gap-4">
         {storedViews.map((view) => {
           const lens = getLensDefinition(view.lensKey);
           const isLoading =
@@ -65,7 +97,7 @@ export function StoredViewsPanel({
           return (
             <article
               key={`${view.entityName}-${view.deployedAt}`}
-              className="relative overflow-hidden border border-ui-border bg-white p-5"
+              className="w-full relative overflow-hidden border border-ui-border bg-white p-5"
             >
               <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-[url('/bg-pattern.png')] bg-repeat-x bg-bottom opacity-30" />
 
@@ -83,7 +115,7 @@ export function StoredViewsPanel({
                   <Button
                     type="button"
                     variant="secondary"
-                    onClick={() => onCall(view)}
+                    onClick={() => handleCall(view)}
                     disabled={!canCall || isLoading}
                     className="h-9 px-5 text-sm"
                   >
