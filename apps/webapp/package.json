@@ -7,8 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "preview:staging": "opennextjs-cloudflare build --env=staging && opennextjs-cloudflare preview --env=staging",
     "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "build-and-deploy:staging": "opennextjs-cloudflare build --env=staging && opennextjs-cloudflare deploy --env=staging",
     "build-and-upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "build-and-upload:staging": "opennextjs-cloudflare build --env=staging && opennextjs-cloudflare upload --env=staging",
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""

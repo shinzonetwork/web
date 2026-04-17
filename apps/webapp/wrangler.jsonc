@@ -16,5 +16,20 @@
 			"database_name": "shinzo-indexer-db",
 			"database_id": "06692941-66a9-4f60-b57a-44e09c4e6727"
 		}
-	]
+	],
+	"env": {
+		"staging": {
+			"name": "shinzo-webapp-staging",
+			"vars": {
+				"NEXT_PUBLIC_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545"
+			},
+			"d1_databases": [
+				{
+				  "binding": "shinzo_indexer_db",
+				  "database_name": "shinzo-indexer-db-staging",
+				  "database_id": "bc5cf7aa-5cd1-45e5-a01a-9f5826781d05"
+				}
+			  ]
+		}
+	}
 }
