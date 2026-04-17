@@ -24,7 +24,11 @@ export type ResolvedLensView<TArgs extends LensArgs = LensArgs> = {
   uiSupported: boolean;
   resultKind: LensResultKind;
   args: TArgs;
-  buildHostQuery: (entityNameOverride?: string) => string;
+  buildHostQuery: (options?: {
+    entityName?: string;
+    limit?: number;
+    offset?: number;
+  }) => string;
 };
 
 export type LensDefinition<TArgs extends LensArgs = LensArgs> = {
@@ -103,9 +107,22 @@ function replaceRootTypeName(sdl: string, entityName: string): string {
   return nextSdl;
 }
 
-function buildCollectionQuery(entityName: string, fields: string): string {
+function buildCollectionQuery(
+  entityName: string,
+  fields: string,
+  options?: {
+    limit?: number;
+    offset?: number;
+  }
+): string {
+  const queryArgs = [
+    typeof options?.offset === "number" ? `offset: ${options.offset}` : null,
+    typeof options?.limit === "number" ? `limit: ${options.limit}` : null,
+  ].filter(Boolean);
+  const fieldArgs = queryArgs.length > 0 ? `(${queryArgs.join(", ")})` : "";
+
   return `{
-  ${entityName} {
+  ${entityName}${fieldArgs} {
 ${fields}
   }
 }`;
@@ -163,8 +180,11 @@ function resolveTokenAddressView(
     sdl,
     deployArgs: buildTokenAddressDeployArgs(normalizedArgs),
     definitionKey: buildDefinitionKey(query, sdl),
-    buildHostQuery: (entityNameOverride = entityName) =>
-      buildCollectionQuery(entityNameOverride, fields),
+    buildHostQuery: (options) =>
+      buildCollectionQuery(options?.entityName ?? entityName, fields, {
+        limit: options?.limit,
+        offset: options?.offset,
+      }),
   };
 }
 

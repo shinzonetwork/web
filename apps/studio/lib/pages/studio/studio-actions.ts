@@ -12,7 +12,7 @@ import {
   findHubViewByEntityName,
   getHubViewByContractAddress,
 } from "./hub-views";
-import { queryLensView } from "./query-view";
+import { type LensQueryPage, queryLensView } from "./query-view";
 import {
   createStoredDeployedView,
   type StoredDeployedView,
@@ -198,22 +198,28 @@ export async function deployLens<TArgs extends LensArgs>(params: {
 export async function callStoredLensView(params: {
   view: StoredDeployedView;
   hostUrl: string;
+  limit?: number;
+  offset?: number;
 }): Promise<{
   lens: AnyLensDefinition;
-  payload: unknown;
+  result: LensQueryPage;
 }> {
-  const { view, hostUrl } = params;
+  const { view, hostUrl, limit, offset } = params;
   const lens = getLensDefinition(view.lensKey);
 
   if (!lens?.uiSupported) {
     throw new Error(`Lens "${view.lensKey}" is not supported in Studio right now.`);
   }
 
-  const payload = await queryLensView(
+  const result = await queryLensView(
     lens.resolveView(lens.parseStoredArgs(view.args)),
     hostUrl,
-    view.entityName
+    {
+      entityName: view.entityName,
+      limit,
+      offset,
+    }
   );
 
-  return { lens, payload };
+  return { lens, result };
 }

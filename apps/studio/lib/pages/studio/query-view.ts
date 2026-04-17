@@ -1,5 +1,14 @@
 import type { LensArgs, ResolvedLensView } from "./lens-catalog";
 
+export const STUDIO_QUERY_LIMIT = 100;
+
+export type LensQueryPage = {
+  items: unknown[];
+  totalItems: number;
+  limit: number;
+  offset: number;
+};
+
 async function graphqlFetch(
   hostUrl: string,
   query: string
@@ -18,10 +27,20 @@ async function graphqlFetch(
 export async function queryLensView<TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>,
   hostUrl: string,
-  entityNameOverride?: string
-): Promise<unknown> {
-  const entityName = entityNameOverride ?? view.entityName;
-  const query = view.buildHostQuery(entityName);
+  options?: {
+    entityName?: string;
+    limit?: number;
+    offset?: number;
+  }
+): Promise<LensQueryPage> {
+  const entityName = options?.entityName ?? view.entityName;
+  const limit = options?.limit ?? STUDIO_QUERY_LIMIT;
+  const offset = options?.offset ?? 0;
+  const query = view.buildHostQuery({
+    entityName,
+    limit,
+    offset,
+  });
   const result = (await graphqlFetch(hostUrl, query)) as {
     data?: Record<string, unknown>;
     errors?: Array<{ message: string }>;
@@ -31,5 +50,18 @@ export async function queryLensView<TArgs extends LensArgs>(
     throw new Error(result.errors.map((error) => error.message).join(", "));
   }
 
-  return result.data?.[entityName] ?? null;
+  const items = Array.isArray(result.data?.[entityName])
+    ? (result.data?.[entityName] as unknown[])
+    : [];
+  const totalItems =
+    typeof result.data?.totalItems === "number"
+      ? result.data.totalItems
+      : items.length;
+
+  return {
+    items,
+    totalItems,
+    limit,
+    offset,
+  };
 }

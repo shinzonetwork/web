@@ -91,5 +91,9 @@ export function getErc20TokenPresetByAddress(tokenAddress: string) {
   return erc20TokenPresetByAddress.get(normalizeErc20TokenAddress(tokenAddress));
 }
 
-export const USDT_TOKEN_ADDRESS = TOP_ETHEREUM_ERC20_TOKEN_PRESETS[0].address;
-export const USDC_TOKEN_ADDRESS = TOP_ETHEREUM_ERC20_TOKEN_PRESETS[2].address;
+export const USDT_TOKEN_ADDRESS =
+  TOP_ETHEREUM_ERC20_TOKEN_PRESETS.find((token) => token.symbol === "USDT")
+    ?.address ?? "";
+export const USDC_TOKEN_ADDRESS =
+  TOP_ETHEREUM_ERC20_TOKEN_PRESETS.find((token) => token.symbol === "USDC")
+    ?.address ?? "";
