@@ -9,7 +9,7 @@ import { Header } from "./header";
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
 import { type Erc20TransferResult } from "./query-view";
 import { Results } from "./results";
-import { HOST_GRAPHQL_PROXY_PATH } from "@/shared/consts/envs";
+import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
 import { shinzoDevnet } from "@/shared/wagmi";
 import {
   USDC_TOKEN_ADDRESS,
@@ -116,7 +116,7 @@ export function StudioPage() {
           lens: ERC20_TRANSFER_LENS,
           args: runtimeArgs,
           chainId: shinzoDevnet.id,
-          hostUrl: HOST_GRAPHQL_PROXY_PATH,
+          hostUrl: HOST_GRAPHQL_REQUEST_URL,
           switchChainAsync,
           sendTransactionAsync,
           onStatusChange: setStatus,
@@ -160,7 +160,7 @@ export function StudioPage() {
         lens: ERC20_TRANSFER_LENS,
         viewName: latestDeployedView.viewName,
         args: latestDeployedView.args as TokenAddressLensArgs,
-        hostUrl: HOST_GRAPHQL_PROXY_PATH,
+        hostUrl: HOST_GRAPHQL_REQUEST_URL,
       });
       setResults(
         Array.isArray(payload) ? (payload as Erc20TransferResult[]) : []
@@ -181,7 +181,7 @@ export function StudioPage() {
     try {
       const { payload } = await callStoredLensView({
         view,
-        hostUrl: HOST_GRAPHQL_PROXY_PATH,
+        hostUrl: HOST_GRAPHQL_REQUEST_URL,
       });
       setStoredCallState({
         status: "success",
