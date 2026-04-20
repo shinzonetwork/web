@@ -9,7 +9,7 @@
     "build": "next build",
     "build:open": "opennextjs-cloudflare build",
     "deploy": "pnpm run deploy:database && pnpm run deploy:app",
-    "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV --skipPopulateCache",
+    "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV --x-provision=false",
     "deploy:database": "NODE_ENV=production CLOUDFLARE_ENV=$CLOUDFLARE_ENV payload migrate && pnpm seed:chains && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote",
     "generate:importmap": "payload generate:importmap",
     "generate:types": "pnpm run generate:types:cloudflare && pnpm run generate:types:payload",
