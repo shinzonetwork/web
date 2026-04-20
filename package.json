@@ -23,7 +23,7 @@
     "lucide-react": "^0.562.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.14.9",
+    "@opennextjs/cloudflare": "1.19.2",
     "typescript": "^5.9.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.1",

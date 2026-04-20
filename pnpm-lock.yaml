@@ -25,8 +25,8 @@ importers:
         version: 4.1.18
     devDependencies:
       '@opennextjs/cloudflare':
-        specifier: ^1.14.9
-        version: 1.18.0(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(wrangler@4.83.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))
+        specifier: 1.19.2
+        version: 1.19.2(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(wrangler@4.83.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.9.3)
@@ -3494,17 +3494,17 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
-  '@opennextjs/aws@3.9.16':
-    resolution: {integrity: sha512-jQQStCysIllNCPqz5W2KSguXpr+ETlOcD8SyNu+h9zwpRVYk4uEPQge+ErG3avI5xsT8vKA7EGLYG59dhj/B6Q==}
+  '@opennextjs/aws@3.10.2':
+    resolution: {integrity: sha512-YN13i3XhtB7ftCJGrcxbBvtu8hqWZMN10HQlX0hUQnWqzSlcIuq1gc1RuYqjv6I8Ixp3uKJrTuqe6+v1nQD10g==}
     hasBin: true
     peerDependencies:
-      next: ~15.0.8 || ~15.1.12 || ~15.2.9 || ~15.3.9 || ~15.4.11 || ~15.5.10 || ~16.0.11 || ^16.1.5
+      next: '>=15.5.15 || >=16.2.3'
 
-  '@opennextjs/cloudflare@1.18.0':
-    resolution: {integrity: sha512-JM236YHnKzroFAZqst1t28ZGOShvnkVUDtjrp7TJ/W2P3RLo4b6npJ8VEXOn6frs6lsUfR5rvsKYLYb7h1GIJQ==}
+  '@opennextjs/cloudflare@1.19.2':
+    resolution: {integrity: sha512-VlKXxgaOZRyFgkKLeFJ4qoI4UoBesU5MTdHyHtbGWsdRXAaaHpev74jpw0FYXbHky5BpVPznATEGOzefVqpPhA==}
     hasBin: true
     peerDependencies:
-      next: ~15.0.8 || ~15.1.12 || ~15.2.9 || ~15.3.9 || ~15.4.11 || ~15.5.10 || ~16.0.11 || ^16.1.5
+      next: '>=15.5.15 <16 || >=16.2.3'
       wrangler: ^4.65.0
 
   '@parcel/watcher-android-arm64@2.5.4':
@@ -15279,7 +15279,7 @@ snapshots:
   '@open-draft/until@2.1.0':
     optional: true
 
-  '@opennextjs/aws@3.9.16(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))':
+  '@opennextjs/aws@3.10.2(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))':
     dependencies:
       '@ast-grep/napi': 0.40.5
       '@aws-sdk/client-cloudfront': 3.984.0
@@ -15303,11 +15303,11 @@ snapshots:
       - aws-crt
       - supports-color
 
-  '@opennextjs/cloudflare@1.18.0(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(wrangler@4.83.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))':
+  '@opennextjs/cloudflare@1.19.2(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))(wrangler@4.83.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))':
     dependencies:
       '@ast-grep/napi': 0.40.5
       '@dotenvx/dotenvx': 1.31.0
-      '@opennextjs/aws': 3.9.16(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))
+      '@opennextjs/aws': 3.10.2(next@16.2.1(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4))
       cloudflare: 4.5.0
       comment-json: 4.6.2
       enquirer: 2.4.1
