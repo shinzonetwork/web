@@ -37,15 +37,9 @@
       "service": "shinzo-website"
     }
   ],
-  // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
-  // https://opennext.js.org/cloudflare/caching#incremental-cache
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "shinzo-website-r2"
-    },
-    {
-      "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "shinzo-website-r2"
     }
   ],
@@ -71,13 +65,6 @@
       "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
       "database_name": "shinzo-website-db",
       "remote": true
-    },
-    // D1 Tag Cache (Next mode)
-    // https://opennext.js.org/cloudflare/caching#tag-cache-for-on-demand-revalidation
-    {
-      "binding": "NEXT_TAG_CACHE_D1",
-      "database_id": "77abb256-958a-4011-87a5-1c45990ae18a",
-      "database_name": "shinzo-website-db"
     }
   ],
   "images": {
@@ -108,11 +95,6 @@
           "database_id": "be1c7e5b-8b9e-4cf9-84ab-0eb0451d6871",
           "database_name": "shinzo-website-db-staging",
           "remote": true
-        },
-        {
-          "binding": "NEXT_TAG_CACHE_D1",
-          "database_id": "be1c7e5b-8b9e-4cf9-84ab-0eb0451d6871",
-          "database_name": "shinzo-website-db-staging"
         }
       ],
       "services": [
@@ -124,10 +106,6 @@
       "r2_buckets": [
         {
           "binding": "R2",
-          "bucket_name": "shinzo-website-r2-staging"
-        },
-        {
-          "binding": "NEXT_INC_CACHE_R2_BUCKET",
           "bucket_name": "shinzo-website-r2-staging"
         }
       ],

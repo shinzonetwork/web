@@ -23,11 +23,11 @@
     "lucide-react": "^0.562.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.14.9",
+    "@opennextjs/cloudflare": "1.19.2",
     "typescript": "^5.9.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.1",
-    "wrangler": "^4.59.2",
+    "wrangler": "4.83.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
