@@ -183,6 +183,8 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
 
+  apps/health-proxy: {}
+
   apps/metrics-dashboard:
     dependencies:
       '@shinzo/ui':
