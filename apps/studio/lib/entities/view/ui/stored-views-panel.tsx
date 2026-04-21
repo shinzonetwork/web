@@ -1,14 +1,16 @@
 "use client";
 
+import { isStudioSupportedLens } from "@/entities/lens";
 import { useStoredViews } from "../model/use-stored-views";
 import { StoredViewCard } from "./stored-view-card";
 import { useStoredViewCall } from "./use-stored-view-call";
 
 export const StoredViewsPanel = () => {
   const { views } = useStoredViews();
-  const { callState, page, call } = useStoredViewCall(views);
+  const supportedViews = views.filter((view) => isStudioSupportedLens(view.lensKey));
+  const { callState, page, call } = useStoredViewCall(supportedViews);
 
-  if (views.length === 0) {
+  if (supportedViews.length === 0) {
     return null;
   }
 
@@ -25,7 +27,7 @@ export const StoredViewsPanel = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        {views.map((view) => (
+        {supportedViews.map((view) => (
           <StoredViewCard
             key={`${view.entityName}-${view.deployedAt}`}
             view={view}

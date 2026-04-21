@@ -9,11 +9,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { isStudioSupportedLens } from "@/entities/lens";
+import { isStudioKnownLens } from "@/entities/lens";
 import {
   loadStoredDeployedViews,
   upsertStoredDeployedView,
 } from "./storage";
+import { isCurrentStoredView } from "./current-view";
 import type { StoredDeployedView } from "./types";
 
 export interface UseStoredViewsResult {
@@ -27,18 +28,21 @@ interface StoredViewsProviderProps {
   children: ReactNode;
 }
 
+const filterStudioViews = (views: StoredDeployedView[]): StoredDeployedView[] =>
+  views.filter(
+    (view) => isStudioKnownLens(view.lensKey) && isCurrentStoredView(view)
+  );
+
 export const StoredViewsProvider = ({ children }: StoredViewsProviderProps) => {
   const [views, setViews] = useState<StoredDeployedView[]>([]);
 
   useEffect(() => {
-    setViews(
-      loadStoredDeployedViews().filter((v) => isStudioSupportedLens(v.lensKey))
-    );
+    setViews(filterStudioViews(loadStoredDeployedViews()));
   }, []);
 
   const upsert = useCallback((view: StoredDeployedView) => {
     const next = upsertStoredDeployedView(view);
-    setViews(next.filter((v) => isStudioSupportedLens(v.lensKey)));
+    setViews(filterStudioViews(next));
   }, []);
 
   const value = useMemo(() => ({ views, upsert }), [views, upsert]);

@@ -28,21 +28,21 @@ export interface DeployTransaction {
 
 export const buildDeployTransaction = async <TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>,
-  preloadedWasmBytes?: Uint8Array
+  preloadedWasmBytes?: Uint8Array[]
 ): Promise<DeployTransaction> => {
-  const wasmBytes = preloadedWasmBytes ?? (await downloadWasm(view.wasmUrl));
+  const wasmBytesByStep =
+    preloadedWasmBytes ??
+    (await Promise.all(view.steps.map((step) => downloadWasm(step.wasmUrl))));
 
   const bundler = new Bundler(makeBrowserZstd());
   const payloadBytes = await bundler.BundleView({
     Query: view.query,
     Sdl: view.sdl,
     Transform: {
-      Lenses: [
-        {
-          Path: bytesToBase64(wasmBytes),
-          Arguments: JSON.stringify(view.deployArgs),
-        },
-      ],
+      Lenses: view.steps.map((step, index) => ({
+        Path: bytesToBase64(wasmBytesByStep[index]),
+        Arguments: JSON.stringify(step.args),
+      })),
     },
   });
 

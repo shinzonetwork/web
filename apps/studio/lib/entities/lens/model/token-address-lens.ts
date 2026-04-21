@@ -6,6 +6,7 @@ import { buildCollectionQuery } from "./host-query";
 import {
   buildDefinitionKey,
   extractRootTypeName,
+  prefixStudioViewName,
   replaceRootTypeName,
 } from "./sdl";
 import type {
@@ -46,8 +47,10 @@ const buildTokenAddressSuffix = (tokenAddress: string): string => {
 
 type TokenAddressLensMeta = Pick<
   LensDefinition<TokenAddressLensArgs>,
-  "lensKey" | "title" | "description" | "wasmUrl" | "uiSupported" | "resultKind"
->;
+  "lensKey" | "title" | "description" | "packKey" | "uiSupported" | "resultKind"
+> & {
+  wasmUrl: string;
+};
 
 export const resolveTokenAddressView = (
   lens: TokenAddressLensMeta,
@@ -56,9 +59,11 @@ export const resolveTokenAddressView = (
   fields: string
 ): ResolvedLensView<TokenAddressLensArgs> => {
   const normalizedArgs = parseTokenAddressArgs(args);
-  const entityName = `${extractRootTypeName(baseSdl)}${buildTokenAddressSuffix(
-    normalizedArgs.tokenAddress
-  )}`;
+  const entityName = prefixStudioViewName(
+    `${extractRootTypeName(baseSdl)}${buildTokenAddressSuffix(
+      normalizedArgs.tokenAddress
+    )}`
+  );
   const sdl = replaceRootTypeName(baseSdl, entityName);
   const query = ERC20_LENS_QUERY;
 
@@ -68,7 +73,12 @@ export const resolveTokenAddressView = (
     entityName,
     query,
     sdl,
-    deployArgs: buildTokenAddressDeployArgs(normalizedArgs),
+    steps: [
+      {
+        wasmUrl: lens.wasmUrl,
+        args: buildTokenAddressDeployArgs(normalizedArgs),
+      },
+    ],
     definitionKey: buildDefinitionKey(query, sdl),
     buildHostQuery: (options) =>
       buildCollectionQuery(options?.entityName ?? entityName, fields, {

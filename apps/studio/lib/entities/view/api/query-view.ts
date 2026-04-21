@@ -2,6 +2,7 @@ import {
   getLensDefinition,
   type AnyLensDefinition,
   type LensArgs,
+  type LensDefinition,
   type ResolvedLensView,
 } from "@/entities/lens";
 import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
@@ -14,7 +15,9 @@ import {
 
 const LENS_QUERY_STALE_TIME_MS = 5 * 60 * 1000;
 
-const graphqlFetch = async (query: string): Promise<Record<string, unknown>> => {
+export const graphqlFetch = async (
+  query: string
+): Promise<Record<string, unknown>> => {
   const res = await fetch(HOST_GRAPHQL_REQUEST_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -83,8 +86,9 @@ export const callStoredLensView = async (
     throw new Error(`Lens "${view.lensKey}" is not supported in Studio right now.`);
   }
 
+  const typedLens = lens as LensDefinition<LensArgs>;
   const result = await queryLensView(
-    lens.resolveView(lens.parseStoredArgs(view.args)),
+    typedLens.resolveView(typedLens.parseStoredArgs(view.args)),
     {
       entityName: view.entityName,
       limit: options?.limit,

@@ -20,6 +20,7 @@ const isStoredDeployedView = (value: unknown): value is StoredDeployedView => {
 
   return (
     typeof candidate.entityName === "string" &&
+    (candidate.packKey === undefined || typeof candidate.packKey === "string") &&
     (candidate.contractAddress === undefined ||
       typeof candidate.contractAddress === "string") &&
     (candidate.txHash === undefined || typeof candidate.txHash === "string") &&
@@ -98,6 +99,7 @@ export const createStoredDeployedView = <TArgs extends LensArgs>(
   input: CreateStoredDeployedViewInput
 ): StoredDeployedView => ({
   entityName: view.entityName,
+  packKey: view.packKey,
   contractAddress: input.contractAddress,
   txHash: input.txHash,
   source: input.source,

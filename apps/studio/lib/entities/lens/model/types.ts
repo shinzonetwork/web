@@ -11,16 +11,21 @@ export interface BuildHostQueryOptions {
   offset?: number;
 }
 
+export interface ResolvedLensStep {
+  wasmUrl: string;
+  args: Record<string, unknown>;
+}
+
 export interface ResolvedLensView<TArgs extends LensArgs = LensArgs> {
   lensKey: string;
   definitionKey: string;
   title: string;
   description: string;
+  packKey?: string;
   entityName: string;
   query: string;
   sdl: string;
-  deployArgs: Record<string, unknown>;
-  wasmUrl: string;
+  steps: ResolvedLensStep[];
   uiSupported: boolean;
   resultKind: LensResultKind;
   args: TArgs;
@@ -31,9 +36,9 @@ export interface LensDefinition<TArgs extends LensArgs = LensArgs> {
   lensKey: string;
   title: string;
   description: string;
+  packKey?: string;
   parseStoredArgs: (args: LensArgs) => TArgs;
   resolveView: (args: TArgs) => ResolvedLensView<TArgs>;
-  wasmUrl: string;
   uiSupported: boolean;
   resultKind: LensResultKind;
 }

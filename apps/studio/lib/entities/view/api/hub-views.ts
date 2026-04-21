@@ -1,3 +1,6 @@
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { STUDIO_VIEW_NAME_PREFIX } from "@/entities/lens";
 import { SHINZOHUB_LCD_URL } from "@/shared/consts/envs";
 
 interface HubViewWire {
@@ -15,10 +18,6 @@ interface HubViewsResponse {
   };
 }
 
-interface HubViewResponse {
-  view?: HubViewWire | null;
-}
-
 export interface HubViewRecord {
   name: string;
   creator: string;
@@ -26,6 +25,18 @@ export interface HubViewRecord {
   data: string | null;
   height: string;
 }
+
+interface FindHubViewByEntityNameOptions {
+  contractAddress?: string;
+}
+
+const HUB_VIEWS_PAGE_LIMIT = 200;
+const STUDIO_HUB_VIEWS_STALE_TIME_MS = 60 * 1000;
+
+export const STUDIO_HUB_VIEWS_QUERY_KEY = [
+  "studio-hub-views",
+  STUDIO_VIEW_NAME_PREFIX,
+] as const;
 
 const normalizeHubBaseUrl = (): string => {
   const trimmed = SHINZOHUB_LCD_URL.trim();
@@ -67,33 +78,23 @@ const toHubViewRecord = (
   };
 };
 
-const findMatchingHubView = (
-  views: HubViewWire[] | undefined,
-  entityName: string
-): HubViewRecord | null => {
-  if (!views) {
-    return null;
-  }
-
-  for (const view of views) {
-    const record = toHubViewRecord(view);
-
-    if (record?.name === entityName) {
-      return record;
-    }
-  }
-
-  return null;
+const toHeightNumber = (view: HubViewRecord): number => {
+  const parsedHeight = Number(view.height);
+  return Number.isFinite(parsedHeight) ? parsedHeight : 0;
 };
 
-export const findHubViewByEntityName = async (
-  entityName: string
-): Promise<HubViewRecord | null> => {
+const compareHubViewsByHeightDesc = (
+  left: HubViewRecord,
+  right: HubViewRecord
+): number => toHeightNumber(right) - toHeightNumber(left);
+
+export const fetchStudioHubViews = async (): Promise<HubViewRecord[]> => {
+  const collectedViews: HubViewRecord[] = [];
   let nextKey: string | null = null;
 
   while (true) {
     const url = buildHubUrl("/shinzonetwork/view/v1/views");
-    url.searchParams.set("pagination.limit", "200");
+    url.searchParams.set("pagination.limit", String(HUB_VIEWS_PAGE_LIMIT));
 
     if (nextKey) {
       url.searchParams.set("pagination.key", nextKey);
@@ -105,29 +106,70 @@ export const findHubViewByEntityName = async (
     }
 
     const payload = (await response.json()) as HubViewsResponse;
-    const match = findMatchingHubView(payload.views, entityName);
 
-    if (match) {
-      return match;
+    for (const view of payload.views ?? []) {
+      const record = toHubViewRecord(view);
+      if (!record?.name.startsWith(STUDIO_VIEW_NAME_PREFIX)) {
+        continue;
+      }
+
+      collectedViews.push(record);
     }
 
     nextKey = payload.pagination?.next_key ?? null;
     if (!nextKey) {
-      return null;
+      break;
     }
   }
+
+  return [...collectedViews].sort(compareHubViewsByHeightDesc);
 };
 
-export const getHubViewByContractAddress = async (
-  contractAddress: string
-): Promise<HubViewRecord | null> => {
-  const url = buildHubUrl(`/shinzonetwork/view/v1/views/${contractAddress}`);
-  const response = await hubFetch(url);
-
-  if (response.status === 404) {
+export const findHubViewByEntityName = (
+  views: HubViewRecord[] | undefined,
+  entityName: string,
+  options?: FindHubViewByEntityNameOptions
+): HubViewRecord | null => {
+  if (!views?.length) {
     return null;
   }
 
-  const payload = (await response.json()) as HubViewResponse;
-  return toHubViewRecord(payload.view);
+  const matchingViews = views.filter((view) => view.name === entityName);
+
+  if (options?.contractAddress) {
+    return (
+      matchingViews.find(
+        (view) => view.contractAddress === options.contractAddress
+      ) ?? null
+    );
+  }
+
+  return matchingViews[0] ?? null;
+};
+
+export const useStudioHubViews = () =>
+  useQuery({
+    queryKey: STUDIO_HUB_VIEWS_QUERY_KEY,
+    staleTime: STUDIO_HUB_VIEWS_STALE_TIME_MS,
+    queryFn: fetchStudioHubViews,
+  });
+
+export const useStudioHubViewByEntityName = (
+  entityName: string | null | undefined,
+  options?: FindHubViewByEntityNameOptions
+) => {
+  const query = useStudioHubViews();
+
+  const view = useMemo(
+    () =>
+      entityName
+        ? findHubViewByEntityName(query.data, entityName, options)
+        : null,
+    [entityName, options?.contractAddress, query.data]
+  );
+
+  return {
+    ...query,
+    view,
+  };
 };

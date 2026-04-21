@@ -4,6 +4,7 @@ export type StoredDeployedViewSource = "deployed" | "hub-existing";
 
 export interface StoredDeployedView {
   entityName: string;
+  packKey?: string;
   contractAddress?: string;
   txHash?: string;
   source: StoredDeployedViewSource;

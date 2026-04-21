@@ -1,7 +1,14 @@
 import { keccak256, toBytes } from "viem";
 
+export const STUDIO_VIEW_NAME_PREFIX = "Studio_v3_";
+
 export const buildDefinitionKey = (query: string, sdl: string): string =>
   keccak256(toBytes(`${query}\n${sdl}`));
+
+export const prefixStudioViewName = (entityName: string): string =>
+  entityName.startsWith(STUDIO_VIEW_NAME_PREFIX)
+    ? entityName
+    : `${STUDIO_VIEW_NAME_PREFIX}${entityName}`;
 
 export const extractRootTypeName = (sdl: string): string => {
   const match = sdl.match(/\btype\s+([A-Za-z0-9_]+)\b/);

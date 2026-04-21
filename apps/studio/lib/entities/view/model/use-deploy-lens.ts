@@ -25,25 +25,31 @@ import {
 import { downloadWasm } from "../api/deploy-transaction";
 import {
   findHubViewByEntityName,
-  getHubViewByContractAddress,
+  type HubViewRecord,
+  useStudioHubViews,
 } from "../api/hub-views";
 import { createStoredDeployedView } from "./storage";
 import type { DeployStatus, StoredDeployedView } from "./types";
 import { ViewValidationError } from "./view-validation-error";
 
 interface ValidatedView {
-  wasmBytes: Uint8Array;
+  wasmBytesByStep: Uint8Array[];
   warnings: ValidationIssue[];
 }
 
 const validateResolvedView = async <TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>
 ): Promise<ValidatedView> => {
-  const wasmBytes = await downloadWasm(view.wasmUrl);
+  const wasmBytesByStep = await Promise.all(
+    view.steps.map((step) => downloadWasm(step.wasmUrl))
+  );
   const validation = await validateView({
     query: view.query,
     sdl: view.sdl,
-    lenses: [{ wasmBytes, args: view.deployArgs }],
+    lenses: view.steps.map((step, index) => ({
+      wasmBytes: wasmBytesByStep[index],
+      args: step.args,
+    })),
   });
 
   if (!validation.ok) {
@@ -51,7 +57,7 @@ const validateResolvedView = async <TArgs extends LensArgs>(
   }
 
   return {
-    wasmBytes,
+    wasmBytesByStep,
     warnings: validation.issues.filter((issue) => issue.severity === "warning"),
   };
 };
@@ -61,7 +67,7 @@ type PublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
 interface SubmitDeployTxInput<TArgs extends LensArgs> {
   account: Address;
   resolvedView: ResolvedLensView<TArgs>;
-  wasmBytes: Uint8Array;
+  wasmBytesByStep: Uint8Array[];
   publicClient: PublicClient;
   switchChainAsync: ReturnType<typeof useSwitchChain>["switchChainAsync"];
   sendTransactionAsync: ReturnType<typeof useSendTransaction>["sendTransactionAsync"];
@@ -73,12 +79,12 @@ const submitDeployTransaction = async <TArgs extends LensArgs>(
   const {
     account,
     resolvedView,
-    wasmBytes,
+    wasmBytesByStep,
     publicClient,
     switchChainAsync,
     sendTransactionAsync,
   } = input;
-  const tx = await buildDeployTransaction(resolvedView, wasmBytes);
+  const tx = await buildDeployTransaction(resolvedView, wasmBytesByStep);
   const chainId = shinzoDevnet.id;
 
   const estimatedGas = await publicClient.estimateGas({
@@ -109,20 +115,28 @@ const submitDeployTransaction = async <TArgs extends LensArgs>(
 
 const confirmRegisteredView = async (
   receipt: TransactionReceipt,
-  entityName: string
+  entityName: string,
+  studioHubViews: HubViewRecord[],
+  refreshStudioHubViews: () => Promise<HubViewRecord[]>
 ): Promise<{ contractAddress: string; txHash: string }> => {
   const contractAddress = extractDeployedViewContractAddress(receipt);
-  const registeredHubView = await getHubViewByContractAddress(contractAddress);
+  let availableViews = studioHubViews;
+  let registeredHubView = findHubViewByEntityName(availableViews, entityName, {
+    contractAddress,
+  });
+
+  for (let attempt = 0; attempt < 20 && !registeredHubView; attempt += 1) {
+    await new Promise((resolve) => window.setTimeout(resolve, 1_000));
+    availableViews = await refreshStudioHubViews();
+
+    registeredHubView = findHubViewByEntityName(availableViews, entityName, {
+      contractAddress,
+    });
+  }
 
   if (!registeredHubView) {
     throw new Error(
-      `Deployment transaction succeeded, but ShinzoHub LCD did not return a registered view for contract ${contractAddress}.`
-    );
-  }
-
-  if (registeredHubView.name !== entityName) {
-    throw new Error(
-      `ShinzoHub registered "${registeredHubView.name}", but Studio expected "${entityName}".`
+      `Deployment transaction succeeded, but ShinzoHub LCD did not return a registered view named "${entityName}".`
     );
   }
 
@@ -137,13 +151,22 @@ export interface DeployResult {
   validationWarnings: ValidationIssue[];
 }
 
+export interface DeployPackResult {
+  deployedViews: StoredDeployedView[];
+  validationWarnings: ValidationIssue[];
+}
+
 export interface UseDeployLensResult {
   deploy: <TArgs extends LensArgs>(
     lens: LensDefinition<TArgs>,
     args: TArgs
   ) => Promise<DeployResult>;
+  deployResolvedViews: (
+    views: ResolvedLensView[]
+  ) => Promise<DeployPackResult>;
   status: DeployStatus;
   error: string;
+  activeViewTitle: string;
   validationIssues: ValidationIssue[];
   reset: () => void;
 }
@@ -153,9 +176,12 @@ export const useDeployLens = (): UseDeployLensResult => {
   const { sendTransactionAsync } = useSendTransaction();
   const { switchChainAsync } = useSwitchChain();
   const publicClient = usePublicClient({ chainId: shinzoDevnet.id });
+  const { data: studioHubViews = [], refetch: refetchStudioHubViews } =
+    useStudioHubViews();
 
   const [status, setStatus] = useState<DeployStatus>("idle");
   const [error, setError] = useState("");
+  const [activeViewTitle, setActiveViewTitle] = useState("");
   const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>(
     []
   );
@@ -163,8 +189,69 @@ export const useDeployLens = (): UseDeployLensResult => {
   const reset = useCallback(() => {
     setStatus("idle");
     setError("");
+    setActiveViewTitle("");
     setValidationIssues([]);
   }, []);
+
+  const deployResolvedView = useCallback(
+    async <TArgs extends LensArgs>(
+      resolvedView: ResolvedLensView<TArgs>
+    ): Promise<DeployResult> => {
+      setActiveViewTitle(resolvedView.title);
+
+      setStatus("checking");
+      const existing = findHubViewByEntityName(
+        studioHubViews,
+        resolvedView.entityName
+      );
+      if (existing) {
+        const deployedView = createStoredDeployedView(resolvedView, {
+          source: "hub-existing",
+          contractAddress: existing.contractAddress,
+        });
+        return { deployedView, validationWarnings: [] };
+      }
+
+      setStatus("validating");
+      const { wasmBytesByStep, warnings } = await validateResolvedView(
+        resolvedView
+      );
+
+      setStatus("deploying");
+      const receipt = await submitDeployTransaction({
+        account: account!,
+        resolvedView,
+        wasmBytesByStep,
+        publicClient: publicClient!,
+        switchChainAsync,
+        sendTransactionAsync,
+      });
+
+      setStatus("confirming");
+      const { contractAddress, txHash } = await confirmRegisteredView(
+        receipt,
+        resolvedView.entityName,
+        studioHubViews,
+        async () => (await refetchStudioHubViews()).data ?? []
+      );
+
+      const deployedView = createStoredDeployedView(resolvedView, {
+        source: "deployed",
+        contractAddress,
+        txHash,
+      });
+
+      return { deployedView, validationWarnings: warnings };
+    },
+    [
+      account,
+      publicClient,
+      refetchStudioHubViews,
+      sendTransactionAsync,
+      studioHubViews,
+      switchChainAsync,
+    ]
+  );
 
   const deploy = useCallback(
     async <TArgs extends LensArgs>(
@@ -184,46 +271,12 @@ export const useDeployLens = (): UseDeployLensResult => {
       setValidationIssues([]);
 
       try {
-        const resolvedView = lens.resolveView(args);
-
-        setStatus("checking");
-        const existing = await findHubViewByEntityName(resolvedView.entityName);
-        if (existing) {
-          const deployedView = createStoredDeployedView(resolvedView, {
-            source: "hub-existing",
-            contractAddress: existing.contractAddress,
-          });
-          setStatus("done");
-          return { deployedView, validationWarnings: [] };
-        }
-
-        setStatus("validating");
-        const { wasmBytes, warnings } = await validateResolvedView(resolvedView);
-
-        setStatus("deploying");
-        const receipt = await submitDeployTransaction({
-          account,
-          resolvedView,
-          wasmBytes,
-          publicClient,
-          switchChainAsync,
-          sendTransactionAsync,
-        });
-
-        setStatus("confirming");
-        const { contractAddress, txHash } = await confirmRegisteredView(
-          receipt,
-          resolvedView.entityName
+        const { deployedView, validationWarnings } = await deployResolvedView(
+          lens.resolveView(args)
         );
-
-        const deployedView = createStoredDeployedView(resolvedView, {
-          source: "deployed",
-          contractAddress,
-          txHash,
-        });
-        setValidationIssues(warnings);
+        setValidationIssues(validationWarnings);
         setStatus("done");
-        return { deployedView, validationWarnings: warnings };
+        return { deployedView, validationWarnings };
       } catch (err) {
         setStatus("error");
         if (err instanceof ViewValidationError) {
@@ -234,8 +287,59 @@ export const useDeployLens = (): UseDeployLensResult => {
         throw err;
       }
     },
-    [account, publicClient, sendTransactionAsync, switchChainAsync]
+    [account, publicClient, deployResolvedView]
   );
 
-  return { deploy, status, error, validationIssues, reset };
+  const deployResolvedViews = useCallback(
+    async (views: ResolvedLensView[]): Promise<DeployPackResult> => {
+      if (!account) {
+        throw new Error("Wallet is not connected.");
+      }
+      if (!publicClient) {
+        throw new Error(
+          "Shinzo public client is unavailable. Check NEXT_PUBLIC_SHINZOHUB_EVM_RPC."
+        );
+      }
+
+      setError("");
+      setValidationIssues([]);
+
+      try {
+        const deployedViews: StoredDeployedView[] = [];
+        const warnings: ValidationIssue[] = [];
+
+        for (const view of views) {
+          const result = await deployResolvedView(view);
+          deployedViews.push(result.deployedView);
+          warnings.push(...result.validationWarnings);
+        }
+
+        setValidationIssues(warnings);
+        setStatus("done");
+        return {
+          deployedViews,
+          validationWarnings: warnings,
+        };
+      } catch (err) {
+        setStatus("error");
+        if (err instanceof ViewValidationError) {
+          setValidationIssues(err.result.issues);
+        } else {
+          setError(err instanceof Error ? err.message : "Unexpected error");
+        }
+        throw err;
+      }
+    },
+    [account, publicClient, deployResolvedView]
+  );
+
+  return {
+    deploy,
+    deployResolvedViews,
+    status,
+    error,
+    activeViewTitle,
+    validationIssues,
+    reset,
+  };
 };
