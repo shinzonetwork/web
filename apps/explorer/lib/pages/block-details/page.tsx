@@ -1,21 +1,30 @@
-import { PageLayout } from '@/widgets/layout'
+import { PageLayout } from '@/widgets/layout';
 import { BlockTabs } from './block-tabs';
-import { PageParamsOptions, getServerPage } from '@shinzo/ui/pagination';
+import { PageParams } from '@shinzo/ui/pagination';
 
+export type BlockDetailClientPageProps =
+  | {
+      pageParams: PageParams;
+      blockNumber: number;
+    }
+  | {
+      pageParams: PageParams;
+      blockHash: string;
+    };
 
-export interface BlockDetailPageProps {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<PageParamsOptions>;}
-
-export const BlockDetailPage = async ({ params, searchParams }: BlockDetailPageProps) => {
-  const { id } = await params;
-  const blockNumber = Number(id);
-  const search = await searchParams;
-  const pageParams = getServerPage(search);
+export const BlockDetailClientPage = async (props: BlockDetailClientPageProps) => {
+  const title =
+    'blockNumber' in props
+      ? `Block #${props.blockNumber}`
+      : `Block ${props.blockHash.slice(0, 10)}…${props.blockHash.slice(-8)}`;
 
   return (
-    <PageLayout title={`Block #${blockNumber}`}>
-      <BlockTabs height={blockNumber} pageParams={pageParams} />
+    <PageLayout title={title}>
+      {'blockNumber' in props ? (
+        <BlockTabs blockNumber={props.blockNumber} pageParams={props.pageParams} />
+      ) : (
+        <BlockTabs blockHash={props.blockHash} pageParams={props.pageParams} />
+      )}
     </PageLayout>
   );
 };

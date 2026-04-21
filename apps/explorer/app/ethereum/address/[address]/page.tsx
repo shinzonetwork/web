@@ -1,0 +1,1 @@
+export { AddressDetailPage as default } from '@/pages/address';

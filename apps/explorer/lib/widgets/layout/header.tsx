@@ -5,7 +5,7 @@ import Link from "next/link";
 import ShinzoLogo from './shinzo-logo.svg';
 import { NavLink } from './nav-link';
 import { getPageLink } from '@/shared/utils/links';
-import { useChainPathSegment } from "../chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "../chain-path-segment";
 
 export interface HeaderProps {
   hideSearch?: boolean;

@@ -1,0 +1,1 @@
+export { TokenDetailPage as default } from '@/pages/token';

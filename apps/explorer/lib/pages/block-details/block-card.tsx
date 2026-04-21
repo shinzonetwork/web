@@ -4,16 +4,17 @@ import { useState } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { useBlock } from "./use-block";
+import { useBlock, type UseBlockOptions } from "./use-block";
 import { formatTimestamp } from "@/shared/utils/format-timestamp";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
+import { getPageLink } from "@/shared/utils/links";
 
-export interface BlockCardProps {
-  height: number;
-}
+export type BlockCardProps = UseBlockOptions;
 
-export const BlockCard = ({ height }: BlockCardProps) => {
+export const BlockCard = (options: BlockCardProps) => {
   const [showMore, setShowMore] = useState(false);
-  const { data: block, isLoading } = useBlock({ number: height });
+  const { data: block, isLoading } = useBlock(options);
+  const chain = useChainPathSegment();
 
   if (!block || !block.number) {
     return (
@@ -44,6 +45,7 @@ export const BlockCard = ({ height }: BlockCardProps) => {
           title="Validator"
           value={block.miner}
           loading={isLoading}
+          link={block.miner != null ? `${getPageLink('address', { param: block.miner, chain})}` : undefined}
         >
           {block.miner}
         </DataItem>
@@ -104,6 +106,7 @@ export const BlockCard = ({ height }: BlockCardProps) => {
             copyable
             loading={isLoading}
             truncate={false}
+            link={block.hash != null ? `${getPageLink('block', { param: block.hash, chain})}` : undefined}
           >
             <span className="whitespace-nowrap overflow-x-auto">
               {block.hash}
@@ -115,6 +118,7 @@ export const BlockCard = ({ height }: BlockCardProps) => {
             value={block.parentHash}
             copyable
             truncate={false}
+            link={block.parentHash != null ? `${getPageLink('block', { param: block.parentHash, chain})}` : undefined}
           >
             {block.parentHash}
           </DataItem>

@@ -8,7 +8,7 @@ import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { AttestationsTooltip } from '@/pages/transaction-details/attestations-tooltip';
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
 export interface TransactionCardProps {
   txHash: string;
@@ -112,6 +112,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title='From'
         value={tx.from}
         loading={isLoading}
+        link={tx.from != null ? `${getPageLink('address', { param: tx.from, chain})}` : undefined}
       >
         {tx.from}
       </DataItem>
@@ -120,6 +121,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         title="To"
         value={tx.to}
         loading={isLoading}
+        link={tx.to != null ? `${getPageLink('address', { param: tx.to, chain})}` : undefined}
       >
         {tx.to}
       </DataItem>
