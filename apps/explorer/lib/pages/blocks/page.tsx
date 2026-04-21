@@ -3,16 +3,12 @@
 import Link from "next/link"
 import { formatDistanceToNow } from "date-fns"
 import { Pagination, DEFAULT_LIMIT, PageParams } from '@shinzo/ui/pagination'
+import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs'
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatGasUsed } from '@/shared/utils/format-gas';
 import { formatHash } from '@/shared/utils/format-hash';
 import { Typography } from '@/shared/ui/typography';
 import { Container, PageLayout } from '@/widgets/layout'
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from '@/shared/ui/tabs';
 import {
   TableLayout,
   TableNullableCell,
@@ -35,7 +31,10 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
   return (
     <PageLayout title='Blocks'>
-      <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
+      <Container
+        wrapperClassName='mt-16 mb-8 border-b border-ui-border'
+        className='flex items-end justify-between [&>*]:translate-y-[1px]'
+      >
         <Tabs defaultValue='all'>
           <TabsList>
             <TabsTrigger value='all' className='min-w-16'>

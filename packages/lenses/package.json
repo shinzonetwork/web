@@ -1,0 +1,37 @@
+{
+  "name": "@shinzo/lenses",
+  "version": "0.1.0",
+  "description": "AssemblyScript SDK for authoring Shinzo LensVM modules.",
+  "type": "module",
+  "sideEffects": false,
+  "types": "./lib/index.ts",
+  "exports": {
+    ".": "./lib/index.ts",
+    "./ens": "./ens/index.ts",
+    "./evm": "./lib/evm/index.ts",
+    "./testing": "./lib/testing/index.ts",
+    "./validate": "./lib/testing/validate.ts",
+    "./exports": "./lib/exports.ts",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "ens",
+    "erc20-transfers",
+    "erc20-account-balances",
+    "README.md",
+    "ADR.md"
+  ],
+  "scripts": {
+    "build": "node ./scripts/build-all.mjs",
+    "test": "pnpm run build && vitest run"
+  },
+  "dependencies": {
+    "assemblyscript-json": "^1.1.0"
+  },
+  "devDependencies": {
+    "assemblyscript": "^0.28.10",
+    "viem": "~2.44.4",
+    "vitest": "^3.1.1"
+  }
+}

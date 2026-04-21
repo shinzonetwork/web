@@ -3,4 +3,4 @@ export {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from './tabs';
+} from "./tabs";

@@ -1,7 +1,7 @@
 "use client"
 
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
-import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { TransactionsList } from './transactions-list';
 import { useTransactions } from './use-transactions';
@@ -23,7 +23,10 @@ export const TransactionsPageClient = ({ block, pageParams }: TransactionPagePro
 
   return (
     <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
-      <Container borderB wrapperClassName='mt-16 mb-8' className='flex justify-between items-end'>
+      <Container
+        wrapperClassName='mt-16 mb-8 border-b border-ui-border'
+        className='flex items-end justify-between [&>*]:translate-y-[1px]'
+      >
         <Tabs defaultValue='all'>
           <TabsList>
             <TabsTrigger value='all' className='min-w-16'>

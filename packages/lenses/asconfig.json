@@ -1,0 +1,72 @@
+{
+  "options": {
+    "path": ["node_modules"],
+    "initialMemory": 4,
+    "use": ["abort=lib/abort/abort"]
+  },
+  "targets": {
+    "erc20-transfers": {
+      "outFile": "erc20-transfers/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "erc20-account-balances": {
+      "outFile": "erc20-account-balances/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-event-normalizer": {
+      "outFile": "ens/event-normalizer/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-domain-projector": {
+      "outFile": "ens/domain-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-registration-projector": {
+      "outFile": "ens/registration-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-wrapped-domain-projector": {
+      "outFile": "ens/wrapped-domain-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-resolver-record-projector": {
+      "outFile": "ens/resolver-record-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-primary-name-projector": {
+      "outFile": "ens/primary-name-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    },
+    "ens-event-projector": {
+      "outFile": "ens/event-projector/lens.wasm",
+      "optimizeLevel": 3,
+      "shrinkLevel": 0,
+      "converge": false,
+      "noAssert": false
+    }
+  }
+}

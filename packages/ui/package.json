@@ -8,6 +8,7 @@
     "./skeleton": "./src/skeleton/index.tsx",
     "./pagination": "./src/pagination/index.ts",
     "./table": "./src/table/index.ts",
+    "./tabs": "./src/tabs/index.ts",
     "./copy-button": "./src/copy-button/index.tsx",
     "./search-input": "./src/search-input/index.tsx",
     "./theme.css": "./src/theme.css"
@@ -19,6 +20,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@radix-ui/react-tabs": "^1.1.13",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.0.2"
   },
