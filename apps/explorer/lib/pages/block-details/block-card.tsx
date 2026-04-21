@@ -6,7 +6,7 @@ import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { useBlock, type UseBlockOptions } from "./use-block";
 import { formatTimestamp } from "@/shared/utils/format-timestamp";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { getPageLink } from "@/shared/utils/links";
 
 export type BlockCardProps = UseBlockOptions;

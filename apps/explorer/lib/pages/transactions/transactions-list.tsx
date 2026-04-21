@@ -12,7 +12,7 @@ import {
 import { Transaction } from '@/shared/graphql';
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
 export const TransactionsList = ({ transactions, isLoading }: { transactions: Transaction[] | undefined, isLoading: boolean }) => {
   const chain = useChainPathSegment();

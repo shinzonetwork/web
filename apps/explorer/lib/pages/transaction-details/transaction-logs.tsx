@@ -13,7 +13,7 @@ import { isTokenEvent } from './known-events';
 import { formatUnits, getAddress } from 'viem';
 import Link from 'next/link';
 import { getPageLink } from '@/shared/utils/links';
-import { useChainPathSegment } from '@/widgets/chain-path-segment/use-chain-path-segment';
+import { useChainPathSegment } from '@/widgets/chain-path-segment';
 
 interface LogEntryProps {
   logIndex: number | null | undefined;

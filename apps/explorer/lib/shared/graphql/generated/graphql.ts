@@ -10049,6 +10049,13 @@ export type BlockTransactionsCountQueryVariables = Exact<{
 
 export type BlockTransactionsCountQuery = { __typename?: 'Query', BlockTransactionsCount?: Array<{ __typename?: 'Ethereum__Mainnet__Block', transactions?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', transactionIndex?: number | null } | null> | null } | null> | null };
 
+export type BlockTransactionsCountByHashQueryVariables = Exact<{
+  blockHash: Scalars['String']['input'];
+}>;
+
+
+export type BlockTransactionsCountByHashQuery = { __typename?: 'Query', BlockTransactionsCount?: Array<{ __typename?: 'Ethereum__Mainnet__Block', transactions?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', transactionIndex?: number | null } | null> | null } | null> | null };
+
 export type BlockTransactionsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -10057,6 +10064,15 @@ export type BlockTransactionsQueryVariables = Exact<{
 
 
 export type BlockTransactionsQuery = { __typename?: 'Query', BlockTransactions?: Array<{ __typename?: 'Ethereum__Mainnet__Block', timestamp?: string | null, transactions?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', hash?: string | null, from?: string | null, to?: string | null, value?: string | null, gasPrice?: string | null } | null> | null } | null> | null };
+
+export type BlockTransactionsByHashQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  hash: Scalars['String']['input'];
+}>;
+
+
+export type BlockTransactionsByHashQuery = { __typename?: 'Query', BlockTransactions?: Array<{ __typename?: 'Ethereum__Mainnet__Block', timestamp?: string | null, transactions?: Array<{ __typename?: 'Ethereum__Mainnet__Transaction', hash?: string | null, from?: string | null, to?: string | null, value?: string | null, gasPrice?: string | null } | null> | null } | null> | null };
 
 export type BlockQueryVariables = Exact<{
   number: Scalars['Int']['input'];
@@ -10155,6 +10171,18 @@ export const BlockTransactionsCountDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<BlockTransactionsCountQuery, BlockTransactionsCountQueryVariables>;
+export const BlockTransactionsCountByHashDocument = new TypedDocumentString(`
+    query BlockTransactionsCountByHash($blockHash: String!) {
+  BlockTransactionsCount: Ethereum__Mainnet__Block(
+    filter: {hash: {_eq: $blockHash}}
+    limit: 1
+  ) {
+    transactions(order: {transactionIndex: DESC}, limit: 1) {
+      transactionIndex
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<BlockTransactionsCountByHashQuery, BlockTransactionsCountByHashQueryVariables>;
 export const BlockTransactionsDocument = new TypedDocumentString(`
     query BlockTransactions($offset: Int, $limit: Int, $blockNumber: Int) {
   BlockTransactions: Ethereum__Mainnet__Block(
@@ -10172,6 +10200,23 @@ export const BlockTransactionsDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<BlockTransactionsQuery, BlockTransactionsQueryVariables>;
+export const BlockTransactionsByHashDocument = new TypedDocumentString(`
+    query BlockTransactionsByHash($offset: Int, $limit: Int, $hash: String!) {
+  BlockTransactions: Ethereum__Mainnet__Block(
+    filter: {hash: {_eq: $hash}}
+    limit: 1
+  ) {
+    timestamp
+    transactions(offset: $offset, limit: $limit) {
+      hash
+      from
+      to
+      value
+      gasPrice
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<BlockTransactionsByHashQuery, BlockTransactionsByHashQueryVariables>;
 export const BlockDocument = new TypedDocumentString(`
     query Block($number: Int!) {
   Block: Ethereum__Mainnet__Block(filter: {number: {_eq: $number}}, limit: 1) {

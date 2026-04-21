@@ -5,15 +5,15 @@ import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { useBlockTransactions } from "./use-block-transactions";
 import { BlockTransactionsList } from "./block-transactions-list";
 import { useBlockTransactionsCount } from './use-block-transactions-count';
-export interface BlockTxsProps {
-  blockNumber: number | undefined;
-  pageParams: PageParams;
-}
 
-export const BlockTransactions = ({ blockNumber, pageParams }: BlockTxsProps) => {
-  const { page, offset, limit } = pageParams;
-  const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useBlockTransactions({ offset, limit, blockNumber });
-  const { data: blockTransactionsCount } = useBlockTransactionsCount({ blockNumber });
+export type BlockTransactionsProps =
+  | { blockNumber: number; blockHash?: never; pageParams: PageParams } 
+  | { blockHash: string; blockNumber?: never; pageParams: PageParams };
+
+export const BlockTransactions = (options: BlockTransactionsProps) => {
+  const { page } = options.pageParams;
+  const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useBlockTransactions(options);
+  const { data: blockTransactionsCount } = useBlockTransactionsCount(options);
   return (
     <>
       <BlockTransactionsList

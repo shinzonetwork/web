@@ -21,7 +21,7 @@ import { useBlocks } from './use-blocks';
 import { CopyButton } from "@/shared/ui/button";
 import { useBlocksCount } from "./use-blocks-count";
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;

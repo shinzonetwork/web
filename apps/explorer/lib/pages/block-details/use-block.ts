@@ -62,14 +62,19 @@ export const useBlock = (options: UseBlockOptions) => {
   const hash = 'hash' in options ? options.hash : undefined;
 
   return useQuery({
-    queryKey: ['block', number ?? hash, number != null ? 'number' : 'hash'],
-    enabled: number != null || !!hash,
+    queryKey: ['block', number ?? hash, number !== undefined ? 'number' : 'hash'],
+    enabled: number !== undefined || !!hash,
     staleTime: 1000 * 60,
     queryFn: async () => {
-      const res =
-        number != null
-          ? await execute(BlockQuery, { number })
-          : await execute(BlockByHashQuery, { hash: hash! });
+      let res;
+      if (number !== undefined) {
+        res = await execute(BlockQuery, { number });
+      } else {
+        if (hash === undefined) {
+          throw new Error('useBlock: hash is required when number is omitted');
+        }
+        res = await execute(BlockByHashQuery, { hash });
+      }
       return res.Block?.[0] ?? null;
     },
   });

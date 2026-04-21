@@ -8,7 +8,7 @@ import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { AttestationsTooltip } from '@/pages/transaction-details/attestations-tooltip';
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
 export interface TransactionCardProps {
   txHash: string;

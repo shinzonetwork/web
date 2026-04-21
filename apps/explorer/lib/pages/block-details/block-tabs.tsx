@@ -1,5 +1,3 @@
-'use client';
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { BlockCard } from './block-card';
@@ -35,13 +33,17 @@ export const BlockTabs = (props: BlockTabsProps) => {
         </TabsContent>
 
         <TabsContent asChild value='transactions'>
-          <BlockTransactions
-            blockNumber={
-              'blockNumber' in props ? props.blockNumber : undefined
-            }
-            // blockHash={'blockHash' in props ? props.blockHash : undefined}
-            pageParams={pageParams}
-          />
+          {'blockNumber' in props ? (
+            <BlockTransactions
+              blockNumber={props.blockNumber}
+              pageParams={pageParams}
+            />
+          ) : (
+            <BlockTransactions
+              blockHash={props.blockHash}
+              pageParams={pageParams}
+            />
+          )}
         </TabsContent>
       </div>
     </Tabs>
