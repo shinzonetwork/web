@@ -84,6 +84,41 @@ describe("parseQueryFields", () => {
   test("returns empty set for query without braces", () => {
     expect(parseQueryFields("SomeType")).toEqual(new Set());
   });
+
+  test("ignores root argument objects and parses the actual selection set", () => {
+    const fields = parseQueryFields(`Ethereum__Mainnet__Log(
+      filter: {
+        address: {
+          _in: ["0xabc", "0xdef"]
+        }
+      }
+      order: [{ blockNumber: ASC }, { logIndex: ASC }]
+    ) {
+      address
+      topics
+      data
+      blockNumber
+      logIndex
+      transaction {
+        hash
+        from
+        to
+      }
+    }`);
+
+    expect(fields).toEqual(
+      new Set([
+        "address",
+        "topics",
+        "data",
+        "blockNumber",
+        "logIndex",
+        "transaction.hash",
+        "transaction.from",
+        "transaction.to",
+      ]),
+    );
+  });
 });
 
 // --- Integration tests for validateView ---
@@ -117,6 +152,25 @@ describe("validateView", () => {
     const errors = result.issues.filter((i) => i.severity === "error");
     expect(errors).toEqual([]);
     expect(result.ok).toBe(true);
+  });
+
+  test("query validation still passes when the root log query has arguments", async () => {
+    const result = await validateView({
+      query: `Ethereum__Mainnet__Log(
+        filter: { address: { _in: ["0x0000000000000000000000000000000000000001"] } }
+        order: [{ blockNumber: ASC }]
+      ) { address topics data blockNumber transaction { hash from to } }`,
+      sdl: VALID_SDL,
+      lenses: [{ wasmBytes: loadErc20Wasm(), args: TOKEN_ARGS }],
+    });
+
+    const queryErrors = result.issues.filter(
+      (issue) =>
+        issue.code === "QUERY_MISSING_EVM_FIELD" ||
+        issue.code === "QUERY_MISSING_EVM_RELATION"
+    );
+
+    expect(queryErrors).toEqual([]);
   });
 
   test("detects flat transactionHash instead of relation", async () => {

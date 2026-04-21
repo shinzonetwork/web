@@ -33,12 +33,36 @@ export type ViewValidationResult = {
 
 export function parseQueryFields(query: string): Set<string> {
   const fields = new Set<string>();
-  const braceStart = query.indexOf("{");
+  const braceStart = findRootSelectionBrace(query);
   if (braceStart === -1) return fields;
 
   const tokens = tokenize(query.slice(braceStart));
   parseBlock(tokens, "", fields);
   return fields;
+}
+
+function findRootSelectionBrace(query: string): number {
+  let parenDepth = 0;
+
+  for (let i = 0; i < query.length; i++) {
+    const char = query[i];
+
+    if (char === "(") {
+      parenDepth += 1;
+      continue;
+    }
+
+    if (char === ")") {
+      parenDepth = Math.max(parenDepth - 1, 0);
+      continue;
+    }
+
+    if (char === "{" && parenDepth === 0) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 function tokenize(input: string): string[] {

@@ -18,9 +18,52 @@ export type LensModuleRef =
       wasmPath?: string;
     };
 
+type AsconfigTarget = {
+  outFile?: string;
+};
+
+type Asconfig = {
+  targets?: Record<string, AsconfigTarget>;
+};
+
+let cachedTargets: Record<string, AsconfigTarget> | null = null;
+
+function getAsconfigTargets(): Record<string, AsconfigTarget> {
+  if (cachedTargets != null) {
+    return cachedTargets;
+  }
+
+  const asconfig = JSON.parse(
+    readFileSync(join(process.cwd(), "asconfig.json"), "utf8")
+  ) as Asconfig;
+  cachedTargets = asconfig.targets ?? {};
+  return cachedTargets;
+}
+
+function resolveTargetOutFile(targetName: string): string | null {
+  const target = getAsconfigTargets()[targetName];
+  if (target?.outFile == null || target.outFile.length == 0) {
+    return null;
+  }
+
+  return join(process.cwd(), target.outFile);
+}
+
 function resolveWasmPath(ref: LensModuleRef): string {
   if (typeof ref == "string") {
-    return join(process.cwd(), ref, "lens.wasm");
+    const directPath = join(process.cwd(), ref, "lens.wasm");
+
+    try {
+      readFileSync(directPath);
+      return directPath;
+    } catch {
+      const targetOutFile = resolveTargetOutFile(ref);
+      if (targetOutFile != null) {
+        return targetOutFile;
+      }
+    }
+
+    return directPath;
   }
 
   if (ref.wasmPath != null && ref.wasmPath.length > 0) {
@@ -28,7 +71,19 @@ function resolveWasmPath(ref: LensModuleRef): string {
   }
 
   if (ref.target != null && ref.target.length > 0) {
-    return join(process.cwd(), ref.target, "lens.wasm");
+    const directPath = join(process.cwd(), ref.target, "lens.wasm");
+
+    try {
+      readFileSync(directPath);
+      return directPath;
+    } catch {
+      const targetOutFile = resolveTargetOutFile(ref.target);
+      if (targetOutFile != null) {
+        return targetOutFile;
+      }
+    }
+
+    return directPath;
   }
 
   throw new Error("expected a target name or wasmPath");

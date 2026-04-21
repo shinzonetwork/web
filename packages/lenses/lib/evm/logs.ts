@@ -1,7 +1,7 @@
 import { JSON } from "assemblyscript-json/assembly";
 import { keccak256 } from "../keccak256";
 import { hexEncode } from "../hex";
-import { decodeAbiWord } from "./decoder";
+import { decodeAbiValue, decodeIndexedAbiWord, decodeAbiWord } from "./decoder";
 import { AbiEvent, AbiInput, DecodedArgument, DecodedLog } from "./types";
 
 export class EvmLogLike {
@@ -130,7 +130,13 @@ export function decodeEvent(event: AbiEvent, topics: string[], data: string): De
     const input = event.inputs[i];
     if (input.indexed) {
       if (topicIndex < topics.length) {
-        args.push(new DecodedArgument(input.name, input.typeName, decodeParam(input.typeName, topics[topicIndex])));
+        args.push(
+          new DecodedArgument(
+            input.name,
+            input.typeName,
+            decodeIndexedAbiWord(input.typeName, topics[topicIndex]),
+          ),
+        );
       }
       topicIndex++;
       continue;
@@ -150,7 +156,13 @@ export function decodeEvent(event: AbiEvent, topics: string[], data: string): De
   for (let i = 0; i < nonIndexed.length; i++) {
     if (offset + 64 > dataHex.length) break;
     const chunk = "0x" + dataHex.substring(offset, offset + 64);
-    args.push(new DecodedArgument(nonIndexed[i].name, nonIndexed[i].typeName, decodeParam(nonIndexed[i].typeName, chunk)));
+    args.push(
+      new DecodedArgument(
+        nonIndexed[i].name,
+        nonIndexed[i].typeName,
+        decodeAbiValue(nonIndexed[i].typeName, dataHex, chunk),
+      ),
+    );
     offset += 64;
   }
 

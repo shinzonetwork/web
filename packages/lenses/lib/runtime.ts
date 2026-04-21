@@ -162,7 +162,7 @@ class RegisteredLensImpl<Q, O, A> extends RegisteredLens {
     this.config = config;
   }
 
-  onSetParam(payload: string): string | null {
+  initializeContext(payload: string): string | null {
     const json = payload.length == 0 ? new JSON.Obj() : <JSON.Obj>JSON.parse(payload);
     let args: A | null = null;
     const argsSchema = this.config.argsSchema;
@@ -186,9 +186,26 @@ class RegisteredLensImpl<Q, O, A> extends RegisteredLens {
     return null;
   }
 
-  onNextDocument(payload: string): string | null {
-    if (this.ctx == null) {
+  ensureContext(): string | null {
+    if (this.ctx != null) {
+      return null;
+    }
+
+    if (this.config.argsSchema != null) {
       return "set_param must be called before transform";
+    }
+
+    return this.initializeContext("");
+  }
+
+  onSetParam(payload: string): string | null {
+    return this.initializeContext(payload);
+  }
+
+  onNextDocument(payload: string): string | null {
+    const initError = this.ensureContext();
+    if (initError != null) {
+      return initError;
     }
     const context = this.ctx!;
 
@@ -198,9 +215,15 @@ class RegisteredLensImpl<Q, O, A> extends RegisteredLens {
   }
 
   onFinalize(): string | null {
-    if (this.ctx == null || this.state.finalized) {
+    if (this.state.finalized) {
       this.state.finalized = true;
       return null;
+    }
+
+    const initError = this.ensureContext();
+    if (initError != null) {
+      this.state.finalized = true;
+      return initError;
     }
     const context = this.ctx!;
 

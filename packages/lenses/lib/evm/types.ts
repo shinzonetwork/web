@@ -62,11 +62,17 @@ export class EvmTransactionContext {
   to: string = "";
 }
 
+export class EvmBlockContext {
+  timestamp: string = "";
+}
+
 export class EvmLogDocument {
   address: string = "";
   topics: string[] = [];
   data: string = "";
   blockNumber: i64 = 0;
+  logIndex: i64 = 0;
+  block: EvmBlockContext = new EvmBlockContext();
   transaction: EvmTransactionContext = new EvmTransactionContext();
 
   static fromJson(doc: JSON.Obj): EvmLogDocument {
@@ -77,6 +83,9 @@ export class EvmLogDocument {
 
     const blockNumber = doc.getInteger("blockNumber");
     if (blockNumber != null) log.blockNumber = blockNumber.valueOf();
+
+    const logIndex = doc.getInteger("logIndex");
+    if (logIndex != null) log.logIndex = logIndex.valueOf();
 
     const data = doc.getString("data");
     if (data != null) log.data = data.valueOf();
@@ -99,6 +108,12 @@ export class EvmLogDocument {
       if (from != null) log.transaction.from = from.valueOf();
       const to = tx.getString("to");
       if (to != null) log.transaction.to = to.valueOf();
+    }
+
+    const block = doc.getObj("block");
+    if (block != null) {
+      const timestamp = block.getString("timestamp");
+      if (timestamp != null) log.block.timestamp = timestamp.valueOf();
     }
 
     return log;

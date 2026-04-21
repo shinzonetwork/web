@@ -85,10 +85,12 @@ export async function executeLens(
   const rows: unknown[] = [];
   let error: string | null = null;
 
-  const argsPtr = writeToMemory(exports, encodeTransport(JSON_TYPE_ID, JSON.stringify(args)));
-  const argsResult = decodeTransport(exports.memory, exports.set_param(argsPtr));
-  if (argsResult.typeId === ERROR_TYPE_ID) {
-    error = argsResult.payload;
+  if (args !== undefined) {
+    const argsPtr = writeToMemory(exports, encodeTransport(JSON_TYPE_ID, JSON.stringify(args)));
+    const argsResult = decodeTransport(exports.memory, exports.set_param(argsPtr));
+    if (argsResult.typeId === ERROR_TYPE_ID) {
+      error = argsResult.payload;
+    }
   }
 
   nextQueue = inputs.map((input) => encodeTransport(JSON_TYPE_ID, JSON.stringify(input)));

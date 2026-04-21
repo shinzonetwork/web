@@ -65,6 +65,19 @@ function copyRange(bytes: Uint8Array, start: i32, count: i32): Uint8Array {
   return out;
 }
 
+function parseWordUintToI32(rawBytes: Uint8Array): i32 {
+  let out: u64 = 0;
+
+  for (let i = 0; i < rawBytes.length; i++) {
+    out = (out << 8) | <u64>rawBytes[i];
+    if (out > <u64>i32.MAX_VALUE) {
+      return i32.MAX_VALUE;
+    }
+  }
+
+  return <i32>out;
+}
+
 function decodeAddress(rawBytes: Uint8Array): string {
   if (rawBytes.length >= 20) {
     return "0x" + hexEncode(copyRange(rawBytes, rawBytes.length - 20, 20));
@@ -118,6 +131,76 @@ function decodeBytes(rawBytes: Uint8Array, count: i32): string {
   }
 
   return "0x" + hexEncode(copyRange(rawBytes, 0, count));
+}
+
+function stripRightPadding(bytes: Uint8Array): Uint8Array {
+  let end = bytes.length;
+  while (end > 0 && bytes[end - 1] == 0) {
+    end--;
+  }
+
+  return copyRange(bytes, 0, end);
+}
+
+function decodeUtf8(rawBytes: Uint8Array): string {
+  if (rawBytes.length == 0) {
+    return "";
+  }
+
+  return String.UTF8.decode(rawBytes.buffer, false);
+}
+
+export function isDynamicAbiType(typeName: string): bool {
+  return typeName == "string" || typeName == "bytes";
+}
+
+function decodeDynamicBytesPayload(
+  typeName: string,
+  fullDataBytes: Uint8Array,
+  rawHeadBytes: Uint8Array,
+): string {
+  const offset = parseWordUintToI32(rawHeadBytes);
+  if (offset < 0 || offset + 32 > fullDataBytes.length) {
+    return typeName == "string" ? "" : "0x";
+  }
+
+  const length = parseWordUintToI32(copyRange(fullDataBytes, offset, 32));
+  if (length < 0 || offset + 32 + length > fullDataBytes.length) {
+    return typeName == "string" ? "" : "0x";
+  }
+
+  const payload = copyRange(fullDataBytes, offset + 32, length);
+  if (typeName == "string") {
+    return decodeUtf8(payload);
+  }
+
+  return "0x" + hexEncode(payload);
+}
+
+export function decodeAbiValue(typeName: string, fullHexData: string, headHexData: string): string {
+  const cleanFull = stripHexPrefix(fullHexData);
+  const cleanHead = stripHexPrefix(headHexData);
+  const rawHeadBytes = hexDecode(cleanHead);
+
+  if (rawHeadBytes.length == 0) {
+    return "";
+  }
+
+  if (isDynamicAbiType(typeName)) {
+    return decodeDynamicBytesPayload(typeName, hexDecode(cleanFull), rawHeadBytes);
+  }
+
+  return decodeAbiWord(typeName, headHexData);
+}
+
+export function decodeIndexedAbiWord(typeName: string, hexData: string): string {
+  if (isDynamicAbiType(typeName)) {
+    const clean = stripHexPrefix(hexData);
+    const rawBytes = hexDecode(clean);
+    return "0x" + hexEncode(stripRightPadding(rawBytes));
+  }
+
+  return decodeAbiWord(typeName, hexData);
 }
 
 /** Decodes a single 32-byte ABI word into the Rust-parity string representation. */

@@ -7,6 +7,7 @@
   "types": "./lib/index.ts",
   "exports": {
     ".": "./lib/index.ts",
+    "./ens": "./ens/index.ts",
     "./evm": "./lib/evm/index.ts",
     "./testing": "./lib/testing/index.ts",
     "./validate": "./lib/testing/validate.ts",
@@ -15,15 +16,14 @@
   },
   "files": [
     "lib",
+    "ens",
     "erc20-transfers",
     "erc20-account-balances",
     "README.md",
     "ADR.md"
   ],
   "scripts": {
-    "build": "pnpm run build:erc20-transfers && pnpm run build:erc20-account-balances",
-    "build:erc20-transfers": "asc erc20-transfers/index.ts --target erc20-transfers",
-    "build:erc20-account-balances": "asc erc20-account-balances/index.ts --target erc20-account-balances",
+    "build": "node ./scripts/build-all.mjs",
     "test": "pnpm run build && vitest run"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "assemblyscript": "^0.28.10",
+    "viem": "~2.44.4",
     "vitest": "^3.1.1"
   }
 }

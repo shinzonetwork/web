@@ -17,7 +17,7 @@ pnpm test
 
 This builds the example lenses and runs the package test suite.
 
-Compiled artifacts are written to `<lens-name>/lens.wasm`.
+Compiled artifacts are written to the `outFile` locations defined in `asconfig.json`.
 
 ## Writing lenses
 
