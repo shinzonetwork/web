@@ -11,6 +11,7 @@ interface RegistrationInputFieldProps {
   isTextarea?: boolean;
   error?: string;
   disabled?: boolean;
+  required?: boolean;
 }
 
 /**
@@ -24,12 +25,13 @@ export function RegistrationInputField({
   isTextarea = false,
   error,
   disabled = false,
+  required = true,
 }: RegistrationInputFieldProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id} className="text-sm font-medium">
         {label}
-        <span className="text-xs text-red-500">*</span>
+        {required && <span className="text-xs text-red-500">*</span>}
       </Label>
       {isTextarea ? (
         <Textarea

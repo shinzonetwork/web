@@ -1,7 +1,198 @@
 import { EntityRole } from "../constants";
 import { Hex, getAddress, isAddress, isHex } from "viem";
 import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
+import {
+  HostRegistrationFormData,
+  IndexerRegistrationFormData,
+  RegistrationFormDataV2,
+} from "@/shared/types";
 
+//Shinzohub V2 Registration
+
+// check if the registration is in v2 mode
+export const isRegistrationV2 = () => {
+  return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
+};
+
+/**
+ * Validate registration form data
+ */
+export function validateRegistrationFormV2(
+  formData: RegistrationFormDataV2
+): boolean {
+  const validations = [
+    Boolean(formData.message?.trim()),
+    Boolean(formData.defraPublicKey?.trim()),
+    Boolean(formData.defraSignedMessage?.trim()),
+  ];
+  return validations.every(Boolean);
+}
+
+export function validateIndexerRegistrationForm(
+  formData: IndexerRegistrationFormData
+): boolean {
+  const validations = [
+    formData.entity === EntityRole.Indexer,
+    validateRegistrationFormV2(formData),
+    Boolean(formData.connectionString?.trim()),
+    Boolean(formData.sourceChain?.trim()),
+    Boolean(formData.sourceChainId),
+  ];
+  return validations.every(Boolean);
+}
+
+export function validateHostRegistrationForm(
+  formData: HostRegistrationFormData
+): boolean {
+  const validations = [
+    formData.entity === EntityRole.Host,
+    validateRegistrationFormV2(formData),
+  ];
+  return validations.every(Boolean);
+}
+
+export type RequiredFieldsValidationResult = {
+  isValid: boolean;
+  errors: Record<string, string | undefined>;
+};
+
+export function validateHex(value: string): boolean {
+  if (!value || !isHex(value)) {
+    return false;
+  }
+  // Validate even length (each byte = 2 hex chars)
+  const hexContent = value.startsWith("0x") ? value.slice(2) : value;
+  if (hexContent.length % 2 !== 0) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Validate required fields for registration form
+ */
+export function validateSharedFieldsV2(
+  formData: RegistrationFormDataV2
+): RequiredFieldsValidationResult {
+  const errors: Record<keyof RegistrationFormDataV2, string | undefined> = {
+    entity: undefined,
+    message: undefined,
+    defraPublicKey: undefined,
+    defraSignedMessage: undefined,
+  };
+
+  if (!formData.message?.trim() || !validateHex(formData.message.trim())) {
+    errors.message = "Signed message is required and must bea valid hex string";
+  }
+  if (
+    !(formData.defraPublicKey.trim().length > 2) ||
+    !validateHex(formData.defraPublicKey.trim())
+  ) {
+    errors.defraPublicKey =
+      "Public key is required and must be a valid hex string";
+  }
+  if (
+    !(formData.defraSignedMessage.trim().length > 2) ||
+    !validateHex(formData.defraSignedMessage.trim())
+  ) {
+    errors.defraSignedMessage =
+      "Signed public key message is required and must be a valid hex string";
+  }
+
+  return {
+    isValid: Object.values(errors).every((error) => error === undefined),
+    errors,
+  };
+}
+
+export function validateIndexerFields(
+  formData: IndexerRegistrationFormData
+): RequiredFieldsValidationResult {
+  const errors: Record<keyof IndexerRegistrationFormData, string | undefined> =
+    {
+      entity: undefined,
+      message: undefined,
+      defraPublicKey: undefined,
+      defraSignedMessage: undefined,
+      connectionString: undefined,
+      sourceChain: undefined,
+      sourceChainId: undefined,
+    };
+  if (!formData.connectionString?.trim()) {
+    errors.connectionString = "Connection string is required";
+  }
+  if (!formData.sourceChain?.trim()) {
+    errors.sourceChain = "Source chain is required";
+  }
+  if (!formData.sourceChainId) {
+    errors.sourceChainId = "Source chain ID is required";
+  }
+  const sharedfieldsValidation = validateSharedFieldsV2(formData);
+  const indexerFieldsValidation = Object.values(errors).every(
+    (error) => error === undefined
+  );
+
+  return {
+    isValid: sharedfieldsValidation.isValid && indexerFieldsValidation,
+    errors: { ...sharedfieldsValidation.errors, ...errors },
+  };
+}
+
+// Registration form configuration
+export const REGISTRATION_FORM_INPUTS_V2 = [
+  {
+    id: "message",
+    label: "Signed message",
+    isTextarea: false,
+    required: true,
+  },
+  {
+    id: "defraPublicKey",
+    label: "Public key",
+    isTextarea: false,
+    required: true,
+  },
+  {
+    id: "defraSignedMessage",
+    label: "Signed public key message",
+    isTextarea: true,
+    required: true,
+  },
+] as const;
+
+export const REGISTRATION_FORM_INPUTS_INDEXER = [
+  ...REGISTRATION_FORM_INPUTS_V2,
+  {
+    id: "connectionString",
+    label: "Connection string",
+    isTextarea: false,
+    required: true,
+  },
+  {
+    id: "sourceChain",
+    label: "Source chain",
+    isTextarea: false,
+    required: true,
+  },
+  {
+    id: "sourceChainId",
+    label: "Source chain ID",
+    isTextarea: false,
+    required: true,
+  },
+] as const;
+
+export const REGISTRATION_FORM_INPUTS_HOST = [
+  ...REGISTRATION_FORM_INPUTS_V2,
+  {
+    id: "connectionString",
+    label: "Connection string",
+    isTextarea: false,
+    required: false,
+  },
+] as const;
+
+//Shinzohub V1 Registration
 export type RegistrationFormData = {
   message: Hex | undefined;
   defraPublicKey: Hex | undefined;
