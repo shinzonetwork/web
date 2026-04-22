@@ -11,19 +11,25 @@ import {
   TOAST_CONFIG,
 } from "@/shared/lib";
 import { useRegistrationContext } from "@/entities/registration-process";
-import type { HostRegistrationFormData, IndexerRegistrationFormData } from "@/shared/types";
+import type {
+  HostRegistrationFormData,
+  IndexerRegistrationFormData,
+} from "@/shared/types";
 import { INDEXER_REGISTER_TRANSACTION_ABI } from "../abi/indexer-register-transaction-abi";
 import { HOST_REGISTER_TRANSACTION_ABI } from "../abi/host-register-transaction-abi";
 
 /**
  * Hook to handle registration transaction logic
  */
-export function useRegistrationTransaction(formData: IndexerRegistrationFormData | HostRegistrationFormData) {
+export function useRegistrationTransaction(
+  formData: IndexerRegistrationFormData | HostRegistrationFormData
+) {
   const {
     sendTransaction,
     isPending,
     error: sendError,
     data: txHash,
+    reset: resetSendTransaction,
   } = useSendTransaction();
 
   const {
@@ -73,7 +79,6 @@ export function useRegistrationTransaction(formData: IndexerRegistrationFormData
     let encodedData;
     try {
       if (formData.entity === EntityRole.Indexer) {
-        console.log("Indexer registration");
         const indexer = formData as IndexerRegistrationFormData;
         encodedData = encodeFunctionData({
           abi: INDEXER_REGISTER_TRANSACTION_ABI,
@@ -88,7 +93,6 @@ export function useRegistrationTransaction(formData: IndexerRegistrationFormData
           ],
         });
       } else if (formData.entity === EntityRole.Host) {
-        console.log("Host registration");
         const host = formData as HostRegistrationFormData;
         encodedData = encodeFunctionData({
           abi: HOST_REGISTER_TRANSACTION_ABI,
@@ -101,7 +105,6 @@ export function useRegistrationTransaction(formData: IndexerRegistrationFormData
           ],
         });
       }
-
     } catch (error: unknown) {
       const { shortMessage } = error as {
         shortMessage?: string;
@@ -141,5 +144,6 @@ export function useRegistrationTransaction(formData: IndexerRegistrationFormData
     isConfirmed,
     sendError,
     txHash,
+    resetTransactionState: resetSendTransaction,
   };
 }

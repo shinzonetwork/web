@@ -41,7 +41,7 @@ export type RegistrationFormDataV2 = {
   message: Hex | string;
   defraPublicKey: Hex | string;
   defraSignedMessage: Hex | string;
-};  
+};
 
 export type IndexerRegistrationFormData = RegistrationFormDataV2 & {
   connectionString: string;
@@ -53,4 +53,7 @@ export type HostRegistrationFormData = RegistrationFormDataV2 & {
   connectionString?: string | undefined;
 };
 
-export type RegistrationFormDataByEntity<T extends EntityRole> = T extends EntityRole.Indexer ? IndexerRegistrationFormData : HostRegistrationFormData;
+export type RegistrationFormDataByEntity<T extends EntityRole> =
+  T extends EntityRole.Indexer
+    ? IndexerRegistrationFormData
+    : HostRegistrationFormData;

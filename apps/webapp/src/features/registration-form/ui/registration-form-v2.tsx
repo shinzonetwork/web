@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/shared/ui/button";
 
 import { RegistrationDataForm } from "./registration-data-form";
@@ -28,14 +28,25 @@ export function RegistrationFormV2() {
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
-  const {
-    formData,
-    handleInputChange,
-    handleUserRoleChange,
-  } = useRegistrationForm({ entity: EntityRole.Host });
+  const { formData, handleInputChange, handleUserRoleChange } =
+    useRegistrationForm({ entity: EntityRole.Host });
 
-  const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
-    useRegistrationTransaction(formData);
+  const {
+    sendRegisterTransaction,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    resetTransactionState,
+  } = useRegistrationTransaction(formData);
+
+  const handleEntityChange = useCallback(
+    (value: string) => {
+      handleUserRoleChange(value);
+      setFieldErrors({});
+      resetTransactionState();
+    },
+    [handleUserRoleChange, resetTransactionState]
+  );
 
   const handleRegister = async () => {
     const validatedFields =
@@ -79,7 +90,7 @@ export function RegistrationFormV2() {
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}
-        handleUserRoleChange={handleUserRoleChange}
+        handleUserRoleChange={handleEntityChange}
         fieldErrors={fieldErrors}
         prefilledFields={{}}
       />
