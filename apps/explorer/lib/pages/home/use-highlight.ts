@@ -8,21 +8,23 @@ interface UseHighlightOptions {
 
 interface UseHighlightReturn {
   /** Get the highlight class for a specific row */
-  getHighlightClass: (rowId?: string | number | null) => string;
+  getHighlightClass: (rowId?: string | number | bigint | null) => string;
 }
+
+type HighlightRowId = string | number | bigint;
 
 /**
  * Hook to highlight new rows based on their IDs. Pass an array of IDs,
  * and the hook will track which IDs are new compared to previous renders.
  */
 export const useHighlight = (
-  dataIds: (string | number)[] | undefined,
+  dataIds: HighlightRowId[] | undefined,
   options?: UseHighlightOptions,
 ): UseHighlightReturn => {
   const { duration = 1000 } = options || {};
 
-  const seenRowsRef = useRef<Set<string | number> | undefined>(undefined);
-  const [newRows, setNewRows] = useState(new Set<string | number>());
+  const seenRowsRef = useRef<Set<HighlightRowId> | undefined>(undefined);
+  const [newRows, setNewRows] = useState(new Set<HighlightRowId>());
 
   // create a stable key based on the actual IDs, not the array reference, to avoid infinite rerendering
   const dataIdsKey = dataIds ? dataIds.join(',') : undefined;
@@ -31,13 +33,13 @@ export const useHighlight = (
     if (dataIds) {
       // on initial load, just populate seenRows without highlighting
       if (seenRowsRef.current === undefined) {
-        seenRowsRef.current = new Set<string | number>(dataIds);
+        seenRowsRef.current = new Set<HighlightRowId>(dataIds);
         return;
       }
 
       // starting from the second data load, compare and find new rows
-      const updNewRows = new Set<string | number>();
-      const updSeenRows = new Set<string | number>();
+      const updNewRows = new Set<HighlightRowId>();
+      const updSeenRows = new Set<HighlightRowId>();
 
       dataIds.forEach((id) => {
         if (!seenRowsRef.current!.has(id)) {
@@ -64,7 +66,7 @@ export const useHighlight = (
     const timeout = setTimeout(() => {
       const out = performance.now();
       console.log('HIGHLIGHT TIMEOUT', out - intime);
-      setNewRows(new Set<string | number>());
+        setNewRows(new Set<HighlightRowId>());
     }, duration);
 
     return () => clearTimeout(timeout);
