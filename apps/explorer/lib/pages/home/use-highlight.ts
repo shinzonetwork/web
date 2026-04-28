@@ -62,10 +62,7 @@ export const useHighlight = (
   useEffect(() => {
     if (newRows.size === 0) return;
 
-    const intime = performance.now();
     const timeout = setTimeout(() => {
-      const out = performance.now();
-      console.log('HIGHLIGHT TIMEOUT', out - intime);
         setNewRows(new Set<HighlightRowId>());
     }, duration);
 
