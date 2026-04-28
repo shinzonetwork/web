@@ -13,13 +13,14 @@ import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+// import { useHomeBlocks } from "../hook/use-home-blocks";
 import { useHomeBlocks } from "../hook/use-home-blocks";
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
 
 export const BlocksHome = () => {
-  const { data: blocks, isLoading } = useHomeBlocks();
+  const { blocks, isLoading } = useHomeBlocks({ count: 5 });
   const chain = useChainPathSegment();
 
   const dataIds = useMemo(

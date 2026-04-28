@@ -4,12 +4,12 @@ import { StatsBlock } from "@/pages/home/stats";
 import { useHomeBlocks } from "../hook/use-home-blocks";
 
 export const HomeStats = () => {
-    const {data: blocksData, isLoading: blocksLoading} = useHomeBlocks();
+    const {blocks, isLoading: blocksLoading} = useHomeBlocks({ count: 5 });
   
     return (
       <section className='flex -mt-px'>
         <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={blocksLoading}>
-          <AnimatedNumber value={Number(blocksData?.[0]?.number)} />
+          <AnimatedNumber value={Number(blocks?.[0]?.number)} />
         </StatsBlock>
         {/* <StatsBlock title='Total txns' icon={<ArrowLeftRightIcon />} isLoading={metricsLoading}>
           <AnimatedNumber value={metricsData?.metrics.transactions_processed} />
