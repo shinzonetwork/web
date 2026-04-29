@@ -16,14 +16,14 @@ type UseHomeTransactionsOptions = {
 };
 
 export function useHomeTransactions(
-  { count = 5, refetchIntervalMs = 10_000 }: UseHomeTransactionsOptions = {},
+  { count, refetchIntervalMs = 10_000 }: UseHomeTransactionsOptions = {},
 ) {
   const indexQuery = useShinzohubTransactionIndex({ refetchIntervalMs });
 
   const transactions = useMemo<TransactionSummary[]>(() => {
     const indexed = indexQuery.data?.transactions ?? [];
     if (!indexed.length) return [];
-    return [...indexed]
+    const sorted = [...indexed]
       .sort((a, b) => {
         const blockDelta = BigInt(b.blockNumber) - BigInt(a.blockNumber);
         if (blockDelta !== BigInt(0)) {
@@ -31,12 +31,13 @@ export function useHomeTransactions(
         }
         return b.transactionIndex - a.transactionIndex;
       })
-      .slice(0, count)
-      .map((tx) => ({
+      const requiredTransactions = count === undefined ? sorted : sorted.slice(0, count)
+      return requiredTransactions.map((tx) => ({
         hash: tx.hash,
         from: tx.from,
-        to: tx.to,
+        to: tx.to ?? null,
         value: tx.value,
+        gasPrice: tx.gasPrice,
       }));
   }, [indexQuery.data?.transactions, count]);
 
