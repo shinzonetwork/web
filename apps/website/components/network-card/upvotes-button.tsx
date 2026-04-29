@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 import { MouseEvent, useCallback, useEffect, useState } from "react";
 
 const STORAGE_KEY = "shinzo_upvoted_chains";
@@ -40,6 +41,7 @@ export const UpvotesButton = ({
   chainId: number;
   upvotes: number;
 }) => {
+  const router = useRouter();
   const [count, setCount] = useState(upvotes);
   const [voted, setVoted] = useState(false);
 
@@ -65,6 +67,9 @@ export const UpvotesButton = ({
         if (!res.ok) {
           setCount((c) => c - 1);
           setVoted(false);
+        } else {
+          // Refresh the page to update the upvotes count
+          router.refresh();
         }
       } catch {
         setCount((c) => c - 1);

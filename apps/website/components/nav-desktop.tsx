@@ -23,11 +23,11 @@ export interface NavDesktopProps {
 
 export default function NavDesktop({ className = '', navMenu, socialLinks, docsLink }: NavDesktopProps) {
 
-    const navItemLvl1Style = "underline-offset-2 hover:underline data-[state=open]:underline";
+    const navItemLvl1Style = "underline-offset-2 hover:underline data-[state=open]:underline px-2 lg:px-5";
 
     return (
         <div className={className}>
-            <NavigationMenu viewport={false}>
+            <NavigationMenu viewport={false} className="ml-auto">
                 <NavigationMenuList className="flex-wrap" >
                     {navMenu.map((item, index) => (
                         <NavigationMenuItem key={index}>
@@ -58,7 +58,7 @@ export default function NavDesktop({ className = '', navMenu, socialLinks, docsL
                 </NavigationMenuList>
             </NavigationMenu>
 
-            <div className="ml-auto">
+            <div className="ml-4">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-4">
                         {socialLinks?.github && (

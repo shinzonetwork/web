@@ -1,12 +1,10 @@
 import Analytics from "@/components/analytics";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { Providers } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { Metadata } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import localFont from 'next/font/local';
-import { headers } from "next/headers";
 import React from 'react';
 import './styles.css';
 
@@ -32,25 +30,21 @@ const fonts = `${inter.variable} ${geistMono.variable} ${jpSerif.variable}`;
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props;
-  const headersList = await headers();
-  const cookies = headersList.get("cookie");
 
   return (
     <html lang="en">
       <body className={fonts}>
-        <Providers cookies={cookies}>
-          <Analytics>
-            <div className={cn(`min-h-screen flex flex-col`)} >
-              <Header navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
+        <Analytics>
+          <div className={cn(`min-h-screen flex flex-col`)} >
+            <Header navMenu={headerNavMenu} socialLinks={socialLinks} docsLink={docsLinks} />
 
-              <main className="grow">
-                {children}
-              </main>
+            <main className="grow">
+              {children}
+            </main>
 
-              <Footer footerNavMenu={footerNavMenu} />
-            </div>
-          </Analytics>
-        </Providers>
+            <Footer footerNavMenu={footerNavMenu} />
+          </div>
+        </Analytics>
       </body>
     </html>
   )
