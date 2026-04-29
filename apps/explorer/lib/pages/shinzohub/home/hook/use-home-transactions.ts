@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useShinzohubTransactionIndex } from './use-shinzohub-transaction-index';
+import { useShinzohubTransactionIndex } from '../../hook/use-shinzohub-transaction-index';
 
 export type TransactionSummary = {
   hash: `0x${string}`;
