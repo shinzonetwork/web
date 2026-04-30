@@ -43,6 +43,11 @@ export interface Erc20TokenPreset {
 export const normalizeErc20TokenAddress = (tokenAddress: string): string =>
   tokenAddress.trim().toLowerCase();
 
+export interface EthereumAccountPreset {
+  label: string;
+  address: string;
+}
+
 // Top 10 ERC-20s on Ethereum by circulating market cap from Etherscan on 2026-04-17.
 export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
   {
@@ -102,6 +107,21 @@ export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
     icon: wbtcIcon.src,
   },
 ] as const satisfies readonly Erc20TokenPreset[];
+
+export const WELL_KNOWN_ETHEREUM_ACCOUNT_PRESETS = [
+  {
+    label: "vitalik.eth",
+    address: "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+  },
+  {
+    label: "nick.eth",
+    address: "0xb8c2c29ee19d8307cb7255e1cd9cbde883a267d5",
+  },
+  {
+    label: "coinbase10.eth",
+    address: "0x53824a44a65b29a7e35b82c3339a841338414f08",
+  },
+] as const satisfies readonly EthereumAccountPreset[];
 
 const erc20TokenPresetByAddress = new Map(
   TOP_ETHEREUM_ERC20_TOKEN_PRESETS.map((token) => [

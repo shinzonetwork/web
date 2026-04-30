@@ -1,4 +1,5 @@
 export type LensArgs = Record<string, string>;
+export type LensQueryArgs = Record<string, string>;
 
 export type LensResultKind =
   | "erc20-transfers"
@@ -9,6 +10,7 @@ export interface BuildHostQueryOptions {
   entityName?: string;
   limit?: number;
   offset?: number;
+  queryArgs?: LensQueryArgs;
 }
 
 export interface ResolvedLensStep {

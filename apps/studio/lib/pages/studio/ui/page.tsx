@@ -35,10 +35,16 @@ export const StudioPage = () => (
           </TabsContent>
 
           <TabsContent value={ERC20_TRANSFER_LENS.lensKey}>
-            <DeployForm />
+            <DeployForm
+              lens={ERC20_TRANSFER_LENS}
+              showTokenPresets
+              autoFocus
+            />
           </TabsContent>
 
-          <TabsContent value={ERC20_ACCOUNT_BALANCES_LENS.lensKey} />
+          <TabsContent value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
+            <DeployForm lens={ERC20_ACCOUNT_BALANCES_LENS} showTokenPresets />
+          </TabsContent>
         </Tabs>
       </main>
     </div>

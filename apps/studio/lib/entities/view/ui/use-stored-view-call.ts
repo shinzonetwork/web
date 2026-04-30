@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { LensQueryArgs } from "@/entities/lens";
 import { callStoredLensView } from "../api/query-view";
 import {
   STUDIO_QUERY_LIMIT,
@@ -9,21 +10,38 @@ import {
   type StoredDeployedView,
 } from "../model/types";
 
-type StoredCallState =
+export type StoredViewQueryMode = "browse" | "account";
+
+export type StoredCallState =
   | { status: "idle" }
-  | { status: "loading"; entityName: string; page: number }
+  | {
+      status: "loading";
+      entityName: string;
+      page: number;
+      queryMode: StoredViewQueryMode;
+      queryArgs?: LensQueryArgs;
+    }
   | {
       status: "success";
       entityName: string;
       page: number;
+      queryMode: StoredViewQueryMode;
+      queryArgs?: LensQueryArgs;
       result: LensQueryPage;
     }
   | {
       status: "error";
       entityName: string;
       page: number;
+      queryMode: StoredViewQueryMode;
+      queryArgs?: LensQueryArgs;
       error: string;
     };
+
+export interface StoredViewCallOptions {
+  mode?: StoredViewQueryMode;
+  queryArgs?: LensQueryArgs;
+}
 
 const getPageValue = (rawPage: string | null): number => {
   const parsed = Number.parseInt(rawPage ?? "1", 10);
@@ -33,7 +51,10 @@ const getPageValue = (rawPage: string | null): number => {
 export interface UseStoredViewCallResult {
   callState: StoredCallState;
   page: number;
-  call: (view: StoredDeployedView) => Promise<void>;
+  call: (
+    view: StoredDeployedView,
+    options?: StoredViewCallOptions
+  ) => Promise<void>;
 }
 
 export const useStoredViewCall = (
@@ -66,20 +87,29 @@ export const useStoredViewCall = (
   );
 
   const fetchViewPage = useCallback(
-    async (view: StoredDeployedView, pageValue: number) => {
+    async (
+      view: StoredDeployedView,
+      pageValue: number,
+      options?: StoredViewCallOptions
+    ) => {
       const requestId = ++requestIdRef.current;
       const offset = (pageValue - 1) * STUDIO_QUERY_LIMIT;
+      const queryMode = options?.mode ?? "browse";
+      const queryArgs = options?.queryArgs;
 
       setCallState({
         status: "loading",
         entityName: view.entityName,
         page: pageValue,
+        queryMode,
+        queryArgs,
       });
 
       try {
         const { result } = await callStoredLensView(view, {
           limit: STUDIO_QUERY_LIMIT,
           offset,
+          queryArgs,
         });
 
         if (requestId !== requestIdRef.current) return;
@@ -88,6 +118,8 @@ export const useStoredViewCall = (
           status: "success",
           entityName: view.entityName,
           page: pageValue,
+          queryMode,
+          queryArgs,
           result,
         });
       } catch (err) {
@@ -97,6 +129,8 @@ export const useStoredViewCall = (
           status: "error",
           entityName: view.entityName,
           page: pageValue,
+          queryMode,
+          queryArgs,
           error: err instanceof Error ? err.message : "Unexpected error",
         });
       }
@@ -105,11 +139,11 @@ export const useStoredViewCall = (
   );
 
   const call = useCallback(
-    async (view: StoredDeployedView) => {
+    async (view: StoredDeployedView, options?: StoredViewCallOptions) => {
       if (page !== 1) {
         syncPageParam(1);
       }
-      await fetchViewPage(view, 1);
+      await fetchViewPage(view, 1, options);
     },
     [fetchViewPage, page, syncPageParam]
   );
@@ -128,7 +162,10 @@ export const useStoredViewCall = (
     );
     if (!activeView) return;
 
-    void fetchViewPage(activeView, page);
+    void fetchViewPage(activeView, page, {
+      mode: callState.queryMode,
+      queryArgs: callState.queryArgs,
+    });
   }, [callState, fetchViewPage, page, storedViews]);
 
   return { callState, page, call };

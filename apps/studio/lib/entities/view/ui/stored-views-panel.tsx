@@ -5,9 +5,17 @@ import { useStoredViews } from "../model/use-stored-views";
 import { StoredViewCard } from "./stored-view-card";
 import { useStoredViewCall } from "./use-stored-view-call";
 
-export const StoredViewsPanel = () => {
+interface StoredViewsPanelProps {
+  lensKey?: string;
+}
+
+export const StoredViewsPanel = ({ lensKey }: StoredViewsPanelProps) => {
   const { views } = useStoredViews();
-  const supportedViews = views.filter((view) => isStudioSupportedLens(view.lensKey));
+  const supportedViews = views.filter(
+    (view) =>
+      isStudioSupportedLens(view.lensKey) &&
+      (!lensKey || view.lensKey === lensKey)
+  );
   const { callState, page, call } = useStoredViewCall(supportedViews);
 
   if (supportedViews.length === 0) {
@@ -33,7 +41,7 @@ export const StoredViewsPanel = () => {
             view={view}
             callState={callState}
             page={page}
-            onCall={(v) => void call(v)}
+            onCall={(v, options) => void call(v, options)}
           />
         ))}
       </div>

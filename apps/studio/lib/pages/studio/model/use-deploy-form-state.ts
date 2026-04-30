@@ -2,9 +2,9 @@
 
 import { useCallback, useState } from "react";
 import { useAccount, useChainId, useSwitchChain } from "wagmi";
+import type { LensDefinition, TokenAddressLensArgs } from "@/entities/lens";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
 import { normalizeErc20TokenAddress } from "@/shared/consts/view-config";
-import { ERC20_TRANSFER_LENS } from "@/entities/lens";
 import {
   ViewValidationError,
   useDeployLens,
@@ -28,7 +28,9 @@ export interface UseDeployFormStateResult {
   switchToShinzo: () => Promise<void>;
 }
 
-export const useDeployFormState = (): UseDeployFormStateResult => {
+export const useDeployFormState = (
+  lens: LensDefinition<TokenAddressLensArgs>
+): UseDeployFormStateResult => {
   const { isConnected } = useAccount();
   const activeChainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
@@ -57,7 +59,7 @@ export const useDeployFormState = (): UseDeployFormStateResult => {
     setLastSavedView(null);
 
     try {
-      const { deployedView } = await deploy(ERC20_TRANSFER_LENS, {
+      const { deployedView } = await deploy(lens, {
         tokenAddress: normalizedAddress,
       });
       upsert(deployedView);
@@ -67,7 +69,7 @@ export const useDeployFormState = (): UseDeployFormStateResult => {
         console.error(err);
       }
     }
-  }, [deploy, isConnected, isInProgress, normalizedAddress, upsert]);
+  }, [deploy, isConnected, isInProgress, lens, normalizedAddress, upsert]);
 
   const switchToShinzo = useCallback(async () => {
     setSwitchChainError("");

@@ -2,6 +2,7 @@ export type {
   BuildHostQueryOptions,
   LensArgs,
   LensDefinition,
+  LensQueryArgs,
   LensResultKind,
   ResolvedLensView,
   TokenAddressLensArgs,

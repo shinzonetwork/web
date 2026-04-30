@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { STUDIO_VIEW_NAME_PREFIX } from "@/entities/lens";
 import { SHINZOHUB_LCD_URL } from "@/shared/consts/envs";
@@ -160,13 +159,9 @@ export const useStudioHubViewByEntityName = (
 ) => {
   const query = useStudioHubViews();
 
-  const view = useMemo(
-    () =>
-      entityName
-        ? findHubViewByEntityName(query.data, entityName, options)
-        : null,
-    [entityName, options?.contractAddress, query.data]
-  );
+  const view = entityName
+    ? findHubViewByEntityName(query.data, entityName, options)
+    : null;
 
   return {
     ...query,

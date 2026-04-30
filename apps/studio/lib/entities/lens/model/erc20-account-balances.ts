@@ -1,4 +1,8 @@
-import { createTokenAddressLens } from "./token-address-lens";
+import {
+  buildErc20AccountBalanceHostQuery,
+  buildFilteredErc20LogQuery,
+  createTokenAddressLens,
+} from "./token-address-lens";
 
 const ERC20_ACCOUNT_BALANCE_SDL = `type Erc20AccountBalance @materialized(if: false) {
   tokenAddress: String
@@ -19,9 +23,13 @@ export const ERC20_ACCOUNT_BALANCES_LENS = createTokenAddressLens(
     description:
       "This lens aggregates account balances and transfer counts for one ERC-20 token contract.",
     wasmUrl: "/erc20-account-balances.wasm",
-    uiSupported: false,
+    uiSupported: true,
     resultKind: "erc20-account-balances",
   },
   ERC20_ACCOUNT_BALANCE_SDL,
-  ERC20_ACCOUNT_BALANCE_FIELDS
+  ERC20_ACCOUNT_BALANCE_FIELDS,
+  {
+    buildDeployQuery: (args) => buildFilteredErc20LogQuery(args.tokenAddress),
+    buildHostQuery: buildErc20AccountBalanceHostQuery,
+  }
 );

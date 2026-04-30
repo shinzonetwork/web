@@ -3,6 +3,7 @@ import {
   type AnyLensDefinition,
   type LensArgs,
   type LensDefinition,
+  type LensQueryArgs,
   type ResolvedLensView,
 } from "@/entities/lens";
 import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
@@ -33,7 +34,20 @@ interface QueryLensViewOptions {
   entityName?: string;
   limit?: number;
   offset?: number;
+  queryArgs?: LensQueryArgs;
 }
+
+const serializeLensQueryArgs = (queryArgs?: LensQueryArgs): string => {
+  if (!queryArgs) {
+    return "";
+  }
+
+  const entries = Object.entries(queryArgs)
+    .filter(([, value]) => value.length > 0)
+    .sort(([left], [right]) => left.localeCompare(right));
+
+  return entries.length > 0 ? JSON.stringify(entries) : "";
+};
 
 export const queryLensView = async <TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>,
@@ -42,12 +56,19 @@ export const queryLensView = async <TArgs extends LensArgs>(
   const entityName = options?.entityName ?? view.entityName;
   const limit = options?.limit ?? STUDIO_QUERY_LIMIT;
   const offset = options?.offset ?? 0;
+  const queryArgs = options?.queryArgs;
 
   return getQueryClient().fetchQuery<LensQueryPage>({
-    queryKey: ["lens-view", entityName, limit, offset],
+    queryKey: [
+      "lens-view",
+      entityName,
+      limit,
+      offset,
+      serializeLensQueryArgs(queryArgs),
+    ],
     staleTime: LENS_QUERY_STALE_TIME_MS,
     queryFn: async () => {
-      const query = view.buildHostQuery({ entityName, limit, offset });
+      const query = view.buildHostQuery({ entityName, limit, offset, queryArgs });
       const result = (await graphqlFetch(query)) as {
         data?: Record<string, unknown>;
         errors?: Array<{ message: string }>;
@@ -69,6 +90,7 @@ export const queryLensView = async <TArgs extends LensArgs>(
 interface CallStoredLensViewOptions {
   limit?: number;
   offset?: number;
+  queryArgs?: LensQueryArgs;
 }
 
 export interface CallStoredLensViewResult {
@@ -93,6 +115,7 @@ export const callStoredLensView = async (
       entityName: view.entityName,
       limit: options?.limit,
       offset: options?.offset,
+      queryArgs: options?.queryArgs,
     }
   );
 
