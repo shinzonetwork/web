@@ -12,6 +12,8 @@ interface RegistrationInputFieldProps {
   error?: string;
   disabled?: boolean;
   required?: boolean;
+  isSelect?: boolean;
+  selectOptions?: { value: string; label: string }[];
 }
 
 /**
@@ -23,6 +25,8 @@ export function RegistrationInputField({
   value,
   onChange,
   isTextarea = false,
+  isSelect = false,
+  selectOptions = [],
   error,
   disabled = false,
   required = true,
@@ -47,6 +51,24 @@ export function RegistrationInputField({
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${id}-error` : undefined}
         />
+      ) : isSelect ? (
+        <select
+          id={id}
+          value={value ?? ""}
+          onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+            onChange(e.target.value)
+          }
+          className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ${
+            error ? "border-destructive focus-visible:ring-destructive" : ""
+          } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
+          aria-invalid={error ? "true" : "false"}
+          aria-describedby={error ? `${id}-error` : undefined}
+          disabled={disabled}
+        >
+          {selectOptions.map((option: { value: string; label: string }) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
       ) : (
         <Input
           id={id}

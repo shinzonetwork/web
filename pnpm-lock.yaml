@@ -366,6 +366,15 @@ importers:
 
   apps/webapp:
     dependencies:
+      '@cosmjs/crypto':
+        specifier: ^0.38.1
+        version: 0.38.1
+      '@cosmjs/encoding':
+        specifier: ^0.38.1
+        version: 0.38.1
+      '@cosmjs/proto-signing':
+        specifier: ^0.38.1
+        version: 0.38.1
       '@google-cloud/storage':
         specifier: ^7.19.0
         version: 7.19.0
@@ -396,6 +405,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      cosmjs-types:
+        specifier: ^0.11.0
+        version: 0.11.0
       lucide-react:
         specifier: ^0.575.0
         version: 0.575.0(react@19.2.6)
@@ -17891,6 +17903,41 @@ snapshots:
       - utf-8-validate
       - zod
 
+  '@reown/appkit-ui@1.7.8(@types/react@19.2.14)(aws4fetch@1.0.20)(bufferutil@4.1.0)(react@19.2.6)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.5)':
+    dependencies:
+      '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-controllers': 1.7.8(@types/react@19.2.14)(aws4fetch@1.0.20)(bufferutil@4.1.0)(react@19.2.6)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.76)
+      '@reown/appkit-wallet': 1.7.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)
+      lit: 3.3.0
+      qrcode: 1.5.3
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@deno/kv'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/blob'
+      - '@vercel/functions'
+      - '@vercel/kv'
+      - aws4fetch
+      - bufferutil
+      - db0
+      - encoding
+      - ioredis
+      - react
+      - typescript
+      - uploadthing
+      - utf-8-validate
+      - zod
+
   '@reown/appkit-ui@1.7.8(@types/react@19.2.14)(aws4fetch@1.0.20)(bufferutil@4.1.0)(react@19.2.6)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)':
     dependencies:
       '@reown/appkit-common': 1.7.8(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
@@ -23647,7 +23694,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -23669,7 +23716,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.53.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

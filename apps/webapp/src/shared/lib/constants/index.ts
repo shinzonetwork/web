@@ -9,6 +9,11 @@ export const SHINZO_PRECOMPILE_ADDRESS =
   "0x0000000000000000000000000000000000000211";
 
 export const UI_TEXT_CONTENT = {
+  assertion: {
+    title: "/ Assert Indexer on the Shinzo Network",
+    description:
+      "Assert your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+  },
   registration: {
     title: "/ Register on the Shinzo Network",
     description:

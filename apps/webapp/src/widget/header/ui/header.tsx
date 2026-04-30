@@ -32,6 +32,11 @@ export function Header() {
               Registration
             </Button>
           </Link>
+          <Link href="/indexer-assertion">
+            <Button variant="link" className=" text-md text-muted-foreground ">
+              Indexer Assertion
+            </Button>
+          </Link>
           <Link href="/validators">
             <Button variant="link" className=" text-md text-muted-foreground ">
               Validators
