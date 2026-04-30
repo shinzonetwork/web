@@ -1,9 +1,9 @@
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Textarea } from "@/shared/ui/textarea";
-import { ChangeEvent } from "react";
+import { ChangeEvent, ReactNode } from "react";
 
-interface RegistrationInputFieldProps {
+type InputFieldProps = {
   id: string;
   label: string;
   value: string;
@@ -14,12 +14,13 @@ interface RegistrationInputFieldProps {
   required?: boolean;
   isSelect?: boolean;
   selectOptions?: { value: string; label: string }[];
+  action?: ReactNode;
 }
 
 /**
  * Reusable form field component for configuration inputs
  */
-export function RegistrationInputField({
+export function InputField({
   id,
   label,
   value,
@@ -30,7 +31,8 @@ export function RegistrationInputField({
   error,
   disabled = false,
   required = true,
-}: RegistrationInputFieldProps) {
+  action,
+}: InputFieldProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id} className="text-sm font-medium">
@@ -58,7 +60,7 @@ export function RegistrationInputField({
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             onChange(e.target.value)
           }
-          className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ${
+          className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 ${
             error ? "border-destructive focus-visible:ring-destructive" : ""
           } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
           aria-invalid={error ? "true" : "false"}
@@ -70,20 +72,23 @@ export function RegistrationInputField({
           ))}
         </select>
       ) : (
-        <Input
-          id={id}
-          type="text"
-          value={value ?? ""}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            onChange(e.target.value)
-          }
-          disabled={disabled}
-          className={`font-mono ${
-            error ? "border-destructive focus-visible:ring-destructive" : ""
-          } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
-          aria-invalid={error ? "true" : "false"}
-          aria-describedby={error ? `${id}-error` : undefined}
-        />
+        <div className="flex items-center gap-2">
+          <Input
+            id={id}
+            type="text"
+            value={value ?? ""}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              onChange(e.target.value)
+            }
+            disabled={disabled}
+            className={`font-mono ${
+              error ? "border-destructive focus-visible:ring-destructive" : ""
+            } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
+            aria-invalid={error ? "true" : "false"}
+            aria-describedby={error ? `${id}-error` : undefined}
+          />
+          {action}
+        </div>
       )}
       {error && (
         <p

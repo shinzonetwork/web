@@ -8,7 +8,7 @@ import {
   type RegistrationFormData,
   isRegistrationV2,
 } from "@/shared/lib";
-import { RegistrationInputField as Inputfield } from "./registration-input-field";
+import { InputField } from "@/widget";
 
 import { Hex } from "viem";
 import { RegistrationRadioButton } from "./registration-radio-button";
@@ -58,7 +58,7 @@ export function RegistrationDataForm({
           ? REGISTRATION_FORM_INPUTS_INDEXER.map((input) => {
               const indexerForm = formData as IndexerRegistrationFormData;
               return (
-                <Inputfield
+                <InputField
                   key={input.id}
                   id={input.id}
                   label={input.label}
@@ -76,7 +76,7 @@ export function RegistrationDataForm({
           : REGISTRATION_FORM_INPUTS_HOST.map((input) => {
               const hostForm = formData as HostRegistrationFormData;
               return (
-                <Inputfield
+                <InputField
                   key={input.id}
                   id={input.id}
                   label={input.label}
@@ -94,7 +94,7 @@ export function RegistrationDataForm({
         : REGISTRATION_FORM_INPUTS.map((input) => {
             const v1Form = formData as RegistrationFormData;
             return (
-              <Inputfield
+              <InputField
                 key={input.id}
                 id={input.id}
                 label={input.label}

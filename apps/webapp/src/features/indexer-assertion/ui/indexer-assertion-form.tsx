@@ -4,7 +4,14 @@ import { useIndexerAssertionForm } from "../hooks/use-indexer-assertion-form";
 import { getAssertionButtonText } from "../util/form-data";
 
 export function IndexerAssertionForm() {
-    const { assertionFormData, handleInputChange, fieldErrors, isValid } = useIndexerAssertionForm();
+    const {
+      assertionFormData,
+      handleInputChange,
+      fieldErrors,
+      isValid,
+      handleSignDigest,
+      isSigning,
+    } = useIndexerAssertionForm();
     
       const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         // event.preventDefault();
@@ -21,9 +28,10 @@ export function IndexerAssertionForm() {
         <div className="space-y-6 ml-10">
           <IndexerAssertionDataForm
             formData={assertionFormData}
-            isValid={isValid}
             handleInputChange={handleInputChange}
             fieldErrors={fieldErrors}
+            onSignDigest={handleSignDigest}
+            isSigning={isSigning}
           />
           <Button
             onClick={handleSubmit}

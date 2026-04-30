@@ -4,6 +4,7 @@ export * from "./copy-to-clipboard";
 export * from "./disconnect-wallet";
 export * from "./form-header";
 export * from "./header";
+export * from "./input-field";
 export * from "./pagination";
 export * from "./table";
 export * from "./toast";

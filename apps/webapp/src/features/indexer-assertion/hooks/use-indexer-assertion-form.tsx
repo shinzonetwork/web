@@ -1,11 +1,12 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IndexerAssertionFormData, SOURCE_CHAIN, SOURCE_CHAIN_ID_MAP } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
+import { useAccount, useSignMessage } from "wagmi";
 
-function createInitialValues(): IndexerAssertionFormData {
+function createInitialValues(delegateAddress: string = ""): IndexerAssertionFormData {
     return {
       consensusPubKey: "",
-      delegateAddress: "",
+      delegateAddress,
       sourceChain: "ethereum" as SOURCE_CHAIN,
       sourceChainId: SOURCE_CHAIN_ID_MAP.ethereum,
       assertionId: `assert-${Date.now()}`,
@@ -15,8 +16,19 @@ function createInitialValues(): IndexerAssertionFormData {
   }
 
 export function useIndexerAssertionForm() {
-    const [assertionFormData, setAssertionFormData] = useState<IndexerAssertionFormData>(createInitialValues());
+    const { address } = useAccount();
+    const { signMessageAsync, isPending: isSigning } = useSignMessage();
+    const [assertionFormData, setAssertionFormData] = useState<IndexerAssertionFormData>(
+        createInitialValues(address ?? "")
+    );
     const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
+
+    useEffect(() => {
+        setAssertionFormData((prev) => ({
+            ...prev,
+            delegateAddress: address ?? "",
+        }));
+    }, [address]);
 
     const isValid = useMemo(() => {
         return (
@@ -33,7 +45,6 @@ export function useIndexerAssertionForm() {
         // Clear previous error for this field when user starts typing
         setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
 
-        // Update form data without validation (validation happens on button click)
         setAssertionFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
         
         if (field === "sourceChain" && value in SOURCE_CHAIN_ID_MAP) {
@@ -41,10 +52,29 @@ export function useIndexerAssertionForm() {
         }
     }, []);
 
+    const handleSignDigest = useCallback(async () => {
+        const digest = assertionFormData.delegateDigest?.trim();
+
+        if (!digest) {
+            setFieldErrors((prev) => ({ ...prev, delegateDigest: "Enter delegate digest before signing." }));
+            return;
+        }
+
+        try {
+            const signature = await signMessageAsync({ message: digest });
+            setAssertionFormData((prev) => ({ ...prev, delegateSignature: signature }));
+            setFieldErrors((prev) => ({ ...prev, delegateDigest: undefined, delegateSignature: undefined }));
+        } catch {
+            setFieldErrors((prev) => ({ ...prev, delegateSignature: "Failed to sign digest. Please try again." }));
+        }
+    }, [assertionFormData.delegateDigest, signMessageAsync]);
+
     return {
         assertionFormData,
         handleInputChange,
+        handleSignDigest,
         fieldErrors,
         isValid,
+        isSigning,
     };
 }
