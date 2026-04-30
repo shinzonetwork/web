@@ -2,7 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { type Address, getAddress } from 'viem';
-import { publicClient } from '@/shared/viem/client';
+import { getPublicClient } from '@/shared/viem/client';
+import { useChainPathSegment } from '@/widgets/chain-path-segment/use-chain-path-segment';
 
 const erc20MetadataAbi = [
   { type: 'function', name: 'name', inputs: [], outputs: [{ type: 'string' }], stateMutability: 'view' },
@@ -25,12 +26,15 @@ export const getTokenIconUrl = (checksumAddress: string): string =>
 
 /** Fetches ERC20 name, symbol, and decimals via a single multicall. */
 export const useTokenMetadata = (address: string | undefined) => {
+  const chain = useChainPathSegment();
+
   return useQuery({
-    queryKey: ['token-metadata', address],
+    queryKey: ['token-metadata', chain, address],
     queryFn: async (): Promise<TokenMetadata | null> => {
       if (!address) return null;
 
       const checksumAddress = getAddress(address);
+      const publicClient = getPublicClient(chain);
 
       const results = await publicClient.multicall({
         contracts: [

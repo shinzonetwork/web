@@ -1,9 +1,9 @@
-/** First path segment for multi-chain explorer routes, e.g. `/ethereum/blocks`, `/shinohub/blocks`. */
-export const CHAIN_PATH_SEGMENTS = ["ethereum", "shinohub"] as const;
+/** First path segment for multi-chain explorer routes, e.g. `/ethereum/blocks`, `/shinzohub/blocks`. */
+export const CHAIN_PATH_SEGMENTS = ["ethereum", "shinzohub"] as const;
 
 export type ChainPathSegment = (typeof CHAIN_PATH_SEGMENTS)[number] | (string & {});
 
-export const DEFAULT_CHAIN_PATH_SEGMENT: ChainPathSegment = "ethereum";
+export const DEFAULT_CHAIN_PATH_SEGMENT: ChainPathSegment = "shinzohub";
 
 export const APP_PAGES = {
   home: '',
