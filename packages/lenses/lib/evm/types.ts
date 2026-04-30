@@ -74,9 +74,11 @@ export class EvmLogDocument {
   logIndex: i64 = 0;
   block: EvmBlockContext = new EvmBlockContext();
   transaction: EvmTransactionContext = new EvmTransactionContext();
+  raw: JSON.Obj | null = null;
 
   static fromJson(doc: JSON.Obj): EvmLogDocument {
     const log = new EvmLogDocument();
+    log.raw = doc;
 
     const address = doc.getString("address");
     if (address != null) log.address = address.valueOf();

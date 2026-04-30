@@ -17,6 +17,7 @@
   "files": [
     "lib",
     "ens",
+    "decode-log",
     "erc20-transfers",
     "erc20-account-balances",
     "README.md",

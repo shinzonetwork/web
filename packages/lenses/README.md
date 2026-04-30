@@ -85,6 +85,7 @@ The EVM layer handles:
 - selector matching
 - optional event-name filtering
 - decoded argument access through `decoded.getArg(...)`
+- access to the original parsed row through `log.raw` for passthrough-style lenses
 
 Supported decoded ABI word types:
 
@@ -101,6 +102,7 @@ Still out of scope:
 
 ## Existing examples
 
+- [Decode Log](./decode-log)
 - [ERC-20 Transfers](./erc20-transfers)
 - [ERC-20 Account Balances](./erc20-account-balances)
 
