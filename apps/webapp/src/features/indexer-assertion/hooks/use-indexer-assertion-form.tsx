@@ -45,11 +45,15 @@ export function useIndexerAssertionForm() {
         // Clear previous error for this field when user starts typing
         setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
 
-        setAssertionFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
-        
-        if (field === "sourceChain" && value in SOURCE_CHAIN_ID_MAP) {
-            setAssertionFormData((prev) => ({ ...prev, sourceChainId: SOURCE_CHAIN_ID_MAP[value as SOURCE_CHAIN] }));
-        }
+        setAssertionFormData((prev) => {
+            const updatedData = { ...prev, [field]: sanitizedValue };
+
+            if (field === "sourceChain" && value in SOURCE_CHAIN_ID_MAP) {
+                updatedData.sourceChainId = SOURCE_CHAIN_ID_MAP[value as SOURCE_CHAIN];
+            }
+
+            return updatedData;
+        });
     }, []);
 
     const handleSignDigest = useCallback(async () => {

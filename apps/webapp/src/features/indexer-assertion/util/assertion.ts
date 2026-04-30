@@ -126,23 +126,23 @@ export async function adminIndexerAssertion(opts: {
   return broadcast(rpc, txRaw);
 }
 
-const ADMIN_PRIVATE_KEY = "1382627402f3ffffe632834a2b9f27ce084ff76c20f8d29270979537aa31e5c7";
-const RPC = "http://localhost:26657";
+// const ADMIN_PRIVATE_KEY = "1382627402f3ffffe632834a2b9f27ce084ff76c20f8d29270979537aa31e5c7";
+// const RPC = "http://localhost:26657";
 
-async function main() {
-  const result = await adminIndexerAssertion({
-    privateKey: ADMIN_PRIVATE_KEY,
-    rpcEndpoint: RPC,
-    consensusPubKey: "",
-    delegateAddress: "",
-    sourceChain: "ethereum",
-    sourceChainId: 1,
-    assertionId: `assert-${Date.now()}`,
-    delegateDigest: new Uint8Array(32),
-    delegateSignature: new Uint8Array(65),
-  });
-  console.log("Tx hash:", result.hash);
-  console.log("Code:", result.code === 0 ? "SUCCESS" : `FAILED (${result.code}) ${result.log}`);
-}
+// async function main() {
+//   const result = await adminIndexerAssertion({
+//     privateKey: ADMIN_PRIVATE_KEY,
+//     rpcEndpoint: RPC,
+//     consensusPubKey: "",
+//     delegateAddress: "",
+//     sourceChain: "ethereum",
+//     sourceChainId: 1,
+//     assertionId: `assert-${Date.now()}`,
+//     delegateDigest: new Uint8Array(32),
+//     delegateSignature: new Uint8Array(65),
+//   });
+//   console.log("Tx hash:", result.hash);
+//   console.log("Code:", result.code === 0 ? "SUCCESS" : `FAILED (${result.code}) ${result.log}`);
+// }
 
-main().catch(console.error);
+// main().catch(console.error);

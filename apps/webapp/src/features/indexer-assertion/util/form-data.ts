@@ -66,17 +66,3 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
       isSelect: false,
     },
   ] as const;
-  
-/**
- * Get button text based on transaction state
- */
-export function getAssertionButtonText(
-    isPending: boolean,
-    isConfirming: boolean,
-    isConfirmed: boolean
-  ): string {
-    if (isPending) return "Confirming in wallet...";
-    if (isConfirming) return "Processing...";
-    if (isConfirmed) return "Assertion Submitted!";
-    return "Submit";
-  }
