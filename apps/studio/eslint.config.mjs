@@ -1,3 +1,12 @@
 import config from "@shinzo/eslint-config";
 
-export default config;
+const studioConfig = [
+  ...config,
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
+];
+
+export default studioConfig;

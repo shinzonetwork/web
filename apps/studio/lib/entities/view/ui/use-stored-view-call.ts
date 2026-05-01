@@ -1,8 +1,10 @@
-"use client";
-
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { LensQueryArgs } from "@/entities/lens";
+import {
+  replaceBrowserUrl,
+  usePathname,
+  useSearchParams,
+} from "@/shared/utils/browser-location";
 import { callStoredLensView } from "../api/query-view";
 import {
   STUDIO_QUERY_LIMIT,
@@ -63,7 +65,6 @@ export const useStoredViewCall = (
   const [callState, setCallState] = useState<StoredCallState>({ status: "idle" });
   const requestIdRef = useRef(0);
   const pathname = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const page = getPageValue(searchParams.get("page"));
 
@@ -79,11 +80,9 @@ export const useStoredViewCall = (
 
       const nextQuery = nextParams.toString();
 
-      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, {
-        scroll: false,
-      });
+      replaceBrowserUrl(nextQuery ? `${pathname}?${nextQuery}` : pathname);
     },
-    [pathname, router, searchParams]
+    [pathname, searchParams]
   );
 
   const fetchViewPage = useCallback(

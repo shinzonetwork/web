@@ -76,7 +76,6 @@ export const Erc20AccountBalancesResult = ({
               <td className="px-4 py-3">
                 <span className="inline-flex items-center gap-1.5">
                   {preset?.icon && (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={preset.icon}
                       alt=""

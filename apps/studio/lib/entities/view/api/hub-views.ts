@@ -41,7 +41,7 @@ const normalizeHubBaseUrl = (): string => {
   const trimmed = SHINZOHUB_LCD_URL.trim();
 
   if (!trimmed) {
-    throw new Error("NEXT_PUBLIC_SHINZOHUB_LCD_URL is not set.");
+    throw new Error("VITE_SHINZOHUB_LCD_URL is not set.");
   }
 
   return trimmed.endsWith("/") ? trimmed : `${trimmed}/`;

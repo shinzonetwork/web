@@ -1,9 +1,10 @@
-"use client";
-
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
 import { cn } from "@shinzo/ui/cn";
+import {
+  navigateWithAnchorClick,
+  usePathname,
+  useSearchParams,
+} from "@/shared/utils/browser-location";
 
 interface PagerProps {
   page: number;
@@ -43,14 +44,19 @@ export const Pager = ({ page, hasMore, className }: PagerProps) => {
     >
       <ul className="flex h-11 flex-row items-center">
         <li className="h-full">
-          <Link
+          <a
             href={getPageLink(page - 1)}
             aria-label="Previous page"
             aria-disabled={prevDisabled}
+            onClick={(event) =>
+              navigateWithAnchorClick(event, getPageLink(page - 1), {
+                disabled: prevDisabled,
+              })
+            }
             className={cn(linkClass, "border-r-0")}
           >
             <ChevronLeftIcon />
-          </Link>
+          </a>
         </li>
         <li className="h-full">
           <span
@@ -64,14 +70,19 @@ export const Pager = ({ page, hasMore, className }: PagerProps) => {
           </span>
         </li>
         <li className="h-full">
-          <Link
+          <a
             href={getPageLink(page + 1)}
             aria-label="Next page"
             aria-disabled={nextDisabled}
+            onClick={(event) =>
+              navigateWithAnchorClick(event, getPageLink(page + 1), {
+                disabled: nextDisabled,
+              })
+            }
             className={cn(linkClass, "border-l-0")}
           >
             <ChevronRightIcon />
-          </Link>
+          </a>
         </li>
       </ul>
     </nav>

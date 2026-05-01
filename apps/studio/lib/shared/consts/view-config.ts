@@ -29,7 +29,7 @@ import usdsIcon from "./token-icons/usds.svg?url";
 import bnbIcon from "./token-icons/bnb.svg?url";
 import stethIcon from "./token-icons/steth.svg?url";
 import leoIcon from "./token-icons/leo.svg?url";
-import wbtcIcon from "./token-icons/wbtc.png";
+import wbtcIcon from "./token-icons/wbtc.png?url";
 
 export interface Erc20TokenPreset {
   symbol: string;
@@ -110,7 +110,7 @@ export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
     address: "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
     entitySuffix: "WBTC",
     decimals: 8,
-    icon: wbtcIcon.src,
+    icon: wbtcIcon,
   },
 ] as const satisfies readonly Erc20TokenPreset[];
 

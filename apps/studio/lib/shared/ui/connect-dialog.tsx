@@ -47,7 +47,6 @@ export const ConnectDialog = () => {
 
     if (connector.icon) {
       return (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={connector.icon}
           alt={connector.name}

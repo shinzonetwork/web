@@ -41,7 +41,6 @@ const TokenPresetBadges = ({
         title={`${token.name} (${token.symbol}) · ${token.address}`}
         className="inline-flex items-center gap-2 rounded-full border border-szo-border px-3 py-1.5 text-xs font-medium transition-colors hover:border-szo-black"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={token.icon}
           alt=""

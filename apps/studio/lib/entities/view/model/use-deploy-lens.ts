@@ -217,12 +217,21 @@ export const useDeployLens = (): UseDeployLensResult => {
         resolvedView
       );
 
+      if (!account) {
+        throw new Error("Wallet is not connected.");
+      }
+      if (!publicClient) {
+        throw new Error(
+          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
+        );
+      }
+
       setStatus("deploying");
       const receipt = await submitDeployTransaction({
-        account: account!,
+        account,
         resolvedView,
         wasmBytesByStep,
-        publicClient: publicClient!,
+        publicClient,
         switchChainAsync,
         sendTransactionAsync,
       });
@@ -263,7 +272,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check NEXT_PUBLIC_SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
         );
       }
 
@@ -297,7 +306,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check NEXT_PUBLIC_SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
         );
       }
 

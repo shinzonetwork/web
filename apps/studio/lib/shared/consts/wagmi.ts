@@ -7,10 +7,11 @@ import {
   APP_URL,
   SHINZOHUB_CHAIN_ID,
   SHINZOHUB_BLOCK_EXPLORER_URL,
+  SHINZOHUB_EVM_RPC,
 } from "@/shared/consts/envs";
 
 if (!WALLETCONNECT_ID) {
-  console.warn("NEXT_PUBLIC_WALLETCONNECT_ID is not set");
+  console.warn("VITE_WALLETCONNECT_ID is not set");
 }
 
 export const shinzoDevnet = defineChain({
@@ -30,7 +31,7 @@ export const shinzoDevnet = defineChain({
     : {}),
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_SHINZOHUB_EVM_RPC ?? ""],
+      http: [SHINZOHUB_EVM_RPC],
     },
   },
 });
