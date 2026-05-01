@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 import type { Hex } from "viem";
-import { EntityRole } from "@/shared/lib";
+import { EntityRole, isRegistrationV2 } from "@/shared/lib";
 
-export interface PrefillData {
+export type PrefillDataV1 = {
   role: EntityRole | undefined;
   signedMessage: Hex | undefined;
   defraPublicKey: Hex | undefined;
@@ -12,6 +12,18 @@ export interface PrefillData {
   peerId: Hex | undefined;
   peerSignedMessage: Hex | undefined;
 }
+
+export type PrefillDataV2 = {
+  role: EntityRole;
+  signedMessage: Hex;
+  defraPublicKey: Hex;
+  defraPublicKeySignedMessage: Hex;
+  connectionString?: string;
+  sourceChain?: string ;
+  sourceChainId?: number;
+}
+
+export type PrefillData = PrefillDataV1 | PrefillDataV2;
 
 /**
  * Converts a string to Hex if it's a valid hex string, otherwise returns undefined.
@@ -58,12 +70,28 @@ export function usePrefillData(): PrefillData {
         defraPublicKeySignedMessage: undefined,
         peerId: undefined,
         peerSignedMessage: undefined,
+        connectionString: undefined,
+        sourceChain: undefined,
+        sourceChainId: undefined,
       };
     }
 
     const searchParams = new URLSearchParams(window.location.search);
 
-    return {
+    if (isRegistrationV2()) {
+      return {
+        role: parseRole(searchParams.get("role")),
+        signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
+        defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
+        defraPublicKeySignedMessage: toHexOrUndefined(
+          searchParams.get("defraPublicKeySignedMessage")
+        ),
+        connectionString: searchParams.get("connectionString"),
+        sourceChain: searchParams.get("sourceChain"),
+        sourceChainId: parseInt(searchParams.get("sourceChainId") ?? "0"),
+      } as PrefillDataV2;
+    } else {
+      return {
       role: parseRole(searchParams.get("role")),
       signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
       defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
@@ -74,6 +102,7 @@ export function usePrefillData(): PrefillData {
       peerSignedMessage: toHexOrUndefined(
         searchParams.get("peerSignedMessage")
       ),
-    };
-  }, []);
+      } as PrefillDataV1;
+    }
+  }, [isRegistrationV2()]);
 }

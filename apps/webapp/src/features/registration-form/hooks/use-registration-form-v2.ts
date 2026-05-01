@@ -1,32 +1,35 @@
 import { useCallback, useState } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
 import { RegistrationFormDataByEntity } from "@/shared/types";
+import { PrefillDataV2, usePrefillData } from "./use-prefill-data";
 
-const getInitialFormData = (entity: EntityRole) =>
+const getInitialFormData = (entity: EntityRole, prefillData: PrefillDataV2 | undefined = undefined) =>
   entity === EntityRole.Indexer
     ? {
         entity: EntityRole.Indexer,
-        message: "",
-        defraPublicKey: "",
-        defraSignedMessage: "",
-        connectionString: "",
-        sourceChain: "",
-        sourceChainId: 0,
+        message: prefillData?.signedMessage ?? "",
+        defraPublicKey: prefillData?.defraPublicKey ?? "",
+        defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
+        connectionString: prefillData?.connectionString ?? "",
+        sourceChain: prefillData?.sourceChain ?? "",
+        sourceChainId: prefillData?.sourceChainId ?? 0,
       }
     : {
         entity: EntityRole.Host,
-        message: "",
-        defraPublicKey: "",
-        defraSignedMessage: "",
-        connectionString: "",
+        message: prefillData?.signedMessage ?? "",
+        defraPublicKey: prefillData?.defraPublicKey ?? "",
+        defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
+        connectionString: prefillData?.connectionString ?? "",
       };
 
-export function useRegistrationForm({ entity }: { entity: EntityRole }) {
+export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
+  const prefillData = usePrefillData() as PrefillDataV2;
+
   const [formData, setFormData] = useState<
     RegistrationFormDataByEntity<typeof entity>
   >(
     () =>
-      getInitialFormData(entity) as RegistrationFormDataByEntity<typeof entity>
+      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<typeof entity>
   );
 
   const handleInputChange = useCallback((field: string, value: string) => {

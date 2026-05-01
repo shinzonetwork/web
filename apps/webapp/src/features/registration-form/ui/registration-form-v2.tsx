@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { Button } from "@/shared/ui/button";
 
 import { RegistrationDataForm } from "./registration-data-form";
-import { useRegistrationForm } from "../hooks/use-registration-form-v2";
+import { useRegistrationFormV2 } from "../hooks/use-registration-form-v2";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction-v2";
 import {
   getRegistrationButtonText,
@@ -22,12 +22,11 @@ import type {
 } from "@/shared/types";
 
 export function RegistrationFormV2() {
-  const { address } = useAccount();
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
   const { formData, handleInputChange, handleUserRoleChange } =
-    useRegistrationForm({ entity: EntityRole.Host });
+    useRegistrationFormV2({ entity: EntityRole.Host });
 
   const {
     sendRegisterTransaction,
@@ -95,12 +94,6 @@ export function RegistrationFormV2() {
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
       </Button>
-      {!validateEntity(address, formData.entity) && (
-        <div className="text-sm text-red-500">
-          You are not whitelisted as an indexer. Please contact the Shinzo team
-          to be whitelisted.
-        </div>
-      )}
     </div>
   );
 }
