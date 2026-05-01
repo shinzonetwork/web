@@ -1,1 +1,5 @@
-export { Register as default } from "@/page-components/registration";
+import { redirect } from "next/navigation";
+
+export default function Home() {
+  return redirect("/registration");
+}

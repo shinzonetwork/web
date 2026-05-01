@@ -4,6 +4,7 @@ import { useRegistrationContext } from "@/entities/registration-process";
 import { Connect } from "@/page-components/connect";
 import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
+import { HeaderMenu } from "@/widget/menu/ui/header-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
@@ -27,21 +28,7 @@ export function Header() {
           unoptimized
         />
         <div className="flex flex-row items-center">
-          <Link href="/">
-            <Button variant="link" className=" text-md text-muted-foreground ">
-              Registration
-            </Button>
-          </Link>
-          <Link href="/indexer-assertion">
-            <Button variant="link" className=" text-md text-muted-foreground ">
-              Indexer Assertion
-            </Button>
-          </Link>
-          <Link href="/validators">
-            <Button variant="link" className=" text-md text-muted-foreground ">
-              Validators
-            </Button>
-          </Link>
+          <HeaderMenu />
         </div>
       </div>
       <div className="flex flex-row justify-end">
