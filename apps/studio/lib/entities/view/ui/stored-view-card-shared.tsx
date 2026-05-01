@@ -40,6 +40,20 @@ export const getStoredViewTokenName = (
   return tokenPreset?.name ?? truncateHex(tokenAddress);
 };
 
+export const getStoredViewContractName = (
+  view: StoredDeployedView
+): string | null =>
+  typeof view.args.contractName === "string" && view.args.contractName.trim()
+    ? view.args.contractName
+    : null;
+
+export const getStoredViewSourceAddress = (
+  view: StoredDeployedView
+): string | null =>
+  typeof view.args.sourceAddress === "string" && view.args.sourceAddress.trim()
+    ? view.args.sourceAddress
+    : null;
+
 export const getStoredViewDefaultTitle = (view: StoredDeployedView): string =>
   getLensDefinition(view.lensKey)?.title ?? view.lensKey;
 
@@ -108,6 +122,8 @@ interface StoredViewMetadataProps {
 
 export const StoredViewMetadata = ({ view }: StoredViewMetadataProps) => {
   const tokenMeta = getStoredViewTokenMeta(view);
+  const contractName = getStoredViewContractName(view);
+  const sourceAddress = getStoredViewSourceAddress(view);
 
   return (
     <dl className="grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-4">
@@ -118,6 +134,26 @@ export const StoredViewMetadata = ({ view }: StoredViewMetadataProps) => {
           </dt>
           <dd className="truncate font-mono text-xs text-szo-black/70">
             {tokenMeta}
+          </dd>
+        </div>
+      )}
+
+      {!tokenMeta && contractName && (
+        <div className="flex min-w-0 flex-col gap-1">
+          <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
+            Contract
+          </dt>
+          <dd className="truncate text-szo-black/70">{contractName}</dd>
+        </div>
+      )}
+
+      {!tokenMeta && sourceAddress && (
+        <div className="flex min-w-0 flex-col gap-1">
+          <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
+            Source Contract
+          </dt>
+          <dd className="truncate font-mono text-xs text-szo-black/70">
+            {sourceAddress}
           </dd>
         </div>
       )}
@@ -137,7 +173,9 @@ export const StoredViewMetadata = ({ view }: StoredViewMetadataProps) => {
         <dt className="font-mono text-xs uppercase tracking-[0.12em] text-szo-black/40">
           Saved
         </dt>
-        <dd className="text-szo-black/70">{formatTimestamp(view.deployedAt)}</dd>
+        <dd className="text-szo-black/70">
+          {formatTimestamp(view.deployedAt)}
+        </dd>
       </div>
 
       {view.contractAddress && (
@@ -205,12 +243,13 @@ export const StoredViewResults = ({
 
     {callState.status === "success" && renderSuccess(callState)}
 
-    {callState.status === "success" && (page > 1 || callState.result.hasMore) && (
-      <Pager
-        className="justify-end"
-        page={page}
-        hasMore={callState.result.hasMore}
-      />
-    )}
+    {callState.status === "success" &&
+      (page > 1 || callState.result.hasMore) && (
+        <Pager
+          className="justify-end"
+          page={page}
+          hasMore={callState.result.hasMore}
+        />
+      )}
   </div>
 );

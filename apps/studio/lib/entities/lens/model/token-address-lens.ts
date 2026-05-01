@@ -84,11 +84,19 @@ const buildDefaultTokenAddressHostQuery = ({
 const formatEthereumLogFilterAddress = (tokenAddress: string): string =>
   getAddress(tokenAddress);
 
-export const buildFilteredErc20LogQuery = (
-  tokenAddress: string
-): string => `Ethereum__Mainnet__Log(filter: { address: { _eq: ${graphqlString(
-  formatEthereumLogFilterAddress(tokenAddress)
-)} } }) { address topics data blockNumber transaction { hash from to } }`;
+export const buildFilteredErc20LogQuery = (tokenAddress: string): string =>
+  buildFilteredEthereumLogQuery(
+    tokenAddress,
+    "address topics data blockNumber transaction { hash from to }"
+  );
+
+export const buildFilteredEthereumLogQuery = (
+  address: string,
+  selectionSet: string
+): string =>
+  `Ethereum__Mainnet__Log(filter: { address: { _eq: ${graphqlString(
+    formatEthereumLogFilterAddress(address)
+  )} } }) { ${selectionSet} }`;
 
 export const buildErc20AccountBalanceHostQuery = ({
   entityName,

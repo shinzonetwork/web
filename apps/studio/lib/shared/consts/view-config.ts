@@ -48,6 +48,12 @@ export interface EthereumAccountPreset {
   address: string;
 }
 
+export interface EthereumContractPreset {
+  label: string;
+  name: string;
+  address: string;
+}
+
 // Top 10 ERC-20s on Ethereum by circulating market cap from Etherscan on 2026-04-17.
 export const TOP_ETHEREUM_ERC20_TOKEN_PRESETS = [
   {
@@ -122,6 +128,39 @@ export const WELL_KNOWN_ETHEREUM_ACCOUNT_PRESETS = [
     address: "0x53824a44a65b29a7e35b82c3339a841338414f08",
   },
 ] as const satisfies readonly EthereumAccountPreset[];
+
+export const POPULAR_ETHEREUM_CONTRACT_PRESETS = [
+  {
+    label: "USDC Proxy",
+    name: "USDC FiatTokenProxy",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+  },
+  {
+    label: "USDT",
+    name: "Tether USD",
+    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  },
+  {
+    label: "WETH",
+    name: "Wrapped Ether",
+    address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  },
+  {
+    label: "ENS Registry",
+    name: "ENS Registry",
+    address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+  },
+  {
+    label: "Uniswap V3",
+    name: "Uniswap V3 Factory",
+    address: "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+  },
+  {
+    label: "Uniswap V2",
+    name: "UniswapV2Factory",
+    address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
+  },
+] as const satisfies readonly EthereumContractPreset[];
 
 const erc20TokenPresetByAddress = new Map(
   TOP_ETHEREUM_ERC20_TOKEN_PRESETS.map((token) => [

@@ -1,8 +1,10 @@
+import { DECODE_LOG_LENS } from "./decode-log";
 import { ERC20_ACCOUNT_BALANCES_LENS } from "./erc20-account-balances";
 import { ERC20_TRANSFER_LENS } from "./erc20-transfers";
 import { ENS_CORE_PACK_LENSES } from "./ens-core";
 
 export const STUDIO_LENS_CATALOG = [
+  DECODE_LOG_LENS,
   ERC20_TRANSFER_LENS,
   ERC20_ACCOUNT_BALANCES_LENS,
   ...ENS_CORE_PACK_LENSES,

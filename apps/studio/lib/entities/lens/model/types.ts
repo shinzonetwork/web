@@ -2,6 +2,7 @@ export type LensArgs = Record<string, string>;
 export type LensQueryArgs = Record<string, string>;
 
 export type LensResultKind =
+  | "decoded-log"
   | "erc20-transfers"
   | "erc20-account-balances"
   | "json";
@@ -47,4 +48,10 @@ export interface LensDefinition<TArgs extends LensArgs = LensArgs> {
 
 export type TokenAddressLensArgs = {
   tokenAddress: string;
+};
+
+export type DecodeLogLensArgs = {
+  sourceAddress: string;
+  contractName: string;
+  abi: string;
 };

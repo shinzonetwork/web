@@ -6,6 +6,7 @@ import type {
   StoredCallState,
   StoredViewCallOptions,
 } from "./use-stored-view-call";
+import { DecodedLogViewCard } from "./decoded-log-view-card";
 import { Erc20AccountBalancesViewCard } from "./erc20-account-balances-view-card";
 import { Erc20TransfersViewCard } from "./erc20-transfers-view-card";
 import { GenericStoredViewCard } from "./generic-stored-view-card";
@@ -30,6 +31,19 @@ export const StoredViewCard = ({
   const canCall = Boolean(lens?.uiSupported);
 
   switch (lens?.resultKind) {
+    case "decoded-log":
+      return (
+        <DecodedLogViewCard
+          view={view}
+          callState={callState}
+          page={page}
+          isSelected={isSelected}
+          isLoading={isLoading}
+          canCall={canCall}
+          onCall={onCall}
+        />
+      );
+
     case "erc20-transfers":
       return (
         <Erc20TransfersViewCard

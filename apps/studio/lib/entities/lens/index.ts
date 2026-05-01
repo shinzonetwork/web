@@ -1,5 +1,6 @@
 export type {
   BuildHostQueryOptions,
+  DecodeLogLensArgs,
   LensArgs,
   LensDefinition,
   LensQueryArgs,
@@ -14,6 +15,7 @@ export {
   isStudioSupportedLens,
   type AnyLensDefinition,
 } from "./model/catalog";
+export { DECODE_LOG_LENS } from "./model/decode-log";
 export { ERC20_TRANSFER_LENS } from "./model/erc20-transfers";
 export { ERC20_ACCOUNT_BALANCES_LENS } from "./model/erc20-account-balances";
 export {
@@ -32,7 +34,4 @@ export {
   ENS_WRAPPED_DOMAIN_ENTITY_NAME,
   ENS_WRAPPED_DOMAIN_V1_LENS,
 } from "./model/ens-core";
-export {
-  STUDIO_VIEW_NAME_PREFIX,
-  prefixStudioViewName,
-} from "./model/sdl";
+export { STUDIO_VIEW_NAME_PREFIX, prefixStudioViewName } from "./model/sdl";
