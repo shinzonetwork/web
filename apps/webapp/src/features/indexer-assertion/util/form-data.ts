@@ -1,4 +1,3 @@
-//Shinzohub V1 Registration
 export type IndexerAssertionFormData = {
     consensusPubKey: string;
     delegateAddress: string;
@@ -8,6 +7,9 @@ export type IndexerAssertionFormData = {
     delegateDigest: string;
     delegateSignature: string;
 };
+
+/** Delegate digest is a fixed-length payload (32 characters). */
+export const DELEGATE_DIGEST_MAX_LENGTH = 32;
 
 export type SOURCE_CHAIN = "ethereum" | "shinzohub";
 
@@ -58,6 +60,9 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
       label: "Delegate Digest",
       isTextarea: false,
       isSelect: false,
+      maxLength: DELEGATE_DIGEST_MAX_LENGTH,
+      description:
+        "The delegate digest must consist of exactly 32 characters; values shorter or longer than this length are not permitted.",
     },
     {
       id: "delegateSignature",

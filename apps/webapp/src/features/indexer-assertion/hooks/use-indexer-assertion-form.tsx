@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IndexerAssertionFormData, SOURCE_CHAIN, SOURCE_CHAIN_ID_MAP } from "../util/form-data";
+import {
+    DELEGATE_DIGEST_MAX_LENGTH,
+    IndexerAssertionFormData,
+    SOURCE_CHAIN,
+    SOURCE_CHAIN_ID_MAP,
+} from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
 import { useAccount, useSignMessage } from "wagmi";
 
@@ -35,13 +40,16 @@ export function useIndexerAssertionForm() {
             assertionFormData.consensusPubKey.trim().length > 0 &&
             assertionFormData.delegateAddress.trim().length > 0 &&
             assertionFormData.assertionId.trim().length > 0 &&
-            assertionFormData.delegateDigest.trim().length > 0 &&
+            assertionFormData.delegateDigest.trim().length === DELEGATE_DIGEST_MAX_LENGTH &&
             assertionFormData.delegateSignature.trim().length > 0
         );
     }, [assertionFormData]);
 
     const handleInputChange = useCallback((field: string, value: string) => {
-        const sanitizedValue = sanitizeString(value);
+        let sanitizedValue = sanitizeString(value);
+        if (field === "delegateDigest") {
+            sanitizedValue = sanitizedValue.slice(0, DELEGATE_DIGEST_MAX_LENGTH);
+        }
         // Clear previous error for this field when user starts typing
         setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
 

@@ -7,11 +7,28 @@ import { TxRaw, TxBody } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { PubKey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 import * as _m0 from "protobufjs/minimal";
 
+const PREFIX = 'shinzo';
 const PUBKEY_TYPE = "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey";
 const MSG_TYPE_URL = "/shinzonetwork.indexer.v1.MsgIndexerAssertion";
 
+type MsgIndexerAssertion = {
+  signer: string;
+  consensusPubKey: string;
+  delegateAddress: string;
+  sourceChain: string;
+  sourceChainId: number;
+  assertionId: string;
+  delegateDigest: Uint8Array;
+  delegateSignature: Uint8Array;
+};
+
+type AdminIndexerAssertionOptions = Omit<MsgIndexerAssertion, "signer"> & {
+  privateKey: string;
+  rpcEndpoint: string;
+};
+
 const MsgIndexerAssertion = {
-  encode(m: any, w: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(m: MsgIndexerAssertion, w: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (m.signer !== "") w.uint32(10).string(m.signer);
     if (m.consensusPubKey !== "") w.uint32(18).string(m.consensusPubKey);
     if (m.delegateAddress !== "") w.uint32(26).string(m.delegateAddress);
@@ -22,7 +39,7 @@ const MsgIndexerAssertion = {
     if (m.delegateSignature.length !== 0) w.uint32(66).bytes(m.delegateSignature);
     return w;
   },
-  fromPartial(o: any): any {
+  fromPartial(o: MsgIndexerAssertion): MsgIndexerAssertion {
     return {
       signer: o.signer ?? "",
       consensusPubKey: o.consensusPubKey ?? "",
@@ -52,7 +69,7 @@ async function getChainId(rpc: string): Promise<string> {
 async function getAccount(rpc: string, address: string) {
   const bytes = await abciQuery(rpc, "/cosmos.auth.v1beta1.Query/Account", QueryAccountRequest.encode({ address }).finish());
   const { account } = QueryAccountResponse.decode(bytes);
-  const base = BaseAccount.decode(account!.value);
+  const base = BaseAccount.decode(account ? account.value : new Uint8Array(0));
   return { accountNumber: Number(base.accountNumber), sequence: Number(base.sequence) };
 }
 
@@ -66,39 +83,27 @@ async function broadcast(rpc: string, txBytes: Uint8Array): Promise<{ hash: stri
   return { hash: json.result.hash, code: json.result.code, log: json.result.log };
 }
 
-export async function adminIndexerAssertion(opts: {
-  privateKey: string;
-  rpcEndpoint: string;
-  prefix?: string;
-  consensusPubKey: string;
-  delegateAddress: string;
-  sourceChain: string;
-  sourceChainId: number;
-  assertionId: string;
-  delegateDigest: Uint8Array;
-  delegateSignature: Uint8Array;
-}) {
-  const prefix = opts.prefix ?? "shinzo";
-  const rpc = opts.rpcEndpoint;
-
-  const privkey = fromHex(opts.privateKey.replace(/^0x/, ""));
+export async function adminIndexerAssertion(opts: AdminIndexerAssertionOptions) {
+  const { privateKey, rpcEndpoint, delegateAddress, consensusPubKey, sourceChain, sourceChainId, assertionId, delegateDigest, delegateSignature} = opts;
+  const privkey = fromHex(privateKey.replace(/^0x/, ""));
   const keypair = await Secp256k1.makeKeypair(privkey);
   const compressedPubkey = Secp256k1.compressPubkey(keypair.pubkey);
-  const address = toBech32(prefix, keccak256(keypair.pubkey.slice(1)).slice(-20));
+  const address = toBech32(PREFIX, keccak256(keypair.pubkey.slice(1)).slice(-20));
 
-  const chainId = await getChainId(rpc);
-  const { accountNumber, sequence } = await getAccount(rpc, address);
+  const chainId = await getChainId(rpcEndpoint);
+  const { accountNumber, sequence } = await getAccount(rpcEndpoint, address);
   const pubkey = { typeUrl: PUBKEY_TYPE, value: PubKey.encode({ key: compressedPubkey }).finish() };
+  const shinzoAddress = delegateAddress.startsWith(PREFIX) ? delegateAddress : toBech32(PREFIX, fromHex(delegateAddress.replace(/^0x/, "")));
 
   const msgValue = MsgIndexerAssertion.fromPartial({
     signer: address,
-    consensusPubKey: opts.consensusPubKey,
-    delegateAddress: opts.delegateAddress,
-    sourceChain: opts.sourceChain,
-    sourceChainId: opts.sourceChainId,
-    assertionId: opts.assertionId,
-    delegateDigest: opts.delegateDigest,
-    delegateSignature: opts.delegateSignature,
+    consensusPubKey: consensusPubKey,
+    delegateAddress: shinzoAddress,
+    sourceChain: sourceChain,
+    sourceChainId: sourceChainId,
+    assertionId: assertionId,
+    delegateDigest: delegateDigest,
+    delegateSignature: delegateSignature,
   });
 
   const txBodyBytes = TxBody.encode(TxBody.fromPartial({
@@ -123,26 +128,5 @@ export async function adminIndexerAssertion(opts: {
     signatures: [sigBytes],
   })).finish();
 
-  return broadcast(rpc, txRaw);
+  return await broadcast(rpcEndpoint, txRaw);
 }
-
-// const ADMIN_PRIVATE_KEY = "1382627402f3ffffe632834a2b9f27ce084ff76c20f8d29270979537aa31e5c7";
-// const RPC = "http://localhost:26657";
-
-// async function main() {
-//   const result = await adminIndexerAssertion({
-//     privateKey: ADMIN_PRIVATE_KEY,
-//     rpcEndpoint: RPC,
-//     consensusPubKey: "",
-//     delegateAddress: "",
-//     sourceChain: "ethereum",
-//     sourceChainId: 1,
-//     assertionId: `assert-${Date.now()}`,
-//     delegateDigest: new Uint8Array(32),
-//     delegateSignature: new Uint8Array(65),
-//   });
-//   console.log("Tx hash:", result.hash);
-//   console.log("Code:", result.code === 0 ? "SUCCESS" : `FAILED (${result.code}) ${result.log}`);
-// }
-
-// main().catch(console.error);

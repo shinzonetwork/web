@@ -1,7 +1,11 @@
 "use client";
 
 import { InputField } from "@/widget/input-field";
-import { INDEXER_ASSERTION_FORM_INPUTS, IndexerAssertionFormData } from "../util/form-data";
+import {
+  DELEGATE_DIGEST_MAX_LENGTH,
+  INDEXER_ASSERTION_FORM_INPUTS,
+  IndexerAssertionFormData,
+} from "../util/form-data";
 import { Button } from "@/shared/ui/button";
 
 type IndexerAssertionDataFormProps = React.PropsWithChildren<{
@@ -21,6 +25,8 @@ export function IndexerAssertionDataForm({ formData, handleInputChange, fieldErr
           key={input.id}
           id={input.id}
           label={input.label}
+          description={"description" in input ? input.description : undefined}
+          maxLength={"maxLength" in input ? input.maxLength : undefined}
           value={String(formData[input.id as keyof IndexerAssertionFormData])}
           onChange={(value) => handleInputChange(input.id as keyof IndexerAssertionFormData, value)}
           isTextarea={input.isTextarea}
@@ -35,7 +41,10 @@ export function IndexerAssertionDataForm({ formData, handleInputChange, fieldErr
                 variant="default"
                 size="sm"
                 onClick={onSignDigest}
-                disabled={!formData.delegateDigest?.trim() || isSigning}
+                disabled={
+                  formData.delegateDigest?.trim().length !== DELEGATE_DIGEST_MAX_LENGTH ||
+                  isSigning
+                }
               >
                 {isSigning ? "Signing..." : "Sign"}
               </Button>
