@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { STUDIO_VIEW_NAME_PREFIX } from "@/entities/lens";
-import { SHINZOHUB_LCD_URL } from "@/shared/consts/envs";
+import { SHINZOHUB_COSMOS_RPC_REQUEST_URL } from "@/shared/consts/envs";
 
 interface HubViewWire {
   name?: string;
@@ -38,23 +38,26 @@ export const STUDIO_HUB_VIEWS_QUERY_KEY = [
 ] as const;
 
 const normalizeHubBaseUrl = (): string => {
-  const trimmed = SHINZOHUB_LCD_URL.trim();
+  const trimmed = SHINZOHUB_COSMOS_RPC_REQUEST_URL.trim();
 
   if (!trimmed) {
-    throw new Error("VITE_SHINZOHUB_LCD_URL is not set.");
+    throw new Error("ShinzoHub Cosmos RPC proxy path is not configured.");
   }
 
   return trimmed.endsWith("/") ? trimmed : `${trimmed}/`;
 };
 
-const buildHubUrl = (path: string): URL => new URL(path, normalizeHubBaseUrl());
+const buildHubUrl = (path: string): URL => {
+  const baseUrl = new URL(normalizeHubBaseUrl(), window.location.origin);
+  return new URL(path.replace(/^\/+/, ""), baseUrl);
+};
 
 const hubFetch = async (url: URL): Promise<Response> => {
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok && response.status !== 404) {
     throw new Error(
-      `ShinzoHub LCD returned ${response.status}: ${response.statusText}`
+      `ShinzoHub Cosmos RPC returned ${response.status}: ${response.statusText}`
     );
   }
 
@@ -101,7 +104,7 @@ export const fetchStudioHubViews = async (): Promise<HubViewRecord[]> => {
 
     const response = await hubFetch(url);
     if (response.status === 404) {
-      throw new Error("ShinzoHub LCD views endpoint was not found.");
+      throw new Error("ShinzoHub Cosmos RPC views endpoint was not found.");
     }
 
     const payload = (await response.json()) as HubViewsResponse;

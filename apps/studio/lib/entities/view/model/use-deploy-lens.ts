@@ -138,7 +138,7 @@ const confirmRegisteredView = async (
 
   if (!registeredHubView) {
     throw new Error(
-      `Deployment transaction succeeded, but ShinzoHub LCD did not return a registered view named "${entityName}".`
+      `Deployment transaction succeeded, but ShinzoHub Cosmos RPC did not return a registered view named "${entityName}".`
     );
   }
 
@@ -221,7 +221,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
         );
       }
 
@@ -271,7 +271,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
         );
       }
 
@@ -305,7 +305,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check VITE_SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
         );
       }
 

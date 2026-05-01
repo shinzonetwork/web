@@ -7,7 +7,7 @@ import {
   APP_URL,
   SHINZOHUB_CHAIN_ID,
   SHINZOHUB_BLOCK_EXPLORER_URL,
-  SHINZOHUB_EVM_RPC,
+  SHINZOHUB_EVM_RPC_REQUEST_URL,
 } from "@/shared/consts/envs";
 
 if (!WALLETCONNECT_ID) {
@@ -31,7 +31,7 @@ export const shinzoDevnet = defineChain({
     : {}),
   rpcUrls: {
     default: {
-      http: [SHINZOHUB_EVM_RPC],
+      http: [SHINZOHUB_EVM_RPC_REQUEST_URL],
     },
   },
 });
@@ -60,7 +60,7 @@ export const wagmiConfig = createConfig({
   ssr: true,
   transports: {
     [mainnet.id]: http(),
-    [shinzoDevnet.id]: http(),
+    [shinzoDevnet.id]: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
   },
 });
 

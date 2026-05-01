@@ -1,11 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "../../../packages/ui/src/theme.css";
-@source "../../../packages/ui/src";
+@import "../../../../packages/ui/src/theme.css";
+@source "../../../../packages/ui/src";
 
 @font-face {
   font-family: "Shinzo JP Serif";
-  src: url("../../../packages/ui/src/fonts/jp-serif.woff2") format("woff2");
+  src: url("../../../../packages/ui/src/fonts/jp-serif.woff2") format("woff2");
   font-display: swap;
 }
 
