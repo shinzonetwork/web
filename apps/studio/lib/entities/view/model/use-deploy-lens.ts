@@ -7,17 +7,16 @@ import {
   usePublicClient,
   useSendTransaction,
   useSwitchChain,
+  type UseSendTransactionReturnType,
+  type UseSwitchChainReturnType,
 } from "wagmi";
-import {
-  validateView,
-  type ValidationIssue,
-} from "@shinzo/lenses/validate";
+import { validateView, type ValidationIssue } from "@shinzo/lenses/validate";
 import type {
   LensArgs,
   LensDefinition,
   ResolvedLensView,
 } from "@/entities/lens";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
+import { shinzoDevnet, type wagmiConfig } from "@/shared/consts/wagmi";
 import {
   buildDeployTransaction,
   extractDeployedViewContractAddress,
@@ -63,14 +62,15 @@ const validateResolvedView = async <TArgs extends LensArgs>(
 };
 
 type PublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
+type StudioWagmiConfig = typeof wagmiConfig;
 
 interface SubmitDeployTxInput<TArgs extends LensArgs> {
   account: Address;
   resolvedView: ResolvedLensView<TArgs>;
   wasmBytesByStep: Uint8Array[];
   publicClient: PublicClient;
-  switchChainAsync: ReturnType<typeof useSwitchChain>["switchChainAsync"];
-  sendTransactionAsync: ReturnType<typeof useSendTransaction>["sendTransactionAsync"];
+  switchChainAsync: UseSwitchChainReturnType<StudioWagmiConfig>["switchChainAsync"];
+  sendTransactionAsync: UseSendTransactionReturnType<StudioWagmiConfig>["sendTransactionAsync"];
 }
 
 const submitDeployTransaction = async <TArgs extends LensArgs>(
@@ -105,7 +105,9 @@ const submitDeployTransaction = async <TArgs extends LensArgs>(
     gasPrice: gasPrice > BigInt(0) ? gasPrice : undefined,
   });
 
-  const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: txHash,
+  });
   if (receipt.status !== "success") {
     throw new Error("Deployment transaction reverted on-chain.");
   }
@@ -161,9 +163,7 @@ export interface UseDeployLensResult {
     lens: LensDefinition<TArgs>,
     args: TArgs
   ) => Promise<DeployResult>;
-  deployResolvedViews: (
-    views: ResolvedLensView[]
-  ) => Promise<DeployPackResult>;
+  deployResolvedViews: (views: ResolvedLensView[]) => Promise<DeployPackResult>;
   status: DeployStatus;
   error: string;
   activeViewTitle: string;
@@ -213,9 +213,8 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
 
       setStatus("validating");
-      const { wasmBytesByStep, warnings } = await validateResolvedView(
-        resolvedView
-      );
+      const { wasmBytesByStep, warnings } =
+        await validateResolvedView(resolvedView);
 
       if (!account) {
         throw new Error("Wallet is not connected.");

@@ -5,6 +5,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import highlightUrl from "./tab-highlight.png";
 import { cn } from "../cn";
+import { getImageUrl } from "../image-url";
 
 function Tabs({
   className,
@@ -41,7 +42,7 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       style={
         {
-          "--tab-highlight": `url(${highlightUrl.src})`,
+          "--tab-highlight": `url(${getImageUrl(highlightUrl)})`,
         } as React.CSSProperties
       }
       className={cn(
@@ -53,7 +54,7 @@ function TabsTrigger({
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         "before:bg-(image:--tab-highlight) before:pointer-events-none before:absolute before:-left-[1px] before:-top-[10px] before:h-[10px] before:w-full before:bg-cover before:bg-no-repeat before:opacity-0 before:transition-opacity before:content-['']",
         "data-[state=active]:border-ui-accent data-[state=active]:before:opacity-100",
-        className
+        className,
       )}
       {...props}
     />

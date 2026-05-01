@@ -25,8 +25,8 @@ declare module "*.svg?url" {
 }
 
 declare module "*.png" {
-  const image: { src: string; height: number; width: number };
-  export default image;
+  const url: string;
+  export default url;
 }
 
 declare module "*.png?url" {
