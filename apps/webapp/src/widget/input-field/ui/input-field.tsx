@@ -3,11 +3,7 @@
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Textarea } from "@/shared/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/shared/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { InfoIcon } from "lucide-react";
 import { ChangeEvent, ReactNode } from "react";
 
@@ -75,7 +71,11 @@ export function InputField({
                   <InfoIcon className="size-4" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="top" sideOffset={6} className="max-w-xs font-normal">
+              <TooltipContent
+                side="top"
+                sideOffset={6}
+                className="max-w-xs font-normal"
+              >
                 {description}
               </TooltipContent>
             </Tooltip>
@@ -111,7 +111,9 @@ export function InputField({
           disabled={disabled}
         >
           {selectOptions.map((option: { value: string; label: string }) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
           ))}
         </select>
       ) : (

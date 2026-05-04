@@ -29,12 +29,8 @@ export function RegistrationFormV2() {
     entity: registrationEntity,
   });
 
-  const {
-    sendRegisterTransaction,
-    isPending,
-    isConfirming,
-    isConfirmed,
-  } = useRegistrationTransaction(formData);
+  const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
+    useRegistrationTransaction(formData);
 
   const handleRegister = async () => {
     const validatedFields =

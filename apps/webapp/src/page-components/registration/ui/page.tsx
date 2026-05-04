@@ -19,7 +19,13 @@ export default function Register() {
     <>
       <Header />
       <div className="mx-12 my-12 flex flex-col gap-4">
-        <FormHeader content={UI_TEXT_CONTENT[pathname.split("/").pop() as keyof typeof UI_TEXT_CONTENT]} />
+        <FormHeader
+          content={
+            UI_TEXT_CONTENT[
+              pathname.split("/").pop() as keyof typeof UI_TEXT_CONTENT
+            ]
+          }
+        />
         {isConnected && isSignedWithWallet && <Registration />}
         {!isConnected && <Connect />}
       </div>

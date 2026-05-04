@@ -10,7 +10,7 @@ export type PrefillDataV1 = {
   defraPublicKeySignedMessage: Hex | undefined;
   peerId: Hex | undefined;
   peerSignedMessage: Hex | undefined;
-}
+};
 
 export type PrefillDataV2 = {
   role: EntityRole;
@@ -18,9 +18,9 @@ export type PrefillDataV2 = {
   defraPublicKey: Hex;
   defraPublicKeySignedMessage: Hex;
   connectionString?: string;
-  sourceChain?: string ;
+  sourceChain?: string;
   sourceChainId?: number;
-}
+};
 
 export type PrefillData = PrefillDataV1 | PrefillDataV2;
 
@@ -98,8 +98,6 @@ export function usePrefillData(): PrefillData {
       searchParams.get("defraPublicKeySignedMessage")
     ),
     peerId: toHexOrUndefined(searchParams.get("peerId")),
-    peerSignedMessage: toHexOrUndefined(
-      searchParams.get("peerSignedMessage")
-    ),
+    peerSignedMessage: toHexOrUndefined(searchParams.get("peerSignedMessage")),
   } as PrefillDataV1;
 }

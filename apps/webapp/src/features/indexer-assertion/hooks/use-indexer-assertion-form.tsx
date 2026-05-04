@@ -1,92 +1,109 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    DELEGATE_DIGEST_MAX_LENGTH,
-    IndexerAssertionFormData,
-    SOURCE_CHAIN,
-    SOURCE_CHAIN_ID_MAP,
+  DELEGATE_DIGEST_MAX_LENGTH,
+  IndexerAssertionFormData,
+  SOURCE_CHAIN,
+  SOURCE_CHAIN_ID_MAP,
 } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
 import { useAccount, useSignMessage } from "wagmi";
 
-function createInitialValues(delegateAddress: string = ""): IndexerAssertionFormData {
-    return {
-      consensusPubKey: "",
-      delegateAddress,
-      sourceChain: "ethereum" as SOURCE_CHAIN,
-      sourceChainId: SOURCE_CHAIN_ID_MAP.ethereum,
-      assertionId: `assert-${Date.now()}`,
-      delegateDigest: "",
-      delegateSignature: "",
-    };
-  }
+function createInitialValues(
+  delegateAddress: string = ""
+): IndexerAssertionFormData {
+  return {
+    consensusPubKey: "",
+    delegateAddress,
+    sourceChain: "ethereum" as SOURCE_CHAIN,
+    sourceChainId: SOURCE_CHAIN_ID_MAP.ethereum,
+    assertionId: `assert-${Date.now()}`,
+    delegateDigest: "",
+    delegateSignature: "",
+  };
+}
 
 export function useIndexerAssertionForm() {
-    const { address } = useAccount();
-    const { signMessageAsync, isPending: isSigning } = useSignMessage();
-    const [assertionFormData, setAssertionFormData] = useState<IndexerAssertionFormData>(
-        createInitialValues(address ?? "")
+  const { address } = useAccount();
+  const { signMessageAsync, isPending: isSigning } = useSignMessage();
+  const [assertionFormData, setAssertionFormData] =
+    useState<IndexerAssertionFormData>(createInitialValues(address ?? ""));
+  const [fieldErrors, setFieldErrors] = useState<
+    Record<string, string | undefined>
+  >({});
+
+  useEffect(() => {
+    setAssertionFormData((prev) => ({
+      ...prev,
+      delegateAddress: address ?? "",
+    }));
+  }, [address]);
+
+  const isValid = useMemo(() => {
+    return (
+      assertionFormData.consensusPubKey.trim().length > 0 &&
+      assertionFormData.delegateAddress.trim().length > 0 &&
+      assertionFormData.assertionId.trim().length > 0 &&
+      assertionFormData.delegateDigest.trim().length ===
+        DELEGATE_DIGEST_MAX_LENGTH &&
+      assertionFormData.delegateSignature.trim().length > 0
     );
-    const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
+  }, [assertionFormData]);
 
-    useEffect(() => {
-        setAssertionFormData((prev) => ({
-            ...prev,
-            delegateAddress: address ?? "",
-        }));
-    }, [address]);
+  const handleInputChange = useCallback((field: string, value: string) => {
+    let sanitizedValue = sanitizeString(value);
+    if (field === "delegateDigest") {
+      sanitizedValue = sanitizedValue.slice(0, DELEGATE_DIGEST_MAX_LENGTH);
+    }
+    // Clear previous error for this field when user starts typing
+    setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
 
-    const isValid = useMemo(() => {
-        return (
-            assertionFormData.consensusPubKey.trim().length > 0 &&
-            assertionFormData.delegateAddress.trim().length > 0 &&
-            assertionFormData.assertionId.trim().length > 0 &&
-            assertionFormData.delegateDigest.trim().length === DELEGATE_DIGEST_MAX_LENGTH &&
-            assertionFormData.delegateSignature.trim().length > 0
-        );
-    }, [assertionFormData]);
+    setAssertionFormData((prev) => {
+      const updatedData = { ...prev, [field]: sanitizedValue };
 
-    const handleInputChange = useCallback((field: string, value: string) => {
-        let sanitizedValue = sanitizeString(value);
-        if (field === "delegateDigest") {
-            sanitizedValue = sanitizedValue.slice(0, DELEGATE_DIGEST_MAX_LENGTH);
-        }
-        // Clear previous error for this field when user starts typing
-        setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+      if (field === "sourceChain" && value in SOURCE_CHAIN_ID_MAP) {
+        updatedData.sourceChainId = SOURCE_CHAIN_ID_MAP[value as SOURCE_CHAIN];
+      }
 
-        setAssertionFormData((prev) => {
-            const updatedData = { ...prev, [field]: sanitizedValue };
+      return updatedData;
+    });
+  }, []);
 
-            if (field === "sourceChain" && value in SOURCE_CHAIN_ID_MAP) {
-                updatedData.sourceChainId = SOURCE_CHAIN_ID_MAP[value as SOURCE_CHAIN];
-            }
+  const handleSignDigest = useCallback(async () => {
+    const digest = assertionFormData.delegateDigest?.trim();
 
-            return updatedData;
-        });
-    }, []);
+    if (!digest) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        delegateDigest: "Enter delegate digest before signing.",
+      }));
+      return;
+    }
 
-    const handleSignDigest = useCallback(async () => {
-        const digest = assertionFormData.delegateDigest?.trim();
+    try {
+      const signature = await signMessageAsync({ message: digest });
+      setAssertionFormData((prev) => ({
+        ...prev,
+        delegateSignature: signature,
+      }));
+      setFieldErrors((prev) => ({
+        ...prev,
+        delegateDigest: undefined,
+        delegateSignature: undefined,
+      }));
+    } catch {
+      setFieldErrors((prev) => ({
+        ...prev,
+        delegateSignature: "Failed to sign digest. Please try again.",
+      }));
+    }
+  }, [assertionFormData.delegateDigest, signMessageAsync]);
 
-        if (!digest) {
-            setFieldErrors((prev) => ({ ...prev, delegateDigest: "Enter delegate digest before signing." }));
-            return;
-        }
-
-        try {
-            const signature = await signMessageAsync({ message: digest });
-            setAssertionFormData((prev) => ({ ...prev, delegateSignature: signature }));
-            setFieldErrors((prev) => ({ ...prev, delegateDigest: undefined, delegateSignature: undefined }));
-        } catch {
-            setFieldErrors((prev) => ({ ...prev, delegateSignature: "Failed to sign digest. Please try again." }));
-        }
-    }, [assertionFormData.delegateDigest, signMessageAsync]);
-
-    return {
-        assertionFormData,
-        handleInputChange,
-        handleSignDigest,
-        fieldErrors,
-        isValid,
-        isSigning,
-    };
+  return {
+    assertionFormData,
+    handleInputChange,
+    handleSignDigest,
+    fieldErrors,
+    isValid,
+    isSigning,
+  };
 }

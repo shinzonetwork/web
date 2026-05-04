@@ -114,8 +114,12 @@ export function validateSharedFieldsV2(
     defraSignedMessage: undefined,
   };
 
-  if (!(formData.defraPublicKey.trim().length > 2) || !validateHex(formData.message.trim())) {
-    errors.message = "Signed message is required and must be a valid hex string. ";
+  if (
+    !(formData.defraPublicKey.trim().length > 2) ||
+    !validateHex(formData.message.trim())
+  ) {
+    errors.message =
+      "Signed message is required and must be a valid hex string. ";
   }
   if (
     !(formData.defraPublicKey.trim().length > 2) ||
@@ -178,14 +182,13 @@ export function validateIndexerFields(
 export function validateHostFields(
   formData: HostRegistrationFormData
 ): RequiredFieldsValidationResult {
-  const errors: Record<keyof HostRegistrationFormData, string | undefined> =
-    {
-      entity: undefined,
-      message: undefined,
-      defraPublicKey: undefined,
-      defraSignedMessage: undefined,
-      connectionString: undefined,
-    };
+  const errors: Record<keyof HostRegistrationFormData, string | undefined> = {
+    entity: undefined,
+    message: undefined,
+    defraPublicKey: undefined,
+    defraSignedMessage: undefined,
+    connectionString: undefined,
+  };
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
     errors.connectionString = "Connection string is required";

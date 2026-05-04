@@ -3,7 +3,10 @@ import { EntityRole, sanitizeString } from "@/shared/lib";
 import { RegistrationFormDataByEntity } from "@/shared/types";
 import { PrefillDataV2, usePrefillData } from "./use-prefill-data";
 
-const getInitialFormData = (entity: EntityRole, prefillData: PrefillDataV2 | undefined = undefined) =>
+const getInitialFormData = (
+  entity: EntityRole,
+  prefillData: PrefillDataV2 | undefined = undefined
+) =>
   entity === EntityRole.Indexer
     ? {
         entity: EntityRole.Indexer,
@@ -29,7 +32,9 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
     RegistrationFormDataByEntity<typeof entity>
   >(
     () =>
-      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<typeof entity>
+      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<
+        typeof entity
+      >
   );
 
   const handleInputChange = useCallback((field: string, value: string) => {
