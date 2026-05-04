@@ -67,7 +67,7 @@ export function RegistrationForm() {
       />
       <Button
         onClick={handleRegister}
-        className="w-fit rounded-full"
+        className="w-fit rounded-none"
         disabled={isRegistrationDisabled || isPending || isConfirming}
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}

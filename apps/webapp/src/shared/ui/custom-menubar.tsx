@@ -56,7 +56,7 @@ function MenubarTrigger({
     <MenubarPrimitive.Trigger
       data-slot="menubar-trigger"
       className={cn(
-        "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:bg-muted-foreground/20 focus:text-muted-foreground/70 data-[state=open]:bg-muted-foreground/20 data-[state=open]:text-muted-foreground/70",
+        "flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none focus:underline focus:decoration-primary focus:decoration-2 focus:underline-offset-4 data-[state=open]:underline data-[state=open]:decoration-primary data-[state=open]:decoration-2 data-[state=open]:underline-offset-4",
         className
       )}
       {...props}
@@ -103,7 +103,7 @@ function MenubarItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:bg-muted-foreground/20 focus:text-muted-foreground/70 data-highlighted:bg-muted-foreground/20 data-highlighted:text-muted-foreground/70 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:data-highlighted:bg-destructive/10 data-[variant=destructive]:data-highlighted:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!",
+        "relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none focus:underline focus:decoration-primary focus:decoration-2 focus:underline-offset-4 data-highlighted:underline data-highlighted:decoration-primary data-highlighted:decoration-2 data-highlighted:underline-offset-4 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:underline data-[variant=destructive]:focus:decoration-destructive data-[variant=destructive]:focus:decoration-2 data-[variant=destructive]:focus:underline-offset-4 data-[variant=destructive]:data-highlighted:underline data-[variant=destructive]:data-highlighted:decoration-destructive data-[variant=destructive]:data-highlighted:decoration-2 data-[variant=destructive]:data-highlighted:underline-offset-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground data-[variant=destructive]:*:[svg]:text-destructive!",
         className
       )}
       {...props}
@@ -121,7 +121,7 @@ function MenubarCheckboxItem({
     <MenubarPrimitive.CheckboxItem
       data-slot="menubar-checkbox-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-muted-foreground/20 focus:text-muted-foreground/70 data-highlighted:bg-muted-foreground/20 data-highlighted:text-muted-foreground/70 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:underline focus:decoration-primary focus:decoration-2 focus:underline-offset-4 data-highlighted:underline data-highlighted:decoration-primary data-highlighted:decoration-2 data-highlighted:underline-offset-4 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       checked={checked}
@@ -146,7 +146,7 @@ function MenubarRadioItem({
     <MenubarPrimitive.RadioItem
       data-slot="menubar-radio-item"
       className={cn(
-        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:bg-muted-foreground/20 focus:text-muted-foreground/70 data-highlighted:bg-muted-foreground/20 data-highlighted:text-muted-foreground/70 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative flex cursor-default items-center gap-2 rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none focus:underline focus:decoration-primary focus:decoration-2 focus:underline-offset-4 data-highlighted:underline data-highlighted:decoration-primary data-highlighted:decoration-2 data-highlighted:underline-offset-4 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -229,7 +229,7 @@ function MenubarSubTrigger({
       data-slot="menubar-sub-trigger"
       data-inset={inset}
       className={cn(
-        "flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:bg-muted-foreground/20 focus:text-muted-foreground/70 data-highlighted:bg-muted-foreground/20 data-highlighted:text-muted-foreground/70 data-[inset]:pl-8 data-[state=open]:bg-muted-foreground/20 data-[state=open]:text-muted-foreground/70",
+        "flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none focus:underline focus:decoration-primary focus:decoration-2 focus:underline-offset-4 data-highlighted:underline data-highlighted:decoration-primary data-highlighted:decoration-2 data-highlighted:underline-offset-4 data-[inset]:pl-8 data-[state=open]:underline data-[state=open]:decoration-primary data-[state=open]:decoration-2 data-[state=open]:underline-offset-4",
         className
       )}
       {...props}

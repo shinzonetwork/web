@@ -52,6 +52,7 @@ export function IndexerAssertionDataForm({
                 type="button"
                 variant="default"
                 size="sm"
+                className="rounded-none"
                 onClick={onSignDigest}
                 disabled={
                   formData.delegateDigest?.trim().length !==

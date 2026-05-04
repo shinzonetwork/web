@@ -22,14 +22,16 @@ export function Header() {
   return (
     <header className="flex flex-row justify-between items-center mx-4 my-4 border-b border-border pb-6">
       <div className="flex flex-row items-center gap-8">
-        <Image
-          src="/images/shinzo-logo.svg"
-          alt="Shinzo"
-          width={123}
-          height={123}
-          priority
-          unoptimized
-        />
+        <Link href="/">
+          <Image
+            src="/images/shinzo-logo.svg"
+            alt="Shinzo"
+            width={123}
+            height={123}
+            priority
+            unoptimized
+          />
+        </Link>
         <div className="flex flex-row items-center">
           {isRegistrationV2() ? (
             <HeaderMenu />
@@ -46,7 +48,7 @@ export function Header() {
               <Link href="/validators">
                 <Button
                   variant="link"
-                  className=" text-md text-muted-foreground "
+                  className=" text-md text-muted-foreground"
                 >
                   Validators
                 </Button>
@@ -58,7 +60,7 @@ export function Header() {
       <div className="flex flex-row justify-end">
         {isConnected && isSignedWithWallet && isIndexerWhitelisted && (
           <Link href="/join-devnet">
-            <Button className=" bg-primary text-primary-foreground ">
+            <Button className=" bg-primary text-primary-foreground rounded-none">
               Join Devnet
             </Button>
           </Link>

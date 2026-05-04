@@ -75,7 +75,7 @@ export function IndexerAssertionForm() {
       />
       <Button
         onClick={handleSubmit}
-        className="w-fit rounded-full"
+        className="w-fit rounded-none"
         disabled={!isValid || isSubmitting}
       >
         {isSubmitting ? "Submitting..." : "Submit Assertion"}

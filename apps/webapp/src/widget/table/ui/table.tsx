@@ -165,7 +165,7 @@ export function Table({ entries }: TableProps) {
                 <Button
                   type="button"
                   onClick={() => void copy(`\n${selectedPeers.join("\n")}`)}
-                  className="px-4 py-2 rounded-md bg-primary text-primary-foreground"
+                  className="px-4 py-2 rounded-none bg-primary text-primary-foreground"
                 >
                   {copied ? "Copied" : "Copy Selected"}
                 </Button>
