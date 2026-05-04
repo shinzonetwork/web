@@ -8,15 +8,13 @@ import { useRegistrationForm } from "../hooks/use-registration-form-v2";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction-v2";
 import {
   getRegistrationButtonText,
-  TOAST_CONFIG,
   validateEntity,
   EntityRole,
   validateIndexerFields,
-  validateSharedFieldsV2,
   validateIndexerRegistrationForm,
   validateHostRegistrationForm,
+  validateHostFields,
 } from "@/shared/lib";
-import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
 import type {
   HostRegistrationFormData,
@@ -52,15 +50,11 @@ export function RegistrationFormV2() {
     const validatedFields =
       formData.entity === EntityRole.Indexer
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
-        : validateSharedFieldsV2(formData as HostRegistrationFormData);
+        : validateHostFields(formData as HostRegistrationFormData);
 
     setFieldErrors(validatedFields.errors);
 
     if (!validatedFields.isValid) {
-      toast.error(
-        Object.values(validatedFields.errors).filter(Boolean).join("\n"),
-        TOAST_CONFIG
-      );
       return;
     }
 

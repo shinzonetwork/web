@@ -9,6 +9,20 @@ import {
 
 //Shinzohub V2 Registration
 
+/**
+ * libp2p multiaddr for IPv4 + TCP + peer id, e.g.
+ *
+ * - IPv4: dotted quads (no leading zeros enforced per octet beyond 0–255 range)
+ * - TCP port: 1–65535
+ * - `/p2p/`: base58btc alphabet (no `0`, `O`, `I`, `l`), typical ed25519 peer ids are ~52 chars
+ */
+export const INDEXER_CONNECTION_STRING_PATTERN =
+  /^\/ip4\/(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\/tcp\/(?:[1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])\/p2p\/[1-9A-HJ-NP-Za-km-z]{46,128}$/;
+
+export function isValidIndexerConnectionString(value: string): boolean {
+  return INDEXER_CONNECTION_STRING_PATTERN.test(value.trim());
+}
+
 // check if the registration is in v2 mode
 export const isRegistrationV2 = () => {
   return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
@@ -21,9 +35,9 @@ export function validateRegistrationFormV2(
   formData: RegistrationFormDataV2
 ): boolean {
   const validations = [
-    Boolean(formData.message?.trim()),
-    Boolean(formData.defraPublicKey?.trim()),
-    Boolean(formData.defraSignedMessage?.trim()),
+    Boolean(formData.message?.trim().length > 2),
+    Boolean(formData.defraPublicKey?.trim().length > 2),
+    Boolean(formData.defraSignedMessage?.trim().length > 2),
   ];
   return validations.every(Boolean);
 }
@@ -34,7 +48,7 @@ export function validateIndexerRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Indexer,
     validateRegistrationFormV2(formData),
-    Boolean(formData.connectionString?.trim()),
+    isValidIndexerConnectionString(formData.connectionString ?? ""),
     Boolean(formData.sourceChain?.trim()),
     Boolean(formData.sourceChainId),
   ];
@@ -81,22 +95,22 @@ export function validateSharedFieldsV2(
     defraSignedMessage: undefined,
   };
 
-  if (!formData.message?.trim() || !validateHex(formData.message.trim())) {
-    errors.message = "Signed message is required and must bea valid hex string";
+  if (!(formData.defraPublicKey.trim().length > 2) || !validateHex(formData.message.trim())) {
+    errors.message = "Signed message is required and must be a valid hex string. ";
   }
   if (
     !(formData.defraPublicKey.trim().length > 2) ||
     !validateHex(formData.defraPublicKey.trim())
   ) {
     errors.defraPublicKey =
-      "Public key is required and must be a valid hex string";
+      "Public key is required and must be a valid hex string. ";
   }
   if (
     !(formData.defraSignedMessage.trim().length > 2) ||
     !validateHex(formData.defraSignedMessage.trim())
   ) {
     errors.defraSignedMessage =
-      "Signed public key message is required and must be a valid hex string";
+      "Signed public key message is required and must be a valid hex string. ";
   }
 
   return {
@@ -118,8 +132,12 @@ export function validateIndexerFields(
       sourceChain: undefined,
       sourceChainId: undefined,
     };
-  if (!formData.connectionString?.trim()) {
+  const connection = formData.connectionString?.trim() ?? "";
+  if (!connection) {
     errors.connectionString = "Connection string is required";
+  } else if (!isValidIndexerConnectionString(connection)) {
+    errors.connectionString =
+      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
   }
   if (!formData.sourceChain?.trim()) {
     errors.sourceChain = "Source chain is required";
@@ -134,6 +152,35 @@ export function validateIndexerFields(
 
   return {
     isValid: sharedfieldsValidation.isValid && indexerFieldsValidation,
+    errors: { ...sharedfieldsValidation.errors, ...errors },
+  };
+}
+
+export function validateHostFields(
+  formData: HostRegistrationFormData
+): RequiredFieldsValidationResult {
+  const errors: Record<keyof HostRegistrationFormData, string | undefined> =
+    {
+      entity: undefined,
+      message: undefined,
+      defraPublicKey: undefined,
+      defraSignedMessage: undefined,
+      connectionString: undefined,
+    };
+  const connection = formData.connectionString?.trim() ?? "";
+  if (!connection) {
+    errors.connectionString = "Connection string is required";
+  } else if (!isValidIndexerConnectionString(connection)) {
+    errors.connectionString =
+      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+  }
+  const sharedfieldsValidation = validateSharedFieldsV2(formData);
+  const hostFieldsValidation = Object.values(errors).every(
+    (error) => error === undefined
+  );
+
+  return {
+    isValid: sharedfieldsValidation.isValid && hostFieldsValidation,
     errors: { ...sharedfieldsValidation.errors, ...errors },
   };
 }
@@ -188,7 +235,7 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
     id: "connectionString",
     label: "Connection string",
     isTextarea: false,
-    required: false,
+    required: true,
   },
 ] as const;
 
