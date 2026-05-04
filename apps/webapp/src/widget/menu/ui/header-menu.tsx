@@ -17,7 +17,7 @@ export function HeaderMenu() {
                   </MenubarSubTrigger>
                   <MenubarSubContent>
                     <MenubarItem asChild className="text-lg text-muted-foreground">
-                      <Link href="/registration">Registration</Link>
+                      <Link href="/host-registration">Registration</Link>
                     </MenubarItem>
                 </MenubarSubContent>
                </MenubarSub>
@@ -28,10 +28,10 @@ export function HeaderMenu() {
                   </MenubarSubTrigger>
                   <MenubarSubContent>
                     <MenubarItem asChild className="text-lg text-muted-foreground">
-                      <Link href="/registration">Registration</Link>
+                      <Link href="/indexer-registration">Registration</Link>
                     </MenubarItem>
                     <MenubarItem asChild className="text-lg text-muted-foreground">
-                      <Link href="/assertion">Assertion</Link>
+                      <Link href="/indexer-assertion">Assertion</Link>
                     </MenubarItem>
                   </MenubarSubContent>
                 </MenubarSub>

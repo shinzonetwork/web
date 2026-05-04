@@ -28,7 +28,8 @@ interface RegistrationDataFormProps {
     | IndexerRegistrationFormData
     | HostRegistrationFormData;
   handleInputChange: (field: string, value: string) => void;
-  handleUserRoleChange: (value: string) => void;
+  /** V1 only: Host/Indexer radio. Omitted for V2 (entity comes from the registration route). */
+  handleUserRoleChange?: (value: string) => void;
   fieldErrors?: Record<string, string | undefined>;
   prefilledFields?: Record<string, boolean>;
 }
@@ -42,16 +43,18 @@ export function RegistrationDataForm({
 }: RegistrationDataFormProps) {
   return (
     <div className="space-y-6 w-full max-w-6xl">
-      <div className="space-y-4">
-        <Label htmlFor="userRole" className="text-sm font-medium">
-          Select a role <span className="text-xs text-red-500">*</span>
-        </Label>
-        <RegistrationRadioButton
-          selectedEntityValue={formData.entity.toString()}
-          prefilledEntityValue={prefilledFields.entity}
-          onChange={handleUserRoleChange}
-        />
-      </div>
+      {!isRegistrationV2() && handleUserRoleChange ? (
+        <div className="space-y-4">
+          <Label htmlFor="userRole" className="text-sm font-medium">
+            Select a role <span className="text-xs text-red-500">*</span>
+          </Label>
+          <RegistrationRadioButton
+            selectedEntityValue={formData.entity.toString()}
+            prefilledEntityValue={prefilledFields.entity}
+            onChange={handleUserRoleChange}
+          />
+        </div>
+      ) : null}
 
       {isRegistrationV2()
         ? formData.entity === EntityRole.Indexer

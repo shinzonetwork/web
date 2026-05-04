@@ -1,49 +1,40 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/shared/ui/button";
+import { useRegistrationContext } from "@/entities/registration-process";
 
 import { RegistrationDataForm } from "./registration-data-form";
 import { useRegistrationFormV2 } from "../hooks/use-registration-form-v2";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction-v2";
 import {
   getRegistrationButtonText,
-  validateEntity,
   EntityRole,
   validateIndexerFields,
   validateIndexerRegistrationForm,
   validateHostRegistrationForm,
   validateHostFields,
 } from "@/shared/lib";
-import { useAccount } from "wagmi";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
 
 export function RegistrationFormV2() {
+  const { registrationEntity } = useRegistrationContext();
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
-  const { formData, handleInputChange, handleUserRoleChange } =
-    useRegistrationFormV2({ entity: EntityRole.Host });
+  const { formData, handleInputChange } = useRegistrationFormV2({
+    entity: registrationEntity,
+  });
 
   const {
     sendRegisterTransaction,
     isPending,
     isConfirming,
     isConfirmed,
-    resetTransactionState,
   } = useRegistrationTransaction(formData);
-
-  const handleEntityChange = useCallback(
-    (value: string) => {
-      handleUserRoleChange(value);
-      setFieldErrors({});
-      resetTransactionState();
-    },
-    [handleUserRoleChange, resetTransactionState]
-  );
 
   const handleRegister = async () => {
     const validatedFields =
@@ -83,7 +74,6 @@ export function RegistrationFormV2() {
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}
-        handleUserRoleChange={handleEntityChange}
         fieldErrors={fieldErrors}
         prefilledFields={{}}
       />

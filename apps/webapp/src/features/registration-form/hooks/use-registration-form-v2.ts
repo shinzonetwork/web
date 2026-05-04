@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
 import { RegistrationFormDataByEntity } from "@/shared/types";
 import { PrefillDataV2, usePrefillData } from "./use-prefill-data";
@@ -33,30 +33,26 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
   );
 
   const handleInputChange = useCallback((field: string, value: string) => {
+    if (field === "entity") {
+      return;
+    }
     const sanitizedValue = sanitizeString(value);
     // Update form data without validation (validation happens on button click)
     setFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
   }, []);
 
-  const handleUserRoleChange = useCallback((value: string) => {
-    const parsed = parseInt(value, 10);
-    if (
-      isNaN(parsed) ||
-      (parsed !== EntityRole.Indexer && parsed !== EntityRole.Host)
-    ) {
-      return;
-    }
-    const newEntity = parsed as EntityRole;
+  useEffect(() => {
     setFormData(
-      getInitialFormData(newEntity) as RegistrationFormDataByEntity<
+      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<
         typeof entity
       >
     );
-  }, []);
+    // Only re-initialize when route-driven entity changes; prefillData is read from latest closure.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- avoid resetting the form every render when prefill is a new object reference
+  }, [entity]);
 
   return {
     formData,
     handleInputChange,
-    handleUserRoleChange,
   };
 }

@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { Header } from "@/widget";
 
-export default function Home() {
-  return redirect("/registration");
-}
+export default function HomePage() {
+  return <Header />;
+};

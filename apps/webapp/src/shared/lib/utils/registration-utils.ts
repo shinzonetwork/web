@@ -29,6 +29,25 @@ export const isRegistrationV2 = () => {
 };
 
 /**
+ * Host vs Indexer for V2 registration is determined only by the URL route
+ * (e.g. `/host-registration`, `/indexer-registration`). Users switch flows via nav links, not in-form toggles.
+ */
+export function getRegistrationEntityFromPathname(
+  pathname: string | null
+): EntityRole {
+  if (!pathname) {
+    return EntityRole.Host;
+  }
+  if (pathname.includes("indexer-registration")) {
+    return EntityRole.Indexer;
+  }
+  if (pathname.includes("host-registration")) {
+    return EntityRole.Host;
+  }
+  return EntityRole.Host;
+}
+
+/**
  * Validate registration form data
  */
 export function validateRegistrationFormV2(
