@@ -2,7 +2,10 @@
 
 import { useRegistrationContext } from "@/entities/registration-process";
 import { Connect } from "@/page-components/connect";
-import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
+import {
+  isIndexerWhitelisted as isIndexerWhitelistedFunction,
+  isRegistrationV2,
+} from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
 import { HeaderMenu } from "@/widget/menu/ui/header-menu";
 import Image from "next/image";
@@ -28,7 +31,28 @@ export function Header() {
           unoptimized
         />
         <div className="flex flex-row items-center">
-          <HeaderMenu />
+          {isRegistrationV2() ? (
+            <HeaderMenu />
+          ) : (
+            <div className="flex flex-row items-center">
+              <Link href="/registration">
+                <Button
+                  variant="link"
+                  className=" text-md text-muted-foreground "
+                >
+                  Registration
+                </Button>
+              </Link>
+              <Link href="/validators">
+                <Button
+                  variant="link"
+                  className=" text-md text-muted-foreground "
+                >
+                  Validators
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-row justify-end">

@@ -24,4 +24,9 @@ export const UI_TEXT_CONTENT = {
     description:
       "Assert your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
   },
+  registration: {
+    title: "/ Register on the Shinzo Network",
+    description:
+      "Sign up your host or indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+  },
 } as const;
