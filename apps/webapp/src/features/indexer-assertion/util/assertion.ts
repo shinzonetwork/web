@@ -46,8 +46,7 @@ const MsgIndexerAssertion = {
     if (m.sourceChainId !== 0) w.uint32(40).uint64(m.sourceChainId);
     if (m.assertionId !== "") w.uint32(50).string(m.assertionId);
     if (m.delegateDigest.length !== 0) w.uint32(58).bytes(m.delegateDigest);
-    if (m.delegateSignature.length !== 0)
-      w.uint32(66).bytes(m.delegateSignature);
+    if (m.delegateSignature.length !== 0) w.uint32(66).bytes(m.delegateSignature);
     return w;
   },
   fromPartial(o: MsgIndexerAssertion): MsgIndexerAssertion {
