@@ -9,7 +9,7 @@ import {
 } from "@/features/registration-form";
 import { FormHeader } from "@/widget/form-header";
 import { Header } from "@/widget";
-import { isRegistrationV2, UI_TEXT_CONTENT } from "@/shared/lib";
+import { isRegistrationV2, UI_FORM_HEADER_CONTENT } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { Connect } from "@/page-components/connect";
 
@@ -24,8 +24,8 @@ export default function Register() {
       <div className="mx-12 my-12 flex flex-col gap-4">
         <FormHeader
           content={
-            UI_TEXT_CONTENT[
-              pathname.split("/").pop() as keyof typeof UI_TEXT_CONTENT
+            UI_FORM_HEADER_CONTENT[
+              pathname.split("/").pop() as keyof typeof UI_FORM_HEADER_CONTENT
             ]
           }
         />
