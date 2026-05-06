@@ -1,6 +1,7 @@
 import { Copy } from "lucide-react";
 import { RegistrationForm } from "./registration-form";
-import { shortenAddress, TOAST_CONFIG } from "@/shared/lib";
+import { RegistrationFormV2 } from "./registration-form-v2";
+import { isRegistrationV2, shortenAddress, TOAST_CONFIG } from "@/shared/lib";
 import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
 
@@ -36,7 +37,7 @@ export default function Registration() {
           </div>
         </button>
       </div>
-      <RegistrationForm />
+      {isRegistrationV2() ? <RegistrationFormV2 /> : <RegistrationForm />}
     </>
   );
 }
