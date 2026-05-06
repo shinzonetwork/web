@@ -1,3 +1,4 @@
+export * from "./address-copy";
 export * from "./banner";
 export * from "./connect-wallet";
 export * from "./copy-to-clipboard";
