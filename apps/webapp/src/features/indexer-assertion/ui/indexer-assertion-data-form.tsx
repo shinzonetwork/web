@@ -1,12 +1,8 @@
-"use client";
-
 import { InputField } from "@/widget/input-field";
 import {
-  DELEGATE_DIGEST_MAX_LENGTH,
   INDEXER_ASSERTION_FORM_INPUTS,
   IndexerAssertionFormData,
 } from "../util/form-data";
-import { Button } from "@/shared/ui/button";
 
 type IndexerAssertionDataFormProps = React.PropsWithChildren<{
   formData: IndexerAssertionFormData;
@@ -20,14 +16,8 @@ export function IndexerAssertionDataForm({
   formData,
   handleInputChange,
   fieldErrors,
-  onSignDigest,
-  isSigning,
 }: IndexerAssertionDataFormProps) {
-  const disabledFields = [
-    "sourceChainId",
-    "delegateAddress",
-    "delegateSignature",
-  ];
+  const disabledFields = ["sourceChainId", "delegateSignature"];
   return (
     <div className="space-y-6 w-full max-w-6xl">
       {INDEXER_ASSERTION_FORM_INPUTS.map((input) => (
@@ -36,7 +26,6 @@ export function IndexerAssertionDataForm({
           id={input.id}
           label={input.label}
           description={"description" in input ? input.description : undefined}
-          maxLength={"maxLength" in input ? input.maxLength : undefined}
           value={String(formData[input.id as keyof IndexerAssertionFormData])}
           onChange={(value) =>
             handleInputChange(input.id as keyof IndexerAssertionFormData, value)
@@ -46,23 +35,6 @@ export function IndexerAssertionDataForm({
           selectOptions={input.isSelect ? input.selectOptions : []}
           error={fieldErrors[input.id]}
           disabled={disabledFields.includes(input.id)}
-          action={
-            input.id === "delegateDigest" ? (
-              <Button
-                type="button"
-                variant="default"
-                size="sm"
-                className="rounded-none"
-                onClick={onSignDigest}
-                disabled={
-                  formData.delegateDigest?.trim().length !==
-                    DELEGATE_DIGEST_MAX_LENGTH || isSigning
-                }
-              >
-                {isSigning ? "Signing..." : "Sign"}
-              </Button>
-            ) : undefined
-          }
         />
       ))}
     </div>

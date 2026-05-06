@@ -18,10 +18,8 @@ type InputFieldProps = {
   required?: boolean;
   isSelect?: boolean;
   selectOptions?: { value: string; label: string }[];
-  action?: ReactNode;
   /** Shown in a tooltip when hovering the logo next to the label (also exposed to SR via aria-describedby). */
   description?: ReactNode;
-  maxLength?: number;
 };
 
 /**
@@ -38,9 +36,7 @@ export function InputField({
   error,
   disabled = false,
   required = true,
-  action,
   description,
-  maxLength,
 }: InputFieldProps) {
   const describedBy = [
     description ? `${id}-description` : undefined,
@@ -122,7 +118,6 @@ export function InputField({
             id={id}
             type="text"
             value={value ?? ""}
-            maxLength={maxLength}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               onChange(e.target.value)
             }
@@ -133,7 +128,6 @@ export function InputField({
             aria-invalid={error ? "true" : "false"}
             aria-describedby={describedBy || undefined}
           />
-          {action}
         </div>
       )}
       {error && (

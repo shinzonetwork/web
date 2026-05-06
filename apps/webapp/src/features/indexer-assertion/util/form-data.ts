@@ -3,9 +3,6 @@ export type IndexerAssertionFormData = {
   delegateAddress: string;
   sourceChain: string;
   sourceChainId: number;
-  assertionId: string;
-  delegateDigest: string;
-  delegateSignature: string;
 };
 
 /** Delegate digest is a fixed-length payload (32 characters). */
@@ -29,6 +26,8 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
     label: "Delegate Address",
     isTextarea: false,
     isSelect: false,
+    description:
+      "The delegate address should be the Shinzo address of the indexer, starting with the prefix 'shinzo'",
   },
   {
     id: "consensusPubKey",
@@ -49,25 +48,16 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
     isTextarea: false,
     isSelect: false,
   },
-  {
-    id: "assertionId",
-    label: "Assertion ID",
-    isTextarea: false,
-    isSelect: false,
-  },
-  {
-    id: "delegateDigest",
-    label: "Delegate Digest",
-    isTextarea: false,
-    isSelect: false,
-    maxLength: DELEGATE_DIGEST_MAX_LENGTH,
-    description:
-      "The delegate digest must consist of exactly 32 characters; values shorter or longer than this length are not permitted.",
-  },
-  {
-    id: "delegateSignature",
-    label: "Delegate Signature",
-    isTextarea: false,
-    isSelect: false,
-  },
 ] as const;
+
+/**
+ * Get button text based on transaction state
+ */
+export function getIndexerAssertionButtonText(
+  isSigning: boolean,
+  isSubmitting: boolean
+): string {
+  if (isSigning) return "Signing...";
+  if (isSubmitting) return "Processing submission...";
+  return "Sign & Submit";
+}
