@@ -16,6 +16,76 @@ import {
 
 const LENS_QUERY_STALE_TIME_MS = 5 * 60 * 1000;
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const parseJsonObject = (text: string): Record<string, unknown> | null => {
+  if (!text.trim()) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(text);
+    return isRecord(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
+const stringifyErrorValue = (value: unknown): string => {
+  if (typeof value === "string") {
+    return value;
+  }
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+  if (isRecord(value) && typeof value.message === "string") {
+    return value.message;
+  }
+
+  try {
+    return JSON.stringify(value) ?? "Unknown error";
+  } catch {
+    return "Unknown error";
+  }
+};
+
+const getResponseErrorMessages = (
+  payload: Record<string, unknown> | null
+): string[] => {
+  if (!payload) {
+    return [];
+  }
+
+  if (Array.isArray(payload.errors)) {
+    return payload.errors.map(stringifyErrorValue).filter(Boolean);
+  }
+
+  if (payload.error !== undefined) {
+    return [stringifyErrorValue(payload.error)].filter(Boolean);
+  }
+
+  if (payload.message !== undefined) {
+    return [stringifyErrorValue(payload.message)].filter(Boolean);
+  }
+
+  return [];
+};
+
+const createHostErrorMessage = (
+  response: Response,
+  responseText: string,
+  payload: Record<string, unknown> | null
+): string => {
+  const errorText =
+    getResponseErrorMessages(payload).join(", ") ||
+    responseText.trim() ||
+    response.statusText ||
+    "Unknown error";
+
+  return `Host returned ${response.status}: ${errorText}`;
+};
+
 export const graphqlFetch = async (
   query: string
 ): Promise<Record<string, unknown>> => {
@@ -24,10 +94,22 @@ export const graphqlFetch = async (
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query }),
   });
+  const responseText = await res.text();
+  const payload = parseJsonObject(responseText);
+
   if (!res.ok) {
-    throw new Error(`Host returned ${res.status}: ${res.statusText}`);
+    throw new Error(createHostErrorMessage(res, responseText, payload));
   }
-  return res.json();
+
+  if (!payload) {
+    throw new Error(
+      responseText.trim()
+        ? `Host returned a non-JSON response: ${responseText.trim()}`
+        : "Host returned an empty response."
+    );
+  }
+
+  return payload;
 };
 
 interface QueryLensViewOptions {
@@ -68,7 +150,12 @@ export const queryLensView = async <TArgs extends LensArgs>(
     ],
     staleTime: LENS_QUERY_STALE_TIME_MS,
     queryFn: async () => {
-      const query = view.buildHostQuery({ entityName, limit, offset, queryArgs });
+      const query = view.buildHostQuery({
+        entityName,
+        limit,
+        offset,
+        queryArgs,
+      });
       const result = (await graphqlFetch(query)) as {
         data?: Record<string, unknown>;
         errors?: Array<{ message: string }>;
@@ -105,7 +192,9 @@ export const callStoredLensView = async (
   const lens = getLensDefinition(view.lensKey);
 
   if (!lens?.uiSupported) {
-    throw new Error(`Lens "${view.lensKey}" is not supported in Studio right now.`);
+    throw new Error(
+      `Lens "${view.lensKey}" is not supported in Studio right now.`
+    );
   }
 
   const typedLens = lens as LensDefinition<LensArgs>;

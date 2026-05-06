@@ -13,10 +13,10 @@
     "VITE_WALLETCONNECT_ID": "",
     "VITE_APP_URL": "http://localhost:5173",
     "VITE_SHINZOHUB_BLOCK_EXPLORER_URL": "",
-    "VITE_SHINZOHUB_CHAIN_ID": "91273002"
+    "VITE_SHINZOHUB_CHAIN_ID": "91273002",
   },
   "assets": {
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/*"]
-  }
+    "run_worker_first": ["/api/*"],
+  },
 }
