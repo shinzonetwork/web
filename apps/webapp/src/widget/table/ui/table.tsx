@@ -14,7 +14,7 @@ type TableProps = {
 function peerConnectionString(entry: LiveIndexer): string | null {
   const peer = entry.peers;
   if (!peer?.id) return null;
-  return `- '/ip4/${entry.ip}/tcp/9171/${peer.id}'`;
+  return `- '/ip4/${entry.ip}/tcp/9171/p2p/${peer.id}'`;
 }
 
 export function Table({ entries }: TableProps) {

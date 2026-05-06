@@ -9,22 +9,27 @@ import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';
-import { useShortBlocks } from './use-short-blocks';
-import { useHighlight } from './use-highlight';
+import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+// import { useHomeBlocks } from "../hook/use-home-blocks";
+import { useHomeBlocks } from "../hook/use-home-blocks";
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')
 
 export const BlocksHome = () => {
-  const { data: blocks, isLoading } = useShortBlocks();
+  const { blocks, isLoading } = useHomeBlocks({ count: 5 });
   const chain = useChainPathSegment();
 
-  const dataIds = useMemo(() => blocks
-      ?.map((block) => block?.number)
-      ?.filter((num): num is number => num !== null && num !== undefined), [blocks]);
+  const dataIds = useMemo(
+    () =>
+      blocks
+        ?.map((block) => block?.number)
+        ?.filter((num): num is bigint => num !== null && num !== undefined),
+    [blocks],
+  );
 
   const { getHighlightClass } = useHighlight(dataIds, {
     duration: 1000,
@@ -100,9 +105,7 @@ export const BlocksHome = () => {
               </TableNullableCell>
               <TableNullableCell
                 value={
-                  block?.transactions?.[0]?.transactionIndex != null
-                    ? block.transactions[0].transactionIndex + 1
-                    : 0
+                  block?.transactionCount
                 }
                 align="center"
                 className={highlightClass}

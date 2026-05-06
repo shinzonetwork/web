@@ -16,6 +16,8 @@ import {
 import { useBlocks } from './use-blocks';
 import { CopyButton } from "@/shared/ui/button";
 import { useBlocksCount } from "./use-blocks-count";
+import { getPageLink } from "@/shared/utils/links";
+import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;
@@ -25,6 +27,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
   const { page, offset, limit } = pageParams;
   const { data: blocks, isLoading } = useBlocks({ limit, offset });
   const { data: blocksCount } = useBlocksCount();
+  const chain = useChainPathSegment();
 
   return (
     <PageLayout title='Blocks'>
@@ -58,7 +61,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
           <>
             <TableNullableCell value={block?.number}>
               {(value) => (
-                <Link href={`/blocks/${value}`} className='flex items-center gap-4'>
+                <Link href={`${getPageLink('block', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
                   <i className='flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm'>
                     <ShinzoFilledIcon className='size-4' />
                   </i>

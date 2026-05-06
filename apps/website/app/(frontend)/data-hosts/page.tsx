@@ -105,7 +105,7 @@ export default function Page() {
             <li>Participate early in shaping an open data read layer before it ossifies.</li>
           </ul>
           <p>This is an infrastructure utility with real demand behind it.</p>
-          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/docs/hosts/overview" target="_blank">Host Docs ↗</a></p>
+          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/hosts/overview" target="_blank">Host Docs ↗</a></p>
         </>
       },
       {

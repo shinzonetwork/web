@@ -8,21 +8,22 @@ import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
 import { cn } from '@/shared/utils/utils';
 import { HALF_CONTAINER_CLASS } from './blocks-home';
-import { useShortTransactions } from './use-short-transactions';
-import { useHighlight } from './use-highlight';
+import { useHomeTransactions } from '../hook/use-home-transactions';
+import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from '@/shared/ui/button';
-import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { getPageLink } from '@/shared/utils/links';
+import { useChainPathSegment } from '@/widgets/chain-path-segment/use-chain-path-segment';
 
 export const TransactionsHome = () => {
-  const { data: transactions, isLoading } = useShortTransactions();
+  const { data: transactions, isLoading } = useHomeTransactions({ count: 5 });
   const chain = useChainPathSegment();
-  
-  const dataIds = useMemo(() => transactions
-    ?.map((transaction) => transaction?.hash)
-    ?.filter(Boolean), [transactions]);
 
-  const { getHighlightClass } = useHighlight(dataIds as string[], {
+  const dataIds = useMemo(
+    () => transactions?.map((tx) => tx.hash).filter(Boolean),
+    [transactions],
+  );
+
+  const { getHighlightClass } = useHighlight(dataIds, {
     duration: 1000,
   });
 
@@ -57,7 +58,7 @@ export const TransactionsHome = () => {
             <>
               <TableNullableCell value={tx?.hash} className={highlightClass}>
                 {(value) => (
-                  <Link href={`${getPageLink('tx', { param: value, chain})}`} className="flex items-center gap-4">
+                  <Link href={`${getPageLink('tx', { param: value, chain })}`} className="flex items-center gap-4">
                     <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
                       <ShinzoTxnIcon className="size-4" />
                     </i>
@@ -69,23 +70,23 @@ export const TransactionsHome = () => {
               </TableNullableCell>
 
               <TableNullableCell value={tx?.from} align="center" className={highlightClass}>
-                {(value) => (
+                {(from) => (
                   <div className="flex flex-col gap-1">
-                    {value && (
+                    {from && (
                       <div className="flex flex-row gap-2">
                         <Typography>From: </Typography>
                         <div className="flex items-center gap-1 text-sm text-foreground">
-                          {formatHash(value ?? '', 8, 6)}
-                          <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                          {formatHash(from, 8, 6)}
+                          <CopyButton text={from} className="text-muted-foreground" />
                         </div>
-                     </div>
+                      </div>
                     )}
                     {tx?.to && (
                       <div className="flex flex-row gap-2">
                         <Typography>To: </Typography>
                         <div className="flex items-center gap-1 text-sm text-foreground">
-                          {formatHash(value ?? '', 8, 6)}
-                          <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                          {formatHash(tx.to, 8, 6)}
+                          <CopyButton text={tx.to} className="text-muted-foreground" />
                         </div>
                       </div>
                     )}
@@ -100,7 +101,7 @@ export const TransactionsHome = () => {
                 )}
               </TableNullableCell>
             </>
-          )
+          );
         }}
       />
 

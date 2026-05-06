@@ -1,12 +1,14 @@
 'use client';
 
+import type { ReactNode } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
 import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { AttestationsTooltip } from '@/pages/transaction-details/attestations-tooltip';
-import type { ReactNode } from 'react';
+import { getPageLink } from "@/shared/utils/links";
+import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
 
 export interface TransactionCardProps {
   txHash: string;
@@ -40,7 +42,8 @@ const TransactionStatus = ({ status, children }: { status: boolean | undefined, 
 
 export const TransactionCard = ({ txHash }: TransactionCardProps) => {
   const { data: tx, isLoading } = useTransaction({ hash: txHash });
-
+  const chain = useChainPathSegment();
+  
   if (!tx || !tx.hash) {
     return (
       <p className="text-center text-muted-foreground">Transaction not found.</p>
@@ -83,7 +86,7 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
       <DataItem
         title='Block'
         value={tx.blockNumber}
-        link={`/blocks/${tx.blockNumber}`}
+        link={`${getPageLink('block', { param: tx.blockNumber?.toString() ?? '', chain})}`}
         loading={isLoading}
       >
         {tx.blockNumber}

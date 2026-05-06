@@ -114,7 +114,6 @@ export const BlockCard = ({ height }: BlockCardProps) => {
             title="Parent Hash"
             value={block.parentHash}
             copyable
-            link={block.number ? `/blocks/${block.number - 1}` : undefined}
             truncate={false}
           >
             {block.parentHash}

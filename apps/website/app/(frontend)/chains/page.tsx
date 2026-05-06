@@ -107,7 +107,7 @@ const queryChainsByType = async (payload: BasePayload, supported: boolean) => {
     depth: 1,
     limit: 60,
     overrideAccess: true,
-    sort: "-upvotes",
+    sort: ["-upvotes", "name"],
     where: {
       isSupported: {
         equals: supported,
