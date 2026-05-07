@@ -21,7 +21,7 @@ import { useBlocks } from './use-blocks';
 import { CopyButton } from "@/shared/ui/button";
 import { useBlocksCount } from "./use-blocks-count";
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
 export interface BlocksPageClientProps {
   pageParams: PageParams;
@@ -92,10 +92,12 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
             <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
-                <div className="flex items-center gap-1 text-sm text-foreground">
-                  {formatHash(value ?? '', 8, 6)}
-                  <CopyButton text={value ?? ''} className="text-muted-foreground" />
-                </div>
+                <Link href={`${getPageLink('address', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
+                  <Typography color='accent' className='underline'>
+                    {formatHash(value ?? '', 8, 6)}
+                  </Typography>
+                  <CopyButton text={value ?? ''} className="text-muted-foreground" />  
+                </Link>
               )}
             </TableNullableCell>
 
