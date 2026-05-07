@@ -1,3 +1,5 @@
+import { getRequiredEnv } from './env';
+
 const RECAPTCHA_VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
 
 interface RecaptchaVerifyResponse {
@@ -5,7 +7,6 @@ interface RecaptchaVerifyResponse {
 }
 
 export const verifyCaptcha = async (
-  secretKey: string,
   token: string,
 ): Promise<boolean> => {
   if (!token.trim()) return false;
@@ -14,7 +15,7 @@ export const verifyCaptcha = async (
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      secret: secretKey,
+      secret: getRequiredEnv('RECAPTCHA_SECRET_KEY'),
       response: token,
     }),
   });

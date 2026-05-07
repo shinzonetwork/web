@@ -1,5 +1,4 @@
 import { keccak256, Secp256k1 } from '@cosmjs/crypto';
-import { fromHex, toBech32 } from '@cosmjs/encoding';
 import { makeAuthInfoBytes, makeSignBytes, makeSignDoc } from '@cosmjs/proto-signing';
 import { BaseAccount } from 'cosmjs-types/cosmos/auth/v1beta1/auth';
 import {
@@ -10,15 +9,17 @@ import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx';
 import { PubKey } from 'cosmjs-types/cosmos/crypto/secp256k1/keys';
 import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { Buffer } from 'node:buffer';
+import { getShinzoRpcUrl } from './env';
+import { FAUCET_AMOUNT, FAUCET_DENOM } from './faucet-constants';
+import {
+  normalizeShinzoAddress,
+  type FaucetSigner,
+} from './shinzo-address';
 
-const PREFIX = 'shinzo';
-const DENOM = 'ushinzo';
-const AMOUNT = '1000000000000000'; // 0.001 SHN
 const PUBKEY_TYPE = '/cosmos.evm.crypto.v1.ethsecp256k1.PubKey';
 
 interface SendFaucetTokensOptions {
-  faucetPrivateKey: string;
-  rpcUrl: string;
+  faucetSigner: FaucetSigner;
   toAddress: string;
 }
 
@@ -46,14 +47,10 @@ interface BroadcastResponse {
   };
 }
 
-async function abciQuery(
-  rpcUrl: string,
-  path: string,
-  data: Uint8Array,
-): Promise<Uint8Array> {
+async function abciQuery(path: string, data: Uint8Array): Promise<Uint8Array> {
   const hex = Buffer.from(data).toString('hex');
   const response = await fetch(
-    `${rpcUrl}/abci_query?path=%22${encodeURIComponent(path)}%22&data=0x${hex}`,
+    `${getShinzoRpcUrl()}/abci_query?path=%22${encodeURIComponent(path)}%22&data=0x${hex}`,
   );
 
   if (!response.ok) {
@@ -70,8 +67,8 @@ async function abciQuery(
   return Buffer.from(value, 'base64');
 }
 
-async function getChainId(rpcUrl: string): Promise<string> {
-  const response = await fetch(`${rpcUrl}/status`);
+async function getChainId(): Promise<string> {
+  const response = await fetch(`${getShinzoRpcUrl()}/status`);
 
   if (!response.ok) {
     throw new Error(`Status query failed with status ${response.status}.`);
@@ -87,9 +84,8 @@ async function getChainId(rpcUrl: string): Promise<string> {
   return chainId;
 }
 
-async function getAccount(rpcUrl: string, address: string) {
+async function getAccount(address: string) {
   const bytes = await abciQuery(
-    rpcUrl,
     '/cosmos.auth.v1beta1.Query/Account',
     QueryAccountRequest.encode({ address }).finish(),
   );
@@ -108,10 +104,9 @@ async function getAccount(rpcUrl: string, address: string) {
 }
 
 async function broadcast(
-  rpcUrl: string,
   txBytes: Uint8Array,
 ): Promise<{ hash: string; code: number; log: string }> {
-  const response = await fetch(rpcUrl, {
+  const response = await fetch(getShinzoRpcUrl(), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -141,24 +136,16 @@ async function broadcast(
 }
 
 export const sendFaucetTokens = async ({
-  faucetPrivateKey,
-  rpcUrl,
+  faucetSigner,
   toAddress,
 }: SendFaucetTokensOptions) => {
-  const privateKey = fromHex(faucetPrivateKey.replace(/^0x/, ''));
-  const keypair = await Secp256k1.makeKeypair(privateKey);
-  const compressedPubkey = Secp256k1.compressPubkey(keypair.pubkey);
-  const address = toBech32(PREFIX, keccak256(keypair.pubkey.slice(1)).slice(-20));
-
-  const chainId = await getChainId(rpcUrl);
-  const { accountNumber, sequence } = await getAccount(rpcUrl, address);
+  const chainId = await getChainId();
+  const { accountNumber, sequence } = await getAccount(faucetSigner.address);
   const pubkey = {
     typeUrl: PUBKEY_TYPE,
-    value: PubKey.encode({ key: compressedPubkey }).finish(),
+    value: PubKey.encode({ key: faucetSigner.compressedPubkey }).finish(),
   };
-  const shinzoAddress = toAddress.startsWith(PREFIX)
-    ? toAddress
-    : toBech32(PREFIX, fromHex(toAddress.replace(/^0x/, '')));
+  const shinzoAddress = normalizeShinzoAddress(toAddress);
 
   const txBodyBytes = TxBody.encode(
     TxBody.fromPartial({
@@ -167,9 +154,9 @@ export const sendFaucetTokens = async ({
           typeUrl: '/cosmos.bank.v1beta1.MsgSend',
           value: MsgSend.encode(
             MsgSend.fromPartial({
-              fromAddress: address,
+              fromAddress: faucetSigner.address,
               toAddress: shinzoAddress,
-              amount: [{ denom: DENOM, amount: AMOUNT }],
+              amount: [{ denom: FAUCET_DENOM, amount: FAUCET_AMOUNT }],
             }),
           ).finish(),
         },
@@ -179,7 +166,7 @@ export const sendFaucetTokens = async ({
 
   const authInfoBytes = makeAuthInfoBytes(
     [{ pubkey, sequence }],
-    [{ denom: DENOM, amount: '1' }],
+    [{ denom: FAUCET_DENOM, amount: '1' }],
     200000,
     undefined,
     undefined,
@@ -188,7 +175,7 @@ export const sendFaucetTokens = async ({
   const signDoc = makeSignDoc(txBodyBytes, authInfoBytes, chainId, accountNumber);
   const signature = Secp256k1.createSignature(
     keccak256(makeSignBytes(signDoc)),
-    privateKey,
+    faucetSigner.privateKey,
   );
   const signatureBytes = new Uint8Array([...signature.r(32), ...signature.s(32)]);
 
@@ -200,7 +187,7 @@ export const sendFaucetTokens = async ({
     }),
   ).finish();
 
-  const result = await broadcast(rpcUrl, txRaw);
+  const result = await broadcast(txRaw);
 
   return { txHash: result.hash, address: shinzoAddress };
 };
