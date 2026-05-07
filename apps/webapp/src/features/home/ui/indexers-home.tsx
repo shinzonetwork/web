@@ -1,10 +1,29 @@
 "use client";
 
 import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 
 export function IndexersHome() {
-  const { data: registeredIndexers } = useRegisteredIndexers();
+  const PAGE_SIZE = 5;
+  const [offset, setOffset] = useState(0);
+  const queryParams = useMemo(
+    () => ({ offset, limit: PAGE_SIZE, count_total: true }),
+    [offset]
+  );
+  const { data: registeredIndexers, isFetching } =
+    useRegisteredIndexers(queryParams);
   const indexers = registeredIndexers?.indexers || [];
+  const total = Number(registeredIndexers?.pagination?.total ?? 0);
+  const nextKey = registeredIndexers?.pagination?.next_key;
+  const hasNextPage = Boolean(nextKey) || offset + indexers.length < total;
+  const hasPrevPage = offset > 0;
+  const router = useRouter();
+  const handleRegisterAsIndexer = () => {
+    router.push("/indexer-registration");
+  };
+  const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <section className="w-full min-w-0 max-w-full px-4 py-8 sm:p-12">
@@ -20,6 +39,7 @@ export function IndexersHome() {
         <button
           type="button"
           className="shrink-0 self-start bg-primary px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary-foreground rounded-none transition-opacity hover:opacity-90 active:opacity-80 sm:self-auto sm:px-8"
+          onClick={handleRegisterAsIndexer}
         >
           REGISTER AS INDEXER
         </button>
@@ -70,6 +90,34 @@ export function IndexersHome() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <p className="font-mono text-xs text-muted-foreground">
+          {total > 0
+            ? `Showing ${offset + 1}-${offset + indexers.length} of ${total}`
+            : "No indexers found"}
+        </p>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
+            disabled={!hasPrevPage || isFetching}
+            onClick={() => setOffset((prev) => Math.max(0, prev - PAGE_SIZE))}
+          >
+            Prev
+          </button>
+          <span className="font-mono text-xs text-muted-foreground">
+            Page {currentPage} / {totalPages}
+          </span>
+          <button
+            type="button"
+            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
+            disabled={!hasNextPage || isFetching}
+            onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </section>
   );
