@@ -2,7 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-const registeredIndexerApiEndpoint = process.env.NEXT_PUBLIC_REGISTERED_INDEXER_API_ENDPOINT || "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/indexer/v1/indexers";
+const registeredIndexerApiEndpoint =
+  process.env.NEXT_PUBLIC_REGISTERED_INDEXER_API_ENDPOINT ||
+  "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/indexer/v1/indexers";
 
 interface RegisteredIndexer {
   address: string;
@@ -18,7 +20,7 @@ type IndexerResponse = {
     total: number;
     next_key: string | null;
   };
-}
+};
 
 async function fetchRegisteredIndexers(): Promise<IndexerResponse> {
   const response = await fetch(registeredIndexerApiEndpoint);

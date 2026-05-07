@@ -4,7 +4,7 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { AppProviders } from "@/providers";
-import { Toast, WalletChangeGuard } from "@/widget";
+import { Footer, Toast, WalletChangeGuard } from "@/widget";
 import { RegistrationContextProvider } from "@/entities/registration-process";
 import { TooltipProvider } from "@/shared/ui/tooltip";
 
@@ -46,6 +46,7 @@ export default function RootLayout({
             </TooltipProvider>
           </RegistrationContextProvider>
         </AppProviders>
+        <Footer />
       </body>
     </html>
   );

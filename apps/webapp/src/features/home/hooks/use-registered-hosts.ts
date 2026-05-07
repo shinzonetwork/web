@@ -2,7 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-const registeredHostsApiEndpoint = process.env.NEXT_PUBLIC_REGISTERED_HOSTS_API_ENDPOINT || "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/host/v1/hosts";
+const registeredHostsApiEndpoint =
+  process.env.NEXT_PUBLIC_REGISTERED_HOSTS_API_ENDPOINT ||
+  "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/host/v1/hosts";
 
 interface RegisteredHost {
   address: string;

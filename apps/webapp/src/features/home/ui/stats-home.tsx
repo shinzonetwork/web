@@ -13,14 +13,18 @@ export function StatsHome() {
 
   return (
     <section className="grid w-full min-w-0 max-w-full grid-cols-1 border-b border-border md:grid-cols-2 md:divide-x md:divide-border">
-        <div className="p-6">
-        <div className="font-mono text-secondary mb-1">{UI_HOME_HEADER_CONTENT.registered_indexers}</div>
+      <div className="p-6">
+        <div className="font-mono text-secondary mb-1">
+          {UI_HOME_HEADER_CONTENT.registered_indexers}
+        </div>
         <div className="font-h2 text-h2 text-black">{totalIndexers}</div>
+      </div>
+      <div className="p-6">
+        <div className="font-mono text-secondary mb-1">
+          {UI_HOME_HEADER_CONTENT.registered_hosts}
         </div>
-        <div className="p-6">
-        <div className="font-mono text-secondary mb-1">{UI_HOME_HEADER_CONTENT.registered_hosts}</div>
         <div className="font-h2 text-h2 text-black">{totalHosts}</div>
-        </div>
+      </div>
     </section>
   );
 }
