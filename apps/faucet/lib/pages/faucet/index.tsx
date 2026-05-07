@@ -1,4 +1,3 @@
-'use client';
 import { useMemo, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { SearchInput } from '@shinzo/ui/search-input';
@@ -7,7 +6,7 @@ import { requestFaucetDrop } from './api/request-airdrop';
 import ShinzoLogo from './shinzo-logo.svg';
 import { RecaptchaWidget, type RecaptchaRef } from './recaptcha-widget';
 import { ShinzoFrame } from './shinzo-frame';
-import { SHINZO_RPC } from '@/shared/envs';
+import { FAUCET_RPC_URL } from '@/shared/envs';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -44,12 +43,12 @@ export function FaucetPage() {
   const successLink = useMemo(() => {
     if (!shinzoAddress) return null;
 
-    const rpcHost = SHINZO_RPC.replace(/:[0-9]+$/, ':1317');
+    const rpcHost = FAUCET_RPC_URL.replace(/:[0-9]+$/, ':1317');
     return `${rpcHost}/cosmos/bank/v1beta1/balances/${shinzoAddress}`;
   }, [shinzoAddress]);
 
   const txLink = useMemo(() => {
-    return `${SHINZO_RPC}/tx?hash=0x${message}`;
+    return `${FAUCET_RPC_URL}/tx?hash=0x${message}`;
   }, [message]);
 
   const handleSubmit = async () => {
