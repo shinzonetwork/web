@@ -7,6 +7,7 @@ import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import {
   cn,
   isIndexerWhitelisted as isIndexerWhitelistedFunction,
+  isRegistrationV2,
 } from "@/shared/lib";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
@@ -33,6 +34,7 @@ export function RegistrationRadioButton({
   const isIndexerWhitelisted = isIndexerWhitelistedFunction(
     address ? address : undefined
   );
+  const isIndexerDisabled = !isIndexerWhitelisted || prefilledEntityValue || isRegistrationV2();
   return (
     <RadioGroup
       className={`flex gap-4 ${prefilledEntityValue ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -81,7 +83,7 @@ export function RegistrationRadioButton({
                 selectedEntityValue === "2"
                   ? "bg-muted-foreground border-muted text-muted"
                   : "bg-background hover:bg-muted-foreground/20 hover:text-muted-foreground/70",
-                !isIndexerWhitelisted ? "opacity-50 cursor-not-allowed" : ""
+                  isIndexerDisabled ? "opacity-50 cursor-not-allowed" : ""
               )}
             >
               <span className="flex items-center justify-center size-7 border border-border rounded-sm">
@@ -97,7 +99,7 @@ export function RegistrationRadioButton({
               <RadioGroupItem
                 value="2"
                 id="indexer"
-                disabled={!isIndexerWhitelisted || prefilledEntityValue}
+                disabled={isIndexerDisabled}
                 className="sr-only"
               />
               <span>Indexer</span>

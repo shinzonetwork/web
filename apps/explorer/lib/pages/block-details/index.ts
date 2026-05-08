@@ -1,1 +1,1 @@
-export { BlockDetailPage } from './page';
+export { BlockDetails } from './page-server';

@@ -1,0 +1,1 @@
+export { AddressDetailPage } from './page';
