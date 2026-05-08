@@ -14,11 +14,13 @@ import {
   validateHostRegistrationForm,
   validateHostFields,
 } from "../util/registration";
-import { EntityRole } from "@/shared/lib";
+import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
+import { useVerifyIndexerAssertion } from "../hooks/use-verify-indexer-assertion";
+import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
   const { registrationEntity } = useRegistrationContext();
@@ -31,8 +33,15 @@ export function RegistrationFormV2() {
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
     useRegistrationTransaction(formData);
+  const { data: isAssertionVerified } = useVerifyIndexerAssertion();
 
   const handleRegister = async () => {
+    if (registrationEntity === EntityRole.Indexer) {
+      if (!isAssertionVerified) {
+        toast.error("Indexer assertion is not done.", TOAST_CONFIG);
+        return;
+      }
+    }
     const validatedFields =
       formData.entity === EntityRole.Indexer
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
@@ -56,9 +65,10 @@ export function RegistrationFormV2() {
 
   let isRegistrationDisabled = false;
   if (formData.entity === EntityRole.Indexer) {
-    isRegistrationDisabled = !validateIndexerRegistrationForm(
-      formData as IndexerRegistrationFormData
-    );
+    isRegistrationDisabled =
+      !validateIndexerRegistrationForm(
+        formData as IndexerRegistrationFormData
+      ) || !isAssertionVerified;
   } else {
     isRegistrationDisabled = !validateHostRegistrationForm(
       formData as HostRegistrationFormData
@@ -67,6 +77,14 @@ export function RegistrationFormV2() {
 
   return (
     <div className="space-y-6 ml-10">
+      {!isAssertionVerified && (
+        <div className="w-full max-w-6xl rounded-none border border-destructive/40 bg-destructive/10 p-4 space-y-6">
+          <p className="mt-1 font-mono text-sm text-destructive">
+            Indexer assertion is not done. Please complete the indexer assertion
+            to register.
+          </p>
+        </div>
+      )}
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}
