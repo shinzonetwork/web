@@ -31,6 +31,7 @@ Browser-exposed Vite variables:
 
 - `VITE_WALLETCONNECT_ID` (optional): WalletConnect/Reown project ID for QR wallet connections.
 - `VITE_APP_URL` (optional, needed with VITE_WALLETCONNECT_ID): Public app URL used in wallet metadata.
+- `VITE_SHINZOHUB_EXPLORER_URL` (optional): ShinzoHub block explorer base URL.
 - `VITE_SHINZOHUB_CHAIN_ID`: ShinzoHub EVM chain ID. Local/default devnet is `91273002`.
 
 ## Running
