@@ -6,13 +6,14 @@
   "workers_dev": true,
   "preview_urls": true,
   "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
   "vars": {
-    "VITE_RECAPTCHA_SITE_KEY": "",
     "VITE_SHINZOHUB_EXPLORER_URL": "http://blockscout.shinzo.network/",
-    "RECAPTCHA_SECRET_KEY": "",
     "SHINZOHUB_COSMOS_RPC": "http://rpc.devnet.shinzo.network:1317",
-    "SHINZOHUB_RPC": "http://rpc.devnet.shinzo.network:26657",
-    "FAUCET_PRIVATE_KEY": ""
+    "SHINZOHUB_RPC": "http://rpc.devnet.shinzo.network:26657"
+  },
+  "secrets": {
+    "required": ["RECAPTCHA_SECRET_KEY", "FAUCET_PRIVATE_KEY"]
   },
   "assets": {
     "not_found_handling": "single-page-application",
