@@ -1,6 +1,6 @@
 interface ImportMetaEnv {
   readonly VITE_RECAPTCHA_SITE_KEY?: string;
-  readonly VITE_SHINZO_RPC?: string;
+  readonly VITE_SHINZOHUB_EXPLORER_URL?: string;
 }
 
 interface ImportMeta {

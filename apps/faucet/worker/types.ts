@@ -3,7 +3,7 @@ export interface Env {
   RECAPTCHA_SECRET_KEY?: string;
   SHINZOHUB_COSMOS_RPC?: string;
   VITE_RECAPTCHA_SITE_KEY?: string;
-  VITE_SHINZO_RPC?: string;
+  SHINZOHUB_RPC?: string;
 }
 
 export type FaucetDropResult =

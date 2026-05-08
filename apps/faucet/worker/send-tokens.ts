@@ -85,22 +85,26 @@ async function getChainId(): Promise<string> {
 }
 
 async function getAccount(address: string) {
-  const bytes = await abciQuery(
-    '/cosmos.auth.v1beta1.Query/Account',
-    QueryAccountRequest.encode({ address }).finish(),
-  );
-  const { account } = QueryAccountResponse.decode(bytes);
+  try {
+    const bytes = await abciQuery(
+      '/cosmos.auth.v1beta1.Query/Account',
+      QueryAccountRequest.encode({ address }).finish(),
+    );
+    const { account } = QueryAccountResponse.decode(bytes);
 
-  if (!account) {
-    throw new Error(`Faucet account ${address} was not found.`);
+    if (!account) {
+      throw new Error(`Faucet account ${address} was not found.`);
+    }
+
+    const base = BaseAccount.decode(account.value);
+
+    return {
+      accountNumber: Number(base.accountNumber),
+      sequence: Number(base.sequence),
+    };
+  } catch {
+    throw new Error(`Faucet account ${address} was not found or empty.`);
   }
-
-  const base = BaseAccount.decode(account.value);
-
-  return {
-    accountNumber: Number(base.accountNumber),
-    sequence: Number(base.sequence),
-  };
 }
 
 async function broadcast(
