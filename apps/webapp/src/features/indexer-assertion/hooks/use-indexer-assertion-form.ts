@@ -5,19 +5,21 @@ import {
   SOURCE_CHAIN_ID_MAP,
 } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
+import { useAccount } from "wagmi";
 
-function createInitialValues(): IndexerAssertionFormData {
+function createInitialValues(connectedAddress: string): IndexerAssertionFormData {
   return {
     consensusPubKey: "",
-    delegateAddress: "",
+    delegateAddress: connectedAddress,
     sourceChain: "ethereum" as SOURCE_CHAIN,
     sourceChainId: SOURCE_CHAIN_ID_MAP.ethereum,
   };
 }
 
 export function useIndexerAssertionForm() {
+  const { address: connectedAddress } = useAccount();
   const [assertionFormData, setAssertionFormData] =
-    useState<IndexerAssertionFormData>(createInitialValues());
+    useState<IndexerAssertionFormData>(createInitialValues(connectedAddress ?? ""));
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
