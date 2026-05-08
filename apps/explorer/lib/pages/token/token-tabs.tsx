@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shinzo/ui/tabs";
 import { Typography } from "@/shared/ui/typography";
 import { Container } from "@/widgets/layout";
 
@@ -12,7 +12,7 @@ export const TokenTabs = () => {
               </TabsTrigger>
             </TabsList>
           </Container>
-    
+
           <div className='mt-2 border-t border-border'>
             <TabsContent value='overview'>
                 <Container className='py-10'>
