@@ -19,6 +19,7 @@ const DEPLOY_STATUS_LABELS: Record<string, string> = {
   idle: "Deploy ENS Core Pack",
   checking: "Checking Hub",
   validating: "Validating View",
+  simulating: "Simulating Tx",
   deploying: "Registering View",
   confirming: "Confirming",
   done: "Ready",
@@ -378,6 +379,7 @@ export const EnsStudioTab = () => {
               disabled={
                 deployStatus === "checking" ||
                 deployStatus === "validating" ||
+                deployStatus === "simulating" ||
                 deployStatus === "deploying" ||
                 deployStatus === "confirming"
               }
@@ -385,6 +387,7 @@ export const EnsStudioTab = () => {
             >
               {(deployStatus === "checking" ||
                 deployStatus === "validating" ||
+                deployStatus === "simulating" ||
                 deployStatus === "deploying" ||
                 deployStatus === "confirming") && (
                 <Loader2 className="size-4 animate-spin" />

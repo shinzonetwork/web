@@ -2,7 +2,13 @@
 
 import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
-import { type Connector, useAccount, useConnect, useDisconnect } from "wagmi";
+import {
+  type Connector,
+  useConnect,
+  useConnection,
+  useConnectors,
+  useDisconnect,
+} from "wagmi";
 import { Button } from "@/shared/ui/button";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
 import {
@@ -15,14 +21,14 @@ import WalletConnectIcon from "./walletconnect.svg";
 import { cn } from "@shinzo/ui/cn";
 
 export const ConnectDialog = () => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   const {
-    connect,
-    connectors,
+    mutate: connect,
     error: connectError,
     isPending: isConnecting,
   } = useConnect();
-  const { disconnect } = useDisconnect();
+  const connectors = useConnectors();
+  const { mutate: disconnect } = useDisconnect();
 
   const [isOpen, setIsOpen] = useState(false);
 

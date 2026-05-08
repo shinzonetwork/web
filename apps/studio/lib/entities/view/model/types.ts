@@ -17,6 +17,7 @@ export interface StoredDeployedView {
 export type DeployProgressStatus =
   | "checking"
   | "validating"
+  | "simulating"
   | "deploying"
   | "confirming";
 
