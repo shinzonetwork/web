@@ -6,12 +6,23 @@ import { requestFaucetDrop } from './api/request-airdrop';
 import ShinzoLogo from './shinzo-logo.svg';
 import { RecaptchaWidget, type RecaptchaRef } from './recaptcha-widget';
 import { ShinzoFrame } from './shinzo-frame';
-import { FAUCET_RPC_URL } from '@/shared/envs';
+import { SHINZOHUB_EXPLORER_URL } from '@/shared/envs';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 const RATE_LIMIT_KEY = 'faucet_requested';
 const RATE_LIMIT_MS  = 24 * 60 * 60 * 1000;
+
+const explorerPath = (path: string) => {
+  const baseUrl = SHINZOHUB_EXPLORER_URL.endsWith('/')
+    ? SHINZOHUB_EXPLORER_URL
+    : `${SHINZOHUB_EXPLORER_URL}/`;
+
+  return new URL(path.replace(/^\/+/, ''), baseUrl).toString();
+};
+
+const formatExplorerTxHash = (txHash: string) =>
+  txHash.startsWith('0x') ? txHash : `0x${txHash}`;
 
 function getRateLimitTs(): number | null {
   try {
@@ -43,12 +54,11 @@ export function FaucetPage() {
   const successLink = useMemo(() => {
     if (!shinzoAddress) return null;
 
-    const rpcHost = FAUCET_RPC_URL.replace(/:[0-9]+$/, ':1317');
-    return `${rpcHost}/cosmos/bank/v1beta1/balances/${shinzoAddress}`;
+    return explorerPath(`/address/${shinzoAddress}`);
   }, [shinzoAddress]);
 
   const txLink = useMemo(() => {
-    return `${FAUCET_RPC_URL}/tx?hash=0x${message}`;
+    return explorerPath(`/tx/${formatExplorerTxHash(message)}`);
   }, [message]);
 
   const handleSubmit = async () => {
