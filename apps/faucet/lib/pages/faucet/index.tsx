@@ -1,4 +1,3 @@
-'use client';
 import { useMemo, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { SearchInput } from '@shinzo/ui/search-input';
@@ -7,12 +6,50 @@ import { requestFaucetDrop } from './api/request-airdrop';
 import ShinzoLogo from './shinzo-logo.svg';
 import { RecaptchaWidget, type RecaptchaRef } from './recaptcha-widget';
 import { ShinzoFrame } from './shinzo-frame';
-import { SHINZO_RPC } from '@/shared/envs';
+import { SHINZOHUB_EXPLORER_URL } from '@/shared/envs';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
 const RATE_LIMIT_KEY = 'faucet_requested';
 const RATE_LIMIT_MS  = 24 * 60 * 60 * 1000;
+const RECAPTCHA_TIMEOUT_MS = 10_000;
+
+const explorerPath = (path: string) => {
+  const baseUrl = SHINZOHUB_EXPLORER_URL.endsWith('/')
+    ? SHINZOHUB_EXPLORER_URL
+    : `${SHINZOHUB_EXPLORER_URL}/`;
+
+  return new URL(path.replace(/^\/+/, ''), baseUrl).toString();
+};
+
+const formatExplorerTxHash = (txHash: string) =>
+  txHash.startsWith('0x') ? txHash : `0x${txHash}`;
+
+const getRecaptchaToken = async (recaptcha: RecaptchaRef | null) => {
+  if (!recaptcha) return '';
+
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  const timeout = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(
+      () => reject(new Error('reCAPTCHA timed out. Please refresh and try again.')),
+      RECAPTCHA_TIMEOUT_MS,
+    );
+  });
+
+  try {
+    const token = await Promise.race([recaptcha.executeAsync(), timeout]);
+
+    if (!token) {
+      throw new Error('reCAPTCHA verification failed. Please try again.');
+    }
+
+    return token;
+  } finally {
+    clearTimeout(timeoutId!);
+    recaptcha.reset();
+  }
+};
 
 function getRateLimitTs(): number | null {
   try {
@@ -44,12 +81,11 @@ export function FaucetPage() {
   const successLink = useMemo(() => {
     if (!shinzoAddress) return null;
 
-    const rpcHost = SHINZO_RPC.replace(/:[0-9]+$/, ':1317');
-    return `${rpcHost}/cosmos/bank/v1beta1/balances/${shinzoAddress}`;
+    return explorerPath(`/address/${shinzoAddress}`);
   }, [shinzoAddress]);
 
   const txLink = useMemo(() => {
-    return `${SHINZO_RPC}/tx?hash=0x${message}`;
+    return explorerPath(`/tx/${formatExplorerTxHash(message)}`);
   }, [message]);
 
   const handleSubmit = async () => {
@@ -62,8 +98,7 @@ export function FaucetPage() {
     setShinzoAddress(undefined);
     setStatus('loading');
     try {
-      const token = await recaptchaRef.current?.executeAsync() ?? '';
-      recaptchaRef.current?.reset();
+      const token = await getRecaptchaToken(recaptchaRef.current);
       const result = await requestFaucetDrop(address.trim(), token);
       if ('error' in result) {
         setStatus('error');
@@ -74,9 +109,11 @@ export function FaucetPage() {
         setShinzoAddress(result.address);
         setMessage(result.txHash);
       }
-    } catch {
+    } catch (error) {
       setStatus('error');
-      setMessage('Unexpected error. Please try again.');
+      setMessage(
+        error instanceof Error ? error.message : 'Unexpected error. Please try again.',
+      );
     }
   };
 

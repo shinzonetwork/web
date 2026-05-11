@@ -1,6 +1,5 @@
-export const RECAPTCHA_SITE_KEY   = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
-export const RECAPTCHA_SECRET_KEY = process.env.RECAPTCHA_SECRET_KEY ?? '';
+export const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY ?? '';
 
-export const FAUCET_PRIVATE_KEY   = process.env.FAUCET_PRIVATE_KEY ?? '';
-
-export const SHINZO_RPC = process.env.NEXT_PUBLIC_SHINZO_RPC ?? 'http://rpc.devnet.shinzo.network:26657';
+export const SHINZOHUB_EXPLORER_URL =
+  import.meta.env.VITE_SHINZOHUB_EXPLORER_URL ??
+  'http://blockscout.shinzo.network/';

@@ -134,51 +134,84 @@ importers:
   apps/faucet:
     dependencies:
       '@cosmjs/amino':
-        specifier: ^0.38.1
+        specifier: 0.38.1
         version: 0.38.1
       '@cosmjs/crypto':
-        specifier: ^0.38.1
+        specifier: 0.38.1
         version: 0.38.1
       '@cosmjs/encoding':
-        specifier: ^0.38.1
+        specifier: 0.38.1
         version: 0.38.1
       '@cosmjs/proto-signing':
-        specifier: ^0.38.1
+        specifier: 0.38.1
         version: 0.38.1
       '@cosmjs/stargate':
-        specifier: ^0.38.1
+        specifier: 0.38.1
         version: 0.38.1(bufferutil@4.1.0)(utf-8-validate@5.0.10)
+      '@fontsource-variable/geist-mono':
+        specifier: 5.2.7
+        version: 5.2.7
+      '@fontsource-variable/inter':
+        specifier: 5.2.8
+        version: 5.2.8
       '@radix-ui/react-slot':
-        specifier: ^1.2.4
+        specifier: 1.2.4
         version: 1.2.4(@types/react@19.2.8)(react@19.2.3)
       '@shinzo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       class-variance-authority:
-        specifier: ^0.7.1
+        specifier: 0.7.1
         version: 0.7.1
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       cosmjs-types:
-        specifier: ^0.11.0
+        specifier: 0.11.0
         version: 0.11.0
-      next:
-        specifier: ^16.0.10
-        version: 16.0.10(@babel/core@7.28.6)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.77.4)
+      hono:
+        specifier: 4.12.16
+        version: 4.12.16
+      lucide-react:
+        specifier: 1.14.0
+        version: 1.14.0(react@19.2.3)
       react-google-recaptcha:
-        specifier: ^3.1.0
+        specifier: 3.1.0
         version: 3.1.0(react@19.2.3)
     devDependencies:
+      '@cloudflare/vite-plugin':
+        specifier: 1.35.0
+        version: 1.35.0(bufferutil@4.1.0)(utf-8-validate@5.0.10)(vite@8.0.10(@types/node@25.0.9)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(workerd@1.20260430.1)(wrangler@4.87.0(@cloudflare/workers-types@4.20260501.1)(bufferutil@4.1.0)(utf-8-validate@5.0.10))
+      '@cloudflare/workers-types':
+        specifier: 4.20260501.1
+        version: 4.20260501.1
       '@shinzo/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
+      '@tailwindcss/vite':
+        specifier: 4.2.4
+        version: 4.2.4(vite@8.0.10(@types/node@25.0.9)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
       '@types/react-google-recaptcha':
-        specifier: ^2.1.9
+        specifier: 2.1.9
         version: 2.1.9
+      '@vitejs/plugin-react':
+        specifier: 6.0.1
+        version: 6.0.1(vite@8.0.10(@types/node@25.0.9)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      prettier:
+        specifier: 3.8.3
+        version: 3.8.3
       tw-animate-css:
-        specifier: ^1.4.0
+        specifier: 1.4.0
         version: 1.4.0
+      vite:
+        specifier: 8.0.10
+        version: 8.0.10(@types/node@25.0.9)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
+      vite-plugin-svgr:
+        specifier: 5.2.0
+        version: 5.2.0(rollup@4.60.3)(typescript@5.9.3)(vite@8.0.10(@types/node@25.0.9)(esbuild@0.27.3)(jiti@2.6.1)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
+      wrangler:
+        specifier: 4.87.0
+        version: 4.87.0(@cloudflare/workers-types@4.20260501.1)(bufferutil@4.1.0)(utf-8-validate@5.0.10)
 
   apps/health-proxy: {}
 
@@ -17780,7 +17813,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.8
       estree-walker: 2.0.2
-      picomatch: 4.0.3
+      picomatch: 4.0.4
     optionalDependencies:
       rollup: 4.60.3
 
@@ -26904,8 +26937,8 @@ snapshots:
 
   tinyglobby@0.2.15:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
 
   tinyglobby@0.2.16:
     dependencies:
@@ -27511,11 +27544,11 @@ snapshots:
   vite@7.3.2(@types/node@25.0.9)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.77.4)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2):
     dependencies:
       esbuild: 0.27.3
-      fdir: 6.5.0(picomatch@4.0.3)
-      picomatch: 4.0.3
-      postcss: 8.5.6
+      fdir: 6.5.0(picomatch@4.0.4)
+      picomatch: 4.0.4
+      postcss: 8.5.14
       rollup: 4.60.3
-      tinyglobby: 0.2.15
+      tinyglobby: 0.2.16
     optionalDependencies:
       '@types/node': 25.0.9
       fsevents: 2.3.3

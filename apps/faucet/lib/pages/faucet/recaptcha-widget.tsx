@@ -1,4 +1,3 @@
-'use client';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { forwardRef } from 'react';
 import { RECAPTCHA_SITE_KEY } from '@/shared/envs';
