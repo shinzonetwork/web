@@ -1,9 +1,17 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { Address, TransactionReceipt } from "viem";
 import {
-  useAccount,
+  BaseError,
+  UserRejectedRequestError,
+  WaitForTransactionReceiptTimeoutError,
+  type Address,
+  type Hash,
+  type ReplacementReturnType,
+  type TransactionReceipt,
+} from "viem";
+import {
+  useConnection,
   usePublicClient,
   useSendTransaction,
   useSwitchChain,
@@ -64,13 +72,76 @@ const validateResolvedView = async <TArgs extends LensArgs>(
 type PublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
 type StudioWagmiConfig = typeof wagmiConfig;
 
+const findError = (
+  error: unknown,
+  predicate: (error: unknown) => boolean
+): unknown => {
+  if (error instanceof BaseError) {
+    return error.walk(predicate);
+  }
+
+  return predicate(error) ? error : null;
+};
+
+const isErrorNamed = (error: unknown, name: string): boolean =>
+  error instanceof Error && error.name === name;
+
+const getReadableErrorMessage = (error: unknown): string => {
+  const cause = error instanceof BaseError ? error.walk() : error;
+
+  if (cause instanceof BaseError) {
+    return cause.shortMessage || cause.details || cause.message;
+  }
+
+  if (cause instanceof Error) {
+    return cause.message;
+  }
+
+  return "Unexpected error";
+};
+
+const isUserRejectedRequest = (error: unknown): boolean =>
+  Boolean(
+    findError(
+      error,
+      (cause) =>
+        cause instanceof UserRejectedRequestError ||
+        isErrorNamed(cause, "UserRejectedRequestError")
+    )
+  );
+
+const isReceiptTimeout = (error: unknown): boolean =>
+  Boolean(
+    findError(
+      error,
+      (cause) =>
+        cause instanceof WaitForTransactionReceiptTimeoutError ||
+        isErrorNamed(cause, "WaitForTransactionReceiptTimeoutError")
+    )
+  );
+
+const createDeployTransactionError = (
+  message: string,
+  error: unknown,
+  rejectedMessage = "Wallet request was rejected."
+): Error => {
+  if (isUserRejectedRequest(error)) {
+    return new Error(rejectedMessage);
+  }
+
+  return new Error(`${message} ${getReadableErrorMessage(error)}`);
+};
+
 interface SubmitDeployTxInput<TArgs extends LensArgs> {
   account: Address;
   resolvedView: ResolvedLensView<TArgs>;
   wasmBytesByStep: Uint8Array[];
   publicClient: PublicClient;
-  switchChainAsync: UseSwitchChainReturnType<StudioWagmiConfig>["switchChainAsync"];
-  sendTransactionAsync: UseSendTransactionReturnType<StudioWagmiConfig>["sendTransactionAsync"];
+  switchChainMutateAsync: UseSwitchChainReturnType<StudioWagmiConfig>["mutateAsync"];
+  sendTransactionMutateAsync: UseSendTransactionReturnType<StudioWagmiConfig>["mutateAsync"];
+  onSimulationStart?: () => void;
+  onBroadcastStart?: () => void;
+  onTransactionSent?: (hash: Hash) => void;
 }
 
 const submitDeployTransaction = async <TArgs extends LensArgs>(
@@ -81,35 +152,119 @@ const submitDeployTransaction = async <TArgs extends LensArgs>(
     resolvedView,
     wasmBytesByStep,
     publicClient,
-    switchChainAsync,
-    sendTransactionAsync,
+    switchChainMutateAsync,
+    sendTransactionMutateAsync,
+    onSimulationStart,
+    onBroadcastStart,
+    onTransactionSent,
   } = input;
   const tx = await buildDeployTransaction(resolvedView, wasmBytesByStep);
   const chainId = shinzoDevnet.id;
 
-  const estimatedGas = await publicClient.estimateGas({
-    account,
-    to: tx.to,
-    data: tx.data,
-  });
+  let estimatedGas;
+  let gasPrice;
+  try {
+    estimatedGas = await publicClient.estimateGas({
+      account,
+      to: tx.to,
+      data: tx.data,
+    });
+    gasPrice = await publicClient.getGasPrice();
+  } catch (error) {
+    throw createDeployTransactionError(
+      "Could not prepare the deployment transaction.",
+      error
+    );
+  }
+
   const gas = estimatedGas + estimatedGas / BigInt(5);
-  const gasPrice = await publicClient.getGasPrice();
+  const gasPriceOverride = gasPrice > BigInt(0) ? gasPrice : undefined;
 
-  await switchChainAsync({ chainId });
-  const txHash = await sendTransactionAsync({
-    account,
-    to: tx.to,
-    data: tx.data,
-    chainId,
-    gas,
-    gasPrice: gasPrice > BigInt(0) ? gasPrice : undefined,
-  });
+  onSimulationStart?.();
+  try {
+    await publicClient.call({
+      account,
+      to: tx.to,
+      data: tx.data,
+      gas,
+      gasPrice: gasPriceOverride,
+    });
+  } catch (error) {
+    throw createDeployTransactionError(
+      "Deployment transaction simulation failed.",
+      error
+    );
+  }
 
-  const receipt = await publicClient.waitForTransactionReceipt({
-    hash: txHash,
-  });
+  onBroadcastStart?.();
+  try {
+    await switchChainMutateAsync({ chainId });
+  } catch (error) {
+    throw createDeployTransactionError(
+      "Could not switch your wallet to Shinzo Devnet.",
+      error,
+      "Network switch was rejected in your wallet."
+    );
+  }
+
+  let txHash: Hash;
+  try {
+    txHash = await sendTransactionMutateAsync({
+      account,
+      to: tx.to,
+      data: tx.data,
+      chainId,
+      gas,
+      gasPrice: gasPriceOverride,
+    });
+  } catch (error) {
+    throw createDeployTransactionError(
+      "Could not broadcast the deployment transaction.",
+      error,
+      "Deployment transaction was rejected in your wallet."
+    );
+  }
+
+  onTransactionSent?.(txHash);
+
+  const replacementRef: { current: ReplacementReturnType | null } = {
+    current: null,
+  };
+  let receipt: TransactionReceipt;
+  try {
+    receipt = await publicClient.waitForTransactionReceipt({
+      hash: txHash,
+      onReplaced: (response) => {
+        replacementRef.current = response;
+      },
+    });
+  } catch (error) {
+    if (isReceiptTimeout(error)) {
+      throw new Error(
+        `Deployment transaction ${txHash} was broadcast, but confirmation timed out. It may still be pending on Shinzo Devnet.`
+      );
+    }
+
+    throw createDeployTransactionError(
+      `Deployment transaction ${txHash} was broadcast, but its receipt could not be fetched.`,
+      error
+    );
+  }
+
+  if (replacementRef.current?.reason === "cancelled") {
+    throw new Error("Deployment transaction was cancelled in your wallet.");
+  }
+
+  if (replacementRef.current?.reason === "replaced") {
+    throw new Error(
+      "Deployment transaction was replaced by another transaction before confirmation."
+    );
+  }
+
   if (receipt.status !== "success") {
-    throw new Error("Deployment transaction reverted on-chain.");
+    throw new Error(
+      `Deployment transaction ${receipt.transactionHash} reverted on-chain.`
+    );
   }
 
   return receipt;
@@ -172,9 +327,9 @@ export interface UseDeployLensResult {
 }
 
 export const useDeployLens = (): UseDeployLensResult => {
-  const { address: account } = useAccount();
-  const { sendTransactionAsync } = useSendTransaction();
-  const { switchChainAsync } = useSwitchChain();
+  const { address: account } = useConnection();
+  const { mutateAsync: sendTransactionMutateAsync } = useSendTransaction();
+  const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
   const publicClient = usePublicClient({ chainId: shinzoDevnet.id });
   const { data: studioHubViews = [], refetch: refetchStudioHubViews } =
     useStudioHubViews();
@@ -225,17 +380,25 @@ export const useDeployLens = (): UseDeployLensResult => {
         );
       }
 
-      setStatus("deploying");
+      setStatus("simulating");
       const receipt = await submitDeployTransaction({
         account,
         resolvedView,
         wasmBytesByStep,
         publicClient,
-        switchChainAsync,
-        sendTransactionAsync,
+        switchChainMutateAsync,
+        sendTransactionMutateAsync,
+        onSimulationStart: () => {
+          setStatus("simulating");
+        },
+        onBroadcastStart: () => {
+          setStatus("deploying");
+        },
+        onTransactionSent: () => {
+          setStatus("confirming");
+        },
       });
 
-      setStatus("confirming");
       const { contractAddress, txHash } = await confirmRegisteredView(
         receipt,
         resolvedView.entityName,
@@ -255,9 +418,9 @@ export const useDeployLens = (): UseDeployLensResult => {
       account,
       publicClient,
       refetchStudioHubViews,
-      sendTransactionAsync,
+      sendTransactionMutateAsync,
       studioHubViews,
-      switchChainAsync,
+      switchChainMutateAsync,
     ]
   );
 

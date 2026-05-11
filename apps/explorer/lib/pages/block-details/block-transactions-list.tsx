@@ -9,8 +9,12 @@ import {
 } from '@shinzo/ui/table';
 import { CopyButton } from '@/shared/ui/button';
 import { Transaction } from '@/shared/graphql';
+import { getPageLink } from '@/shared/utils/links';
+import { useChainPathSegment } from '@/widgets/chain-path-segment';
 
 export const BlockTransactionsList = ({ transactions, timestamp, isLoading }: { transactions: Transaction[] | undefined, timestamp: string, isLoading: boolean }) => {
+  const chain = useChainPathSegment();
+
   const formatValue = (value: string) => {
     const eth = Number(value) / 1e18;
     return eth.toFixed(6);
@@ -33,7 +37,7 @@ export const BlockTransactionsList = ({ transactions, timestamp, isLoading }: { 
           <>
             <TableNullableCell value={tx?.hash}>
               {(value) => (
-                <Link href={`/tx/${value}`}>
+                <Link href={getPageLink('tx', { param: value, chain})}>
                   <Typography color='accent' className='underline'>
                     {formatHash(value, 12, 8)}
                   </Typography>

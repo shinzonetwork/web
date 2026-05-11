@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useAccount, useChainId, useSwitchChain } from "wagmi";
+import { useConnection, useSwitchChain } from "wagmi";
 import type { LensDefinition, TokenAddressLensArgs } from "@/entities/lens";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
 import { normalizeErc20TokenAddress } from "@/shared/consts/view-config";
@@ -31,9 +31,8 @@ export interface UseDeployFormStateResult {
 export const useDeployFormState = (
   lens: LensDefinition<TokenAddressLensArgs>
 ): UseDeployFormStateResult => {
-  const { isConnected } = useAccount();
-  const activeChainId = useChainId();
-  const { switchChainAsync } = useSwitchChain();
+  const { chainId: activeChainId, isConnected } = useConnection();
+  const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
   const { upsert } = useStoredViews();
   const { deploy, status, error, validationIssues } = useDeployLens();
 
@@ -47,6 +46,7 @@ export const useDeployFormState = (
   const isInProgress =
     status === "checking" ||
     status === "validating" ||
+    status === "simulating" ||
     status === "deploying" ||
     status === "confirming";
   const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;
@@ -74,13 +74,13 @@ export const useDeployFormState = (
   const switchToShinzo = useCallback(async () => {
     setSwitchChainError("");
     try {
-      await switchChainAsync({ chainId: shinzoDevnet.id });
+      await switchChainMutateAsync({ chainId: shinzoDevnet.id });
     } catch (err) {
       setSwitchChainError(
         err instanceof Error ? err.message : "Could not switch to Shinzo Devnet."
       );
     }
-  }, [switchChainAsync]);
+  }, [switchChainMutateAsync]);
 
   return {
     address,

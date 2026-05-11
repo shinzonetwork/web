@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { useAccount, useChainId, useSwitchChain } from "wagmi";
+import { useConnection, useSwitchChain } from "wagmi";
 import { isAddress } from "viem";
 import { DECODE_LOG_LENS } from "@/entities/lens";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
@@ -32,9 +32,8 @@ export interface UseDecodeStudioStateResult {
 }
 
 export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
-  const { isConnected } = useAccount();
-  const activeChainId = useChainId();
-  const { switchChainAsync } = useSwitchChain();
+  const { chainId: activeChainId, isConnected } = useConnection();
+  const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
   const { upsert } = useStoredViews();
   const {
     deploy,
@@ -59,6 +58,7 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   const isDeployInProgress =
     status === "checking" ||
     status === "validating" ||
+    status === "simulating" ||
     status === "deploying" ||
     status === "confirming";
   const isInProgress = isFetchingAbi || isDeployInProgress;
@@ -111,7 +111,7 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   const switchToShinzo = useCallback(async () => {
     setSwitchChainError("");
     try {
-      await switchChainAsync({ chainId: shinzoDevnet.id });
+      await switchChainMutateAsync({ chainId: shinzoDevnet.id });
     } catch (error) {
       setSwitchChainError(
         error instanceof Error
@@ -119,7 +119,7 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
           : "Could not switch to Shinzo Devnet."
       );
     }
-  }, [switchChainAsync]);
+  }, [switchChainMutateAsync]);
 
   return {
     address,

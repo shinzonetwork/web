@@ -5,18 +5,10 @@
   "compatibility_date": "2026-05-01",
   "workers_dev": true,
   "preview_urls": true,
+  "keep_vars": true,
   "compatibility_flags": ["nodejs_compat"],
-  "vars": {
-    "HOST_GRAPHQL_URL": "http://34.29.235.10:444/api/v0/graphql",
-    "SHINZOHUB_EVM_RPC": "http://rpc.develop.devnet.shinzo.network:8545",
-    "SHINZOHUB_COSMOS_RPC": "http://rpc.develop.devnet.shinzo.network:1317",
-    "VITE_WALLETCONNECT_ID": "",
-    "VITE_APP_URL": "http://localhost:5173",
-    "VITE_SHINZOHUB_BLOCK_EXPLORER_URL": "",
-    "VITE_SHINZOHUB_CHAIN_ID": "91273002",
-  },
   "assets": {
     "not_found_handling": "single-page-application",
-    "run_worker_first": ["/api/*"],
-  },
+    "run_worker_first": ["/api/*"]
+  }
 }
