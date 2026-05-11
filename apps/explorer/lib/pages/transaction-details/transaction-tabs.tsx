@@ -1,6 +1,6 @@
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { TransactionCard } from './transaction-card';
 import { TransactionLogs } from './transaction-logs';
@@ -19,7 +19,10 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
 
   return (
     <Tabs defaultValue='overview'>
-      <Container wrapperClassName='mt-12' borderB>
+      <Container
+        wrapperClassName='mt-12 border-b border-ui-border'
+        className='[&>*]:translate-y-[1px]'
+      >
         <TabsList>
           <TabsTrigger value='overview'>
             Overview
@@ -30,7 +33,7 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
         </TabsList>
       </Container>
 
-      <div className='mt-2 border-t border-border'>
+      <div className='mt-2 border-t border-ui-border'>
         <TabsContent value='overview'>
           <TransactionCard txHash={hash} />
         </TabsContent>

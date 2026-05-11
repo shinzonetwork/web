@@ -1,0 +1,30 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../../../../packages/ui/src/theme.css";
+@source "../../../../packages/ui/src";
+
+@font-face {
+  font-family: "Shinzo JP Serif";
+  src: url("../../../../packages/ui/src/fonts/jp-serif.woff2") format("woff2");
+  font-display: swap;
+}
+
+@theme inline {
+  --font-sans: "Inter Variable", sans-serif;
+  --font-mono: "Geist Mono Variable", monospace;
+  --font-jp-serif: "Shinzo JP Serif", serif;
+
+  --color-szo-primary: oklch(0.5512 0.2083 25.95);
+  --color-szo-border: #aaaaaa;
+  --color-szo-black: #000000;
+  --color-szo-bg: #ffffff;
+}
+
+@layer base {
+  body {
+    @apply bg-szo-bg font-sans;
+  }
+  html {
+    @apply antialiased;
+  }
+}

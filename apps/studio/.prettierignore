@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+build
+out
+.vite
+.wrangler
+coverage
+
+# Production artifacts
+*.min.js
+*.min.css
+
+# Local environment
+.env
+.env*.local
+.dev.vars
+
+# System and editor files
+.DS_Store
+.idea
+.vscode
+
+# Generated metadata
+*.tsbuildinfo

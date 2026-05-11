@@ -12,7 +12,7 @@ import { cn } from '@/shared/utils/utils';
 import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
-import { useChainPathSegment } from "@/widgets/chain-path-segment/use-chain-path-segment";
+import { useChainPathSegment } from "@/widgets/chain-path-segment";
 // import { useHomeBlocks } from "../hook/use-home-blocks";
 import { useHomeBlocks } from "../hook/use-home-blocks";
 

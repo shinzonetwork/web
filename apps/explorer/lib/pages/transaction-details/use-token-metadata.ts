@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { type Address, getAddress } from 'viem';
 import { getPublicClient } from '@/shared/viem/client';
-import { useChainPathSegment } from '@/widgets/chain-path-segment/use-chain-path-segment';
+import { useChainPathSegment } from '@/widgets/chain-path-segment';
 
 const erc20MetadataAbi = [
   { type: 'function', name: 'name', inputs: [], outputs: [{ type: 'string' }], stateMutability: 'view' },
