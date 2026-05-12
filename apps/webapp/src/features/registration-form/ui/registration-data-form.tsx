@@ -72,6 +72,8 @@ export function RegistrationDataForm({
                   error={fieldErrors[input.id]}
                   disabled={prefilledFields[input.id] ?? false}
                   required={input.required}
+                  isSelect={input.isSelect}
+                  selectOptions={input.isSelect ? input.selectOptions : []}
                 />
               );
             })

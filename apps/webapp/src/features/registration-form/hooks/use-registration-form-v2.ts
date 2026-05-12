@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
 import { RegistrationFormDataByEntity } from "@/shared/types";
 import { PrefillDataV2, usePrefillData } from "./use-prefill-data";
+import { SOURCE_CHAIN_ID_MAP } from "@/features/indexer-assertion/util/form-data";
 
 const getInitialFormData = (
   entity: EntityRole,
@@ -44,6 +45,11 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
     const sanitizedValue = sanitizeString(value);
     // Update form data without validation (validation happens on button click)
     setFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
+
+    if (field === "sourceChain") {
+      setFormData((prev) => ({ ...prev, sourceChainId: SOURCE_CHAIN_ID_MAP[value as keyof typeof SOURCE_CHAIN_ID_MAP] }));
+    }
+
   }, []);
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import {
   RegistrationFormDataV2,
 } from "@/shared/types";
 import { isIndexerWhitelisted } from "@/shared/lib";
+import { SOURCE_CHAIN_OPTIONS } from "@/features/indexer-assertion/util/form-data";
 
 //Shinzohub V2 Registration
 
@@ -208,18 +209,21 @@ export const REGISTRATION_FORM_INPUTS_V2 = [
     id: "message",
     label: "Signed message",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "defraPublicKey",
     label: "Public key",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "defraSignedMessage",
     label: "Signed public key message",
     isTextarea: true,
+    isSelect: false,
     required: true,
   },
 ] as const;
@@ -230,20 +234,17 @@ export const REGISTRATION_FORM_INPUTS_INDEXER = [
     id: "connectionString",
     label: "Connection string",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "sourceChain",
     label: "Source chain",
     isTextarea: false,
+    isSelect: true,
+    selectOptions: SOURCE_CHAIN_OPTIONS,
     required: true,
-  },
-  {
-    id: "sourceChainId",
-    label: "Source chain ID",
-    isTextarea: false,
-    required: true,
-  },
+  }
 ] as const;
 
 export const REGISTRATION_FORM_INPUTS_HOST = [
@@ -252,6 +253,7 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
     id: "connectionString",
     label: "Connection string",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
 ] as const;
