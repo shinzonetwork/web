@@ -4,7 +4,7 @@ import { useIndexerAssertionForm } from "../hooks/use-indexer-assertion-form";
 import { useIndexerAssertion } from "../hooks/use-indexer-assertion";
 import { getIndexerAssertionButtonText } from "../util/form-data";
 
-export function IndexerAssertionForm() {
+export default function IndexerAssertionForm() {
   const { assertionFormData, handleInputChange, fieldErrors, isValid } =
     useIndexerAssertionForm();
   const { handleSignDigest, isSigning, isSubmitting, handleAssertion } =
@@ -28,7 +28,7 @@ export function IndexerAssertionForm() {
       />
       <Button
         onClick={handleSubmit}
-        className="w-fit rounded-none"
+        className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
         disabled={!isValid || isSubmitting}
       >
         {getIndexerAssertionButtonText(isSigning, isSubmitting)}

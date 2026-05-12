@@ -1,11 +1,11 @@
-import { EntityRole } from "../constants";
-import { Hex, getAddress, isAddress, isHex } from "viem";
-import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
+import { EntityRole } from "@/shared/lib/constants";
+import { Hex, isHex } from "viem";
 import {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
   RegistrationFormDataV2,
 } from "@/shared/types";
+import { isIndexerWhitelisted } from "@/shared/lib";
 
 //Shinzohub V2 Registration
 
@@ -22,11 +22,6 @@ export const INDEXER_CONNECTION_STRING_PATTERN =
 export function isValidIndexerConnectionString(value: string): boolean {
   return INDEXER_CONNECTION_STRING_PATTERN.test(value.trim());
 }
-
-// check if the registration is in v2 mode
-export const isRegistrationV2 = () => {
-  return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
-};
 
 /**
  * Host vs Indexer for V2 registration is determined only by the URL route
@@ -394,36 +389,4 @@ export const validateHexFormat = (formData: RegistrationFormData) => {
     }
   }
   return true;
-};
-
-// Normalize all whitelist addresses once for case-insensitive comparison
-const normalizedWhitelist = INDEXER_WHITELIST.map((addr) =>
-  getAddress(addr).toLowerCase()
-);
-
-export const isIndexerWhitelisted = (
-  address: Hex | undefined | null
-): boolean => {
-  // Handle undefined or null addresses
-  if (!address) {
-    return false;
-  }
-
-  // Validate address format
-  if (!isAddress(address)) {
-    return false;
-  }
-
-  try {
-    // Normalize the input address to lowercase for case-insensitive comparison
-    // getAddress validates and normalizes the address format
-    const normalizedAddress = getAddress(address).toLowerCase();
-    return normalizedWhitelist.includes(normalizedAddress);
-  } catch (error) {
-    // Invalid address format
-    if (process.env.NODE_ENV === "development") {
-      console.error("Invalid address format:", error);
-    }
-    return false;
-  }
 };

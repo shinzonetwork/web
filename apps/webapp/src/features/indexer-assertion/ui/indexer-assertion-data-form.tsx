@@ -17,7 +17,11 @@ export function IndexerAssertionDataForm({
   handleInputChange,
   fieldErrors,
 }: IndexerAssertionDataFormProps) {
-  const disabledFields = ["delegateAddress", "sourceChainId", "delegateSignature"];
+  const disabledFields = [
+    "delegateAddress",
+    "sourceChainId",
+    "delegateSignature",
+  ];
   return (
     <div className="space-y-6 w-full max-w-6xl">
       {INDEXER_ASSERTION_FORM_INPUTS.map((input) => (

@@ -2,27 +2,41 @@
 
 import { useAccount, useDisconnect } from "wagmi";
 import { Button } from "@/shared/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { shortenAddress } from "@/shared/lib";
 
 export function DisconnectWallet() {
   const { disconnect } = useDisconnect();
   const { isConnected, address } = useAccount();
 
-  const handleDisconnectWallet = () => {
-    disconnect();
-  };
+  if (!isConnected || !address) {
+    return null;
+  }
 
   return (
-    <>
-      {isConnected && address && (
-        <div className="gap-4">
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="link"
+          className="ml-4 w-fit rounded-none text-muted-foreground hover:text-muted-foreground/90"
+        >
+          {shortenAddress(address)}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-auto space-y-3 rounded-none">
+        <p className="font-mono text-sm text-muted-foreground">
+          Disconnect this wallet?
+        </p>
+        <div className="flex justify-end gap-2">
           <Button
-            onClick={handleDisconnectWallet}
-            className="ml-4 w-fit rounded-none bg-muted-foreground text-muted hover:bg-muted-foreground/90"
+            variant="default"
+            className="rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
+            onClick={() => disconnect()}
           >
-            Disconnect
+            Confirm
           </Button>
         </div>
-      )}
-    </>
+      </PopoverContent>
+    </Popover>
   );
 }

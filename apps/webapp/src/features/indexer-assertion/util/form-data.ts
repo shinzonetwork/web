@@ -1,39 +1,32 @@
 export type IndexerAssertionFormData = {
   consensusPubKey: string;
-  delegateAddress: string;
   sourceChain: string;
-  sourceChainId: number;
 };
 
 /** Delegate digest is a fixed-length payload (32 characters). */
 export const DELEGATE_DIGEST_MAX_LENGTH = 32;
 
-export type SOURCE_CHAIN = "ethereum" | "shinzohub";
+export type SOURCE_CHAIN = "ethereum" | "sepolia" | "polygon";
 
 export const SOURCE_CHAIN_ID_MAP: Record<SOURCE_CHAIN, number> = {
   ethereum: 1,
-  shinzohub: 91273002,
+  sepolia: 11155111,
+  polygon: 137,
 };
 
 export const SOURCE_CHAIN_OPTIONS = [
   { value: "ethereum", label: "Ethereum" },
-  { value: "shinzohub", label: "Shinzohub" },
+  { value: "sepolia", label: "Sepolia" },
+  { value: "polygon", label: "Polygon" },
 ];
 
 export const INDEXER_ASSERTION_FORM_INPUTS = [
-  {
-    id: "delegateAddress",
-    label: "Delegate Address",
-    isTextarea: false,
-    isSelect: false,
-    description:
-      "The delegate address should be the Shinzo address of the indexer, starting with the prefix 'shinzo'",
-  },
   {
     id: "consensusPubKey",
     label: "Consensus Public Key",
     isTextarea: false,
     isSelect: false,
+    description: "The consensus public key of the indexer",
   },
   {
     id: "sourceChain",
@@ -41,12 +34,6 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
     isTextarea: false,
     isSelect: true,
     selectOptions: SOURCE_CHAIN_OPTIONS,
-  },
-  {
-    id: "sourceChainId",
-    label: "Source Chain ID",
-    isTextarea: false,
-    isSelect: false,
   },
 ] as const;
 

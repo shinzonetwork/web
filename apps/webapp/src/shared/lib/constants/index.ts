@@ -30,3 +30,7 @@ export const UI_TEXT_CONTENT = {
       "Sign up your host or indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
   },
 } as const;
+
+export const isRegistrationV2 = () => {
+  return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
+};

@@ -9,12 +9,12 @@ import { useRegistrationFormV2 } from "../hooks/use-registration-form-v2";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction-v2";
 import {
   getRegistrationButtonText,
-  EntityRole,
   validateIndexerFields,
   validateIndexerRegistrationForm,
   validateHostRegistrationForm,
   validateHostFields,
-} from "@/shared/lib";
+} from "../util/registration";
+import { EntityRole } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
@@ -75,7 +75,7 @@ export function RegistrationFormV2() {
       />
       <Button
         onClick={handleRegister}
-        className="w-fit rounded-none"
+        className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
         disabled={isRegistrationDisabled || isPending || isConfirming}
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}

@@ -1,15 +1,20 @@
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
-import { IndexerAssertionFormData } from "../util/form-data";
+import {
+  IndexerAssertionFormData,
+  SOURCE_CHAIN,
+  SOURCE_CHAIN_ID_MAP,
+} from "../util/form-data";
 import { TOAST_CONFIG } from "@/shared/lib";
 import { adminIndexerAssertion } from "../util/assertion";
-import { useSignMessage } from "wagmi";
+import { useAccount, useSignMessage } from "wagmi";
 import { concat, hexToBytes, keccak256, stringToBytes } from "viem";
 
 export type SignedDelegatePayload = { digest: Uint8Array; signature: string };
 
 export function useIndexerAssertion() {
   const { signMessageAsync, isPending: isSigning } = useSignMessage();
+  const { address } = useAccount();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -65,9 +70,10 @@ export function useIndexerAssertion() {
           privateKey,
           rpcEndpoint,
           consensusPubKey: assertionFormData.consensusPubKey,
-          delegateAddress: assertionFormData.delegateAddress,
+          delegateAddress: address ?? "",
           sourceChain: assertionFormData.sourceChain,
-          sourceChainId: Number(assertionFormData.sourceChainId),
+          sourceChainId:
+            SOURCE_CHAIN_ID_MAP[assertionFormData.sourceChain as SOURCE_CHAIN],
           assertionId: `assert-${Math.random().toString(36).substring(2, 15)}`,
           delegateDigest: signed?.digest,
           delegateSignature: signature,
@@ -86,7 +92,7 @@ export function useIndexerAssertion() {
         setIsSubmitting(false);
       }
     },
-    []
+    [address]
   );
   return {
     handleSignDigest,

@@ -5,11 +5,8 @@ import { usePathname } from "next/navigation";
 import { useAccount } from "wagmi";
 import { RegistrationContext as RegistrationContextType } from "./types";
 import { RegistrationContext } from "./registration-context";
-import {
-  getRegistrationEntityFromPathname,
-  isWalletSigned,
-  setWalletSigned,
-} from "@/shared/lib";
+import { isWalletSigned, setWalletSigned } from "@/shared/lib";
+import { getRegistrationEntityFromPathname } from "@/features/registration-form/util/registration";
 
 /**
  * The provider for the registration context.

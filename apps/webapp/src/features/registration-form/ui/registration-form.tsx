@@ -7,11 +7,11 @@ import { useRegistrationForm } from "../hooks/use-registration-form";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction";
 import {
   getRegistrationButtonText,
-  TOAST_CONFIG,
   validateRegistrationForm,
   validateRequiredFields,
   validateEntity,
-} from "@/shared/lib";
+} from "../util/registration";
+import { TOAST_CONFIG } from "@/shared/lib";
 import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
 
@@ -67,7 +67,7 @@ export function RegistrationForm() {
       />
       <Button
         onClick={handleRegister}
-        className="w-fit rounded-none"
+        className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
         disabled={isRegistrationDisabled || isPending || isConfirming}
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}

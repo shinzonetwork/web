@@ -1,13 +1,12 @@
 import { Label } from "@/shared/ui/label";
 
 import {
-  EntityRole,
   REGISTRATION_FORM_INPUTS,
   REGISTRATION_FORM_INPUTS_HOST,
   REGISTRATION_FORM_INPUTS_INDEXER,
   type RegistrationFormData,
-  isRegistrationV2,
-} from "@/shared/lib";
+} from "../util/registration";
+import { EntityRole, isRegistrationV2 } from "@/shared/lib";
 import { InputField } from "@/widget";
 
 import { Hex } from "viem";

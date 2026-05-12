@@ -1,1 +1,1 @@
-export { default as IndexerAssertion } from "./ui/indexer-assertion";
+export { default as IndexerAssertionForm } from "./ui/indexer-assertion-form";

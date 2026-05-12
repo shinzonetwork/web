@@ -3,10 +3,13 @@
 import { useAccount } from "wagmi";
 
 import { useRegistrationContext } from "@/entities/registration-process";
-import { Registration } from "@/features/registration-form";
+import {
+  RegistrationForm,
+  RegistrationFormV2,
+} from "@/features/registration-form";
 import { FormHeader } from "@/widget/form-header";
 import { Header } from "@/widget";
-import { UI_TEXT_CONTENT } from "@/shared/lib";
+import { isRegistrationV2, UI_TEXT_CONTENT } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { Connect } from "@/page-components/connect";
 
@@ -26,8 +29,16 @@ export default function Register() {
             ]
           }
         />
-        {isConnected && isSignedWithWallet && <Registration />}
-        {!isConnected && <Connect />}
+        <div className="flex flex-col gap-4 py-8">
+          {!isConnected && <Connect />}
+          {isConnected &&
+            isSignedWithWallet &&
+            (isRegistrationV2() ? (
+              <RegistrationFormV2 />
+            ) : (
+              <RegistrationForm />
+            ))}
+        </div>
       </div>
     </>
   );
