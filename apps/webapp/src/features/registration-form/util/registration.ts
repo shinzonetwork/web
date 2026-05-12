@@ -244,7 +244,7 @@ export const REGISTRATION_FORM_INPUTS_INDEXER = [
     isSelect: true,
     selectOptions: SOURCE_CHAIN_OPTIONS,
     required: true,
-  }
+  },
 ] as const;
 
 export const REGISTRATION_FORM_INPUTS_HOST = [

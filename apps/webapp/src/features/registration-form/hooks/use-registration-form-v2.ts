@@ -47,9 +47,12 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
     setFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
 
     if (field === "sourceChain") {
-      setFormData((prev) => ({ ...prev, sourceChainId: SOURCE_CHAIN_ID_MAP[value as keyof typeof SOURCE_CHAIN_ID_MAP] }));
+      setFormData((prev) => ({
+        ...prev,
+        sourceChainId:
+          SOURCE_CHAIN_ID_MAP[value as keyof typeof SOURCE_CHAIN_ID_MAP],
+      }));
     }
-
   }, []);
 
   useEffect(() => {
