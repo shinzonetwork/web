@@ -40,7 +40,9 @@
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "shinzo-website-r2"
+      "bucket_name": "shinzo-website-r2",
+      // Fixes issue with dev images not being served
+      "preview_bucket_name": "shinzo-website-r2"
     }
   ],
   // DO Queue - (Time based revalidation)
@@ -56,7 +58,9 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": ["DOQueueHandler"]
+      "new_sqlite_classes": [
+        "DOQueueHandler"
+      ]
     }
   ],
   "d1_databases": [
@@ -106,7 +110,9 @@
       "r2_buckets": [
         {
           "binding": "R2",
-          "bucket_name": "shinzo-website-r2-staging"
+          "bucket_name": "shinzo-website-r2-staging",
+          // Fixes issue with dev images not being served
+          "preview_bucket_name": "shinzo-website-r2-staging"
         }
       ],
       "durable_objects": {
@@ -120,7 +126,9 @@
       "migrations": [
         {
           "tag": "v1",
-          "new_sqlite_classes": ["DOQueueHandler"]
+          "new_sqlite_classes": [
+            "DOQueueHandler"
+          ]
         }
       ],
       "images": {

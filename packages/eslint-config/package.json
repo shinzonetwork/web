@@ -7,7 +7,7 @@
     ".": "./index.mjs"
   },
   "dependencies": {
-    "eslint-config-next": "^16.0.1"
+    "eslint-config-next": "^16.2.6"
   },
   "peerDependencies": {
     "eslint": "^9",

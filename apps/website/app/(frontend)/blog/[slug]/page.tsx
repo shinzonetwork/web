@@ -46,7 +46,7 @@ export default async function BlogDetail({ params }: BlogDetailProps) {
 
     return (
         <div>
-            <BlockHero title={<h1>{post.title}</h1>} content={<div>
+            <BlockHero title={post.title} content={<div>
                 <h2 className="text-h4">{post.subtitle}</h2>
                 <p className="text-px-12 font-mono">[{formatDate(post?.publishedAt || '')}]
                     {post?.authors?.length && post?.authors?.length > 0 ? " | " : ""}

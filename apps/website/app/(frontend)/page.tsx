@@ -3,20 +3,11 @@ import BlockGhLatest from "@/components/block-gh-latest";
 import BlockHero from "@/components/block-hero";
 import BlockHomeExplainer from "@/components/block-home-explainer";
 import BlockHomeIntro from "@/components/block-home-intro";
-import BlockLogoCarousel from "@/components/block-logo-carousel";
 import BlockSectionedContent from "@/components/block-sectioned-content";
 import CharBlockchainSvg from '@/components/svg/chars-blockchain.svg';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-// import BlockHomeTwoColumn from "@/components/block-home-two-column";
-// import BlockFeatures from "@/components/block-features";
-// import Feature1Image from '@/public/feature-1.png';
-// import Feature2Image from '@/public/feature-2.png';
-// import Feature3Image from '@/public/feature-3.png';
-// import Feature4Image from '@/public/feature-4.png';
-// import ForBuildersImage from '@/public/feature-builders.png';
-// import ForValidatorsImage from '@/public/feature-validators.png';
 
 export default async function Home() {
 
@@ -39,8 +30,6 @@ export default async function Home() {
                 </>}
             />
 
-            <BlockLogoCarousel />
-
             <BlockHomeIntro
                 title="Blockchain was supposed to be different"
                 titleHighlights={['Verifiable', 'Trustless', 'Permissionless', 'Decentralized']}
@@ -60,38 +49,6 @@ export default async function Home() {
             />
 
             <BlockHomeExplainer />
-
-            {/*
-            <BlockHomeTwoColumn
-                column1={{
-                    title: '/ For Builders',
-                    content: <>
-                        <p>Build wallets, explorers, analytics, and DeFi that don’t collapse when an API does.</p>
-                        <p>Query any integrated chain. Verify every byte. Compose the views you need without asking permission.</p>
-                        <p><Link href="/" className="font-mono font-bold">Build with Proofs ↗</Link></p>
-                    </>,
-                    image: ForBuildersImage,
-                }}
-                column2={{
-                    title: '/ For Validators & Miners',
-                    content: <>
-                        <p>You already secure the chain — now let your hardware secure its truth.</p>
-                        <p>Run Shinzo alongside your node software and earn from the same machines that keep blockchains alive.</p>
-                        <p>No new infrastructure. No new trust. Just more value from what you already run.</p>
-                        <p ><Link href="/" className="font-mono font-bold">Join the Validator Cohort ↗</Link></p>
-                    </>,
-                    image: ForValidatorsImage,
-                }}
-            /> */}
-
-            {/* <BlockFeatures
-                features={[
-                    { title: 'Cross-chain routing with unified liquidity', image: Feature1Image },
-                    { title: 'On-chain research that’s reproducible', image: Feature2Image },
-                    { title: 'Institutional-grade audit trails', image: Feature3Image },
-                    { title: 'Real-time systems that listen to blocks, not dashboards', image: Feature4Image },
-                ]}
-            /> */}
 
             <BlockSectionedContent sections={[
                 {
