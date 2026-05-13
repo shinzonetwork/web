@@ -16,11 +16,17 @@ import { isIndexerWhitelisted } from "@/shared/lib";
  * - TCP port: 1–65535
  * - `/p2p/`: base58btc alphabet (no `0`, `O`, `I`, `l`), typical ed25519 peer ids are ~52 chars
  */
-export const INDEXER_CONNECTION_STRING_PATTERN =
+const CONNECTION_STRING_PATTERN =
   /^\/ip4\/(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\/tcp\/(?:[1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])\/p2p\/[1-9A-HJ-NP-Za-km-z]{46,128}$/;
 
-export function isValidIndexerConnectionString(value: string): boolean {
-  return INDEXER_CONNECTION_STRING_PATTERN.test(value.trim());
+const IPV4_PATTERN =
+  /^(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
+
+export function isValidConnectionString(value: string): boolean {
+  return (
+    IPV4_PATTERN.test(value.trim()) ||
+    CONNECTION_STRING_PATTERN.test(value.trim())
+  );
 }
 
 /**
@@ -62,7 +68,7 @@ export function validateIndexerRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Indexer,
     validateRegistrationFormV2(formData),
-    isValidIndexerConnectionString(formData.connectionString ?? ""),
+    isValidConnectionString(formData.connectionString ?? ""),
     Boolean(formData.sourceChain?.trim()),
     Boolean(formData.sourceChainId),
   ];
@@ -153,9 +159,9 @@ export function validateIndexerFields(
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
     errors.connectionString = "Connection string is required";
-  } else if (!isValidIndexerConnectionString(connection)) {
+  } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
-      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+      "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
   }
   if (!formData.sourceChain?.trim()) {
     errors.sourceChain = "Source chain is required";
@@ -187,9 +193,9 @@ export function validateHostFields(
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
     errors.connectionString = "Connection string is required";
-  } else if (!isValidIndexerConnectionString(connection)) {
+  } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
-      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+      "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const hostFieldsValidation = Object.values(errors).every(
