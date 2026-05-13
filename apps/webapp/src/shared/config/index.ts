@@ -3,9 +3,10 @@
 import { createConfig, http } from "wagmi";
 import { defineChain, type Chain } from "viem";
 import { getRpcUrl } from "./env";
+import { SHINZO_CHAIN_ID } from "../lib/constants";
 
 export const Shinzo: Chain = defineChain({
-  id: 91273002,
+  id: SHINZO_CHAIN_ID,
   name: "Shinzo",
   nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
   rpcUrls: {

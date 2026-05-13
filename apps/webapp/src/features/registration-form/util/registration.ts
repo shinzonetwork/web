@@ -1,4 +1,4 @@
-import { EntityRole } from "@/shared/lib/constants";
+import { EntityRole, getSourceChainOptions } from "@/shared/lib/constants";
 import { Hex, isHex } from "viem";
 import {
   HostRegistrationFormData,
@@ -6,7 +6,6 @@ import {
   RegistrationFormDataV2,
 } from "@/shared/types";
 import { isIndexerWhitelisted } from "@/shared/lib";
-import { SOURCE_CHAIN_OPTIONS } from "@/features/indexer-assertion/util/form-data";
 
 //Shinzohub V2 Registration
 
@@ -242,7 +241,7 @@ export const REGISTRATION_FORM_INPUTS_INDEXER = [
     label: "Source chain",
     isTextarea: false,
     isSelect: true,
-    selectOptions: SOURCE_CHAIN_OPTIONS,
+    selectOptions: getSourceChainOptions(),
     required: true,
   },
 ] as const;

@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
-import { IndexerAssertionFormData, SOURCE_CHAIN } from "../util/form-data";
+import { IndexerAssertionFormData } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
+
+const defaultSourceChain = process.env.NEXT_PUBLIC_DEFAULT_SOURCE_CHAIN;
 
 function createInitialValues(): IndexerAssertionFormData {
   return {
     consensusPubKey: "",
-    sourceChain: "ethereum" as SOURCE_CHAIN,
+    sourceChain: defaultSourceChain ?? "",
   };
 }
 

@@ -1,11 +1,7 @@
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
-import {
-  IndexerAssertionFormData,
-  SOURCE_CHAIN,
-  SOURCE_CHAIN_ID_MAP,
-} from "../util/form-data";
-import { TOAST_CONFIG } from "@/shared/lib";
+import { IndexerAssertionFormData } from "../util/form-data";
+import { TOAST_CONFIG, getSourceChainMap } from "@/shared/lib";
 import { adminIndexerAssertion } from "../util/assertion";
 import { useAccount, useSignMessage } from "wagmi";
 import { concat, hexToBytes, keccak256, stringToBytes } from "viem";
@@ -64,6 +60,10 @@ export function useIndexerAssertion() {
       const signature = hexToBytes(signed?.signature as `0x${string}`); // 65 bytes
       if (signature[64] >= 27) signature[64] -= 27;
 
+      const availableChains = getSourceChainMap();
+      const sourceChainId =
+        availableChains[assertionFormData.sourceChain ?? ""];
+
       try {
         setIsSubmitting(true);
         const result = await adminIndexerAssertion({
@@ -72,8 +72,7 @@ export function useIndexerAssertion() {
           consensusPubKey: assertionFormData.consensusPubKey,
           delegateAddress: address ?? "",
           sourceChain: assertionFormData.sourceChain,
-          sourceChainId:
-            SOURCE_CHAIN_ID_MAP[assertionFormData.sourceChain as SOURCE_CHAIN],
+          sourceChainId: sourceChainId,
           assertionId: `assert-${Math.random().toString(36).substring(2, 15)}`,
           delegateDigest: signed?.digest,
           delegateSignature: signature,

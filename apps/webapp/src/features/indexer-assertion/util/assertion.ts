@@ -3,8 +3,8 @@ import {
   makeSignDoc,
   makeSignBytes,
 } from "@cosmjs/proto-signing";
-import { keccak256, Secp256k1 } from "@cosmjs/crypto";
-import { toBech32, fromHex } from "@cosmjs/encoding";
+import { Secp256k1 } from "@cosmjs/crypto";
+import { toBech32 } from "@cosmjs/encoding";
 import { BaseAccount } from "cosmjs-types/cosmos/auth/v1beta1/auth";
 import {
   QueryAccountRequest,
@@ -13,6 +13,9 @@ import {
 import { TxRaw, TxBody } from "cosmjs-types/cosmos/tx/v1beta1/tx";
 import { PubKey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 import * as _m0 from "protobufjs/minimal";
+import { bytesToHex, concat, Hex, hexToBytes, keccak256 } from "viem";
+import { privateKeyToAccount, sign } from "viem/accounts";
+import { SHINZO_CHAIN_ID } from "@/shared/lib/constants";
 
 const PREFIX = "shinzo";
 const PUBKEY_TYPE = "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey";
@@ -65,23 +68,44 @@ const MsgIndexerAssertion = {
   },
 };
 
+function normalizePrivateKey(privateKey: string): `0x${string}` {
+  const hex = privateKey.trim().replace(/^0x/i, "");
+  return `0x${hex}`;
+}
+
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+  return bytes;
+}
+
 async function abciQuery(
   rpc: string,
   path: string,
   data: Uint8Array
 ): Promise<Uint8Array> {
-  const hex = Buffer.from(data).toString("hex");
   const res = await fetch(
-    `${rpc}/abci_query?path=%22${encodeURIComponent(path)}%22&data=0x${hex}`
+    `${rpc}/abci_query?path=%22${encodeURIComponent(path)}%22&data=${bytesToHex(data)}`
   );
-  const json = (await res.json()) as any;
-  return Buffer.from(json.result.response.value, "base64");
-}
-
-async function getChainId(rpc: string): Promise<string> {
-  const res = await fetch(`${rpc}/status`);
-  const json = (await res.json()) as any;
-  return json.result.node_info.network;
+  const json = (await res.json()) as {
+    result?: { response?: { value?: string } };
+  };
+  const value = json.result?.response?.value;
+  if (!value) {
+    throw new Error("ABCI query returned no response value.");
+  }
+  return base64ToBytes(value);
 }
 
 async function getAccount(rpc: string, address: string) {
@@ -109,10 +133,12 @@ async function broadcast(
       jsonrpc: "2.0",
       id: 1,
       method: "broadcast_tx_sync",
-      params: { tx: Buffer.from(txBytes).toString("base64") },
+      params: { tx: bytesToBase64(txBytes) },
     }),
   });
-  const json = (await res.json()) as any;
+  const json = (await res.json()) as {
+    result: { hash: string; code: number; log: string };
+  };
   return {
     hash: json.result.hash,
     code: json.result.code,
@@ -134,15 +160,13 @@ export async function adminIndexerAssertion(
     delegateDigest,
     delegateSignature,
   } = opts;
-  const privkey = fromHex(privateKey.replace(/^0x/, ""));
-  const keypair = await Secp256k1.makeKeypair(privkey);
-  const compressedPubkey = Secp256k1.compressPubkey(keypair.pubkey);
-  const address = toBech32(
-    PREFIX,
-    keccak256(keypair.pubkey.slice(1)).slice(-20)
+  const normalizedPrivateKey = normalizePrivateKey(privateKey);
+  const account = privateKeyToAccount(normalizedPrivateKey);
+  const compressedPubkey = Secp256k1.compressPubkey(
+    hexToBytes(account.publicKey)
   );
+  const address = toBech32(PREFIX, hexToBytes(account.address));
 
-  const chainId = await getChainId(rpcEndpoint);
   const { accountNumber, sequence } = await getAccount(rpcEndpoint, address);
   const pubkey = {
     typeUrl: PUBKEY_TYPE,
@@ -150,7 +174,7 @@ export async function adminIndexerAssertion(
   };
   const shinzoAddress = delegateAddress.startsWith(PREFIX)
     ? delegateAddress
-    : toBech32(PREFIX, fromHex(delegateAddress.replace(/^0x/, "")));
+    : toBech32(PREFIX, hexToBytes(delegateAddress as Hex));
 
   const msgValue = MsgIndexerAssertion.fromPartial({
     signer: address,
@@ -185,14 +209,14 @@ export async function adminIndexerAssertion(
   const signDoc = makeSignDoc(
     txBodyBytes,
     authInfoBytes,
-    chainId,
+    SHINZO_CHAIN_ID.toString(),
     accountNumber
   );
-  const sig = await Secp256k1.createSignature(
-    keccak256(makeSignBytes(signDoc)),
-    privkey
-  );
-  const sigBytes = new Uint8Array([...sig.r(32), ...sig.s(32)]);
+  const { r, s } = await sign({
+    hash: keccak256(makeSignBytes(signDoc)),
+    privateKey: normalizedPrivateKey,
+  });
+  const sigBytes = hexToBytes(concat([r, s]));
 
   const txRaw = TxRaw.encode(
     TxRaw.fromPartial({

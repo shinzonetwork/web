@@ -1,3 +1,5 @@
+import { getSourceChainOptions } from "@/shared/lib";
+
 export type IndexerAssertionFormData = {
   consensusPubKey: string;
   sourceChain: string;
@@ -5,20 +7,6 @@ export type IndexerAssertionFormData = {
 
 /** Delegate digest is a fixed-length payload (32 characters). */
 export const DELEGATE_DIGEST_MAX_LENGTH = 32;
-
-export type SOURCE_CHAIN = "ethereum" | "sepolia" | "polygon";
-
-export const SOURCE_CHAIN_ID_MAP: Record<SOURCE_CHAIN, number> = {
-  ethereum: 1,
-  sepolia: 11155111,
-  polygon: 137,
-};
-
-export const SOURCE_CHAIN_OPTIONS = [
-  { value: "ethereum", label: "Ethereum" },
-  { value: "sepolia", label: "Sepolia" },
-  { value: "polygon", label: "Polygon" },
-];
 
 export const INDEXER_ASSERTION_FORM_INPUTS = [
   {
@@ -33,7 +21,7 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
     label: "Source Chain",
     isTextarea: false,
     isSelect: true,
-    selectOptions: SOURCE_CHAIN_OPTIONS,
+    selectOptions: getSourceChainOptions(),
   },
 ] as const;
 

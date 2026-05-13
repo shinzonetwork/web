@@ -1,3 +1,5 @@
+export const SHINZO_CHAIN_ID = 91273002;
+
 export const MESSAGE_TO_SIGN = "Shinzo Registration Verification";
 
 export enum EntityRole {
@@ -10,12 +12,12 @@ export const SHINZO_PRECOMPILE_ADDRESS =
 
 export const UI_TEXT_CONTENT = {
   "host-registration": {
-    title: "/ Register Host on the Shinzo Network",
+    title: "/ Register your host to participate within the Shinzo Network",
     description:
       "Sign up your host to be recognized by the Shinzo Network and contribute to the ecosystem.",
   },
   "indexer-registration": {
-    title: "/ Register Indexer on the Shinzo Network",
+    title: "/ Register your indexer to participate within the Shinzo Network",
     description:
       "Sign up your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
   },
@@ -33,4 +35,16 @@ export const UI_TEXT_CONTENT = {
 
 export const isRegistrationV2 = () => {
   return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
+};
+
+export const getSourceChainMap = () => {
+  return JSON.parse(process.env.NEXT_PUBLIC_AVAILABLE_SOURCE_CHAINS ?? "{}");
+};
+
+export const getSourceChainOptions = () => {
+  const sourceChainMap = getSourceChainMap();
+  return Object.entries(sourceChainMap).map(([key, _]) => ({
+    value: key,
+    label: key.charAt(0).toUpperCase() + key.slice(1),
+  })) as { value: string; label: string }[];
 };
