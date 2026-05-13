@@ -23,7 +23,10 @@ export function DisconnectWallet() {
           {shortenAddress(address)}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-auto space-y-3 rounded-none">
+      <PopoverContent
+        align="end"
+        className="w-auto space-y-3 rounded-none bg-background shadow-md"
+      >
         <p className="font-mono text-sm text-muted-foreground">
           Disconnect this wallet?
         </p>

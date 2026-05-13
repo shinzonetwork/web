@@ -17,7 +17,7 @@ export function HeaderMenu() {
           <span>Host</span>
           <ChevronDownIcon className="h-4 w-4" />
         </MenubarTrigger>
-        <MenubarContent>
+        <MenubarContent className="w-full min-w-[150px] bg-background shadow-md rounded-none">
           <MenubarItem asChild className="text-lg text-muted-foreground">
             <Link href="/host-registration">Registration</Link>
           </MenubarItem>
@@ -29,10 +29,11 @@ export function HeaderMenu() {
           <span>Indexer</span>
           <ChevronDownIcon className="h-4 w-4" />
         </MenubarTrigger>
-        <MenubarContent>
+        <MenubarContent className="w-full min-w-[150px] bg-background shadow-md rounded-none">
           <MenubarItem asChild className="text-lg text-muted-foreground">
             <Link href="/indexer-registration">Registration</Link>
           </MenubarItem>
+          <MenubarSeparator />
           <MenubarItem asChild className="text-lg text-muted-foreground">
             <Link href="/indexer-assertion">Assertion</Link>
           </MenubarItem>
