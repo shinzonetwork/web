@@ -1,6 +1,9 @@
 "use client";
 
+import { SHINZO_PREFIX } from "@/shared/lib";
+import { toBech32 } from "@cosmjs/encoding";
 import { useQuery } from "@tanstack/react-query";
+import { Hex, hexToBytes } from "viem";
 import { useAccount } from "wagmi";
 
 const registeredHostsApiEndpoint =
@@ -30,10 +33,13 @@ async function fetchIndexerAssertion(address: string): Promise<boolean> {
 
 export function useVerifyIndexerAssertion(intervalMs = 30000) {
   const { address } = useAccount();
+  const shinzoAddress = address?.startsWith(SHINZO_PREFIX)
+    ? address
+    : toBech32(SHINZO_PREFIX, hexToBytes(address as Hex));
 
   return useQuery({
-    queryKey: ["indexer-assertion-verification", address],
-    queryFn: () => fetchIndexerAssertion(address as string),
+    queryKey: ["indexer-assertion-verification", shinzoAddress],
+    queryFn: () => fetchIndexerAssertion(shinzoAddress as string),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
     enabled: !!address,
