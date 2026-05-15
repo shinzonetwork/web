@@ -10,15 +10,17 @@ export const getSourceChainMap = () => {
   return AVAILABLE_CHAINS_MAP;
 };
 
-export type SourceChainOptions = {
+export type SourceChainOption = {
   value: string;
-  label: keyof typeof AVAILABLE_CHAINS_MAP;
+  label: string;
 };
 
-export const getSourceChainOptions = (): SourceChainOptions[] => {
+export const getSourceChainOptions = (): SourceChainOption[] => {
   const sourceChainMap = getSourceChainMap();
-  return Object.entries(sourceChainMap).map(([key, _]) => ({
+  const chainOptions = Object.entries(sourceChainMap).map(([key]) => ({
     value: key,
     label: key.charAt(0).toUpperCase() + key.slice(1),
-  })) as SourceChainOptions[];
+  }));
+
+  return [{ value: "", label: "Select the chain" }, ...chainOptions];
 };
