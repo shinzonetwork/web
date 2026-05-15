@@ -3,7 +3,7 @@
 import { createConfig, http } from "wagmi";
 import { defineChain, type Chain } from "viem";
 import { getRpcUrl } from "./env";
-import { SHINZO_CHAIN_ID } from "../lib/constants";
+import { SHINZO_CHAIN_ID } from "../lib/constants/chains";
 
 export const Shinzo: Chain = defineChain({
   id: SHINZO_CHAIN_ID,

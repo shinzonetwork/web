@@ -15,7 +15,7 @@ import { PubKey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 import * as _m0 from "protobufjs/minimal";
 import { bytesToHex, concat, Hex, hexToBytes, keccak256 } from "viem";
 import { privateKeyToAccount, sign } from "viem/accounts";
-import { SHINZO_CHAIN_ID } from "@/shared/lib/constants";
+import { SHINZO_CHAIN_ID } from "@/shared/lib";
 
 const PREFIX = "shinzo";
 const PUBKEY_TYPE = "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey";

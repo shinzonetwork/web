@@ -1,5 +1,3 @@
-export const SHINZO_CHAIN_ID = 91273002;
-
 export const MESSAGE_TO_SIGN = "Shinzo Registration Verification";
 
 export enum EntityRole {
@@ -35,16 +33,4 @@ export const UI_TEXT_CONTENT = {
 
 export const isRegistrationV2 = () => {
   return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
-};
-
-export const getSourceChainMap = () => {
-  return JSON.parse(process.env.NEXT_PUBLIC_AVAILABLE_SOURCE_CHAINS ?? "{}");
-};
-
-export const getSourceChainOptions = () => {
-  const sourceChainMap = getSourceChainMap();
-  return Object.entries(sourceChainMap).map(([key, _]) => ({
-    value: key,
-    label: key.charAt(0).toUpperCase() + key.slice(1),
-  })) as { value: string; label: string }[];
 };

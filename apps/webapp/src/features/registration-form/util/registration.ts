@@ -1,4 +1,4 @@
-import { EntityRole, getSourceChainOptions } from "@/shared/lib/constants";
+import { EntityRole, getSourceChainOptions } from "@/shared/lib";
 import { Hex, isHex } from "viem";
 import {
   HostRegistrationFormData,
