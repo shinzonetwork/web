@@ -30,6 +30,7 @@ export default function Registration() {
           className="font-mono text-sm underline hover:text-[#D32C34] cursor-pointer transition-colors"
           type="button"
           title="Click to copy address"
+          aria-label="Copy address to clipboard"
         >
           <div className="flex items-center gap-1">
             {shortenAddress(address)}
