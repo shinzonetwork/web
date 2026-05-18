@@ -96,21 +96,21 @@ export function validateSharedFieldsV2(
   };
 
   if (!(formData.defraPublicKey.trim().length > 2) || !validateHex(formData.message.trim())) {
-    errors.message = "Signed message is required and must be a valid hex string. ";
+    errors.message = "Signed message is required and must be a valid hex string.";
   }
   if (
     !(formData.defraPublicKey.trim().length > 2) ||
     !validateHex(formData.defraPublicKey.trim())
   ) {
     errors.defraPublicKey =
-      "Public key is required and must be a valid hex string. ";
+      "Public key is required and must be a valid hex string.";
   }
   if (
     !(formData.defraSignedMessage.trim().length > 2) ||
     !validateHex(formData.defraSignedMessage.trim())
   ) {
     errors.defraSignedMessage =
-      "Signed public key message is required and must be a valid hex string. ";
+      "Signed public key message is required and must be a valid hex string.";
   }
 
   return {
