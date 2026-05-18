@@ -11,7 +11,7 @@ import { TooltipProvider } from "@/shared/ui/tooltip";
 export const metadata: Metadata = {
   title: "Shinzo",
   description:
-    "Sign up your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+    "Register your host to participate in the Shinzo Network.",
   icons: "/images/favicon.png",
 };
 

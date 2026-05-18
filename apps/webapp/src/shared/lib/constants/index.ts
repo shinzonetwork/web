@@ -10,8 +10,8 @@ export const SHINZO_PRECOMPILE_ADDRESS =
 
 export const UI_TEXT_CONTENT = {
   registration: {
-    title: "/ Register on the Shinzo Network",
+    title: "Register on the Shinzo Network",
     description:
-      "Sign up your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+      "Register your host to participate in the Shinzo Network.",
   },
 } as const;
