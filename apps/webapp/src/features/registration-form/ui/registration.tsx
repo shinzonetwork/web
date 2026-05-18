@@ -29,7 +29,7 @@ export default function Registration() {
           onClick={handleCopyAddress}
           className="font-mono text-sm underline hover:text-[#D32C34] cursor-pointer transition-colors"
           type="button"
-          title="Click to copy address"
+          title="Copy address to clipboard"
           aria-label="Copy address to clipboard"
         >
           <div className="flex items-center gap-1">
