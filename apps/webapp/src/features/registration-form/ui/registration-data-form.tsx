@@ -1,14 +1,13 @@
 import { Label } from "@/shared/ui/label";
 
 import {
-  EntityRole,
   REGISTRATION_FORM_INPUTS,
   REGISTRATION_FORM_INPUTS_HOST,
   REGISTRATION_FORM_INPUTS_INDEXER,
   type RegistrationFormData,
-  isRegistrationV2,
-} from "@/shared/lib";
-import { RegistrationInputField as Inputfield } from "./registration-input-field";
+} from "../util/registration";
+import { EntityRole, isRegistrationV2 } from "@/shared/lib";
+import { InputField } from "@/widget";
 
 import { Hex } from "viem";
 import { RegistrationRadioButton } from "./registration-radio-button";
@@ -28,7 +27,8 @@ interface RegistrationDataFormProps {
     | IndexerRegistrationFormData
     | HostRegistrationFormData;
   handleInputChange: (field: string, value: string) => void;
-  handleUserRoleChange: (value: string) => void;
+  /** V1 only: Host/Indexer radio. Omitted for V2 (entity comes from the registration route). */
+  handleUserRoleChange?: (value: string) => void;
   fieldErrors?: Record<string, string | undefined>;
   prefilledFields?: Record<string, boolean>;
 }
@@ -42,23 +42,25 @@ export function RegistrationDataForm({
 }: RegistrationDataFormProps) {
   return (
     <div className="space-y-6 w-full max-w-6xl">
-      <div className="space-y-4">
-        <Label htmlFor="userRole" className="text-sm font-medium">
-          Select a role <span className="text-xs text-red-500">*</span>
-        </Label>
-        <RegistrationRadioButton
-          selectedEntityValue={formData.entity.toString()}
-          prefilledEntityValue={prefilledFields.entity}
-          onChange={handleUserRoleChange}
-        />
-      </div>
+      {!isRegistrationV2() && handleUserRoleChange ? (
+        <div className="space-y-4">
+          <Label htmlFor="userRole" className="text-sm font-medium">
+            Select a role <span className="text-xs text-red-500">*</span>
+          </Label>
+          <RegistrationRadioButton
+            selectedEntityValue={formData.entity.toString()}
+            prefilledEntityValue={prefilledFields.entity}
+            onChange={handleUserRoleChange}
+          />
+        </div>
+      ) : null}
 
       {isRegistrationV2()
         ? formData.entity === EntityRole.Indexer
           ? REGISTRATION_FORM_INPUTS_INDEXER.map((input) => {
               const indexerForm = formData as IndexerRegistrationFormData;
               return (
-                <Inputfield
+                <InputField
                   key={input.id}
                   id={input.id}
                   label={input.label}
@@ -70,13 +72,15 @@ export function RegistrationDataForm({
                   error={fieldErrors[input.id]}
                   disabled={prefilledFields[input.id] ?? false}
                   required={input.required}
+                  isSelect={input.isSelect}
+                  selectOptions={input.isSelect ? input.selectOptions : []}
                 />
               );
             })
           : REGISTRATION_FORM_INPUTS_HOST.map((input) => {
               const hostForm = formData as HostRegistrationFormData;
               return (
-                <Inputfield
+                <InputField
                   key={input.id}
                   id={input.id}
                   label={input.label}
@@ -94,7 +98,7 @@ export function RegistrationDataForm({
         : REGISTRATION_FORM_INPUTS.map((input) => {
             const v1Form = formData as RegistrationFormData;
             return (
-              <Inputfield
+              <InputField
                 key={input.id}
                 id={input.id}
                 label={input.label}

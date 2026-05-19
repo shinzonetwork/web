@@ -1,11 +1,11 @@
-import { EntityRole } from "../constants";
-import { Hex, getAddress, isAddress, isHex } from "viem";
-import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
+import { EntityRole, getSourceChainOptions } from "@/shared/lib";
+import { Hex, isHex } from "viem";
 import {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
   RegistrationFormDataV2,
 } from "@/shared/types";
+import { isIndexerWhitelisted } from "@/shared/lib";
 
 //Shinzohub V2 Registration
 
@@ -16,17 +16,37 @@ import {
  * - TCP port: 1–65535
  * - `/p2p/`: base58btc alphabet (no `0`, `O`, `I`, `l`), typical ed25519 peer ids are ~52 chars
  */
-export const INDEXER_CONNECTION_STRING_PATTERN =
+const CONNECTION_STRING_PATTERN =
   /^\/ip4\/(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\/tcp\/(?:[1-9]\d{0,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])\/p2p\/[1-9A-HJ-NP-Za-km-z]{46,128}$/;
 
-export function isValidIndexerConnectionString(value: string): boolean {
-  return INDEXER_CONNECTION_STRING_PATTERN.test(value.trim());
+const IPV4_PATTERN =
+  /^(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)\.(?:25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)$/;
+
+export function isValidConnectionString(value: string): boolean {
+  return (
+    IPV4_PATTERN.test(value.trim()) ||
+    CONNECTION_STRING_PATTERN.test(value.trim())
+  );
 }
 
-// check if the registration is in v2 mode
-export const isRegistrationV2 = () => {
-  return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
-};
+/**
+ * Host vs Indexer for V2 registration is determined only by the URL route
+ * (e.g. `/host-registration`, `/indexer-registration`). Users switch flows via nav links, not in-form toggles.
+ */
+export function getRegistrationEntityFromPathname(
+  pathname: string | null
+): EntityRole {
+  if (!pathname) {
+    return EntityRole.Host;
+  }
+  if (pathname.includes("indexer-registration")) {
+    return EntityRole.Indexer;
+  }
+  if (pathname.includes("host-registration")) {
+    return EntityRole.Host;
+  }
+  return EntityRole.Host;
+}
 
 /**
  * Validate registration form data
@@ -48,7 +68,7 @@ export function validateIndexerRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Indexer,
     validateRegistrationFormV2(formData),
-    isValidIndexerConnectionString(formData.connectionString ?? ""),
+    isValidConnectionString(formData.connectionString ?? ""),
     Boolean(formData.sourceChain?.trim()),
     Boolean(formData.sourceChainId),
   ];
@@ -95,8 +115,12 @@ export function validateSharedFieldsV2(
     defraSignedMessage: undefined,
   };
 
-  if (!(formData.defraPublicKey.trim().length > 2) || !validateHex(formData.message.trim())) {
-    errors.message = "Signed message is required and must be a valid hex string. ";
+  if (
+    !(formData.defraPublicKey.trim().length > 2) ||
+    !validateHex(formData.message.trim())
+  ) {
+    errors.message =
+      "Signed message is required and must be a valid hex string. ";
   }
   if (
     !(formData.defraPublicKey.trim().length > 2) ||
@@ -135,9 +159,9 @@ export function validateIndexerFields(
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
     errors.connectionString = "Connection string is required";
-  } else if (!isValidIndexerConnectionString(connection)) {
+  } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
-      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+      "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
   }
   if (!formData.sourceChain?.trim()) {
     errors.sourceChain = "Source chain is required";
@@ -159,20 +183,19 @@ export function validateIndexerFields(
 export function validateHostFields(
   formData: HostRegistrationFormData
 ): RequiredFieldsValidationResult {
-  const errors: Record<keyof HostRegistrationFormData, string | undefined> =
-    {
-      entity: undefined,
-      message: undefined,
-      defraPublicKey: undefined,
-      defraSignedMessage: undefined,
-      connectionString: undefined,
-    };
+  const errors: Record<keyof HostRegistrationFormData, string | undefined> = {
+    entity: undefined,
+    message: undefined,
+    defraPublicKey: undefined,
+    defraSignedMessage: undefined,
+    connectionString: undefined,
+  };
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
     errors.connectionString = "Connection string is required";
-  } else if (!isValidIndexerConnectionString(connection)) {
+  } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
-      "Connection string must look like /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+      "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const hostFieldsValidation = Object.values(errors).every(
@@ -191,18 +214,21 @@ export const REGISTRATION_FORM_INPUTS_V2 = [
     id: "message",
     label: "Signed message",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "defraPublicKey",
     label: "Public key",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "defraSignedMessage",
     label: "Signed public key message",
     isTextarea: true,
+    isSelect: false,
     required: true,
   },
 ] as const;
@@ -213,18 +239,15 @@ export const REGISTRATION_FORM_INPUTS_INDEXER = [
     id: "connectionString",
     label: "Connection string",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
   {
     id: "sourceChain",
     label: "Source chain",
     isTextarea: false,
-    required: true,
-  },
-  {
-    id: "sourceChainId",
-    label: "Source chain ID",
-    isTextarea: false,
+    isSelect: true,
+    selectOptions: getSourceChainOptions(),
     required: true,
   },
 ] as const;
@@ -235,6 +258,7 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
     id: "connectionString",
     label: "Connection string",
     isTextarea: false,
+    isSelect: false,
     required: true,
   },
 ] as const;
@@ -372,36 +396,4 @@ export const validateHexFormat = (formData: RegistrationFormData) => {
     }
   }
   return true;
-};
-
-// Normalize all whitelist addresses once for case-insensitive comparison
-const normalizedWhitelist = INDEXER_WHITELIST.map((addr) =>
-  getAddress(addr).toLowerCase()
-);
-
-export const isIndexerWhitelisted = (
-  address: Hex | undefined | null
-): boolean => {
-  // Handle undefined or null addresses
-  if (!address) {
-    return false;
-  }
-
-  // Validate address format
-  if (!isAddress(address)) {
-    return false;
-  }
-
-  try {
-    // Normalize the input address to lowercase for case-insensitive comparison
-    // getAddress validates and normalizes the address format
-    const normalizedAddress = getAddress(address).toLowerCase();
-    return normalizedWhitelist.includes(normalizedAddress);
-  } catch (error) {
-    // Invalid address format
-    if (process.env.NODE_ENV === "development") {
-      console.error("Invalid address format:", error);
-    }
-    return false;
-  }
 };

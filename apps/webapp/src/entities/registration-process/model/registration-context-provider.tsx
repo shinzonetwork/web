@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback, ReactNode, useMemo, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useAccount } from "wagmi";
 import { RegistrationContext as RegistrationContextType } from "./types";
 import { RegistrationContext } from "./registration-context";
 import { isWalletSigned, setWalletSigned } from "@/shared/lib";
+import { getRegistrationEntityFromPathname } from "@/features/registration-form/util/registration";
 
 /**
  * The provider for the registration context.
@@ -14,6 +16,7 @@ export const RegistrationContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
+  const pathname = usePathname();
   const { address, isConnected } = useAccount();
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const [signedState, setSignedState] = useState<Record<string, boolean>>({});
@@ -72,6 +75,11 @@ export const RegistrationContextProvider = ({
     [address]
   );
 
+  const registrationEntity = useMemo(
+    () => getRegistrationEntityFromPathname(pathname),
+    [pathname]
+  );
+
   const context: RegistrationContextType = useMemo(() => {
     return {
       isPortOpen,
@@ -80,6 +88,7 @@ export const RegistrationContextProvider = ({
       setRegistered: (registered: boolean) => setIsRegistered(registered),
       handleSignedWithWallet: handleSignedWithWallet,
       showPortOpen: (open: boolean) => setIsPortOpen(open),
+      registrationEntity,
     };
   }, [
     isRegistered,
@@ -88,6 +97,7 @@ export const RegistrationContextProvider = ({
     handleSignedWithWallet,
     isPortOpen,
     setIsPortOpen,
+    registrationEntity,
   ]);
 
   return (

@@ -38,6 +38,11 @@
 
   --color-border: var(--color-ui-border);
 
+  --color-popover: var(--color-ui-bg);
+  --color-popover-foreground: var(--color-ui-text);
+  --color-card: var(--color-ui-bg);
+  --color-card-foreground: var(--color-ui-text);
+
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-chart-1: var(--color-ui-chart-1);
