@@ -1,7 +1,9 @@
 "use client";
+import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { useRegisteredHosts } from "../hooks/use-registered-hosts";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { DEFAULT_LIMIT, Pagination } from "@shinzo/ui/pagination";
 
 export function HostsHome() {
   const PAGE_SIZE = 5;
@@ -13,19 +15,17 @@ export function HostsHome() {
   const { data: registeredHosts, isFetching } = useRegisteredHosts(queryParams);
   const hosts = registeredHosts?.hosts || [];
   const total = Number(registeredHosts?.pagination?.total ?? 0);
-  const nextKey = registeredHosts?.pagination?.next_key;
-  const hasNextPage = Boolean(nextKey) || offset + hosts.length < total;
-  const hasPrevPage = offset > 0;
   const router = useRouter();
   const handleRegisterAsHost = () => {
     router.push("/host-registration");
   };
   const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  const tableHeadings = ["Address", "DID", "Connection String"];
 
   return (
-    <section className="w-full min-w-0 max-w-full px-4 py-8 sm:p-12">
-      <div className="mb-8 flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section className="w-full min-w-0 max-w-full">
+      <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <h2 className="font-h2 text-h2 text-black slash-separator uppercase wrap-break-word">
             Registered Hosts
@@ -42,67 +42,49 @@ export function HostsHome() {
           Register as Host
         </button>
       </div>
-      <div className="w-full min-w-0 max-w-full overflow-hidden border border-border">
-        <table className="w-full table-fixed border-collapse text-left">
-          <thead>
-            <tr className="border-b border-border bg-muted">
-              <th className="w-[28%] border-r border-border p-3 font-mono text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                ADDRESS
-              </th>
-              <th className="w-[32%] border-r border-border p-3 font-mono text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                DID
-              </th>
-              <th className="p-3 font-mono text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                CONNECTION STRING
-              </th>
-            </tr>
-          </thead>
-          <tbody className="font-mono">
-            {hosts.map((host) => (
-              <tr
-                key={host.address}
-                className="border-b border-border bg-white transition-colors hover:bg-zinc-50"
+      <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
+        <TableLayout
+          isLoading={isFetching}
+          loadingRowCount={DEFAULT_LIMIT}
+          notFound="No hosts are registered yet."
+          headings={hosts.length > 0 ? tableHeadings : [""]}
+          gridClass={
+            hosts.length > 0 ? "grid-cols[repeat(3,1fr)]" : "grid-cols-1"
+          }
+          iterable={hosts ?? []}
+          rowRenderer={(host) => (
+            <>
+              <TableNullableCell value={host?.address}>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value}</span>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={host?.did} nowrap>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value}</span>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell
+                value={host?.connection_string}
+                className="min-w-0 whitespace-normal"
               >
-                <td className="wrap-break-word border-r border-border p-3 align-top text-xs sm:p-4 sm:text-sm">
-                  {host.address}
-                </td>
-                <td className="wrap-break-word border-r border-border p-3 align-top text-xs sm:p-4 sm:text-sm">
-                  {host.did}
-                </td>
-                <td className="break-all p-3 align-top text-xs sm:p-4 sm:text-sm">
-                  {host.connection_string}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <p className="font-mono text-xs text-muted-foreground">
-          {total > 0
-            ? `Showing ${offset + 1}-${offset + hosts.length} of ${total}`
-            : "No hosts found"}
-        </p>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
-            disabled={!hasPrevPage || isFetching}
-            onClick={() => setOffset((prev) => Math.max(0, prev - PAGE_SIZE))}
-          >
-            Prev
-          </button>
-          <span className="font-mono text-xs text-muted-foreground">
-            Page {currentPage} / {totalPages}
-          </span>
-          <button
-            type="button"
-            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
-            disabled={!hasNextPage || isFetching}
-            onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
-          >
-            Next
-          </button>
+                {(value) => (
+                  <span className="text-sm text-foreground wrap-break-word break-all">
+                    {value}
+                  </span>
+                )}
+              </TableNullableCell>
+            </>
+          )}
+        />
+        <div className="pr-6">
+          <Pagination
+            page={currentPage}
+            totalItems={total}
+            itemsPerPage={DEFAULT_LIMIT}
+          />
         </div>
       </div>
     </section>

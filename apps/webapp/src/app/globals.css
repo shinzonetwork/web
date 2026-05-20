@@ -13,6 +13,7 @@
   --color-ui-warning-foreground: #ffffff;
   --color-ui-destructive: #d32c34;
   --color-ui-destructive-foreground: #ffffff;
+  --color-ui-bg-accent-light: #fffbfb;
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
   --color-muted-foreground: var(--color-ui-text-muted);
   --color-accent: var(--color-ui-accent);
   --color-accent-foreground: var(--color-ui-text-accent);
+  --color-background-accent-light: var(--color-ui-bg-accent-light);
 
   --color-primary: var(--color-ui-primary);
   --color-primary-foreground: var(--color-ui-primary-foreground);

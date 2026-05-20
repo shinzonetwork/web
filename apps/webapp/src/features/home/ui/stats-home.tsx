@@ -18,8 +18,8 @@ export function StatsHome() {
   const totalHosts = Number(registeredHosts?.pagination?.total ?? 0);
 
   return (
-    <section className="grid w-full min-w-0 max-w-full grid-cols-1 border-b border-border md:grid-cols-2 md:divide-x md:divide-border">
-      <div className="p-6">
+    <section className="grid w-full min-w-0 max-w-full grid-cols-1 border-b bg-background-accent-light border-border md:grid-cols-2 md:divide-x md:divide-border">
+      <div className="py-6 px-8">
         <div className="font-mono text-secondary mb-1">
           {UI_HOME_HEADER_CONTENT.registered_indexers}
         </div>

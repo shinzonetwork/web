@@ -3,31 +3,34 @@
 import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
+import { Pagination } from "@shinzo/ui/pagination";
 
 export function IndexersHome() {
-  const PAGE_SIZE = 5;
+  const DEFAULT_LIMIT = 5;
   const [offset, setOffset] = useState(0);
   const queryParams = useMemo(
-    () => ({ offset, limit: PAGE_SIZE, count_total: true }),
+    () => ({ offset, limit: DEFAULT_LIMIT, count_total: true }),
     [offset]
   );
   const { data: registeredIndexers, isFetching } =
     useRegisteredIndexers(queryParams);
   const indexers = registeredIndexers?.indexers || [];
   const total = Number(registeredIndexers?.pagination?.total ?? 0);
-  const nextKey = registeredIndexers?.pagination?.next_key;
-  const hasNextPage = Boolean(nextKey) || offset + indexers.length < total;
-  const hasPrevPage = offset > 0;
+  // const nextKey = registeredIndexers?.pagination?.next_key;
+  // const hasNextPage = Boolean(nextKey) || offset + indexers.length < total;
+  // const hasPrevPage = offset > 0;
   const router = useRouter();
   const handleRegisterAsIndexer = () => {
     router.push("/indexer-registration");
   };
-  const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.floor(offset / DEFAULT_LIMIT) + 1;
+  // const totalPages = Math.max(1, Math.ceil(total / DEFAULT_LIMIT));
 
+  const tableHeadings = ["Address", "DID", "Chain", "Connection String"];
   return (
-    <section className="w-full min-w-0 max-w-full px-4 py-8 sm:p-12">
-      <div className="mb-8 flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <section className="w-full min-w-0 max-w-full">
+      <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <h2 className="font-h2 text-h2 text-foreground slash-separator uppercase wrap-break-word">
             Registered Indexers
@@ -44,79 +47,54 @@ export function IndexersHome() {
           REGISTER AS INDEXER
         </button>
       </div>
-      <div className="w-full min-w-0 max-w-full overflow-hidden border border-border">
-        <table className="w-full table-fixed border-collapse text-left">
-          <thead>
-            <tr className="border-b border-border bg-muted">
-              <th className="w-[18%] border-r border-border p-3 font-mono-label text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                ADDRESS
-              </th>
-              <th className="w-[22%] border-r border-border p-3 font-mono-label text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                DID
-              </th>
-              <th className="w-[28%] border-r border-border p-3 font-mono-label text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                CONNECTION STRING
-              </th>
-              <th className="w-[22%] border-r border-border p-3 font-mono-label text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                SOURCE CHAIN
-              </th>
-              <th className="p-3 font-mono-label text-xs text-muted-foreground sm:p-4 sm:text-sm">
-                CHAIN ID
-              </th>
-            </tr>
-          </thead>
-          <tbody className="font-table-data text-table-data">
-            {indexers.map((indexer) => (
-              <tr
-                key={indexer.address}
-                className="border-b border-border bg-white transition-colors hover:bg-zinc-50"
-              >
-                <td className="wrap-break-word border-r border-border p-3 align-top font-mono text-xs sm:p-4 sm:text-sm">
-                  {indexer.address}
-                </td>
-                <td className="wrap-break-word border-r border-border p-3 align-top font-mono text-xs sm:p-4 sm:text-sm">
-                  {indexer.did}
-                </td>
-                <td className="break-all border-r border-border p-3 align-top font-mono text-xs text-accent sm:p-4 sm:text-sm">
-                  {indexer.connection_string}
-                </td>
-                <td className="wrap-break-word border-r border-border p-3 align-top text-xs sm:p-4 sm:text-sm">
-                  {indexer.source_chain}
-                </td>
-                <td className="p-3 align-top font-mono text-xs sm:p-4 sm:text-sm">
-                  {indexer.source_chain_id}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <p className="font-mono text-xs text-muted-foreground">
-          {total > 0
-            ? `Showing ${offset + 1}-${offset + indexers.length} of ${total}`
-            : "No indexers found"}
-        </p>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
-            disabled={!hasPrevPage || isFetching}
-            onClick={() => setOffset((prev) => Math.max(0, prev - PAGE_SIZE))}
-          >
-            Prev
-          </button>
-          <span className="font-mono text-xs text-muted-foreground">
-            Page {currentPage} / {totalPages}
-          </span>
-          <button
-            type="button"
-            className="rounded-none border border-border px-3 py-2 font-mono text-xs uppercase disabled:opacity-50"
-            disabled={!hasNextPage || isFetching}
-            onClick={() => setOffset((prev) => prev + PAGE_SIZE)}
-          >
-            Next
-          </button>
+      <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
+        <TableLayout
+          isLoading={isFetching}
+          loadingRowCount={DEFAULT_LIMIT}
+          notFound="No Indexers are registered yet."
+          headings={indexers.length > 0 ? tableHeadings : [""]}
+          gridClass={
+            indexers.length > 0 ? "grid-cols[repeat(4,1fr)]" : "grid-cols-1"
+          }
+          iterable={indexers ?? []}
+          rowRenderer={(indexer) => (
+            <>
+              <TableNullableCell value={indexer?.address}>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value}</span>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={indexer?.did} nowrap>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value}</span>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={indexer?.source_chain} nowrap>
+                {(value) => (
+                  <span className="text-sm text-foreground">
+                    {value.charAt(0).toUpperCase() + value.slice(1)}
+                  </span>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={indexer?.connection_string}>
+                {(value) => (
+                  <span className="text-sm text-foreground wrap-break-word break-all">
+                    {value}
+                  </span>
+                )}
+              </TableNullableCell>
+            </>
+          )}
+        />
+        <div className="pr-6">
+          <Pagination
+            page={currentPage}
+            totalItems={total}
+            itemsPerPage={DEFAULT_LIMIT}
+          />
         </div>
       </div>
     </section>
