@@ -13,7 +13,7 @@ export function IndexersHome() {
     () => ({ offset, limit: DEFAULT_LIMIT, count_total: true }),
     [offset]
   );
-  const { data: registeredIndexers, isFetching } =
+  const { data: registeredIndexers, isPending } =
     useRegisteredIndexers(queryParams);
   const indexers = registeredIndexers?.indexers || [];
   const total = Number(registeredIndexers?.pagination?.total ?? 0);
@@ -49,13 +49,11 @@ export function IndexersHome() {
       </div>
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
         <TableLayout
-          isLoading={isFetching}
+          isLoading={isPending}
           loadingRowCount={DEFAULT_LIMIT}
           notFound="No Indexers are registered yet."
           headings={indexers.length > 0 ? tableHeadings : [""]}
-          gridClass={
-            indexers.length > 0 ? "grid-cols[repeat(4,1fr)]" : "grid-cols-1"
-          }
+          gridClass="grid-cols[repeat(4,1fr)]"
           iterable={indexers ?? []}
           rowRenderer={(indexer) => (
             <>

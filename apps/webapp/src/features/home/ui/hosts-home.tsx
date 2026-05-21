@@ -12,7 +12,7 @@ export function HostsHome() {
     () => ({ offset, limit: PAGE_SIZE, count_total: true }),
     [offset]
   );
-  const { data: registeredHosts, isFetching } = useRegisteredHosts(queryParams);
+  const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
   const hosts = registeredHosts?.hosts || [];
   const total = Number(registeredHosts?.pagination?.total ?? 0);
   const router = useRouter();
@@ -44,13 +44,11 @@ export function HostsHome() {
       </div>
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
         <TableLayout
-          isLoading={isFetching}
+          isLoading={isPending}
           loadingRowCount={DEFAULT_LIMIT}
           notFound="No hosts are registered yet."
           headings={hosts.length > 0 ? tableHeadings : [""]}
-          gridClass={
-            hosts.length > 0 ? "grid-cols[repeat(3,1fr)]" : "grid-cols-1"
-          }
+          gridClass="grid-cols[repeat(3,1fr)]"
           iterable={hosts ?? []}
           rowRenderer={(host) => (
             <>

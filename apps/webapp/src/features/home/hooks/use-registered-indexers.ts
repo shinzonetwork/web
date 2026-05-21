@@ -60,5 +60,6 @@ export function useRegisteredIndexers(
     queryFn: () => fetchRegisteredIndexers(pagination),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
+    placeholderData: (previousData) => previousData,
   });
 }

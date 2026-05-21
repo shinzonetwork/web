@@ -60,5 +60,6 @@ export function useRegisteredHosts(
     queryFn: () => fetchRegisteredHosts(pagination),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
+    placeholderData: (previousData) => previousData,
   });
 }
