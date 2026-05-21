@@ -101,12 +101,14 @@ export default async function Page({
                         </td>
                       </tr>
                     )}
-                    <tr>
-                      <td>Claimed</td>
-                      <td className="font-mono opacity-70">
-                        {chain.claimedSpots || '0'}/{chain.spotsLimit || '0'}
-                      </td>
-                    </tr>
+                    {chain.claimedSpots > 0 && (
+                      <tr>
+                        <td>Claimed</td>
+                        <td className="font-mono opacity-70">
+                          {chain.claimedSpots}/{chain.spotsLimit}
+                        </td>
+                      </tr>
+                    )}
                     <tr>
                       <td>Upvotes</td>
                       <td className="font-mono opacity-70">{chain.upvotes || '0'}</td>
@@ -173,32 +175,36 @@ export default async function Page({
             )}
           </div>
 
-          <div className="col-span-full pt-10">
-            <h2 className="text-h4 mb-8">/ Indexer Spots</h2>
-            <div className="flex gap-10 lg:flex-row flex-col">
-              <p className="whitespace-nowrap text-px-14 text-text-secondary font-mono">Claimed: {chain.claimedSpots}/{chain.spotsLimit}</p>
+          {chain.claimedSpots > 0 && (
+            <div className="col-span-full pt-10">
+              <h2 className="text-h4 mb-8">/ Indexer Spots</h2>
+              <div className="flex gap-10 lg:flex-row flex-col">
+                <p className="whitespace-nowrap text-px-14 text-text-secondary font-mono">Claimed: {chain.claimedSpots}/{chain.spotsLimit}</p>
 
-              <div className="relative grow h-4 w-full border-2 border-szo-primary">
-                <div
-                  style={{ width: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
-                  className="bg-[url('/bg-pattern.png')] bg-no-repeat bg-[length:100%_100%] h-full"
-                />
-                <div
-                  style={{ left: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
-                  className="absolute -top-1.5 w-3 h-6 bg-white border-2 border-szo-primary"
-                />
+                <div className="relative grow h-4 w-full border-2 border-szo-primary">
+                  <div
+                    style={{ width: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
+                    className="bg-[url('/bg-pattern.png')] bg-no-repeat bg-[length:100%_100%] h-full"
+                  />
+                  <div
+                    style={{ left: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
+                    className="absolute -top-1.5 w-3 h-6 bg-white border-2 border-szo-primary"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </BlockContainer>
       </BlockSpacing>
 
-      <IndexerSpots
-        claims={chain.claims ?? []}
-        totalClaims={chain.claimedSpots}
-        page={page}
-        limit={limit}
-      />
+      {chain.claimedSpots > 0 && (
+        <IndexerSpots
+          claims={chain.claims ?? []}
+          totalClaims={chain.claimedSpots}
+          page={page}
+          limit={limit}
+        />
+      )}
 
       <BlockCta
         title="Don't see yours?"
