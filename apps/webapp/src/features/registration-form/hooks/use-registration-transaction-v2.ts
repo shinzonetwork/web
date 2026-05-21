@@ -5,11 +5,7 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { encodeFunctionData, type Hex } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
-import {
-  EntityRole,
-  SHINZO_PRECOMPILE_ADDRESS,
-  TOAST_CONFIG,
-} from "@/shared/lib";
+import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
 import { useRegistrationContext } from "@/entities/registration-process";
 import type {
   HostRegistrationFormData,
@@ -18,6 +14,10 @@ import type {
 import { INDEXER_REGISTER_TRANSACTION_ABI } from "../abi/indexer-register-transaction-abi";
 import { HOST_REGISTER_TRANSACTION_ABI } from "../abi/host-register-transaction-abi";
 
+export const INDEXER_PRECOMPILE_ADDRESS =
+  "0x0000000000000000000000000000000000000212";
+export const HOST_PRECOMPILE_ADDRESS =
+  "0x0000000000000000000000000000000000000211";
 /**
  * Hook to handle registration transaction logic
  */
@@ -77,8 +77,10 @@ export function useRegistrationTransaction(
 
   const sendRegisterTransaction = useCallback(async () => {
     let encodedData;
+    let precompileAddress;
     try {
       if (formData.entity === EntityRole.Indexer) {
+        precompileAddress = INDEXER_PRECOMPILE_ADDRESS;
         const indexer = formData as IndexerRegistrationFormData;
         encodedData = encodeFunctionData({
           abi: INDEXER_REGISTER_TRANSACTION_ABI,
@@ -93,6 +95,7 @@ export function useRegistrationTransaction(
           ],
         });
       } else if (formData.entity === EntityRole.Host) {
+        precompileAddress = HOST_PRECOMPILE_ADDRESS;
         const host = formData as HostRegistrationFormData;
         encodedData = encodeFunctionData({
           abi: HOST_REGISTER_TRANSACTION_ABI,
@@ -120,7 +123,7 @@ export function useRegistrationTransaction(
 
     try {
       await sendTransaction({
-        to: SHINZO_PRECOMPILE_ADDRESS,
+        to: precompileAddress as Hex,
         data: encodedData,
       });
     } catch (error: unknown) {
