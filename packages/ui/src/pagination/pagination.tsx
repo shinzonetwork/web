@@ -16,9 +16,17 @@ export interface PaginationProps extends ComponentProps<"nav"> {
   itemsPerPage?: number;
   totalItems?: number;
   page: number;
+  /** Query param name for page number (default `page`). Use distinct names when multiple paginated sections share one route. */
+  pageParam?: string;
 }
 
-export const Pagination = ({ page, itemsPerPage = DEFAULT_LIMIT, totalItems = 0, ...props }: PaginationProps) => {
+export const Pagination = ({
+  page,
+  itemsPerPage = DEFAULT_LIMIT,
+  totalItems = 0,
+  pageParam = "page",
+  ...props
+}: PaginationProps) => {
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
   const pathname = usePathname();
@@ -26,7 +34,7 @@ export const Pagination = ({ page, itemsPerPage = DEFAULT_LIMIT, totalItems = 0,
 
   const getPageLink = (pageNum: number) => {
     const newParams = new URLSearchParams(params.toString());
-    newParams.set('page', pageNum.toString());
+    newParams.set(pageParam, pageNum.toString());
     const joiner = pathname.includes('?') ? '&' : '?';
     return `${pathname}${joiner}${newParams.toString()}`;
   };

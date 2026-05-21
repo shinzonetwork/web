@@ -1,27 +1,48 @@
 "use client";
-import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
-import { useRegisteredHosts } from "../hooks/use-registered-hosts";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
-import { DEFAULT_LIMIT, Pagination } from "@shinzo/ui/pagination";
 
-export function HostsHome() {
-  const PAGE_SIZE = 5;
-  const [offset, setOffset] = useState(0);
-  const queryParams = useMemo(
-    () => ({ offset, limit: PAGE_SIZE, count_total: true }),
-    [offset]
-  );
-  const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
-  const hosts = registeredHosts?.hosts || [];
-  const total = Number(registeredHosts?.pagination?.total ?? 0);
+import { Suspense, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
+import {
+  getServerPage,
+  Pagination,
+  DEFAULT_LIMIT,
+  type PageParams,
+} from "@shinzo/ui/pagination";
+import { useRegisteredHosts } from "../hooks/use-registered-hosts";
+
+const HOSTS_PAGE_PARAM = "hostsPage";
+
+const tableHeadings = ["Address", "DID", "Connection String"];
+
+function HostsHomeContent() {
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const { page, offset, limit }: PageParams = useMemo(
+    () =>
+      getServerPage({
+        page: searchParams.get(HOSTS_PAGE_PARAM) ?? "1",
+        limit: String(DEFAULT_LIMIT),
+      }),
+    [searchParams]
+  );
+
+  const queryParams = useMemo(
+    () => ({
+      offset,
+      limit,
+      count_total: true,
+    }),
+    [offset, limit]
+  );
+
+  const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
+  const hosts = registeredHosts?.hosts ?? [];
+  const total = Number(registeredHosts?.pagination?.total ?? 0);
   const handleRegisterAsHost = () => {
     router.push("/host-registration");
   };
-  const currentPage = Math.floor(offset / PAGE_SIZE) + 1;
-
-  const tableHeadings = ["Address", "DID", "Connection String"];
 
   return (
     <section className="w-full min-w-0 max-w-full">
@@ -77,14 +98,25 @@ export function HostsHome() {
             </>
           )}
         />
-        <div className="pr-6">
-          <Pagination
-            page={currentPage}
-            totalItems={total}
-            itemsPerPage={DEFAULT_LIMIT}
-          />
-        </div>
+        {total > DEFAULT_LIMIT && (
+          <div className="pr-6">
+            <Pagination
+              page={page}
+              totalItems={total}
+              itemsPerPage={DEFAULT_LIMIT}
+              pageParam={HOSTS_PAGE_PARAM}
+            />
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+export function HostsHome() {
+  return (
+    <Suspense fallback={null}>
+      <HostsHomeContent />
+    </Suspense>
   );
 }

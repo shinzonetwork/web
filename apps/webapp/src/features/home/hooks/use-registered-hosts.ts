@@ -22,6 +22,7 @@ type PaginationParams = {
   offset?: number;
   limit?: number;
   count_total?: boolean;
+  reverse?: boolean;
 };
 
 interface IndexerResponse {
@@ -39,6 +40,9 @@ async function fetchRegisteredHosts(
   if (pagination.key) params.set("pagination.key", pagination.key);
   if (pagination.count_total !== undefined) {
     params.set("pagination.count_total", String(pagination.count_total));
+  }
+  if (pagination.reverse !== undefined) {
+    params.set("pagination.reverse", String(pagination.reverse));
   }
 
   const response = await fetch(

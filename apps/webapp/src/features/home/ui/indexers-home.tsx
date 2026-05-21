@@ -1,33 +1,50 @@
 "use client";
 
-import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
-import { Pagination } from "@shinzo/ui/pagination";
+import {
+  getServerPage,
+  Pagination,
+  DEFAULT_LIMIT,
+  type PageParams,
+} from "@shinzo/ui/pagination";
+import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
 
-export function IndexersHome() {
-  const DEFAULT_LIMIT = 5;
-  const [offset, setOffset] = useState(0);
+const INDEXERS_PAGE_PARAM = "indexersPage";
+
+const tableHeadings = ["Address", "DID", "Chain", "Connection String"];
+
+function IndexersHomeContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const { page, offset, limit }: PageParams = useMemo(
+    () =>
+      getServerPage({
+        page: searchParams.get(INDEXERS_PAGE_PARAM) ?? "1",
+        limit: String(DEFAULT_LIMIT),
+      }),
+    [searchParams]
+  );
+
   const queryParams = useMemo(
-    () => ({ offset, limit: DEFAULT_LIMIT, count_total: true }),
-    [offset]
+    () => ({
+      offset,
+      limit,
+      count_total: true,
+    }),
+    [offset, limit]
   );
   const { data: registeredIndexers, isPending } =
     useRegisteredIndexers(queryParams);
-  const indexers = registeredIndexers?.indexers || [];
+  const indexers = registeredIndexers?.indexers ?? [];
   const total = Number(registeredIndexers?.pagination?.total ?? 0);
-  // const nextKey = registeredIndexers?.pagination?.next_key;
-  // const hasNextPage = Boolean(nextKey) || offset + indexers.length < total;
-  // const hasPrevPage = offset > 0;
-  const router = useRouter();
+
   const handleRegisterAsIndexer = () => {
     router.push("/indexer-registration");
   };
-  const currentPage = Math.floor(offset / DEFAULT_LIMIT) + 1;
-  // const totalPages = Math.max(1, Math.ceil(total / DEFAULT_LIMIT));
 
-  const tableHeadings = ["Address", "DID", "Chain", "Connection String"];
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -63,13 +80,13 @@ export function IndexersHome() {
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.did} nowrap>
+              <TableNullableCell value={indexer?.did}>
                 {(value) => (
                   <span className="text-sm text-foreground">{value}</span>
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.source_chain} nowrap>
+              <TableNullableCell value={indexer?.source_chain}>
                 {(value) => (
                   <span className="text-sm text-foreground">
                     {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -77,7 +94,10 @@ export function IndexersHome() {
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.connection_string}>
+              <TableNullableCell
+                value={indexer?.connection_string}
+                className="min-w-0 whitespace-normal"
+              >
                 {(value) => (
                   <span className="text-sm text-foreground wrap-break-word break-all">
                     {value}
@@ -87,14 +107,25 @@ export function IndexersHome() {
             </>
           )}
         />
-        <div className="pr-6">
-          <Pagination
-            page={currentPage}
-            totalItems={total}
-            itemsPerPage={DEFAULT_LIMIT}
-          />
-        </div>
+        {total > DEFAULT_LIMIT && (
+          <div className="pr-6">
+            <Pagination
+              page={page}
+              totalItems={total}
+              itemsPerPage={DEFAULT_LIMIT}
+              pageParam={INDEXERS_PAGE_PARAM}
+            />
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+export function IndexersHome() {
+  return (
+    <Suspense fallback={null}>
+      <IndexersHomeContent />
+    </Suspense>
   );
 }
