@@ -2,6 +2,7 @@ import type { Client } from "viem";
 import {
   countViews,
   createView,
+  getCreatedViewAddress,
   getView,
   listViews,
 } from "./views/index.js";
@@ -24,6 +25,7 @@ export {
 export {
   countViews,
   createView,
+  getCreatedViewAddress,
   getView,
   listViews,
   viewRegistryAbi,

@@ -1,5 +1,5 @@
-import type { Account, Address, Client, Hex } from "viem";
-import { encodeFunctionData } from "viem";
+import type { Account, Address, Client, Hex, TransactionReceipt } from "viem";
+import { decodeEventLog, encodeFunctionData } from "viem";
 import { sendTransaction } from "viem/actions";
 import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index.js";
 import { buildUrl, requestJson } from "../internal/fetch.js";
@@ -323,6 +323,53 @@ export async function createView(client: Client, parameters: CreateViewParameter
     chain: client.chain,
     account: parameters.account ?? (client as { account?: Account | Address }).account,
   } as any);
+}
+
+/**
+ * Reads the deployed View contract address from a ViewRegistry transaction receipt.
+ *
+ * Use this after `createView` and `publicClient.waitForTransactionReceipt` when
+ * your app needs the new view address without manually decoding logs.
+ *
+ * @param receipt - Transaction receipt returned by Viem after the create view
+ * transaction is confirmed.
+ * @returns The `viewAddress` emitted by the ViewRegistry `ViewCreated` event.
+ * @throws When the receipt does not contain a decodable `ViewCreated` log from
+ * the ViewRegistry precompile.
+ *
+ * @example
+ * ```ts
+ * import { createView, getCreatedViewAddress } from "@shinzo/shinzohub";
+ *
+ * const hash = await createView(walletClient, { bundle });
+ * const receipt = await publicClient.waitForTransactionReceipt({ hash });
+ * const viewAddress = getCreatedViewAddress(receipt);
+ * ```
+ */
+export function getCreatedViewAddress(receipt: TransactionReceipt): Hex {
+  for (const log of receipt.logs) {
+    if (log.address.toLowerCase() !== viewRegistryAddress.toLowerCase()) {
+      continue;
+    }
+
+    try {
+      const decoded = decodeEventLog({
+        abi: viewRegistryAbi,
+        eventName: "ViewCreated",
+        topics: log.topics,
+        data: log.data,
+        strict: false,
+      });
+
+      if (decoded.eventName === "ViewCreated" && typeof decoded.args.viewAddress === "string") {
+        return decoded.args.viewAddress as Hex;
+      }
+    } catch {
+      // Ignore unrelated logs emitted by the same transaction.
+    }
+  }
+
+  throw new Error("Transaction receipt does not contain a ViewCreated log from the ViewRegistry.");
 }
 
 /**

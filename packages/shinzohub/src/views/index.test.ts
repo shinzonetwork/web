@@ -1,12 +1,22 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createPublicClient, createWalletClient, http, type Hex } from "viem";
+import {
+  createPublicClient,
+  createWalletClient,
+  encodeAbiParameters,
+  encodeEventTopics,
+  http,
+  type Hex,
+  type TransactionReceipt,
+} from "viem";
 import { shinzoHubDevelop } from "../chains/index.js";
 import { createShinzoHubClient } from "../index.js";
 import {
   countViews,
   createView,
+  getCreatedViewAddress,
   getView,
   listViews,
+  viewRegistryAbi,
   viewRegistryAddress,
 } from "./index.js";
 
@@ -91,6 +101,44 @@ describe("createView", () => {
       ?.params?.[0] as { data: Hex; to: Hex };
     expect(transaction.to).toBe(viewRegistryAddress);
     expect(transaction.data.startsWith("0x526670b3")).toBe(true);
+  });
+});
+
+describe("getCreatedViewAddress", () => {
+  it("decodes the ViewCreated address from a transaction receipt", () => {
+    const topics = encodeEventTopics({
+      abi: viewRegistryAbi,
+      eventName: "ViewCreated",
+      args: {
+        viewAddress,
+        creator: creatorAddress,
+      },
+    });
+    const receipt = {
+      logs: [
+        {
+          address: viewRegistryAddress,
+          topics,
+          data: encodeAbiParameters([{ type: "string" }], ["Studio_DecodedLog"]),
+        },
+      ],
+    } as unknown as TransactionReceipt;
+
+    expect(getCreatedViewAddress(receipt)).toBe(viewAddress);
+  });
+
+  it("throws when the receipt has no ViewCreated log", () => {
+    const receipt = {
+      logs: [
+        {
+          address: creatorAddress,
+          topics: [],
+          data: "0x",
+        },
+      ],
+    } as unknown as TransactionReceipt;
+
+    expect(() => getCreatedViewAddress(receipt)).toThrow(/ViewCreated/);
   });
 });
 

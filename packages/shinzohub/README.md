@@ -50,6 +50,15 @@ const hash = await walletClient.createView({
 });
 ```
 
+Read the deployed View address from the receipt:
+
+```ts
+import { getCreatedViewAddress } from "@shinzo/shinzohub";
+
+const receipt = await publicClient.waitForTransactionReceipt({ hash });
+const viewAddress = getCreatedViewAddress(receipt);
+```
+
 Use a custom pricing contract by passing `pricing`:
 
 ```ts
@@ -85,7 +94,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover the ViewRegistry ABI with `viewRegistryAbi`.
 - [x] Cover `register(bytes)` with `createView({ bundle })`.
 - [x] Cover `registerWithPricing(bytes,address)` with `createView({ bundle, pricing })`.
-- [x] Cover `ViewCreated(address,address,string)` through `viewRegistryAbi` for Viem log decoding.
+- [x] Cover `ViewCreated(address,address,string)` through `getCreatedViewAddress(receipt)` and `viewRegistryAbi`.
 - [ ] Add an ergonomic read helper for `getView(address)` if apps need direct ViewRegistry creator reads.
 - [ ] Add dedicated ViewRegistry event query/decode helpers if ABI-based Viem usage is not enough.
 

@@ -6,6 +6,7 @@ const expectedRootExports = [
   "countViews",
   "createShinzoHubClient",
   "createView",
+  "getCreatedViewAddress",
   "getView",
   "hexToShinzoAddress",
   "listViews",
