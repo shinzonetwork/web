@@ -1,45 +1,40 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
-import {
-  getServerPage,
-  Pagination,
-  DEFAULT_LIMIT,
-  type PageParams,
-} from "@shinzo/ui/pagination";
+import { Pagination } from "@shinzo/ui/pagination";
 import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
+import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
 
 const INDEXERS_PAGE_PARAM = "indexersPage";
+const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
+const PAGE_SIZE = 5;
 
 const tableHeadings = ["Address", "DID", "Chain", "Connection String"];
 
 function IndexersHomeContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const { page, queryParams, applyPaginationData, totalItems } =
+    useCursorPagePagination({
+      pageParam: INDEXERS_PAGE_PARAM,
+      storageKey: INDEXERS_CURSOR_KEY,
+      limit: PAGE_SIZE,
+    });
 
-  const { page, offset, limit }: PageParams = useMemo(
-    () =>
-      getServerPage({
-        page: searchParams.get(INDEXERS_PAGE_PARAM) ?? "1",
-        limit: String(DEFAULT_LIMIT),
-      }),
-    [searchParams]
-  );
-
-  const queryParams = useMemo(
-    () => ({
-      offset,
-      limit,
-      count_total: true,
-    }),
-    [offset, limit]
-  );
   const { data: registeredIndexers, isPending } =
     useRegisteredIndexers(queryParams);
   const indexers = registeredIndexers?.indexers ?? [];
-  const total = Number(registeredIndexers?.pagination?.total ?? 0);
+  const pageTotal = Number(registeredIndexers?.pagination?.total ?? 0);
+  const nextKey = registeredIndexers?.pagination?.next_key;
+
+  useEffect(() => {
+    if (registeredIndexers) {
+      applyPaginationData(nextKey, pageTotal);
+    }
+  }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
+
+  const showPagination = useMemo(() => totalItems > PAGE_SIZE, [totalItems]);
 
   const handleRegisterAsIndexer = () => {
     router.push("/indexer-registration");
@@ -67,7 +62,7 @@ function IndexersHomeContent() {
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
         <TableLayout
           isLoading={isPending}
-          loadingRowCount={DEFAULT_LIMIT}
+          loadingRowCount={PAGE_SIZE}
           notFound="No Indexers are registered yet."
           headings={indexers.length > 0 ? tableHeadings : [""]}
           gridClass="grid-cols[repeat(4,1fr)]"
@@ -107,12 +102,12 @@ function IndexersHomeContent() {
             </>
           )}
         />
-        {total > DEFAULT_LIMIT && (
+        {showPagination && (
           <div className="pr-6">
             <Pagination
               page={page}
-              totalItems={total}
-              itemsPerPage={DEFAULT_LIMIT}
+              totalItems={totalItems}
+              itemsPerPage={PAGE_SIZE}
               pageParam={INDEXERS_PAGE_PARAM}
             />
           </div>

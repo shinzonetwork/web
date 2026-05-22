@@ -1,45 +1,40 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
-import {
-  getServerPage,
-  Pagination,
-  DEFAULT_LIMIT,
-  type PageParams,
-} from "@shinzo/ui/pagination";
+import { Pagination } from "@shinzo/ui/pagination";
 import { useRegisteredHosts } from "../hooks/use-registered-hosts";
+import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
 
 const HOSTS_PAGE_PARAM = "hostsPage";
+const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
+const PAGE_SIZE = 5;
 
 const tableHeadings = ["Address", "DID", "Connection String"];
 
 function HostsHomeContent() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-
-  const { page, offset, limit }: PageParams = useMemo(
-    () =>
-      getServerPage({
-        page: searchParams.get(HOSTS_PAGE_PARAM) ?? "1",
-        limit: String(DEFAULT_LIMIT),
-      }),
-    [searchParams]
-  );
-
-  const queryParams = useMemo(
-    () => ({
-      offset,
-      limit,
-      count_total: true,
-    }),
-    [offset, limit]
-  );
+  const { page, queryParams, applyPaginationData, totalItems } =
+    useCursorPagePagination({
+      pageParam: HOSTS_PAGE_PARAM,
+      storageKey: HOSTS_CURSOR_KEY,
+      limit: PAGE_SIZE,
+    });
 
   const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
   const hosts = registeredHosts?.hosts ?? [];
-  const total = Number(registeredHosts?.pagination?.total ?? 0);
+  const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
+  const nextKey = registeredHosts?.pagination?.next_key;
+
+  useEffect(() => {
+    if (registeredHosts) {
+      applyPaginationData(nextKey, pageTotal);
+    }
+  }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
+
+  const showPagination = useMemo(() => totalItems > PAGE_SIZE, [totalItems]);
+
   const handleRegisterAsHost = () => {
     router.push("/host-registration");
   };
@@ -66,7 +61,7 @@ function HostsHomeContent() {
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
         <TableLayout
           isLoading={isPending}
-          loadingRowCount={DEFAULT_LIMIT}
+          loadingRowCount={PAGE_SIZE}
           notFound="No hosts are registered yet."
           headings={hosts.length > 0 ? tableHeadings : [""]}
           gridClass="grid-cols[repeat(3,1fr)]"
@@ -98,12 +93,12 @@ function HostsHomeContent() {
             </>
           )}
         />
-        {total > DEFAULT_LIMIT && (
+        {showPagination && (
           <div className="pr-6">
             <Pagination
               page={page}
-              totalItems={total}
-              itemsPerPage={DEFAULT_LIMIT}
+              totalItems={totalItems}
+              itemsPerPage={PAGE_SIZE}
               pageParam={HOSTS_PAGE_PARAM}
             />
           </div>

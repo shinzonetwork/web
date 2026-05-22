@@ -1,62 +1,44 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import {
+  buildCursorPaginationSearchParams,
+  type CursorPaginationParams,
+  type CursorPaginationResponse,
+} from "../lib/pagination";
 
 const registeredHostsApiEndpoint =
   process.env.NEXT_PUBLIC_REGISTERED_HOSTS_API_ENDPOINT ||
   "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/host/v1/hosts";
 
-interface RegisteredHost {
+export type RegisteredHost = {
   address: string;
   did: string;
   connection_string: string;
-}
-
-type PaginationResponse = {
-  total?: string | number;
-  next_key?: string | null;
 };
 
-type PaginationParams = {
-  key?: string;
-  offset?: number;
-  limit?: number;
-  count_total?: boolean;
-  reverse?: boolean;
-};
-
-interface IndexerResponse {
+export type RegisteredHostsResponse = {
   hosts: RegisteredHost[];
-  pagination?: PaginationResponse;
-}
+  pagination?: CursorPaginationResponse;
+};
 
-async function fetchRegisteredHosts(
-  pagination: PaginationParams
-): Promise<IndexerResponse> {
-  const params = new URLSearchParams();
-  params.set("pagination.limit", String(pagination.limit ?? 10));
-  params.set("pagination.offset", String(pagination.offset ?? 0));
+export type RegisteredHostsPaginationParams = CursorPaginationParams;
 
-  if (pagination.key) params.set("pagination.key", pagination.key);
-  if (pagination.count_total !== undefined) {
-    params.set("pagination.count_total", String(pagination.count_total));
-  }
-  if (pagination.reverse !== undefined) {
-    params.set("pagination.reverse", String(pagination.reverse));
-  }
+export async function fetchRegisteredHosts(
+  pagination: RegisteredHostsPaginationParams
+): Promise<RegisteredHostsResponse> {
+  const params = buildCursorPaginationSearchParams(pagination);
 
   const response = await fetch(
     `${registeredHostsApiEndpoint}?${params.toString()}`
   );
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-  const data: IndexerResponse = await response.json();
-
-  return data;
+  return response.json() as Promise<RegisteredHostsResponse>;
 }
 
 export function useRegisteredHosts(
-  pagination: PaginationParams = {},
+  pagination: RegisteredHostsPaginationParams,
   intervalMs = 30000
 ) {
   return useQuery({
