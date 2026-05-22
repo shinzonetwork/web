@@ -1,4 +1,7 @@
-export type Hex = `0x${string}`;
+import type { Hex as ViemHex } from "viem";
+import { bytesToHex as viemBytesToHex, hexToBytes as viemHexToBytes } from "viem";
+
+export type Hex = ViemHex;
 export type BytesLike = Hex | Uint8Array | readonly number[];
 
 const HEX_RE = /^0x[0-9a-fA-F]*$/;
@@ -53,25 +56,18 @@ export function stripHexPrefix(value: Hex): string {
 
 /** Converts bytes to lowercase `0x` hex. */
 export function bytesToHex(bytes: Uint8Array | readonly number[]): Hex {
-  let body = "";
   for (const byte of bytes) {
     if (!Number.isInteger(byte) || byte < 0 || byte > 255) {
       throw new Error("bytes must contain integers in the 0-255 range.");
     }
-    body += byte.toString(16).padStart(2, "0");
   }
-  return `0x${body}`;
+  return viemBytesToHex(Uint8Array.from(bytes));
 }
 
 /** Converts lowercase or uppercase `0x` hex to bytes. */
 export function hexToBytes(value: Hex): Uint8Array {
   assertHex(value);
-  const body = stripHexPrefix(value);
-  const bytes = new Uint8Array(body.length / 2);
-  for (let index = 0; index < bytes.length; index += 1) {
-    bytes[index] = Number.parseInt(body.slice(index * 2, index * 2 + 2), 16);
-  }
-  return bytes;
+  return viemHexToBytes(value);
 }
 
 /** Converts a bytes-like value to lowercase `0x` hex. */
