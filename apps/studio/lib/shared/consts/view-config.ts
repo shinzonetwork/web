@@ -1,28 +1,3 @@
-// ShinzoHub precompile for view registration
-export const VIEW_REGISTRY_ADDRESS =
-  "0x0000000000000000000000000000000000000210" as const;
-
-// register(bytes) ABI plus ViewCreated event for receipt decoding.
-export const VIEW_REGISTRY_ABI = [
-  {
-    name: "register",
-    type: "function",
-    inputs: [{ name: "payload", type: "bytes" }],
-    outputs: [{ name: "viewAddress", type: "address" }],
-    stateMutability: "nonpayable",
-  },
-  {
-    name: "ViewCreated",
-    type: "event",
-    anonymous: false,
-    inputs: [
-      { name: "viewAddress", type: "address", indexed: true },
-      { name: "creator", type: "address", indexed: true },
-      { name: "name", type: "string", indexed: false },
-    ],
-  },
-] as const;
-
 import usdtIcon from "./token-icons/usdt.svg?url";
 import usdcIcon from "./token-icons/usdc.svg?url";
 import usdsIcon from "./token-icons/usds.svg?url";

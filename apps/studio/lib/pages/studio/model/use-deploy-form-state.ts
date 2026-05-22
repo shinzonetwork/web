@@ -46,7 +46,6 @@ export const useDeployFormState = (
   const isInProgress =
     status === "checking" ||
     status === "validating" ||
-    status === "simulating" ||
     status === "deploying" ||
     status === "confirming";
   const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;

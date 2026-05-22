@@ -1,4 +1,4 @@
-import type { ValidationIssue } from "@shinzo/lenses/validate";
+import type { ValidationIssue } from "@shinzo/lenses/view";
 
 interface ValidationIssuesProps {
   issues: ValidationIssue[];
