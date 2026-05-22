@@ -123,22 +123,32 @@ result.expectNoError().expectSingleRow(expectedRow);
 
 This keeps normal lens tests focused on inputs and outputs rather than transport vectors or raw WASM memory.
 
-## View validation
+## View validation and bundling
 
-The package provides `validateView()` — a static validation layer that checks the consistency of a complete view definition (query + SDL + WASM lenses) without requiring a running DefraDB instance. It's available from two entry points:
+The package provides two view-level helpers:
 
-- `@shinzo/lenses/testing` — Node.js, includes `loadWasmBytes()` for reading `.wasm` files from disk
-- `@shinzo/lenses/validate` — browser-safe, no Node.js dependencies
+- `validateView(view)` checks the consistency of a complete view definition (query + SDL + WASM lenses) without requiring a running DefraDB instance.
+- `bundleView(view)` turns the same view definition into registerable viewbundle bytes for `@shinzo/shinzohub`.
+
+They are intentionally independent: validate first when you want actionable issues, then bundle when you are ready to deploy. `bundleView()` throws bundling errors, but it does not call `validateView()` for you.
+
+Use these entry points:
+
+- `@shinzo/lenses/view` — browser/default usage, exports `validateView()` and browser-safe `bundleView()`
+- `@shinzo/lenses/view/node` — Node.js scripts and tests, exports `validateView()` and Node-backed `bundleView()`
+- `@shinzo/lenses/testing` — Node.js test helpers, including `loadWasmBytes()` for reading `.wasm` files from disk
+- `@shinzo/lenses/validate` — validation-only compatibility entry point
 
 ### Usage in Node.js / vitest
 
 ```ts
-import { validateView, loadWasmBytes } from "@shinzo/lenses/testing";
+import { loadWasmBytes } from "@shinzo/lenses/testing";
+import { bundleView, validateView } from "@shinzo/lenses/view/node";
 import { join } from "node:path";
 
 const wasmBytes = loadWasmBytes(join(process.cwd(), "erc20-transfers/lens.wasm"));
 
-const result = await validateView({
+const view = {
   query: "Ethereum__Mainnet__Log { address topics data blockNumber transaction { hash from to } }",
   sdl: `type ERC20Transfer @materialized(if: false) {
     tokenAddress: String
@@ -153,27 +163,38 @@ const result = await validateView({
     args: { tokenAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7" },
     testInputs: [sampleLog],  // optional — enables output field checks
   }],
-});
+};
+
+const result = await validateView(view);
 
 if (!result.ok) {
   console.error("Validation failed:", result.issues);
 }
+
+const bundle = await bundleView(view);
 ```
 
 ### Usage in browser
 
 ```ts
-import { validateView } from "@shinzo/lenses/validate";
+import { bundleView, validateView } from "@shinzo/lenses/view";
+import { createView } from "@shinzo/shinzohub";
 
 const wasmBytes = new Uint8Array(
   await fetch("/erc20-transfers.wasm").then((r) => r.arrayBuffer())
 );
 
-const result = await validateView({
+const view = {
   query: "...",
   sdl: "...",
   lenses: [{ wasmBytes }],
-});
+};
+
+const result = await validateView(view);
+if (!result.ok) throw new Error(result.issues[0]?.message);
+
+const bundle = await bundleView(view);
+const hash = await createView(walletClient, { bundle });
 ```
 
 ### Validation codes

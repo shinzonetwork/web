@@ -6,26 +6,53 @@ import { instantiateModule, executeLens } from "./wasm-runtime";
 
 // --- Types ---
 
+/**
+ * Complete logical definition of a Shinzo view before it is bundled or
+ * registered on ShinzoHub.
+ *
+ * @example
+ * ```ts
+ * const view: ViewDefinition = {
+ *   query: "Ethereum__Mainnet__Log { address topics data blockNumber transaction { hash from to } }",
+ *   sdl: "type TransferView { tokenAddress: String hash: String amount: String }",
+ *   lenses: [{ wasmBytes, args: { tokenAddress } }],
+ * };
+ * ```
+ */
 export type ViewDefinition = {
+  /** Source GraphQL query that selects the rows the lens pipeline receives. */
   query: string;
+  /** SDL type definition describing the rows the deployed view returns. */
   sdl: string;
+  /** Ordered WASM lens pipeline. The first lens receives query rows. */
   lenses: LensEntry[];
 };
 
+/** One WASM lens and its optional runtime/test configuration. */
 export type LensEntry = {
+  /** Compiled LensVM-compatible WASM module bytes. */
   wasmBytes: Uint8Array;
+  /** JSON-serializable runtime arguments passed into the lens. */
   args?: unknown;
+  /** Optional sample rows used by `validateView` for output and chain checks. */
   testInputs?: unknown[];
 };
 
+/** One validation issue reported for a logical view definition. */
 export type ValidationIssue = {
+  /** `error` blocks deployment; `warning` is advisory. */
   severity: "error" | "warning";
+  /** Stable machine-readable issue code for UI grouping or tests. */
   code: string;
+  /** Human-readable explanation intended for app developers. */
   message: string;
 };
 
+/** Result returned by `validateView`. */
 export type ViewValidationResult = {
+  /** True when no issue has `severity: "error"`. */
   ok: boolean;
+  /** All errors and warnings found during validation. */
   issues: ValidationIssue[];
 };
 
@@ -284,6 +311,27 @@ async function runLensFromBytes(
 
 // --- Orchestrator ---
 
+/**
+ * Validates a complete logical Shinzo view definition before bundling or
+ * registration.
+ *
+ * This checks SDL parsing, required EVM query fields, WASM health,
+ * instantiation, and optional output/chain compatibility when `testInputs` are
+ * provided. It does not bundle the view and does not contact ShinzoHub.
+ *
+ * @param view - Query, SDL, and ordered WASM lenses to validate.
+ * @returns Validation result with blocking errors and advisory warnings.
+ *
+ * @example
+ * ```ts
+ * import { validateView } from "@shinzo/lenses/view";
+ *
+ * const validation = await validateView(view);
+ * if (!validation.ok) {
+ *   throw new Error(validation.issues[0]?.message);
+ * }
+ * ```
+ */
 export async function validateView(view: ViewDefinition): Promise<ViewValidationResult> {
   const issues: ValidationIssue[] = [];
 
