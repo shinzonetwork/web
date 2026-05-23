@@ -10,6 +10,8 @@
     "./ens": "./ens/index.ts",
     "./evm": "./lib/evm/index.ts",
     "./testing": "./lib/testing/index.ts",
+    "./view": "./lib/view/index.ts",
+    "./view/node": "./lib/view/node.ts",
     "./validate": "./lib/testing/validate.ts",
     "./exports": "./lib/exports.ts",
     "./package.json": "./package.json"
@@ -28,6 +30,7 @@
     "test": "pnpm run build && vitest run"
   },
   "dependencies": {
+    "@shinzonetwork/viewbundle": "1.0.1",
     "assemblyscript-json": "^1.1.0"
   },
   "devDependencies": {

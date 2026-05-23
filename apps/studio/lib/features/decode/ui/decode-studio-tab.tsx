@@ -15,7 +15,6 @@ const STATUS_LABELS: Record<DeployStatus, string> = {
   idle: "",
   checking: "Checking ShinzoHub for an existing registration...",
   validating: "Validating view definition...",
-  simulating: "Simulating deployment transaction...",
   deploying: "Sending deployment transaction...",
   confirming: "Waiting for deployment confirmation...",
   done: "",

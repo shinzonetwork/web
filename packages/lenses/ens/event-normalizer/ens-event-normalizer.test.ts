@@ -57,7 +57,9 @@ const makeLog = (config: {
     args: config.args,
   });
   const nonIndexedInputs = config.event.inputs.filter((input) => !input.indexed);
-  const nonIndexedArgs = nonIndexedInputs.map((input) => config.args[input.name]);
+  const nonIndexedArgs = nonIndexedInputs.map((input) =>
+    input.name == null ? undefined : config.args[input.name]
+  );
   const data = encodeAbiParameters(nonIndexedInputs, nonIndexedArgs);
 
   return {

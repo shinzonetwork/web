@@ -7,22 +7,47 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "shinzo-source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./addresses": {
+      "shinzo-source": "./src/addresses/index.ts",
       "types": "./dist/addresses/index.d.ts",
       "default": "./dist/addresses/index.js"
     },
     "./chains": {
+      "shinzo-source": "./src/chains/index.ts",
       "types": "./dist/chains/index.d.ts",
       "default": "./dist/chains/index.js"
     },
     "./views": {
+      "shinzo-source": "./src/views/index.ts",
       "types": "./dist/views/index.d.ts",
       "default": "./dist/views/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./addresses": {
+        "types": "./dist/addresses/index.d.ts",
+        "default": "./dist/addresses/index.js"
+      },
+      "./chains": {
+        "types": "./dist/chains/index.d.ts",
+        "default": "./dist/chains/index.js"
+      },
+      "./views": {
+        "types": "./dist/views/index.d.ts",
+        "default": "./dist/views/index.js"
+      },
+      "./package.json": "./package.json"
+    }
   },
   "files": [
     "dist",

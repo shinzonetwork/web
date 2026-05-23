@@ -58,7 +58,6 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   const isDeployInProgress =
     status === "checking" ||
     status === "validating" ||
-    status === "simulating" ||
     status === "deploying" ||
     status === "confirming";
   const isInProgress = isFetchingAbi || isDeployInProgress;
