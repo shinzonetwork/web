@@ -1,0 +1,74 @@
+{
+  "name": "@shinzo/shinzohub",
+  "version": "0.1.0",
+  "description": "Viem-first TypeScript client actions for ShinzoHub.",
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "shinzo-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./addresses": {
+      "shinzo-source": "./src/addresses/index.ts",
+      "types": "./dist/addresses/index.d.ts",
+      "default": "./dist/addresses/index.js"
+    },
+    "./chains": {
+      "shinzo-source": "./src/chains/index.ts",
+      "types": "./dist/chains/index.d.ts",
+      "default": "./dist/chains/index.js"
+    },
+    "./views": {
+      "shinzo-source": "./src/views/index.ts",
+      "types": "./dist/views/index.d.ts",
+      "default": "./dist/views/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./addresses": {
+        "types": "./dist/addresses/index.d.ts",
+        "default": "./dist/addresses/index.js"
+      },
+      "./chains": {
+        "types": "./dist/chains/index.d.ts",
+        "default": "./dist/chains/index.js"
+      },
+      "./views": {
+        "types": "./dist/views/index.d.ts",
+        "default": "./dist/views/index.js"
+      },
+      "./package.json": "./package.json"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "llm.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm run build",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "abitype": "^1.0.6",
+    "typescript": "^5.9.3",
+    "viem": "^2.21.32",
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "abitype": "^1.0.6",
+    "viem": "^2.21.32"
+  }
+}

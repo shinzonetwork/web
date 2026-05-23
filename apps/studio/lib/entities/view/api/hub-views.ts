@@ -1,21 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import { listViews, type ShinzoHubView } from "@shinzo/shinzohub";
+import { createPublicClient, http } from "viem";
 import { STUDIO_VIEW_NAME_PREFIX } from "@/entities/lens";
-import { SHINZOHUB_COSMOS_RPC_REQUEST_URL } from "@/shared/consts/envs";
-
-interface HubViewWire {
-  name?: string;
-  creator?: string;
-  contract_address?: string;
-  data?: string | null;
-  height?: string;
-}
-
-interface HubViewsResponse {
-  views?: HubViewWire[];
-  pagination?: {
-    next_key?: string | null;
-  };
-}
+import {
+  SHINZOHUB_COSMOS_RPC_REQUEST_URL,
+  SHINZOHUB_EVM_RPC_REQUEST_URL,
+} from "@/shared/consts/envs";
+import { shinzoDevnet } from "@/shared/consts/wagmi";
 
 export interface HubViewRecord {
   name: string;
@@ -31,52 +22,39 @@ interface FindHubViewByEntityNameOptions {
 
 const HUB_VIEWS_PAGE_LIMIT = 200;
 const STUDIO_HUB_VIEWS_STALE_TIME_MS = 60 * 1000;
+const shinzohubPublicClient = createPublicClient({
+  chain: shinzoDevnet,
+  transport: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
+});
 
 export const STUDIO_HUB_VIEWS_QUERY_KEY = [
   "studio-hub-views",
   STUDIO_VIEW_NAME_PREFIX,
 ] as const;
 
-const normalizeHubBaseUrl = (): string => {
+const getHubCosmosRestUrl = (): string => {
   const trimmed = SHINZOHUB_COSMOS_RPC_REQUEST_URL.trim();
 
   if (!trimmed) {
     throw new Error("ShinzoHub Cosmos RPC proxy path is not configured.");
   }
 
-  return trimmed.endsWith("/") ? trimmed : `${trimmed}/`;
-};
-
-const buildHubUrl = (path: string): URL => {
-  const baseUrl = new URL(normalizeHubBaseUrl(), window.location.origin);
-  return new URL(path.replace(/^\/+/, ""), baseUrl);
-};
-
-const hubFetch = async (url: URL): Promise<Response> => {
-  const response = await fetch(url, { cache: "no-store" });
-
-  if (!response.ok && response.status !== 404) {
-    throw new Error(
-      `ShinzoHub Cosmos RPC returned ${response.status}: ${response.statusText}`
-    );
-  }
-
-  return response;
+  return new URL(trimmed, window.location.origin).toString();
 };
 
 const toHubViewRecord = (
-  view: HubViewWire | null | undefined
+  view: ShinzoHubView | null | undefined
 ): HubViewRecord | null => {
-  if (!view?.name || !view.contract_address) {
+  if (!view?.name || !view.contractAddress) {
     return null;
   }
 
   return {
     name: view.name,
     creator: view.creator ?? "",
-    contractAddress: view.contract_address,
+    contractAddress: view.contractAddress,
     data: view.data ?? null,
-    height: view.height ?? "",
+    height: view.height.toString(),
   };
 };
 
@@ -93,23 +71,16 @@ const compareHubViewsByHeightDesc = (
 export const fetchStudioHubViews = async (): Promise<HubViewRecord[]> => {
   const collectedViews: HubViewRecord[] = [];
   let nextKey: string | null = null;
+  const cosmosRestUrl = getHubCosmosRestUrl();
 
   while (true) {
-    const url = buildHubUrl("/shinzonetwork/view/v1/views");
-    url.searchParams.set("pagination.limit", String(HUB_VIEWS_PAGE_LIMIT));
+    const payload = await listViews(shinzohubPublicClient, {
+      cosmosRestUrl,
+      limit: HUB_VIEWS_PAGE_LIMIT,
+      pageKey: nextKey ?? undefined,
+    });
 
-    if (nextKey) {
-      url.searchParams.set("pagination.key", nextKey);
-    }
-
-    const response = await hubFetch(url);
-    if (response.status === 404) {
-      throw new Error("ShinzoHub Cosmos RPC views endpoint was not found.");
-    }
-
-    const payload = (await response.json()) as HubViewsResponse;
-
-    for (const view of payload.views ?? []) {
+    for (const view of payload.views) {
       const record = toHubViewRecord(view);
       if (!record?.name.startsWith(STUDIO_VIEW_NAME_PREFIX)) {
         continue;
@@ -118,7 +89,7 @@ export const fetchStudioHubViews = async (): Promise<HubViewRecord[]> => {
       collectedViews.push(record);
     }
 
-    nextKey = payload.pagination?.next_key ?? null;
+    nextKey = payload.pagination.nextKey;
     if (!nextKey) {
       break;
     }
@@ -139,9 +110,10 @@ export const findHubViewByEntityName = (
   const matchingViews = views.filter((view) => view.name === entityName);
 
   if (options?.contractAddress) {
+    const targetAddress = options.contractAddress.toLowerCase();
     return (
       matchingViews.find(
-        (view) => view.contractAddress === options.contractAddress
+        (view) => view.contractAddress.toLowerCase() === targetAddress
       ) ?? null
     );
   }
