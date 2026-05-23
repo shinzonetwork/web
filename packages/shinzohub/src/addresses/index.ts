@@ -29,8 +29,41 @@ class AddressValidationError extends Error {
   }
 }
 
+interface ValidatedShinzoAddress {
+  prefix: string;
+  data: Uint8Array;
+}
+
 function isHexAddress(value: string): boolean {
   return isHexLike(value.trim(), SHINZO_ADDRESS_BYTE_LENGTH);
+}
+
+function validateShinzoAddress(
+  value: string,
+  options: ShinzoAddressOptions = {},
+): ValidatedShinzoAddress {
+  const expectedPrefix = options.prefix ?? SHINZO_BECH32_PREFIX;
+
+  try {
+    const decoded = decodeBech32(value.trim());
+    if (decoded.prefix !== expectedPrefix) {
+      throw new AddressValidationError(
+        `Invalid bech32 prefix "${decoded.prefix}". Expected "${expectedPrefix}".`,
+      );
+    }
+    if (decoded.data.length !== SHINZO_ADDRESS_BYTE_LENGTH) {
+      throw new AddressValidationError(
+        `Shinzo addresses must contain ${SHINZO_ADDRESS_BYTE_LENGTH} bytes.`,
+      );
+    }
+    return decoded;
+  } catch (error) {
+    if (error instanceof AddressValidationError) {
+      throw error;
+    }
+    const message = error instanceof Error ? error.message : "Invalid Shinzo address.";
+    throw new AddressValidationError(message);
+  }
 }
 
 /**
@@ -102,31 +135,12 @@ export function hexToShinzoAddress(value: string, options: ShinzoAddressOptions 
  * ```
  */
 export function shinzoAddressToHex(value: string, options: ShinzoAddressOptions = {}): HexAddress {
-  const expectedPrefix = options.prefix ?? SHINZO_BECH32_PREFIX;
-  try {
-    const decoded = decodeBech32(value.trim());
-    if (decoded.prefix !== expectedPrefix) {
-      throw new AddressValidationError(
-        `Invalid bech32 prefix "${decoded.prefix}". Expected "${expectedPrefix}".`,
-      );
-    }
-    if (decoded.data.length !== SHINZO_ADDRESS_BYTE_LENGTH) {
-      throw new AddressValidationError(
-        `Shinzo addresses must contain ${SHINZO_ADDRESS_BYTE_LENGTH} bytes.`,
-      );
-    }
-    return normalizeHex(
-      Array.from(decoded.data, (byte) => byte.toString(16).padStart(2, "0")).join(""),
-      "address",
-      SHINZO_ADDRESS_BYTE_LENGTH,
-    ) as HexAddress;
-  } catch (error) {
-    if (error instanceof AddressValidationError) {
-      throw error;
-    }
-    const message = error instanceof Error ? error.message : "Invalid Shinzo address.";
-    throw new AddressValidationError(message);
-  }
+  const decoded = validateShinzoAddress(value, options);
+  return normalizeHex(
+    Array.from(decoded.data, (byte) => byte.toString(16).padStart(2, "0")).join(""),
+    "address",
+    SHINZO_ADDRESS_BYTE_LENGTH,
+  ) as HexAddress;
 }
 
 /**
@@ -159,6 +173,6 @@ export function normalizeShinzoAddress(value: string, options: ShinzoAddressOpti
     return hexToShinzoAddress(input, options);
   }
 
-  const hexAddress = shinzoAddressToHex(input, options);
-  return hexToShinzoAddress(hexAddress, options);
+  const decoded = validateShinzoAddress(input, options);
+  return encodeBech32(decoded.prefix, decoded.data) as ShinzoAddress;
 }
