@@ -10,6 +10,7 @@
     "dev:faucet": "pnpm --filter shinzo-faucet dev",
     "dev:health-proxy": "pnpm --filter shinzo-health-proxy dev",
     "dev:studio": "pnpm --filter @shinzo/studio dev",
+    "dev:brand-kit": "pnpm --filter @shinzo/brand-kit dev",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"
   },

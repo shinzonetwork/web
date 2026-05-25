@@ -1,0 +1,91 @@
+/* Entry point — order matters:
+   1. Tailwind engine
+   2. Fonts
+   3. Brand tokens (@theme, CSS vars)
+   4. Base resets
+   5. Brand component classes  ← part of the design system
+*/
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/geist-mono";
+@import "./tokens.css";
+
+@font-face {
+  font-family: "Toppan Bunkyu Midashi Mincho";
+  src: url("../../../packages/ui/src/fonts/jp-serif.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@import "@shinzo/ui/theme.css";
+
+/* Tell Tailwind to scan @shinzo/ui source via its node_modules symlink */
+@source "../node_modules/@shinzo/ui/src";
+
+/* =====================================================
+   UTILITIES
+   ===================================================== */
+
+/* text-px-{n} — write pixel values, output rem. e.g. text-px-13 → 0.8125rem */
+@utility text-px-* {
+  font-size: calc(--value(number) / 16 * 1rem);
+}
+
+@utility scroll-mt-nav {
+  scroll-margin-top: var(--spacing-nav);
+}
+
+/* =====================================================
+   BASE
+   ===================================================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-szo-text);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* =====================================================
+   BRAND COMPONENTS
+   Part of the Shinzo design system — these classes are
+   consumable outside this viewer in any Shinzo product.
+   ===================================================== */
+@layer components {
+
+  /* ----- Cards ----- */
+  .card {
+    @apply bg-white border border-szo-border-light rounded-lg p-6;
+  }
+  .card-accent {
+    @apply bg-szo-bg-accent border border-szo-primary/20 rounded-lg p-6;
+  }
+  .card-muted {
+    @apply bg-szo-bg-muted border border-gray-200 rounded-lg p-6;
+  }
+
+  /* ----- Badges ----- */
+  .badge {
+    @apply inline-flex items-center py-[3px] px-[10px] rounded-full text-xs font-medium leading-normal;
+  }
+  .badge-primary { @apply bg-szo-primary/[0.08] text-szo-primary; }
+  .badge-neutral { @apply bg-szo-bg-muted text-szo-text-muted border border-gray-200; }
+  .badge-outline { @apply bg-transparent text-szo-primary border border-szo-primary/30; }
+}
+
