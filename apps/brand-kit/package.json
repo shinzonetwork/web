@@ -7,7 +7,9 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy": "vite build && wrangler deploy",
+    "upload": "vite build && wrangler versions upload"
   },
   "dependencies": {
     "@fontsource-variable/geist-mono": "5.2.7",
