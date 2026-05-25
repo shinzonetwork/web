@@ -54,7 +54,7 @@ export function Typography() {
         {TYPE_SCALE.map(({ token, px, rem }) => {
           const pxNum = parseInt(px);
           return (
-            <div key={token} className="flex items-baseline gap-6 py-4 border-t border-gray-100 last:border-b last:border-b-gray-100">
+            <div key={token} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 py-4 border-t border-gray-100 last:border-b last:border-b-gray-100">
               <div className="w-[120px] shrink-0">
                 <span className="block text-xs font-semibold uppercase tracking-[0.07em] text-gray-600 font-mono mb-0.5">{token}</span>
                 <span className="text-xs text-gray-500 font-mono">{px} / {rem}</span>
@@ -83,7 +83,7 @@ export function Typography() {
         {WEIGHTS.map(({ weight, label, name }) => (
           <div
             key={weight}
-            className="flex items-baseline gap-5 py-[14px] border-t border-gray-100"
+            className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-5 py-[14px] border-t border-gray-100"
           >
             <div className="w-[100px] shrink-0">
               <div className="text-xs font-semibold uppercase tracking-[0.07em] text-gray-600 font-mono">
@@ -109,7 +109,7 @@ export function Typography() {
         {WEIGHTS.map(({ weight, label, name }) => (
           <div
             key={weight}
-            className="flex items-baseline gap-5 py-[14px] border-t border-gray-100"
+            className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-5 py-[14px] border-t border-gray-100"
           >
             <div className="w-[100px] shrink-0">
               <div className="text-xs font-semibold uppercase tracking-[0.07em] text-gray-600 font-mono">

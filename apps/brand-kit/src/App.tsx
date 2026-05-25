@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { ShinzoLogo } from "./components/ShinzoLogo";
 import { Overview } from "./sections/Overview";
 import { Logo } from "./sections/Logo";
 import { Colors } from "./sections/Colors";
@@ -17,12 +16,12 @@ import { useBrandKitNav } from "./hooks/useBrandKitNav";
 import designDoc from "../DESIGN.md?raw";
 
 const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
-  logo:       Logo,
-  colors:     Colors,
+  logo: Logo,
+  colors: Colors,
   typography: Typography,
-  buttons:    Buttons,
+  buttons: Buttons,
   components: ComponentsSection,
-  tokens:     Tokens,
+  tokens: Tokens,
 };
 
 export default function App() {
@@ -38,18 +37,18 @@ export default function App() {
       {/* ===== HEADER ===== */}
       <header
         className={[
-          "fixed top-0 left-0 right-0 z-[200] h-[var(--spacing-nav)]",
+          "fixed top-0 left-0 right-0 z-200 h-nav",
           "flex items-center justify-between px-5 pr-6",
-          "bg-white/95 backdrop-blur-[8px]",
-          "transition-[opacity,transform] duration-[250ms] ease-[ease]",
+          "bg-white/95 backdrop-blur-sm",
+          "transition-[opacity,transform] duration-250 ease-[ease]",
           navVisible
             ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-[6px] pointer-events-none",
+            : "opacity-0 translate-y-[-6px] pointer-events-none",
         ].join(" ")}
       >
         <a href="#overview" onClick={handleNavClick} className="flex items-center gap-4 no-underline">
-          <ShinzoLogo variant="symbol" style={{ height: 20, width: "auto" }} />
-          <span className="text-xs font-mono text-szo-text font-normal tracking-[0.05em] leading-none">
+          <img src="/logo/shinzo-logomark-black.png" className="w-6" alt="Shinzo" />
+          <span className="text-xs font-mono text-szo-text font-normal tracking-wider leading-none">
             Brand Design System
           </span>
         </a>
@@ -65,9 +64,9 @@ export default function App() {
         <main>
           <Overview />
 
-          <div className="flex items-start pt-[var(--spacing-nav)]">
+          <div className="flex items-start pt-nav">
             {/* ===== SIDEBAR ===== */}
-            <aside className="hidden lg:block sticky top-[var(--spacing-nav)] h-[calc(100svh-var(--spacing-nav))] w-[var(--spacing-sidebar)] shrink-0 overflow-y-auto py-4 bg-white [scrollbar-width:thin] [scrollbar-color:var(--color-gray-300)_transparent]">
+            <aside className="hidden lg:block sticky top-nav h-[calc(100svh-nav)] w-sidebar shrink-0 overflow-y-auto py-4 bg-white scrollbar-thin [scrollbar-color:var(--color-gray-300)_transparent]">
               {GROUPS.map((group, i) => (
                 <div key={group.id}>
                   {i > 0 && <div className="h-px bg-gray-200 mx-4 my-2" />}
@@ -116,14 +115,16 @@ export default function App() {
                 );
               })}
 
-              <footer className="border-t border-gray-200 overflow-hidden">
+              <footer className="border-t border-gray-200 overflow-hidden max-w-content px-4">
                 <FadeIn y={24} duration={0.9}>
                   <div className="px-5 pt-6 pb-2 flex items-center justify-between">
                     <span className="text-xs text-gray-400 font-mono">Shinzō © 2025</span>
                   </div>
-                  <ShinzoLogo
+                  <img
+                    src="/logo/shinzo-logo-black.svg"
                     style={{ width: "100%", height: "auto", display: "block" }}
                     className="opacity-90"
+                    alt="Shinzo"
                   />
                 </FadeIn>
               </footer>
