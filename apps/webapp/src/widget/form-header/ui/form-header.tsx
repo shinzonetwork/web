@@ -1,9 +1,9 @@
-import { UI_TEXT_CONTENT } from "@/shared/lib";
+import { UI_FORM_HEADER_CONTENT } from "@/shared/lib";
 
 export function FormHeader({
   content,
 }: {
-  content: (typeof UI_TEXT_CONTENT)[keyof typeof UI_TEXT_CONTENT];
+  content: (typeof UI_FORM_HEADER_CONTENT)[keyof typeof UI_FORM_HEADER_CONTENT];
 }) {
   return (
     <div className="space-y-2">

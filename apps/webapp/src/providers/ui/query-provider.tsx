@@ -3,7 +3,14 @@
 import type { ReactNode } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 interface AppQueryProviderProps {
   children: ReactNode;

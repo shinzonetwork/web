@@ -4,7 +4,7 @@ import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { AppProviders } from "@/providers";
-import { Toast, WalletChangeGuard } from "@/widget";
+import { Footer, Toast, WalletChangeGuard } from "@/widget";
 import { RegistrationContextProvider } from "@/entities/registration-process";
 import { TooltipProvider } from "@/shared/ui/tooltip";
 
@@ -33,17 +33,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
       >
         <AppProviders>
           <RegistrationContextProvider>
             <TooltipProvider>
               <WalletChangeGuard />
-              <main className="min-h-screen">{children}</main>
+              <main className="min-h-screen w-full min-w-0 max-w-full overflow-x-hidden">
+                {children}
+              </main>
               <Toast />
             </TooltipProvider>
           </RegistrationContextProvider>
         </AppProviders>
+        <Footer />
       </body>
     </html>
   );

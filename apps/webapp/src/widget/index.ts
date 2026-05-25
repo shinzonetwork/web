@@ -3,6 +3,7 @@ export * from "./banner";
 export * from "./connect-wallet";
 export * from "./copy-to-clipboard";
 export * from "./disconnect-wallet";
+export * from "./footer";
 export * from "./form-header";
 export * from "./header";
 export * from "./input-field";

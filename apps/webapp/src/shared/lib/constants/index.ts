@@ -9,7 +9,7 @@ export enum EntityRole {
 export const SHINZO_PRECOMPILE_ADDRESS =
   "0x0000000000000000000000000000000000000211";
 
-export const UI_TEXT_CONTENT = {
+export const UI_FORM_HEADER_CONTENT = {
   "host-registration": {
     title: "/ Register your host to participate within the Shinzo Network",
     description:
@@ -35,3 +35,13 @@ export const UI_TEXT_CONTENT = {
 export const isRegistrationV2 = () => {
   return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
 };
+
+export const UI_HOME_HEADER_CONTENT = {
+  home: {
+    title: "TECHNICAL REGISTRY",
+    description:
+      "Verifiable data infrastructure for the decentralized web. A low-level coordination layer for decentralized indexing and host services.",
+  },
+  registered_indexers: "REGISTERED INDEXERS",
+  registered_hosts: "REGISTERED HOSTS",
+} as const;
