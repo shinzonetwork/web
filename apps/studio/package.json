@@ -29,6 +29,8 @@
     "class-variance-authority": "0.7.1",
     "hono": "4.12.16",
     "lucide-react": "1.14.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "viem": "2.48.7",
     "wagmi": "3.6.9"
   },
