@@ -2,7 +2,8 @@ import "@fontsource-variable/inter/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import "./globals.css";
 
-import { StudioPage } from "@/pages/studio";
+import { DeployPage } from "@/pages/deploy";
+import { ViewsPage } from "@/pages/views";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Providers } from "./providers";
@@ -13,10 +14,18 @@ if (!rootElement) {
   throw new Error("Studio root element was not found.");
 }
 
+const App = () => {
+  if (window.location.pathname === "/deploy") {
+    return <DeployPage />;
+  }
+
+  return <ViewsPage />;
+};
+
 createRoot(rootElement).render(
   <StrictMode>
     <Providers>
-      <StudioPage />
+      <App />
     </Providers>
   </StrictMode>
 );
