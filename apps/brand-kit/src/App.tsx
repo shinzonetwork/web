@@ -64,7 +64,7 @@ export default function App() {
         <main>
           <Overview />
 
-          <div className="flex items-start pt-nav">
+          <div className="flex items-start pt-nav overflow-x-clip">
             {/* ===== SIDEBAR ===== */}
             <aside className="hidden lg:block sticky top-nav h-[calc(100svh-nav)] w-sidebar shrink-0 overflow-y-auto py-4 bg-white scrollbar-thin [scrollbar-color:var(--color-gray-300)_transparent]">
               {GROUPS.map((group, i) => (
@@ -115,15 +115,15 @@ export default function App() {
                 );
               })}
 
-              <footer className="border-t border-gray-200 overflow-hidden max-w-content px-4">
+              <footer className="border-t border-gray-200 overflow-hidden max-w-content px-4 mt-40">
                 <FadeIn y={24} duration={0.9}>
                   <div className="px-5 pt-6 pb-2 flex items-center justify-between">
-                    <span className="text-xs text-gray-400 font-mono">Shinzō © 2025</span>
+                    <span className="text-xs text-gray-400 font-mono">Shinzō © {new Date().getFullYear()}</span>
                   </div>
                   <img
                     src="/logo/shinzo-logo-black.svg"
                     style={{ width: "100%", height: "auto", display: "block" }}
-                    className="opacity-90"
+                    className="opacity-90 mt-10"
                     alt="Shinzo"
                   />
                 </FadeIn>

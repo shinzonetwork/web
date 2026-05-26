@@ -1,3 +1,4 @@
+import { BayerGradient } from "../components/BayerGradient";
 import { FadeIn } from "../components/FadeIn";
 
 interface GroupIntroProps {
@@ -22,15 +23,18 @@ export function GroupIntro({ id, group, title, description, items }: GroupIntroP
         </div>
         <h2 className="font-display text-4xl font-normal text-gray-900 mb-5 tracking-tight">{title}</h2>
         <p className="text-px-14 text-gray-600 leading-relaxed mb-10 max-w-xl">{description}</p>
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex flex-wrap flex-col lg:flex-row justify-stretch lg:max-w-2/3 divide-gray-200 divide-x-2 border-gray-200 border-2 relative">
           {items.map(({ id, label, desc }) => (
             <a
               key={id}
               href={`#${id}`}
-              className="block px-4 py-3 border border-gray-200 rounded-lg no-underline transition-all duration-150 min-w-[140px] hover:border-szo-primary/40 hover:bg-[color-mix(in_srgb,var(--color-szo-primary)_4%,white)] hover:text-szo-primary"
+              className="relative block lg:w-1/3 w-full group hover:z-10"
             >
-              <div className="text-px-13 font-medium mb-0.5">{label}</div>
-              <div className="text-xs text-gray-600">{desc}</div>
+              <div className="relative h-full z-2 bg-white px-4 py-3 group-hover:hover:outline-2 group-hover:hover:outline-szo-primary group-hover:hover:-outline-offset-2 transition-all" >
+                <div className="text-px-14 font-display mb-1">/ {label}</div>
+                <div className="text-sm text-gray-600">{desc}</div>
+              </div>
+              <BayerGradient from="#ffffff" to="#d01f27" className="absolute right-0 bottom-0 group-hover:-right-2 group-hover:-bottom-2 w-full h-full opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none" />
             </a>
           ))}
         </div>

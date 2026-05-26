@@ -123,59 +123,78 @@ Responsive headings use `clamp()` to scale between breakpoints.
 
 ## 4. Component Stylings
 
+### Corner Radius — Rules
+
+Radius is minimal and purposeful. Cards, containers, panels, and layout elements are **always sharp** — across every Shinzo surface including the website, explorer, studio, and dashboard.
+
+**No radius (0px) — all contexts:**
+- Cards, feature cards, pricing cards, role cards
+- Data panels, stat boxes, tables, list containers
+- Layout sections, dividers, any structural container
+
+**Always pill regardless of context:**
+- Buttons (default and large): `9999px`
+- Badges and status tags: `9999px`
+
+**Small radius only for interactive form elements:**
+- Text inputs, search fields: `4–6px`
+- Small buttons: `8px`
+- Inline code chips: `4px`
+
 ### Buttons
 
 Default and large buttons use `rounded-full` (pill). Small buttons use `rounded-md` (8px).
 
 **Primary** (default action — black)
-- Background: `#000000`
-- Text: `#ffffff`
+- Background: `#000000` / Text: `#ffffff`
 - Height: `44px` (default) / `48px` (large) / `32px` (small)
 - Padding: `0 32px` (default/large) / `0 16px` (small)
-- Border radius: `9999px` (pill) — `8px` for small
-- Font: Inter, 14px weight 500
-- Hover: `rgba(0,0,0,0.9)`
+- Border radius: pill — `8px` for small
+- Font: Inter, 14px weight 500 / Hover: `rgba(0,0,0,0.9)`
 
 **Red** (high-emphasis CTA)
-- Background: `#d01f27`
-- Text: `#ffffff`
-- Hover: `#a81920`
+- Background: `#d01f27` / Text: `#ffffff` / Hover: `#a81920`
 - Same sizing as primary
 
 **Secondary** (outlined red)
-- Background: transparent
-- Text: `#d01f27`
-- Border: `1px solid #d01f27`
-- Hover: `rgba(208,31,39,0.06)` background tint
+- Background: transparent / Text: `#d01f27`
+- Border: `1px solid #d01f27` / Hover: `rgba(208,31,39,0.06)` tint
 
 **Outline** (neutral)
-- Background: transparent
-- Text: `#353535`
-- Border: `1px solid #C7C7C7`
-- Hover: `#f5f5f5` background, `#a3a3a3` border
+- Background: transparent / Text: `#353535`
+- Border: `1px solid #C7C7C7` / Hover: `#f5f5f5` bg, `#a3a3a3` border
 
 **Ghost**
-- Background: transparent
-- Text: `#353535`
-- No border
-- Hover: `#f5f5f5` background
+- Background: transparent / Text: `#353535` / No border / Hover: `#f5f5f5` bg
 
-### Cards
+### Cards & Containers
+
+All cards and containers are sharp-edged (`0px` radius) across every Shinzo surface — website, explorer, studio, dashboard.
 
 **Default**
-- Background: `#ffffff` / Border: `1px solid #F4F4F4` / Radius: `12px` / Padding: `24px`
+- Background: `#ffffff` / Border: `1px solid #e5e5e5` / Radius: `0` / Padding: `24px`
 
-**Accent** (featured content)
-- Background: `#fffbfb` / Border: `1px solid rgba(208,31,39,0.2)` / Radius: `12px` / Padding: `24px`
+**Accent** (featured/highlighted)
+- Background: `#fffbfb` / Border: `1px solid rgba(208,31,39,0.2)` / Radius: `0` / Padding: `24px`
 
 **Muted**
-- Background: `#f5f5f5` / Border: `1px solid #e5e5e5` / Radius: `12px` / Padding: `24px`
+- Background: `#f5f5f5` / Border: `1px solid #e5e5e5` / Radius: `0` / Padding: `24px`
+
+**Data panel / stat box**
+- Background: `#ffffff` / Border: `1px solid #e5e5e5` / Radius: `0` / Padding: `16–24px`
+
+**Data row / table row**
+- Border-bottom: `1px solid #f5f5f5` / Radius: `0` / Hover: `#fafafa` background
 
 ### Badges
 
 - **Primary**: `rgba(208,31,39,0.08)` bg / `#d01f27` text / pill / Inter 12px weight 500
 - **Neutral**: `#f5f5f5` bg / `#525252` text / `1px solid #e5e5e5` border / pill
 - **Outline**: transparent bg / `#d01f27` text / `1px solid rgba(208,31,39,0.3)` border / pill
+- **Status — Active**: `rgba(34,197,94,0.1)` bg / `#16a34a` text / pill
+- **Status — Warning**: `rgba(234,179,8,0.1)` bg / `#ca8a04` text / pill
+- **Status — Error**: `rgba(208,31,39,0.08)` bg / `#d01f27` text / pill
+- **Status — Inactive**: `#f5f5f5` bg / `#a3a3a3` text / pill
 
 ---
 
@@ -200,13 +219,15 @@ Base unit: `8px`. All spacing values are multiples.
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--radius-xs` | `4px` | Tiny elements, inline chips |
-| `--radius-sm` | `6px` | Small inputs, tags |
-| `--radius-md` | `8px` | Small buttons, inputs |
-| `--radius-lg` | `12px` | Cards, containers, panels |
-| `--radius-xl` | `16px` | Large cards, modals |
-| `--radius-2xl` | `24px` | Extra-large containers |
-| `--radius-full` | `9999px` | Badges, pills, default buttons |
+| `--radius-xs` | `4px` | Inline code chips, tiny tags |
+| `--radius-sm` | `6px` | Text inputs, search fields |
+| `--radius-md` | `8px` | Small buttons, icon buttons |
+| `--radius-lg` | `12px` | Reserved — not used on cards or containers |
+| `--radius-xl` | `16px` | Reserved — not used on cards or containers |
+| `--radius-2xl` | `24px` | Reserved — not used on cards or containers |
+| `--radius-full` | `9999px` | All badges, default/large buttons |
+
+> **No radius on cards or containers anywhere** — website, explorer, studio, dashboard, and all other surfaces. Only buttons (pill/8px) and form inputs (4–6px) use radius.
 
 ### Grid & Layout
 
@@ -298,7 +319,8 @@ All logo assets are served at `https://brand.shinzo.network/logo/`. Each file is
 - Use `Geist Mono` (weight 400) for all headings
 - Use `Inter` (weights 300–600) for body copy and UI labels
 - Apply negative letter-spacing to display headings only (36px+)
-- Use pill radius (`9999px`) for default/large buttons; `8px` for small buttons and badges
+- Use pill radius for default/large buttons and all badges — always
+- Use `0px` radius for all containers, panels, and data surfaces in application UIs
 - Keep the design flat: borders and background color only, never shadows
 - Maintain sufficient contrast — minimum 4.5:1 for all body text
 
@@ -310,6 +332,8 @@ All logo assets are served at `https://brand.shinzo.network/logo/`. Each file is
 - Don't mix status colors with the primary brand red
 - Don't use `#d01f27` as a background for large surfaces — it's an accent color
 - Don't use the old `--color-szo-text-muted: #AAAAAA` token for body text — it fails WCAG AA. Use `--color-ui-text-muted: #525252` instead
+- Don't add border radius to layout sections, data tables, stat panels, or any application UI container — sharp edges only in product interfaces
+- Don't apply card radius (`12px+`) in explorer, studio, or dashboard contexts — those UIs are sharp rectangular throughout
 
 ---
 
@@ -358,8 +382,11 @@ All logo assets are served at `https://brand.shinzo.network/logo/`. Each file is
 **Hero Section:**
 "White background. Headline: Geist Mono 60px weight 400, leading 1.0, tracking -2px, `#000000` with a `#d01f27` accent word. Subtitle: Inter 18px weight 300, leading 1.6, `#525252`. Primary CTA: `#000000` background, white text, pill radius. Red CTA: `#d01f27` background, white text, pill radius. No shadows."
 
-**Feature Card Grid:**
-"3-column grid, white background. Cards: `#ffffff` bg, `1px solid #F4F4F4` border, 12px radius, 24px padding, no shadow. Card title: Inter 16px weight 500, `#171717`. Body: Inter 14px weight 400, `#525252`, leading 1.55."
+**Feature Card Grid (website/marketing):**
+"3-column grid, white background. Cards: `#ffffff` bg, `1px solid #e5e5e5` border, 0px radius, 24px padding, no shadow. Card title: Inter 16px weight 500, `#171717`. Body: Inter 14px weight 400, `#525252`, leading 1.55."
+
+**Data Table / App Panel (explorer, studio, dashboard):**
+"Sharp rectangular containers — NO border radius anywhere. Panels: `#ffffff` bg, `1px solid #e5e5e5` border, 0px radius, 16–24px padding. Table rows: `1px solid #f5f5f5` bottom border, transparent bg, hover `#fafafa`. All stat boxes, data grids, and layout containers are sharp-edged."
 
 **Dark Section:**
 "Full-bleed `#000000` background. Headline: Geist Mono 48px weight 400, white, tracking -1.5px. Body: Inter 16px weight 300, `#737373`. Primary button: `#d01f27` bg, white text, pill radius. Ghost: transparent, white text, `1px solid rgba(255,255,255,0.25)` border."
@@ -370,6 +397,7 @@ All logo assets are served at `https://brand.shinzo.network/logo/`. Each file is
 3. No shadows — depth via borders and surface color only
 4. Status colors (green/amber/red/gray) are not brand decorations
 5. Light-first default: white or near-white backgrounds
-6. Button radius: pill for default/large; `8px` for small
-7. Responsive: fluid type with `clamp()`, single column on mobile
-8. Contrast: all body text ≥ 4.5:1 — use `--color-ui-text` (`#353535`) not legacy muted tokens
+6. Button radius: pill for default/large; `8px` for small — always
+7. Radius context: marketing cards get `12px`; application UIs get `0px` — check which context you're in
+8. Responsive: fluid type with `clamp()`, single column on mobile
+9. Contrast: all body text ≥ 4.5:1 — use `--color-ui-text` (`#353535`) not legacy muted tokens
