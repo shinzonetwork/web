@@ -60,22 +60,21 @@ export function Overview() {
           </motion.div>
         </div>
 
-        <div className="w-full mt-20 relative border-l border-t border-gray-200">
+        <motion.div
+          className="w-full mt-20 relative border-t border-gray-200"
+          variants={fadeUpVariants}
+          custom={0.65}
+          initial="hidden"
+          animate="visible"
+        >
           <div className="absolute right-full w-screen bottom-full border-t border-gray-200" />
-          <motion.div
-            className="w-full divide-y lg:divide-y-0 lg:divide-x divide-gray-200 flex flex-col lg:flex-row relative"
-            variants={fadeUpVariants}
-            custom={0.65}
-            initial="hidden"
-            animate="visible"
-          >
+          <div className="w-full divide-y lg:divide-y-0 lg:divide-x divide-gray-200 flex flex-col lg:flex-row relative">
             {GROUP_LINKS.map(({ href, label, desc }) => (
-              <a key={href} href={href} className="relative flex-1 group hover:z-10 border-r lg:border-r-0  last:border-r border-gray-200">
+              <a key={href} href={href} className="relative flex-1 group hover:z-10 border-x lg:border-r-0 last:border-r border-gray-200">
                 <div className="relative z-2 bg-white px-4 py-3 group-hover:outline-2 group-hover:outline-szo-primary group-hover:-outline-offset-2 transition-all">
                   <div className="font-display text-px-16 mb-1">/ {label}</div>
                   <div className="text-xs text-gray-600">{desc}</div>
                 </div>
-
                 <BayerGradient
                   from="#ffffff"
                   to="#d01f27"
@@ -83,10 +82,9 @@ export function Overview() {
                 />
               </a>
             ))}
-          </motion.div>
-
-          <div className="w-[100cqw] h-3 border-y border-gray-200" />
-        </div>
+          </div>
+          <div className="w-[100cqw] h-3 border border-gray-200" />
+        </motion.div>
       </div>
 
     </div>

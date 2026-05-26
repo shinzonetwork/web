@@ -68,7 +68,6 @@
    consumable outside this viewer in any Shinzo product.
    ===================================================== */
 @layer components {
-
   /* ----- Cards ----- */
   .card {
     @apply bg-white border border-szo-border-light rounded-lg p-6;
@@ -84,8 +83,13 @@
   .badge {
     @apply inline-flex items-center py-[3px] px-[10px] rounded-full text-xs font-medium leading-normal;
   }
-  .badge-primary { @apply bg-szo-primary/[0.08] text-szo-primary; }
-  .badge-neutral { @apply bg-szo-bg-muted text-szo-text-muted border border-gray-200; }
-  .badge-outline { @apply bg-transparent text-szo-primary border border-szo-primary/30; }
+  .badge-primary {
+    @apply bg-szo-primary/[0.08] text-szo-primary;
+  }
+  .badge-neutral {
+    @apply bg-szo-bg-muted text-szo-text-muted border border-gray-200;
+  }
+  .badge-outline {
+    @apply bg-transparent text-szo-primary border border-szo-primary/30;
+  }
 }
-
