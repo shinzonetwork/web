@@ -1,7 +1,7 @@
 import { normalizeHexAddress, shinzoAddressToHex } from "@shinzo/shinzohub";
 import type { ViewsAddressLink } from "./types";
 
-const BLOCKSCOUT_BASE_URL = "https://blockscout.shinzo.network";
+const BLOCKSCOUT_BASE_URL = "http://blockscout.shinzo.network";
 
 export const shortenAddress = (value: string, visible = 14): string => {
   if (value.length <= visible) return value;
@@ -33,6 +33,9 @@ export const createBlockscoutAddressLink = (
     href: `${BLOCKSCOUT_BASE_URL}/address/${evmAddress}`,
   };
 };
+
+export const createViewHref = (name: string): string =>
+  `/views/${encodeURIComponent(name)}`;
 
 export const formatHeight = (height: bigint): string => height.toString();
 

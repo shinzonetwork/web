@@ -1,7 +1,4 @@
-export type ViewsVerificationFilter =
-  | "all"
-  | "verified"
-  | "not-verified";
+export type ViewsVerificationFilter = "all" | "verified" | "not-verified";
 
 export interface ViewsFilters {
   search: string;
@@ -50,6 +47,7 @@ export type ViewsLensStatus =
 
 export interface ViewsPageItem {
   id: string;
+  href: string;
   name: string;
   creator: ViewsAddressLink;
   contract: ViewsAddressLink;

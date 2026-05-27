@@ -12,6 +12,7 @@ import { shinzoDevnet } from "@/shared/consts/wagmi";
 import { matchLensStatus, getVerifiedLensOptions } from "./lens-matching";
 import {
   createBlockscoutAddressLink,
+  createViewHref,
   formatHeight,
   normalizeSearchValue,
   toHeightNumber,
@@ -91,7 +92,9 @@ const createSearchText = (item: Omit<ViewsPageItem, "searchText">): string => {
       ? ""
       : `${item.metadata.rootType} ${item.metadata.lensHashes.join(" ")}`;
   const lensText =
-    item.lens.status === "verified" ? `${item.lens.title} ${item.lens.lensKey}` : item.lens.status;
+    item.lens.status === "verified"
+      ? `${item.lens.title} ${item.lens.lensKey}`
+      : item.lens.status;
 
   return normalizeSearchValue(
     [
@@ -116,11 +119,13 @@ const toViewsPageItem = (view: ShinzoHubView): ViewsPageItem | null => {
   }
 
   const lens = matchLensStatus(metadata);
+  const contract = createBlockscoutAddressLink(view.contractAddress);
   const itemWithoutSearchText = {
     id: view.contractAddress,
+    href: createViewHref(view.name),
     name: view.name,
     creator: createBlockscoutAddressLink(view.creator || "unknown"),
-    contract: createBlockscoutAddressLink(view.contractAddress),
+    contract,
     height: formatHeight(view.height),
     heightNumber: toHeightNumber(view.height),
     metadata,
@@ -179,8 +184,7 @@ const filterViews = (
 
     if (
       filters.lensKey !== VIEWS_ALL_LENSES_FILTER &&
-      (item.lens.status !== "verified" ||
-        item.lens.lensKey !== filters.lensKey)
+      (item.lens.status !== "verified" || item.lens.lensKey !== filters.lensKey)
     ) {
       return false;
     }
@@ -259,7 +263,8 @@ export const useViews = (): UseViewsResult => {
   if (query.isError) {
     return {
       status: "error",
-      error: query.error instanceof Error ? query.error.message : "Unexpected error",
+      error:
+        query.error instanceof Error ? query.error.message : "Unexpected error",
       ...sharedState,
     };
   }

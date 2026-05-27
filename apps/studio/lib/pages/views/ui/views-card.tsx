@@ -2,6 +2,7 @@
 
 import { ExternalLink } from "lucide-react";
 import { cn } from "@shinzo/ui/cn";
+import { navigateWithAnchorClick } from "@/shared/utils/browser-location";
 import type {
   ViewsAddressLink,
   ViewsLensStatus,
@@ -15,7 +16,7 @@ const AddressChip = ({ link }: { link: ViewsAddressLink }) => (
     rel="noreferrer"
     title={link.address}
     className={cn(
-      "inline-flex max-w-full items-center gap-1 border border-ui-border bg-ui-bg px-2 py-0.5 align-baseline",
+      "relative z-20 inline-flex max-w-full items-center gap-1 border border-ui-border bg-ui-bg px-2 py-0.5 align-baseline",
       "font-mono text-[11px] leading-5 text-szo-black transition-colors",
       "hover:border-szo-primary hover:text-szo-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-szo-primary/40"
     )}
@@ -45,6 +46,12 @@ export const ViewsCard = ({ view }: { view: ViewsPageItem }) => (
       )}
     >
       <div className="flex min-w-0 flex-col gap-2">
+        <a
+          href={view.href}
+          aria-label={`Open ${view.name}`}
+          onClick={(event) => navigateWithAnchorClick(event, view.href)}
+          className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-szo-primary/40"
+        />
         <h2
           title={view.name}
           className="truncate font-mono text-base font-light text-szo-black"
