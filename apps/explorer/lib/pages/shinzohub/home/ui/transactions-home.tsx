@@ -13,6 +13,7 @@ import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
+import { formatTokenValue } from '../../utils/format';
 
 export const TransactionsHome = () => {
   const { data: transactions, isLoading } = useHomeTransactions({ count: 5 });
@@ -26,11 +27,6 @@ export const TransactionsHome = () => {
   const { getHighlightClass } = useHighlight(dataIds, {
     duration: 1000,
   });
-
-  const formatValue = (value: string) => {
-    const eth = Number(value) / 1e18;
-    return eth.toFixed(2);
-  };
 
   return (
     <div>
@@ -96,7 +92,7 @@ export const TransactionsHome = () => {
               <TableNullableCell value={tx?.value} align="center" className={highlightClass}>
                 {(value) => (
                   <div className="flex items-center gap-1 text-sm">
-                    {formatValue(value)}ETH
+                    {formatTokenValue(value, 18)} SHNZ
                   </div>
                 )}
               </TableNullableCell>

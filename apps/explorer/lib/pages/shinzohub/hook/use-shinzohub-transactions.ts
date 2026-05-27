@@ -4,12 +4,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPublicClient } from '@/shared/viem/client';
 import type { Transaction } from 'viem';
 
-const TX_INDEX_QUERY_KEY = ['shinzohub', 'transaction-index'] as const;
-const TX_INDEX_STORAGE_KEY = 'shinzohub_tx_index_v1';
-const TX_INDEX_REFETCH_INTERVAL_MS = 60_000;
+const SHINZOHUB_TX_QUERY_KEY = ['shinzohub', 'transactions'] as const;
+const SHINZOHUB_TX_STORAGE_KEY = 'shinzohub_txs_storage';
+const SHINZOHUB_TX_REFETCH_INTERVAL_MS = 60_000;
 const BLOCK_BATCH_SIZE = 20;
 
-export type IndexedTransaction = {
+export type ShinzohubTransaction = {
   hash: `0x${string}`;
   from: `0x${string}`;
   to: `0x${string}` | null;
@@ -20,49 +20,49 @@ export type IndexedTransaction = {
   transactionIndex: number;
 };
 
-export type TransactionIndexState = {
+export type ShinzohubTransactionsStorageState = {
   lastScannedBlock: string;
-  transactions: IndexedTransaction[];
+  transactions: ShinzohubTransaction[];
 };
 
-function isFullTransaction(
+function blockHasTransactions(
   entry: Transaction | `0x${string}`,
 ): entry is Transaction {
   return typeof entry === 'object' && entry !== null && 'hash' in entry;
 }
 
-function safeReadStorage(): TransactionIndexState {
+function safeReadStorage(): ShinzohubTransactionsStorageState {
   if (typeof window === 'undefined') {
     return { lastScannedBlock: '-1', transactions: [] };
   }
   try {
-    const raw = window.localStorage.getItem(TX_INDEX_STORAGE_KEY);
+    const raw = window.localStorage.getItem(SHINZOHUB_TX_STORAGE_KEY);
     if (!raw) return { lastScannedBlock: '-1', transactions: [] };
-    const parsed = JSON.parse(raw) as Partial<TransactionIndexState> | null;
+    const parsed = JSON.parse(raw) as Partial<ShinzohubTransactionsStorageState> | null;
     if (!parsed || typeof parsed.lastScannedBlock !== 'string' || !Array.isArray(parsed.transactions)) {
       return { lastScannedBlock: '-1', transactions: [] };
     }
     return {
       lastScannedBlock: parsed.lastScannedBlock,
-      transactions: parsed.transactions as IndexedTransaction[],
+      transactions: parsed.transactions as ShinzohubTransaction[],
     };
   } catch {
     return { lastScannedBlock: '-1', transactions: [] };
   }
 }
 
-function safeWriteStorage(state: TransactionIndexState): void {
+function safeWriteStorage(state: ShinzohubTransactionsStorageState): void {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(TX_INDEX_STORAGE_KEY, JSON.stringify(state));
+  window.localStorage.setItem(SHINZOHUB_TX_STORAGE_KEY, JSON.stringify(state));
 }
 
 type SyncOptions = {
-  onCheckpoint?: (state: TransactionIndexState) => void;
+  onCheckpoint?: (state: ShinzohubTransactionsStorageState) => void;
 };
 
-export async function syncShinzohubTransactionIndex(
+export async function syncShinzohubTransactions(
   options: SyncOptions = {},
-): Promise<TransactionIndexState> {
+): Promise<ShinzohubTransactionsStorageState> {
   const { onCheckpoint } = options;
   const publicClient = getPublicClient('shinzohub');
   const latestBlock = await publicClient.getBlockNumber({ cacheTime: 0 });
@@ -107,7 +107,7 @@ export async function syncShinzohubTransactionIndex(
     );
 
     blocks.forEach((block) => {
-      const txObjects = block.transactions.filter(isFullTransaction);
+      const txObjects = block.transactions.filter(blockHasTransactions);
       txObjects.forEach((tx, idx) => {
         if (!tx.hash || seenHashes.has(tx.hash)) return;
         allTransactions.push({
@@ -124,7 +124,7 @@ export async function syncShinzohubTransactionIndex(
       });
     });
 
-    const checkpoint: TransactionIndexState = {
+    const checkpoint: ShinzohubTransactionsStorageState = {
       lastScannedBlock: batchEnd.toString(),
       transactions: allTransactions,
     };
@@ -133,7 +133,7 @@ export async function syncShinzohubTransactionIndex(
     start = batchEnd + BigInt(1);
   }
 
-  const finalState: TransactionIndexState = {
+  const finalState: ShinzohubTransactionsStorageState = {
     lastScannedBlock: latestBlock.toString(),
     transactions: allTransactions,
   };
@@ -142,17 +142,17 @@ export async function syncShinzohubTransactionIndex(
   return finalState;
 }
 
-export function useShinzohubTransactionIndex(
-  { refetchIntervalMs = TX_INDEX_REFETCH_INTERVAL_MS }: { refetchIntervalMs?: number } = {},
+export function useShinzohubTransactions(
+  { refetchIntervalMs = SHINZOHUB_TX_REFETCH_INTERVAL_MS }: { refetchIntervalMs?: number } = {},
 ) {
   const queryClient = useQueryClient();
 
-  return useQuery<TransactionIndexState>({
-    queryKey: TX_INDEX_QUERY_KEY,
+  return useQuery<ShinzohubTransactionsStorageState>({
+    queryKey: SHINZOHUB_TX_QUERY_KEY,
     queryFn: () =>
-      syncShinzohubTransactionIndex({
+      syncShinzohubTransactions({
         onCheckpoint: (checkpoint) => {
-          queryClient.setQueryData(TX_INDEX_QUERY_KEY, checkpoint);
+          queryClient.setQueryData(SHINZOHUB_TX_QUERY_KEY, checkpoint);
         },
       }),
     staleTime: refetchIntervalMs,

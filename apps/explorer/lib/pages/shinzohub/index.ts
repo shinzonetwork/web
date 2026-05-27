@@ -1,1 +1,2 @@
-export { HomePage as default } from './home';
+export { HomePage } from './home';
+export { ShinzohubTransactionsPage } from './transactions';
