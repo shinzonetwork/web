@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - Node.js >= 24
-- pnpm 10
+- PNPM 10
 
 ## Steps
 
