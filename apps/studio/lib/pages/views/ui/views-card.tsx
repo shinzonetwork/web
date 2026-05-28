@@ -37,11 +37,22 @@ const getVerificationLabel = (lens: ViewsLensStatus): string => {
   }
 };
 
+const getVerificationClassName = (lens: ViewsLensStatus): string => {
+  switch (lens.status) {
+    case "verified":
+      return "border-szo-primary/30 bg-ui-bg-accent text-ui-text-accent";
+    case "not-verified":
+      return "border-ui-border bg-ui-bg-muted text-ui-text-muted";
+    case "unknown":
+      return "border-ui-border bg-white text-ui-text-muted";
+  }
+};
+
 export const ViewsCard = ({ view }: { view: ViewsPageItem }) => (
-  <div className="group relative isolate h-full">
+  <div className="group relative isolate h-full min-w-0">
     <article
       className={cn(
-        "relative z-10 flex h-full min-h-48 flex-col gap-4 border-2 border-ui-border bg-white p-4",
+        "relative z-10 flex h-full min-h-48 min-w-0 flex-col gap-4 border-2 border-ui-border bg-white p-4",
         "transition-all duration-300 group-hover:border-szo-primary"
       )}
     >
@@ -53,28 +64,35 @@ export const ViewsCard = ({ view }: { view: ViewsPageItem }) => (
           className="absolute inset-0 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-szo-primary/40"
         />
         <h2
-          title={view.name}
-          className="truncate font-mono text-base font-light text-szo-black"
+          title={`/ ${view.name}`}
+          className="min-w-0 truncate whitespace-nowrap font-mono text-base font-normal leading-6 text-szo-black"
         >
           / {view.name}
         </h2>
 
-        <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-szo-black/60">
-          <span>Smart contract</span>
+        <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-ui-text-muted">
+          <span className="shrink-0">Smart contract</span>
           <AddressChip link={view.contract} />
         </p>
 
-        <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-szo-black/60">
-          <span>by</span>
+        <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-ui-text-muted">
+          <span className="shrink-0">by</span>
           <AddressChip link={view.creator} />
         </p>
       </div>
 
-      <div className="mt-auto grid gap-3 border-t border-ui-border pt-4 text-xs text-szo-black/55 sm:grid-cols-2">
-        <p className="min-w-0 truncate font-mono text-szo-black">
+      <div className="mt-auto grid min-w-0 gap-3 border-t border-ui-border pt-4 text-xs text-ui-text-muted sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+        <p
+          className={cn(
+            "inline-flex w-fit max-w-full items-center rounded-full border px-2.5 py-1 font-sans text-xs font-medium",
+            getVerificationClassName(view.lens)
+          )}
+        >
           {getVerificationLabel(view.lens)}
         </p>
-        <p className="font-mono sm:text-right">Height: {view.height}</p>
+        <p className="min-w-0 truncate font-mono sm:text-right">
+          Height: {view.height}
+        </p>
       </div>
     </article>
 

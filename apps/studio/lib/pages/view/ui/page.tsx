@@ -40,17 +40,26 @@ const AddressChip = ({ link }: { link: ViewAddressLink }) => (
 const getLensLabel = (lens: ViewLensStatus): string => {
   switch (lens.status) {
     case "verified":
-      return `${lens.title} verified`;
+      return "Verified";
     case "not-verified":
-      return "Lens not verified";
+      return "Not verified";
     case "unknown":
-      return "Lens unknown";
+      return "Unknown";
   }
 };
 
 const LensStatus = ({ lens }: { lens: ViewLensStatus }) => {
+  const className = cn(
+    "inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 font-sans text-xs font-medium",
+    lens.status === "verified" &&
+      "border-szo-primary/30 bg-ui-bg-accent text-ui-text-accent",
+    lens.status === "not-verified" &&
+      "border-ui-border bg-ui-bg-muted text-ui-text-muted",
+    lens.status === "unknown" && "border-ui-border bg-white text-ui-text-muted"
+  );
+
   return (
-    <span className="inline-flex items-center gap-1.5 border border-ui-border bg-white px-2.5 py-1 font-mono text-xs text-szo-black">
+    <span className={className}>
       {lens.status === "verified" ? (
         <ShieldCheck className="size-3.5" aria-hidden="true" />
       ) : null}
@@ -66,26 +75,28 @@ const LensStatus = ({ lens }: { lens: ViewLensStatus }) => {
 };
 
 const ViewMeta = ({ view }: { view: ViewPageRecord }) => (
-  <dl className="grid gap-4 border-y border-ui-border py-5 text-sm md:grid-cols-2 xl:grid-cols-4">
+  <dl className="grid min-w-0 gap-4 border-y border-ui-border py-5 text-sm md:grid-cols-2 xl:grid-cols-4">
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-szo-black/45">Contract</dt>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">Contract</dt>
       <dd>
         <AddressChip link={view.contract} />
       </dd>
     </div>
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-szo-black/45">Author</dt>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">Author</dt>
       <dd>
         <AddressChip link={view.creator} />
       </dd>
     </div>
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-szo-black/45">Height</dt>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">Height</dt>
       <dd className="truncate font-mono text-szo-black">{view.height}</dd>
     </div>
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-szo-black/45">Root type</dt>
-      <dd className="truncate font-mono text-szo-black">{view.rootType}</dd>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">Root type</dt>
+      <dd className="break-words font-mono text-szo-black [overflow-wrap:anywhere]">
+        {view.rootType}
+      </dd>
     </div>
   </dl>
 );
@@ -93,19 +104,18 @@ const ViewMeta = ({ view }: { view: ViewPageRecord }) => (
 const LensDetails = ({ view }: { view: ViewPageRecord }) => {
   if (view.lens.status === "verified") {
     return (
-      <section className="border border-ui-border bg-white p-5">
+      <section className="border border-szo-primary/30 bg-ui-bg-accent p-5">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0">
-            <h2 className="font-mono text-lg font-light text-szo-black">
+            <h2 className="font-mono text-lg font-normal text-szo-black">
               {view.lens.title}
             </h2>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-szo-black/60">
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-ui-text-muted">
               {view.lens.description}
             </p>
           </div>
-          <LensStatus lens={view.lens} />
         </div>
-        <p className="mt-4 truncate font-mono text-xs text-szo-black/45">
+        <p className="mt-4 break-words font-mono text-xs text-ui-text-muted [overflow-wrap:anywhere]">
           Hash: {view.lens.hash}
         </p>
       </section>
@@ -115,23 +125,22 @@ const LensDetails = ({ view }: { view: ViewPageRecord }) => {
   if (view.lens.status === "not-verified") {
     return (
       <section className="border border-ui-border bg-white p-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h2 className="font-mono text-lg font-light text-szo-black">
+        <div className="flex min-w-0 flex-col gap-3">
+          <div className="min-w-0">
+            <h2 className="font-mono text-lg font-normal text-szo-black">
               Lens not verified
             </h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {view.lens.hashes.map((hash) => (
                 <span
                   key={hash}
-                  className="max-w-full truncate border border-ui-border bg-ui-bg px-2 py-1 font-mono text-xs text-szo-black/60"
+                  className="max-w-full break-words rounded-sm border border-ui-border bg-ui-bg px-2 py-1 font-mono text-xs text-ui-text-muted [overflow-wrap:anywhere]"
                 >
                   {hash}
                 </span>
               ))}
             </div>
           </div>
-          <LensStatus lens={view.lens} />
         </div>
       </section>
     );
@@ -139,11 +148,10 @@ const LensDetails = ({ view }: { view: ViewPageRecord }) => {
 
   return (
     <section className="border border-ui-border bg-white p-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <h2 className="font-mono text-lg font-light text-szo-black">
+      <div className="flex flex-col gap-3">
+        <h2 className="font-mono text-lg font-normal text-szo-black">
           Lens unknown
         </h2>
-        <LensStatus lens={view.lens} />
       </div>
     </section>
   );
@@ -189,8 +197,8 @@ const ViewPageError = ({ error }: { error: string }) => (
 const ViewPageContent = ({ view }: { view: ViewPageRecord }) => (
   <div className="flex min-h-screen flex-col">
     <Header />
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-7 px-6 py-10">
-      <div className="flex flex-col gap-4 border-b border-ui-border pb-5 lg:flex-row lg:items-start lg:justify-between">
+    <main className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-7 px-5 py-10 sm:px-6">
+      <div className="flex min-w-0 flex-col gap-4 border-b border-ui-border pb-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0">
           <Button asChild variant="secondary" className="mb-5 gap-2">
             <a
@@ -203,13 +211,15 @@ const ViewPageContent = ({ view }: { view: ViewPageRecord }) => (
           </Button>
           <h1
             title={view.name}
-            className="truncate font-mono text-3xl font-light text-szo-black md:text-4xl"
+            className="break-words font-mono text-3xl font-normal leading-tight text-szo-black [overflow-wrap:anywhere] md:text-4xl"
           >
             / {view.name}
           </h1>
         </div>
 
-        <LensStatus lens={view.lens} />
+        <div className="shrink-0">
+          <LensStatus lens={view.lens} />
+        </div>
       </div>
 
       <ViewMeta view={view} />
