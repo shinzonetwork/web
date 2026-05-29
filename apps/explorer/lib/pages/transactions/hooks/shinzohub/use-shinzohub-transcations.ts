@@ -1,20 +1,20 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useShinzohubTransactions, ShinzohubTransaction } from '../../hook/use-shinzohub-transactions';
+import { useShinzohubTransactionsSync, ShinzohubTransaction } from './use-shinzohub-transactions-sync';
 import { DEFAULT_LIMIT, PageParams } from '@shinzo/ui/pagination';
 
 
-type UseTransactionsOptions = {
+type UseShinzohubTransactionsOptions = {
   pageParams: PageParams;
   refetchIntervalMs?: number;
 };
 
-export function useTransactions(
-  { pageParams, refetchIntervalMs = 10_000 }: UseTransactionsOptions = { pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT } },
+export function useShinzohubTransactions(
+  { pageParams, refetchIntervalMs = 10_000 }: UseShinzohubTransactionsOptions = { pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT } },
 ) {
   const { offset, limit } = pageParams;
-  const indexQuery = useShinzohubTransactions({ refetchIntervalMs });
+  const indexQuery = useShinzohubTransactionsSync({ refetchIntervalMs });
 
   const transactions = useMemo<ShinzohubTransaction[]>(() => {
     const indexed = indexQuery.data?.transactions ?? [];

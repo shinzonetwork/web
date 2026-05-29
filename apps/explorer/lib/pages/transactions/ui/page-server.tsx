@@ -1,7 +1,6 @@
 'use server';
-
-import { TransactionsPageClient } from './page';
 import { PageParamsOptions, getServerPage } from '@shinzo/ui/pagination';
+import { TransactionsPageClient } from './page';
 
 export interface TransactionsPageProps {
   searchParams: Promise<{ block?: string } & PageParamsOptions>

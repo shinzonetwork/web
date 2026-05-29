@@ -1,6 +1,6 @@
 import { METRICS_API_URL } from '@/shared/utils/consts';
 import { useQuery } from '@tanstack/react-query';
-import { MetricsResponse } from '../home/use-blocks-and-transactions-count';
+import { MetricsResponse } from '../../../home/use-blocks-and-transactions-count';
 
 interface TransactionsCountResponse {
   totalTransactions: number;

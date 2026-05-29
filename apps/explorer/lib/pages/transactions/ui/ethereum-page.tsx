@@ -4,22 +4,25 @@ import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { TransactionsList } from './transactions-list';
-import { useTransactions } from '../hook/use-transcations';
+import { useEthereumTransactions } from '../hooks/ethereum/use-ethereum-transactions';
+import { useTransactionsCount } from '../hooks/ethereum/use-transactions-count';
 
-export interface TransactionPageProps {
+export type EthereumTransactionPageProps = {
   block?: number;
   pageParams: PageParams;
 }
 
-export const TransactionsPageClient = ({ pageParams }: TransactionPageProps) => {
-  const { page } = pageParams;
-  const { data: transactions, totalTransactionsCount, isLoading } = useTransactions({
-    refetchIntervalMs: 10_000,
-    pageParams,
+export const EthereumTransactionsPageClient = ({ block, pageParams }: EthereumTransactionPageProps) => {
+  const { page, offset, limit } = pageParams;
+  const { data: transactions, isLoading } = useEthereumTransactions({
+    limit,
+    offset,
+    blockNumber: block,
   });
+  const { data: transactionsCount } = useTransactionsCount();
 
   return (
-    <PageLayout title='Transactions'>
+    <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
       <Container
         wrapperClassName='mt-16 mb-8 border-b border-ui-border'
         className='flex items-end justify-between [&>*]:translate-y-[1px]'
@@ -34,13 +37,13 @@ export const TransactionsPageClient = ({ pageParams }: TransactionPageProps) => 
 
         <Pagination
           page={page}
-          totalItems={totalTransactionsCount}
+          totalItems={transactionsCount?.totalTransactions ?? 0}
           itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>
 
       <TransactionsList
-        transactions={transactions}
+        transactions={transactions?.filter((txn): txn is NonNullable<typeof txn> => txn !== null) ?? []}
         isLoading={isLoading}
       />
     </PageLayout>

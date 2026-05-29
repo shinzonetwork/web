@@ -142,7 +142,7 @@ export async function syncShinzohubTransactions(
   return finalState;
 }
 
-export function useShinzohubTransactions(
+export function useShinzohubTransactionsSync(
   { refetchIntervalMs = SHINZOHUB_TX_REFETCH_INTERVAL_MS }: { refetchIntervalMs?: number } = {},
 ) {
   const queryClient = useQueryClient();

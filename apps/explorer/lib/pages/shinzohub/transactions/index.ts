@@ -1,1 +1,0 @@
-export { TransactionsPage as ShinzohubTransactionsPage } from './ui/page-server';

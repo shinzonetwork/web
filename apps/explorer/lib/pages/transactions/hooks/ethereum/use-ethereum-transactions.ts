@@ -39,22 +39,28 @@ const TransactionsQuery = graphql(`
   }
 `)
 
-interface UseTransactionsOptions {
+interface UseEthereumTransactionsOptions {
   offset?: number;
   limit?: number;
   blockNumber?: number;
 }
 
-export const useTransactions = (options: Partial<UseTransactionsOptions>) => {
+export type EthereumTransaction = Omit<Transaction, 'block'> & {
+  timestamp: string | undefined;
+};
+export const useEthereumTransactions = (options: Partial<UseEthereumTransactionsOptions>) => {
   const { offset, limit, blockNumber } = options;
 
   return useQuery({
-    queryKey: ['transactions', offset, limit, blockNumber],
+    queryKey: ['ethereum', 'transactions', offset, limit, blockNumber],
     queryFn: async () => {
       const res = await execute(TransactionsQuery, { offset, limit, blockNumber });
-      return {
-        transactions: res.Transaction?.filter(Boolean) as Transaction[],
-      };
+      const filteredTxns = res.Transaction?.filter(Boolean) as Transaction[];
+      const mappedTxns = filteredTxns.map((txn) => ({
+        ...txn,
+        timestamp: txn.block?.timestamp ? txn.block.timestamp : undefined,
+      }));
+      return mappedTxns as EthereumTransaction[];
     },
   });
 };

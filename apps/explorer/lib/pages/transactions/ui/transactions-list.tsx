@@ -12,10 +12,16 @@ import {
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
-import { ShinzohubTransaction } from '../../hook/use-shinzohub-transactions';
-import { formatTokenValue, formatGasPrice } from '../../utils/format';
+import { ShinzohubTransaction } from '../hooks/shinzohub/use-shinzohub-transactions-sync';
+import { EthereumTransaction } from '../hooks/ethereum/use-ethereum-transactions';
+import { formatTokenValue } from '@/shared/utils/format-token';
+import { formatGasPrice } from '@/shared/utils/format-gasprice';
 
-export const TransactionsList = ({ transactions, isLoading }: { transactions: ShinzohubTransaction[] | undefined, isLoading: boolean }) => {
+export type TransactionsListProps = {
+  transactions: (EthereumTransaction | ShinzohubTransaction)[] | undefined;
+  isLoading: boolean;
+}
+export const TransactionsList = ({ transactions, isLoading }: TransactionsListProps) => {
   const chain = useChainPathSegment();
 
   return (
@@ -81,11 +87,11 @@ export const TransactionsList = ({ transactions, isLoading }: { transactions: Sh
             </TableNullableCell>
 
             <TableNullableCell value={tx?.value}>
-              {(value) => `${formatTokenValue(value, 18)} SHNZ`}
+              {(value) => `${formatTokenValue(value, 18)} ETH`}
             </TableNullableCell>
 
             <TableNullableCell value={tx?.gasPrice}>
-              {(value) => `${formatGasPrice(value)} Gwei`}
+              {(value) => `${formatGasPrice(value ?? '')} Gwei`}
             </TableNullableCell>
           </>
         )}

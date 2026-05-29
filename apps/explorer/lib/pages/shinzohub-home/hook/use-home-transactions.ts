@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useShinzohubTransactions } from '../../hook/use-shinzohub-transactions';
+import { useShinzohubTransactionsSync } from '@/pages/transactions/hooks/shinzohub/use-shinzohub-transactions-sync';
 
 export type TransactionSummary = {
   hash: `0x${string}`;
@@ -18,7 +18,7 @@ type UseHomeTransactionsOptions = {
 export function useHomeTransactions(
   { count, refetchIntervalMs = 10_000 }: UseHomeTransactionsOptions = {},
 ) {
-  const indexQuery = useShinzohubTransactions({ refetchIntervalMs });
+  const indexQuery = useShinzohubTransactionsSync({ refetchIntervalMs });
 
   const transactions = useMemo<TransactionSummary[]>(() => {
     const indexed = indexQuery.data?.transactions ?? [];

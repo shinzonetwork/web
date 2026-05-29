@@ -13,7 +13,7 @@ import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
-import { formatTokenValue } from '../../utils/format';
+import { formatTokenValue } from '@/shared/utils/format-token';
 
 export const TransactionsHome = () => {
   const { data: transactions, isLoading } = useHomeTransactions({ count: 5 });
