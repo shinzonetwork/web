@@ -1,1 +1,1 @@
-export { TransactionDetailPage } from './page';
+export { TransactionDetailPage } from './ui/page';

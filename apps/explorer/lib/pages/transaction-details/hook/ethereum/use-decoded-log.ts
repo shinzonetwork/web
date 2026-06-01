@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { decodeEventLog, getAddress, type AbiEvent } from 'viem';
-import { KNOWN_EVENTS } from './known-events';
+import { KNOWN_EVENTS } from '../../known-events';
 
 export interface DecodedArg {
   name: string;
@@ -124,7 +124,7 @@ export const useDecodedLog = (
   const topic0 = topics?.[0];
 
   return useQuery({
-    queryKey: ['decoded-log', topics, data],
+    queryKey: ['ethereum', 'decoded-log', topics, data],
     queryFn: async (): Promise<DecodedLog | null> => {
       if (!topic0 || !topics) return null;
 

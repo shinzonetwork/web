@@ -34,15 +34,15 @@ const TransactionQuery = graphql(`
   }
 `)
 
-interface UseTransactionOptions {
+interface UseEthereumTransactionOptions {
   hash: string;
 }
 
-export const useTransaction = (options: UseTransactionOptions) => {
+export const useEthereumTransaction = (options: UseEthereumTransactionOptions) => {
   const { hash } = options;
 
   return useQuery({
-    queryKey: ['transaction', hash],
+    queryKey: ['ethereum', 'transaction', hash],
     queryFn: async () => {
       const res = await execute(TransactionQuery, { hash });
       return res.Transaction?.[0] ?? null;

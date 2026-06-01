@@ -4,17 +4,21 @@ import type { ReactNode } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
-import { useTransaction } from './use-transaction';
 import { DataItem, DataList } from '@/widgets/data-list';
-import { AttestationsTooltip } from '@/pages/transaction-details/attestations-tooltip';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
+import { Hex } from 'viem';
+import { formatTokenValue } from '@/shared/utils/format-token';
+import { useShinzohubTransactionDetails } from '../hook/shinzohub/use-shinzohub-transaction-details';
+import { useShinzohubTransactionReceipt } from '../hook/shinzohub/use-shinzohub-transaction-receipt';
+import { useShinzohubBlockByBlocknumber } from '../hook/shinzohub/use-shinzohub-block-by-blocknumber';
+import { formatGasPrice } from '@/shared/utils/format-gasprice';
 
-export interface TransactionCardProps {
-  txHash: string;
+export type ShinzohubTransactionCardProps = {
+  txHash: Hex;
 }
 
-const TransactionStatus = ({ status, children }: { status: boolean | undefined, children: ReactNode }) => {
+const TransactionStatus = ({ status, children }: { status: boolean | undefined, children?: ReactNode }) => {
   if (status) {
     return (
       <div className="flex items-center gap-2">
@@ -40,27 +44,21 @@ const TransactionStatus = ({ status, children }: { status: boolean | undefined, 
   );
 };
 
-export const TransactionCard = ({ txHash }: TransactionCardProps) => {
-  const { data: tx, isLoading } = useTransaction({ hash: txHash });
+export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardProps) => {
+  const { data: tx, isLoading: isTransactionLoading } = useShinzohubTransactionDetails(txHash);
+  const { data: block, isLoading: isBlockLoading } = useShinzohubBlockByBlocknumber(txHash);
+  const { data: receipt, isLoading: isReceiptLoading } = useShinzohubTransactionReceipt(txHash);
   const chain = useChainPathSegment();
-  
-  if (!tx || !tx.hash) {
+
+  if (!tx || !block || !receipt) {
     return (
       <p className="text-center text-muted-foreground">Transaction not found.</p>
     );
   }
 
-  const formatValue = (value: string) => {
-    const eth = Number(value) / 1e18
-    return eth.toFixed(6)
-  }
+  const isLoading = isTransactionLoading || isBlockLoading || isReceiptLoading;
 
-  const formatGasPrice = (gasPrice: string) => {
-    const gwei = Number(gasPrice) / 1e9
-    return gwei.toFixed(2)
-  }
-
-  const transactionFee = (Number(tx.gasUsed) * Number(tx.gasPrice)) / 1e18;
+  const transactionFee = (Number(receipt.gasUsed) * Number(tx.gasPrice)) / 1e18;
 
   return (
     <DataList>
@@ -75,12 +73,10 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
 
       <DataItem
         title='Status'
-        value={tx.status ? 'success' : 'failed'}
+        value={receipt.status}
         loading={isLoading}
       >
-        <TransactionStatus status={tx.status || undefined}>
-          <AttestationsTooltip docId={tx?._docID || undefined} />
-        </TransactionStatus>
+        <TransactionStatus status={receipt.status === 'success' ? true : false} />
       </DataItem>
 
       <DataItem
@@ -94,16 +90,16 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
 
       <DataItem
         title='Timestamp'
-        value={tx.block?.timestamp}
+        value={block.timestamp}
         loading={isLoading}
       >
-        {tx.block?.timestamp && (
+        {block.timestamp && (
           <>
-            {formatDistanceToNow(new Date(Number(tx.block.timestamp) * 1000), {
+            {formatDistanceToNow(new Date(Number(block.timestamp) * 1000), {
               addSuffix: true,
             })}
             {' '}
-            ({new Date(Number(tx.block.timestamp) * 1000).toUTCString()})
+            ({new Date(Number(block.timestamp) * 1000).toUTCString()})
           </>
         )}
       </DataItem>
@@ -131,12 +127,12 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         value={tx.value}
         loading={isLoading}
       >
-        {tx.value && `${formatValue(tx.value)} ETH`}
+        {tx.value && `${formatTokenValue(tx.value.toString(), 18)} SHNZ`}
       </DataItem>
 
       <DataItem
         title="Transaction Fee"
-        value={tx.gasUsed && tx.gasPrice ? transactionFee : null}
+        value={receipt.gasUsed && tx.gasPrice ? transactionFee : null}
         loading={isLoading}
       >
         {transactionFee.toFixed(8)} ETH
@@ -147,23 +143,23 @@ export const TransactionCard = ({ txHash }: TransactionCardProps) => {
         value={tx.gasPrice}
         loading={isLoading}
       >
-        {tx.gasPrice && `${formatGasPrice(tx.gasPrice)} Gwei`}
+        {tx.gasPrice && `${formatGasPrice(tx.gasPrice.toString())} Gwei`}
       </DataItem>
 
       <DataItem
         title="Gas Limit"
-        value={tx.gas}
+        value={block.gasLimit}
         loading={isLoading}
       />
 
       <DataItem
         title="Gas Used"
-        value={tx.gasUsed}
+        value={receipt.gasUsed}
         loading={isLoading}
       >
-        {tx.gasUsed && tx.gas && (
+        {receipt.gasUsed && block.gasLimit && (
           <>
-            {tx.gasUsed} ({((Number(tx.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)
+            {receipt.gasUsed} ({((Number(receipt.gasUsed) / Number(block.gasLimit)) * 100).toFixed(2)}%)
           </>
         )}
       </DataItem>

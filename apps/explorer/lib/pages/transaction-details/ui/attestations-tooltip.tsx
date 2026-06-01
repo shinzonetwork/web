@@ -1,7 +1,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Badge } from '@/shared/ui/badge';
 import { Typography } from '@/shared/ui/typography';
-import { useAttestations } from '@/pages/transaction-details/use-attestations';
+import { useAttestations } from '@/pages/transaction-details/hook/ethereum/use-attestations';
 
 export interface AttestationsTooltipProps {
   docId: string | undefined;

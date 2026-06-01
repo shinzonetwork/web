@@ -26,7 +26,7 @@ interface UseTransactionLogsOptions {
 
 export const useTransactionLogs = ({ hash, enabled = true }: UseTransactionLogsOptions) => {
   return useQuery({
-    queryKey: ['transaction-logs', hash],
+    queryKey: ['ethereum', 'transaction-logs', hash],
     enabled: !!hash && enabled,
     staleTime: Infinity,
     queryFn: async () => {

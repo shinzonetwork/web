@@ -11,7 +11,7 @@ const AttestationsQuery = graphql(`
 
 export const useAttestations = (docId: string | undefined) => {
   return useQuery({
-    queryKey: ['attestations', docId],
+    queryKey: ['ethereum', 'attestations', docId],
     enabled: !!docId,
     staleTime: 60 * 1000,
     queryFn: async () => {

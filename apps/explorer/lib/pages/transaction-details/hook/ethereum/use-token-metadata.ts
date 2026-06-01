@@ -29,7 +29,7 @@ export const useTokenMetadata = (address: string | undefined) => {
   const chain = useChainPathSegment();
 
   return useQuery({
-    queryKey: ['token-metadata', chain, address],
+    queryKey: ['ethereum', 'token-metadata', chain, address],
     queryFn: async (): Promise<TokenMetadata | null> => {
       if (!address) return null;
 
