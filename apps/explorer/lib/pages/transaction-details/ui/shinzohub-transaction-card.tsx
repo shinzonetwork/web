@@ -49,154 +49,147 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
   const { data: block, isLoading: isBlockLoading } = useShinzohubBlockByBlocknumber(txHash);
   const { data: receipt, isLoading: isReceiptLoading } = useShinzohubTransactionReceipt(txHash);
   const chain = useChainPathSegment();
-
-  if (!tx || !block || !receipt) {
-    return (
-      <p className="text-center text-muted-foreground">Transaction not found.</p>
-    );
-  }
-
   const isLoading = isTransactionLoading || isBlockLoading || isReceiptLoading;
 
-  const transactionFee = (Number(receipt.gasUsed) * Number(tx.gasPrice)) / 1e18;
+  const transactionFee = (Number(receipt?.gasUsed ?? 0) * Number(tx?.gasPrice ?? 0)) / 1e18;
 
   return (
     <DataList>
       <DataItem
         title='Hash'
-        value={tx.hash}
+        value={tx?.hash}
         copyable
         loading={isLoading}
       >
-        {tx.hash}
+        {tx?.hash}
       </DataItem>
 
       <DataItem
         title='Status'
-        value={receipt.status}
+        value={receipt?.status}
         loading={isLoading}
       >
-        <TransactionStatus status={receipt.status === 'success' ? true : false} />
+        <TransactionStatus status={receipt?.status === 'success' ? true : false} />
       </DataItem>
 
       <DataItem
         title='Block'
-        value={tx.blockNumber}
-        link={`${getPageLink('block', { param: tx.blockNumber?.toString() ?? '', chain})}`}
+        value={tx?.blockNumber}
+        link={`${getPageLink('block', { param: tx?.blockNumber?.toString() ?? '', chain})}`}
         loading={isLoading}
       >
-        {tx.blockNumber}
+        {tx?.blockNumber}
       </DataItem>
 
       <DataItem
         title='Timestamp'
-        value={block.timestamp}
+        value={block?.timestamp}
         loading={isLoading}
       >
-        {block.timestamp && (
+        {block?.timestamp && (
           <>
-            {formatDistanceToNow(new Date(Number(block.timestamp) * 1000), {
+            {formatDistanceToNow(new Date(Number(block?.timestamp) * 1000), {
               addSuffix: true,
             })}
             {' '}
-            ({new Date(Number(block.timestamp) * 1000).toUTCString()})
+            ({new Date(Number(block?.timestamp) * 1000).toUTCString()})
           </>
         )}
       </DataItem>
 
       <DataItem
         title='From'
-        value={tx.from}
+        value={tx?.from}
         loading={isLoading}
-        link={tx.from != null ? `${getPageLink('address', { param: tx.from, chain})}` : undefined}
+        link={tx?.from != null ? `${getPageLink('address', { param: tx?.from, chain})}` : undefined}
       >
-        {tx.from}
+        {tx?.from}
       </DataItem>
 
       <DataItem
         title="To"
-        value={tx.to}
+        value={tx?.to}
         loading={isLoading}
-        link={tx.to != null ? `${getPageLink('address', { param: tx.to, chain})}` : undefined}
+        link={tx?.to != null ? `${getPageLink('address', { param: tx?.to, chain})}` : undefined}
       >
-        {tx.to}
+        {tx?.to}
       </DataItem>
 
       <DataItem
         title="Value"
-        value={tx.value}
+        value={tx?.value}
         loading={isLoading}
       >
-        {tx.value && `${formatTokenValue(tx.value.toString(), 18)} SHNZ`}
+        {tx?.value && `${formatTokenValue(tx?.value.toString(), 18)} SHNZ`}
       </DataItem>
 
       <DataItem
         title="Transaction Fee"
-        value={receipt.gasUsed && tx.gasPrice ? transactionFee : null}
+        value={receipt?.gasUsed && tx?.gasPrice ? transactionFee : null}
         loading={isLoading}
       >
-        {transactionFee.toFixed(8)} ETH
+        {transactionFee?.toFixed(8)} SHNZ
       </DataItem>
 
       <DataItem
         title="Gas Price"
-        value={tx.gasPrice}
+        value={tx?.gasPrice}
         loading={isLoading}
       >
-        {tx.gasPrice && `${formatGasPrice(tx.gasPrice.toString())} Gwei`}
+        {tx?.gasPrice && `${formatGasPrice(tx?.gasPrice.toString())} Gwei`}
       </DataItem>
 
       <DataItem
         title="Gas Limit"
-        value={block.gasLimit}
+        value={tx?.gas}
         loading={isLoading}
       />
 
       <DataItem
         title="Gas Used"
-        value={receipt.gasUsed}
+        value={receipt?.gasUsed}
         loading={isLoading}
       >
-        {receipt.gasUsed && block.gasLimit && (
+        {receipt?.gasUsed && tx?.gas && (
           <>
-            {receipt.gasUsed} ({((Number(receipt.gasUsed) / Number(block.gasLimit)) * 100).toFixed(2)}%)
+            {receipt?.gasUsed} ({((Number(receipt?.gasUsed) / Number(tx?.gas)) * 100).toFixed(2)}%)
           </>
         )}
       </DataItem>
 
       <DataItem
         title="Nonce"
-        value={tx.nonce}
+        value={tx?.nonce}
         loading={isLoading}
       />
 
       <DataItem
         title="Position in Block"
-        value={tx.transactionIndex}
+        value={tx?.transactionIndex}
         loading={isLoading}
       />
 
       <DataItem
         title="Input Data"
-        value={tx.input}
+        value={tx?.input}
         loading={isLoading}
         allowWrap
-        wrapAt={tx.input && tx.input.length > 100 ? 100 : tx.input?.length}
+        wrapAt={tx?.input && tx?.input.length > 100 ? 100 : tx?.input?.length}
       >
-          {tx.input}
+          {tx?.input}
       </DataItem>
 
       <DataItem
         title='Type'
-        value={tx.type}
+        value={tx?.type}
         loading={isLoading}
       >
-        <Badge variant='outline'>Type {tx.type}</Badge>
+        <Badge variant='outline'>Type {tx?.type}</Badge>
       </DataItem>
 
       <DataItem
         title='Chain ID'
-        value={tx.chainId}
+        value={tx?.chainId}
         loading={isLoading}
       />
     </DataList>

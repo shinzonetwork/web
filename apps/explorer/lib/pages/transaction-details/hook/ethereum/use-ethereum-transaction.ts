@@ -1,4 +1,5 @@
 import { execute, graphql } from '@/shared/graphql';
+import { useChainPathSegment } from '@/widgets/chain-path-segment';
 import { useQuery } from '@tanstack/react-query';
 
 const TransactionQuery = graphql(`
@@ -40,6 +41,7 @@ interface UseEthereumTransactionOptions {
 
 export const useEthereumTransaction = (options: UseEthereumTransactionOptions) => {
   const { hash } = options;
+  const chain = useChainPathSegment();
 
   return useQuery({
     queryKey: ['ethereum', 'transaction', hash],
@@ -47,7 +49,7 @@ export const useEthereumTransaction = (options: UseEthereumTransactionOptions) =
       const res = await execute(TransactionQuery, { hash });
       return res.Transaction?.[0] ?? null;
     },
-    enabled: !!hash,
+    enabled: chain === 'ethereum' && !!hash,
   });
 };
 

@@ -4,7 +4,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container } from '@/widgets/layout';
 import { EthereumTransactionCard } from './ethereum-transaction-card';
 import { TransactionLogs } from './transaction-logs';
-import { useEthereumTransaction } from '../hook/ethereum/use-ethereum-transaction';
 import { useTransactionLogs } from '../hook/ethereum/use-transaction-logs';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
 import { Hex } from 'viem';
@@ -14,12 +13,12 @@ import { ShinzohubTransactionCard } from './shinzohub-transaction-card';
 export interface TxTabsProps {
   hash: Hex;
 }
-type ChainSpecificTransactionCardProps = {
+type ChainSpecificTransactionProps = {
   chain: ChainPathSegment;
   hash: Hex;
 };
 
-const ChainSpecificTransactionCard = ({ chain, hash }: ChainSpecificTransactionCardProps) => {
+const ChainSpecificTransactionCard = ({ chain, hash }: ChainSpecificTransactionProps) => {
   switch (chain) {
     case 'ethereum':
       return <EthereumTransactionCard txHash={hash} />;
@@ -30,12 +29,20 @@ const ChainSpecificTransactionCard = ({ chain, hash }: ChainSpecificTransactionC
   }
 };
 
+const ChainSpecificTransactionLogs = ({ chain, hash }: ChainSpecificTransactionProps) => {
+  switch (chain) {
+    case 'ethereum':
+      return <TransactionLogs txHash={hash} />;
+    default:
+      return null;
+  }
+};
+
 export const TxTabs = ({ hash }: TxTabsProps) => {
-  const { data: tx } = useEthereumTransaction({ hash });
   const chain = useChainPathSegment();
 
   // preload logs when page is loaded
-  useTransactionLogs({ hash, enabled: !!tx });
+  useTransactionLogs({ hash });
 
   return (
     <Tabs defaultValue='overview'>
@@ -62,7 +69,10 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
         </TabsContent>
 
         <TabsContent asChild value='logs'>
-          <TransactionLogs txHash={hash} />
+          <ChainSpecificTransactionLogs
+            chain={chain}
+            hash={hash}
+          />
         </TabsContent>
       </div>
     </Tabs>
