@@ -14,15 +14,15 @@
   --font-mono: "Geist Mono Variable", monospace;
   --font-jp-serif: "Shinzo JP Serif", serif;
 
-  --color-szo-primary: oklch(0.5512 0.2083 25.95);
-  --color-szo-border: #aaaaaa;
+  --color-szo-primary: #d01f27;
+  --color-szo-border: #c7c7c7;
   --color-szo-black: #000000;
   --color-szo-bg: #ffffff;
 }
 
 @layer base {
   body {
-    @apply bg-szo-bg font-sans;
+    @apply bg-szo-bg font-sans text-ui-text;
   }
   html {
     @apply antialiased;
