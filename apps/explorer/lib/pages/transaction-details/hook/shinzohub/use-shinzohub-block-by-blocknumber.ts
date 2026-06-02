@@ -2,8 +2,6 @@ import { getPublicClient } from "@/shared/viem/client";
 import { useQuery } from "@tanstack/react-query";
 import type { Block } from "viem";
 
-export type { ShinzohubRpcTransaction } from "./shinzohub-rpc-transaction";
-
 const fetchShinzohubBlockByBlockNumber = async (blockNumber: bigint): Promise<Block> => {
   const publicClient = getPublicClient('shinzohub');
   return publicClient.getBlock({ blockNumber });
