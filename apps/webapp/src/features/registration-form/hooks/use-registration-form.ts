@@ -2,15 +2,15 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { EntityRole, sanitizeString } from "@/shared/lib";
-import type { RegistrationFormData } from "@/shared/lib";
+import type { RegistrationFormData } from "../util/registration";
 import { isHex } from "viem";
-import { usePrefillData } from "./use-prefill-data";
+import { PrefillDataV1, usePrefillData } from "./use-prefill-data";
 
 /**
  * Hook to manage configuration form state with input sanitization
  */
 export function useRegistrationForm() {
-  const prefillData = usePrefillData();
+  const prefillData = usePrefillData() as PrefillDataV1;
 
   // Determine which fields are prefilled (non-empty values from query params)
   const prefilledFields = useMemo(

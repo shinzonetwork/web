@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { EntityRole } from "@/shared/lib";
 import { RegistrationContext as RegistrationContextType } from "./types";
 
 /**
@@ -11,4 +12,5 @@ export const RegistrationContext = createContext<RegistrationContextType>({
   setRegistered: () => {},
   handleSignedWithWallet: () => {},
   showPortOpen: () => {},
+  registrationEntity: EntityRole.Host,
 });

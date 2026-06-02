@@ -1,52 +1,47 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/shared/ui/button";
+import { useRegistrationContext } from "@/entities/registration-process";
 
 import { RegistrationDataForm } from "./registration-data-form";
-import { useRegistrationForm } from "../hooks/use-registration-form-v2";
+import { useRegistrationFormV2 } from "../hooks/use-registration-form-v2";
 import { useRegistrationTransaction } from "../hooks/use-registration-transaction-v2";
 import {
   getRegistrationButtonText,
-  validateEntity,
-  EntityRole,
   validateIndexerFields,
   validateIndexerRegistrationForm,
   validateHostRegistrationForm,
   validateHostFields,
-} from "@/shared/lib";
-import { useAccount } from "wagmi";
+} from "../util/registration";
+import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
+import { useVerifyIndexerAssertion } from "../hooks/use-verify-indexer-assertion";
+import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
-  const { address } = useAccount();
+  const { registrationEntity } = useRegistrationContext();
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
-  const { formData, handleInputChange, handleUserRoleChange } =
-    useRegistrationForm({ entity: EntityRole.Host });
+  const { formData, handleInputChange } = useRegistrationFormV2({
+    entity: registrationEntity,
+  });
 
-  const {
-    sendRegisterTransaction,
-    isPending,
-    isConfirming,
-    isConfirmed,
-    resetTransactionState,
-  } = useRegistrationTransaction(formData);
-
-  const handleEntityChange = useCallback(
-    (value: string) => {
-      handleUserRoleChange(value);
-      setFieldErrors({});
-      resetTransactionState();
-    },
-    [handleUserRoleChange, resetTransactionState]
-  );
+  const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
+    useRegistrationTransaction(formData);
+  const { data: isAssertionVerified } = useVerifyIndexerAssertion();
 
   const handleRegister = async () => {
+    if (registrationEntity === EntityRole.Indexer) {
+      if (!isAssertionVerified) {
+        toast.error("Indexer assertion is not done.", TOAST_CONFIG);
+        return;
+      }
+    }
     const validatedFields =
       formData.entity === EntityRole.Indexer
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
@@ -70,9 +65,10 @@ export function RegistrationFormV2() {
 
   let isRegistrationDisabled = false;
   if (formData.entity === EntityRole.Indexer) {
-    isRegistrationDisabled = !validateIndexerRegistrationForm(
-      formData as IndexerRegistrationFormData
-    );
+    isRegistrationDisabled =
+      !validateIndexerRegistrationForm(
+        formData as IndexerRegistrationFormData
+      ) || !isAssertionVerified;
   } else {
     isRegistrationDisabled = !validateHostRegistrationForm(
       formData as HostRegistrationFormData
@@ -81,26 +77,27 @@ export function RegistrationFormV2() {
 
   return (
     <div className="space-y-6 ml-10">
+      {!isAssertionVerified && (
+        <div className="w-full max-w-6xl rounded-none border border-destructive/40 bg-destructive/10 p-4 space-y-6">
+          <p className="mt-1 font-mono text-sm text-destructive">
+            Indexer assertion is not done. Please complete the indexer assertion
+            to register.
+          </p>
+        </div>
+      )}
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}
-        handleUserRoleChange={handleEntityChange}
         fieldErrors={fieldErrors}
         prefilledFields={{}}
       />
       <Button
         onClick={handleRegister}
-        className="w-fit rounded-full"
+        className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
         disabled={isRegistrationDisabled || isPending || isConfirming}
       >
         {getRegistrationButtonText(isPending, isConfirming, isConfirmed)}
       </Button>
-      {!validateEntity(address, formData.entity) && (
-        <div className="text-sm text-red-500">
-          You are not whitelisted as an indexer. Please contact the Shinzo team
-          to be whitelisted.
-        </div>
-      )}
     </div>
   );
 }

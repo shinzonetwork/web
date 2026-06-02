@@ -31,8 +31,10 @@ export default defineConfig({
     cloudflare(),
   ],
   resolve: {
+    conditions: ["module", "browser", "development|production", "shinzo-source"],
     alias: {
       "@": fileURLToPath(new URL("./lib", import.meta.url)),
     },
+    dedupe: ["react", "react-dom"],
   },
 });

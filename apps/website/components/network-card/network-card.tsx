@@ -62,9 +62,11 @@ export const NetworkCard = ({
             <p className="font-light font-mono text-px-16">/ {chain.name}</p>
           </div>
 
-          <p className="font-mono text-px-13 text-text-secondary">
-            Spots claimed: {chain.claimedSpots}/{chain.spotsLimit}
-          </p>
+          {chain.claimedSpots > 0 && (
+            <p className="font-mono text-px-13 text-text-secondary">
+              Spots claimed: {chain.claimedSpots}/{chain.spotsLimit}
+            </p>
+          )}
         </div>
       </Link>
 

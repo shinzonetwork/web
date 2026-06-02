@@ -34,7 +34,8 @@ export function RegistrationRadioButton({
   const isIndexerWhitelisted = isIndexerWhitelistedFunction(
     address ? address : undefined
   );
-  const isIndexerDisabled = !isIndexerWhitelisted || prefilledEntityValue || isRegistrationV2();
+  const whiteListForV1 = isRegistrationV2() ? false : !isIndexerWhitelisted;
+  const isIndexerDisabled = whiteListForV1 || prefilledEntityValue;
   return (
     <RadioGroup
       className={`flex gap-4 ${prefilledEntityValue ? "opacity-50 cursor-not-allowed" : ""}`}
@@ -83,7 +84,7 @@ export function RegistrationRadioButton({
                 selectedEntityValue === "2"
                   ? "bg-muted-foreground border-muted text-muted"
                   : "bg-background hover:bg-muted-foreground/20 hover:text-muted-foreground/70",
-                  isIndexerDisabled ? "opacity-50 cursor-not-allowed" : ""
+                isIndexerDisabled ? "opacity-50 cursor-not-allowed" : ""
               )}
             >
               <span className="flex items-center justify-center size-7 border border-border rounded-sm">

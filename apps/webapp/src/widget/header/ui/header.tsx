@@ -2,8 +2,12 @@
 
 import { useRegistrationContext } from "@/entities/registration-process";
 import { Connect } from "@/page-components/connect";
-import { isIndexerWhitelisted as isIndexerWhitelistedFunction } from "@/shared/lib";
+import {
+  isIndexerWhitelisted as isIndexerWhitelistedFunction,
+  isRegistrationV2,
+} from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
+import { HeaderMenu } from "@/widget/menu/ui/header-menu";
 import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
@@ -18,31 +22,45 @@ export function Header() {
   return (
     <header className="flex flex-row justify-between items-center mx-4 my-4 border-b border-border pb-6">
       <div className="flex flex-row items-center gap-8">
-        <Image
-          src="/images/shinzo-logo.svg"
-          alt="Shinzo"
-          width={123}
-          height={123}
-          priority
-          unoptimized
-        />
+        <Link href="/">
+          <Image
+            src="/images/shinzo-logo.svg"
+            alt="Shinzo"
+            width={123}
+            height={123}
+            priority
+            unoptimized
+          />
+        </Link>
         <div className="flex flex-row items-center">
-          <Link href="/">
-            <Button variant="link" className=" text-md text-muted-foreground ">
-              Registration
-            </Button>
-          </Link>
-          <Link href="/validators">
-            <Button variant="link" className=" text-md text-muted-foreground ">
-              Validators
-            </Button>
-          </Link>
+          {isRegistrationV2() ? (
+            <HeaderMenu />
+          ) : (
+            <div className="flex flex-row items-center">
+              <Link href="/registration">
+                <Button
+                  variant="link"
+                  className=" text-md text-muted-foreground "
+                >
+                  Registration
+                </Button>
+              </Link>
+              <Link href="/validators">
+                <Button
+                  variant="link"
+                  className=" text-md text-muted-foreground"
+                >
+                  Validators
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex flex-row justify-end">
         {isConnected && isSignedWithWallet && isIndexerWhitelisted && (
           <Link href="/join-devnet">
-            <Button className=" bg-primary text-primary-foreground ">
+            <Button className=" bg-primary text-primary-foreground rounded-none">
               Join Devnet
             </Button>
           </Link>

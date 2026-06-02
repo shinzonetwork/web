@@ -1,6 +1,6 @@
 import { keccak256, toBytes } from "viem";
 
-export const STUDIO_VIEW_NAME_PREFIX = "Studio_";
+export const STUDIO_VIEW_NAME_PREFIX = "Studio_v1_";
 
 export const buildDefinitionKey = (query: string, sdl: string): string =>
   keccak256(toBytes(`${query}\n${sdl}`));

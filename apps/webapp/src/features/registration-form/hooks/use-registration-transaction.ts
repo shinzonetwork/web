@@ -5,14 +5,13 @@ import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
 import { encodeFunctionData } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
-import {
-  SHINZO_PRECOMPILE_ADDRESS,
-  TOAST_CONFIG,
-  validateHexFormat,
-} from "@/shared/lib";
+import { SHINZO_PRECOMPILE_ADDRESS, TOAST_CONFIG } from "@/shared/lib";
 import { REGISTER_TRANSACTION_ABI } from "../abi/register-transaction-abi";
 import { useRegistrationContext } from "@/entities/registration-process";
-import type { RegistrationFormData } from "@/shared/lib";
+import {
+  validateHexFormat,
+  type RegistrationFormData,
+} from "../util/registration";
 
 /**
  * Hook to handle registration transaction logic

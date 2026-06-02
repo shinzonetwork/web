@@ -1,17 +1,28 @@
 "use client";
 
-import { useMemo } from "react";
 import type { Hex } from "viem";
-import { EntityRole } from "@/shared/lib";
+import { EntityRole, isRegistrationV2 } from "@/shared/lib";
 
-export interface PrefillData {
+export type PrefillDataV1 = {
   role: EntityRole | undefined;
   signedMessage: Hex | undefined;
   defraPublicKey: Hex | undefined;
   defraPublicKeySignedMessage: Hex | undefined;
   peerId: Hex | undefined;
   peerSignedMessage: Hex | undefined;
-}
+};
+
+export type PrefillDataV2 = {
+  role: EntityRole;
+  signedMessage: Hex;
+  defraPublicKey: Hex;
+  defraPublicKeySignedMessage: Hex;
+  connectionString?: string;
+  sourceChain?: string;
+  sourceChainId?: number;
+};
+
+export type PrefillData = PrefillDataV1 | PrefillDataV2;
 
 /**
  * Converts a string to Hex if it's a valid hex string, otherwise returns undefined.
@@ -49,20 +60,23 @@ function parseRole(value: string | null): EntityRole | undefined {
  * - ?role=indexer&signedMessage=0x5368696e7a6&peerId=0x3bf54397b0&peerSignedMessage=0x435cb4cc3e&defraPublicKey=0x034e95&defraPublicKeySignedMessage=0x304502210
  */
 export function usePrefillData(): PrefillData {
-  return useMemo<PrefillData>(() => {
-    if (typeof window === "undefined") {
-      return {
-        role: undefined,
-        signedMessage: undefined,
-        defraPublicKey: undefined,
-        defraPublicKeySignedMessage: undefined,
-        peerId: undefined,
-        peerSignedMessage: undefined,
-      };
-    }
+  if (typeof window === "undefined") {
+    return {
+      role: undefined,
+      signedMessage: undefined,
+      defraPublicKey: undefined,
+      defraPublicKeySignedMessage: undefined,
+      peerId: undefined,
+      peerSignedMessage: undefined,
+      connectionString: undefined,
+      sourceChain: undefined,
+      sourceChainId: undefined,
+    } as PrefillData;
+  }
 
-    const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(window.location.search);
 
+  if (isRegistrationV2()) {
     return {
       role: parseRole(searchParams.get("role")),
       signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
@@ -70,10 +84,20 @@ export function usePrefillData(): PrefillData {
       defraPublicKeySignedMessage: toHexOrUndefined(
         searchParams.get("defraPublicKeySignedMessage")
       ),
-      peerId: toHexOrUndefined(searchParams.get("peerId")),
-      peerSignedMessage: toHexOrUndefined(
-        searchParams.get("peerSignedMessage")
-      ),
-    };
-  }, []);
+      connectionString: searchParams.get("connectionString") ?? undefined,
+      sourceChain: searchParams.get("sourceChain") ?? undefined,
+      sourceChainId: parseInt(searchParams.get("sourceChainId") ?? "0", 10),
+    } as PrefillDataV2;
+  }
+
+  return {
+    role: parseRole(searchParams.get("role")),
+    signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
+    defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
+    defraPublicKeySignedMessage: toHexOrUndefined(
+      searchParams.get("defraPublicKeySignedMessage")
+    ),
+    peerId: toHexOrUndefined(searchParams.get("peerId")),
+    peerSignedMessage: toHexOrUndefined(searchParams.get("peerSignedMessage")),
+  } as PrefillDataV1;
 }

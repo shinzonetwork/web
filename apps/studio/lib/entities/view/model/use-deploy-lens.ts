@@ -10,26 +10,27 @@ import {
   type ReplacementReturnType,
   type TransactionReceipt,
 } from "viem";
+import { getWalletClient } from "@wagmi/core";
 import {
   useConnection,
   usePublicClient,
-  useSendTransaction,
   useSwitchChain,
-  type UseSendTransactionReturnType,
   type UseSwitchChainReturnType,
 } from "wagmi";
-import { validateView, type ValidationIssue } from "@shinzo/lenses/validate";
+import {
+  bundleView,
+  validateView,
+  type ValidationIssue,
+  type ViewDefinition,
+} from "@shinzo/lenses/view";
+import { createView, getCreatedViewAddress } from "@shinzo/shinzohub";
 import type {
   LensArgs,
   LensDefinition,
   ResolvedLensView,
 } from "@/entities/lens";
-import { shinzoDevnet, type wagmiConfig } from "@/shared/consts/wagmi";
-import {
-  buildDeployTransaction,
-  extractDeployedViewContractAddress,
-} from "../api/deploy-transaction";
-import { downloadWasm } from "../api/deploy-transaction";
+import { shinzoDevnet, wagmiConfig } from "@/shared/consts/wagmi";
+import { resolveViewDefinition } from "../api/deploy-transaction";
 import {
   findHubViewByEntityName,
   type HubViewRecord,
@@ -40,31 +41,22 @@ import type { DeployStatus, StoredDeployedView } from "./types";
 import { ViewValidationError } from "./view-validation-error";
 
 interface ValidatedView {
-  wasmBytesByStep: Uint8Array[];
+  definition: ViewDefinition;
   warnings: ValidationIssue[];
 }
 
 const validateResolvedView = async <TArgs extends LensArgs>(
   view: ResolvedLensView<TArgs>
 ): Promise<ValidatedView> => {
-  const wasmBytesByStep = await Promise.all(
-    view.steps.map((step) => downloadWasm(step.wasmUrl))
-  );
-  const validation = await validateView({
-    query: view.query,
-    sdl: view.sdl,
-    lenses: view.steps.map((step, index) => ({
-      wasmBytes: wasmBytesByStep[index],
-      args: step.args,
-    })),
-  });
+  const definition = await resolveViewDefinition(view);
+  const validation = await validateView(definition);
 
   if (!validation.ok) {
     throw new ViewValidationError(validation);
   }
 
   return {
-    wasmBytesByStep,
+    definition,
     warnings: validation.issues.filter((issue) => issue.severity === "warning"),
   };
 };
@@ -132,71 +124,29 @@ const createDeployTransactionError = (
   return new Error(`${message} ${getReadableErrorMessage(error)}`);
 };
 
-interface SubmitDeployTxInput<TArgs extends LensArgs> {
+interface SubmitDeployTxInput {
   account: Address;
-  resolvedView: ResolvedLensView<TArgs>;
-  wasmBytesByStep: Uint8Array[];
+  viewDefinition: ViewDefinition;
   publicClient: PublicClient;
   switchChainMutateAsync: UseSwitchChainReturnType<StudioWagmiConfig>["mutateAsync"];
-  sendTransactionMutateAsync: UseSendTransactionReturnType<StudioWagmiConfig>["mutateAsync"];
-  onSimulationStart?: () => void;
   onBroadcastStart?: () => void;
   onTransactionSent?: (hash: Hash) => void;
 }
 
-const submitDeployTransaction = async <TArgs extends LensArgs>(
-  input: SubmitDeployTxInput<TArgs>
+const submitDeployTransaction = async (
+  input: SubmitDeployTxInput
 ): Promise<TransactionReceipt> => {
   const {
     account,
-    resolvedView,
-    wasmBytesByStep,
+    viewDefinition,
     publicClient,
     switchChainMutateAsync,
-    sendTransactionMutateAsync,
-    onSimulationStart,
     onBroadcastStart,
     onTransactionSent,
   } = input;
-  const tx = await buildDeployTransaction(resolvedView, wasmBytesByStep);
+  const bundle = await bundleView(viewDefinition);
   const chainId = shinzoDevnet.id;
 
-  let estimatedGas;
-  let gasPrice;
-  try {
-    estimatedGas = await publicClient.estimateGas({
-      account,
-      to: tx.to,
-      data: tx.data,
-    });
-    gasPrice = await publicClient.getGasPrice();
-  } catch (error) {
-    throw createDeployTransactionError(
-      "Could not prepare the deployment transaction.",
-      error
-    );
-  }
-
-  const gas = estimatedGas + estimatedGas / BigInt(5);
-  const gasPriceOverride = gasPrice > BigInt(0) ? gasPrice : undefined;
-
-  onSimulationStart?.();
-  try {
-    await publicClient.call({
-      account,
-      to: tx.to,
-      data: tx.data,
-      gas,
-      gasPrice: gasPriceOverride,
-    });
-  } catch (error) {
-    throw createDeployTransactionError(
-      "Deployment transaction simulation failed.",
-      error
-    );
-  }
-
-  onBroadcastStart?.();
   try {
     await switchChainMutateAsync({ chainId });
   } catch (error) {
@@ -207,15 +157,23 @@ const submitDeployTransaction = async <TArgs extends LensArgs>(
     );
   }
 
+  const walletClient = await (async () => {
+    try {
+      return await getWalletClient(wagmiConfig, { chainId });
+    } catch (error) {
+      throw createDeployTransactionError(
+        "Could not access your Shinzo Devnet wallet client.",
+        error
+      );
+    }
+  })();
+
+  onBroadcastStart?.();
   let txHash: Hash;
   try {
-    txHash = await sendTransactionMutateAsync({
+    txHash = await createView(walletClient, {
       account,
-      to: tx.to,
-      data: tx.data,
-      chainId,
-      gas,
-      gasPrice: gasPriceOverride,
+      bundle,
     });
   } catch (error) {
     throw createDeployTransactionError(
@@ -276,7 +234,7 @@ const confirmRegisteredView = async (
   studioHubViews: HubViewRecord[],
   refreshStudioHubViews: () => Promise<HubViewRecord[]>
 ): Promise<{ contractAddress: string; txHash: string }> => {
-  const contractAddress = extractDeployedViewContractAddress(receipt);
+  const contractAddress = getCreatedViewAddress(receipt);
   let availableViews = studioHubViews;
   let registeredHubView = findHubViewByEntityName(availableViews, entityName, {
     contractAddress,
@@ -328,7 +286,6 @@ export interface UseDeployLensResult {
 
 export const useDeployLens = (): UseDeployLensResult => {
   const { address: account } = useConnection();
-  const { mutateAsync: sendTransactionMutateAsync } = useSendTransaction();
   const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
   const publicClient = usePublicClient({ chainId: shinzoDevnet.id });
   const { data: studioHubViews = [], refetch: refetchStudioHubViews } =
@@ -368,8 +325,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
 
       setStatus("validating");
-      const { wasmBytesByStep, warnings } =
-        await validateResolvedView(resolvedView);
+      const { definition, warnings } = await validateResolvedView(resolvedView);
 
       if (!account) {
         throw new Error("Wallet is not connected.");
@@ -380,17 +336,12 @@ export const useDeployLens = (): UseDeployLensResult => {
         );
       }
 
-      setStatus("simulating");
+      setStatus("deploying");
       const receipt = await submitDeployTransaction({
         account,
-        resolvedView,
-        wasmBytesByStep,
+        viewDefinition: definition,
         publicClient,
         switchChainMutateAsync,
-        sendTransactionMutateAsync,
-        onSimulationStart: () => {
-          setStatus("simulating");
-        },
         onBroadcastStart: () => {
           setStatus("deploying");
         },
@@ -418,7 +369,6 @@ export const useDeployLens = (): UseDeployLensResult => {
       account,
       publicClient,
       refetchStudioHubViews,
-      sendTransactionMutateAsync,
       studioHubViews,
       switchChainMutateAsync,
     ]

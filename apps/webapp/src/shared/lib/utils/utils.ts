@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Hex } from "viem";
+import { getAddress, Hex, isAddress } from "viem";
+import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,3 +28,35 @@ export function indexerEntryKey(entry: {
 }): string {
   return `${entry.validatorAddress}-${entry.ip}`;
 }
+
+// Normalize all whitelist addresses once for case-insensitive comparison
+export const normalizedWhitelist = INDEXER_WHITELIST.map((addr) =>
+  getAddress(addr).toLowerCase()
+);
+
+export const isIndexerWhitelisted = (
+  address: Hex | undefined | null
+): boolean => {
+  // Handle undefined or null addresses
+  if (!address) {
+    return false;
+  }
+
+  // Validate address format
+  if (!isAddress(address)) {
+    return false;
+  }
+
+  try {
+    // Normalize the input address to lowercase for case-insensitive comparison
+    // getAddress validates and normalizes the address format
+    const normalizedAddress = getAddress(address).toLowerCase();
+    return normalizedWhitelist.includes(normalizedAddress);
+  } catch (error) {
+    // Invalid address format
+    if (process.env.NODE_ENV === "development") {
+      console.error("Invalid address format:", error);
+    }
+    return false;
+  }
+};

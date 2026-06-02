@@ -1,4 +1,4 @@
-import type { ViewValidationResult } from "@shinzo/lenses/validate";
+import type { ViewValidationResult } from "@shinzo/lenses/view";
 
 export class ViewValidationError extends Error {
   result: ViewValidationResult;
