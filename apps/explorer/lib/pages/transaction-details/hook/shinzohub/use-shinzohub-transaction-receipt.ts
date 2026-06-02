@@ -6,9 +6,9 @@ export type { ShinzohubRpcTransaction } from "./shinzohub-rpc-transaction";
 
 const fetchShinzohubTransactionReceipt = async (hash: Hex): Promise<TransactionReceipt> => {
   const publicClient = getPublicClient('shinzohub');
-  const reciept = await publicClient.getTransactionReceipt({ hash });
+  const receipt = await publicClient.getTransactionReceipt({ hash });
 
-  return reciept;
+  return receipt;
 };
 
 export const useShinzohubTransactionReceipt = (hash: Hex) => {

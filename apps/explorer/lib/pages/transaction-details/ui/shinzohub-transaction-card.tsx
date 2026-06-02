@@ -1,6 +1,5 @@
 'use client';
 
-import type { ReactNode } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { Badge } from '@/shared/ui/badge';
@@ -18,40 +17,53 @@ export type ShinzohubTransactionCardProps = {
   txHash: Hex;
 }
 
-const TransactionStatus = ({ status, children }: { status: boolean | undefined, children?: ReactNode }) => {
+const TransactionStatus = ({ status }: { status: boolean | undefined }) => {
+  if (status === undefined) {
+    return null;
+  }
+
   if (status) {
     return (
-      <div className="flex items-center gap-2">
-        <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
-          <CheckCircle2 className="mr-1 h-3 w-3"/>
-          Success
-        </Badge>
-
-        {children}
-      </div>
+      <Badge variant="outline" className="border-green-500/50 bg-green-500/10 text-green-500">
+        <CheckCircle2 className="mr-1 h-3 w-3"/>
+        Success
+      </Badge>
     );
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
-        <XCircle className="mr-1 h-3 w-3" />
-        Failed
-      </Badge>
-
-      {children}
-    </div>
+    <Badge variant="outline" className="border-red-500/50 bg-red-500/10 text-red-500">
+      <XCircle className="mr-1 h-3 w-3" />
+      Failed
+    </Badge>
   );
 };
 
 export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardProps) => {
   const { data: tx, isLoading: isTransactionLoading } = useShinzohubTransactionDetails(txHash);
-  const { data: block, isLoading: isBlockLoading } = useShinzohubBlockByBlocknumber(txHash);
+  const { data: block, isLoading: isBlockLoading } = useShinzohubBlockByBlocknumber(tx?.blockNumber ?? undefined);
   const { data: receipt, isLoading: isReceiptLoading } = useShinzohubTransactionReceipt(txHash);
   const chain = useChainPathSegment();
   const isLoading = isTransactionLoading || isBlockLoading || isReceiptLoading;
 
-  const transactionFee = (Number(receipt?.gasUsed ?? 0) * Number(tx?.gasPrice ?? 0)) / 1e18;
+  const gasPriceWei = receipt?.effectiveGasPrice ?? tx?.gasPrice;
+  const transactionFee =
+    receipt?.gasUsed && gasPriceWei
+      ? (Number(receipt.gasUsed) * Number(gasPriceWei)) / 1e18
+      : null;
+
+  const receiptStatus =
+    receipt?.status === 'success'
+      ? true
+      : receipt?.status === 'reverted'
+        ? false
+        : undefined;
+
+  if (!isLoading && !tx) {
+    return (
+      <p className="text-center text-muted-foreground">Transaction not found.</p>
+    );
+  }
 
   return (
     <DataList>
@@ -69,7 +81,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={receipt?.status}
         loading={isLoading}
       >
-        <TransactionStatus status={receipt?.status === 'success' ? true : false} />
+        <TransactionStatus status={receiptStatus} />
       </DataItem>
 
       <DataItem
@@ -88,11 +100,11 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
       >
         {block?.timestamp && (
           <>
-            {formatDistanceToNow(new Date(Number(block?.timestamp) * 1000), {
+            {formatDistanceToNow(new Date(Number(block.timestamp) * 1000), {
               addSuffix: true,
             })}
             {' '}
-            ({new Date(Number(block?.timestamp) * 1000).toUTCString()})
+            ({new Date(Number(block.timestamp) * 1000).toUTCString()})
           </>
         )}
       </DataItem>
@@ -120,23 +132,23 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={tx?.value}
         loading={isLoading}
       >
-        {tx?.value && `${formatTokenValue(tx?.value.toString(), 18)} SHNZ`}
+        {tx?.value != null && tx.value > BigInt(0) && `${formatTokenValue(tx.value.toString(), 18)} SHNZ`}
       </DataItem>
 
       <DataItem
         title="Transaction Fee"
-        value={receipt?.gasUsed && tx?.gasPrice ? transactionFee : null}
+        value={transactionFee}
         loading={isLoading}
       >
-        {transactionFee?.toFixed(8)} SHNZ
+        {transactionFee != null && `${transactionFee.toFixed(8)} SHNZ`}
       </DataItem>
 
       <DataItem
         title="Gas Price"
-        value={tx?.gasPrice}
+        value={gasPriceWei}
         loading={isLoading}
       >
-        {tx?.gasPrice && `${formatGasPrice(tx?.gasPrice.toString())} Gwei`}
+        {gasPriceWei != null && `${formatGasPrice(gasPriceWei.toString())} Gwei`}
       </DataItem>
 
       <DataItem
@@ -152,7 +164,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
       >
         {receipt?.gasUsed && tx?.gas && (
           <>
-            {receipt?.gasUsed} ({((Number(receipt?.gasUsed) / Number(tx?.gas)) * 100).toFixed(2)}%)
+            {receipt.gasUsed} ({((Number(receipt.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)
           </>
         )}
       </DataItem>
@@ -174,7 +186,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={tx?.input}
         loading={isLoading}
         allowWrap
-        wrapAt={tx?.input && tx?.input.length > 100 ? 100 : tx?.input?.length}
+        wrapAt={tx?.input && tx.input.length > 100 ? 100 : tx?.input?.length}
       >
           {tx?.input}
       </DataItem>
@@ -184,7 +196,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={tx?.type}
         loading={isLoading}
       >
-        <Badge variant='outline'>Type {tx?.type}</Badge>
+        {tx?.type != null && <Badge variant='outline'>Type {tx.type}</Badge>}
       </DataItem>
 
       <DataItem

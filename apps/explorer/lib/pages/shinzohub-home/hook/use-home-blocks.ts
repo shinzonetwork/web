@@ -67,7 +67,7 @@ export function useHomeBlocks({ count = 5 }: UseHomeBlocksOptions = {}) {
     return () => {
       unwatch()
     }
-  }, [count])
+  }, [count, publicClient])
 
   return { blocks, isLoading, error }
 }

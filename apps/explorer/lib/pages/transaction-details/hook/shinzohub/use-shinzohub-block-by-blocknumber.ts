@@ -1,21 +1,18 @@
 import { getPublicClient } from "@/shared/viem/client";
 import { useQuery } from "@tanstack/react-query";
-import type { Hex, Block } from "viem";
+import type { Block } from "viem";
 
 export type { ShinzohubRpcTransaction } from "./shinzohub-rpc-transaction";
 
-const fetchShinzohubBlockByBlocknumber = async (hash: Hex): Promise<Block> => {
+const fetchShinzohubBlockByBlockNumber = async (blockNumber: bigint): Promise<Block> => {
   const publicClient = getPublicClient('shinzohub');
-  const transaction = await publicClient.getTransaction({ hash });
-  const block = await publicClient.getBlock({ blockNumber: transaction.blockNumber });
-
-  return block;
+  return publicClient.getBlock({ blockNumber });
 };
 
-export const useShinzohubBlockByBlocknumber = (hash: Hex) => {
+export const useShinzohubBlockByBlocknumber = (blockNumber: bigint | undefined) => {
   return useQuery<Block>({
-    queryKey: ['shinzohub', 'block-by-blocknumber', hash],
-    queryFn: () => fetchShinzohubBlockByBlocknumber(hash),
-    enabled: !!hash,
+    queryKey: ['shinzohub', 'block-by-blocknumber', blockNumber?.toString()],
+    queryFn: () => fetchShinzohubBlockByBlockNumber(blockNumber!),
+    enabled: blockNumber != null,
   });
 };

@@ -40,6 +40,7 @@ const ChainSpecificTransactionLogs = ({ chain, hash }: ChainSpecificTransactionP
 
 export const TxTabs = ({ hash }: TxTabsProps) => {
   const chain = useChainPathSegment();
+  const showLogsTab = chain === 'ethereum';
 
   // preload logs when page is loaded
   useTransactionLogs({ hash });
@@ -54,9 +55,11 @@ export const TxTabs = ({ hash }: TxTabsProps) => {
           <TabsTrigger value='overview'>
             Overview
           </TabsTrigger>
-          <TabsTrigger value='logs'>
-            Logs
-          </TabsTrigger>
+          {showLogsTab && (
+            <TabsTrigger value='logs'>
+              Logs
+            </TabsTrigger>
+          )}
         </TabsList>
       </Container>
 
