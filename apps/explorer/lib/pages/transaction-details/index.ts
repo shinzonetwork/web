@@ -1,1 +1,2 @@
-export { TransactionDetailPage } from './ui/page';
+export { EthereumTransactionDetailPage } from './ui/ethereum/ethereum-page';
+export { ShinzohubTransactionDetailPage } from './ui/shinzohub/shinzohub-page';

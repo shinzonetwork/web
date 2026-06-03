@@ -1,9 +1,8 @@
 'use client';
 
 import { execute, graphql } from '@/shared/graphql';
-import { useChainPathSegment } from '@/widgets/chain-path-segment';
 import { useQuery } from '@tanstack/react-query';
-import { useEthereumTransaction } from './use-ethereum-transaction';
+import { Hex } from 'viem';
 
 const TransactionLogsQuery = graphql(`
   query TransactionLogs($hash: String) {
@@ -21,18 +20,15 @@ const TransactionLogsQuery = graphql(`
   }
 `);
 
-interface UseTransactionLogsOptions {
-  hash: string;
+interface UseEthereumTransactionLogsOptions {
+  hash: Hex;
   enabled?: boolean;
 }
 
-export const useTransactionLogs = ({ hash }: UseTransactionLogsOptions) => {
-  const {data: tx} = useEthereumTransaction({ hash });
-  const chain = useChainPathSegment();
-
+export const useEthereumTransactionLogs = ({ hash, enabled = true }: UseEthereumTransactionLogsOptions) => {
   return useQuery({
-    queryKey: ['ethereum', 'transaction-logs', hash],
-    enabled: chain === 'ethereum' && !!hash && !!tx,
+    queryKey: ['transaction-logs', hash],
+    enabled: !!hash && enabled,
     staleTime: Infinity,
     queryFn: async () => {
       const res = await execute(TransactionLogsQuery, { hash });

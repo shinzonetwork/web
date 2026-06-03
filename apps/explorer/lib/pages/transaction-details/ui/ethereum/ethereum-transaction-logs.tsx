@@ -6,11 +6,11 @@ import { Badge } from '@/shared/ui/badge';
 import { CopyButton } from '@/shared/ui/button';
 import { Skeleton } from '@shinzo/ui/skeleton';
 import { DataList, DataItem } from '@/widgets/data-list';
-import { useTransactionLogs } from '../hook/ethereum/use-transaction-logs';
-import { useDecodedLog } from '../hook/ethereum/use-decoded-log';
-import { useTokenMetadata, getTokenIconUrl, type TokenMetadata } from '../hook/ethereum/use-token-metadata';
-import { isTokenEvent } from '../known-events';
-import { formatUnits, getAddress } from 'viem';
+import { useEthereumTransactionLogs } from '../../hook/ethereum/use-ethereum-transaction-logs';
+import { useDecodedLog } from '../../hook/ethereum/use-decoded-log';
+import { useTokenMetadata, getTokenIconUrl, type TokenMetadata } from '../../hook/ethereum/use-token-metadata';
+import { isTokenEvent } from '../../known-events';
+import { formatUnits, getAddress, Hex } from 'viem';
 import Link from 'next/link';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
@@ -107,12 +107,12 @@ const LogEntry = ({ logIndex, address, topics, data }: LogEntryProps) => {
   );
 };
 
-export interface TransactionLogsProps {
-  txHash: string;
+export interface EthereumTransactionLogsProps {
+  txHash: Hex;
 }
 
-export const TransactionLogs = ({ txHash }: TransactionLogsProps) => {
-  const { data: logs, isLoading } = useTransactionLogs({ hash: txHash });
+export const EthereumTransactionLogs = ({ txHash }: EthereumTransactionLogsProps) => {
+  const { data: logs, isLoading } = useEthereumTransactionLogs({ hash: txHash });
 
   if (isLoading) {
     return (

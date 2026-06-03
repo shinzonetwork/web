@@ -8,10 +8,11 @@ import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { Hex } from 'viem';
 import { formatTokenValue } from '@/shared/utils/format-token';
-import { useShinzohubTransactionDetails } from '../hook/shinzohub/use-shinzohub-transaction-details';
-import { useShinzohubTransactionReceipt } from '../hook/shinzohub/use-shinzohub-transaction-receipt';
-import { useShinzohubBlockByBlocknumber } from '../hook/shinzohub/use-shinzohub-block-by-blocknumber';
+import { useShinzohubTransactionDetails } from '../../hook/shinzohub/use-shinzohub-transaction-details';
+import { useShinzohubTransactionReceipt } from '../../hook/shinzohub/use-shinzohub-transaction-receipt';
+import { useShinzohubBlockByBlocknumber } from '../../hook/shinzohub/use-shinzohub-block-by-blocknumber';
 import { formatGasPrice } from '@/shared/utils/format-gasprice';
+import { SHINZO_TOKEN } from '@/shared/utils/tokens';
 
 export type ShinzohubTransactionCardProps = {
   txHash: Hex;
@@ -132,7 +133,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={tx?.value}
         loading={isLoading}
       >
-        {tx?.value != null && tx.value > BigInt(0) && `${formatTokenValue(tx.value.toString(), 18)} SHNZ`}
+        {tx?.value != null && tx.value > BigInt(0) && `${formatTokenValue(tx.value.toString(), SHINZO_TOKEN.decimals)} ${SHINZO_TOKEN.symbol}`}
       </DataItem>
 
       <DataItem
@@ -140,7 +141,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={transactionFee}
         loading={isLoading}
       >
-        {transactionFee != null && `${transactionFee.toFixed(8)} SHNZ`}
+        {transactionFee != null && `${transactionFee.toFixed(8)} ${SHINZO_TOKEN.symbol}`}
       </DataItem>
 
       <DataItem

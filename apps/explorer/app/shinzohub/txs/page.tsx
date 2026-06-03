@@ -1,1 +1,1 @@
-export { TransactionsPage as default } from '@/pages/transactions';
+export { ShinzohubTransactionsPage as default } from '@/pages/transactions';

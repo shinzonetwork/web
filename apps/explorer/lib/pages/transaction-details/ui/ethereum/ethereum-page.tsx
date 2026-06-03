@@ -2,10 +2,10 @@ import { PageLayout } from '@/widgets/layout'
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
 import { CopyButton } from '@/shared/ui/button';
-import { TxTabs } from './transaction-tabs';
+import { EthereumTxTabs } from './ethereum-transaction-tabs';
 import { Hex } from 'viem';
 
-export const TransactionDetailPage = async ({ params }: { params: Promise<{ hash: Hex }> }) => {
+export const EthereumTransactionDetailPage = async ({ params }: { params: Promise<{ hash: Hex }> }) => {
   const { hash } = await params;
 
   return (
@@ -20,7 +20,7 @@ export const TransactionDetailPage = async ({ params }: { params: Promise<{ hash
         )}
       title='Transaction'
     >
-      <TxTabs hash={hash} />
+      <EthereumTxTabs hash={hash} />
     </PageLayout>
   );
 };
