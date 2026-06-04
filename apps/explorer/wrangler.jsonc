@@ -1,13 +1,23 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
-  "name": "shinzo-explorer",
-  "compatibility_date": "2026-01-04",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  }
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "shinzo-explorer",
+	"compatibility_date": "2026-01-04",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"vars": {
+		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545"
+	},
+	"d1_databases": [
+		{
+			"binding": "shinzohub_explorer",
+			"database_name": "shinzohub-explorer",
+			"database_id": "3c109340-58f6-453b-b609-4938c7e5a002"
+		}
+	]
 }

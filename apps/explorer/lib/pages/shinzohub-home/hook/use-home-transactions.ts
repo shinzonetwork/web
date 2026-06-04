@@ -1,7 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useShinzohubTransactionsSync } from '@/pages/transactions/hooks/shinzohub/use-shinzohub-transactions-sync';
+import { useQuery } from '@tanstack/react-query';
+import {
+  fetchShinzohubTransactions,
+  shinzohubTransactionsQueryKey,
+} from '@/pages/transactions/hooks/shinzohub/use-shinzohub-transactions';
 
 export type TransactionSummary = {
   hash: `0x${string}`;
@@ -16,33 +19,22 @@ type UseHomeTransactionsOptions = {
 };
 
 export function useHomeTransactions(
-  { count, refetchIntervalMs = 10_000 }: UseHomeTransactionsOptions = {},
+  { count = 5, refetchIntervalMs = 10_000 }: UseHomeTransactionsOptions = {},
 ) {
-  const indexQuery = useShinzohubTransactionsSync({ refetchIntervalMs });
+  const limit = Math.max(1, count);
 
-  const transactions = useMemo<TransactionSummary[]>(() => {
-    const indexed = indexQuery.data?.transactions ?? [];
-    if (!indexed.length) return [];
-    const sorted = [...indexed]
-      .sort((a, b) => {
-        const blockDelta = BigInt(b.blockNumber) - BigInt(a.blockNumber);
-        if (blockDelta !== BigInt(0)) {
-          return blockDelta > BigInt(0) ? 1 : -1;
-        }
-        return b.transactionIndex - a.transactionIndex;
-      })
-      const requiredTransactions = count === undefined ? sorted : sorted.slice(0, count)
-      return requiredTransactions.map((tx) => ({
+  return useQuery({
+    queryKey: shinzohubTransactionsQueryKey({ offset: 0, limit }),
+    queryFn: () => fetchShinzohubTransactions({ offset: 0, limit }),
+    staleTime: refetchIntervalMs,
+    refetchInterval: refetchIntervalMs,
+    refetchIntervalInBackground: true,
+    select: (data) =>
+      data.transactions.map((tx) => ({
         hash: tx.hash,
         from: tx.from,
         to: tx.to ?? null,
         value: tx.value,
-        gasPrice: tx.gasPrice,
-      }));
-  }, [indexQuery.data?.transactions, count]);
-
-  return {
-    ...indexQuery,
-    data: transactions,
-  };
+      })),
+  });
 }

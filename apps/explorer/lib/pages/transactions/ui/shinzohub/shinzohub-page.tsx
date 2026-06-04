@@ -13,9 +13,9 @@ export type ShinzohubTransactionPageProps = {
 
 export const ShinzohubTransactionsPageClient = ({ block, pageParams }: ShinzohubTransactionPageProps) => {
   const { page } = pageParams;
-  const { data: transactions, totalTransactionsCount, isLoading } = useShinzohubTransactions({
-    pageParams
-  });
+  const { data, isLoading } = useShinzohubTransactions({ pageParams });
+  const transactions = data?.transactions;
+  const totalTransactionsCount = data?.totalTransactionsCount;
 
   return (
     <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>

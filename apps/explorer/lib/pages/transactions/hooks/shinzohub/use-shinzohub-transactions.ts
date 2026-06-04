@@ -1,39 +1,57 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useShinzohubTransactionsSync, ShinzohubTransaction } from './use-shinzohub-transactions-sync';
-import { DEFAULT_LIMIT, PageParams } from '@shinzo/ui/pagination';
-
+import { useQuery } from '@tanstack/react-query';
+import { DEFAULT_LIMIT, type PageParams } from '@shinzo/ui/pagination';
+import {
+  type ShinzohubTransactionsResponse,
+} from '@/shared/shinzohub/transactions/types';
 
 type UseShinzohubTransactionsOptions = {
   pageParams: PageParams;
   refetchIntervalMs?: number;
 };
 
+export function shinzohubTransactionsQueryKey(params: { offset: number; limit: number }) {
+  return ['shinzohub', 'transactions', params.offset, params.limit] as const;
+}
+
+export async function fetchShinzohubTransactions(params: {
+  offset: number;
+  limit: number;
+}): Promise<ShinzohubTransactionsResponse> {
+  const searchParams = new URLSearchParams({
+    offset: String(params.offset),
+    limit: String(params.limit),
+  });
+  const response = await fetch(`/api/shinzohub/transactions?${searchParams.toString()}`);
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch Shinzohub transactions');
+  }
+
+  return response.json() as Promise<ShinzohubTransactionsResponse>;
+}
+
 export function useShinzohubTransactions(
-  { pageParams, refetchIntervalMs = 10_000 }: UseShinzohubTransactionsOptions = { pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT } },
+  {
+    pageParams,
+    refetchIntervalMs = 30_000,
+  }: UseShinzohubTransactionsOptions = {
+    pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT },
+  },
 ) {
   const { offset, limit } = pageParams;
-  const indexQuery = useShinzohubTransactionsSync({ refetchIntervalMs });
 
-  const transactions = useMemo<ShinzohubTransaction[]>(() => {
-    const indexed = indexQuery.data?.transactions ?? [];
-    if (!indexed.length) return [];
-    const sorted = [...indexed]
-      .sort((a, b) => {
-        const blockDelta = BigInt(b.blockNumber) - BigInt(a.blockNumber);
-        if (blockDelta !== BigInt(0)) {
-          return blockDelta > BigInt(0) ? 1 : -1;
-        }
-        return b.transactionIndex - a.transactionIndex;
-      })
-      return sorted.slice(offset, offset + limit);
-
-  }, [indexQuery.data?.transactions, offset, limit]);
-
-  return {
-    ...indexQuery,
-    data: transactions,
-    totalTransactionsCount: indexQuery.data?.transactions?.length ?? 0,
-  };
+  return useQuery({
+    queryKey: shinzohubTransactionsQueryKey({ offset, limit }),
+    queryFn: () => fetchShinzohubTransactions({ offset, limit }),
+    staleTime: refetchIntervalMs,
+    refetchInterval: refetchIntervalMs,
+    refetchIntervalInBackground: true,
+    select: (data) => ({
+      transactions: data.transactions,
+      totalTransactionsCount: data.total,
+      lastScannedBlock: data.lastScannedBlock,
+    }),
+  });
 }

@@ -12,7 +12,7 @@ import {
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
-import { ShinzohubTransaction } from '../hooks/shinzohub/use-shinzohub-transactions-sync';
+import type { ShinzohubTransaction } from '@/shared/shinzohub/transactions/types';
 import { EthereumTransaction } from '../hooks/ethereum/use-ethereum-transactions';
 import { formatTokenValue } from '@/shared/utils/format-token';
 import { formatGasPrice } from '@/shared/utils/format-gasprice';
