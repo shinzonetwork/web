@@ -13,22 +13,22 @@ export const UI_FORM_HEADER_CONTENT = {
   "host-registration": {
     title: "/ Register on the Shinzo Network",
     description:
-      "Sign up your host to be recognized by the Shinzo Network and contribute to the ecosystem.",
+      "Register your Host to participate in the Shinzo Network.",
   },
   "indexer-registration": {
-    title: "/ Register your indexer to participate within the Shinzo Network",
+    title: "/ Register your Indexer to participate within the Shinzo Network",
     description:
-      "Register your host to participate in the Shinzo Network.",
+      "Register your Indexer to participate in the Shinzo Network.",
   },
   "indexer-assertion": {
     title: "/ Assert Indexer on the Shinzo Network",
     description:
-      "Assert your indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+      "Assert your Indexer to participate in the Shinzo Network.",
   },
   registration: {
     title: "/ Register on the Shinzo Network",
     description:
-      "Sign up your host or indexer to be recognized by the Shinzo Network and contribute to the ecosystem.",
+      "Register your Host or Indexer to participate in the Shinzo Network.",
   },
 } as const;
 
