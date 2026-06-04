@@ -36,8 +36,8 @@ import {
   type HubViewRecord,
   useStudioHubViews,
 } from "../api/hub-views";
-import { createStoredDeployedView } from "./storage";
-import type { DeployStatus, StoredDeployedView } from "./types";
+import { createDeployedViewRecord } from "./deployed-view";
+import type { DeployedView, DeployStatus } from "./types";
 import { ViewValidationError } from "./view-validation-error";
 
 interface ValidatedView {
@@ -262,12 +262,12 @@ const confirmRegisteredView = async (
 };
 
 export interface DeployResult {
-  deployedView: StoredDeployedView;
+  deployedView: DeployedView;
   validationWarnings: ValidationIssue[];
 }
 
 export interface DeployPackResult {
-  deployedViews: StoredDeployedView[];
+  deployedViews: DeployedView[];
   validationWarnings: ValidationIssue[];
 }
 
@@ -317,7 +317,7 @@ export const useDeployLens = (): UseDeployLensResult => {
         resolvedView.entityName
       );
       if (existing) {
-        const deployedView = createStoredDeployedView(resolvedView, {
+        const deployedView = createDeployedViewRecord(resolvedView, {
           source: "hub-existing",
           contractAddress: existing.contractAddress,
         });
@@ -357,7 +357,7 @@ export const useDeployLens = (): UseDeployLensResult => {
         async () => (await refetchStudioHubViews()).data ?? []
       );
 
-      const deployedView = createStoredDeployedView(resolvedView, {
+      const deployedView = createDeployedViewRecord(resolvedView, {
         source: "deployed",
         contractAddress,
         txHash,
@@ -426,7 +426,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       setValidationIssues([]);
 
       try {
-        const deployedViews: StoredDeployedView[] = [];
+        const deployedViews: DeployedView[] = [];
         const warnings: ValidationIssue[] = [];
 
         for (const view of views) {

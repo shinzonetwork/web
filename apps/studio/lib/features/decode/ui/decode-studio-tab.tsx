@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { SearchInput } from "@shinzo/ui/search-input";
 import { DECODE_LOG_LENS } from "@/entities/lens";
-import { StoredViewsPanel, type DeployStatus } from "@/entities/view";
+import type { DeployStatus } from "@/entities/view";
 import { POPULAR_ETHEREUM_CONTRACT_PRESETS } from "@/shared/consts/view-config";
 import { Button } from "@/shared/ui/button";
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
@@ -54,7 +54,6 @@ export const DecodeStudioTab = () => {
     error,
     switchChainError,
     validationIssues,
-    lastSavedView,
     submit,
     switchToShinzo,
   } = useDecodeStudioState();
@@ -135,15 +134,9 @@ export const DecodeStudioTab = () => {
         </p>
       )}
 
-      <DeployStatusMessage
-        status={status}
-        error={combinedError}
-        lastSavedView={lastSavedView}
-      />
+      <DeployStatusMessage error={combinedError} />
 
       <ValidationIssues issues={validationIssues} />
-
-      <StoredViewsPanel lensKey={DECODE_LOG_LENS.lensKey} />
     </div>
   );
 };

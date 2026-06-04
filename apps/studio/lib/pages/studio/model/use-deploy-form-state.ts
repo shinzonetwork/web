@@ -3,13 +3,13 @@
 import { useCallback, useState } from "react";
 import { useConnection, useSwitchChain } from "wagmi";
 import type { LensDefinition, TokenAddressLensArgs } from "@/entities/lens";
+import { createViewHref } from "@/pages/views/model/view-formatters";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
 import { normalizeErc20TokenAddress } from "@/shared/consts/view-config";
+import { pushBrowserUrl } from "@/shared/utils/browser-location";
 import {
   ViewValidationError,
   useDeployLens,
-  useStoredViews,
-  type StoredDeployedView,
 } from "@/entities/view";
 
 export interface UseDeployFormStateResult {
@@ -23,7 +23,6 @@ export interface UseDeployFormStateResult {
   error: string;
   switchChainError: string;
   validationIssues: ReturnType<typeof useDeployLens>["validationIssues"];
-  lastSavedView: StoredDeployedView | null;
   submit: () => Promise<void>;
   switchToShinzo: () => Promise<void>;
 }
@@ -33,14 +32,10 @@ export const useDeployFormState = (
 ): UseDeployFormStateResult => {
   const { chainId: activeChainId, isConnected } = useConnection();
   const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
-  const { upsert } = useStoredViews();
   const { deploy, status, error, validationIssues } = useDeployLens();
 
   const [address, setAddress] = useState("");
   const [switchChainError, setSwitchChainError] = useState("");
-  const [lastSavedView, setLastSavedView] = useState<StoredDeployedView | null>(
-    null
-  );
 
   const normalizedAddress = normalizeErc20TokenAddress(address);
   const isInProgress =
@@ -55,20 +50,17 @@ export const useDeployFormState = (
       return;
     }
 
-    setLastSavedView(null);
-
     try {
       const { deployedView } = await deploy(lens, {
         tokenAddress: normalizedAddress,
       });
-      upsert(deployedView);
-      setLastSavedView(deployedView);
+      pushBrowserUrl(createViewHref(deployedView.entityName));
     } catch (err) {
       if (!(err instanceof ViewValidationError)) {
         console.error(err);
       }
     }
-  }, [deploy, isConnected, isInProgress, lens, normalizedAddress, upsert]);
+  }, [deploy, isConnected, isInProgress, lens, normalizedAddress]);
 
   const switchToShinzo = useCallback(async () => {
     setSwitchChainError("");
@@ -92,7 +84,6 @@ export const useDeployFormState = (
     error,
     switchChainError,
     validationIssues,
-    lastSavedView,
     submit,
     switchToShinzo,
   };

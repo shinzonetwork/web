@@ -7,7 +7,6 @@ import {
   ERC20_ACCOUNT_BALANCES_LENS,
   ERC20_TRANSFER_LENS,
 } from "@/entities/lens";
-import { StoredViewsProvider } from "@/entities/view";
 import { DecodeStudioTab } from "@/features/decode/ui/decode-studio-tab";
 import { Header } from "@/pages/studio/ui/header";
 import { Button } from "@/shared/ui/button";
@@ -36,17 +35,15 @@ const DeployPageContent = () => (
       </div>
 
       <Tabs defaultValue={DECODE_LOG_LENS.lensKey} className="gap-6">
-        <div className="max-w-full overflow-x-auto border-b border-ui-border">
-          <TabsList className="[&>*]:translate-y-[1px]">
-            <TabsTrigger value={DECODE_LOG_LENS.lensKey}>Decode</TabsTrigger>
-            <TabsTrigger value={ERC20_TRANSFER_LENS.lensKey}>
-              ERC20 Transfers
-            </TabsTrigger>
-            <TabsTrigger value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
-              ERC20 Balances
-            </TabsTrigger>
-          </TabsList>
-        </div>
+        <TabsList className="[&>*]:translate-y-[1px]">
+          <TabsTrigger value={DECODE_LOG_LENS.lensKey}>Decode</TabsTrigger>
+          <TabsTrigger value={ERC20_TRANSFER_LENS.lensKey}>
+            ERC20 Transfers
+          </TabsTrigger>
+          <TabsTrigger value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
+            ERC20 Balances
+          </TabsTrigger>
+        </TabsList>
 
         <TabsContent value={DECODE_LOG_LENS.lensKey}>
           <DecodeStudioTab />
@@ -64,8 +61,4 @@ const DeployPageContent = () => (
   </div>
 );
 
-export const DeployPage = () => (
-  <StoredViewsProvider>
-    <DeployPageContent />
-  </StoredViewsProvider>
-);
+export const DeployPage = () => <DeployPageContent />;

@@ -4,12 +4,12 @@ import { useCallback, useState } from "react";
 import { useConnection, useSwitchChain } from "wagmi";
 import { isAddress } from "viem";
 import { DECODE_LOG_LENS } from "@/entities/lens";
+import { createViewHref } from "@/pages/views/model/view-formatters";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
+import { pushBrowserUrl } from "@/shared/utils/browser-location";
 import {
   ViewValidationError,
   useDeployLens,
-  useStoredViews,
-  type StoredDeployedView,
 } from "@/entities/view";
 import { fetchDecodeLogLensArgs } from "./sourcify";
 
@@ -26,7 +26,6 @@ export interface UseDecodeStudioStateResult {
   error: string;
   switchChainError: string;
   validationIssues: ReturnType<typeof useDeployLens>["validationIssues"];
-  lastSavedView: StoredDeployedView | null;
   submit: () => Promise<void>;
   switchToShinzo: () => Promise<void>;
 }
@@ -34,7 +33,6 @@ export interface UseDecodeStudioStateResult {
 export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   const { chainId: activeChainId, isConnected } = useConnection();
   const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
-  const { upsert } = useStoredViews();
   const {
     deploy,
     status,
@@ -47,9 +45,6 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   const [isFetchingAbi, setIsFetchingAbi] = useState(false);
   const [fetchError, setFetchError] = useState("");
   const [switchChainError, setSwitchChainError] = useState("");
-  const [lastSavedView, setLastSavedView] = useState<StoredDeployedView | null>(
-    null
-  );
 
   const normalizedAddress = address.trim();
   const isValidAddress =
@@ -69,7 +64,6 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
 
     reset();
     setFetchError("");
-    setLastSavedView(null);
 
     let decodeArgs;
     setIsFetchingAbi(true);
@@ -90,8 +84,7 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
 
     try {
       const { deployedView } = await deploy(DECODE_LOG_LENS, decodeArgs);
-      upsert(deployedView);
-      setLastSavedView(deployedView);
+      pushBrowserUrl(createViewHref(deployedView.entityName));
     } catch (error) {
       if (!(error instanceof ViewValidationError)) {
         console.error(error);
@@ -104,7 +97,6 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
     isValidAddress,
     normalizedAddress,
     reset,
-    upsert,
   ]);
 
   const switchToShinzo = useCallback(async () => {
@@ -133,7 +125,6 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
     error: fetchError || deployError,
     switchChainError,
     validationIssues,
-    lastSavedView,
     submit,
     switchToShinzo,
   };

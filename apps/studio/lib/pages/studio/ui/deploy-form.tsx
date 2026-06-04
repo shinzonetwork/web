@@ -6,7 +6,7 @@ import type { LensDefinition, TokenAddressLensArgs } from "@/entities/lens";
 import { Button } from "@/shared/ui/button";
 import { ConnectDialog } from "@/shared/ui/connect-dialog";
 import { TOP_ETHEREUM_ERC20_TOKEN_PRESETS } from "@/shared/consts/view-config";
-import { StoredViewsPanel, type DeployStatus } from "@/entities/view";
+import type { DeployStatus } from "@/entities/view";
 import { useDeployFormState } from "../model/use-deploy-form-state";
 import { DeployStatusMessage } from "./deploy-status-message";
 import { ValidationIssues } from "./validation-issues";
@@ -70,7 +70,6 @@ export const DeployForm = ({
     error,
     switchChainError,
     validationIssues,
-    lastSavedView,
     submit,
     switchToShinzo,
   } = useDeployFormState(lens);
@@ -85,8 +84,8 @@ export const DeployForm = ({
         </h2>
         <p className="text-sm leading-relaxed text-szo-black/60">
           {lens.description} Deploy a view for a specific token contract,
-          register it on ShinzoHub, then call it later from Stored Deployments
-          after host propagation.
+          register it on ShinzoHub, then open it in the view playground after
+          host propagation.
         </p>
       </div>
 
@@ -145,15 +144,9 @@ export const DeployForm = ({
         </p>
       )}
 
-      <DeployStatusMessage
-        status={status}
-        error={combinedError}
-        lastSavedView={lastSavedView}
-      />
+      <DeployStatusMessage error={combinedError} />
 
       <ValidationIssues issues={validationIssues} />
-
-      <StoredViewsPanel lensKey={lens.lensKey} />
     </div>
   );
 };

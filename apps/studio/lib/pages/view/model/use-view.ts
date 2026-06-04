@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  getView,
   listViews,
   normalizeHexAddress,
   shinzoAddressToHex,
@@ -167,25 +168,6 @@ const findNewestParsedViewByName = async (
   return view;
 };
 
-const findParsedViewByAddress = async (
-  address: string
-): Promise<ShinzoHubView> => {
-  const views = await fetchViewsForRoute({});
-  const view = views.find(
-    (candidate) =>
-      normalizeHexAddress(candidate.contractAddress) === address &&
-      isParsedView(candidate)
-  );
-
-  if (!view) {
-    throw new Error(
-      `No parsed ShinzoHub view metadata found for "${address}".`
-    );
-  }
-
-  return view;
-};
-
 const fetchViewByRoute = async ({
   identifier,
   address,
@@ -194,7 +176,11 @@ const fetchViewByRoute = async ({
   address: string | null;
 }): Promise<ShinzoHubView> => {
   if (address) {
-    return findParsedViewByAddress(address);
+    return getView(shinzohubPublicClient, {
+      cosmosRestUrl: getHubCosmosRestUrl(),
+      includeMetadata: true,
+      address,
+    });
   }
 
   if (!identifier) {
