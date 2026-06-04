@@ -5,11 +5,9 @@ import { SearchInput } from "@shinzo/ui/search-input";
 import { Tabs, TabsList, TabsTrigger } from "@shinzo/ui/tabs";
 import { useConnection } from "wagmi";
 import {
-  VIEWS_ALL_LENSES_FILTER,
   VIEWS_OWNER_FILTERS,
   VIEWS_VERIFICATION_FILTERS,
   type ViewsFilters,
-  type ViewsLensFilterOption,
   type ViewsOwnerFilter,
   type ViewsVerificationFilter,
 } from "../model/types";
@@ -35,7 +33,6 @@ const isViewsVerificationFilter = (
 
 interface ViewsToolbarProps {
   filters: ViewsFilters;
-  lensOptions: readonly ViewsLensFilterOption[];
   totalCount: number;
   visibleCount: number;
   onFiltersChange: (filters: ViewsFilters) => void;
@@ -44,7 +41,6 @@ interface ViewsToolbarProps {
 
 export const ViewsToolbar = ({
   filters,
-  lensOptions,
   totalCount,
   visibleCount,
   onFiltersChange,
@@ -71,8 +67,8 @@ export const ViewsToolbar = ({
       <div
         className={`grid min-w-0 gap-3 lg:items-center ${
           showOwnerFilter
-            ? "lg:grid-cols-[auto_auto_minmax(12rem,12rem)_minmax(16rem,1fr)]"
-            : "lg:grid-cols-[auto_minmax(12rem,12rem)_minmax(16rem,1fr)]"
+            ? "lg:grid-cols-[auto_auto_minmax(16rem,1fr)]"
+            : "lg:grid-cols-[auto_minmax(16rem,1fr)]"
         }`}
       >
         {showOwnerFilter && (
@@ -116,24 +112,6 @@ export const ViewsToolbar = ({
             ))}
           </TabsList>
         </Tabs>
-
-        <label className="flex h-14 min-w-0 items-center gap-3 rounded-xl border-2 border-ui-border bg-white px-5 font-sans text-sm text-ui-text">
-          <span className="shrink-0 text-ui-text-muted">Lens</span>
-          <select
-            value={filters.lensKey}
-            onChange={(event) =>
-              onFiltersChange({ ...filters, lensKey: event.target.value })
-            }
-            className="min-w-0 flex-1 bg-transparent text-ui-text outline-none"
-          >
-            <option value={VIEWS_ALL_LENSES_FILTER}>All</option>
-            {lensOptions.map((option) => (
-              <option key={option.key} value={option.key}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
 
         <SearchInput
           placeholder="Search views, owners, contracts, or lenses"

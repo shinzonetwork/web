@@ -28,16 +28,6 @@ const localLensByHash = new Map(
   LOCAL_LENS_HASHES.map((entry) => [normalizeHash(entry.hash), entry] as const)
 );
 
-export const getVerifiedLensOptions = () =>
-  LOCAL_LENS_HASHES.map((entry) => {
-    const lens = studioLensByKey.get(entry.lensKey);
-
-    return {
-      key: entry.lensKey,
-      label: lens?.title ?? entry.lensKey,
-    };
-  });
-
 export const matchLensStatus = (
   metadata: ViewsMetadataState
 ): ViewsLensStatus => {

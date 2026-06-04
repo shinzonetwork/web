@@ -21,7 +21,6 @@ const PageFrame = ({
     <main className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 px-5 py-10 sm:px-6">
       <ViewsToolbar
         filters={views.filters}
-        lensOptions={views.status === "success" ? views.result.lensOptions : []}
         totalCount={views.status === "success" ? views.result.totalCount : 0}
         visibleCount={views.status === "success" ? views.result.visibleCount : 0}
         onFiltersChange={views.setFilters}

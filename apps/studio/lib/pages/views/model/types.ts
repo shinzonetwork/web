@@ -5,7 +5,6 @@ export interface ViewsFilters {
   search: string;
   owner: ViewsOwnerFilter;
   verification: ViewsVerificationFilter;
-  lensKey: string;
 }
 
 export interface ViewsAddressLink {
@@ -60,17 +59,11 @@ export interface ViewsPageItem {
   searchText: string;
 }
 
-export interface ViewsLensFilterOption {
-  key: string;
-  label: string;
-}
-
 export interface ViewsResult {
   items: readonly ViewsPageItem[];
   totalCount: number;
   visibleCount: number;
   refreshedAt: number;
-  lensOptions: readonly ViewsLensFilterOption[];
 }
 
 export type ViewsQueryState =
@@ -94,13 +87,10 @@ export type UseViewsResult = ViewsQueryState & {
   isLoadingMore: boolean;
 };
 
-export const VIEWS_ALL_LENSES_FILTER = "all" as const;
-
 export const DEFAULT_VIEWS_FILTERS: ViewsFilters = {
   search: "",
   owner: "all",
   verification: "all",
-  lensKey: VIEWS_ALL_LENSES_FILTER,
 };
 
 export const VIEWS_OWNER_FILTERS = [

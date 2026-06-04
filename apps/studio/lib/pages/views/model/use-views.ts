@@ -14,7 +14,7 @@ import {
   SHINZOHUB_EVM_RPC_REQUEST_URL,
 } from "@/shared/consts/envs";
 import { shinzoDevnet } from "@/shared/consts/wagmi";
-import { matchLensStatus, getVerifiedLensOptions } from "./lens-matching";
+import { matchLensStatus } from "./lens-matching";
 import {
   createBlockscoutAddressLink,
   createViewHref,
@@ -24,10 +24,8 @@ import {
 } from "./view-formatters";
 import {
   DEFAULT_VIEWS_FILTERS,
-  VIEWS_ALL_LENSES_FILTER,
   type UseViewsResult,
   type ViewsFilters,
-  type ViewsLensFilterOption,
   type ViewsMetadataState,
   type ViewsOwnerFilter,
   type ViewsPageItem,
@@ -190,29 +188,8 @@ const filterViews = (
       return false;
     }
 
-    if (
-      filters.lensKey !== VIEWS_ALL_LENSES_FILTER &&
-      (item.lens.status !== "verified" || item.lens.lensKey !== filters.lensKey)
-    ) {
-      return false;
-    }
-
     return true;
   });
-};
-
-const getLensOptions = (
-  items: readonly ViewsPageItem[]
-): readonly ViewsLensFilterOption[] => {
-  const availableLensKeys = new Set(
-    items.flatMap((item) =>
-      item.lens.status === "verified" ? [item.lens.lensKey] : []
-    )
-  );
-
-  return getVerifiedLensOptions().filter((option) =>
-    availableLensKeys.has(option.key)
-  );
 };
 
 export const useViews = (): UseViewsResult => {
@@ -258,7 +235,6 @@ export const useViews = (): UseViewsResult => {
       totalCount: loadedItems.length,
       visibleCount: items.length,
       refreshedAt: query.dataUpdatedAt,
-      lensOptions: getLensOptions(loadedItems),
     };
   }, [filters, loadedItems, query.dataUpdatedAt]);
 
