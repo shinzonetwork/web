@@ -197,7 +197,7 @@ export const callStoredLensView = async (
     );
   }
 
-  const typedLens = lens as LensDefinition<LensArgs>;
+  const typedLens = lens as unknown as LensDefinition<LensArgs>;
   const result = await queryLensView(
     typedLens.resolveView(typedLens.parseStoredArgs(view.args)),
     {

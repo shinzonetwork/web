@@ -1,10 +1,4 @@
 import decodeLogMetadata from "@shinzo/lenses/decode-log/metadata.json";
-import ensDomainProjectorMetadata from "@shinzo/lenses/ens/domain-projector/metadata.json";
-import ensEventProjectorMetadata from "@shinzo/lenses/ens/event-projector/metadata.json";
-import ensPrimaryNameProjectorMetadata from "@shinzo/lenses/ens/primary-name-projector/metadata.json";
-import ensRegistrationProjectorMetadata from "@shinzo/lenses/ens/registration-projector/metadata.json";
-import ensResolverRecordProjectorMetadata from "@shinzo/lenses/ens/resolver-record-projector/metadata.json";
-import ensWrappedDomainProjectorMetadata from "@shinzo/lenses/ens/wrapped-domain-projector/metadata.json";
 import erc20AccountBalancesMetadata from "@shinzo/lenses/erc20-account-balances/metadata.json";
 import erc20TransfersMetadata from "@shinzo/lenses/erc20-transfers/metadata.json";
 import { STUDIO_LENS_CATALOG } from "@/entities/lens";
@@ -22,24 +16,6 @@ const LOCAL_LENS_HASHES = [
     lensKey: "erc20-account-balances",
     hash: erc20AccountBalancesMetadata.hash,
   },
-  { lensKey: "ens-domain-v1", hash: ensDomainProjectorMetadata.hash },
-  {
-    lensKey: "ens-registration-v1",
-    hash: ensRegistrationProjectorMetadata.hash,
-  },
-  {
-    lensKey: "ens-wrapped-domain-v1",
-    hash: ensWrappedDomainProjectorMetadata.hash,
-  },
-  {
-    lensKey: "ens-resolver-record-v1",
-    hash: ensResolverRecordProjectorMetadata.hash,
-  },
-  {
-    lensKey: "ens-primary-name-v1",
-    hash: ensPrimaryNameProjectorMetadata.hash,
-  },
-  { lensKey: "ens-event-v1", hash: ensEventProjectorMetadata.hash },
 ] as const satisfies readonly LocalLensHashEntry[];
 
 const studioLensByKey = new Map(

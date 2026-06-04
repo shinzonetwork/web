@@ -7,7 +7,6 @@
   "types": "./lib/index.ts",
   "exports": {
     ".": "./lib/index.ts",
-    "./ens": "./ens/index.ts",
     "./evm": "./lib/evm/index.ts",
     "./testing": "./lib/testing/index.ts",
     "./view": "./lib/view/index.ts",
@@ -15,20 +14,12 @@
     "./decode-log/metadata.json": "./decode-log/metadata.json",
     "./erc20-transfers/metadata.json": "./erc20-transfers/metadata.json",
     "./erc20-account-balances/metadata.json": "./erc20-account-balances/metadata.json",
-    "./ens/domain-projector/metadata.json": "./ens/domain-projector/metadata.json",
-    "./ens/registration-projector/metadata.json": "./ens/registration-projector/metadata.json",
-    "./ens/wrapped-domain-projector/metadata.json": "./ens/wrapped-domain-projector/metadata.json",
-    "./ens/resolver-record-projector/metadata.json": "./ens/resolver-record-projector/metadata.json",
-    "./ens/primary-name-projector/metadata.json": "./ens/primary-name-projector/metadata.json",
-    "./ens/event-projector/metadata.json": "./ens/event-projector/metadata.json",
-    "./ens/event-normalizer/metadata.json": "./ens/event-normalizer/metadata.json",
     "./validate": "./lib/testing/validate.ts",
     "./exports": "./lib/exports.ts",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
-    "ens",
     "decode-log",
     "erc20-transfers",
     "erc20-account-balances",

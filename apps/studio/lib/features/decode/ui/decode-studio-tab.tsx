@@ -70,8 +70,8 @@ export const DecodeStudioTab = () => {
         <p className="text-sm leading-relaxed text-szo-black/60">
           Enter any verified Ethereum smart contract address and Shinzo will
           fetch its Sourcify ABI, index its logs, and save a reusable decoded
-          view. For example, paste the ENS Registry contract to browse decoded
-          resolver and ownership events after deployment.
+          view. For example, paste the USDC Proxy contract to browse decoded
+          token events after deployment.
         </p>
       </div>
 

@@ -121,11 +121,6 @@ export const POPULAR_ETHEREUM_CONTRACT_PRESETS = [
     address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
   },
   {
-    label: "ENS Registry",
-    name: "ENS Registry",
-    address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-  },
-  {
     label: "Uniswap V3",
     name: "Uniswap V3 Factory",
     address: "0x1F98431c8aD98523631AE4a59f267346ea31F984",

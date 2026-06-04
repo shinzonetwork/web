@@ -11,7 +11,6 @@ Lenses are small WASM modules that transform raw source rows into the final View
 Studio is organized around a few deployment flows:
 
 - Decode arbitrary verified Ethereum contract events from Sourcify ABIs.
-- Deploy ENS-focused view packs.
 - Deploy ERC-20 transfer and account-balance views.
 - Re-open stored deployments and query them through the configured Host.
 
