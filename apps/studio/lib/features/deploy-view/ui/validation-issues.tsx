@@ -1,3 +1,5 @@
+"use client";
+
 import type { ValidationIssue } from "@shinzo/lenses/view";
 
 interface ValidationIssuesProps {

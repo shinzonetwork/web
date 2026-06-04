@@ -2,35 +2,38 @@
 
 import { useCallback, useState } from "react";
 import { useConnection, useSwitchChain } from "wagmi";
-import { isAddress } from "viem";
-import { DECODE_LOG_LENS } from "@/entities/lens";
-import { createViewHref } from "@/pages/views/model/view-formatters";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
-import { pushBrowserUrl } from "@/shared/utils/browser-location";
+import type { LensArgs, LensDefinition } from "@/entities/lens";
 import {
+  createViewHref,
   ViewValidationError,
   useDeployLens,
 } from "@/entities/view";
-import { fetchDecodeLogLensArgs } from "./sourcify";
+import { shinzoDevnet } from "@/shared/consts/wagmi";
+import { pushBrowserUrl } from "@/shared/utils/browser-location";
 
-export interface UseDecodeStudioStateResult {
-  address: string;
-  setAddress: (value: string) => void;
-  normalizedAddress: string;
-  isValidAddress: boolean;
+interface UseDeployViewActionInput<TArgs extends LensArgs> {
+  lens: LensDefinition<TArgs>;
+  canSubmit: boolean;
+  resolveArgs: () => TArgs | Promise<TArgs>;
+}
+
+export interface UseDeployViewActionResult {
   isConnected: boolean;
   isOnShinzoDevnet: boolean;
-  isFetchingAbi: boolean;
+  isPreparing: boolean;
   isInProgress: boolean;
   status: ReturnType<typeof useDeployLens>["status"];
   error: string;
-  switchChainError: string;
   validationIssues: ReturnType<typeof useDeployLens>["validationIssues"];
   submit: () => Promise<void>;
   switchToShinzo: () => Promise<void>;
 }
 
-export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
+export const useDeployViewAction = <TArgs extends LensArgs>({
+  lens,
+  canSubmit,
+  resolveArgs,
+}: UseDeployViewActionInput<TArgs>): UseDeployViewActionResult => {
   const { chainId: activeChainId, isConnected } = useConnection();
   const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
   const {
@@ -41,49 +44,41 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
     reset,
   } = useDeployLens();
 
-  const [address, setAddress] = useState("");
-  const [isFetchingAbi, setIsFetchingAbi] = useState(false);
-  const [fetchError, setFetchError] = useState("");
+  const [isPreparing, setIsPreparing] = useState(false);
+  const [prepareError, setPrepareError] = useState("");
   const [switchChainError, setSwitchChainError] = useState("");
 
-  const normalizedAddress = address.trim();
-  const isValidAddress =
-    normalizedAddress.length > 0 && isAddress(normalizedAddress);
-  const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;
   const isDeployInProgress =
     status === "checking" ||
     status === "validating" ||
     status === "deploying" ||
     status === "confirming";
-  const isInProgress = isFetchingAbi || isDeployInProgress;
+  const isInProgress = isPreparing || isDeployInProgress;
+  const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;
 
   const submit = useCallback(async () => {
-    if (!isConnected || !isValidAddress || isInProgress) {
+    if (!isConnected || !canSubmit || isInProgress) {
       return;
     }
 
     reset();
-    setFetchError("");
+    setPrepareError("");
 
-    let decodeArgs;
-    setIsFetchingAbi(true);
-
+    let args: TArgs;
+    setIsPreparing(true);
     try {
-      decodeArgs = await fetchDecodeLogLensArgs(normalizedAddress);
+      args = await resolveArgs();
     } catch (error) {
-      setFetchError(
-        error instanceof Error
-          ? error.message
-          : "Could not fetch a verified ABI from Sourcify."
+      setPrepareError(
+        error instanceof Error ? error.message : "Could not prepare view args."
       );
-      setIsFetchingAbi(false);
+      setIsPreparing(false);
       return;
     }
-
-    setIsFetchingAbi(false);
+    setIsPreparing(false);
 
     try {
-      const { deployedView } = await deploy(DECODE_LOG_LENS, decodeArgs);
+      const { deployedView } = await deploy(lens, args);
       pushBrowserUrl(createViewHref(deployedView.entityName));
     } catch (error) {
       if (!(error instanceof ViewValidationError)) {
@@ -91,12 +86,13 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
       }
     }
   }, [
+    canSubmit,
     deploy,
     isConnected,
     isInProgress,
-    isValidAddress,
-    normalizedAddress,
+    lens,
     reset,
+    resolveArgs,
   ]);
 
   const switchToShinzo = useCallback(async () => {
@@ -113,17 +109,12 @@ export const useDecodeStudioState = (): UseDecodeStudioStateResult => {
   }, [switchChainMutateAsync]);
 
   return {
-    address,
-    setAddress,
-    normalizedAddress,
-    isValidAddress,
     isConnected,
     isOnShinzoDevnet,
-    isFetchingAbi,
+    isPreparing,
     isInProgress,
     status,
-    error: fetchError || deployError,
-    switchChainError,
+    error: prepareError || deployError || switchChainError,
     validationIssues,
     submit,
     switchToShinzo,

@@ -2,31 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  hexToShinzoAddress,
-  listViews,
-  type ShinzoHubView,
-} from "@shinzo/shinzohub";
-import { createPublicClient, http } from "viem";
+import { hexToShinzoAddress } from "@shinzo/shinzohub";
 import { useConnection } from "wagmi";
 import {
-  SHINZOHUB_COSMOS_RPC_REQUEST_URL,
-  SHINZOHUB_EVM_RPC_REQUEST_URL,
-} from "@/shared/consts/envs";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
-import { matchLensStatus } from "./lens-matching";
-import {
-  createBlockscoutAddressLink,
-  createViewHref,
-  formatHeight,
+  fetchHubViewsPage,
   normalizeSearchValue,
-  toHeightNumber,
-} from "./view-formatters";
+  toViewSummary,
+} from "@/entities/view";
 import {
   DEFAULT_VIEWS_FILTERS,
   type UseViewsResult,
   type ViewsFilters,
-  type ViewsMetadataState,
   type ViewsOwnerFilter,
   type ViewsPageItem,
   type ViewsResult,
@@ -41,116 +27,17 @@ interface ViewsPageResponse {
   readonly nextPageKey: string | null;
 }
 
-const shinzohubPublicClient = createPublicClient({
-  chain: shinzoDevnet,
-  transport: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
-});
-
-const getHubCosmosRestUrl = (): string => {
-  const trimmed = SHINZOHUB_COSMOS_RPC_REQUEST_URL.trim();
-
-  if (!trimmed) {
-    throw new Error("ShinzoHub Cosmos RPC proxy path is not configured.");
-  }
-
-  return new URL(trimmed, window.location.origin).toString();
-};
-
 const compareViewsByHeightDesc = (
   left: ViewsPageItem,
   right: ViewsPageItem
 ): number => right.heightNumber - left.heightNumber;
-
-const getMetadataState = (view: ShinzoHubView): ViewsMetadataState => {
-  const { metadata } = view;
-
-  if (!metadata) {
-    return {
-      status: "missing",
-    };
-  }
-
-  const lensHashes = metadata.lenses
-    .map((lens) => lens.hash.trim())
-    .filter((hash) => hash.length > 0);
-
-  if (metadata.parseError.trim()) {
-    return {
-      status: "parse-error",
-      rootType: metadata.rootType,
-      lensHashes,
-      parseError: metadata.parseError,
-    };
-  }
-
-  return {
-    status: "parsed",
-    rootType: metadata.rootType,
-    lensHashes,
-  };
-};
-
-const createSearchText = (item: Omit<ViewsPageItem, "searchText">): string => {
-  const metadataText =
-    item.metadata.status === "missing"
-      ? ""
-      : `${item.metadata.rootType} ${item.metadata.lensHashes.join(" ")}`;
-  const lensText =
-    item.lens.status === "verified"
-      ? `${item.lens.title} ${item.lens.lensKey}`
-      : item.lens.status;
-
-  return normalizeSearchValue(
-    [
-      item.name,
-      item.creator.address,
-      item.contract.address,
-      item.height,
-      metadataText,
-      lensText,
-    ].join(" ")
-  );
-};
-
-const toViewsPageItem = (view: ShinzoHubView): ViewsPageItem | null => {
-  if (!view.name || !view.contractAddress) {
-    return null;
-  }
-
-  const metadata = getMetadataState(view);
-  if (metadata.status !== "parsed") {
-    return null;
-  }
-
-  const lens = matchLensStatus(metadata);
-  const contract = createBlockscoutAddressLink(view.contractAddress);
-  const itemWithoutSearchText = {
-    id: view.contractAddress,
-    href: createViewHref(view.name),
-    name: view.name,
-    creator: createBlockscoutAddressLink(view.creator || "unknown"),
-    contract,
-    height: formatHeight(view.height),
-    heightNumber: toHeightNumber(view.height),
-    metadata,
-    lens,
-  } satisfies Omit<ViewsPageItem, "searchText">;
-
-  return {
-    ...itemWithoutSearchText,
-    searchText: createSearchText(itemWithoutSearchText),
-  };
-};
 
 const fetchViewsPage = async (
   pageKey: string | null,
   creator: string | null
 ): Promise<ViewsPageResponse> => {
   const items: ViewsPageItem[] = [];
-  const cosmosRestUrl = getHubCosmosRestUrl();
-
-  const payload = await listViews(shinzohubPublicClient, {
-    cosmosRestUrl,
+  const payload = await fetchHubViewsPage({
     includeMetadata: true,
     limit: HUB_VIEWS_PAGE_LIMIT,
     pageKey: pageKey ?? undefined,
@@ -158,7 +45,7 @@ const fetchViewsPage = async (
   });
 
   for (const view of payload.views) {
-    const item = toViewsPageItem(view);
+    const item = toViewSummary(view);
     if (item) {
       items.push(item);
     }

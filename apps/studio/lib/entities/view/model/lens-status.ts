@@ -2,7 +2,7 @@ import decodeLogMetadata from "@shinzo/lenses/decode-log/metadata.json";
 import erc20AccountBalancesMetadata from "@shinzo/lenses/erc20-account-balances/metadata.json";
 import erc20TransfersMetadata from "@shinzo/lenses/erc20-transfers/metadata.json";
 import { STUDIO_LENS_CATALOG } from "@/entities/lens";
-import type { ViewsLensStatus, ViewsMetadataState } from "./types";
+import type { ViewLensStatus, ViewMetadataState } from "./types";
 
 interface LocalLensHashEntry {
   readonly lensKey: string;
@@ -29,8 +29,8 @@ const localLensByHash = new Map(
 );
 
 export const matchLensStatus = (
-  metadata: ViewsMetadataState
-): ViewsLensStatus => {
+  metadata: ViewMetadataState
+): ViewLensStatus => {
   if (metadata.status === "missing") {
     return {
       status: "unknown",

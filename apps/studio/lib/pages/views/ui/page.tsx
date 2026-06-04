@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import { Plus } from "lucide-react";
-import { Header } from "@/pages/studio/ui/header";
 import { Button } from "@/shared/ui/button";
+import { Header } from "@/shared/ui/header";
 import { useViews } from "../model/use-views";
 import type { UseViewsResult } from "../model/types";
 import { ViewsGrid, ViewsGridSkeleton } from "./views-grid";

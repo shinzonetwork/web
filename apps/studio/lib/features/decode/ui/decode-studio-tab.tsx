@@ -1,64 +1,43 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
+import { useCallback, useState } from "react";
 import { SearchInput } from "@shinzo/ui/search-input";
-import { DECODE_LOG_LENS } from "@/entities/lens";
-import type { DeployStatus } from "@/entities/view";
+import { isAddress } from "viem";
+import { DECODE_LOG_LENS, type DecodeLogLensArgs } from "@/entities/lens";
+import { useDeployViewAction } from "@/features/deploy-view/model/use-deploy-view-action";
+import { DeployActionControls } from "@/features/deploy-view/ui/deploy-action-controls";
+import { DeployNetworkNotice } from "@/features/deploy-view/ui/deploy-network-notice";
+import { DeployStatusMessage } from "@/features/deploy-view/ui/deploy-status-message";
+import {
+  PresetBadgeList,
+  type PresetBadgeItem,
+} from "@/features/deploy-view/ui/preset-badge-list";
+import { ValidationIssues } from "@/features/deploy-view/ui/validation-issues";
 import { POPULAR_ETHEREUM_CONTRACT_PRESETS } from "@/shared/consts/view-config";
-import { Button } from "@/shared/ui/button";
-import { ConnectDialog } from "@/shared/ui/connect-dialog";
-import { DeployStatusMessage } from "@/pages/studio/ui/deploy-status-message";
-import { ValidationIssues } from "@/pages/studio/ui/validation-issues";
-import { useDecodeStudioState } from "../model/use-decode-studio-state";
+import { fetchDecodeLogLensArgs } from "../model/sourcify";
 
-const STATUS_LABELS: Record<DeployStatus, string> = {
-  idle: "",
-  checking: "Checking ShinzoHub for an existing registration...",
-  validating: "Validating view definition...",
-  deploying: "Sending deployment transaction...",
-  confirming: "Waiting for deployment confirmation...",
-  done: "",
-  error: "",
-};
-
-const ContractPresetBadges = ({
-  onSelect,
-}: {
-  onSelect: (address: string) => void;
-}) => (
-  <div className="flex flex-wrap gap-2">
-    {POPULAR_ETHEREUM_CONTRACT_PRESETS.map((contract) => (
-      <button
-        key={contract.address}
-        type="button"
-        onClick={() => onSelect(contract.address)}
-        title={`${contract.name} · ${contract.address}`}
-        className="inline-flex items-center rounded-full border border-szo-border px-3 py-1.5 text-xs font-medium text-szo-black transition-colors hover:border-szo-black"
-      >
-        {contract.label}
-      </button>
-    ))}
-  </div>
-);
+const contractPresetItems: readonly PresetBadgeItem[] =
+  POPULAR_ETHEREUM_CONTRACT_PRESETS.map((contract) => ({
+    key: contract.address,
+    value: contract.address,
+    label: contract.label,
+    title: `${contract.name} · ${contract.address}`,
+  }));
 
 export const DecodeStudioTab = () => {
-  const {
-    address,
-    setAddress,
-    isValidAddress,
-    isConnected,
-    isOnShinzoDevnet,
-    isFetchingAbi,
-    isInProgress,
-    status,
-    error,
-    switchChainError,
-    validationIssues,
-    submit,
-    switchToShinzo,
-  } = useDecodeStudioState();
-
-  const combinedError = error || switchChainError;
+  const [address, setAddress] = useState("");
+  const normalizedAddress = address.trim();
+  const isValidAddress =
+    normalizedAddress.length > 0 && isAddress(normalizedAddress);
+  const resolveArgs = useCallback(
+    (): Promise<DecodeLogLensArgs> => fetchDecodeLogLensArgs(normalizedAddress),
+    [normalizedAddress]
+  );
+  const deployAction = useDeployViewAction({
+    lens: DECODE_LOG_LENS,
+    canSubmit: isValidAddress,
+    resolveArgs,
+  });
 
   return (
     <div className="flex flex-col gap-8">
@@ -84,59 +63,36 @@ export const DecodeStudioTab = () => {
           onChange={(event) => setAddress(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
-              void submit();
+              void deployAction.submit();
             }
           }}
         />
 
-        <ContractPresetBadges onSelect={setAddress} />
+        <PresetBadgeList items={contractPresetItems} onSelect={setAddress} />
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        {!isConnected ? (
-          <ConnectDialog />
-        ) : (
-          <>
-            {!isOnShinzoDevnet && (
-              <Button
-                type="button"
-                onClick={() => void switchToShinzo()}
-                disabled={isInProgress}
-                variant="secondary"
-                className="disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Switch to Shinzo Devnet
-              </Button>
-            )}
+      <DeployActionControls
+        canSubmit={isValidAddress}
+        isConnected={deployAction.isConnected}
+        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+        isInProgress={deployAction.isInProgress}
+        status={deployAction.status}
+        pendingLabel={
+          deployAction.isPreparing
+            ? "Fetching verified ABI from Sourcify..."
+            : undefined
+        }
+        onSubmit={() => void deployAction.submit()}
+        onSwitchToShinzo={() => void deployAction.switchToShinzo()}
+      />
 
-            <Button
-              type="button"
-              onClick={() => void submit()}
-              disabled={!isValidAddress || isInProgress || !isOnShinzoDevnet}
-              className="gap-2 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isInProgress && <Loader2 className="size-4 animate-spin" />}
-              {isFetchingAbi
-                ? "Fetching verified ABI from Sourcify..."
-                : isInProgress
-                  ? STATUS_LABELS[status]
-                  : "Deploy"}
-            </Button>
-          </>
-        )}
-      </div>
+      <DeployNetworkNotice
+        isConnected={deployAction.isConnected}
+        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+      />
 
-      {isConnected && !isOnShinzoDevnet && (
-        <p className="text-sm text-amber-600">
-          Switch your wallet to Shinzo Devnet before deploying. Custom network
-          wallets like Rabby can be stricter about when they allow chain
-          add/switch requests.
-        </p>
-      )}
-
-      <DeployStatusMessage error={combinedError} />
-
-      <ValidationIssues issues={validationIssues} />
+      <DeployStatusMessage error={deployAction.error} />
+      <ValidationIssues issues={deployAction.validationIssues} />
     </div>
   );
 };

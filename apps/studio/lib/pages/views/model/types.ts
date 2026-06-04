@@ -1,3 +1,5 @@
+import type { ViewSummary } from "@/entities/view";
+
 export type ViewsVerificationFilter = "all" | "verified" | "not-verified";
 export type ViewsOwnerFilter = "all" | "mine";
 
@@ -7,57 +9,7 @@ export interface ViewsFilters {
   verification: ViewsVerificationFilter;
 }
 
-export interface ViewsAddressLink {
-  address: string;
-  shortAddress: string;
-  href: string;
-}
-
-export type ViewsMetadataState =
-  | {
-      status: "parsed";
-      rootType: string;
-      lensHashes: readonly string[];
-    }
-  | {
-      status: "parse-error";
-      rootType: string;
-      lensHashes: readonly string[];
-      parseError: string;
-    }
-  | {
-      status: "missing";
-    };
-
-export type ViewsLensStatus =
-  | {
-      status: "verified";
-      lensKey: string;
-      title: string;
-      description: string;
-      hash: string;
-    }
-  | {
-      status: "not-verified";
-      hashes: readonly string[];
-    }
-  | {
-      status: "unknown";
-      reason: "missing-metadata" | "parse-error" | "no-lens-hashes";
-    };
-
-export interface ViewsPageItem {
-  id: string;
-  href: string;
-  name: string;
-  creator: ViewsAddressLink;
-  contract: ViewsAddressLink;
-  height: string;
-  heightNumber: number;
-  metadata: ViewsMetadataState;
-  lens: ViewsLensStatus;
-  searchText: string;
-}
+export type ViewsPageItem = ViewSummary;
 
 export interface ViewsResult {
   items: readonly ViewsPageItem[];
