@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import { Plus } from "lucide-react";
-import { StoredViewsProvider } from "@/entities/view";
 import { Header } from "@/pages/studio/ui/header";
 import { Button } from "@/shared/ui/button";
 import { useViews } from "../model/use-views";
@@ -81,8 +80,4 @@ const ViewsPageContent = () => {
   );
 };
 
-export const ViewsPage = () => (
-  <StoredViewsProvider>
-    <ViewsPageContent />
-  </StoredViewsProvider>
-);
+export const ViewsPage = () => <ViewsPageContent />;

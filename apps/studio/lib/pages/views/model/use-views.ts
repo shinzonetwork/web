@@ -2,8 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { listViews, type ShinzoHubView } from "@shinzo/shinzohub";
+import {
+  hexToShinzoAddress,
+  listViews,
+  type ShinzoHubView,
+} from "@shinzo/shinzohub";
 import { createPublicClient, http } from "viem";
+import { useConnection } from "wagmi";
 import {
   SHINZOHUB_COSMOS_RPC_REQUEST_URL,
   SHINZOHUB_EVM_RPC_REQUEST_URL,
@@ -24,13 +29,14 @@ import {
   type ViewsFilters,
   type ViewsLensFilterOption,
   type ViewsMetadataState,
+  type ViewsOwnerFilter,
   type ViewsPageItem,
   type ViewsResult,
 } from "./types";
 
 const HUB_VIEWS_PAGE_LIMIT = 200;
 const VIEWS_STALE_TIME_MS = 60 * 1000;
-const VIEWS_QUERY_KEY = ["studio-views-page"] as const;
+const VIEWS_QUERY_KEY = "studio-views-page";
 
 interface ViewsPageResponse {
   readonly items: readonly ViewsPageItem[];
@@ -139,7 +145,8 @@ const toViewsPageItem = (view: ShinzoHubView): ViewsPageItem | null => {
 };
 
 const fetchViewsPage = async (
-  pageKey: string | null
+  pageKey: string | null,
+  creator: string | null
 ): Promise<ViewsPageResponse> => {
   const items: ViewsPageItem[] = [];
   const cosmosRestUrl = getHubCosmosRestUrl();
@@ -149,6 +156,7 @@ const fetchViewsPage = async (
     includeMetadata: true,
     limit: HUB_VIEWS_PAGE_LIMIT,
     pageKey: pageKey ?? undefined,
+    creator: creator ?? undefined,
   });
 
   for (const view of payload.views) {
@@ -208,12 +216,23 @@ const getLensOptions = (
 };
 
 export const useViews = (): UseViewsResult => {
+  const { address } = useConnection();
   const [filters, setFilters] = useState<ViewsFilters>(DEFAULT_VIEWS_FILTERS);
+  const ownerFilter: ViewsOwnerFilter =
+    filters.owner === "mine" && address ? filters.owner : "all";
+  const creatorFilter = useMemo(() => {
+    if (ownerFilter !== "mine" || !address) {
+      return null;
+    }
+
+    return hexToShinzoAddress(address);
+  }, [address, ownerFilter]);
+
   const query = useInfiniteQuery({
-    queryKey: VIEWS_QUERY_KEY,
+    queryKey: [VIEWS_QUERY_KEY, creatorFilter],
     staleTime: VIEWS_STALE_TIME_MS,
     initialPageParam: null as string | null,
-    queryFn: ({ pageParam }) => fetchViewsPage(pageParam),
+    queryFn: ({ pageParam }) => fetchViewsPage(pageParam, creatorFilter),
     getNextPageParam: (lastPage) => lastPage.nextPageKey ?? undefined,
   });
 
@@ -244,7 +263,10 @@ export const useViews = (): UseViewsResult => {
   }, [filters, loadedItems, query.dataUpdatedAt]);
 
   const sharedState = {
-    filters,
+    filters: {
+      ...filters,
+      owner: ownerFilter,
+    },
     setFilters,
     loadMore: () => {
       void query.fetchNextPage();
