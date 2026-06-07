@@ -13,20 +13,20 @@ import {
   TableLayout,
   TableNullableCell,
 } from '@shinzo/ui/table';
-import { useBlocks } from './use-blocks';
+import { useEthereumBlocks } from '../../hooks/ethereum/use-ethereum-blocks';
 import { CopyButton } from "@/shared/ui/button";
-import { useBlocksCount } from "./use-blocks-count";
+import { useEthereumBlocksCount } from "../../hooks/ethereum/use-ethereum-blocks-count";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 
-export interface BlocksPageClientProps {
+export interface EthereumBlocksPageClientProps {
   pageParams: PageParams;
 }
 
-export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
+export const EthereumBlocksPageClient = ({ pageParams }: EthereumBlocksPageClientProps) => {
   const { page, offset, limit } = pageParams;
-  const { data: blocks, isLoading } = useBlocks({ limit, offset });
-  const { data: blocksCount } = useBlocksCount();
+  const { data: blocks, isLoading } = useEthereumBlocks({ limit, offset });
+  const { data: blocksCount } = useEthereumBlocksCount();
   const chain = useChainPathSegment();
 
   return (
@@ -61,7 +61,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
           <>
             <TableNullableCell value={block?.number}>
               {(value) => (
-                <Link href={`${getPageLink('block', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
+                <Link prefetch={false} href={`${getPageLink('block', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
                   <i className='flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm'>
                     <ShinzoFilledIcon className='size-4' />
                   </i>
@@ -91,7 +91,7 @@ export const BlocksPageClient = ({ pageParams }: BlocksPageClientProps) => {
 
             <TableNullableCell value={block?.miner} nowrap>
               {(value) => (
-                <Link href={`${getPageLink('address', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
+                <Link prefetch={false} href={`${getPageLink('address', { param: value.toString(), chain})}`} className='flex items-center gap-4'>
                   <Typography color='accent' className='underline'>
                     {formatHash(value ?? '', 8, 6)}
                   </Typography>

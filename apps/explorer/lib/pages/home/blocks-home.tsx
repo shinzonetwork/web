@@ -65,6 +65,7 @@ export const BlocksHome = () => {
               <TableNullableCell value={block?.number} className={highlightClass}>
                 {(value) => (
                   <Link
+                    prefetch={false}
                     href={`${getPageLink('block', { param: value.toString(), chain})}`}
                     className="flex items-center gap-4"
                   >
@@ -120,6 +121,7 @@ export const BlocksHome = () => {
         <div className='flex grow shrink' />
         <div className={cn('relative flex justify-center border-r border-b border-l border-border bg-background py-4', HALF_CONTAINER_CLASS, GAP_BG, 'after:left-[calc(100%+1px)] after:border-b')}>
           <Link
+            prefetch={false}
             href={`${getPageLink('blocks', { chain})}`}
             className="flex items-center gap-7 text-sm text-secondary hover:underline"
           >

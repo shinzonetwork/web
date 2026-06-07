@@ -105,6 +105,7 @@ export const TransactionsHome = () => {
       <div className='flex'>
         <div className={cn('relative flex justify-center border-r border-b border-l border-border bg-background py-4', HALF_CONTAINER_CLASS)}>
           <Link
+            prefetch={false}
             href={`${getPageLink('txs', { chain })}`}
             className="flex items-center gap-7 text-sm text-secondary hover:underline"
           >
