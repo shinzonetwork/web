@@ -1,17 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { METRICS_API_URL } from '@/shared/utils/consts';
-import { MetricsResponse } from '../home/use-blocks-and-transactions-count';
+import { MetricsResponse } from '../../../home/use-blocks-and-transactions-count';
 
 interface BlocksCountResponse {
   totalBlocks: number;
 }
 
-const BLOCKS_COUNT_QUERY_NAME = 'blocks-count';
-
-export const useBlocksCount = () => {
+export const useEthereumBlocksCount = () => {
 
   return useQuery({
-    queryKey: [BLOCKS_COUNT_QUERY_NAME],
+    queryKey: ['ethereum', 'blocks-count'],
     queryFn: async (): Promise<BlocksCountResponse> => {
       const response = await fetch(METRICS_API_URL ?? '');
       if (!response.ok) {

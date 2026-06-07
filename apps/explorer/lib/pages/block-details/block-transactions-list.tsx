@@ -37,7 +37,7 @@ export const BlockTransactionsList = ({ transactions, timestamp, isLoading }: { 
           <>
             <TableNullableCell value={tx?.hash}>
               {(value) => (
-                <Link href={getPageLink('tx', { param: value, chain})}>
+                <Link prefetch={false} href={getPageLink('tx', { param: value, chain})}>
                   <Typography color='accent' className='underline'>
                     {formatHash(value, 12, 8)}
                   </Typography>
