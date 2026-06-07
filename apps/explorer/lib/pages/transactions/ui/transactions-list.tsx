@@ -37,7 +37,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
           <>
             <TableNullableCell value={tx?.hash}>
               {(value) => (
-                <Link href={`${getPageLink('tx', { param: value, chain})}`}>
+                <Link prefetch={false} href={`${getPageLink('tx', { param: value, chain})}`}>
                   <Typography color='accent' className='underline'>
                     {formatHash(value, 12, 8)}
                   </Typography>
@@ -47,7 +47,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
 
             <TableNullableCell value={tx?.blockNumber}>
               {(value) => (
-                <Link href={`${getPageLink('block', { param: value.toString(), chain})}`}>
+                <Link prefetch={false} href={`${getPageLink('block', { param: value.toString(), chain})}`}>
                   <Typography color='accent' className='underline'>
                     {value}
                   </Typography>
@@ -63,7 +63,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
 
             <TableNullableCell value={tx?.from}>
               {(value) => (
-                <Link href={`${getPageLink('address', { param: value, chain})}`}>
+                <Link prefetch={false} href={`${getPageLink('address', { param: value, chain})}`}>
                   <div className="flex items-center gap-1 text-sm text-foreground">
                     <Typography color='accent' className='underline'>
                       {formatHash(value ?? '', 8, 6)}
@@ -76,7 +76,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
 
             <TableNullableCell value={tx?.to}>
               {(value) => (
-                <Link href={`${getPageLink('address', { param: value, chain})}`}>
+                <Link prefetch={false} href={`${getPageLink('address', { param: value, chain})}`}>
                   <div className="flex items-center gap-1 text-sm text-foreground">
                     <Typography color='accent' className='underline'>
                       {formatHash(value ?? '', 8, 6)}

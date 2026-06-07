@@ -55,7 +55,7 @@ export const TransactionsHome = () => {
             <>
               <TableNullableCell value={tx?.hash} className={highlightClass}>
                 {(value) => (
-                  <Link href={`${getPageLink('tx', { param: value, chain })}`} className="flex items-center gap-4">
+                  <Link prefetch={false} href={`${getPageLink('tx', { param: value, chain })}`} className="flex items-center gap-4">
                     <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
                       <ShinzoTxnIcon className="size-4" />
                     </i>
