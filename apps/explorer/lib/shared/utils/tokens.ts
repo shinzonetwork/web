@@ -8,3 +8,11 @@ export const ETH_TOKEN = {
     symbol: 'ETH',
     decimals: 18,
 };
+const tokenMap = {
+  'shinzohub': SHINZO_TOKEN,
+  'ethereum': ETH_TOKEN,
+};
+
+export const getToken = (name: string) => {
+  return tokenMap[name as keyof typeof tokenMap];
+};

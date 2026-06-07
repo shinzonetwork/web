@@ -16,7 +16,7 @@ import type { ShinzohubTransaction } from '@/shared/shinzohub/transactions/types
 import { EthereumTransaction } from '../hooks/ethereum/use-ethereum-transactions';
 import { formatTokenValue } from '@/shared/utils/format-token';
 import { formatGasPrice } from '@/shared/utils/format-gasprice';
-import { ETH_TOKEN } from '@/shared/utils/tokens';
+import { getToken } from '@/shared/utils/tokens';
 
 export type TransactionsListProps = {
   transactions: (EthereumTransaction | ShinzohubTransaction)[] | undefined;
@@ -88,7 +88,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
             </TableNullableCell>
 
             <TableNullableCell value={tx?.value}>
-              {(value) => `${formatTokenValue(value, ETH_TOKEN.decimals)} ${ETH_TOKEN.symbol}`}
+              {(value) => `${formatTokenValue(value, getToken(chain)?.decimals)} ${getToken(chain)?.symbol}`}
             </TableNullableCell>
 
             <TableNullableCell value={tx?.gasPrice}>

@@ -133,7 +133,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={tx?.value}
         loading={isLoading}
       >
-        {tx?.value != null && tx.value > BigInt(0) && `${formatTokenValue(tx.value.toString(), SHINZO_TOKEN.decimals)} ${SHINZO_TOKEN.symbol}`}
+        {tx?.value != null ? `${formatTokenValue(tx.value.toString(), SHINZO_TOKEN.decimals)} ${SHINZO_TOKEN.symbol}` : `0 ${SHINZO_TOKEN.symbol}`}
       </DataItem>
 
       <DataItem
@@ -141,7 +141,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={transactionFee}
         loading={isLoading}
       >
-        {transactionFee != null && `${transactionFee.toFixed(8)} ${SHINZO_TOKEN.symbol}`}
+        {transactionFee ? `${transactionFee.toFixed(8)} ${SHINZO_TOKEN.symbol}` : `0 ${SHINZO_TOKEN.symbol}`}
       </DataItem>
 
       <DataItem
