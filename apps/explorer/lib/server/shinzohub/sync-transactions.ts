@@ -1,5 +1,5 @@
 import { getPublicClient } from '@/shared/viem/client';
-import type { ShinzohubSyncResult, ShinzohubTransaction } from '@/shared/shinzohub/transactions/types';
+import type { ShinzohubTransactionSummary } from '@/shared/types/types';
 import {
   getLastScannedBlock,
   insertShinzohubTransactions,
@@ -14,6 +14,11 @@ function blockHasTransactions(
 ): entry is Transaction {
   return typeof entry === 'object' && entry !== null && 'hash' in entry;
 }
+
+export type ShinzohubSyncResult = {
+  lastScannedBlock: string;
+  insertedCount: number;
+};
 
 export async function syncShinzohubTransactionsToDb(
   db: CloudflareEnv['shinzohub_explorer'],
@@ -56,7 +61,7 @@ export async function syncShinzohubTransactionsToDb(
       ),
     );
 
-    const batchTransactions: ShinzohubTransaction[] = [];
+    const batchTransactions: ShinzohubTransactionSummary[] = [];
     const seenHashes = new Set<string>();
 
     blocks.forEach((block) => {

@@ -2,13 +2,17 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { DEFAULT_LIMIT, type PageParams } from '@shinzo/ui/pagination';
-import {
-  type ShinzohubTransactionsResponse,
-} from '@/shared/shinzohub/transactions/types';
+import { ShinzohubTransactionSummary } from '@/shared/types/types';
 
 type UseShinzohubTransactionsOptions = {
   pageParams: PageParams;
   refetchIntervalMs?: number;
+};
+
+export type ShinzohubTransactionsResponse = {
+  lastScannedBlock: string;
+  transactions: ShinzohubTransactionSummary[];
+  total: number;
 };
 
 export function shinzohubTransactionsQueryKey(params: { offset: number; limit: number }) {

@@ -1,4 +1,4 @@
-import type { ShinzohubTransaction } from '@/shared/shinzohub/transactions/types';
+import { ShinzohubTransactionSummary } from '@/shared/types/types';
 
 type ExplorerDb = CloudflareEnv['shinzohub_explorer'];
 
@@ -12,7 +12,7 @@ export type ShinzohubTransactionRow = {
   timestamp: string;
 };
 
-export function rowToShinzohubTransaction(row: ShinzohubTransactionRow): ShinzohubTransaction {
+export function rowToShinzohubTransaction(row: ShinzohubTransactionRow): ShinzohubTransactionSummary {
   return {
     hash: row.hash as `0x${string}`,
     from: row.from_address as `0x${string}`,
@@ -45,7 +45,7 @@ export async function updateLastScannedBlock(db: ExplorerDb, lastScannedBlock: s
 
 export async function insertShinzohubTransactions(
   db: ExplorerDb,
-  transactions: ShinzohubTransaction[],
+  transactions: ShinzohubTransactionSummary[],
 ): Promise<number> {
   if (!transactions.length) {
     return 0;
@@ -80,7 +80,7 @@ export async function insertShinzohubTransactions(
 export async function getShinzohubTransactionsPage(
   db: ExplorerDb,
   { offset, limit }: { offset: number; limit: number },
-): Promise<{ transactions: ShinzohubTransaction[]; total: number }> {
+): Promise<{ transactions: ShinzohubTransactionSummary[]; total: number }> {
   const countRow = await db
     .prepare('SELECT COUNT(*) AS n FROM shinzohub_transactions')
     .first<{ n: number }>();
