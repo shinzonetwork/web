@@ -1,5 +1,6 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Hex } from 'viem';
 
 const EthereumBlockQuery = graphql(`
   query Block($number: Int!) {
@@ -55,7 +56,7 @@ const EthereumBlockByHashQuery = graphql(`
 
 export type UseEthereumBlockOptions =
   | { number: number; hash?: never }
-  | { hash: string; number?: never };
+  | { hash: Hex; number?: never };
 
 export const useEthereumBlock = (options: UseEthereumBlockOptions) => {
   const number = 'number' in options ? options.number : undefined;

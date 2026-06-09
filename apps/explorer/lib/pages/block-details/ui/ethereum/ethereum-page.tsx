@@ -1,6 +1,7 @@
 import { PageLayout } from '@/widgets/layout';
 import { EthereumBlockTabs } from './ethereum-block-tabs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { Hex } from 'viem';
 
 export type EthereumBlockDetailClientPageProps =
   | {
@@ -9,7 +10,7 @@ export type EthereumBlockDetailClientPageProps =
     }
   | {
       pageParams: PageParams;
-      blockHash: string;
+      blockHash: Hex;
     };
 
 export const EthereumBlockDetailClientPage = async (props: EthereumBlockDetailClientPageProps) => {

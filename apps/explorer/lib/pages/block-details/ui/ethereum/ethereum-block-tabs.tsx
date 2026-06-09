@@ -5,10 +5,11 @@ import { Container } from '@/widgets/layout';
 import { EthereumBlockCard } from './ethereum-block-card';
 import { EthereumBlockTransactions } from './ethereum-block-txs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { Hex } from 'viem';
 
 export type EthereumBlockTabsProps =
   | { pageParams: PageParams; blockNumber: number }
-  | { pageParams: PageParams; blockHash: string };
+  | { pageParams: PageParams; blockHash: Hex };
 
 export const EthereumBlockTabs = (props: EthereumBlockTabsProps) => {
   const { pageParams } = props;

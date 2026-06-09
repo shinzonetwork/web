@@ -1,6 +1,7 @@
 import { PageLayout } from '@/widgets/layout';
 import { ShinzohubBlockTabs } from './shinzohub-block-tabs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { Hex } from 'viem';
 
 export type ShinzohubBlockDetailsClientPageProps =
   | {
@@ -9,7 +10,7 @@ export type ShinzohubBlockDetailsClientPageProps =
     }
   | {
       pageParams: PageParams;
-      blockHash: string;
+      blockHash: Hex;
     };
 
 export const ShinzohubBlockDetailClientPage = async (props: ShinzohubBlockDetailsClientPageProps) => {
