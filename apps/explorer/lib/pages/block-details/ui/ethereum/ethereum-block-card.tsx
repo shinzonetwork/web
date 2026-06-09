@@ -4,16 +4,17 @@ import { useState } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { useBlock, type UseBlockOptions } from "./use-block";
+import { useEthereumBlock, type UseEthereumBlockOptions } from "../../hook/ethereum/use-ethereum-block";
 import { formatTimestamp } from "@/shared/utils/format-timestamp";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { getPageLink } from "@/shared/utils/links";
+import { formatGwei } from "viem";
 
-export type BlockCardProps = UseBlockOptions;
+export type EthereumBlockCardProps = UseEthereumBlockOptions;
 
-export const BlockCard = (options: BlockCardProps) => {
+export const EthereumBlockCard = (options: EthereumBlockCardProps) => {
   const [showMore, setShowMore] = useState(false);
-  const { data: block, isLoading } = useBlock(options);
+  const { data: block, isLoading } = useEthereumBlock(options);
   const chain = useChainPathSegment();
 
   if (!block || !block.number) {
@@ -66,17 +67,15 @@ export const BlockCard = (options: BlockCardProps) => {
           )}
         </DataItem>
 
-        <DataItem title="Gas Limit" value={block.gasLimit} loading={isLoading}>
-          {block.gasLimit && `${(Number(block.gasLimit) / 1e6).toFixed(2)}M`}
-        </DataItem>
+        <DataItem title="Gas Limit" value={block.gasLimit} loading={isLoading} />
 
         <DataItem
           title="Base Fee Per Gas"
           value={block.baseFeePerGas}
           loading={isLoading}
         >
-          {block.baseFeePerGas &&
-            `${(Number(block.baseFeePerGas) / 1e9)} Gwei`}
+          {block.baseFeePerGas ?
+            `${formatGwei(BigInt(block.baseFeePerGas))} Gwei` : '0 Gwei'}
         </DataItem>
 
         <DataItem title="Nonce" value={block.nonce} loading={isLoading} />

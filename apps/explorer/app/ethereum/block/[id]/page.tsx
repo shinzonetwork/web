@@ -1,1 +1,1 @@
-export { BlockDetails as default } from '@/pages/block-details';
+export { EthereumBlockDetails as default } from '@/pages/block-details';

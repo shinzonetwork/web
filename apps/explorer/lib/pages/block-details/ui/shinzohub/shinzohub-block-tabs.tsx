@@ -1,16 +1,16 @@
 'use client';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container } from '@/widgets/layout';
-import { BlockCard } from './block-card';
-import { BlockTransactions } from './block-txs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { ShinzohubBlockCard } from './shinzohub-block-card';
+import { ShinzohubBlockTransactions } from './shinzohub-block-txs';
 
-export type BlockTabsProps =
+export type ShinzohubBlockTabsProps =
   | { pageParams: PageParams; blockNumber: number }
   | { pageParams: PageParams; blockHash: string };
 
-export const BlockTabs = (props: BlockTabsProps) => {
+export const ShinzohubBlockTabs = (props: ShinzohubBlockTabsProps) => {
   const { pageParams } = props;
   return (
     <Tabs defaultValue='overview'>
@@ -31,20 +31,20 @@ export const BlockTabs = (props: BlockTabsProps) => {
       <div className='mt-2 border-t border-ui-border'>
         <TabsContent value='overview'>
           {'blockNumber' in props ? (
-            <BlockCard number={props.blockNumber} />
+            <ShinzohubBlockCard number={props.blockNumber} />
           ) : (
-            <BlockCard hash={props.blockHash} />
+            <ShinzohubBlockCard hash={props.blockHash} />
           )}
         </TabsContent>
 
         <TabsContent asChild value='transactions'>
           {'blockNumber' in props ? (
-            <BlockTransactions
+            <ShinzohubBlockTransactions
               blockNumber={props.blockNumber}
               pageParams={pageParams}
             />
           ) : (
-            <BlockTransactions
+            <ShinzohubBlockTransactions
               blockHash={props.blockHash}
               pageParams={pageParams}
             />

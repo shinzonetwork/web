@@ -1,7 +1,7 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
 
-const BlockTransactionsCountQuery = graphql(`
+const EthereumBlockTransactionsCountQuery = graphql(`
   query BlockTransactionsCount($blockNumber: Int) {
     BlockTransactionsCount: Ethereum__Mainnet__Block(
       filter: { number: { _eq: $blockNumber } }
@@ -14,7 +14,7 @@ const BlockTransactionsCountQuery = graphql(`
   }
 `)
 
-const BlockTransactionsCountByHashQuery = graphql(`
+const EthereumBlockTransactionsCountByHashQuery = graphql(`
   query BlockTransactionsCountByHash($blockHash: String!) {
     BlockTransactionsCount: Ethereum__Mainnet__Block(
       filter: { hash: { _eq: $blockHash } }
@@ -27,30 +27,30 @@ const BlockTransactionsCountByHashQuery = graphql(`
   }
 `)
 
-export type UseBlockTransactionsCountOptions = 
+export type UseEthereumBlockTransactionsCountOptions = 
   | { blockNumber: number; blockHash?: never }
   | { blockHash: string; blockNumber?: never };
 
 
-export const useBlockTransactionsCount = (options: UseBlockTransactionsCountOptions) => {
+export const useEthereumBlockTransactionsCount = (options: UseEthereumBlockTransactionsCountOptions) => {
   const blockNumber = 'blockNumber' in options ? options.blockNumber : undefined;
   const blockHash = 'blockHash' in options ? options.blockHash : undefined;
 
   return useQuery({
-    queryKey: ['block-transactions-count', blockNumber ?? blockHash, blockNumber !== undefined ? 'blockNumber' : 'blockHash'],
+    queryKey: ['ethereum', 'block-transactions-count', blockNumber ?? blockHash, blockNumber !== undefined ? 'blockNumber' : 'blockHash'],
     enabled: blockNumber !== undefined || !!blockHash,
     staleTime: 1000 * 60,
     queryFn: async () => {
       let res;
       if (blockNumber !== undefined) {
-        res = await execute(BlockTransactionsCountQuery, { blockNumber });
+        res = await execute(EthereumBlockTransactionsCountQuery, { blockNumber });
       } else {
         if (blockHash === undefined) {
           throw new Error(
-            'useBlockTransactionsCount: blockHash is required when blockNumber is omitted',
+            'useEthereumBlockTransactionsCount: blockHash is required when blockNumber is omitted',
           );
         }
-        res = await execute(BlockTransactionsCountByHashQuery, { blockHash });
+        res = await execute(EthereumBlockTransactionsCountByHashQuery, { blockHash });
       }
       const blocks = res.BlockTransactionsCount ?? [];
       const firstBlock = blocks[0];

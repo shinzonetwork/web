@@ -10,7 +10,7 @@ const fetchShinzohubBlockByBlockNumber = async (blockNumber: bigint): Promise<Bl
 export const useShinzohubBlockByBlocknumber = (blockNumber: bigint | undefined) => {
   return useQuery<Block>({
     queryKey: ['shinzohub', 'block-by-blocknumber', blockNumber?.toString()],
-    queryFn: () => fetchShinzohubBlockByBlockNumber(blockNumber!),
+    queryFn: () => fetchShinzohubBlockByBlockNumber(blockNumber ?? BigInt(0)),
     enabled: blockNumber != null,
   });
 };
