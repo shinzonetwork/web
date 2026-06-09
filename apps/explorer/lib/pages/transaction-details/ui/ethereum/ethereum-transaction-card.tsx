@@ -9,7 +9,10 @@ import { DataItem, DataList } from '@/widgets/data-list';
 import { AttestationsTooltip } from '@/pages/transaction-details/ui/ethereum/attestations-tooltip';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
-import { Hex } from 'viem';
+import { formatGwei, Hex } from 'viem';
+import { formatTokenValue } from '@/shared/utils/format-token';
+import { getToken } from '@/shared/utils/tokens';
+import { formatGasUsed } from '@/shared/utils/format-gas';
 
 export type EthereumTransactionCardProps = {
   txHash: Hex;
@@ -49,16 +52,6 @@ export const EthereumTransactionCard = ({ txHash }: EthereumTransactionCardProps
     return (
       <p className="text-center text-muted-foreground">Transaction not found.</p>
     );
-  }
-
-  const formatValue = (value: string) => {
-    const eth = Number(value) / 1e18
-    return eth.toFixed(6)
-  }
-
-  const formatGasPrice = (gasPrice: string) => {
-    const gwei = Number(gasPrice) / 1e9
-    return gwei.toFixed(2)
   }
 
   const transactionFee = (Number(tx.gasUsed) * Number(tx.gasPrice)) / 1e18;
@@ -132,7 +125,7 @@ export const EthereumTransactionCard = ({ txHash }: EthereumTransactionCardProps
         value={tx.value}
         loading={isLoading}
       >
-        {tx.value && `${formatValue(tx.value)} ETH`}
+        {tx.value && `${formatTokenValue(tx.value, getToken('eth').decimals)} ${getToken('eth').symbol}`}
       </DataItem>
 
       <DataItem
@@ -148,7 +141,7 @@ export const EthereumTransactionCard = ({ txHash }: EthereumTransactionCardProps
         value={tx.gasPrice}
         loading={isLoading}
       >
-        {tx.gasPrice && `${formatGasPrice(tx.gasPrice)} Gwei`}
+        {tx.gasPrice && `${formatGwei(BigInt(tx.gasPrice))} Gwei`}
       </DataItem>
 
       <DataItem
@@ -162,11 +155,7 @@ export const EthereumTransactionCard = ({ txHash }: EthereumTransactionCardProps
         value={tx.gasUsed}
         loading={isLoading}
       >
-        {tx.gasUsed && tx.gas && (
-          <>
-            {tx.gasUsed} ({((Number(tx.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)
-          </>
-        )}
+        {(tx.gasUsed && tx.gas) ? formatGasUsed(tx.gasUsed.toString(), tx.gas.toString()) : `0.00M (0.00%)`}
       </DataItem>
 
       <DataItem

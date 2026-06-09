@@ -15,8 +15,8 @@ import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import type { ShinzohubTransaction } from '@/shared/shinzohub/transactions/types';
 import { EthereumTransaction } from '../hooks/ethereum/use-ethereum-transactions';
 import { formatTokenValue } from '@/shared/utils/format-token';
-import { formatGasPrice } from '@/shared/utils/format-gasprice';
 import { getToken } from '@/shared/utils/tokens';
+import { formatGwei } from 'viem';
 
 export type TransactionsListProps = {
   transactions: (EthereumTransaction | ShinzohubTransaction)[] | undefined;
@@ -92,7 +92,7 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
             </TableNullableCell>
 
             <TableNullableCell value={tx?.gasPrice}>
-              {(value) => `${formatGasPrice(value ?? '')} Gwei`}
+              {(value) => `${formatGwei(BigInt(value ?? '0'))} Gwei`}
             </TableNullableCell>
           </>
         )}

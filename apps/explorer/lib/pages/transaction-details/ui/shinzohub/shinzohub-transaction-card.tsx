@@ -6,13 +6,13 @@ import { Badge } from '@/shared/ui/badge';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
-import { Hex } from 'viem';
+import { formatGwei, Hex } from 'viem';
 import { formatTokenValue } from '@/shared/utils/format-token';
 import { useShinzohubTransactionDetails } from '../../hook/shinzohub/use-shinzohub-transaction-details';
 import { useShinzohubTransactionReceipt } from '../../hook/shinzohub/use-shinzohub-transaction-receipt';
 import { useShinzohubBlockByBlocknumber } from '../../hook/shinzohub/use-shinzohub-block-by-blocknumber';
-import { formatGasPrice } from '@/shared/utils/format-gasprice';
 import { SHINZO_TOKEN } from '@/shared/utils/tokens';
+import { formatGasUsed } from '@/shared/utils/format-gas';
 
 export type ShinzohubTransactionCardProps = {
   txHash: Hex;
@@ -149,7 +149,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
         value={gasPriceWei}
         loading={isLoading}
       >
-        {gasPriceWei != null && `${formatGasPrice(gasPriceWei.toString())} Gwei`}
+        {gasPriceWei != null && `${formatGwei(BigInt(gasPriceWei.toString()))} Gwei`}
       </DataItem>
 
       <DataItem
@@ -165,7 +165,7 @@ export const ShinzohubTransactionCard = ({ txHash }: ShinzohubTransactionCardPro
       >
         {receipt?.gasUsed && tx?.gas && (
           <>
-            {receipt.gasUsed} ({((Number(receipt.gasUsed) / Number(tx.gas)) * 100).toFixed(2)}%)
+            {formatGasUsed(receipt.gasUsed.toString(), tx.gas.toString())}
           </>
         )}
       </DataItem>
