@@ -12,14 +12,13 @@ import {
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
-import type { ShinzohubTransaction } from '@/shared/shinzohub/transactions/types';
 import { EthereumTransaction } from '../hooks/ethereum/use-ethereum-transactions';
 import { formatTokenValue } from '@/shared/utils/format-token';
 import { getToken } from '@/shared/utils/tokens';
 import { formatGwei } from 'viem';
 
 export type TransactionsListProps = {
-  transactions: (EthereumTransaction | ShinzohubTransaction)[] | undefined;
+  transactions: EthereumTransaction[] | undefined;
   isLoading: boolean;
 }
 export const TransactionsList = ({ transactions, isLoading }: TransactionsListProps) => {

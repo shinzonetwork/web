@@ -1,16 +1,16 @@
-import { getPublicClient } from "@/shared/viem/client";
 import { useQuery } from "@tanstack/react-query";
-import type { Hex, Transaction } from "viem";
+import type { ShinzohubTransaction } from '@/shared/shinzohub/types';
 
-const fetchShinzohubTransactionDetails = async (hash: Hex): Promise<Transaction> => {
-  const publicClient = getPublicClient('shinzohub');
-  const transaction = await publicClient.getTransaction({ hash });
-
-  return transaction;
+const fetchShinzohubTransactionDetails = async (hash: string): Promise<ShinzohubTransaction> => {
+  const response = await fetch(`/api/shinzohub/transactions/${encodeURIComponent(hash)}`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch ShinzoHub transaction');
+  }
+  return response.json() as Promise<ShinzohubTransaction>;
 };
 
-export const useShinzohubTransactionDetails = (hash: Hex) => {
-  return useQuery<Transaction>({
+export const useShinzohubTransactionDetails = (hash: string) => {
+  return useQuery<ShinzohubTransaction>({
     queryKey: ['shinzohub', 'transaction-details', hash],
     queryFn: () => fetchShinzohubTransactionDetails(hash),
     enabled: !!hash,

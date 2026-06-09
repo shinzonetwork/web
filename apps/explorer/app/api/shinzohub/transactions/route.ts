@@ -1,41 +1,42 @@
 import { NextRequest } from 'next/server';
-import { getDb } from '@/shared/database/db';
-import {
-  getLastScannedBlock,
-  getShinzohubTransactionsPage,
-} from '@/server/shinzohub/transactions-repository';
+import { listTransactions } from '@shinzo/shinzohub';
+import { getShinzohubQueryContext } from '@/server/shinzohub/query-client';
+import { serializeTransactionSummary } from '@/server/shinzohub/serialize';
+import type { ShinzohubTransactionFilter } from '@/shared/shinzohub/types';
 
-function parseOffset(rawOffset: string | null): number {
-  const n = rawOffset ? Number(rawOffset) : 0;
-  return Number.isFinite(n) && n >= 0 ? Math.floor(n) : 0;
+function parsePositiveInteger(rawValue: string | null, fallback: number): number {
+  const value = rawValue ? Number(rawValue) : fallback;
+  return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
-function parseLimit(rawLimit: string | null): number {
-  const n = rawLimit ? Number(rawLimit) : 10;
-  const safe = Number.isFinite(n) && n > 0 ? Math.floor(n) : 10;
-  return Math.min(100, Math.max(1, safe));
+function parseKind(rawKind: string | null): ShinzohubTransactionFilter {
+  return rawKind === 'evm' ? 'evm' : 'all';
 }
 
 export async function GET(req: NextRequest) {
   try {
-    const offset = parseOffset(req.nextUrl.searchParams.get('offset'));
-    const limit = parseLimit(req.nextUrl.searchParams.get('limit'));
-    const db = getDb();
-
-    const [{ transactions, total }, lastScannedBlock] = await Promise.all([
-      getShinzohubTransactionsPage(db, { offset, limit }),
-      getLastScannedBlock(db),
-    ]);
+    const page = parsePositiveInteger(req.nextUrl.searchParams.get('page'), 1);
+    const limit = Math.min(
+      100,
+      parsePositiveInteger(req.nextUrl.searchParams.get('limit'), 10),
+    );
+    const kind = parseKind(req.nextUrl.searchParams.get('kind'));
+    const block = req.nextUrl.searchParams.get('block');
+    const { client, cometRpcUrl } = getShinzohubQueryContext();
+    const result = await listTransactions(client, {
+      page,
+      limit,
+      kind,
+      blockHeight: block || undefined,
+      cometRpcUrl,
+    });
 
     return Response.json({
-      lastScannedBlock,
-      transactions,
-      total,
+      transactions: result.transactions.map(serializeTransactionSummary),
+      total: Number(result.total),
     });
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Failed to load Shinzohub transactions:', err);
-    }
+    console.error('Failed to load ShinzoHub transactions:', err);
     return Response.json({ error: 'Failed to load transactions' }, { status: 500 });
   }
 }

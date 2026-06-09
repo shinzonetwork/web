@@ -6,13 +6,6 @@ import {
   shinzohubTransactionsQueryKey,
 } from '@/pages/transactions/hooks/shinzohub/use-shinzohub-transactions';
 
-export type TransactionSummary = {
-  hash: `0x${string}`;
-  from: `0x${string}`;
-  to: `0x${string}` | null | undefined;
-  value: string;
-};
-
 type UseHomeTransactionsOptions = {
   count?: number;
   refetchIntervalMs?: number;
@@ -24,17 +17,21 @@ export function useHomeTransactions(
   const limit = Math.max(1, count);
 
   return useQuery({
-    queryKey: shinzohubTransactionsQueryKey({ offset: 0, limit }),
-    queryFn: () => fetchShinzohubTransactions({ offset: 0, limit }),
+    queryKey: shinzohubTransactionsQueryKey({ page: 1, limit, kind: 'all' }),
+    queryFn: () => fetchShinzohubTransactions({ page: 1, limit, kind: 'all' }),
     staleTime: refetchIntervalMs,
     refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
-    select: (data) =>
-      data.transactions.map((tx) => ({
-        hash: tx.hash,
-        from: tx.from,
-        to: tx.to ?? null,
-        value: tx.value,
+    select: (data) => ({
+      total: data.total,
+      transactions: data.transactions.map((transaction) => ({
+        hash: transaction.cosmosHash,
+        kind: transaction.kind,
+        action: transaction.actions[0] ?? transaction.kind,
+        from: transaction.senders[0] ?? null,
+        to: transaction.recipients[0] ?? null,
+        value: transaction.transfers[0]?.amount ?? null,
       })),
+    }),
   });
 }

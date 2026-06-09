@@ -3,9 +3,8 @@ import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
 import { CopyButton } from '@/shared/ui/button';
 import { ShinzohubTxTabs } from './shinzohub-transaction-tabs';
-import { Hex } from 'viem';
 
-export const ShinzohubTransactionDetailPage = async ({ params }: { params: Promise<{ hash: Hex }> }) => {
+export const ShinzohubTransactionDetailPage = async ({ params }: { params: Promise<{ hash: string }> }) => {
   const { hash } = await params;
 
   return (

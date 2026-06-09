@@ -1,11 +1,8 @@
 'use client';
 
 import type {
-  ShinzohubTransaction,
+  ShinzohubTransactionSummary,
   ShinzohubTransactionsResponse,
-} from '@/shared/shinzohub/transactions/types';
+} from '@/shared/shinzohub/types';
 
-export type { ShinzohubTransaction, ShinzohubTransactionsResponse };
-
-
-
+export type { ShinzohubTransactionSummary, ShinzohubTransactionsResponse };

@@ -9,10 +9,15 @@ const fetchShinzohubTransactionReceipt = async (hash: Hex): Promise<TransactionR
   return receipt;
 };
 
-export const useShinzohubTransactionReceipt = (hash: Hex) => {
+export const useShinzohubTransactionReceipt = (hash?: Hex | null) => {
   return useQuery<TransactionReceipt>({
     queryKey: ['shinzohub', 'transaction-receipt', hash],
-    queryFn: () => fetchShinzohubTransactionReceipt(hash),
+    queryFn: () => {
+      if (!hash) {
+        throw new Error('EVM transaction hash is required');
+      }
+      return fetchShinzohubTransactionReceipt(hash);
+    },
     enabled: !!hash,
   });
 };

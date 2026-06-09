@@ -13,11 +13,10 @@ import { useHighlight } from '@/pages/home/use-highlight';
 import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
-import { formatTokenValue } from '@/shared/utils/format-token';
-import { SHINZO_TOKEN } from '@/shared/utils/tokens';
 
 export const TransactionsHome = () => {
-  const { data: transactions, isLoading } = useHomeTransactions({ count: 5 });
+  const { data, isLoading } = useHomeTransactions({ count: 5 });
+  const transactions = data?.transactions;
   const chain = useChainPathSegment();
 
   const dataIds = useMemo(
@@ -93,7 +92,7 @@ export const TransactionsHome = () => {
               <TableNullableCell value={tx?.value} align="center" className={highlightClass}>
                 {(value) => (
                   <div className="flex items-center gap-1 text-sm">
-                    {formatTokenValue(value, SHINZO_TOKEN.decimals)} {SHINZO_TOKEN.symbol}
+                    {value}
                   </div>
                 )}
               </TableNullableCell>

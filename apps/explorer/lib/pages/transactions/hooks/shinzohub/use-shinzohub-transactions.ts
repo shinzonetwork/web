@@ -4,25 +4,40 @@ import { useQuery } from '@tanstack/react-query';
 import { DEFAULT_LIMIT, type PageParams } from '@shinzo/ui/pagination';
 import {
   type ShinzohubTransactionsResponse,
-} from '@/shared/shinzohub/transactions/types';
+  type ShinzohubTransactionFilter,
+} from '@/shared/shinzohub/types';
 
 type UseShinzohubTransactionsOptions = {
   pageParams: PageParams;
+  kind?: ShinzohubTransactionFilter;
+  block?: number;
+  enabled?: boolean;
   refetchIntervalMs?: number;
 };
 
-export function shinzohubTransactionsQueryKey(params: { offset: number; limit: number }) {
-  return ['shinzohub', 'transactions', params.offset, params.limit] as const;
+export function shinzohubTransactionsQueryKey(params: {
+  page: number;
+  limit: number;
+  kind: ShinzohubTransactionFilter;
+  block?: number;
+}) {
+  return ['shinzohub', 'transactions', params.page, params.limit, params.kind, params.block] as const;
 }
 
 export async function fetchShinzohubTransactions(params: {
-  offset: number;
+  page: number;
   limit: number;
+  kind?: ShinzohubTransactionFilter;
+  block?: number;
 }): Promise<ShinzohubTransactionsResponse> {
   const searchParams = new URLSearchParams({
-    offset: String(params.offset),
+    page: String(params.page),
     limit: String(params.limit),
+    kind: params.kind ?? 'all',
   });
+  if (params.block) {
+    searchParams.set('block', String(params.block));
+  }
   const response = await fetch(`/api/shinzohub/transactions?${searchParams.toString()}`);
 
   if (!response.ok) {
@@ -35,23 +50,26 @@ export async function fetchShinzohubTransactions(params: {
 export function useShinzohubTransactions(
   {
     pageParams,
+    kind = 'all',
+    block,
+    enabled = true,
     refetchIntervalMs = 30_000,
   }: UseShinzohubTransactionsOptions = {
     pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT },
   },
 ) {
-  const { offset, limit } = pageParams;
+  const { page, limit } = pageParams;
 
   return useQuery({
-    queryKey: shinzohubTransactionsQueryKey({ offset, limit }),
-    queryFn: () => fetchShinzohubTransactions({ offset, limit }),
+    queryKey: shinzohubTransactionsQueryKey({ page, limit, kind, block }),
+    queryFn: () => fetchShinzohubTransactions({ page, limit, kind, block }),
+    enabled,
     staleTime: refetchIntervalMs,
     refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
     select: (data) => ({
       transactions: data.transactions,
       totalTransactionsCount: data.total,
-      lastScannedBlock: data.lastScannedBlock,
     }),
   });
 }
