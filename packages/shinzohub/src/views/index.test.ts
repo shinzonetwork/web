@@ -45,7 +45,7 @@ function parseRequest(init?: RequestInit): JsonRpcRequest {
 }
 
 describe("createView", () => {
-  it("sends register(bytes) when no pricing contract is provided", async () => {
+  it("registers a view with default pricing", async () => {
     const requests: JsonRpcRequest[] = [];
     const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
       const request = parseRequest(init);
@@ -71,7 +71,7 @@ describe("createView", () => {
     expect(transaction.data.startsWith("0x82fbdc9c")).toBe(true);
   });
 
-  it("sends registerWithPricing(bytes,address) when pricing is provided", async () => {
+  it("registers a view with a custom pricing contract", async () => {
     const requests: JsonRpcRequest[] = [];
     const fetch = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
       const request = parseRequest(init);
@@ -105,7 +105,7 @@ describe("createView", () => {
 });
 
 describe("getCreatedViewAddress", () => {
-  it("decodes the ViewCreated address from a transaction receipt", () => {
+  it("reads the new view address from a confirmed registration", () => {
     const topics = encodeEventTopics({
       abi: viewRegistryAbi,
       eventName: "ViewCreated",
@@ -127,7 +127,7 @@ describe("getCreatedViewAddress", () => {
     expect(getCreatedViewAddress(receipt)).toBe(viewAddress);
   });
 
-  it("throws when the receipt has no ViewCreated log", () => {
+  it("fails clearly when a receipt did not create a view", () => {
     const receipt = {
       logs: [
         {
@@ -156,7 +156,7 @@ describe("Cosmos REST view actions", () => {
     transport: http(),
   });
 
-  it("lists views with flat pagination parameters", async () => {
+  it("lists registered views with pagination options", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       expect(String(input)).toBe(
         "https://rest.example/shinzonetwork/view/v1/views?pagination.limit=1&include_metadata=true",
@@ -205,7 +205,7 @@ describe("Cosmos REST view actions", () => {
     });
   });
 
-  it("fetches one view and counts views", async () => {
+  it("loads view details and the registry total", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       if (String(input).endsWith("/view_count")) {
         return Response.json({ count: "42" });
@@ -234,7 +234,7 @@ describe("Cosmos REST view actions", () => {
     await expect(countViews(viemClient)).resolves.toBe(42n);
   });
 
-  it("supports an explicit Cosmos REST endpoint", async () => {
+  it("queries a custom Cosmos REST deployment", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       expect(String(input)).toBe("https://override.example/shinzonetwork/view/v1/views");
       return Response.json({ views: [], pagination: {} });
