@@ -1,6 +1,7 @@
 import { execute, graphql } from '@/shared/graphql';
 import { PageParams } from '@shinzo/ui/pagination';
 import { useQuery } from '@tanstack/react-query';
+import { Hex } from 'viem';
 
 const EthereumBlockTransactionsQuery = graphql(`
   query BlockTransactions($offset: Int, $limit: Int, $blockNumber: Int) {
@@ -36,7 +37,7 @@ const EthereumBlockTransactionsByHashQuery = graphql(`
 
 export type UseEthereumBlockTransactionsOptions =
   | { blockNumber: number; blockHash?: never; pageParams: PageParams }
-  | { blockHash: string; blockNumber?: never; pageParams: PageParams };
+  | { blockHash: Hex; blockNumber?: never; pageParams: PageParams };
 
 export const useEthereumBlockTransactions = (options: UseEthereumBlockTransactionsOptions) => {
   const { offset, limit } = options.pageParams;

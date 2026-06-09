@@ -3,6 +3,7 @@
 import { getServerPage, PageParamsOptions } from '@shinzo/ui/pagination';
   import { notFound } from 'next/navigation';
     import { EthereumBlockDetailClientPage } from './ethereum-page';
+import { Hex } from 'viem';
   
   export interface EthereumBlocksDetailsProps {
     searchParams: Promise<PageParamsOptions>
@@ -17,7 +18,7 @@ import { getServerPage, PageParamsOptions } from '@shinzo/ui/pagination';
     if (isBlockHeightParam(id)) {
       return <EthereumBlockDetailClientPage blockNumber={Number(id)} pageParams={pageParams} />
     } else {
-      const blockHash = parseBlockHashFromPathParam(id);
+      const blockHash = parseBlockHashFromPathParam(id) as Hex;
       if (blockHash == null) {
         notFound();
       }

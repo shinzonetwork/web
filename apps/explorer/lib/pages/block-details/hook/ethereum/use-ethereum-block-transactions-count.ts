@@ -1,5 +1,6 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Hex } from 'viem';
 
 const EthereumBlockTransactionsCountQuery = graphql(`
   query BlockTransactionsCount($blockNumber: Int) {
@@ -29,7 +30,7 @@ const EthereumBlockTransactionsCountByHashQuery = graphql(`
 
 export type UseEthereumBlockTransactionsCountOptions = 
   | { blockNumber: number; blockHash?: never }
-  | { blockHash: string; blockNumber?: never };
+  | { blockHash: Hex; blockNumber?: never };
 
 
 export const useEthereumBlockTransactionsCount = (options: UseEthereumBlockTransactionsCountOptions) => {

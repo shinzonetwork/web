@@ -8,16 +8,16 @@ import { formatTimestamp } from "@/shared/utils/format-timestamp";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { getPageLink } from "@/shared/utils/links";
 import { useShinzohubBlock } from "../../hook/shinzohub/use-shinzohub-block";
-import { formatGwei } from "viem";
+import { formatGwei, Hex } from "viem";
 import { formatGasUsed } from "@/shared/utils/format-gas";
 
 export type ShinzohubBlockCardOptions =
   | { number: number; hash?: never }
-  | { hash: string; number?: never };
+  | { hash: Hex; number?: never };
 
 export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
   const [showMore, setShowMore] = useState(false);
-  const { data: block, isLoading } = useShinzohubBlock(options?.number?.toString() ?? '');
+  const { data: block, isLoading } = useShinzohubBlock(options);
   const chain = useChainPathSegment();
 
   if (!block || !block.number) {

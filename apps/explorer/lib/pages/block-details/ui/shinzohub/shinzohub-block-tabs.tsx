@@ -5,10 +5,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { PageParams } from '@shinzo/ui/pagination';
 import { ShinzohubBlockCard } from './shinzohub-block-card';
 import { ShinzohubBlockTransactions } from './shinzohub-block-txs';
+import { Hex } from 'viem';
 
 export type ShinzohubBlockTabsProps =
   | { pageParams: PageParams; blockNumber: number }
-  | { pageParams: PageParams; blockHash: string };
+  | { pageParams: PageParams; blockHash: Hex };
 
 export const ShinzohubBlockTabs = (props: ShinzohubBlockTabsProps) => {
   const { pageParams } = props;
