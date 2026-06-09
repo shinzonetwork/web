@@ -66,6 +66,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@shinzo/shinzohub':
+        specifier: workspace:*
+        version: link:../../packages/shinzohub
       '@shinzo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -94,9 +97,6 @@ importers:
         specifier: ^2.47.0
         version: 2.47.4(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.4.3)
     devDependencies:
-      '@cloudflare/workers-types':
-        specifier: 4.20260501.1
-        version: 4.20260501.1
       '@graphql-codegen/cli':
         specifier: ^6.1.0
         version: 6.1.1(@parcel/watcher@2.5.4)(@types/node@25.7.0)(bufferutil@4.1.0)(crossws@0.3.5)(graphql@16.12.0)(typescript@5.9.3)(utf-8-validate@5.0.10)

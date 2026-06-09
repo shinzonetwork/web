@@ -11,13 +11,8 @@
 		"binding": "ASSETS"
 	},
 	"vars": {
-		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545"
-	},
-	"d1_databases": [
-		{
-			"binding": "shinzohub_explorer",
-			"database_name": "shinzohub-explorer",
-			"database_id": "3c109340-58f6-453b-b609-4938c7e5a002"
-		}
-	]
+		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545",
+		"SHINZOHUB_COSMOS_REST_URL": "http://rpc.develop.devnet.shinzo.network:1317",
+		"SHINZOHUB_COMET_RPC_URL": "http://rpc.develop.devnet.shinzo.network:26657"
+	}
 }

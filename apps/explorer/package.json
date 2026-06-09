@@ -6,12 +6,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "db:migrate:local": "wrangler d1 execute shinzohub-explorer --local --file=./schema.sql",
-    "db:migrate:remote": "wrangler d1 execute shinzohub-explorer --remote --file=./schema.sql",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "sync:local": "curl -X POST http://localhost:8787/api/shinzohub/transactions/sync",
     "lint": "eslint",
     "shadcn": "pnpm dlx shadcn@latest add",
     "graphql:codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",
@@ -22,6 +19,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@shinzo/ui": "workspace:*",
+    "@shinzo/shinzohub": "workspace:*",
     "@tanstack/react-query": "^5.90.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -32,7 +30,6 @@
     "viem": "^2.47.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20260501.1",
     "@graphql-codegen/cli": "^6.1.0",
     "@graphql-codegen/client-preset": "^5.2.2",
     "@graphql-codegen/plugin-helpers": "^6.1.0",
