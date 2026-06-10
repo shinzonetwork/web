@@ -1,17 +1,17 @@
-import { getFetch, requestCometRpc } from "../internal/comet.js";
+import { getFetch, requestCometRpc } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
+} from "../internal/endpoints";
 import {
   positiveHeight,
   toBlockMeta,
   type BlockchainWire,
-} from "./internal.js";
+} from "./internal";
 import type {
   ListBlocksParameters,
   ListBlocksResult,
-} from "./types.js";
+} from "./types";
 
 /** Lists consensus blocks within an optional inclusive height range. */
 export async function listBlocks(

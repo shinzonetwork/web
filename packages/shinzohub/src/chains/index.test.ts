@@ -3,7 +3,7 @@ import {
   shinzoHubChains,
   shinzoHubDevelop,
   shinzoHubLocal,
-} from "./index.js";
+} from "./index";
 
 describe("Viem chain definitions", () => {
   it("defines standard chain metadata for develop environment", () => {

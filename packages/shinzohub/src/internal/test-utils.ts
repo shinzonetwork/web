@@ -1,6 +1,6 @@
 import { createPublicClient, http, type Hex } from "viem";
 import { expect, vi } from "vitest";
-import { shinzoHubDevelop } from "../chains/index.js";
+import { shinzoHubDevelop } from "../chains/index";
 
 type TransactionKind = "cosmos" | "evm";
 

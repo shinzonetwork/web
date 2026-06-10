@@ -4,7 +4,7 @@ import {
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
-} from "./index.js";
+} from "./index";
 
 describe("Shinzo address utilities", () => {
   it("converts a 20-byte EVM address to Shinzo bech32", () => {

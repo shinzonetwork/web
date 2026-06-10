@@ -1,9 +1,9 @@
-import { getFetch, requestCometRpc } from "../internal/comet.js";
+import { getFetch, requestCometRpc } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
-import type { GetLatestBlockHeightParameters } from "./types.js";
+} from "../internal/endpoints";
+import type { GetLatestBlockHeightParameters } from "./types";
 
 interface StatusWire {
   sync_info?: {

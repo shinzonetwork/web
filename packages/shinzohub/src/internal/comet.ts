@@ -1,4 +1,4 @@
-import { normalizeBaseUrl, type FetchLike } from "./fetch.js";
+import { normalizeBaseUrl, type FetchLike } from "./fetch";
 
 interface CometRpcErrorWire {
   code: number;

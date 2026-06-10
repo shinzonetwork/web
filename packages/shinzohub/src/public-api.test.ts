@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
-import * as shinzohub from "./index.js";
+import * as shinzohub from "./index";
 
 const expectedRootExports = [
   "countViews",

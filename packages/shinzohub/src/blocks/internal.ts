@@ -1,11 +1,11 @@
 import type { Hex } from "viem";
-import { getFetch, requestCometRpc } from "../internal/comet.js";
+import { getFetch, requestCometRpc } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
-import { normalizeHex } from "../internal/hex.js";
-import type { ShinzoHubBlock } from "./types.js";
+} from "../internal/endpoints";
+import { normalizeHex } from "../internal/hex";
+import type { ShinzoHubBlock } from "./types";
 
 /** Comet block header fields used by block normalization. */
 export interface HeaderWire {

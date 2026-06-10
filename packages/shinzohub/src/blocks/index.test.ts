@@ -5,14 +5,14 @@ import {
   mockShinzoHubApi,
   restoreShinzoHubApiMock,
   shinzoHubTestClient,
-} from "../internal/test-utils.js";
+} from "../internal/test-utils";
 import {
   getBlock,
   getBlockTimestamp,
   getLatestBlock,
   getLatestBlockHeight,
   listBlocks,
-} from "./index.js";
+} from "./index";
 
 const blockHash = hashFixture("44");
 const latestBlockHash = hashFixture("66");

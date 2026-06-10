@@ -1,10 +1,10 @@
-import type { ShinzoHubQueryClient } from "../internal/endpoints.js";
-import { normalizeHex, stripHexPrefix } from "../internal/hex.js";
-import { getBlockWire } from "./internal.js";
+import type { ShinzoHubQueryClient } from "../internal/endpoints";
+import { normalizeHex, stripHexPrefix } from "../internal/hex";
+import { getBlockWire } from "./internal";
 import type {
   GetBlockParameters,
   ShinzoHubBlock,
-} from "./types.js";
+} from "./types";
 
 /** Loads one consensus block by height or block hash. */
 export async function getBlock(

@@ -5,27 +5,27 @@ import {
   getCreatedViewAddress,
   getView,
   listViews,
-} from "./views/index.js";
+} from "./views/index";
 import {
   findTransactionByEvmHash,
   getTransaction,
   listTransactions,
-} from "./transactions/index.js";
+} from "./transactions/index";
 import {
   getBlock,
   getBlockTimestamp,
   getLatestBlock,
   getLatestBlockHeight,
   listBlocks,
-} from "./blocks/index.js";
+} from "./blocks/index";
 
 export {
   hexToShinzoAddress,
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
-} from "./addresses/index.js";
-export type { HexAddress, ShinzoAddress } from "./addresses/index.js";
+} from "./addresses/index";
+export type { HexAddress, ShinzoAddress } from "./addresses/index";
 export {
   shinzoHubChains,
   shinzoHubDevelop,
@@ -33,7 +33,7 @@ export {
   shinzoHubLocal,
   shinzoHubMainnet,
   shinzoHubTestnet,
-} from "./chains/index.js";
+} from "./chains/index";
 export {
   countViews,
   createView,
@@ -42,19 +42,19 @@ export {
   listViews,
   viewRegistryAbi,
   viewRegistryAddress,
-} from "./views/index.js";
+} from "./views/index";
 export type {
   CreateViewParameters,
   ListViewsParameters,
   ListViewsResult,
   ShinzoHubView,
   ViewMetadata,
-} from "./views/index.js";
+} from "./views/index";
 export {
   findTransactionByEvmHash,
   getTransaction,
   listTransactions,
-} from "./transactions/index.js";
+} from "./transactions/index";
 export type {
   FindTransactionByEvmHashParameters,
   GetTransactionParameters,
@@ -70,14 +70,14 @@ export type {
   ShinzoHubTransactionOrder,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
-} from "./transactions/index.js";
+} from "./transactions/index";
 export {
   getBlock,
   getBlockTimestamp,
   getLatestBlock,
   getLatestBlockHeight,
   listBlocks,
-} from "./blocks/index.js";
+} from "./blocks/index";
 export type {
   GetBlockParameters,
   GetBlockTimestampParameters,
@@ -85,7 +85,7 @@ export type {
   ListBlocksParameters,
   ListBlocksResult,
   ShinzoHubBlock,
-} from "./blocks/index.js";
+} from "./blocks/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {

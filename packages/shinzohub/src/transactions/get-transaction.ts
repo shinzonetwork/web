@@ -1,20 +1,20 @@
-import { getFetch } from "../internal/comet.js";
+import { getFetch } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
-import { buildUrl, requestJson } from "../internal/fetch.js";
-import { normalizeHex, stripHexPrefix } from "../internal/hex.js";
+} from "../internal/endpoints";
+import { buildUrl, requestJson } from "../internal/fetch";
+import { normalizeHex, stripHexPrefix } from "../internal/hex";
 import {
   eventSummary,
   toEvents,
   type CometEventWire,
-} from "./internal.js";
+} from "./internal";
 import type {
   GetTransactionParameters,
   ShinzoHubCoin,
   ShinzoHubTransaction,
-} from "./types.js";
+} from "./types";
 
 interface RestMessageWire extends Record<string, unknown> {
   "@type"?: string;

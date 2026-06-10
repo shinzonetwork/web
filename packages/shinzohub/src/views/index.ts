@@ -1,10 +1,10 @@
 import type { Account, Address, Client, Hex, TransactionReceipt } from "viem";
 import { decodeEventLog, encodeFunctionData } from "viem";
 import { sendTransaction } from "viem/actions";
-import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index.js";
-import { buildUrl, requestJson } from "../internal/fetch.js";
-import { getRpcEndpoint } from "../internal/endpoints.js";
-import { bytesLikeToHex, normalizeHex } from "../internal/hex.js";
+import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index";
+import { buildUrl, requestJson } from "../internal/fetch";
+import { getRpcEndpoint } from "../internal/endpoints";
+import { bytesLikeToHex, normalizeHex } from "../internal/hex";
 
 /**
  * ShinzoHub ViewRegistry precompile address.

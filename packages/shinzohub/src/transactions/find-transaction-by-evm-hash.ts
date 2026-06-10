@@ -1,17 +1,17 @@
-import { getFetch } from "../internal/comet.js";
+import { getFetch } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
-import { normalizeHex } from "../internal/hex.js";
+} from "../internal/endpoints";
+import { normalizeHex } from "../internal/hex";
 import {
   searchTransactions,
   toTransactionSummary,
-} from "./internal.js";
+} from "./internal";
 import type {
   FindTransactionByEvmHashParameters,
   ShinzoHubTransactionSummary,
-} from "./types.js";
+} from "./types";
 
 /** Finds the canonical transaction summary associated with an EVM hash. */
 export async function findTransactionByEvmHash(

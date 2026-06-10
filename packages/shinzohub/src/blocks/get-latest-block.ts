@@ -1,9 +1,9 @@
-import type { ShinzoHubQueryClient } from "../internal/endpoints.js";
-import { getBlockWire } from "./internal.js";
+import type { ShinzoHubQueryClient } from "../internal/endpoints";
+import { getBlockWire } from "./internal";
 import type {
   GetBlockParameters,
   ShinzoHubBlock,
-} from "./types.js";
+} from "./types";
 
 /** Loads the latest consensus block. */
 export async function getLatestBlock(

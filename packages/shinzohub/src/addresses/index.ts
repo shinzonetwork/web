@@ -1,6 +1,6 @@
 import type { Address } from "viem";
-import { decodeBech32, encodeBech32 } from "../internal/bech32.js";
-import { hexToBytes, isHexLike, normalizeHex } from "../internal/hex.js";
+import { decodeBech32, encodeBech32 } from "../internal/bech32";
+import { hexToBytes, isHexLike, normalizeHex } from "../internal/hex";
 
 type Brand<TValue, TName extends string> = TValue & { readonly __brand: TName };
 

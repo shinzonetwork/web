@@ -1,10 +1,10 @@
-import { getFetch, requestCometRpc } from "../internal/comet.js";
+import { getFetch, requestCometRpc } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
-import { positiveHeight } from "./internal.js";
-import type { GetBlockTimestampParameters } from "./types.js";
+} from "../internal/endpoints";
+import { positiveHeight } from "./internal";
+import type { GetBlockTimestampParameters } from "./types";
 
 interface HeaderWire {
   header?: {

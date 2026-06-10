@@ -8,8 +8,8 @@ import {
   type Hex,
   type TransactionReceipt,
 } from "viem";
-import { shinzoHubDevelop } from "../chains/index.js";
-import { createShinzoHubClient } from "../index.js";
+import { shinzoHubDevelop } from "../chains/index";
+import { createShinzoHubClient } from "../index";
 import {
   countViews,
   createView,
@@ -18,7 +18,7 @@ import {
   listViews,
   viewRegistryAbi,
   viewRegistryAddress,
-} from "./index.js";
+} from "./index";
 
 const viewAddress = "0x018a06D78E0802dB5bC055B4527d7B481c3e9932" as const satisfies Hex;
 const creatorAddress = "0x1234567890AbcdEF1234567890aBcdef12345678" as const satisfies Hex;

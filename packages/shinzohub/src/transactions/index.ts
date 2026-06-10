@@ -1,6 +1,6 @@
-export { findTransactionByEvmHash } from "./find-transaction-by-evm-hash.js";
-export { getTransaction } from "./get-transaction.js";
-export { listTransactions } from "./list-transactions.js";
+export { findTransactionByEvmHash } from "./find-transaction-by-evm-hash";
+export { getTransaction } from "./get-transaction";
+export { listTransactions } from "./list-transactions";
 export type {
   FindTransactionByEvmHashParameters,
   GetTransactionParameters,
@@ -16,4 +16,4 @@ export type {
   ShinzoHubTransactionOrder,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
-} from "./types.js";
+} from "./types";

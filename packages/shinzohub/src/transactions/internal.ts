@@ -1,12 +1,12 @@
 import type { Hex } from "viem";
-import { requestCometRpc } from "../internal/comet.js";
-import { normalizeHex } from "../internal/hex.js";
+import { requestCometRpc } from "../internal/comet";
+import { normalizeHex } from "../internal/hex";
 import type {
   ShinzoHubEvent,
   ShinzoHubTransactionOrder,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
-} from "./types.js";
+} from "./types";
 
 interface CometAttributeWire {
   key?: string;

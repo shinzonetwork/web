@@ -1,17 +1,17 @@
-import { getFetch } from "../internal/comet.js";
+import { getFetch } from "../internal/comet";
 import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
-} from "../internal/endpoints.js";
+} from "../internal/endpoints";
 import {
   positiveInteger,
   searchTransactions,
   toTransactionSummary,
-} from "./internal.js";
+} from "./internal";
 import type {
   ListTransactionsParameters,
   ListTransactionsResult,
-} from "./types.js";
+} from "./types";
 
 const MAX_LIMIT = 100;
 

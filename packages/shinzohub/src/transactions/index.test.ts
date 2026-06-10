@@ -6,12 +6,12 @@ import {
   shinzoHubTestClient,
   transactionDetailsFixture,
   transactionFixture,
-} from "../internal/test-utils.js";
+} from "../internal/test-utils";
 import {
   findTransactionByEvmHash,
   getTransaction,
   listTransactions,
-} from "./index.js";
+} from "./index";
 
 const cosmosHashA = hashFixture("11");
 const cosmosHashB = hashFixture("22");
