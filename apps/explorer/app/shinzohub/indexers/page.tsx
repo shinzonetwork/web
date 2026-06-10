@@ -1,0 +1,1 @@
+export { IndexerPage as default } from '@/pages/indexers';
