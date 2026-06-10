@@ -1,0 +1,1 @@
+export { IndexerPage } from './ui/indexer-page-server';
