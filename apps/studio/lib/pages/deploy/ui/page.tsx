@@ -1,17 +1,9 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@shinzo/ui/tabs";
-import {
-  DECODE_LOG_LENS,
-  ERC20_ACCOUNT_BALANCES_LENS,
-  ERC20_TRANSFER_LENS,
-} from "@/entities/lens";
-import { StoredViewsProvider } from "@/entities/view";
-import { DecodeStudioTab } from "@/features/decode/ui/decode-studio-tab";
-import { Header } from "@/pages/studio/ui/header";
+import { DeployTabs } from "@/features/deploy-view/ui/deploy-tabs";
 import { Button } from "@/shared/ui/button";
-import { DeployForm } from "@/pages/studio/ui/deploy-form";
+import { Header } from "@/shared/ui/header";
 
 const DeployPageContent = () => (
   <div className="flex min-h-screen flex-col">
@@ -35,37 +27,9 @@ const DeployPageContent = () => (
         </Button>
       </div>
 
-      <Tabs defaultValue={DECODE_LOG_LENS.lensKey} className="gap-6">
-        <div className="max-w-full overflow-x-auto border-b border-ui-border">
-          <TabsList className="[&>*]:translate-y-[1px]">
-            <TabsTrigger value={DECODE_LOG_LENS.lensKey}>Decode</TabsTrigger>
-            <TabsTrigger value={ERC20_TRANSFER_LENS.lensKey}>
-              ERC20 Transfers
-            </TabsTrigger>
-            <TabsTrigger value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
-              ERC20 Balances
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value={DECODE_LOG_LENS.lensKey}>
-          <DecodeStudioTab />
-        </TabsContent>
-
-        <TabsContent value={ERC20_TRANSFER_LENS.lensKey}>
-          <DeployForm lens={ERC20_TRANSFER_LENS} showTokenPresets />
-        </TabsContent>
-
-        <TabsContent value={ERC20_ACCOUNT_BALANCES_LENS.lensKey}>
-          <DeployForm lens={ERC20_ACCOUNT_BALANCES_LENS} showTokenPresets />
-        </TabsContent>
-      </Tabs>
+      <DeployTabs />
     </main>
   </div>
 );
 
-export const DeployPage = () => (
-  <StoredViewsProvider>
-    <DeployPageContent />
-  </StoredViewsProvider>
-);
+export const DeployPage = () => <DeployPageContent />;

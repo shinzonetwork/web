@@ -143,8 +143,7 @@
 }
 
 .shinzo-graphiql-shell .graphiql-horizontal-drag-bar {
-  width: 1px !important;
-  background: #c7c7c7 !important;
+  display: none;
 }
 
 .shinzo-graphiql-shell .graphiql-horizontal-drag-bar::after {

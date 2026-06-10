@@ -2,9 +2,8 @@
 
 import type { ReactNode } from "react";
 import { Plus } from "lucide-react";
-import { StoredViewsProvider } from "@/entities/view";
-import { Header } from "@/pages/studio/ui/header";
 import { Button } from "@/shared/ui/button";
+import { Header } from "@/shared/ui/header";
 import { useViews } from "../model/use-views";
 import type { UseViewsResult } from "../model/types";
 import { ViewsGrid, ViewsGridSkeleton } from "./views-grid";
@@ -22,7 +21,6 @@ const PageFrame = ({
     <main className="mx-auto flex w-full min-w-0 max-w-6xl flex-col gap-6 px-5 py-10 sm:px-6">
       <ViewsToolbar
         filters={views.filters}
-        lensOptions={views.status === "success" ? views.result.lensOptions : []}
         totalCount={views.status === "success" ? views.result.totalCount : 0}
         visibleCount={views.status === "success" ? views.result.visibleCount : 0}
         onFiltersChange={views.setFilters}
@@ -81,8 +79,4 @@ const ViewsPageContent = () => {
   );
 };
 
-export const ViewsPage = () => (
-  <StoredViewsProvider>
-    <ViewsPageContent />
-  </StoredViewsProvider>
-);
+export const ViewsPage = () => <ViewsPageContent />;
