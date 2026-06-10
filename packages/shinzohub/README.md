@@ -4,15 +4,6 @@ Viem-first TypeScript client actions for ShinzoHub.
 
 See the complete [API reference](./api.md).
 
-This package intentionally keeps the public API small:
-
-- query registered views
-- query native Cosmos and EVM transactions
-- query consensus blocks
-- create a view from a viewbundle
-- convert Shinzo and EVM address formats
-- reuse ShinzoHub Viem chain definitions
-
 Each query function maps to exactly one ShinzoHub REST or Comet RPC request.
 Applications can compose primitives when they need enrichment or fallback
 behavior.
