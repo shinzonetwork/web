@@ -4,70 +4,17 @@
   "description": "Viem-first TypeScript client actions for ShinzoHub.",
   "type": "module",
   "sideEffects": false,
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "shinzo-source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./addresses": {
-      "shinzo-source": "./src/addresses/index.ts",
-      "types": "./dist/addresses/index.d.ts",
-      "default": "./dist/addresses/index.js"
-    },
-    "./chains": {
-      "shinzo-source": "./src/chains/index.ts",
-      "types": "./dist/chains/index.d.ts",
-      "default": "./dist/chains/index.js"
-    },
-    "./blocks": {
-      "shinzo-source": "./src/blocks/index.ts",
-      "types": "./dist/blocks/index.d.ts",
-      "default": "./dist/blocks/index.js"
-    },
-    "./transactions": {
-      "shinzo-source": "./src/transactions/index.ts",
-      "types": "./dist/transactions/index.d.ts",
-      "default": "./dist/transactions/index.js"
-    },
-    "./views": {
-      "shinzo-source": "./src/views/index.ts",
-      "types": "./dist/views/index.d.ts",
-      "default": "./dist/views/index.js"
-    },
+    ".": "./src/index.ts",
+    "./addresses": "./src/addresses/index.ts",
+    "./chains": "./src/chains/index.ts",
+    "./blocks": "./src/blocks/index.ts",
+    "./transactions": "./src/transactions/index.ts",
+    "./views": "./src/views/index.ts",
     "./package.json": "./package.json"
   },
-  "publishConfig": {
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "./addresses": {
-        "types": "./dist/addresses/index.d.ts",
-        "default": "./dist/addresses/index.js"
-      },
-      "./chains": {
-        "types": "./dist/chains/index.d.ts",
-        "default": "./dist/chains/index.js"
-      },
-      "./blocks": {
-        "types": "./dist/blocks/index.d.ts",
-        "default": "./dist/blocks/index.js"
-      },
-      "./transactions": {
-        "types": "./dist/transactions/index.d.ts",
-        "default": "./dist/transactions/index.js"
-      },
-      "./views": {
-        "types": "./dist/views/index.d.ts",
-        "default": "./dist/views/index.js"
-      },
-      "./package.json": "./package.json"
-    }
-  },
   "files": [
+    "src",
     "dist",
     "README.md",
     "api.md",
