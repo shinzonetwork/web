@@ -80,6 +80,13 @@ describe("transaction queries", () => {
       actions: ["/cosmos.bank.v1beta1.MsgSend"],
       senders: ["shinzo1sender"],
       recipients: ["shinzo1recipient"],
+      transfers: [
+        {
+          sender: "shinzo1sender",
+          recipient: "shinzo1recipient",
+          amount: "42ushinzo",
+        },
+      ],
       fee: "7ushinzo",
     });
     expect(result.transactions[1]).toMatchObject({
@@ -87,6 +94,28 @@ describe("transaction queries", () => {
       kind: "evm",
       success: false,
       code: 9,
+    });
+    api.expectRequestCount(1);
+  });
+
+  it("does not present fee collection as user transfer activity", async () => {
+    const api = mockShinzoHubApi({
+      transactions: [
+        transactionFixture({
+          hash: cosmosHashA,
+          height: 30,
+          transferAmount: null,
+        }),
+      ],
+    });
+
+    const result = await listTransactions(shinzoHubTestClient);
+
+    expect(result.transactions[0]).toMatchObject({
+      senders: ["shinzo1sender"],
+      recipients: [],
+      transfers: [],
+      fee: "7ushinzo",
     });
     api.expectRequestCount(1);
   });

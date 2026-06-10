@@ -97,6 +97,7 @@ export function transactionFixture({
   evmHash = `0x${"aa".repeat(32)}` as Hex,
   code = 0,
   timestamp = "2026-06-09T12:00:00Z",
+  transferAmount = "42ushinzo",
 }: {
   hash: Hex;
   height: number | bigint | string;
@@ -104,28 +105,43 @@ export function transactionFixture({
   evmHash?: Hex;
   code?: number;
   timestamp?: string;
+  transferAmount?: string | null;
 }): TransactionFixture {
   const events: EventFixture[] = [
+    {
+      type: "transfer",
+      attributes: [
+        { key: "sender", value: "shinzo1sender", index: true },
+        { key: "recipient", value: "shinzo1feecollector", index: true },
+        { key: "amount", value: "7ushinzo", index: true },
+      ],
+    },
     {
       type: "message",
       attributes: [
         { key: "action", value: "/cosmos.bank.v1beta1.MsgSend", index: true },
         { key: "sender", value: "shinzo1sender", index: true },
+        { key: "msg_index", value: "0", index: true },
       ],
     },
-    {
+  ];
+
+  if (transferAmount) {
+    events.push({
       type: "transfer",
       attributes: [
         { key: "sender", value: "shinzo1sender", index: true },
         { key: "recipient", value: "shinzo1recipient", index: true },
-        { key: "amount", value: "42ushinzo", index: true },
+        { key: "amount", value: transferAmount, index: true },
+        { key: "msg_index", value: "0", index: true },
       ],
-    },
-    {
-      type: "tx",
-      attributes: [{ key: "fee", value: "7ushinzo", index: true }],
-    },
-  ];
+    });
+  }
+
+  events.push({
+    type: "tx",
+    attributes: [{ key: "fee", value: "7ushinzo", index: true }],
+  });
 
   if (kind === "evm") {
     events.push({

@@ -1,10 +1,8 @@
 import type {
-  ShinzoHubBlock,
   ShinzoHubTransaction,
   ShinzoHubTransactionSummary,
 } from '@shinzo/shinzohub';
 import type {
-  ShinzohubBlock,
   ShinzohubTransaction,
   ShinzohubTransactionSummary,
 } from '@/shared/shinzohub/types';
@@ -27,7 +25,6 @@ export function serializeTransactionSummary(
     })),
   };
 }
-
 export function serializeTransaction(
   transaction: ShinzoHubTransaction,
 ): ShinzohubTransaction {
@@ -45,13 +42,5 @@ export function serializeTransaction(
     gasLimit: transaction.gasLimit.toString(),
     signatures: [...transaction.signatures],
     rawLog: transaction.rawLog,
-  };
-}
-
-export function serializeBlock(block: ShinzoHubBlock): ShinzohubBlock {
-  return {
-    ...block,
-    height: block.height.toString(),
-    size: block.size?.toString() ?? null,
   };
 }

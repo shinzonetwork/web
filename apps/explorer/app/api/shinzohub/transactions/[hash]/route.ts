@@ -2,8 +2,8 @@ import {
   findTransactionByEvmHash,
   getTransaction,
 } from '@shinzo/shinzohub';
-import { getShinzohubQueryContext } from '@/server/shinzohub/query-client';
-import { serializeTransaction } from '@/server/shinzohub/serialize';
+import { getShinzohubQueryContext } from '../_lib/query-context';
+import { serializeTransaction } from '../_lib/serialize';
 
 export async function GET(
   _request: Request,

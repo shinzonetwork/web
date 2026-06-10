@@ -8,6 +8,7 @@ import { CopyButton } from '@/shared/ui/button';
 import { Typography } from '@/shared/ui/typography';
 import type { ShinzohubTransactionSummary } from '@/shared/shinzohub/types';
 import { formatHash } from '@/shared/utils/format-hash';
+import { formatShinzoCoin } from '@/shared/utils/format-token';
 import { getPageLink } from '@/shared/utils/links';
 
 export function ShinzohubTransactionsList({
@@ -22,14 +23,13 @@ export function ShinzohubTransactionsList({
       isLoading={isLoading}
       loadingRowCount={DEFAULT_LIMIT}
       notFound='No transactions found.'
-      gridClass='grid-cols-[1fr_150px_100px_1fr_1fr_150px_130px]'
-      headings={['Hash', 'Type / Action', 'Block', 'Sender', 'Recipient', 'Amount', 'Fee']}
+      gridClass='grid-cols-[1fr_90px_100px_1fr_1fr_150px_130px]'
+      headings={['Hash', 'Type', 'Block', 'Sender', 'Recipient', 'Amount', 'Fee']}
       iterable={transactions}
       rowRenderer={(transaction) => {
         const sender = transaction.senders[0] ?? null;
         const recipient = transaction.recipients[0] ?? null;
         const amount = transaction.transfers[0]?.amount ?? null;
-        const action = transaction.actions[0]?.split('.').at(-1) ?? transaction.kind;
 
         return (
           <>
@@ -43,12 +43,11 @@ export function ShinzohubTransactionsList({
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={action}>
-              {(value) => (
-                <div className='flex items-center gap-2'>
-                  <Badge variant='outline'>{transaction.kind === 'evm' ? 'EVM' : 'Cosmos'}</Badge>
-                  <span className='truncate'>{value}</span>
-                </div>
+            <TableNullableCell value={transaction.kind}>
+              {() => (
+                <Badge variant='outline'>
+                  {transaction.kind === 'evm' ? 'EVM' : 'Cosmos'}
+                </Badge>
               )}
             </TableNullableCell>
 
@@ -78,8 +77,12 @@ export function ShinzohubTransactionsList({
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={amount}>{(value) => value}</TableNullableCell>
-            <TableNullableCell value={transaction.fee}>{(value) => value}</TableNullableCell>
+            <TableNullableCell value={amount}>
+              {(value) => formatShinzoCoin(value)}
+            </TableNullableCell>
+            <TableNullableCell value={transaction.fee}>
+              {(value) => formatShinzoCoin(value)}
+            </TableNullableCell>
           </>
         );
       }}

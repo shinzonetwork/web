@@ -128,7 +128,9 @@ export const useDecodedLog = (
     queryFn: async (): Promise<DecodedLog | null> => {
       if (!topic0 || !topics) return null;
 
-      const rawData: Hex = `0x${data ?? ''}`;
+      const rawData: Hex = data?.startsWith('0x')
+        ? data as Hex
+        : `0x${data ?? ''}`;
 
       const candidates = KNOWN_EVENTS[topic0];
       if (candidates) {

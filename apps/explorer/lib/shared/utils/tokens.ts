@@ -1,13 +1,16 @@
 export const SHINZO_TOKEN = {
-    name: 'Shinzo',
-    symbol: 'SHNZ',
-    decimals: 18,
+  name: 'Shinzo',
+  symbol: 'SHN',
+  denom: 'ushinzo',
+  decimals: 18,
 };
+
 export const ETH_TOKEN = {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    decimals: 18,
+  name: 'Ethereum',
+  symbol: 'ETH',
+  decimals: 18,
 };
+
 const tokenMap = {
   'shinzohub': SHINZO_TOKEN,
   'ethereum': ETH_TOKEN,

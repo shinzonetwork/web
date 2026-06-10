@@ -1,10 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, ChevronDown, ChevronUp, XCircle } from 'lucide-react';
 import { formatGwei } from 'viem';
 import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
 import type { ShinzohubTransaction } from '@/shared/shinzohub/types';
+import {
+  formatShinzoBaseAmount,
+  formatShinzoCoin,
+} from '@/shared/utils/format-token';
 import { getPageLink } from '@/shared/utils/links';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { useShinzohubEvmTransaction } from '../../hook/shinzohub/use-shinzohub-evm-transaction';
@@ -22,6 +28,50 @@ function TransactionStatus({ success }: { success?: boolean }) {
       <XCircle className='mr-1 h-3 w-3' />
       Failed
     </Badge>
+  );
+}
+
+function TransactionInput({
+  input,
+  loading,
+}: {
+  input?: string;
+  loading: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (loading || !input) {
+    return <DataItem title='Input' value={input} loading={loading} />;
+  }
+
+  const byteLength = Math.max(0, (input.length - 2) / 2);
+
+  return (
+    <DataItem
+      title='Input'
+      value={input}
+      allowWrap={expanded}
+      truncate={!expanded}
+      childClassName={expanded ? 'flex-col items-start gap-3' : undefined}
+    >
+      <div className='flex min-w-0 flex-col items-start gap-3'>
+        <Button
+          type='button'
+          variant='ghost'
+          size='sm'
+          className='px-0 text-text-accent'
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? <ChevronUp /> : <ChevronDown />}
+          {expanded ? 'Hide input' : `Show input (${byteLength.toLocaleString()} bytes)`}
+        </Button>
+        {expanded && (
+          <code className='max-w-[100ch] break-all whitespace-pre-wrap text-xs'>
+            {input}
+          </code>
+        )}
+      </div>
+    </DataItem>
   );
 }
 
@@ -45,20 +95,43 @@ export function ShinzohubTransactionCard({
   }
 
   const transactionFee =
-    receipt?.gasUsed && receipt.effectiveGasPrice
+    receipt?.gasUsed != null && receipt.effectiveGasPrice != null
       ? receipt.gasUsed * receipt.effectiveGasPrice
       : null;
+  const transfer = transaction?.transfers[0];
+  const from = transaction?.evmHash
+    ? evmTransaction?.from
+    : transfer?.sender ?? transaction?.senders[0];
+  const to = transaction?.evmHash
+    ? evmTransaction?.to
+    : transfer?.recipient ?? transaction?.recipients[0];
+  const amount = transaction?.evmHash
+    ? evmTransaction?.value != null
+      ? formatShinzoBaseAmount(evmTransaction.value)
+      : undefined
+    : transfer?.amount
+      ? formatShinzoCoin(transfer.amount)
+      : undefined;
+  const fee = transaction?.evmHash
+    ? transactionFee != null
+      ? formatShinzoBaseAmount(transactionFee)
+      : undefined
+    : transaction?.fee
+      ? formatShinzoCoin(transaction.fee)
+      : transaction?.fee;
 
   return (
     <DataList>
-      <DataItem title='Cosmos Hash' value={transaction?.cosmosHash} copyable loading={loading} />
-      <DataItem title='EVM Hash' value={transaction?.evmHash} copyable loading={loading} />
       <DataItem title='Status' value={transaction?.success} loading={loading}>
         <TransactionStatus success={transaction?.success} />
       </DataItem>
       <DataItem title='Type' value={transaction?.kind} loading={loading}>
         {transaction?.kind && <Badge variant='outline'>{transaction.kind === 'evm' ? 'EVM' : 'Cosmos'}</Badge>}
       </DataItem>
+      <DataItem title='From' value={from} copyable loading={loading} />
+      <DataItem title='To' value={to} copyable loading={loading} />
+      <DataItem title='Amount' value={amount} loading={loading} />
+      <DataItem title='Fee' value={fee} loading={loading} />
       <DataItem
         title='Block'
         value={transaction?.height}
@@ -77,33 +150,26 @@ export function ShinzohubTransactionCard({
           </>
         )}
       </DataItem>
+      <DataItem title='Cosmos Hash' value={transaction?.cosmosHash} copyable loading={loading} />
+      {transaction?.evmHash && (
+        <DataItem title='EVM Hash' value={transaction.evmHash} copyable loading={loading} />
+      )}
       <DataItem title='Actions' value={transaction?.actions.join(', ')} loading={loading} />
-      <DataItem title='Senders' value={transaction?.senders.join(', ')} copyable={transaction?.senders.length === 1} loading={loading} />
-      <DataItem title='Recipients' value={transaction?.recipients.join(', ')} copyable={transaction?.recipients.length === 1} loading={loading} />
-      <DataItem title='Fee' value={transaction?.fee} loading={loading} />
-      <DataItem title='Gas Wanted' value={transaction?.gasWanted} loading={loading} />
       <DataItem title='Gas Used' value={transaction?.gasUsed} loading={loading} />
-      <DataItem title='Memo' value={transaction?.memo} loading={loading} allowWrap />
+      <DataItem title='Gas Wanted' value={transaction?.gasWanted} loading={loading} />
 
       {transaction?.evmHash && (
         <>
-          <DataItem title='EVM From' value={evmTransaction?.from} loading={loading} />
-          <DataItem title='EVM To' value={evmTransaction?.to} loading={loading} />
-          <DataItem title='EVM Value' value={evmTransaction?.value?.toString()} loading={loading} />
-          <DataItem title='EVM Transaction Fee' value={transactionFee?.toString()} loading={loading} />
-          <DataItem title='EVM Gas Price' value={receipt?.effectiveGasPrice} loading={loading}>
+          <DataItem title='Gas Price' value={receipt?.effectiveGasPrice} loading={loading}>
             {receipt?.effectiveGasPrice != null && `${formatGwei(receipt.effectiveGasPrice)} Gwei`}
           </DataItem>
-          <DataItem title='EVM Nonce' value={evmTransaction?.nonce} loading={loading} />
-          <DataItem
-            title='EVM Input'
-            value={evmTransaction?.input}
-            loading={loading}
-            allowWrap
-            wrapAt={100}
-          />
-          <DataItem title='EVM Transaction Type' value={evmTransaction?.type} loading={loading} />
+          <DataItem title='Nonce' value={evmTransaction?.nonce} loading={loading} />
+          <DataItem title='Transaction Type' value={evmTransaction?.type} loading={loading} />
         </>
+      )}
+      <DataItem title='Memo' value={transaction?.memo} loading={loading} allowWrap />
+      {transaction?.evmHash && (
+        <TransactionInput input={evmTransaction?.input} loading={loading} />
       )}
     </DataList>
   );

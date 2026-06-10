@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { listTransactions } from '@shinzo/shinzohub';
-import { getShinzohubQueryContext } from '@/server/shinzohub/query-client';
-import { serializeTransactionSummary } from '@/server/shinzohub/serialize';
 import type { ShinzohubTransactionFilter } from '@/shared/shinzohub/types';
+import { getShinzohubQueryContext } from './_lib/query-context';
+import { serializeTransactionSummary } from './_lib/serialize';
 
 function parsePositiveInteger(rawValue: string | null, fallback: number): number {
   const value = rawValue ? Number(rawValue) : fallback;

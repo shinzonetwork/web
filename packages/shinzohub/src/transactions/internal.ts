@@ -125,7 +125,7 @@ export function eventSummary(events: readonly ShinzoHubEvent[]) {
       addUnique(actions, attributes.get("action"));
       addUnique(senders, attributes.get("sender"));
     }
-    if (event.type === "transfer") {
+    if (event.type === "transfer" && attributes.has("msg_index")) {
       const sender = attributes.get("sender") ?? null;
       const recipient = attributes.get("recipient") ?? null;
       const amount = attributes.get("amount") ?? null;
