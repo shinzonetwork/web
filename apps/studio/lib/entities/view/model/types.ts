@@ -84,6 +84,7 @@ export type DeployProgressStatus =
   | "checking"
   | "validating"
   | "deploying"
-  | "confirming";
+  | "confirming"
+  | "registering";
 
 export type DeployStatus = DeployProgressStatus | "idle" | "done" | "error";

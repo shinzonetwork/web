@@ -52,7 +52,8 @@ export const useDeployViewAction = <TArgs extends LensArgs>({
     status === "checking" ||
     status === "validating" ||
     status === "deploying" ||
-    status === "confirming";
+    status === "confirming" ||
+    status === "registering";
   const isInProgress = isPreparing || isDeployInProgress;
   const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;
 

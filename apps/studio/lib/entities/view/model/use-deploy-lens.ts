@@ -250,9 +250,14 @@ const confirmRegisteredView = async (
   }
 
   if (!registeredHubView) {
-    throw new Error(
-      `Deployment transaction succeeded, but ShinzoHub Cosmos RPC did not return a registered view named "${entityName}".`
-    );
+    const message = [
+      `Deployment transaction ${receipt.transactionHash} succeeded and deployed view contract ${contractAddress},`,
+      `but "${entityName}" did not become registered within 20 seconds.`,
+      "ShinzoHub completes registration asynchronously after a SourceHub ICA/IBC acknowledgement.",
+      "Check the ShinzoHub relayer and ordered ICA channel before retrying; this is not a Host error.",
+    ].join(" ");
+
+    throw new Error(message);
   }
 
   return {
@@ -350,6 +355,7 @@ export const useDeployLens = (): UseDeployLensResult => {
         },
       });
 
+      setStatus("registering");
       const { contractAddress, txHash } = await confirmRegisteredView(
         receipt,
         resolvedView.entityName,

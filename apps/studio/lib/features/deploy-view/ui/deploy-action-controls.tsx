@@ -11,6 +11,7 @@ const STATUS_LABELS: Record<DeployStatus, string> = {
   validating: "Validating view definition...",
   deploying: "Sending deployment transaction...",
   confirming: "Waiting for deployment confirmation...",
+  registering: "Waiting for ShinzoHub registration...",
   done: "",
   error: "",
 };
