@@ -66,7 +66,23 @@ function validateShinzoAddress(
   }
 }
 
-/** Normalizes a 20-byte EVM address to canonical lowercase hex. */
+/**
+ * Normalizes a 20-byte EVM address to lowercase `0x` hex.
+ *
+ * Use this at application boundaries when users, config files, or APIs may
+ * provide mixed-case addresses or bare hex without the `0x` prefix.
+ *
+ * @param value - EVM address as `0x` hex or bare 40-character hex.
+ * @returns Canonical lowercase `0x` EVM address.
+ *
+ * @example
+ * ```ts
+ * import { normalizeHexAddress } from "@shinzo/shinzohub";
+ *
+ * const address = normalizeHexAddress("018A06D78E0802DB5BC055B4527D7B481C3E9932");
+ * // "0x018a06d78e0802db5bc055b4527d7b481c3e9932"
+ * ```
+ */
 export function normalizeHexAddress(value: string): HexAddress {
   try {
     return normalizeHex(value, "address", SHINZO_ADDRESS_BYTE_LENGTH) as HexAddress;
@@ -76,14 +92,48 @@ export function normalizeHexAddress(value: string): HexAddress {
   }
 }
 
-/** Converts a 20-byte EVM address to Shinzo bech32 format. */
+/**
+ * Converts a 20-byte EVM hex address to a Shinzo bech32 address.
+ *
+ * This is useful when displaying account addresses in Shinzo-native UI while
+ * still receiving EVM addresses from wallets, logs, or contract calls.
+ *
+ * @param value - EVM address as `0x` hex or bare 40-character hex.
+ * @param options - Optional bech32 prefix override. Defaults to `shinzo`.
+ * @returns Shinzo bech32 address.
+ *
+ * @example
+ * ```ts
+ * import { hexToShinzoAddress } from "@shinzo/shinzohub";
+ *
+ * const account = hexToShinzoAddress("0x000102030405060708090a0b0c0d0e0f10111213");
+ * // "shinzo1qqqsyqcyq5rqwzqfpg9scrgwpugpzysngdwwg4"
+ * ```
+ */
 export function hexToShinzoAddress(value: string, options: ShinzoAddressOptions = {}): ShinzoAddress {
   const prefix = options.prefix ?? SHINZO_BECH32_PREFIX;
   const hexAddress = normalizeHexAddress(value);
   return encodeBech32(prefix, hexToBytes(hexAddress)) as ShinzoAddress;
 }
 
-/** Converts a Shinzo bech32 account address to canonical EVM hex. */
+/**
+ * Converts a Shinzo bech32 address to a lowercase EVM hex address.
+ *
+ * Use this before passing a Shinzo account address into Viem, EVM contract
+ * calls, filters, or wallet transaction parameters.
+ *
+ * @param value - Shinzo bech32 address, such as `shinzo1...`.
+ * @param options - Optional expected bech32 prefix. Defaults to `shinzo`.
+ * @returns Canonical lowercase `0x` EVM address.
+ *
+ * @example
+ * ```ts
+ * import { shinzoAddressToHex } from "@shinzo/shinzohub";
+ *
+ * const evmAddress = shinzoAddressToHex("shinzo1qqqsyqcyq5rqwzqfpg9scrgwpugpzysngdwwg4");
+ * // "0x000102030405060708090a0b0c0d0e0f10111213"
+ * ```
+ */
 export function shinzoAddressToHex(value: string, options: ShinzoAddressOptions = {}): HexAddress {
   const decoded = validateShinzoAddress(value, options);
   return normalizeHex(
@@ -93,7 +143,27 @@ export function shinzoAddressToHex(value: string, options: ShinzoAddressOptions 
   ) as HexAddress;
 }
 
-/** Normalizes either Shinzo bech32 or EVM hex to Shinzo bech32 format. */
+/**
+ * Normalizes a Shinzo address to bech32 format.
+ *
+ * Accepts either a `shinzo...` bech32 account address or a 20-byte EVM hex address.
+ * Use this for UI display, form normalization, and API payloads that should
+ * consistently use Shinzo-native account formatting.
+ *
+ * @param value - Shinzo bech32 address, `0x` EVM address, or bare EVM hex.
+ * @param options - Optional bech32 prefix override. Defaults to `shinzo`.
+ * @returns Canonical Shinzo bech32 address.
+ *
+ * @example
+ * ```ts
+ * import { normalizeShinzoAddress } from "@shinzo/shinzohub";
+ *
+ * const displayAddress = normalizeShinzoAddress(
+ *   "0x000102030405060708090a0b0c0d0e0f10111213",
+ * );
+ * // "shinzo1qqqsyqcyq5rqwzqfpg9scrgwpugpzysngdwwg4"
+ * ```
+ */
 export function normalizeShinzoAddress(value: string, options: ShinzoAddressOptions = {}): ShinzoAddress {
   const input = value.trim();
   if (!input) {

@@ -85,7 +85,12 @@ export const viewRegistryAbi = [
   },
 ] as const;
 
-/** Viewbundle and transaction options for registering a ShinzoHub view. */
+/**
+ * Parameters for creating a ShinzoHub view.
+ *
+ * The same shape is used by the standalone `createView(client, parameters)`
+ * function and the decorated `client.createView(parameters)` action.
+ */
 export interface CreateViewParameters {
   /**
    * Raw viewbundle bytes to register.
@@ -148,7 +153,12 @@ export interface ShinzoHubView {
   metadata: ViewMetadata | null;
 }
 
-/** Filters, pagination, and response-shaping options for listing views. */
+/**
+ * Filters, pagination, and response-shaping options for `listViews`.
+ *
+ * Common app usage is just `{ limit: 25, includeMetadata: true }`. The
+ * metadata filters are useful for catalog/search screens.
+ */
 export interface ListViewsParameters {
   /** Maximum number of views to return. Use this for the common "first page" case. */
   limit?: number | bigint | string;
@@ -269,7 +279,43 @@ interface CountViewsWireResponse {
   count?: string | number;
 }
 
-/** Registers a viewbundle through the ShinzoHub ViewRegistry precompile. */
+/**
+ * Creates a ShinzoHub view by sending a ViewRegistry transaction.
+ *
+ * The method chooses the correct precompile call from the parameters:
+ * `register(bytes)` when `pricing` is omitted, or
+ * `registerWithPricing(bytes,address)` when `pricing` is provided.
+ *
+ * @param client - Viem wallet client configured with a ShinzoHub chain,
+ * transport, and account.
+ * @param parameters - View creation options, including the raw `bundle` bytes
+ * and optional custom `pricing` contract address.
+ * @returns Transaction hash for the submitted ViewRegistry transaction.
+ *
+ * @example
+ * ```ts
+ * import { createWalletClient, http } from "viem";
+ * import { createView, shinzoHubDevelop } from "@shinzo/shinzohub";
+ *
+ * const client = createWalletClient({
+ *   account: "0x1234567890AbcdEF1234567890aBcdef12345678",
+ *   chain: shinzoHubDevelop,
+ *   transport: http(),
+ * });
+ *
+ * const hash = await createView(client, {
+ *   bundle: "0x68656c6c6f",
+ * });
+ * ```
+ *
+ * @example
+ * ```ts
+ * const hash = await client.createView({
+ *   bundle: compiledViewBundle,
+ *   pricing: "0x0000000000000000000000000000000000000000",
+ * });
+ * ```
+ */
 export async function createView(client: Client, parameters: CreateViewParameters): Promise<Hex> {
   const tx = buildCreateViewTransaction(parameters);
   return sendTransaction(client, {
@@ -280,7 +326,27 @@ export async function createView(client: Client, parameters: CreateViewParameter
   } as any);
 }
 
-/** Decodes the created view address from a ViewRegistry transaction receipt. */
+/**
+ * Reads the deployed View contract address from a ViewRegistry transaction receipt.
+ *
+ * Use this after `createView` and `publicClient.waitForTransactionReceipt` when
+ * your app needs the new view address without manually decoding logs.
+ *
+ * @param receipt - Transaction receipt returned by Viem after the create view
+ * transaction is confirmed.
+ * @returns The `viewAddress` emitted by the ViewRegistry `ViewCreated` event.
+ * @throws When the receipt does not contain a decodable `ViewCreated` log from
+ * the ViewRegistry precompile.
+ *
+ * @example
+ * ```ts
+ * import { createView, getCreatedViewAddress } from "@shinzo/shinzohub";
+ *
+ * const hash = await createView(walletClient, { bundle });
+ * const receipt = await publicClient.waitForTransactionReceipt({ hash });
+ * const viewAddress = getCreatedViewAddress(receipt);
+ * ```
+ */
 export function getCreatedViewAddress(receipt: TransactionReceipt): Hex {
   for (const log of receipt.logs) {
     if (log.address.toLowerCase() !== viewRegistryAddress.toLowerCase()) {
@@ -307,7 +373,40 @@ export function getCreatedViewAddress(receipt: TransactionReceipt): Hex {
   throw new Error("Transaction receipt does not contain a ViewCreated log from the ViewRegistry.");
 }
 
-/** Lists registered views with pagination, metadata, and content filters. */
+/**
+ * Lists registered ShinzoHub views through the Cosmos REST gateway.
+ *
+ * The method reads the REST endpoint from `client.chain.rpcUrls.cosmosRest`
+ * when available. Pass `cosmosRestUrl` for custom deployments, tests, or
+ * clients whose chain definition only contains EVM RPC URLs.
+ *
+ * @param client - Viem public or wallet client configured with a ShinzoHub
+ * chain, or any Viem client when `parameters.cosmosRestUrl` is provided.
+ * @param parameters - Optional filters, pagination options, metadata/data
+ * inclusion flags, and REST endpoint override.
+ * @returns A page of registered views plus pagination data.
+ *
+ * @example
+ * ```ts
+ * import { createPublicClient, http } from "viem";
+ * import { listViews, shinzoHubDevelop } from "@shinzo/shinzohub";
+ *
+ * const client = createPublicClient({
+ *   chain: shinzoHubDevelop,
+ *   transport: http(),
+ * });
+ *
+ * const result = await listViews(client, {
+ *   limit: 25,
+ *   includeMetadata: true,
+ *   metadataQueryContains: "Transfer",
+ * });
+ *
+ * for (const view of result.views) {
+ *   console.log(view.name, view.contractAddress);
+ * }
+ * ```
+ */
 export async function listViews(
   client: Client,
   parameters: ListViewsParameters = {},
@@ -328,7 +427,28 @@ export async function listViews(
   };
 }
 
-/** Loads one registered view by its EVM or Shinzo address. */
+/**
+ * Fetches one registered ShinzoHub view through the Cosmos REST gateway.
+ *
+ * Use this when you already know a view contract address and need the
+ * registry record, creator, registration height, or optional bundle metadata.
+ *
+ * @param client - Viem public or wallet client configured with a ShinzoHub
+ * chain, or any Viem client when `parameters.cosmosRestUrl` is provided.
+ * @param parameters - View lookup options. `address` accepts an EVM hex
+ * address or Shinzo bech32 address.
+ * @returns The registered view record.
+ *
+ * @example
+ * ```ts
+ * const view = await client.getView({
+ *   address: "0x018a06d78e0802db5bc055b4527d7b481c3e9932",
+ *   includeMetadata: true,
+ * });
+ *
+ * console.log(view.name, view.metadata?.rootType);
+ * ```
+ */
 export async function getView(client: Client, parameters: GetViewParameters): Promise<ShinzoHubView> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
@@ -346,7 +466,23 @@ export async function getView(client: Client, parameters: GetViewParameters): Pr
   return toView(response.view);
 }
 
-/** Counts all registered ShinzoHub views. */
+/**
+ * Counts registered ShinzoHub views through the Cosmos REST gateway.
+ *
+ * This is useful for dashboards, health checks, and lightweight "is the view
+ * module responding?" checks where fetching full view records would be wasteful.
+ *
+ * @param client - Viem public or wallet client configured with a ShinzoHub
+ * chain, or any Viem client when `parameters.cosmosRestUrl` is provided.
+ * @param parameters - Optional REST endpoint override.
+ * @returns Total number of registered views as a `bigint`.
+ *
+ * @example
+ * ```ts
+ * const totalViews = await client.countViews();
+ * console.log(`ShinzoHub has ${totalViews} registered views`);
+ * ```
+ */
 export async function countViews(client: Client, parameters?: CountViewsParameters): Promise<bigint> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
