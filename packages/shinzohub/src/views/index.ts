@@ -1,9 +1,10 @@
 import type { Account, Address, Client, Hex, TransactionReceipt } from "viem";
 import { decodeEventLog, encodeFunctionData } from "viem";
 import { sendTransaction } from "viem/actions";
-import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index.js";
-import { buildUrl, requestJson } from "../internal/fetch.js";
-import { bytesLikeToHex, normalizeHex } from "../internal/hex.js";
+import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index";
+import { buildUrl, requestJson } from "../internal/fetch";
+import { getRpcEndpoint } from "../internal/endpoints";
+import { bytesLikeToHex, normalizeHex } from "../internal/hex";
 
 /**
  * ShinzoHub ViewRegistry precompile address.
@@ -417,7 +418,7 @@ export async function listViews(
 
   const response = await requestJson<ListViewsWireResponse>(
     fetchFn,
-    buildListViewsUrl(getCosmosRestUrl(client, parameters), parameters),
+    buildListViewsUrl(getRpcEndpoint(client, "cosmosRest", parameters.cosmosRestUrl), parameters),
   );
 
   return {
@@ -456,7 +457,7 @@ export async function getView(client: Client, parameters: GetViewParameters): Pr
 
   const response = await requestJson<GetViewWireResponse>(
     fetchFn,
-    buildGetViewUrl(getCosmosRestUrl(client, parameters), parameters),
+    buildGetViewUrl(getRpcEndpoint(client, "cosmosRest", parameters.cosmosRestUrl), parameters),
   );
 
   if (!response.view) {
@@ -490,7 +491,10 @@ export async function countViews(client: Client, parameters?: CountViewsParamete
 
   const response = await requestJson<CountViewsWireResponse>(
     fetchFn,
-    buildUrl(getCosmosRestUrl(client, parameters), "/shinzonetwork/view/v1/view_count"),
+    buildUrl(
+      getRpcEndpoint(client, "cosmosRest", parameters?.cosmosRestUrl),
+      "/shinzonetwork/view/v1/view_count",
+    ),
   );
 
   return BigInt(response.count ?? 0);
@@ -593,20 +597,6 @@ function toMetadata(wire: ViewMetadataWire): ViewMetadata {
     })),
     parseError: wire.parse_error ?? "",
   };
-}
-
-function getCosmosRestUrl(client: Client, parameters?: CountViewsParameters): string {
-  const url =
-    parameters?.cosmosRestUrl ??
-    (client.chain?.rpcUrls as { cosmosRest?: { http?: readonly string[] } } | undefined)?.cosmosRest?.http?.[0];
-
-  if (!url) {
-    throw new Error(
-      "Cosmos REST URL not found. Ensure the client's chain configuration includes cosmosRest endpoints, or pass cosmosRestUrl explicitly.",
-    );
-  }
-
-  return url;
 }
 
 function normalizeAnyAddress(value: string): Hex {

@@ -1,1 +1,1 @@
-export { HomePage as default } from '@/pages/shinzohub/home';
+export { HomePage as default } from '@/pages/shinzohub-home';

@@ -52,7 +52,7 @@ export const useBlocksAndTransactionsCount = () => {
       if (!response.ok) {
         throw new Error(`Failed to fetch metrics: ${response.statusText}`);
       }
-      const data = await response.json();
+      const data: MetricsResponse = await response.json();
       return data;
     },
   });
