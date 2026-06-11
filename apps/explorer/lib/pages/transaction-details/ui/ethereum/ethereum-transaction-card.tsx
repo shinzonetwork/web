@@ -125,7 +125,7 @@ export const EthereumTransactionCard = ({ txHash }: EthereumTransactionCardProps
         value={tx.value}
         loading={isLoading}
       >
-        {tx.value && `${formatTokenValue(tx.value, getToken('eth').decimals)} ${getToken('eth').symbol}`}
+        {tx.value && `${formatTokenValue(tx.value, getToken(chain)?.decimals)} ${getToken(chain)?.symbol}`}
       </DataItem>
 
       <DataItem
