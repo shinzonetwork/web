@@ -3,7 +3,7 @@
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
-import { TransactionsList } from '../transactions-list';
+import { TransactionsList } from './transactions-list';
 import { useEthereumTransactions } from '../../hooks/ethereum/use-ethereum-transactions';
 import { useTransactionsCount } from '../../hooks/ethereum/use-transactions-count';
 

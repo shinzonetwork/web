@@ -26,8 +26,6 @@ export function useHomeTransactions(
       total: data.total,
       transactions: data.transactions.map((transaction) => ({
         hash: transaction.cosmosHash,
-        kind: transaction.kind,
-        action: transaction.actions[0] ?? transaction.kind,
         from: transaction.senders[0] ?? null,
         to: transaction.recipients[0] ?? null,
         value: transaction.transfers[0]?.amount ?? null,
