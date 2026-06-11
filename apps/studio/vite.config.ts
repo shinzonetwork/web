@@ -34,5 +34,6 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./lib", import.meta.url)),
     },
+    dedupe: ["react", "react-dom"],
   },
 });

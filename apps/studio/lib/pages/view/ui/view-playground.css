@@ -1,0 +1,217 @@
+.shinzo-graphiql-shell .graphiql-container {
+  height: 100%;
+  min-width: 0;
+  background: #ffffff;
+  color: #353535;
+  font-family: "Inter Variable", system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  --color-primary: #d01f27;
+  --color-primary-light: #fffbfb;
+  --color-neutral: #353535;
+  --color-neutral-muted: #525252;
+}
+
+.shinzo-graphiql-shell .graphiql-container *,
+.shinzo-graphiql-shell .graphiql-container *::before,
+.shinzo-graphiql-shell .graphiql-container *::after {
+  box-shadow: none !important;
+}
+
+.shinzo-graphiql-shell .graphiql-sidebar,
+.shinzo-graphiql-shell .graphiql-plugin,
+.shinzo-graphiql-shell .graphiql-session-header,
+.shinzo-graphiql-shell .graphiql-editor-tools,
+.shinzo-graphiql-shell .graphiql-editor-tool,
+.shinzo-graphiql-shell button[aria-label="Show Documentation Explorer"],
+.shinzo-graphiql-shell button[aria-label="Show History"],
+.shinzo-graphiql-shell button[aria-label^="Re-fetch GraphQL schema"],
+.shinzo-graphiql-shell button[aria-label="Open short keys dialog"],
+.shinzo-graphiql-shell button[aria-label="Open settings dialog"],
+.shinzo-graphiql-shell button[aria-label^="Merge fragments"] {
+  display: none !important;
+}
+
+.shinzo-graphiql-shell .graphiql-main,
+.shinzo-graphiql-shell .graphiql-sessions,
+.shinzo-graphiql-shell [role="tabpanel"] {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-sessions {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+}
+
+.shinzo-graphiql-shell #graphiql-session {
+  padding: 0 !important;
+}
+
+.shinzo-graphiql-shell [role="tabpanel"] {
+  display: flex !important;
+}
+
+.shinzo-graphiql-shell .graphiql-editors,
+.shinzo-graphiql-shell .graphiql-response {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-editors {
+  border-right: 1px solid #c7c7c7 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-response {
+  background: #f5f5f5 !important;
+  padding-top: 0 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-response .result-window {
+  min-height: 0 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-query-editor {
+  min-height: 0 !important;
+  column-gap: 0 !important;
+  padding: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-editor {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  background: transparent !important;
+}
+
+.shinzo-graphiql-shell .graphiql-query-editor > .graphiql-editor {
+  padding: 8px !important;
+  box-sizing: border-box !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar {
+  align-items: center !important;
+  width: 52px !important;
+  gap: 6px !important;
+  padding: 8px !important;
+  border-left: 1px solid #c7c7c7 !important;
+  background: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar button {
+  width: 34px !important;
+  height: 34px !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  color: #353535 !important;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar button:hover {
+  border-color: #c7c7c7 !important;
+  background: #f5f5f5 !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button {
+  border-color: #d01f27 !important;
+  background: #d01f27 !important;
+  color: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:hover,
+.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:focus-visible,
+.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:active {
+  border-color: #a81920 !important;
+  background: #a81920 !important;
+  color: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button svg {
+  color: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-toolbar svg,
+.shinzo-graphiql-shell .graphiql-execute-button svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.shinzo-graphiql-shell .graphiql-horizontal-drag-bar {
+  display: none;
+}
+
+.shinzo-graphiql-shell .graphiql-horizontal-drag-bar::after {
+  background: #d01f27 !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor,
+.shinzo-graphiql-shell .monaco-editor .view-lines,
+.shinzo-graphiql-shell .monaco-editor textarea {
+  font-family:
+    "Geist Mono Variable", "JetBrains Mono", "Fira Code", monospace !important;
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor,
+.shinzo-graphiql-shell .monaco-editor-background,
+.shinzo-graphiql-shell .monaco-editor .margin {
+  background: #ffffff !important;
+}
+
+.shinzo-graphiql-shell .graphiql-response .monaco-editor,
+.shinzo-graphiql-shell .graphiql-response .monaco-editor-background,
+.shinzo-graphiql-shell .graphiql-response .monaco-editor .margin {
+  background: #f5f5f5 !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor .line-numbers {
+  color: #a3a3a3 !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor .current-line {
+  border-color: rgba(208, 31, 39, 0.18) !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor .selected-text {
+  background: rgba(208, 31, 39, 0.16) !important;
+}
+
+.shinzo-graphiql-shell .monaco-editor .cursor {
+  background-color: #d01f27 !important;
+  color: #d01f27 !important;
+}
+
+.shinzo-graphiql-shell .monaco-scrollable-element > .scrollbar > .slider {
+  background: #c7c7c7 !important;
+  border-radius: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .shinzo-graphiql-shell [role="tabpanel"] {
+    flex-direction: column !important;
+  }
+
+  .shinzo-graphiql-shell .graphiql-editors,
+  .shinzo-graphiql-shell .graphiql-response {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 0 !important;
+  }
+
+  .shinzo-graphiql-shell .graphiql-editors {
+    border-right: 0 !important;
+    border-bottom: 1px solid #c7c7c7 !important;
+  }
+
+  .shinzo-graphiql-shell .graphiql-horizontal-drag-bar {
+    width: 100% !important;
+    height: 1px !important;
+  }
+}

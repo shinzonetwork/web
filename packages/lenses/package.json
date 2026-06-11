@@ -7,18 +7,19 @@
   "types": "./lib/index.ts",
   "exports": {
     ".": "./lib/index.ts",
-    "./ens": "./ens/index.ts",
     "./evm": "./lib/evm/index.ts",
     "./testing": "./lib/testing/index.ts",
     "./view": "./lib/view/index.ts",
     "./view/node": "./lib/view/node.ts",
+    "./decode-log/metadata.json": "./decode-log/metadata.json",
+    "./erc20-transfers/metadata.json": "./erc20-transfers/metadata.json",
+    "./erc20-account-balances/metadata.json": "./erc20-account-balances/metadata.json",
     "./validate": "./lib/testing/validate.ts",
     "./exports": "./lib/exports.ts",
     "./package.json": "./package.json"
   },
   "files": [
     "lib",
-    "ens",
     "decode-log",
     "erc20-transfers",
     "erc20-account-balances",

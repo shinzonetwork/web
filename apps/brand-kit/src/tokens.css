@@ -1,0 +1,79 @@
+/* =====================================================
+   SHINZO BRAND TOKENS
+   Standalone importable — provides every Shinzo design
+   token as a CSS custom property AND a Tailwind utility.
+
+   Import in any Shinzo project:
+     @import "@shinzo/brand-kit/src/tokens.css";
+
+   Then use:
+     bg-szo-primary   text-szo-text   font-display
+     border-szo-border   rounded-lg   text-gray-900
+   ===================================================== */
+
+@theme inline {
+  /* ---- Typography ---- */
+  --font-display:  "Geist Mono Variable", "JetBrains Mono", "Fira Code", monospace;
+  --font-body:     "Inter Variable", Inter, system-ui, -apple-system, sans-serif;
+  --font-mono:     "Geist Mono Variable", "JetBrains Mono", "Fira Code", monospace;
+  --font-jp-serif: "Toppan Bunkyu Midashi Mincho", serif;
+
+  /* ---- Brand: primary red ---- */
+  --color-szo-primary:      #d01f27;
+  --color-szo-primary-dark: #a81920;
+  --color-szo-primary-lite: #e8454c;
+
+  /* ---- Brand: surfaces ---- */
+  --color-szo-black:        #000000;
+  --color-szo-white:        #ffffff;
+  --color-szo-gray-light:   #F4F4F4;
+  --color-szo-gray-mid:     #C7C7C7;
+
+  --color-szo-text:         #000000;
+  --color-szo-text-muted:   #AAAAAA;
+  --color-szo-border:       #AAAAAA;
+  --color-szo-border-light: #F4F4F4;
+  --color-szo-bg:           #ffffff;
+  --color-szo-bg-muted:     #F4F4F4;
+  --color-szo-bg-accent:    #fffbfb;
+
+  /* ---- UI semantic tokens ---- */
+  --color-ui-bg:              #ffffff;
+  --color-ui-bg-muted:        #f5f5f5;
+  --color-ui-bg-accent:       #fffbfb;
+  --color-ui-bg-accent-hover: #fff5f5;
+
+  --color-ui-border:          #C7C7C7;
+  --color-ui-accent:          #d01f27;
+
+  --color-ui-text:            #353535;
+  --color-ui-text-muted:      #525252;
+  --color-ui-text-accent:     #D32C34;
+
+  /* ---- Gray scale ---- */
+  --color-gray-50:  #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #e5e5e5;
+  --color-gray-300: #d4d4d4;
+  --color-gray-400: #a3a3a3;
+  --color-gray-500: #737373;
+  --color-gray-600: #525252;
+  --color-gray-700: #404040;
+  --color-gray-800: #262626;
+  --color-gray-900: #171717;
+
+  /* ---- Radius scale ---- */
+  /* Intentionally named to override Tailwind defaults consistently */
+  --radius-xs:   4px;
+  --radius-sm:   6px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;
+
+  /* ---- Viewer layout (kit-specific, not brand tokens) ---- */
+  --spacing-sidebar: 240px;
+  --spacing-nav:     56px;
+  --spacing-content: 1400px;
+}
