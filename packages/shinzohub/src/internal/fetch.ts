@@ -1,5 +1,6 @@
 export type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
+/** HTTP error retaining the upstream response details for diagnostics. */
 export class ShinzoHubHttpError extends Error {
   readonly status: number;
   readonly statusText: string;

@@ -5,15 +5,27 @@ import {
   getCreatedViewAddress,
   getView,
   listViews,
-} from "./views/index.js";
+} from "./views/index";
+import {
+  findTransactionByEvmHash,
+  getTransaction,
+  listTransactions,
+} from "./transactions/index";
+import {
+  getBlock,
+  getBlockTimestamp,
+  getLatestBlock,
+  getLatestBlockHeight,
+  listBlocks,
+} from "./blocks/index";
 
 export {
   hexToShinzoAddress,
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
-} from "./addresses/index.js";
-export type { HexAddress, ShinzoAddress } from "./addresses/index.js";
+} from "./addresses/index";
+export type { HexAddress, ShinzoAddress } from "./addresses/index";
 export {
   shinzoHubChains,
   shinzoHubDevelop,
@@ -21,7 +33,7 @@ export {
   shinzoHubLocal,
   shinzoHubMainnet,
   shinzoHubTestnet,
-} from "./chains/index.js";
+} from "./chains/index";
 export {
   countViews,
   createView,
@@ -30,38 +42,52 @@ export {
   listViews,
   viewRegistryAbi,
   viewRegistryAddress,
-} from "./views/index.js";
+} from "./views/index";
 export type {
   CreateViewParameters,
   ListViewsParameters,
   ListViewsResult,
   ShinzoHubView,
   ViewMetadata,
-} from "./views/index.js";
+} from "./views/index";
+export {
+  findTransactionByEvmHash,
+  getTransaction,
+  listTransactions,
+} from "./transactions/index";
+export type {
+  FindTransactionByEvmHashParameters,
+  GetTransactionParameters,
+  ListTransactionsParameters,
+  ListTransactionsResult,
+  ShinzoHubCoin,
+  ShinzoHubEvent,
+  ShinzoHubEventAttribute,
+  ShinzoHubMessage,
+  ShinzoHubTransaction,
+  ShinzoHubTransactionFilter,
+  ShinzoHubTransactionKind,
+  ShinzoHubTransactionOrder,
+  ShinzoHubTransactionSummary,
+  ShinzoHubTransfer,
+} from "./transactions/index";
+export {
+  getBlock,
+  getBlockTimestamp,
+  getLatestBlock,
+  getLatestBlockHeight,
+  listBlocks,
+} from "./blocks/index";
+export type {
+  GetBlockParameters,
+  GetBlockTimestampParameters,
+  GetLatestBlockHeightParameters,
+  ListBlocksParameters,
+  ListBlocksResult,
+  ShinzoHubBlock,
+} from "./blocks/index";
 
-/**
- * Creates a Viem action bundle for ShinzoHub view workflows.
- *
- * Use this with `client.extend(shinzoHubActions)` when you want the methods to
- * appear directly on an existing Viem public or wallet client.
- *
- * @param client - Existing Viem client. Public clients can call read/query
- * methods such as `listViews`; wallet clients can also call `createView`.
- * @returns ShinzoHub actions bound to the provided Viem client.
- *
- * @example
- * ```ts
- * import { createPublicClient, http } from "viem";
- * import { shinzoHubActions, shinzoHubDevelop } from "@shinzo/shinzohub";
- *
- * const client = createPublicClient({
- *   chain: shinzoHubDevelop,
- *   transport: http(),
- * }).extend(shinzoHubActions);
- *
- * const views = await client.listViews({ limit: 10, includeMetadata: true });
- * ```
- */
+/** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
   return {
     /** Counts registered ShinzoHub views. */
@@ -72,35 +98,37 @@ export function shinzoHubActions(client: Client) {
     getView: (parameters: Parameters<typeof getView>[1]) => getView(client, parameters),
     /** Lists registered ShinzoHub views. */
     listViews: (parameters?: Parameters<typeof listViews>[1]) => listViews(client, parameters),
+    /** Lists native Cosmos and EVM transactions. */
+    listTransactions: (parameters?: Parameters<typeof listTransactions>[1]) =>
+      listTransactions(client, parameters),
+    /** Fetches decoded transaction details by Cosmos hash. */
+    getShinzoHubTransaction: (parameters: Parameters<typeof getTransaction>[1]) =>
+      getTransaction(client, parameters),
+    /** Finds a transaction summary by EVM hash. */
+    findShinzoHubTransactionByEvmHash: (
+      parameters: Parameters<typeof findTransactionByEvmHash>[1]
+    ) => findTransactionByEvmHash(client, parameters),
+    /** Lists consensus blocks. */
+    listBlocks: (parameters?: Parameters<typeof listBlocks>[1]) =>
+      listBlocks(client, parameters),
+    /** Fetches the latest ShinzoHub consensus block. */
+    getLatestShinzoHubBlock: (parameters?: Parameters<typeof getLatestBlock>[1]) =>
+      getLatestBlock(client, parameters),
+    /** Fetches the latest ShinzoHub consensus height. */
+    getLatestShinzoHubBlockHeight: (
+      parameters?: Parameters<typeof getLatestBlockHeight>[1]
+    ) => getLatestBlockHeight(client, parameters),
+    /** Fetches one ShinzoHub consensus block by height or hash. */
+    getShinzoHubBlock: (parameters: Parameters<typeof getBlock>[1]) =>
+      getBlock(client, parameters),
+    /** Fetches a block timestamp by height. */
+    getShinzoHubBlockTimestamp: (
+      parameters: Parameters<typeof getBlockTimestamp>[1]
+    ) => getBlockTimestamp(client, parameters),
   };
 }
 
-/**
- * Decorates an existing Viem client with ShinzoHub methods.
- *
- * This is a small convenience wrapper around `client.extend(shinzoHubActions)`.
- * It does not create transports, accounts, or chain configuration for you, so
- * the result stays predictable for Viem users.
- *
- * @param client - Existing Viem public or wallet client to extend.
- * @returns The same Viem client shape with ShinzoHub methods attached.
- *
- * @example
- * ```ts
- * import { createWalletClient, http } from "viem";
- * import { createShinzoHubClient, shinzoHubDevelop } from "@shinzo/shinzohub";
- *
- * const walletClient = createShinzoHubClient(
- *   createWalletClient({
- *     account: "0x1234567890AbcdEF1234567890aBcdef12345678",
- *     chain: shinzoHubDevelop,
- *     transport: http(),
- *   }),
- * );
- *
- * const hash = await walletClient.createView({ bundle: "0x68656c6c6f" });
- * ```
- */
+/** Extends a Viem client with the complete ShinzoHub action bundle. */
 export function createShinzoHubClient<TClient extends Client>(client: TClient) {
   return client.extend(shinzoHubActions);
 }
