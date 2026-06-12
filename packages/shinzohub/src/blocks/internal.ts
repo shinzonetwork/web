@@ -59,10 +59,15 @@ export async function getBlockWire(
     method,
     params,
   );
+
+  if (!response.block?.header?.height || !response.block.header.time) {
+    throw new Error("ShinzoHub block not found.");
+  }
+
   return toBlock(
     response.block_id?.hash,
-    response.block?.header,
-    response.block?.data?.txs?.length ?? 0,
+    response.block.header,
+    response.block.data?.txs?.length ?? 0,
     null,
   );
 }

@@ -2,18 +2,19 @@
 
 import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
-import { useBlockTransactions } from "./use-block-transactions";
-import { BlockTransactionsList } from "./block-transactions-list";
-import { useBlockTransactionsCount } from './use-block-transactions-count';
+import { useEthereumBlockTransactions } from "../../hook/ethereum/use-ethereum-block-transactions";
+import { BlockTransactionsList } from "./ethereum-block-transactions-list";
+import { useEthereumBlockTransactionsCount } from '../../hook/ethereum/use-ethereum-block-transactions-count';
+import { Hex } from 'viem';
 
-export type BlockTransactionsProps =
+export type EthereumBlockTransactionsProps =
   | { blockNumber: number; blockHash?: never; pageParams: PageParams } 
-  | { blockHash: string; blockNumber?: never; pageParams: PageParams };
+  | { blockHash: Hex; blockNumber?: never; pageParams: PageParams };
 
-export const BlockTransactions = (options: BlockTransactionsProps) => {
+export const EthereumBlockTransactions = (options: EthereumBlockTransactionsProps) => {
   const { page } = options.pageParams;
-  const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useBlockTransactions(options);
-  const { data: blockTransactionsCount } = useBlockTransactionsCount(options);
+  const { data: blockTransactions, isLoading: isBlockTransactionsLoading } = useEthereumBlockTransactions(options);
+  const { data: blockTransactionsCount } = useEthereumBlockTransactionsCount(options);
   return (
     <>
       <BlockTransactionsList

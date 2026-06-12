@@ -1,5 +1,5 @@
 import type { ShinzoHubQueryClient } from "../internal/endpoints";
-import { normalizeHex, stripHexPrefix } from "../internal/hex";
+import { hexToBase64, normalizeHex } from "../internal/hex";
 import { getBlockWire } from "./internal";
 import type {
   GetBlockParameters,
@@ -31,7 +31,7 @@ export async function getBlock(
   return getBlockWire(
     client,
     "block_by_hash",
-    { hash: stripHexPrefix(hash).toUpperCase() },
+    { hash: hexToBase64(hash) },
     parameters.cometRpcUrl,
   );
 }
