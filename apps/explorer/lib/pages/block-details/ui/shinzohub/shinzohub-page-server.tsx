@@ -1,9 +1,6 @@
 
-  import { isBlockHeightParam, parseBlockHashFromPathParam } from '@/shared/utils/block-route';
   import { getServerPage, PageParamsOptions } from '@shinzo/ui/pagination';
-  import { notFound } from 'next/navigation';
   import { ShinzohubBlockDetailClientPage } from './shinzohub-page';
-import { Hex } from 'viem';
   
   export interface ShinzohubBlocksDetailsProps {
     searchParams: Promise<PageParamsOptions>
@@ -15,14 +12,7 @@ import { Hex } from 'viem';
     const pageParams = getServerPage(search);
 
     const { id } = await params;
-    if (isBlockHeightParam(id)) {
-      return <ShinzohubBlockDetailClientPage blockNumber={Number(id)} pageParams={pageParams} />
-    } else {
-      const blockHash = parseBlockHashFromPathParam(id) as Hex;
-      if (blockHash == null) {
-        notFound();
-      }
-      return <ShinzohubBlockDetailClientPage blockHash={blockHash} pageParams={pageParams} />; 
-    }
+
+    return <ShinzohubBlockDetailClientPage id={id} pageParams={pageParams} />
   }
   

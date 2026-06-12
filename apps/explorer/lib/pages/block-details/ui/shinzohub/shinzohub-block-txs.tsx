@@ -4,39 +4,30 @@ import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { ShinzohubTransactionsList } from '@/pages/transactions/ui/shinzohub/shinzohub-transactions-list';
 import { useShinzohubTransactions } from '@/pages/transactions/hooks/shinzohub/use-shinzohub-transactions';
-import {
-  useShinzohubBlock,
-  type UseShinzohubBlockOptions,
-} from '../../hook/shinzohub/use-shinzohub-block';
-import type { Hex } from 'viem';
+import { useShinzohubBlock } from '../../hook/shinzohub/use-shinzohub-block';
+import { isBlockHeightParam } from '@/shared/utils/block-route';
 
-function toBlockLookupOptions(
-  options: ShinzohubBlockTransactionsProps,
-): UseShinzohubBlockOptions {
-  if (options.blockNumber !== undefined) {
-    return { number: options.blockNumber };
-  }
-  return { hash: options.blockHash };
-}
+export type ShinzohubBlockTransactionsProps = {
+  id: string;
+  pageParams: PageParams;
+};
 
-export type ShinzohubBlockTransactionsProps =
-  | { blockNumber: number; blockHash?: never; pageParams: PageParams }
-  | { blockHash: Hex; blockNumber?: never; pageParams: PageParams };
-
-export const ShinzohubBlockTransactions = (
-  options: ShinzohubBlockTransactionsProps,
-) => {
-  const { pageParams } = options;
+export const ShinzohubBlockTransactions = ({
+  id,
+  pageParams,
+}: ShinzohubBlockTransactionsProps) => {
   const { page } = pageParams;
+  const lookupByHash = !isBlockHeightParam(id);
 
-  const { data: block, isLoading: isBlockLoading } = useShinzohubBlock(
-    toBlockLookupOptions(options),
-    { enabled: options.blockNumber === undefined },
-  );
+  const { data: block, isLoading: isBlockLoading } = useShinzohubBlock(id, {
+    enabled: lookupByHash,
+  });
 
-  const blockHeight =
-    options.blockNumber ??
-    (block?.height ? Number(block.height) : undefined);
+  const blockHeight = isBlockHeightParam(id)
+    ? Number(id)
+    : block?.height
+      ? Number(block.height)
+      : undefined;
 
   const { data, isLoading: isTransactionsLoading } = useShinzohubTransactions({
     pageParams,
@@ -44,9 +35,7 @@ export const ShinzohubBlockTransactions = (
     enabled: blockHeight !== undefined,
   });
 
-  const isLoading =
-    (options.blockNumber === undefined && isBlockLoading) ||
-    isTransactionsLoading;
+  const isLoading = (lookupByHash && isBlockLoading) || isTransactionsLoading;
 
   return (
     <>

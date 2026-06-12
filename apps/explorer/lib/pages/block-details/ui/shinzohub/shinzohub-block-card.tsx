@@ -8,19 +8,13 @@ import { Button } from "@/shared/ui/button";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { getPageLink } from "@/shared/utils/links";
 import { useShinzohubBlock } from "../../hook/shinzohub/use-shinzohub-block";
-import type { Hex } from "viem";
+import { formatProposerAddress } from "@/shared/shinzohub/utils/format-proposer-address";
 
-export type ShinzohubBlockCardOptions =
-  | { number: number; hash?: never }
-  | { hash: Hex; number?: never };
-
-function formatProposerAddress(address: string): string {
-  return address.startsWith("0x") ? address : `0x${address.toLowerCase()}`;
-}
+export type ShinzohubBlockCardOptions = { id: string }
 
 export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
   const [showMore, setShowMore] = useState(false);
-  const { data: block, isLoading } = useShinzohubBlock(options);
+  const { data: block, isLoading } = useShinzohubBlock(options.id);
   const chain = useChainPathSegment();
 
   if (!block?.height) {

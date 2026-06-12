@@ -1,31 +1,22 @@
 import { PageLayout } from '@/widgets/layout';
 import { ShinzohubBlockTabs } from './shinzohub-block-tabs';
 import { PageParams } from '@shinzo/ui/pagination';
-import { Hex } from 'viem';
+import { isBlockHeightParam } from '@/shared/utils/block-route';
 
-export type ShinzohubBlockDetailsClientPageProps =
-  | {
-      pageParams: PageParams;
-      blockNumber: number;
-    }
-  | {
-      pageParams: PageParams;
-      blockHash: Hex;
-    };
+export type ShinzohubBlockDetailsClientPageProps = {
+  pageParams: PageParams;
+  id: string;
+};
 
 export const ShinzohubBlockDetailClientPage = async (props: ShinzohubBlockDetailsClientPageProps) => {
   const title =
-    'blockNumber' in props
-      ? `Block #${props.blockNumber}`
-      : `Block ${props.blockHash.slice(0, 10)}…${props.blockHash.slice(-8)}`;
+    isBlockHeightParam(props.id)
+      ? `Block #${props.id}`
+      : `Block ${props.id.slice(0, 10)}…${props.id.slice(-8)}`;
 
   return (
     <PageLayout title={title}>
-      {'blockNumber' in props ? (
-        <ShinzohubBlockTabs blockNumber={props.blockNumber} pageParams={props.pageParams} />
-      ) : (
-        <ShinzohubBlockTabs blockHash={props.blockHash} pageParams={props.pageParams} />
-      )}
+      <ShinzohubBlockTabs id={props.id} pageParams={props.pageParams} />
     </PageLayout>
   );
 };

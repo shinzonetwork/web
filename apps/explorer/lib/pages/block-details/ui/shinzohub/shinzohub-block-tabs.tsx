@@ -5,11 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { PageParams } from '@shinzo/ui/pagination';
 import { ShinzohubBlockCard } from './shinzohub-block-card';
 import { ShinzohubBlockTransactions } from './shinzohub-block-txs';
-import { Hex } from 'viem';
 
-export type ShinzohubBlockTabsProps =
-  | { pageParams: PageParams; blockNumber: number }
-  | { pageParams: PageParams; blockHash: Hex };
+export type ShinzohubBlockTabsProps = { pageParams: PageParams; id: string }
 
 export const ShinzohubBlockTabs = (props: ShinzohubBlockTabsProps) => {
   const { pageParams } = props;
@@ -31,25 +28,11 @@ export const ShinzohubBlockTabs = (props: ShinzohubBlockTabsProps) => {
 
       <div className='mt-2 border-t border-ui-border'>
         <TabsContent value='overview'>
-          {'blockNumber' in props ? (
-            <ShinzohubBlockCard number={props.blockNumber} />
-          ) : (
-            <ShinzohubBlockCard hash={props.blockHash} />
-          )}
+          <ShinzohubBlockCard id={props.id} />
         </TabsContent>
 
         <TabsContent asChild value='transactions'>
-          {'blockNumber' in props ? (
-            <ShinzohubBlockTransactions
-              blockNumber={props.blockNumber}
-              pageParams={pageParams}
-            />
-          ) : (
-            <ShinzohubBlockTransactions
-              blockHash={props.blockHash}
-              pageParams={pageParams}
-            />
-          )}
+          <ShinzohubBlockTransactions id={props.id} pageParams={pageParams} />
         </TabsContent>
       </div>
     </Tabs>

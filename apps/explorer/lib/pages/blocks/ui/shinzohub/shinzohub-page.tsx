@@ -16,18 +16,7 @@ import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { useShinzohubBlocks } from "../../hooks/shinzohub/use-shinohub-blocks";
-
-function formatProposerAddress(address: string): string {
-  return address.startsWith('0x') ? address : `0x${address.toLowerCase()}`;
-}
-
-function formatBlockSize(size: string | null): string {
-  if (!size) {
-    return '—';
-  }
-  return `${(Number(size) / 1024).toFixed(2)} KB`;
-}
-
+import { formatProposerAddress } from "@/shared/shinzohub/utils/format-proposer-address";
 export interface ShinzohubBlocksPageClientProps {
   pageParams: PageParams;
 }
@@ -111,7 +100,7 @@ export const ShinzohubBlocksPageClient = ({ pageParams }: ShinzohubBlocksPageCli
               </TableNullableCell>
 
               <TableNullableCell value={block?.size ?? null} nowrap>
-                {(value) => formatBlockSize(value)}
+                {(value) => value ? `${(Number(value) / 1024).toFixed(2)} KB` : '—'}
               </TableNullableCell>
             </>
           );
