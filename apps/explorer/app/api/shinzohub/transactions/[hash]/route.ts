@@ -2,7 +2,7 @@ import {
   findTransactionByEvmHash,
   getTransaction,
 } from '@shinzo/shinzohub';
-import { getShinzohubQueryContext } from '../_lib/query-context';
+import { getShinzohubQueryContext } from '../../../../../lib/shared/shinzohub/query-context';
 import { serializeTransaction } from '../_lib/serialize';
 
 export async function GET(

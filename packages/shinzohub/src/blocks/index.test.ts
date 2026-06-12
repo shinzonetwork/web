@@ -46,6 +46,9 @@ describe("block queries", () => {
     });
     const latest = await getLatestBlock(shinzoHubTestClient);
     const selected = await getBlock(shinzoHubTestClient, { height: 20 });
+    const selectedByHash = await getBlock(shinzoHubTestClient, {
+      hash: blockHash,
+    });
     const latestHeight = await getLatestBlockHeight(shinzoHubTestClient);
     const timestamp = await getBlockTimestamp(shinzoHubTestClient, {
       height: 20,
@@ -69,8 +72,9 @@ describe("block queries", () => {
       size: null,
     });
     expect(selected.height).toBe(20n);
+    expect(selectedByHash.height).toBe(20n);
     expect(latestHeight).toBe(25n);
     expect(timestamp).toBe("2026-06-09T12:00:00Z");
-    api.expectRequestCount(5);
+    api.expectRequestCount(6);
   });
 });

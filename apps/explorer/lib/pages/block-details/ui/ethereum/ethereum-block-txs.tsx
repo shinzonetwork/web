@@ -3,7 +3,7 @@
 import { Container } from '@/widgets/layout';
 import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
 import { useEthereumBlockTransactions } from "../../hook/ethereum/use-ethereum-block-transactions";
-import { BlockTransactionsList } from "../block-transactions-list";
+import { BlockTransactionsList } from "./ethereum-block-transactions-list";
 import { useEthereumBlockTransactionsCount } from '../../hook/ethereum/use-ethereum-block-transactions-count';
 import { Hex } from 'viem';
 

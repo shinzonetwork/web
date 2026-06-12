@@ -1,74 +1,50 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getPublicClient } from '@/shared/viem/client';
-import type { Block, Hex } from 'viem';
-
-export type BlockSummary = {
-  number: bigint;
-  timestamp: bigint;
-  transactionCount: number;
-  miner: Hex;
-  gasUsed: string;
-  gasLimit: string;
-};
+import type { ShinzohubBlocksResponse } from '@/shared/shinzohub/types';
+import { DEFAULT_LIMIT, PageParams } from '@shinzo/ui/pagination';
 
 type UseShinzohubBlocksOptions = {
-  limit?: number;
-  offset?: number;
+  pageParams: PageParams;
   refetchIntervalMs?: number;
 };
 
-function getBlockSummary(block: Block): BlockSummary {
-  if (!block.miner) {
-    throw new Error('Incomplete block data');
-  }
+export async function fetchShinzohubBlocks(params: {
+  page: number;
+  limit: number;
+}): Promise<ShinzohubBlocksResponse> {
+  const searchParams = new URLSearchParams({
+    page: String(params.page),
+    limit: String(params.limit),
+  });
+  const response = await fetch(`/api/shinzohub/blocks?${searchParams.toString()}`);
 
-  return {
-    number: block.number ?? BigInt(0),
-    miner: block.miner,
-    timestamp: block.timestamp ?? BigInt(0),
-    transactionCount: block.transactions.length,
-    gasUsed: block.gasUsed?.toString() ?? '0',
-    gasLimit: block.gasLimit?.toString() ?? '0',
-  };
+  if (!response.ok) {
+    throw new Error('Failed to fetch Shinzohub blocks');
+  }
+  return response.json() as Promise<ShinzohubBlocksResponse>;
 }
 
-async function fetchShinzohubBlocks(limit: number, offset: number): Promise<BlockSummary[]> {
-  const publicClient = getPublicClient('shinzohub');
-  const latestBlock = await publicClient.getBlockNumber({ cacheTime: 0 });
-
-  const blockNumbers: bigint[] = [];
-  for (let i = 0; i < limit && latestBlock - BigInt(offset + i) >= BigInt(0); i += 1) {
-    blockNumbers.push(latestBlock - BigInt(offset + i));
-  }
-
-  const blocks = await Promise.all(
-    blockNumbers.map((blockNumber) =>
-      publicClient.getBlock({
-        blockNumber,
-        includeTransactions: true,
-      }),
-    ),
-  );
-
-  return blocks.map(getBlockSummary);
-}
-
-export function shinzohubBlocksQueryKey(limit: number, offset: number) {
-  return ['shinzohub', 'blocks', limit, offset] as const;
+export function shinzohubBlocksQueryKey(page: number, limit: number) {
+  return ['shinzohub', 'blocks', page, limit] as const;
 }
 
 export function useShinzohubBlocks({
-  limit = 10,
-  offset = 0,
+  pageParams,
   refetchIntervalMs = 10_000,
-}: UseShinzohubBlocksOptions = {}) {
+}: UseShinzohubBlocksOptions = {
+  pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT },
+}) {
+  const { page, limit } = pageParams;
   return useQuery({
-    queryKey: shinzohubBlocksQueryKey(limit, offset),
-    queryFn: () => fetchShinzohubBlocks(limit, offset),
+    queryKey: shinzohubBlocksQueryKey(page, limit),
+    queryFn: () => fetchShinzohubBlocks({ page, limit }),
     staleTime: refetchIntervalMs,
     refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
+    select: (data) => ({
+      blocks: data.blocks,
+      totalBlocksCount: data.total,
+    }),
   });
 }

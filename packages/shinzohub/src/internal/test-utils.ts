@@ -400,11 +400,26 @@ export function mockShinzoHubApi({
     };
   }
 
+  function normalizeBlockHashParam(param: string): string {
+    if (/^[0-9A-Fa-f]+$/.test(param)) {
+      return param.toUpperCase();
+    }
+    try {
+      const bytes = Buffer.from(param, "base64");
+      if (bytes.length === 32) {
+        return bytes.toString("hex").toUpperCase();
+      }
+    } catch {
+      // Fall through to the raw param comparison below.
+    }
+    return param.toUpperCase();
+  }
+
   function findBlock(request: RpcRequest): BlockFixture | undefined {
     if (request.method === "block_by_hash") {
+      const requestedHash = normalizeBlockHashParam(request.params.hash);
       return blocks.find(
-        ({ hash }) =>
-          hash.slice(2).toUpperCase() === request.params.hash.toUpperCase(),
+        ({ hash }) => hash.slice(2).toUpperCase() === requestedHash,
       );
     }
     const height = request.params.height ?? resolvedLatestBlockHeight;

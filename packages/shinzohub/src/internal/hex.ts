@@ -70,6 +70,19 @@ export function hexToBytes(value: Hex): Uint8Array {
   return viemHexToBytes(value);
 }
 
+/** Encodes a 32-byte hex hash as base64 for Comet `block_by_hash` RPC. */
+export function hexToBase64(value: Hex): string {
+  const bytes = hexToBytes(value);
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(bytes).toString("base64");
+  }
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary);
+}
+
 /** Converts a bytes-like value to lowercase `0x` hex. */
 export function bytesLikeToHex(value: BytesLike, name = "value"): Hex {
   if (typeof value === "string") {
