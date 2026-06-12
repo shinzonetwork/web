@@ -49,7 +49,7 @@ export function IndexerForm() {
             <span className="text-sm flex items-center gap-2 text-muted-foreground">
               <label className="block text-sm mb-1">Validator address</label>
               <span className="text-sm text-bold text-primary">
-                {error === "Validator already exists" ? `${error}` : ""}
+                {error === "Validator already exists" ? "An indexer with this address is already registered." : ""}
               </span>
             </span>
             <input
@@ -127,7 +127,7 @@ export function IndexerForm() {
           </div>
         </form>
         {error !== "Validator already exists" && error !== null && (
-          <p className="mt-3 text-sm text-destructive">Error: {error}</p>
+          <p className="mt-3 text-sm text-destructive">Something went wrong. Please try again.</p>
         )}
       </section>
     </>

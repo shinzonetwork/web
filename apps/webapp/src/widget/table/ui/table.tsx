@@ -70,7 +70,7 @@ export function Table({ entries }: TableProps) {
                 colSpan={6}
                 className="px-1.5 py-2 sm:px-2 text-muted-foreground"
               >
-                No peers available.
+                No indexers available.
               </td>
             </tr>
           ) : (

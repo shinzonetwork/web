@@ -48,11 +48,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
   // Handle sendTransaction errors (wallet rejections, network errors, etc.)
   useEffect(() => {
     if (sendError) {
-      const { shortMessage } = sendError as {
-        shortMessage?: string;
-        message?: string;
-      };
-      toast.error(`Registration failed: ${shortMessage}`, TOAST_CONFIG);
+      toast.error("Registration failed. Please try again.", TOAST_CONFIG);
     }
   }, [sendError]);
 
@@ -95,15 +91,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         ],
       });
     } catch (error: unknown) {
-      const { shortMessage } = error as {
-        shortMessage?: string;
-        message?: string;
-      };
-      const errorMessage =
-        error instanceof Error
-          ? shortMessage
-          : "Error encoding data before sending transaction";
-      toast.error(`Registration failed - ${errorMessage}`, TOAST_CONFIG);
+      toast.error("Registration failed. Please try again.", TOAST_CONFIG);
       throw error;
     }
 
@@ -113,15 +101,7 @@ export function useRegistrationTransaction(formData: RegistrationFormData) {
         data: encodedData,
       });
     } catch (error: unknown) {
-      const { shortMessage } = error as {
-        shortMessage?: string;
-        message?: string;
-      };
-      const errorMessage =
-        error instanceof Error
-          ? shortMessage
-          : "Unknown error occurred while sending transaction";
-      toast.error(`Registration failed: ${errorMessage}`, TOAST_CONFIG);
+      toast.error("Registration failed. Please try again.", TOAST_CONFIG);
       throw error;
     }
   }, [formData, sendTransaction]);
