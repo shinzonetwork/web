@@ -1,20 +1,40 @@
 "use client";
 
-import { Suspense, useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { Pagination } from "@shinzo/ui/pagination";
+import { useHealthCheck, useHealthPolling } from "@/features/indexer-list";
 import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
 import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
+import { CopyToClipboard } from "@/widget";
+import {
+  cn,
+  formatHash,
+  indexerEntryKey,
+  ipFromConnectionString,
+} from "@/shared/lib";
+import { HealthStatus } from "@/shared/types";
+import { LoaderCircle } from "lucide-react";
 
 const INDEXERS_PAGE_PARAM = "indexersPage";
 const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
 const PAGE_SIZE = 5;
 
-const tableHeadings = ["Address", "DID", "Chain", "Connection String"];
+const tableHeadings = [
+  "Address",
+  "DID",
+  "Chain",
+  "Connection String",
+  "Status",
+];
 
 function IndexersHomeContent() {
   const router = useRouter();
+  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
+    new Map()
+  );
+  const { fetchHealth } = useHealthCheck();
   const { page, queryParams, applyPaginationData, totalItems } =
     useCursorPagePagination({
       pageParam: INDEXERS_PAGE_PARAM,
@@ -34,7 +54,37 @@ function IndexersHomeContent() {
     }
   }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
 
-  const showPagination = useMemo(() => totalItems > PAGE_SIZE, [totalItems]);
+  useHealthPolling({
+    entries: indexers,
+    resetKey: page,
+    toHealthEntry: (indexer) => ({
+      validatorAddress: indexer.address,
+      ip: ipFromConnectionString(indexer.connection_string),
+    }),
+    fetchHealth,
+    onResults: (liveDataByKey) => {
+      setHealthByKey((prev) => {
+        const next = new Map(prev);
+        for (const [key, data] of liveDataByKey) {
+          if (data.health) next.set(key, data.health);
+        }
+        return next;
+      });
+    },
+  });
+
+  const indexersWithHealth = useMemo(
+    () =>
+      indexers.map((indexer) => {
+        const ip = ipFromConnectionString(indexer.connection_string);
+        const key = indexerEntryKey({ validatorAddress: indexer.address, ip });
+        return {
+          ...indexer,
+          health: healthByKey.get(key) ?? ("unknown" as HealthStatus),
+        };
+      }),
+    [indexers, healthByKey]
+  );
 
   const handleRegisterAsIndexer = () => {
     router.push("/indexer-registration");
@@ -64,9 +114,9 @@ function IndexersHomeContent() {
           isLoading={isPending}
           loadingRowCount={PAGE_SIZE}
           notFound="No Indexers are registered yet."
-          headings={indexers.length > 0 ? tableHeadings : [""]}
-          gridClass="grid-cols[repeat(4,1fr)]"
-          iterable={indexers ?? []}
+          headings={indexersWithHealth.length > 0 ? tableHeadings : [""]}
+          gridClass="grid-cols[repeat(5,1fr)]"
+          iterable={indexersWithHealth}
           rowRenderer={(indexer) => (
             <>
               <TableNullableCell value={indexer?.address}>
@@ -77,7 +127,12 @@ function IndexersHomeContent() {
 
               <TableNullableCell value={indexer?.did}>
                 {(value) => (
-                  <span className="text-sm text-foreground">{value}</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm text-foreground">
+                      {formatHash(value, 15, 5)}
+                    </span>
+                    <CopyToClipboard text={value} />
+                  </div>
                 )}
               </TableNullableCell>
 
@@ -94,24 +149,49 @@ function IndexersHomeContent() {
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
-                  <span className="text-sm text-foreground wrap-break-word break-all">
-                    {value}
-                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm text-foreground wrap-break-word break-all">
+                      {formatHash(value, 20, 10)}
+                    </span>
+                    <CopyToClipboard text={value} />
+                  </div>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell value={indexer?.health} nowrap>
+                {(value) => (
+                  <>
+                    {value !== "unknown" && (
+                      <span
+                        className={cn(
+                          "px-2 py-1 rounded-md text-xs",
+                          value === "healthy"
+                            ? "bg-success/20 text-success"
+                            : "bg-destructive/20 text-destructive"
+                        )}
+                      >
+                        {value === "healthy" ? "Online" : "Offline"}
+                      </span>
+                    )}
+                    {value === "unknown" && (
+                      <span className="px-2 py-1 rounded-md text-xs text-muted-foreground">
+                        <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
+                      </span>
+                    )}
+                  </>
                 )}
               </TableNullableCell>
             </>
           )}
         />
-        {showPagination && (
-          <div className="pr-6">
-            <Pagination
-              page={page}
-              totalItems={totalItems}
-              itemsPerPage={PAGE_SIZE}
-              pageParam={INDEXERS_PAGE_PARAM}
-            />
-          </div>
-        )}
+        <div className="pr-6">
+          <Pagination
+            page={page}
+            totalItems={totalItems}
+            itemsPerPage={PAGE_SIZE}
+            pageParam={INDEXERS_PAGE_PARAM}
+          />
+        </div>
       </div>
     </section>
   );
