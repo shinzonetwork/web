@@ -14,7 +14,7 @@ import {
   validateHostRegistrationForm,
   validateHostFields,
 } from "../util/registration";
-import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
+import { EntityRole, isRegistrationV2, TOAST_CONFIG } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
@@ -74,10 +74,13 @@ export function RegistrationFormV2() {
       formData as HostRegistrationFormData
     );
   }
-
+  const showAssertionBanner =
+    isRegistrationV2() &&
+    formData.entity === EntityRole.Indexer &&
+    !isAssertionVerified;
   return (
     <div className="space-y-6 ml-10">
-      {!isAssertionVerified && (
+      {showAssertionBanner && (
         <div className="w-full max-w-6xl rounded-none border border-destructive/40 bg-destructive/10 p-4 space-y-6">
           <p className="mt-1 font-mono text-sm text-destructive">
             Indexer assertion is not done. Please complete the indexer assertion

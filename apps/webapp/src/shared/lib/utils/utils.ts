@@ -12,6 +12,10 @@ export function shortenAddress(address: Hex | undefined | null): string {
   return address.slice(0, 6) + "..." + address.slice(-4);
 }
 
+export const formatHash = (hash: string, start = 5, end = 5) => {
+  return `${hash.slice(0, start)}...${hash.slice(-end)}`;
+};
+
 // Sanitize string input (basic XSS prevention)
 export function sanitizeString(input: string): string {
   if (typeof input !== "string") return "";
@@ -27,6 +31,14 @@ export function indexerEntryKey(entry: {
   ip: string;
 }): string {
   return `${entry.validatorAddress}-${entry.ip}`;
+}
+
+/** Extract IPv4 from a plain IP or libp2p multiaddr connection string. */
+export function ipFromConnectionString(connectionString: string): string {
+  const trimmed = connectionString.trim();
+  const multiaddrMatch = trimmed.match(/^\/ip4\/([^/]+)/);
+  if (multiaddrMatch) return multiaddrMatch[1];
+  return trimmed;
 }
 
 // Normalize all whitelist addresses once for case-insensitive comparison

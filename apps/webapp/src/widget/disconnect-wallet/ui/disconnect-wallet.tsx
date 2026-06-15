@@ -4,6 +4,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import { Button } from "@/shared/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { shortenAddress } from "@/shared/lib";
+import { LogOutIcon } from "lucide-react";
 
 export function DisconnectWallet() {
   const { disconnect } = useDisconnect();
@@ -21,6 +22,7 @@ export function DisconnectWallet() {
           className="ml-4 w-fit rounded-none text-muted-foreground hover:text-muted-foreground/90"
         >
           {shortenAddress(address)}
+          <LogOutIcon className="w-4 h-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
