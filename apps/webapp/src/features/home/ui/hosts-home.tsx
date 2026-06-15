@@ -16,6 +16,7 @@ import {
 import { HealthStatus } from "@/shared/types";
 import { CopyToClipboard } from "@/widget";
 import { LoaderCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
@@ -120,12 +121,23 @@ function HostsHomeContent() {
 
               <TableNullableCell value={host?.did} nowrap>
                 {(value) => (
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-foreground">
-                      {formatHash(value, 15, 5)}
-                    </span>
-                    <CopyToClipboard text={value} />
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground">
+                          {formatHash(value, 15, 5)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </TableNullableCell>
 
@@ -134,12 +146,23 @@ function HostsHomeContent() {
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-foreground wrap-break-word break-all">
-                      {formatHash(value, 20, 10)}
-                    </span>
-                    <CopyToClipboard text={value} />
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground wrap-break-word break-all">
+                          {formatHash(value, 20, 10)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </TableNullableCell>
               <TableNullableCell value={host?.health} nowrap>

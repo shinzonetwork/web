@@ -16,6 +16,7 @@ import {
 } from "@/shared/lib";
 import { HealthStatus } from "@/shared/types";
 import { LoaderCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const INDEXERS_PAGE_PARAM = "indexersPage";
 const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
@@ -127,12 +128,23 @@ function IndexersHomeContent() {
 
               <TableNullableCell value={indexer?.did}>
                 {(value) => (
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-foreground">
-                      {formatHash(value, 15, 5)}
-                    </span>
-                    <CopyToClipboard text={value} />
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground">
+                          {formatHash(value, 15, 5)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </TableNullableCell>
 
@@ -149,12 +161,25 @@ function IndexersHomeContent() {
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-foreground wrap-break-word break-all">
-                      {formatHash(value, 20, 10)}
-                    </span>
-                    <CopyToClipboard text={value} />
-                  </div>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-foreground wrap-break-word break-all">
+                            {formatHash(value, 20, 10)}
+                          </span>
+                          <CopyToClipboard text={value} />
+                        </div>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </TableNullableCell>
 

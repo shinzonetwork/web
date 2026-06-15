@@ -67,11 +67,7 @@ export function InputField({
                   <InfoIcon className="size-4" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent
-                side="top"
-                sideOffset={6}
-                className="max-w-xs font-normal"
-              >
+              <TooltipContent side="top" sideOffset={6} className="font-normal">
                 {description}
               </TooltipContent>
             </Tooltip>
