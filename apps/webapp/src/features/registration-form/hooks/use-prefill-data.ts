@@ -18,6 +18,7 @@ export type PrefillDataV2 = {
   defraPublicKey: Hex | undefined;
   defraPublicKeySignedMessage: Hex | undefined;
   connectionString?: string;
+  endpointAddress?: string;
 };
 
 export type PrefillData = PrefillDataV1 | PrefillDataV2;

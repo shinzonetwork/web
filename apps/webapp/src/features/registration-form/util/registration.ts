@@ -79,6 +79,7 @@ export function validateHostRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Host,
     validateRegistrationFormV2(formData),
+    Boolean(formData.endpointAddress?.trim()),
   ];
   return validations.every(Boolean);
 }
@@ -179,6 +180,7 @@ export function validateHostFields(
     defraPublicKey: undefined,
     defraSignedMessage: undefined,
     connectionString: undefined,
+    endpointAddress: undefined,
   };
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
@@ -186,6 +188,9 @@ export function validateHostFields(
   } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
       "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+  }
+  if (!formData.endpointAddress?.trim()) {
+    errors.endpointAddress = "Endpoint address is required";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const hostFieldsValidation = Object.values(errors).every(
@@ -239,6 +244,13 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
   {
     id: "connectionString",
     label: "Connection string",
+    isTextarea: false,
+    isSelect: false,
+    required: true,
+  },
+  {
+    id: "endpointAddress",
+    label: "Endpoint address",
     isTextarea: false,
     isSelect: false,
     required: true,

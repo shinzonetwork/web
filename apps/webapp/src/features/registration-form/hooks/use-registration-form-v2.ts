@@ -12,13 +12,23 @@ import {
 const getInitialFormData = (
   entity: EntityRole,
   prefillData: PrefillDataV2 | undefined = undefined
-) => ({
-  entity,
-  message: prefillData?.signedMessage ?? "",
-  defraPublicKey: prefillData?.defraPublicKey ?? "",
-  defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
-  connectionString: prefillData?.connectionString ?? "",
-});
+) =>
+  entity === EntityRole.Generator
+    ? {
+        entity: EntityRole.Generator,
+        message: prefillData?.signedMessage ?? "",
+        defraPublicKey: prefillData?.defraPublicKey ?? "",
+        defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
+        connectionString: prefillData?.connectionString ?? "",
+      }
+    : {
+        entity: EntityRole.Host,
+        message: prefillData?.signedMessage ?? "",
+        defraPublicKey: prefillData?.defraPublicKey ?? "",
+        defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
+        connectionString: prefillData?.connectionString ?? "",
+        endpointAddress: prefillData?.endpointAddress ?? "",
+      };
 
 export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
   const prefillData = useMemo(() => getRegistrationPrefillV2(), []);
