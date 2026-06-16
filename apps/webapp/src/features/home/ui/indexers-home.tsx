@@ -45,7 +45,15 @@ function IndexersHomeContent() {
 
   const { data: registeredIndexers, isPending } =
     useRegisteredIndexers(queryParams);
-  const indexers = registeredIndexers?.indexers ?? [];
+  const indexers = useMemo(
+    () =>
+      registeredIndexers?.indexers.map((indexer) => ({
+        ...indexer,
+        ip: ipFromConnectionString(indexer.connection_string),
+      })) ?? [],
+    [registeredIndexers]
+  );
+
   const pageTotal = Number(registeredIndexers?.pagination?.total ?? 0);
   const nextKey = registeredIndexers?.pagination?.next_key;
 
@@ -60,7 +68,7 @@ function IndexersHomeContent() {
     resetKey: page,
     toHealthEntry: (indexer) => ({
       validatorAddress: indexer.address,
-      ip: ipFromConnectionString(indexer.connection_string),
+      ip: indexer.ip,
     }),
     fetchHealth,
     onResults: (liveDataByKey) => {
@@ -77,8 +85,10 @@ function IndexersHomeContent() {
   const indexersWithHealth = useMemo(
     () =>
       indexers.map((indexer) => {
-        const ip = ipFromConnectionString(indexer.connection_string);
-        const key = indexerEntryKey({ validatorAddress: indexer.address, ip });
+        const key = indexerEntryKey({
+          validatorAddress: indexer.address,
+          ip: indexer.ip,
+        });
         return {
           ...indexer,
           health: healthByKey.get(key) ?? ("unknown" as HealthStatus),

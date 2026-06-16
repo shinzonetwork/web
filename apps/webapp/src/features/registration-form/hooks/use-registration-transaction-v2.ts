@@ -105,6 +105,7 @@ export function useRegistrationTransaction(
             host.defraSignedMessage as Hex,
             host.message as Hex,
             host.connectionString ?? "",
+            host.endpointAddress,
           ],
         });
       }

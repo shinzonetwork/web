@@ -20,6 +20,7 @@ export type PrefillDataV2 = {
   connectionString?: string;
   sourceChain?: string;
   sourceChainId?: number;
+  endpointAddress?: string;
 };
 
 export type PrefillData = PrefillDataV1 | PrefillDataV2;
@@ -71,6 +72,7 @@ export function usePrefillData(): PrefillData {
       connectionString: undefined,
       sourceChain: undefined,
       sourceChainId: undefined,
+      endpointAddress: undefined,
     } as PrefillData;
   }
 
@@ -87,6 +89,7 @@ export function usePrefillData(): PrefillData {
       connectionString: searchParams.get("connectionString") ?? undefined,
       sourceChain: searchParams.get("sourceChain") ?? undefined,
       sourceChainId: parseInt(searchParams.get("sourceChainId") ?? "0", 10),
+      endpointAddress: searchParams.get("endpointAddress") ?? undefined,
     } as PrefillDataV2;
   }
 

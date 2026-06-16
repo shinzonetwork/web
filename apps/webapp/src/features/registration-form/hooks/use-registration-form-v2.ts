@@ -23,6 +23,7 @@ const getInitialFormData = (
         defraPublicKey: prefillData?.defraPublicKey ?? "",
         defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
         connectionString: prefillData?.connectionString ?? "",
+        endpointAddress: prefillData?.endpointAddress ?? "",
       };
 
 export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {

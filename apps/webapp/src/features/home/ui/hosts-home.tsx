@@ -38,7 +38,15 @@ function HostsHomeContent() {
     });
 
   const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
-  const hosts = registeredHosts?.hosts ?? [];
+  const hosts = useMemo(
+    () =>
+      registeredHosts?.hosts.map((host) => ({
+        ...host,
+        ip: ipFromConnectionString(host.connection_string),
+      })) ?? [],
+    [registeredHosts]
+  );
+
   const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
   const nextKey = registeredHosts?.pagination?.next_key;
 
@@ -53,7 +61,7 @@ function HostsHomeContent() {
     resetKey: page,
     toHealthEntry: (host) => ({
       validatorAddress: host.address,
-      ip: ipFromConnectionString(host.connection_string),
+      ip: host.ip,
     }),
     fetchHealth,
     onResults: (liveDataByKey) => {
@@ -70,8 +78,10 @@ function HostsHomeContent() {
   const hostsWithHealth = useMemo(
     () =>
       hosts.map((host) => {
-        const ip = ipFromConnectionString(host.connection_string);
-        const key = indexerEntryKey({ validatorAddress: host.address, ip });
+        const key = indexerEntryKey({
+          validatorAddress: host.address,
+          ip: host.ip,
+        });
         return {
           ...host,
           health: healthByKey.get(key) ?? ("unknown" as HealthStatus),

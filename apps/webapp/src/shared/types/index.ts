@@ -50,7 +50,8 @@ export type IndexerRegistrationFormData = RegistrationFormDataV2 & {
 };
 
 export type HostRegistrationFormData = RegistrationFormDataV2 & {
-  connectionString?: string | undefined;
+  connectionString: string;
+  endpointAddress: string;
 };
 
 export type RegistrationFormDataByEntity<T extends EntityRole> =
