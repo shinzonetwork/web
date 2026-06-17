@@ -15,6 +15,7 @@ export type RegisteredHost = {
   address: string;
   did: string;
   connection_string: string;
+  endpoint_address: string;
 };
 
 export type RegisteredHostsResponse = {
