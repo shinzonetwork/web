@@ -5,7 +5,6 @@ import { formatDistanceToNow } from "date-fns";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { getPageLink } from "@/shared/utils/links";
 import { useShinzohubBlock } from "../../hook/shinzohub/use-shinzohub-block";
 import { formatProposerAddress } from "@/shared/shinzohub/utils/format-proposer-address";
@@ -15,7 +14,6 @@ export type ShinzohubBlockCardOptions = { id: string }
 export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
   const [showMore, setShowMore] = useState(false);
   const { data: block, isLoading } = useShinzohubBlock(options.id);
-  const chain = useChainPathSegment();
 
   if (!block?.height) {
     return (
@@ -44,7 +42,7 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
           loading={isLoading}
           link={
             proposer
-              ? `${getPageLink("address", { param: proposer, chain })}`
+              ? `${getPageLink("address", { param: proposer, chain: 'shinzohub' })}`
               : undefined
           }
         >
@@ -80,7 +78,7 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
             copyable
             loading={isLoading}
             truncate={false}
-            link={`${getPageLink("block", { param: block.hash, chain })}`}
+            link={`${getPageLink("block", { param: block.hash, chain: 'shinzohub' })}`}
           >
             <span className="whitespace-nowrap overflow-x-auto">{block.hash}</span>
           </DataItem>
@@ -92,7 +90,7 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
             truncate={false}
             link={
               block.parentHash
-                ? `${getPageLink("block", { param: block.parentHash, chain })}`
+                ? `${getPageLink("block", { param: block.parentHash, chain: 'shinzohub' })}`
                 : undefined
             }
           >

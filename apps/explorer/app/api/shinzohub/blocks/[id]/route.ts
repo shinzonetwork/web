@@ -1,6 +1,6 @@
 import { getBlock } from '@shinzo/shinzohub';
-import { getShinzohubQueryContext } from '../../../../../lib/shared/shinzohub/query-context';
-import { isBlockHeightParam } from '../../../../../lib/shared/utils/block-route';
+import { getShinzohubQueryContext } from '@/shared/shinzohub/query-context';
+import { isBlockHeightParam } from '@/shared/utils/block-route';
 import { serializeBlock } from '../_lib/serialize';
 
 export async function GET(
