@@ -29,6 +29,21 @@ export function isValidConnectionString(value: string): boolean {
   );
 }
 
+export function isValidEndpointAddress(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+
+  try {
+    const url = new URL(trimmed);
+    return (
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      Boolean(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Host vs Generator for V2 registration is determined only by the URL route
  * (e.g. `/host-registration`, `/generator-registration`). Users switch flows via nav links, not in-form toggles.
@@ -79,7 +94,8 @@ export function validateHostRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Host,
     validateRegistrationFormV2(formData),
-    Boolean(formData.endpointAddress?.trim()),
+    isValidConnectionString(formData.connectionString ?? ""),
+    isValidEndpointAddress(formData.endpointAddress ?? ""),
   ];
   return validations.every(Boolean);
 }
@@ -191,6 +207,9 @@ export function validateHostFields(
   }
   if (!formData.endpointAddress?.trim()) {
     errors.endpointAddress = "Endpoint address is required";
+  } else if (!isValidEndpointAddress(formData.endpointAddress)) {
+    errors.endpointAddress =
+      "Endpoint address must be a valid http or https URL";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const hostFieldsValidation = Object.values(errors).every(
