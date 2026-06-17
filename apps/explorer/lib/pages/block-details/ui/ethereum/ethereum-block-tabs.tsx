@@ -2,15 +2,16 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container } from '@/widgets/layout';
-import { BlockCard } from './block-card';
-import { BlockTransactions } from './block-txs';
+import { EthereumBlockCard } from './ethereum-block-card';
+import { EthereumBlockTransactions } from './ethereum-block-txs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { Hex } from 'viem';
 
-export type BlockTabsProps =
+export type EthereumBlockTabsProps =
   | { pageParams: PageParams; blockNumber: number }
-  | { pageParams: PageParams; blockHash: string };
+  | { pageParams: PageParams; blockHash: Hex };
 
-export const BlockTabs = (props: BlockTabsProps) => {
+export const EthereumBlockTabs = (props: EthereumBlockTabsProps) => {
   const { pageParams } = props;
   return (
     <Tabs defaultValue='overview'>
@@ -31,20 +32,20 @@ export const BlockTabs = (props: BlockTabsProps) => {
       <div className='mt-2 border-t border-ui-border'>
         <TabsContent value='overview'>
           {'blockNumber' in props ? (
-            <BlockCard number={props.blockNumber} />
+            <EthereumBlockCard number={props.blockNumber} />
           ) : (
-            <BlockCard hash={props.blockHash} />
+            <EthereumBlockCard hash={props.blockHash} />
           )}
         </TabsContent>
 
         <TabsContent asChild value='transactions'>
           {'blockNumber' in props ? (
-            <BlockTransactions
+            <EthereumBlockTransactions
               blockNumber={props.blockNumber}
               pageParams={pageParams}
             />
           ) : (
-            <BlockTransactions
+            <EthereumBlockTransactions
               blockHash={props.blockHash}
               pageParams={pageParams}
             />

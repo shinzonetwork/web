@@ -1,7 +1,8 @@
 import { execute, graphql } from '@/shared/graphql';
 import { useQuery } from '@tanstack/react-query';
+import { Hex } from 'viem';
 
-const BlockQuery = graphql(`
+const EthereumBlockQuery = graphql(`
   query Block($number: Int!) {
     Block: Ethereum__Mainnet__Block(filter: { number: { _eq: $number } }, limit: 1) {
       hash
@@ -27,7 +28,7 @@ const BlockQuery = graphql(`
   }
 `);
 
-const BlockByHashQuery = graphql(`
+const EthereumBlockByHashQuery = graphql(`
   query BlockByHash($hash: String!) {
     Block: Ethereum__Mainnet__Block(filter: { hash: { _eq: $hash } }, limit: 1) {
       hash
@@ -53,27 +54,27 @@ const BlockByHashQuery = graphql(`
   }
 `);
 
-export type UseBlockOptions =
+export type UseEthereumBlockOptions =
   | { number: number; hash?: never }
-  | { hash: string; number?: never };
+  | { hash: Hex; number?: never };
 
-export const useBlock = (options: UseBlockOptions) => {
+export const useEthereumBlock = (options: UseEthereumBlockOptions) => {
   const number = 'number' in options ? options.number : undefined;
   const hash = 'hash' in options ? options.hash : undefined;
 
   return useQuery({
-    queryKey: ['block', number ?? hash, number !== undefined ? 'number' : 'hash'],
+    queryKey: ['ethereum', 'block', number ?? hash, number !== undefined ? 'number' : 'hash'],
     enabled: number !== undefined || !!hash,
     staleTime: 1000 * 60,
     queryFn: async () => {
       let res;
       if (number !== undefined) {
-        res = await execute(BlockQuery, { number });
+        res = await execute(EthereumBlockQuery, { number });
       } else {
         if (hash === undefined) {
-          throw new Error('useBlock: hash is required when number is omitted');
+          throw new Error('useEthereumBlock: hash is required when number is omitted');
         }
-        res = await execute(BlockByHashQuery, { hash });
+        res = await execute(EthereumBlockByHashQuery, { hash });
       }
       return res.Block?.[0] ?? null;
     },

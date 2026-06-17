@@ -1,18 +1,19 @@
 import { PageLayout } from '@/widgets/layout';
-import { BlockTabs } from './block-tabs';
+import { EthereumBlockTabs } from './ethereum-block-tabs';
 import { PageParams } from '@shinzo/ui/pagination';
+import { Hex } from 'viem';
 
-export type BlockDetailClientPageProps =
+export type EthereumBlockDetailClientPageProps =
   | {
       pageParams: PageParams;
       blockNumber: number;
     }
   | {
       pageParams: PageParams;
-      blockHash: string;
+      blockHash: Hex;
     };
 
-export const BlockDetailClientPage = async (props: BlockDetailClientPageProps) => {
+export const EthereumBlockDetailClientPage = async (props: EthereumBlockDetailClientPageProps) => {
   const title =
     'blockNumber' in props
       ? `Block #${props.blockNumber}`
@@ -21,9 +22,9 @@ export const BlockDetailClientPage = async (props: BlockDetailClientPageProps) =
   return (
     <PageLayout title={title}>
       {'blockNumber' in props ? (
-        <BlockTabs blockNumber={props.blockNumber} pageParams={props.pageParams} />
+        <EthereumBlockTabs blockNumber={props.blockNumber} pageParams={props.pageParams} />
       ) : (
-        <BlockTabs blockHash={props.blockHash} pageParams={props.pageParams} />
+        <EthereumBlockTabs blockHash={props.blockHash} pageParams={props.pageParams} />
       )}
     </PageLayout>
   );
