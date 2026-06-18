@@ -1,10 +1,10 @@
 "use client"
 
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { RegisteredHost, useRegisteredHosts } from '../hook/use-registered-hosts';
-import { useEffect, useMemo, useState } from 'react';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
@@ -22,7 +22,7 @@ export type HostWithHealth = RegisteredHost & {
   status: HealthStatus;
 };
 
-export const HostPageClient = () => {
+function HostPageContent() {
   const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
     new Map()
   );
@@ -117,4 +117,10 @@ export const HostPageClient = () => {
       />
     </PageLayout>
   );
-};
+}
+
+export const HostPageClient = () => (
+  <Suspense fallback={null}>
+    <HostPageContent />
+  </Suspense>
+);

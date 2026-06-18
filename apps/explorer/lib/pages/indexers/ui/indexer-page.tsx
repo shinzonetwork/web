@@ -1,11 +1,11 @@
 "use client"
 
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { RegisteredIndexer, useRegisteredIndexers } from '../hook/use-registered-indexers';
 import { IndexersList } from './indexers-list';
-import { useEffect, useMemo, useState } from 'react';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
@@ -22,7 +22,7 @@ export type IndexerWithHealth = RegisteredIndexer & {
   status: HealthStatus;
 };
 
-export const IndexerPageClient = () => {
+function IndexerPageContent() {
   const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
     new Map()
   );
@@ -117,4 +117,10 @@ export const IndexerPageClient = () => {
       />
     </PageLayout>
   );
-};
+}
+
+export const IndexerPageClient = () => (
+  <Suspense fallback={null}>
+    <IndexerPageContent />
+  </Suspense>
+);
