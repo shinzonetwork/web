@@ -8,43 +8,43 @@ import { CopyButton } from "@shinzo/ui/copy-button";
 import { Badge } from "@/shared/ui/badge";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
-import { IndexerWithHealth } from "./indexer-page";
+import { HostWithHealth } from "./host-page";
 
 const tableHeadings = [
   "Address",
   "DID",
-  "Chain",
   "Connection String",
+  "Endpoint Address",
   "Status",
 ];
 
-export const IndexersList = ({
-  indexers,
-  indexerLoading,
+export const HostsList = ({
+  hosts,
+  hostLoading,
 }: {
-  indexers: IndexerWithHealth[];
-  indexerLoading: boolean;
+  hosts: HostWithHealth[];
+  hostLoading: boolean;
 }) => {
 
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
       <TableLayout
-        isLoading={indexerLoading}
+        isLoading={hostLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound="No Indexers are registered yet."
-        headings={indexers.length > 0 ? tableHeadings : [""]}
+        headings={hosts.length > 0 ? tableHeadings : [""]}
         gridClass="grid-cols[repeat(5,1fr)]"
-        iterable={indexers ?? []}
-        rowRenderer={(indexer) => (
+        iterable={hosts ?? []}
+        rowRenderer={(host) => (
           <>
-            <TableNullableCell value={indexer?.address}>
+            <TableNullableCell value={host?.address}>
               {(value) => (
                 <span className="text-sm text-foreground">{value}</span>
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={indexer?.did}>
+            <TableNullableCell value={host?.did}>
                 {(value) => (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -66,16 +66,8 @@ export const IndexersList = ({
                 )}
               </TableNullableCell>
 
-            <TableNullableCell value={indexer?.source_chain}>
-              {(value) => (
-                <span className="text-sm text-foreground">
-                  {value.charAt(0).toUpperCase() + value.slice(1)}
-                </span>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell
-                value={indexer?.connection_string}
+              <TableNullableCell
+                value={host?.connection_string ?? "—"}
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
@@ -100,8 +92,35 @@ export const IndexersList = ({
                   </Tooltip>
                 )}
               </TableNullableCell>
+                
+              <TableNullableCell
+                value={host?.endpoint_address ?? undefined}
+                className="min-w-0 whitespace-normal"
+              >
+                {(value) => (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1">
+                          <span className="text-sm text-foreground wrap-break-word break-all">
+                            {value ? formatHash(value, 20, 10) : "—"}
+                          </span>
+                          <CopyButton text={value ?? ""} className="size-4" />
+                        </div>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </TableNullableCell>
 
-            <TableNullableCell value={indexer?.status} nowrap>
+              <TableNullableCell value={host?.status} nowrap>
               {(value) => (
                 <>
                   {value !== "unknown" && (

@@ -3,8 +3,7 @@
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
-import { RegisteredIndexer, useRegisteredIndexers } from '../hook/use-registered-indexers';
-import { IndexersList } from './indexers-list';
+import { RegisteredHost, useRegisteredHosts } from '../hook/use-registered-hosts';
 import { useEffect, useMemo, useState } from 'react';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
@@ -13,55 +12,56 @@ import {
   useHealthPolling,
   type HealthStatus,
 } from '@/shared/health';
+import { HostsList } from './host-list';
 
-const INDEXERS_PAGE_PARAM = "indexersPage";
-const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
+const HOSTS_PAGE_PARAM = "hostsPage";
+const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 
-export type IndexerWithHealth = RegisteredIndexer & {
+export type HostWithHealth = RegisteredHost & {
   ip: string;
   status: HealthStatus;
 };
 
-export const IndexerPageClient = () => {
+export const HostPageClient = () => {
   const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
     new Map()
   );
 
   const { page, queryParams, applyPaginationData, totalItems } =
     useCursorPagePagination({
-      pageParam: INDEXERS_PAGE_PARAM,
-      storageKey: INDEXERS_CURSOR_KEY,
+      pageParam: HOSTS_PAGE_PARAM,
+      storageKey: HOSTS_CURSOR_KEY,
       limit: DEFAULT_LIMIT,
     });
 
-  const { data: registeredIndexers, isPending } =
-    useRegisteredIndexers(queryParams);
+  const { data: registeredHosts, isPending } =
+    useRegisteredHosts(queryParams);
 
-  const indexers: IndexerWithHealth[] = useMemo(
+  const hosts: HostWithHealth[] = useMemo(
     () =>
-      registeredIndexers?.indexers.map((indexer) => ({
-        ...indexer,
-        ip: ipFromConnectionString(indexer.connection_string),
+      registeredHosts?.hosts.map((host) => ({
+        ...host,
+        ip: ipFromConnectionString(host.connection_string),
         status: "unknown" as HealthStatus,
       })) ?? [],
-    [registeredIndexers]
-  );
+    [registeredHosts]
+  );  
 
-  const pageTotal = Number(registeredIndexers?.pagination?.total ?? 0);
-  const nextKey = registeredIndexers?.pagination?.next_key;
+  const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
+  const nextKey = registeredHosts?.pagination?.next_key;
 
   useEffect(() => {
-    if (registeredIndexers) {
+    if (registeredHosts) {
       applyPaginationData(nextKey, pageTotal);
     }
-  }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
+  }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
 
-  useHealthPolling<IndexerWithHealth>({
-    entries: indexers,
+  useHealthPolling<HostWithHealth>({
+    entries: hosts,
     resetKey: page,
-    toHealthEntry: (indexer) => ({
-      address: indexer.address,
-      ip: indexer.ip,
+    toHealthEntry: (host) => ({
+      address: host.address,
+      ip: host.ip,
     }),
     onResults: (liveDataByKey) => {
       setHealthByKey((prev) => {
@@ -74,23 +74,23 @@ export const IndexerPageClient = () => {
     },
   });
 
-  const indexersWithHealth = useMemo(
+  const hostsWithHealth = useMemo(
     () =>
-      indexers.map((indexer) => {
+      hosts.map((host) => {
         const key = createHealthEntryKey({
-          address: indexer.address,
-          ip: indexer.ip,
+          address: host.address,
+          ip: host.ip,
         });
         return {
-          ...indexer,
+          ...host,
           status: healthByKey.get(key) ?? ("unknown" as HealthStatus),
         };
       }),
-    [indexers, healthByKey]
+    [hosts, healthByKey]
   );
 
   return (
-    <PageLayout title='Indexers'>
+    <PageLayout title='Hosts'>
       <Container
         wrapperClassName='mt-16 mb-8 border-b border-ui-border'
         className='flex items-end justify-between [&>*]:translate-y-[1px]'
@@ -107,13 +107,13 @@ export const IndexerPageClient = () => {
           page={page}
           totalItems={totalItems}
           itemsPerPage={DEFAULT_LIMIT}
-          pageParam={INDEXERS_PAGE_PARAM}
+          pageParam={HOSTS_PAGE_PARAM}
         />
       </Container>
 
-      <IndexersList
-        indexers={indexersWithHealth}
-        indexerLoading={isPending}
+      <HostsList
+        hosts={hostsWithHealth}
+        hostLoading={isPending}
       />
     </PageLayout>
   );

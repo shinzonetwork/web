@@ -44,7 +44,7 @@ export function useRegisteredIndexers(
   intervalMs = 30000
 ) {
   return useQuery({
-    queryKey: ["registered-indexers", pagination],
+    queryKey: ["shinzohub","registered-indexers", pagination],
     queryFn: () => fetchRegisteredIndexers(pagination),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,

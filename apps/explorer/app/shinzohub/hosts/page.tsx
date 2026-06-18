@@ -1,0 +1,1 @@
+export { HostPageClient as default } from '@/pages/host';

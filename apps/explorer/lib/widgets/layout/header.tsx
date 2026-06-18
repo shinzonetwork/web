@@ -76,7 +76,12 @@ export const Header = ({}: HeaderProps) => {
             </NavLink>
             {chain === 'shinzohub' && <NavLink link={`${getPageLink('indexers', { chain })}`}>
               Indexers
-            </NavLink>}
+            </NavLink>
+            }
+            {chain === 'shinzohub' && <NavLink link={`${getPageLink('hosts', { chain })}`}>
+              Hosts
+            </NavLink>
+            }
           </nav>
         </div>
 

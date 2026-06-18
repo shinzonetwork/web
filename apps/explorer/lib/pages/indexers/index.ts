@@ -1,1 +1,1 @@
-export { IndexerPage } from './ui/indexer-page-server';
+export { IndexerPageClient as IndexerPage } from './ui/indexer-page';
