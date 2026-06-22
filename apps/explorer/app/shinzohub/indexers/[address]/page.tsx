@@ -1,0 +1,1 @@
+export { IndexerDetailClientPage as default } from '@/pages/indexer-details';

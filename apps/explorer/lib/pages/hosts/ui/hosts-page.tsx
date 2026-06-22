@@ -11,19 +11,19 @@ import {
   ipFromConnectionString,
   useHealthPolling,
   type HealthStatus,
+  type LiveData,
 } from '@/shared/health';
-import { HostsList } from './host-list';
+import { HostsList } from './hosts-list';
 
 const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 
-export type HostWithHealth = RegisteredHost & {
+export type HostWithHealth = RegisteredHost & Omit<LiveData, "p2p" | "uptime"> & {
   ip: string;
-  status: HealthStatus;
 };
 
-function HostPageContent() {
-  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
+function HostsPageContent() {
+  const [healthByKey, setHealthByKey] = useState<Map<string, LiveData>>(
     new Map()
   );
 
@@ -43,6 +43,9 @@ function HostPageContent() {
         ...host,
         ip: ipFromConnectionString(host.connection_string),
         status: "unknown" as HealthStatus,
+        uptime_seconds: 0,
+        last_processed: "",
+        current_block: 0,
       })) ?? [],
     [registeredHosts]
   );  
@@ -66,8 +69,8 @@ function HostPageContent() {
     onResults: (liveDataByKey) => {
       setHealthByKey((prev) => {
         const next = new Map(prev);
-        for (const [key, { status }] of liveDataByKey) {
-          if (status) next.set(key, status);
+        for (const [key, liveData] of liveDataByKey) {
+          if (liveData) next.set(key, liveData);
         }
         return next;
       });
@@ -81,9 +84,11 @@ function HostPageContent() {
           address: host.address,
           ip: host.ip,
         });
+        const data = healthByKey.get(key);
         return {
           ...host,
-          status: healthByKey.get(key) ?? ("unknown" as HealthStatus),
+          ...data,
+          status: data?.status ?? ("unknown" as HealthStatus)
         };
       }),
     [hosts, healthByKey]
@@ -119,8 +124,8 @@ function HostPageContent() {
   );
 }
 
-export const HostPageClient = () => (
+export const HostsPageClient = () => (
   <Suspense fallback={null}>
-    <HostPageContent />
+    <HostsPageContent />
   </Suspense>
 );

@@ -68,7 +68,7 @@ export function useHealthPolling<T>({
       const liveDataByKey = new Map<string, LiveData>();
       for (const result of results) {
         if (result.status === "fulfilled") {
-          liveDataByKey.set(result.value.key, { status: result.value.status });
+          liveDataByKey.set(result.value.key, result.value.data as LiveData);
         }
       }
 

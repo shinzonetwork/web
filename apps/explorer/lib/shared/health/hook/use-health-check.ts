@@ -1,6 +1,6 @@
 import { useQueryClient, type QueryKey } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { LiveDataWithKey, HealthStatus, LiveData, HealthEntryKeyParams } from "../types";
+import { LiveDataWithKey, LiveData, HealthEntryKeyParams } from "../types";
 import { createHealthEntryKey } from "../lib/utils";
 
 export const healthQueryKey = (entry: HealthEntryKeyParams): QueryKey =>
@@ -22,16 +22,14 @@ async function fetchHealthStatus(
     );
 
     if (!res.ok) {
-      return { key, status: "unhealthy" };
+      return { key, data: { status: "unhealthy", uptime: 0, uptime_seconds: 0, last_processed: "", current_block: 0, p2p: null } };
     }
 
     const data = (await res.json()) as LiveData;
-    const status: HealthStatus =
-      data.status === "healthy" ? "healthy" : "unhealthy";
 
-    return { key, status };
+    return { key, data: { ...data, status: data.status || "unhealthy" } };
   } catch {
-    return { key, status: "unhealthy" };
+    return { key, data: { status: "unhealthy", uptime: 0, uptime_seconds: 0, last_processed: "", current_block: 0, p2p: null } };
   }
 }
 

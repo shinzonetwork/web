@@ -10,6 +10,7 @@ import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cur
 import {
   createHealthEntryKey,
   ipFromConnectionString,
+  LiveData,
   useHealthPolling,
   type HealthStatus,
 } from '@/shared/health';
@@ -17,13 +18,12 @@ import {
 const INDEXERS_PAGE_PARAM = "indexersPage";
 const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
 
-export type IndexerWithHealth = RegisteredIndexer & {
+export type IndexerWithHealth = RegisteredIndexer & Omit<LiveData, "p2p" | "uptime"> & {
   ip: string;
-  status: HealthStatus;
 };
 
-function IndexerPageContent() {
-  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
+function IndexersPageContent() {
+  const [healthByKey, setHealthByKey] = useState<Map<string, LiveData>>(
     new Map()
   );
 
@@ -43,6 +43,9 @@ function IndexerPageContent() {
         ...indexer,
         ip: ipFromConnectionString(indexer.connection_string),
         status: "unknown" as HealthStatus,
+        uptime_seconds: 0,
+        last_processed: "",
+        current_block: 0,
       })) ?? [],
     [registeredIndexers]
   );
@@ -66,8 +69,8 @@ function IndexerPageContent() {
     onResults: (liveDataByKey) => {
       setHealthByKey((prev) => {
         const next = new Map(prev);
-        for (const [key, { status }] of liveDataByKey) {
-          if (status) next.set(key, status);
+        for (const [key, liveData] of liveDataByKey) {
+          if (liveData) next.set(key, liveData);
         }
         return next;
       });
@@ -81,9 +84,11 @@ function IndexerPageContent() {
           address: indexer.address,
           ip: indexer.ip,
         });
+        const data = healthByKey.get(key);
         return {
           ...indexer,
-          status: healthByKey.get(key) ?? ("unknown" as HealthStatus),
+          ...data,
+          status: data?.status ?? ("unknown" as HealthStatus)
         };
       }),
     [indexers, healthByKey]
@@ -119,8 +124,8 @@ function IndexerPageContent() {
   );
 }
 
-export const IndexerPageClient = () => (
+export const IndexersPageClient = () => (
   <Suspense fallback={null}>
-    <IndexerPageContent />
+    <IndexersPageContent />
   </Suspense>
 );

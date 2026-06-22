@@ -14,7 +14,9 @@ export const APP_PAGES = {
   txs: '/txs',
   tx: '/tx/{param}',
   indexers: '/indexers',
+  indexer: '/indexers/{address}',
   hosts: '/hosts',
+  host: '/hosts/{address}',
 } as const;
 
 export type AppPage = keyof typeof APP_PAGES;
@@ -29,7 +31,9 @@ type OptionsByPage = {
   address: { param: string },
   token: { param: string },
   indexers: undefined,
+  indexer: { address: string },
   hosts: undefined,
+  host: { address: string },
 };
 
 export type PageOptions<PAGE extends AppPage> = OptionsByPage[PAGE];

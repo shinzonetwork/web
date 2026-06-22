@@ -1,0 +1,1 @@
+export { HostDetailClientPage } from './ui/host-page';
