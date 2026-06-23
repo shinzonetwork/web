@@ -1,6 +1,9 @@
 import config from "@shinzo/eslint-config";
 
 const uiConfig = [
+  {
+    ignores: ["storybook-static/**"],
+  },
   ...config,
   {
     rules: {
