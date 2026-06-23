@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChainSelector } from "@shinzo/ui/chain-selector";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@shinzo/ui/select";
 // import { SearchInput } from '@/shared/ui/search-input';
 import EthereumIcon from '@/shared/ui/icons/ethereum.svg';
 import ShinzoHubIcon from '@/shared/ui/icons/shinzo-filled.svg';
@@ -32,6 +38,8 @@ export const Header = ({}: HeaderProps) => {
   const chain = useChainPathSegment();
   const pathname = usePathname();
   const router = useRouter();
+  const selectedChain =
+    CHAIN_OPTIONS.find((option) => option.value === chain) ?? CHAIN_OPTIONS[0];
 
   const selectChain = (nextChain: string) => {
     if (nextChain === chain) {
@@ -69,11 +77,35 @@ export const Header = ({}: HeaderProps) => {
           </nav>
         </div>
 
-        <ChainSelector
-          value={chain}
-          options={CHAIN_OPTIONS}
-          onValueChange={selectChain}
-        />
+        <Select value={chain} onValueChange={selectChain}>
+          <SelectTrigger aria-label="Select chain">
+            <SelectValue>
+              <span className="min-w-0 flex-1 truncate">
+                {selectedChain.label}
+              </span>
+              <span
+                aria-hidden
+                className="flex size-5 shrink-0 items-center justify-center text-ui-text"
+              >
+                {selectedChain.icon}
+              </span>
+            </SelectValue>
+          </SelectTrigger>
+
+          <SelectContent align="end">
+            {CHAIN_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                <span
+                  aria-hidden
+                  className="flex size-5 shrink-0 items-center justify-center text-ui-text"
+                >
+                  {option.icon}
+                </span>
+                <span className="truncate">{option.label}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         {/* TODO: implement searching */}
         {/*{!hideSearch && (*/}

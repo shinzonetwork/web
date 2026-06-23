@@ -19,15 +19,15 @@
   --color-ui-shimmer: #e5e5e5;
 
   --animate-shimmer: shimmer 2s infinite;
-  --animate-chain-menu-in: chain-menu-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-chain-menu-out: chain-menu-out 120ms ease-in;
+  --animate-select-content-in: select-content-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-select-content-out: select-content-out 120ms ease-in;
 
   @keyframes shimmer {
     0% { left: -50%; }
     100% { left: 150%; }
   }
 
-  @keyframes chain-menu-in {
+  @keyframes select-content-in {
     from {
       opacity: 0;
       transform: translateY(-6px) scale(0.98);
@@ -38,7 +38,7 @@
     }
   }
 
-  @keyframes chain-menu-out {
+  @keyframes select-content-out {
     from {
       opacity: 1;
       transform: translateY(0) scale(1);
