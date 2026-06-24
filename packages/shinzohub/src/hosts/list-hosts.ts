@@ -5,14 +5,8 @@ import {
   type ShinzoHubQueryClient,
 } from "../internal/endpoints";
 import { buildUrl, requestJson } from "../internal/fetch";
-import type { ListHostsParameters, ListHostsResult, RegisteredHost } from "./types";
-
-interface HostWire {
-  address?: string;
-  did?: string;
-  connection_string?: string;
-  endpoint_address?: string;
-}
+import { toHost, type HostWire } from "./internal";
+import type { ListHostsParameters, ListHostsResult } from "./types";
 
 interface PageResponseWire {
   next_key?: string | null;
@@ -77,24 +71,5 @@ function toPageResponse(
   return {
     nextKey: wire?.next_key ?? null,
     total: total === null ? null : Number(total),
-  };
-}
-
-function toHost(wire: HostWire): RegisteredHost {
-  if (!wire.address) {
-    throw new Error("Host response is missing address.");
-  }
-  if (!wire.did) {
-    throw new Error("Host response is missing did.");
-  }
-  if (!wire.connection_string) {
-    throw new Error("Host response is missing connection_string.");
-  }
-
-  return {
-    address: wire.address,
-    did: wire.did,
-    connectionString: wire.connection_string,
-    endpointAddress: wire.endpoint_address,
   };
 }

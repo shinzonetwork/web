@@ -122,6 +122,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 
 - [x] Cover `GET /shinzonetwork/host/v1/hosts` with `listHosts`.
 - [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
+- [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
 
 ### Transactions And Blocks
 

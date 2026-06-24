@@ -28,7 +28,7 @@ export const HostCard = (options: HostCardOptions) => {
     if (!hostDetails?.host) return null;
     return {
       address: hostDetails.host.address,
-      ip: ipFromConnectionString(hostDetails.host.connection_string),
+      ip: ipFromConnectionString(hostDetails.host.connectionString),
     };
   }, [hostDetails]);
 
@@ -128,14 +128,14 @@ export const HostCard = (options: HostCardOptions) => {
 
         <DataItem
           title="Connection string"
-          value={host?.connection_string}
+          value={host?.connectionString}
           loading={isLoading}
           allowWrap
         >
           <div className="flex items-start gap-2 min-w-0">
-            <span className="break-all">{host?.connection_string}</span>
+            <span className="break-all">{host?.connectionString}</span>
             <CopyButton
-              text={host?.connection_string || ""}
+              text={host?.connectionString || ""}
               className="text-muted-foreground shrink-0"
             />
           </div>
@@ -143,15 +143,15 @@ export const HostCard = (options: HostCardOptions) => {
 
         <DataItem
           title="Endpoint URL"
-          value={host?.endpoint_address}
+          value={host?.endpointAddress}
           loading={isLoading}
           allowWrap
         >
           <div className="flex items-start gap-2 min-w-0">
-            <span className="break-all">{host?.endpoint_address || "—"}</span>
-            {host?.endpoint_address && (
+            <span className="break-all">{host?.endpointAddress || "—"}</span>
+            {host?.endpointAddress && (
               <CopyButton
-                text={host?.endpoint_address}
+                text={host?.endpointAddress}
                 className="text-muted-foreground shrink-0"
               />
             )}

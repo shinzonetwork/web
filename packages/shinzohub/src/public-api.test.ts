@@ -10,6 +10,7 @@ const expectedRootExports = [
   "getBlock",
   "getBlockTimestamp",
   "getCreatedViewAddress",
+  "getHost",
   "getLatestBlock",
   "getLatestBlockHeight",
   "getTransaction",

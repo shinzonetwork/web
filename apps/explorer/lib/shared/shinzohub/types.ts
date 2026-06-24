@@ -1,6 +1,9 @@
 import type {
   ListBlocksResult,
+  ListHostsResult,
   ListTransactionsResult,
+  RegisteredHost as ShinzoHubRegisteredHost,
+  RegisteredHostDetailsResult,
   ShinzoHubBlock,
   ShinzoHubEvent,
   ShinzoHubEventAttribute,
@@ -10,8 +13,6 @@ import type {
   ShinzoHubTransactionKind,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
-  RegisteredHost as ShinzoHubRegisteredHost,
-  ListHostsResult,
 } from '@shinzo/shinzohub';
 
 type JsonSerialized<T> =
@@ -54,3 +55,5 @@ export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "
     total: number;
   };
 };
+
+export type RegisteredHostDetailsResponse = JsonSerialized<RegisteredHostDetailsResult>;

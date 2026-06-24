@@ -38,3 +38,17 @@ export interface ListHostsResult {
     total: number | null;
   };
 }
+
+/** Options for fetching one registered host by Shinzo bech32 address. */
+export interface GetHostParameters {
+  /** Shinzo bech32 host address to fetch. */
+  address: string;
+  /** Override the chain's configured Cosmos REST endpoint for this request. */
+  cosmosRestUrl?: string;
+}
+
+/** Response from fetching one registered host by Shinzo bech32 address. */
+export interface RegisteredHostDetailsResult {
+  /** The registered host. */
+  host: RegisteredHost;
+}

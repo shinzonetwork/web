@@ -258,6 +258,29 @@ Example response:
 }
 ```
 
+### `getHost`
+
+Fetches one registered host by Shinzo bech32 address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `address` required: Shinzo bech32 host address.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  address: "shinzo10vc55fnvu6ajrv53znvecrwg0tm07cphdvpccc",
+  did: "did:key:zQ3shND2BaSKQLTBTPrvGa5i3EdVnnAFzfJ8oLXa9aG8zWY1B",
+  connectionString:
+    "/ip4/35.254.135.221/tcp/9171/p2p/12D3KooWEz59tCjcDaUw4tsMhyyKXiBDcV2hwKQ6DYwpXJXVNqsB",
+  endpointAddress: undefined,
+}
+```
+
 ## Transactions
 
 Import from `@shinzo/shinzohub/transactions` or the package root.
