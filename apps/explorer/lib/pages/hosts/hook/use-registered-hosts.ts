@@ -5,20 +5,13 @@ import type { RegisteredHostsListResponse } from "@/shared/shinzohub/types";
 import {
   buildCursorPaginationSearchParams,
   type CursorPaginationParams,
-  type CursorPaginationResponse,
 } from "../../../shared/cursor-pagination/lib/pagination";
-
-export type RegisteredHost = RegisteredHostsResponse["hosts"][number];
-
-export type RegisteredHostsResponse = RegisteredHostsListResponse & {
-  pagination?: CursorPaginationResponse;
-};
 
 export type RegisteredHostsPaginationParams = CursorPaginationParams;
 
 export async function fetchRegisteredHosts(
   pagination: RegisteredHostsPaginationParams
-): Promise<RegisteredHostsResponse> {
+): Promise<RegisteredHostsListResponse> {
   const params = buildCursorPaginationSearchParams(pagination);
   const response = await fetch(`/api/shinzohub/hosts?${params.toString()}`);
 
@@ -26,7 +19,7 @@ export async function fetchRegisteredHosts(
     throw new Error("Failed to fetch hosts");
   }
 
-  return response.json() as Promise<RegisteredHostsResponse>;
+  return response.json() as Promise<RegisteredHostsListResponse>;
 }
 
 export function useRegisteredHosts(

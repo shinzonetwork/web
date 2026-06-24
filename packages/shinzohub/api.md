@@ -281,6 +281,68 @@ Example response:
 }
 ```
 
+## Indexers
+
+Import from `@shinzo/shinzohub/indexers` or the package root.
+
+### `listIndexers`
+
+Lists registered indexers with Cosmos REST cursor pagination.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters` optional
+    - `limit`: page size as `number | bigint | string`.
+    - `offset`: numeric pagination offset as `number | bigint | string`.
+    - `pageKey`: opaque `pagination.nextKey` from the previous response.
+    - `countTotal`: request the total count.
+    - `reverse`: request reverse registration order.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  indexers: [{
+    address: "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg",
+    did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
+    connectionString:
+      "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
+    sourceChain: "ethereum",
+    sourceChainId: "1",
+  }],
+  pagination: {
+    nextKey: null,
+    total: 1,
+  },
+}
+```
+
+### `getIndexer`
+
+Fetches one registered indexer by Shinzo bech32 address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `address` required: Shinzo bech32 indexer address.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  address: "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg",
+  did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
+  connectionString:
+    "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
+  sourceChain: "ethereum",
+  sourceChainId: "1",
+}
+```
+
 ## Transactions
 
 Import from `@shinzo/shinzohub/transactions` or the package root.

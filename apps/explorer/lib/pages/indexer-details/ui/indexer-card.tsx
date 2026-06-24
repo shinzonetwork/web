@@ -28,7 +28,7 @@ export const IndexerCard = (options: IndexerCardOptions) => {
     if (!indexerDetails?.indexer) return null;
     return {
       address: indexerDetails.indexer.address,
-      ip: ipFromConnectionString(indexerDetails.indexer.connection_string),
+      ip: ipFromConnectionString(indexerDetails.indexer.connectionString),
     };
   }, [indexerDetails]);
 
@@ -37,7 +37,7 @@ export const IndexerCard = (options: IndexerCardOptions) => {
     resetKey: indexerEntry?.address,
     toHealthEntry: (indexer) => ({
       address: indexer.address,
-      ip: indexer.ip,
+      ip: '35.208.241.78', //indexer.ip,
     }),
     onResults: (liveDataByKey) => {
       if (!indexerEntry) return;
@@ -100,8 +100,8 @@ export const IndexerCard = (options: IndexerCardOptions) => {
             />
           </div>
         </DataItem>
-        <DataItem title="Chain" value={indexer?.source_chain} loading={isLoading} />
-        <DataItem title="Chain ID" value={indexer?.source_chain_id} loading={isLoading} />
+        <DataItem title="Chain" value={indexer?.sourceChain} loading={isLoading} />
+        <DataItem title="Chain ID" value={indexer?.sourceChainId} loading={isLoading} />
         <DataItem
           title="Uptime"
           value={
@@ -130,14 +130,14 @@ export const IndexerCard = (options: IndexerCardOptions) => {
 
         <DataItem
           title="Connection string"
-          value={indexer?.connection_string}
+          value={indexer?.connectionString}
           loading={isLoading}
           allowWrap
         >
           <div className="flex items-start gap-2 min-w-0">
-            <span className="break-all">{indexer?.connection_string}</span>
+            <span className="break-all">{indexer?.connectionString}</span>
             <CopyButton
-              text={indexer?.connection_string || ""}
+              text={indexer?.connectionString || ""}
               className="text-muted-foreground shrink-0"
             />
           </div>

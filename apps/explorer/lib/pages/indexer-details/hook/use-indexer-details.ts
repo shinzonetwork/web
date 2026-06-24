@@ -1,25 +1,17 @@
 "use client";
 
-import { RegisteredIndexer } from "@/pages/indexers/hook/use-registered-indexers";
 import { useQuery } from "@tanstack/react-query";
-
-const registeredIndexersApiEndpoint =
-  process.env.NEXT_PUBLIC_REGISTERED_INDEXER_API_ENDPOINT ||
-  "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/indexer/v1/indexers";
-
-export type IndexerDetailsResponse = {
-  indexer: RegisteredIndexer;
-};
+import type { RegisteredIndexerDetailsResponse } from "@/shared/shinzohub/types";
 
 export async function fetchIndexerDetails(
   address: string
-): Promise<IndexerDetailsResponse> {
+): Promise<RegisteredIndexerDetailsResponse> {
   const response = await fetch(
-    `${registeredIndexersApiEndpoint}/${address}`
+    `/api/shinzohub/indexers/${encodeURIComponent(address)}`
   );
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (!response.ok) throw new Error("Failed to fetch indexer");
 
-  return response.json() as Promise<IndexerDetailsResponse>;
+  return response.json() as Promise<RegisteredIndexerDetailsResponse>;
 }
 
 export function useIndexerDetails(
@@ -27,10 +19,10 @@ export function useIndexerDetails(
   intervalMs = 30000
 ) {
   return useQuery({
-    queryKey: ["shinzohub","indexer-details", address],
+    queryKey: ["shinzohub", "indexer-details", address],
     queryFn: () => fetchIndexerDetails(address),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
-    placeholderData: (previousData) => previousData
+    placeholderData: (previousData) => previousData,
   });
 }

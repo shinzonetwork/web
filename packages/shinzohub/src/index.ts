@@ -19,6 +19,7 @@ import {
   listBlocks,
 } from "./blocks/index";
 import { listHosts, getHost } from "./hosts/index";
+import { getIndexer, listIndexers } from "./indexers/index";
 
 export {
   hexToShinzoAddress,
@@ -95,6 +96,14 @@ export type {
   RegisteredHost,
   RegisteredHostDetailsResult,
 } from "./hosts/index";
+export { getIndexer, listIndexers } from "./indexers/index";
+export type {
+  GetIndexerParameters,
+  ListIndexersParameters,
+  ListIndexersResult,
+  RegisteredIndexer,
+  RegisteredIndexerDetailsResult,
+} from "./indexers/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
@@ -140,6 +149,12 @@ export function shinzoHubActions(client: Client) {
     /** Fetches one registered ShinzoHub host by address. */
     getHost: (parameters: Parameters<typeof getHost>[1]) =>
       getHost(client, parameters),
+    /** Lists registered ShinzoHub indexers. */
+    listIndexers: (parameters?: Parameters<typeof listIndexers>[1]) =>
+      listIndexers(client, parameters),
+    /** Fetches one registered ShinzoHub indexer by address. */
+    getIndexer: (parameters: Parameters<typeof getIndexer>[1]) =>
+      getIndexer(client, parameters),
   };
 }
 

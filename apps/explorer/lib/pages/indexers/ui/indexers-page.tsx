@@ -4,7 +4,8 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
-import { RegisteredIndexer, useRegisteredIndexers } from '../hook/use-registered-indexers';
+import { useRegisteredIndexers } from '../hook/use-registered-indexers';
+import type { RegisteredIndexer } from '@/shared/shinzohub/types';
 import { IndexersList } from './indexers-list';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
@@ -27,7 +28,7 @@ function IndexersPageContent() {
     new Map()
   );
 
-  const { page, queryParams, applyPaginationData, totalItems } =
+  const { page, queryParams, applyPaginationData, totalItems, limit } =
     useCursorPagePagination({
       pageParam: INDEXERS_PAGE_PARAM,
       storageKey: INDEXERS_CURSOR_KEY,
@@ -41,7 +42,7 @@ function IndexersPageContent() {
     () =>
       registeredIndexers?.indexers.map((indexer) => ({
         ...indexer,
-        ip: ipFromConnectionString(indexer.connection_string),
+        ip: ipFromConnectionString(indexer.connectionString),
         status: "unknown" as HealthStatus,
         uptime_seconds: 0,
         last_processed: "",
@@ -111,7 +112,7 @@ function IndexersPageContent() {
         <Pagination
           page={page}
           totalItems={totalItems}
-          itemsPerPage={DEFAULT_LIMIT}
+          itemsPerPage={limit}
           pageParam={INDEXERS_PAGE_PARAM}
         />
       </Container>

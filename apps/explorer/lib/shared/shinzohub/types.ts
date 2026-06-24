@@ -1,9 +1,12 @@
 import type {
   ListBlocksResult,
   ListHostsResult,
+  ListIndexersResult,
   ListTransactionsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
+  RegisteredIndexer as ShinzoHubRegisteredIndexer,
+  RegisteredIndexerDetailsResult,
   ShinzoHubBlock,
   ShinzoHubEvent,
   ShinzoHubEventAttribute,
@@ -57,3 +60,17 @@ export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "
 };
 
 export type RegisteredHostDetailsResponse = JsonSerialized<RegisteredHostDetailsResult>;
+
+export type RegisteredIndexer = JsonSerialized<ShinzoHubRegisteredIndexer>;
+
+export type RegisteredIndexersListResponse = JsonSerialized<
+  Omit<ListIndexersResult, "pagination">
+> & {
+  pagination: {
+    next_key: string | null;
+    total: number;
+  };
+};
+
+export type RegisteredIndexerDetailsResponse =
+  JsonSerialized<RegisteredIndexerDetailsResult>;

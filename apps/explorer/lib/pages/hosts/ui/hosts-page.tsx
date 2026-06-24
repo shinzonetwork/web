@@ -4,7 +4,8 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
-import { RegisteredHost, useRegisteredHosts } from '../hook/use-registered-hosts';
+import { useRegisteredHosts } from '../hook/use-registered-hosts';
+import type { RegisteredHost } from '@/shared/shinzohub/types';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,

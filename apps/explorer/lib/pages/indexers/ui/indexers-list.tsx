@@ -68,7 +68,7 @@ export const IndexersList = ({
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={indexer?.source_chain}>
+            <TableNullableCell value={indexer?.sourceChain}>
               {(value) => (
                 <span className="text-sm text-foreground">
                   {value.charAt(0).toUpperCase() + value.slice(1)}

@@ -1,5 +1,5 @@
 import type { RegisteredHost, RegisteredHostDetailsResponse, RegisteredHostsListResponse } from "@/shared/shinzohub/types";
-import type { ListHostsResult, RegisteredHost as ShinzoHubRegisteredHost, RegisteredHostDetailsResult } from "@shinzo/shinzohub";
+import type { ListHostsResult, RegisteredHost as ShinzoHubRegisteredHost } from "@shinzo/shinzohub";
 
 export function serializeHost(host: ShinzoHubRegisteredHost): RegisteredHost {
   return {

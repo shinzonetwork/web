@@ -124,6 +124,12 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
 - [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
 
+### Cosmos REST Indexer Queries
+
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listIndexers`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listIndexers`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getIndexer`.
+
 ### Transactions And Blocks
 
 - [x] List all or EVM transactions with `listTransactions`.

@@ -1,42 +1,25 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import type { RegisteredIndexersListResponse } from "@/shared/shinzohub/types";
 import {
   buildCursorPaginationSearchParams,
-  CursorPaginationResponse,
   type CursorPaginationParams,
 } from "../../../shared/cursor-pagination/lib/pagination";
-
-const registeredIndexerApiEndpoint =
-  process.env.NEXT_PUBLIC_REGISTERED_INDEXER_API_ENDPOINT ||
-  "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/indexer/v1/indexers";
-
-export type RegisteredIndexer = {
-  address: string;
-  did: string;
-  connection_string: string;
-  source_chain: string;
-  source_chain_id: string;
-};
-
-export type RegisteredIndexersResponse = {
-  indexers: RegisteredIndexer[];
-  pagination?: CursorPaginationResponse;
-};
 
 export type RegisteredIndexersPaginationParams = CursorPaginationParams;
 
 export async function fetchRegisteredIndexers(
   pagination: RegisteredIndexersPaginationParams
-): Promise<RegisteredIndexersResponse> {
+): Promise<RegisteredIndexersListResponse> {
   const params = buildCursorPaginationSearchParams(pagination);
+  const response = await fetch(`/api/shinzohub/indexers?${params.toString()}`);
 
-  const response = await fetch(
-    `${registeredIndexerApiEndpoint}?${params.toString()}`
-  );
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch indexers");
+  }
 
-  return response.json() as Promise<RegisteredIndexersResponse>;
+  return response.json() as Promise<RegisteredIndexersListResponse>;
 }
 
 export function useRegisteredIndexers(
@@ -44,7 +27,7 @@ export function useRegisteredIndexers(
   intervalMs = 30000
 ) {
   return useQuery({
-    queryKey: ["shinzohub","registered-indexers", pagination],
+    queryKey: ["shinzohub", "registered-indexers", pagination],
     queryFn: () => fetchRegisteredIndexers(pagination),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
