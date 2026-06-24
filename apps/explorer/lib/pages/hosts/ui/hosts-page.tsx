@@ -27,7 +27,7 @@ function HostsPageContent() {
     new Map()
   );
 
-  const { page, queryParams, applyPaginationData, totalItems } =
+  const { page, queryParams, applyPaginationData, totalItems, limit } =
     useCursorPagePagination({
       pageParam: HOSTS_PAGE_PARAM,
       storageKey: HOSTS_CURSOR_KEY,
@@ -41,7 +41,7 @@ function HostsPageContent() {
     () =>
       registeredHosts?.hosts.map((host) => ({
         ...host,
-        ip: ipFromConnectionString(host.connection_string),
+        ip: ipFromConnectionString(host.connectionString),
         status: "unknown" as HealthStatus,
         uptime_seconds: 0,
         last_processed: "",
@@ -111,7 +111,7 @@ function HostsPageContent() {
         <Pagination
           page={page}
           totalItems={totalItems}
-          itemsPerPage={DEFAULT_LIMIT}
+          itemsPerPage={limit}
           pageParam={HOSTS_PAGE_PARAM}
         />
       </Container>

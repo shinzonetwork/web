@@ -1,25 +1,16 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import type { RegisteredHostsListResponse } from "@/shared/shinzohub/types";
 import {
   buildCursorPaginationSearchParams,
-  CursorPaginationResponse,
   type CursorPaginationParams,
+  type CursorPaginationResponse,
 } from "../../../shared/cursor-pagination/lib/pagination";
 
-const registeredHostsApiEndpoint =
-  process.env.NEXT_PUBLIC_REGISTERED_HOST_API_ENDPOINT ||
-  "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/host/v1/hosts";
+export type RegisteredHost = RegisteredHostsResponse["hosts"][number];
 
-export type RegisteredHost = {
-  address: string;
-  did: string;
-  connection_string: string;
-  endpoint_address: string;
-};
-
-export type RegisteredHostsResponse = {
-  hosts: RegisteredHost[];
+export type RegisteredHostsResponse = RegisteredHostsListResponse & {
   pagination?: CursorPaginationResponse;
 };
 
@@ -29,11 +20,12 @@ export async function fetchRegisteredHosts(
   pagination: RegisteredHostsPaginationParams
 ): Promise<RegisteredHostsResponse> {
   const params = buildCursorPaginationSearchParams(pagination);
+  const response = await fetch(`/api/shinzohub/hosts?${params.toString()}`);
 
-  const response = await fetch(
-    `${registeredHostsApiEndpoint}?${params.toString()}`
-  );
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch hosts");
+  }
+
   return response.json() as Promise<RegisteredHostsResponse>;
 }
 
@@ -42,7 +34,7 @@ export function useRegisteredHosts(
   intervalMs = 30000
 ) {
   return useQuery({
-    queryKey: ["shinzohub","registered-hosts", pagination],
+    queryKey: ["shinzohub", "registered-hosts", pagination],
     queryFn: () => fetchRegisteredHosts(pagination),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,

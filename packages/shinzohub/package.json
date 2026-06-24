@@ -9,6 +9,7 @@
     "./addresses": "./src/addresses/index.ts",
     "./chains": "./src/chains/index.ts",
     "./blocks": "./src/blocks/index.ts",
+    "./hosts": "./src/hosts/index.ts",
     "./transactions": "./src/transactions/index.ts",
     "./views": "./src/views/index.ts",
     "./package.json": "./package.json"

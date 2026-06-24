@@ -220,6 +220,44 @@ Example response:
 Throws when the receipt has no decodable `ViewCreated` event from the
 ViewRegistry.
 
+## Hosts
+
+Import from `@shinzo/shinzohub/hosts` or the package root.
+
+### `listHosts`
+
+Lists registered hosts with Cosmos REST cursor pagination.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters` optional
+    - `limit`: page size as `number | bigint | string`.
+    - `offset`: numeric pagination offset as `number | bigint | string`.
+    - `pageKey`: opaque `pagination.nextKey` from the previous response.
+    - `countTotal`: request the total count.
+    - `reverse`: request reverse registration order.
+    - `cosmosRestUrl`: Cosmos REST endpoint override, e.g.
+      `http://rpc.develop.devnet.shinzo.network:1317`.
+
+Example response:
+
+```ts
+{
+  hosts: [{
+    address: "shinzo10vc55fnvu6ajrv53znvecrwg0tm07cphdvpccc",
+    did: "did:key:zQ3shND2BaSKQLTBTPrvGa5i3EdVnnAFzfJ8oLXa9aG8zWY1B",
+    connectionString:
+      "/ip4/35.254.135.221/tcp/9171/p2p/12D3KooWEz59tCjcDaUw4tsMhyyKXiBDcV2hwKQ6DYwpXJXVNqsB",
+    endpointAddress: undefined,
+  }],
+  pagination: {
+    nextKey: null,
+    total: 6n,
+  },
+}
+```
+
 ## Transactions
 
 Import from `@shinzo/shinzohub/transactions` or the package root.

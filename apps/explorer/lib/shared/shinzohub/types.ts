@@ -10,6 +10,8 @@ import type {
   ShinzoHubTransactionKind,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
+  RegisteredHost as ShinzoHubRegisteredHost,
+  ListHostsResult,
 } from '@shinzo/shinzohub';
 
 type JsonSerialized<T> =
@@ -42,4 +44,13 @@ export type ShinzohubBlock = JsonSerialized<ShinzoHubBlock>;
 
 export type ShinzohubBlocksResponse = JsonSerialized<ListBlocksResult> & {
   total: number;
+};
+
+export type RegisteredHost = JsonSerialized<ShinzoHubRegisteredHost>;
+
+export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "pagination">> & {
+  pagination: {
+    next_key: string | null;
+    total: number;
+  };
 };

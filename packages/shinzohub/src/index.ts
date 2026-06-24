@@ -18,6 +18,7 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
+import { listHosts } from "./hosts/index";
 
 export {
   hexToShinzoAddress,
@@ -86,6 +87,12 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
+export { listHosts } from "./hosts/index";
+export type {
+  ListHostsParameters,
+  ListHostsResult,
+  RegisteredHost,
+} from "./hosts/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
@@ -125,6 +132,9 @@ export function shinzoHubActions(client: Client) {
     getShinzoHubBlockTimestamp: (
       parameters: Parameters<typeof getBlockTimestamp>[1]
     ) => getBlockTimestamp(client, parameters),
+    /** Lists registered ShinzoHub hosts. */
+    listHosts: (parameters?: Parameters<typeof listHosts>[1]) =>
+      listHosts(client, parameters),
   };
 }
 
