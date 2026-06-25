@@ -9,13 +9,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shinzo/ui/select";
-// import { SearchInput } from '@/shared/ui/search-input';
 import EthereumIcon from '@/shared/ui/icons/ethereum.svg';
 import ShinzoHubIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import ShinzoLogo from './shinzo-logo.svg';
 import { NavLink } from './nav-link';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from "../chain-path-segment";
+import { ExplorerSearch } from "@/widgets/search";
 
 export interface HeaderProps {
   hideSearch?: boolean;
@@ -34,7 +34,7 @@ const CHAIN_OPTIONS = [
   },
 ];
 
-export const Header = ({}: HeaderProps) => {
+export const Header = ({ hideSearch = false }: HeaderProps) => {
   const chain = useChainPathSegment();
   const pathname = usePathname();
   const router = useRouter();
@@ -60,8 +60,8 @@ export const Header = ({}: HeaderProps) => {
   };
 
   return (
-    <header className="h-40 w-full flex items-center border-b border-border">
-      <div className="container mx-auto flex items-center justify-between gap-3 px-4 sm:gap-12">
+    <header className="flex min-h-40 w-full items-center border-b border-border py-5">
+      <div className="container mx-auto flex flex-wrap items-center justify-between gap-5 px-4 sm:gap-8">
         <div className="flex items-center gap-12">
           <Link href={`${getPageLink('home', { chain })}`}>
             <ShinzoLogo className="h-6 w-auto sm:h-7" />
@@ -77,42 +77,41 @@ export const Header = ({}: HeaderProps) => {
           </nav>
         </div>
 
-        <Select value={chain} onValueChange={selectChain}>
-          <SelectTrigger aria-label="Select chain">
-            <SelectValue>
+        <div className="flex items-center gap-6">
+          {chain === "shinzohub" && !hideSearch && (
+            <ExplorerSearch className="order-3 basis-full lg:order-none lg:max-w-lg lg:flex-1 lg:basis-auto" />
+          )}
+
+          <Select value={chain} onValueChange={selectChain}>
+            <SelectTrigger aria-label="Select chain">
+              <SelectValue>
               <span className="min-w-0 flex-1 truncate">
                 {selectedChain.label}
               </span>
-              <span
-                aria-hidden
-                className="flex size-5 shrink-0 items-center justify-center text-ui-text"
-              >
+                <span
+                  aria-hidden
+                  className="flex size-5 shrink-0 items-center justify-center text-ui-text"
+                >
                 {selectedChain.icon}
               </span>
-            </SelectValue>
-          </SelectTrigger>
+              </SelectValue>
+            </SelectTrigger>
 
-          <SelectContent align="end">
-            {CHAIN_OPTIONS.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
+            <SelectContent align="end">
+              {CHAIN_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
                 <span
                   aria-hidden
                   className="flex size-5 shrink-0 items-center justify-center text-ui-text"
                 >
                   {option.icon}
                 </span>
-                <span className="truncate">{option.label}</span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {/* TODO: implement searching */}
-        {/*{!hideSearch && (*/}
-        {/*  <div className="flex flex-1 items-center gap-4 md:max-w-lg">*/}
-        {/*    <SearchInput />*/}
-        {/*  </div>*/}
-        {/*)}*/}
+                  <span className="truncate">{option.label}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
     </header>
   );

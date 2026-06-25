@@ -5,7 +5,6 @@ import { BlocksHome } from "./blocks-home";
 import { TransactionsHome } from "./transactions-home";
 import { HomeStats } from '@/pages/home/stats';
 import { Typography } from '@/shared/ui/typography';
-// import { SearchInput } from '@/shared/ui/search-input';
 
 export const HomePage = () => {
   return (
@@ -17,7 +16,6 @@ export const HomePage = () => {
           <Typography font='mono' className='text-[25px] whitespace-nowrap'>
             Shinzō Chain Explorer
           </Typography>
-          {/*<SearchInput />*/}
         </div>
       </Container>
 
