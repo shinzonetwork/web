@@ -173,7 +173,8 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [ ] Cover `getDid(address)`.
 - [ ] Cover `getConnectionString(address)`.
 - [ ] Cover `Registered(address,bytes,string)`.
-- [ ] Cover Cosmos REST host queries when the REST API is stable.
+- [x] Fetch one registered host by account address with `getHost`.
+- [ ] Cover paginated Cosmos REST host listings.
 
 ### IndexerRegistry Precompile
 
@@ -185,7 +186,8 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [ ] Cover `getConnectionString(address)`.
 - [ ] Cover `getSourceChain(address)`.
 - [ ] Cover `Registered(address,bytes,string,string,uint64)`.
-- [ ] Cover Cosmos REST indexer queries when the REST API is stable.
+- [x] Fetch one registered indexer by account address with `getIndexer`.
+- [ ] Cover paginated Cosmos REST indexer listings.
 - [ ] Cover indexer assertion transaction helpers when the workflow is designed.
 
 ### SourceHub And Admin Workflows

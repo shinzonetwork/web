@@ -46,6 +46,22 @@ serialization, for example with `String(value)`.
 Every query function performs exactly one REST or Comet RPC request. Compose
 multiple functions in application code when you need fallback or enrichment.
 
+## Hosts And Indexers
+
+Import `getHost` from `@shinzo/shinzohub/hosts` and `getIndexer` from
+`@shinzo/shinzohub/indexers`, or import either action from the package root.
+Both actions accept a Shinzo bech32 address or a 20-byte EVM hex address and
+perform one Cosmos REST request.
+
+```ts
+const host = await getHost(client, { address: "0x1234..." });
+const indexer = await getIndexer(client, { address: "shinzo1..." });
+```
+
+`getHost` returns the canonical account address, DID, connection string, and
+GraphQL endpoint. `getIndexer` returns the canonical account address, DID,
+connection string, source chain, and source-chain ID.
+
 ## Clients
 
 ### `shinzoHubActions`
@@ -70,6 +86,8 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `getShinzoHubBlock`: extended-client name for `getBlock`.
   - `getShinzoHubBlockTimestamp`: extended-client name for
     `getBlockTimestamp`.
+  - `getHost`
+  - `getIndexer`
 
 Example result:
 

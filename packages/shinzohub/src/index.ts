@@ -18,6 +18,8 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
+import { getHost } from "./hosts/index";
+import { getIndexer } from "./indexers/index";
 
 export {
   hexToShinzoAddress,
@@ -78,6 +80,10 @@ export {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
+export { getHost } from "./hosts/index";
+export type { GetHostParameters, ShinzoHubHost } from "./hosts/index";
+export { getIndexer } from "./indexers/index";
+export type { GetIndexerParameters, ShinzoHubIndexer } from "./indexers/index";
 export type {
   GetBlockParameters,
   GetBlockTimestampParameters,
@@ -125,6 +131,10 @@ export function shinzoHubActions(client: Client) {
     getShinzoHubBlockTimestamp: (
       parameters: Parameters<typeof getBlockTimestamp>[1]
     ) => getBlockTimestamp(client, parameters),
+    /** Fetches one registered ShinzoHub host by account address. */
+    getHost: (parameters: Parameters<typeof getHost>[1]) => getHost(client, parameters),
+    /** Fetches one registered ShinzoHub indexer by account address. */
+    getIndexer: (parameters: Parameters<typeof getIndexer>[1]) => getIndexer(client, parameters),
   };
 }
 

@@ -1,9 +1,12 @@
 import type { Account, Address, Client, Hex, TransactionReceipt } from "viem";
-import { decodeEventLog, encodeFunctionData } from "viem";
+import { decodeEventLog, encodeFunctionData, getAddress } from "viem";
 import { sendTransaction } from "viem/actions";
 import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index";
 import { buildUrl, requestJson } from "../internal/fetch";
-import { getRpcEndpoint } from "../internal/endpoints";
+import {
+  getRpcEndpoint,
+  type ShinzoHubQueryClient,
+} from "../internal/endpoints";
 import { bytesLikeToHex, normalizeHex } from "../internal/hex";
 
 /**
@@ -449,7 +452,10 @@ export async function listViews(
  * console.log(view.name, view.metadata?.rootType);
  * ```
  */
-export async function getView(client: Client, parameters: GetViewParameters): Promise<ShinzoHubView> {
+export async function getView(
+  client: ShinzoHubQueryClient,
+  parameters: GetViewParameters,
+): Promise<ShinzoHubView> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
     throw new Error("No fetch implementation is available.");
@@ -602,7 +608,7 @@ function toMetadata(wire: ViewMetadataWire): ViewMetadata {
 function normalizeAnyAddress(value: string): Hex {
   const trimmed = value.trim();
   if (/^0x/i.test(trimmed) || /^[0-9a-fA-F]{40}$/.test(trimmed)) {
-    return normalizeHexAddress(trimmed);
+    return getAddress(normalizeHexAddress(trimmed));
   }
-  return shinzoAddressToHex(trimmed);
+  return getAddress(shinzoAddressToHex(trimmed));
 }

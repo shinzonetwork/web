@@ -211,7 +211,7 @@ describe("Cosmos REST view actions", () => {
         return Response.json({ count: "42" });
       }
       expect(String(input)).toBe(
-        "https://rest.example/shinzonetwork/view/v1/views/0x018a06d78e0802db5bc055b4527d7b481c3e9932?include_data=true",
+        "https://rest.example/shinzonetwork/view/v1/views/0x018a06D78E0802dB5bC055B4527d7B481c3e9932?include_data=true",
       );
       return Response.json({
         view: {
