@@ -5,3 +5,8 @@ export * from "./lib/format-uptime";
 export * from "./lib/format-time";
 export { createHealthEntryKey, ipFromConnectionString } from "./lib/utils";
 export type { HealthStatus, HealthEntryKeyParams, LiveData } from "./types";
+export {
+  getHealth,
+  HEALTH_FETCH_TIMEOUT_MS,
+  UNHEALTHY_LIVE_DATA,
+} from "@shinzo/shinzohub/health";

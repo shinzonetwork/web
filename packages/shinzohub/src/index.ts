@@ -18,6 +18,7 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
+import { getHealth } from "./health/index";
 import { listHosts, getHost } from "./hosts/index";
 import { getIndexer, listIndexers } from "./indexers/index";
 
@@ -88,6 +89,22 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
+export {
+  fetchWithTimeout,
+  getHealth,
+  healthCheckUrls,
+  ipToSslipHostname,
+  isIPv4,
+  HEALTH_FETCH_TIMEOUT_MS,
+  UNHEALTHY_LIVE_DATA,
+} from "./health/index";
+export type {
+  GetHealthParameters,
+  HealthLiveData,
+  HealthP2P,
+  HealthPeer,
+  HealthStatus,
+} from "./health/index";
 export { getHost, listHosts } from "./hosts/index";
 export type {
   GetHostParameters,
@@ -149,6 +166,8 @@ export function shinzoHubActions(client: Client) {
     /** Fetches one registered ShinzoHub host by address. */
     getHost: (parameters: Parameters<typeof getHost>[1]) =>
       getHost(client, parameters),
+    /** Fetches live health for an indexer or host IPv4 address. */
+    getHealth: (parameters: Parameters<typeof getHealth>[0]) => getHealth(parameters),
     /** Lists registered ShinzoHub indexers. */
     listIndexers: (parameters?: Parameters<typeof listIndexers>[1]) =>
       listIndexers(client, parameters),

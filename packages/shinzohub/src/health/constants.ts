@@ -1,9 +1,9 @@
-import type { LiveData } from "../types";
+import type { HealthLiveData } from "./types";
 
 /** Abort in-flight health fetches that do not complete within this window. */
 export const HEALTH_FETCH_TIMEOUT_MS = 2_000;
 
-export const UNHEALTHY_LIVE_DATA: LiveData = {
+export const UNHEALTHY_LIVE_DATA: HealthLiveData = {
   status: "unhealthy",
   uptime: 0,
   uptime_seconds: 0,

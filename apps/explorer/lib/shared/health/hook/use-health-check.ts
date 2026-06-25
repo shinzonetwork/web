@@ -1,13 +1,14 @@
 "use client";
 
-import { useQuery, type QueryKey } from "@tanstack/react-query";
-import { LiveDataWithKey, LiveData, HealthEntryKeyParams } from "../types";
-import { createHealthEntryKey } from "../lib/utils";
 import {
+  fetchWithTimeout,
   HEALTH_FETCH_TIMEOUT_MS,
   UNHEALTHY_LIVE_DATA,
-} from "../lib/constants";
-import { fetchWithTimeout } from "../lib/fetch-with-timeout";
+  type HealthLiveData,
+} from "@shinzo/shinzohub/health";
+import { useQuery, type QueryKey } from "@tanstack/react-query";
+import { LiveDataWithKey, HealthEntryKeyParams } from "../types";
+import { createHealthEntryKey } from "../lib/utils";
 
 export const healthQueryKey = (entry: HealthEntryKeyParams): QueryKey =>
   ["health", createHealthEntryKey(entry)] as const;
@@ -26,7 +27,7 @@ export async function fetchHealthStatus(
       return { key, data: UNHEALTHY_LIVE_DATA };
     }
 
-    const data = (await res.json()) as LiveData;
+    const data = (await res.json()) as HealthLiveData;
     return { key, data: { ...data, status: data.status || "unhealthy" } };
   } catch {
     return { key, data: UNHEALTHY_LIVE_DATA };
@@ -45,7 +46,7 @@ export function useHealthCheck(
 ) {
   return useQuery({
     queryKey: healthQueryKey(entry ?? { address: "", ip: "" }),
-    queryFn: () => fetchHealthStatus(entry!),
+    queryFn: () => fetchHealthStatus(entry ?? { address: "", ip: "" }),
     enabled: enabled && Boolean(entry?.address && entry?.ip),
     staleTime: 0,
     refetchInterval: refetchIntervalMs,
