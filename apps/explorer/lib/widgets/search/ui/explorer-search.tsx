@@ -8,329 +8,42 @@ import {
   type KeyboardEvent,
 } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Blocks,
-  Database,
-  ExternalLink,
-  HardDrive,
-  LoaderCircle,
-  ReceiptText,
-  Search,
-  WalletCards,
-  type LucideIcon,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@shinzo/ui/dropdown-menu";
-import { formatHash } from "@/shared/utils/format-hash";
-import { getPageLink } from "@/shared/utils/links";
-import { ExplorerSearchApiError } from "../api/search";
+import {
+  focusAdjacentDropdownElement,
+  focusDropdownBoundary,
+  focusNextPageElementAfter,
+  isFirstDropdownElementFocused,
+  isLastDropdownElementFocused,
+} from "./search-focus";
 import type { ExplorerSearchResult } from "../model/search-query";
+import { useRecentSearches } from "../model/use-recent-searches";
 import { useExplorerSearch } from "../model/use-explorer-search";
-
-type InternalSearchResult = Exclude<ExplorerSearchResult, { kind: "view" }>;
-
-interface ResultPresentation {
-  description: string;
-  Icon: LucideIcon;
-  title: string;
-}
-
-interface SearchResultItemProps {
-  active: boolean;
-  id: string;
-  onHighlight: () => void;
-  onSelect: (result: ExplorerSearchResult) => void;
-  result: ExplorerSearchResult;
-}
-
-type ExplorerSearchState = ReturnType<typeof useExplorerSearch>;
-
-function getResultKey(result: ExplorerSearchResult): string {
-  switch (result.kind) {
-    case "address":
-      return `address-${result.hexAddress}`;
-    case "view":
-      return `view-${result.address}`;
-    case "host":
-      return `host-${result.address}`;
-    case "indexer":
-      return `indexer-${result.address}`;
-    case "transaction":
-      return `transaction-${result.cosmosHash}`;
-    case "block":
-      return `block-${result.height}`;
-  }
-}
-
-function getResultPresentation(
-  result: ExplorerSearchResult,
-): ResultPresentation {
-  switch (result.kind) {
-    case "address":
-      return {
-        Icon: WalletCards,
-        title: "Address",
-        description: result.shinzoAddress,
-      };
-    case "view":
-      return {
-        Icon: Database,
-        title: `View · ${result.name}`,
-        description: result.address,
-      };
-    case "host":
-      return {
-        Icon: HardDrive,
-        title: "Host",
-        description: `${result.address} · ${formatHash(result.did, 14, 6)}`,
-      };
-    case "indexer":
-      return {
-        Icon: Database,
-        title: "Indexer",
-        description: `${result.address} · ${result.sourceChain || "Unknown chain"}`,
-      };
-    case "transaction": {
-      const hash = result.evmHash ?? result.cosmosHash;
-      const network = result.transactionKind === "evm" ? "EVM" : "Cosmos";
-
-      return {
-        Icon: ReceiptText,
-        title: `${network} transaction`,
-        description: `${formatHash(hash, 16, 10)} · Block ${result.height}`,
-      };
-    }
-    case "block":
-      return {
-        Icon: Blocks,
-        title: `Block ${result.height}`,
-        description: formatHash(result.hash, 16, 10),
-      };
-  }
-}
-
-function getInternalResultHref(result: InternalSearchResult): string {
-  const chain = "shinzohub";
-
-  switch (result.kind) {
-    case "host":
-      return getPageLink("host", { address: result.address, chain });
-    case "indexer":
-      return getPageLink("indexer", { address: result.address, chain });
-    case "transaction":
-      return getPageLink("tx", { param: result.cosmosHash, chain });
-    case "block":
-      return getPageLink("block", { param: result.height, chain });
-    case "address":
-      return getPageLink("address", {
-        param: result.shinzoAddress,
-        chain,
-      });
-  }
-}
-
-function SearchResultContent({ result }: { result: ExplorerSearchResult }) {
-  const { description, Icon, title } = getResultPresentation(result);
-
-  return (
-    <>
-      <Icon aria-hidden className="size-4" />
-      <span className="min-w-0 flex-1">
-        <strong className="block truncate font-medium">{title}</strong>
-        <span className="block truncate text-xs text-ui-text-muted">
-          {description}
-        </span>
-      </span>
-      {result.kind === "view" && (
-        <ExternalLink aria-hidden className="size-3.5" />
-      )}
-    </>
-  );
-}
-
-function SearchResultItem({
-  active,
-  id,
-  onHighlight,
-  onSelect,
-  result,
-}: SearchResultItemProps) {
-  const commonProps = {
-    "data-active": active,
-    id,
-    onFocus: onHighlight,
-    onPointerMove: onHighlight,
-  };
-
-  if (result.kind === "view") {
-    return (
-      <DropdownMenuItem asChild {...commonProps}>
-        <a
-          href={result.externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <SearchResultContent result={result} />
-        </a>
-      </DropdownMenuItem>
-    );
-  }
-
-  return (
-    <DropdownMenuItem
-      {...commonProps}
-      onSelect={() => onSelect(result)}
-    >
-      <SearchResultContent result={result} />
-    </DropdownMenuItem>
-  );
-}
-
-function SearchMessage({
-  description,
-  title,
-}: {
-  description?: string;
-  title: string;
-}) {
-  return (
-    <div
-      className="flex min-h-20 flex-col justify-center px-3 py-4 font-mono"
-      role="status"
-    >
-      <p className="text-sm font-medium text-ui-text">{title}</p>
-      {description && (
-        <p className="mt-1 text-xs leading-5 text-ui-text-muted">
-          {description}
-        </p>
-      )}
-    </div>
-  );
-}
-
-function SearchInputHint({ isSearching }: { isSearching: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className="pointer-events-none absolute right-4 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded border border-ui-accent bg-ui-bg-accent-hover font-mono text-xs font-semibold text-ui-accent"
-    >
-      {isSearching ? (
-        <LoaderCircle className="size-3.5 animate-spin" />
-      ) : (
-        "/"
-      )}
-    </span>
-  );
-}
-
-function SearchError({
-  error,
-  onRetry,
-}: {
-  error: unknown;
-  onRetry: () => void;
-}) {
-  const description = error instanceof ExplorerSearchApiError
-    ? error.detail
-    : "The Explorer could not reach its search service. Check your connection and try again.";
-  const title = error instanceof ExplorerSearchApiError && error.status === 502
-    ? "Shinzohub RPCs are unavailable"
-    : "Unable to search Shinzohub";
-
-  return (
-    <div role="alert">
-      <SearchMessage
-        title={title}
-        description={description}
-      />
-      <DropdownMenuItem
-        className="justify-center text-ui-text-accent"
-        onSelect={(event) => {
-          event.preventDefault();
-          onRetry();
-        }}
-      >
-        Try again
-      </DropdownMenuItem>
-    </div>
-  );
-}
-
-function SearchDropdownBody({
-  activeIndex,
-  menuId,
-  onHighlight,
-  onRetry,
-  onSelect,
-  search,
-}: {
-  activeIndex: number;
-  menuId: string;
-  onHighlight: (index: number) => void;
-  onRetry: () => void;
-  onSelect: (result: ExplorerSearchResult) => void;
-  search: ExplorerSearchState;
-}) {
-  if (search.isSearching) {
-    return <SearchMessage title="Searching Shinzohub…" />;
-  }
-
-  if (search.submittedInvalid) {
-    return (
-      <SearchMessage
-        title="That search is incomplete"
-        description="Enter a Shinzo address, transaction hash, positive block height, or consensus block hash."
-      />
-    );
-  }
-
-  if (search.error) {
-    return <SearchError error={search.error} onRetry={onRetry} />;
-  }
-
-  if (search.results.length === 0) {
-    return (
-      <SearchMessage
-        title="No results found"
-        description="The query is valid, but it did not match a confirmed transaction or block."
-      />
-    );
-  }
-
-  return (
-    <>
-      <DropdownMenuLabel>Results</DropdownMenuLabel>
-      {search.results.map((result, index) => (
-        <SearchResultItem
-          key={getResultKey(result)}
-          id={`${menuId}-${getResultKey(result)}`}
-          result={result}
-          active={index === activeIndex}
-          onHighlight={() => onHighlight(index)}
-          onSelect={onSelect}
-        />
-      ))}
-    </>
-  );
-}
+import { SearchDropdownBody } from "./search-dropdown-body";
+import { SearchDropdownContent } from "./search-dropdown-content";
+import { SearchInputHint } from "./search-input-hint";
+import {
+  getExplorerSearchResultKey,
+  getInternalResultHref,
+} from "./search-result-item";
 
 export function ExplorerSearch({ className = "" }: { className?: string }) {
   const router = useRouter();
+  const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [focused, setFocused] = useState(false);
+  const [open, setOpen] = useState(false);
   const search = useExplorerSearch();
-  const hasPanel = search.currentQuery !== null || search.submittedInvalid;
-  const open = focused && hasPanel;
+  const { recentSearches, rememberSearchResult } = useRecentSearches();
   const activeResult = search.results[activeIndex] ?? search.results[0];
   const activeResultId = activeResult
-    ? `${menuId}-${getResultKey(activeResult)}`
+    ? `${menuId}-${getExplorerSearchResultKey(activeResult)}`
     : undefined;
 
   useEffect(() => {
@@ -364,9 +77,24 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
     return () => window.removeEventListener("keydown", focusSearch);
   }, []);
 
-  const closeMenu = () => setFocused(false);
+  const focusInput = () => {
+    window.queueMicrotask(() => inputRef.current?.focus());
+  };
+
+  const closeMenu = () => setOpen(false);
+
+  const focusDropdownItem = (boundary: "first" | "last") => {
+    return focusDropdownBoundary(contentRef.current, boundary);
+  };
+
+  const pickResult = (result: ExplorerSearchResult) => {
+    rememberSearchResult(result);
+    closeMenu();
+  };
 
   const selectResult = (result: ExplorerSearchResult) => {
+    rememberSearchResult(result);
+
     if (result.kind === "view") {
       const viewWindow = window.open(
         result.externalUrl,
@@ -379,6 +107,18 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
     }
 
     closeMenu();
+  };
+
+  const selectExample = (query: string) => {
+    search.updateInput(query);
+    setOpen(true);
+    focusInput();
+  };
+
+  const clearSearch = () => {
+    search.updateInput("");
+    setOpen(true);
+    focusInput();
   };
 
   const submitSearch = () => {
@@ -395,6 +135,25 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
   const handleInputKeyDown = (
     event: KeyboardEvent<HTMLInputElement>,
   ) => {
+    if (event.key === "ArrowDown" && focusDropdownItem("first")) {
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === "ArrowUp" && focusDropdownItem("last")) {
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      event.key === "Tab" &&
+      !event.shiftKey &&
+      focusDropdownItem("first")
+    ) {
+      event.preventDefault();
+      return;
+    }
+
     if (event.key === "Enter") {
       event.preventDefault();
       submitSearch();
@@ -409,44 +168,84 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
 
     if (event.key === " ") {
       event.preventDefault();
+    }
+  };
+
+  const handleDropdownKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeMenu();
+      focusInput();
       return;
     }
 
-    if (search.results.length === 0) return;
-
-    if (event.key === "ArrowDown") {
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      setActiveIndex((index) => (index + 1) % search.results.length);
+      focusAdjacentDropdownElement({
+        container: contentRef.current,
+        direction: event.key === "ArrowDown" ? 1 : -1,
+        wrap: true,
+      });
+      return;
     }
 
-    if (event.key === "ArrowUp") {
+    if (event.key !== "Tab") return;
+
+    const isMovingBackward = event.shiftKey;
+    const isAtStart = isFirstDropdownElementFocused(contentRef.current);
+    const isAtEnd = isLastDropdownElementFocused(contentRef.current);
+
+    if (isMovingBackward && isAtStart) {
       event.preventDefault();
-      setActiveIndex((index) => (
-        index - 1 + search.results.length
-      ) % search.results.length);
+      inputRef.current?.focus();
+      return;
     }
+
+    if (!isMovingBackward && isAtEnd) {
+      event.preventDefault();
+      closeMenu();
+      if (!focusNextPageElementAfter(rootRef.current, contentRef.current)) {
+        inputRef.current?.blur();
+      }
+      return;
+    }
+
+    event.preventDefault();
+    focusAdjacentDropdownElement({
+      container: contentRef.current,
+      direction: isMovingBackward ? -1 : 1,
+      wrap: false,
+    });
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (nextOpen) {
-      setFocused(true);
-      window.queueMicrotask(() => inputRef.current?.focus());
+      setOpen(true);
+      focusInput();
       return;
     }
 
     window.requestAnimationFrame(() => {
-      if (document.activeElement !== inputRef.current) closeMenu();
+      const activeElement = document.activeElement;
+      const isFocusInsideInput = activeElement === inputRef.current ||
+        rootRef.current?.contains(activeElement) === true;
+      const isFocusInsideDropdown = contentRef.current?.contains(
+        activeElement,
+      ) === true;
+
+      if (!isFocusInsideInput && !isFocusInsideDropdown) closeMenu();
     });
   };
 
   return (
-    <div className={`relative z-20 w-full ${className}`}>
+    <div ref={rootRef} className={`relative z-20 w-full ${className}`}>
       <DropdownMenu
         modal={false}
         open={open}
         onOpenChange={handleOpenChange}
       >
         <form
+          role="search"
           onSubmit={(event) => {
             event.preventDefault();
             submitSearch();
@@ -460,10 +259,11 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
             <DropdownMenuTrigger asChild>
               <input
                 ref={inputRef}
-                type="search"
+                type="text"
+                role="searchbox"
                 value={search.input}
                 onChange={(event) => search.updateInput(event.target.value)}
-                onFocus={() => setFocused(true)}
+                onFocus={() => setOpen(true)}
                 onKeyDown={handleInputKeyDown}
                 aria-label="Search Shinzohub"
                 aria-controls={open ? menuId : undefined}
@@ -474,26 +274,31 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
                 className="relative h-14 w-full min-w-0 rounded-xl border-2 border-ui-accent bg-white px-10 py-4 pr-14 font-mono text-base outline-none transition-[color,box-shadow] placeholder:text-ui-text-muted selection:bg-ui-accent selection:text-ui-bg focus-visible:border-ui-accent focus-visible:ring-3 focus-visible:ring-ui-accent/50"
               />
             </DropdownMenuTrigger>
-            <SearchInputHint isSearching={search.isSearching} />
+            <SearchInputHint
+              hasInput={search.input.length > 0}
+              isSearching={search.isSearching}
+              onClear={clearSearch}
+            />
           </div>
         </form>
 
-        <DropdownMenuContent
+        <SearchDropdownContent
           id={menuId}
-          align="start"
-          onOpenAutoFocus={(event) => event.preventDefault()}
-          onCloseAutoFocus={(event) => event.preventDefault()}
-          className="min-h-26 w-[var(--radix-dropdown-menu-trigger-width)]"
+          contentRef={contentRef}
+          onKeyDown={handleDropdownKeyDown}
         >
           <SearchDropdownBody
             activeIndex={activeIndex}
             menuId={menuId}
+            recentSearches={recentSearches}
             search={search}
+            onExampleSelect={selectExample}
             onHighlight={setActiveIndex}
+            onPick={pickResult}
             onRetry={() => void search.retry()}
             onSelect={selectResult}
           />
-        </DropdownMenuContent>
+        </SearchDropdownContent>
       </DropdownMenu>
     </div>
   );
