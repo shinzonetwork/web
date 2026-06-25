@@ -22,6 +22,12 @@ export type ExplorerSearchQuery =
       cacheKey: string;
       value: string;
       hash: string;
+    }
+  | {
+      kind: "view-name";
+      cacheKey: string;
+      value: string;
+      name: string;
     };
 
 export type ExplorerSearchResult =
@@ -72,6 +78,7 @@ const HEX_ADDRESS_RE = /^(?:0[xX])?[0-9a-fA-F]{40}$/;
 const SHINZO_ADDRESS_RE = /^shinzo1/i;
 const HASH_RE = /^(?:0[xX])?([0-9a-fA-F]{64})$/;
 const BLOCK_HEIGHT_RE = /^\d+$/;
+const VIEW_NAME_RE = /^[A-Za-z][A-Za-z0-9_.-]{2,}$/;
 
 /**
  * Converts every supported address spelling into the same Bech32 value, hex
@@ -135,17 +142,37 @@ function classifyBlockHeight(value: string): ExplorerSearchQuery | null {
   }
 }
 
+/**
+ * Treats plain name-shaped input as a Shinzohub View name search. The chain
+ * applies this as a case-insensitive substring filter, so the cache key is
+ * lower-cased while the submitted value preserves what the user typed.
+ */
+function classifyViewName(value: string): ExplorerSearchQuery | null {
+  if (SHINZO_ADDRESS_RE.test(value)) return null;
+  if (!VIEW_NAME_RE.test(value)) return null;
+
+  const normalizedName = value.toLowerCase();
+  return {
+    kind: "view-name",
+    cacheKey: `view-name:${normalizedName}`,
+    value,
+    name: value,
+  };
+}
+
 const QUERY_CLASSIFIERS: QueryClassifier[] = [
   classifyAddress,
   classifyHash,
   classifyBlockHeight,
+  classifyViewName,
 ];
 
 /**
  * Reads a raw search value from most-specific shape to least-specific shape:
- * address, 32-byte hash, then positive block height. Each successful step
- * returns a canonical value suitable for both the API request and cache key.
- * Incomplete or malformed input returns `null`, so it never reaches an RPC.
+ * address, 32-byte hash, positive block height, then view-name text. Each
+ * successful step returns a canonical value suitable for both the API request
+ * and cache key. Incomplete or malformed input returns `null`, so it never
+ * reaches an RPC.
  */
 export function classifySearchQuery(input: string): ExplorerSearchQuery | null {
   const value = input.trim();

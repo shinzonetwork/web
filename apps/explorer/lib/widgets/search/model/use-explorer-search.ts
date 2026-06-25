@@ -42,8 +42,12 @@ export function useExplorerSearch() {
       return fetchExplorerSearch(query, signal);
     },
     enabled: query !== null,
-    staleTime: query?.kind === "address" ? 60_000 : Infinity,
-    gcTime: query?.kind === "address" ? 10 * 60_000 : 30 * 60_000,
+    staleTime: query?.kind === "address" || query?.kind === "view-name"
+      ? 60_000
+      : Infinity,
+    gcTime: query?.kind === "address" || query?.kind === "view-name"
+      ? 10 * 60_000
+      : 30 * 60_000,
     refetchOnWindowFocus: false,
     retry: (failureCount, error) => {
       if (error instanceof ExplorerSearchApiError && error.status < 500) {

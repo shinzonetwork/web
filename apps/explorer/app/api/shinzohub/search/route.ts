@@ -6,12 +6,16 @@ import {
   getIndexer,
   getTransaction,
   getView,
+  listViews,
 } from "@shinzo/shinzohub";
 import { getShinzohubQueryContext } from "@/shared/shinzohub/query-context";
 import {
   classifySearchQuery,
   type ExplorerSearchResult,
 } from "@/widgets/search";
+
+const STUDIO_VIEW_BASE_URL = "https://studio.shinzo.network/views";
+const VIEW_NAME_SEARCH_LIMIT = 10;
 
 function isNotFound(error: unknown): boolean {
   if (!error || typeof error !== "object") return false;
@@ -30,13 +34,25 @@ async function optionalLookup<T>(lookup: () => Promise<T>): Promise<T | null> {
   }
 }
 
+function toViewSearchResult(view: {
+  contractAddress: string;
+  name: string;
+}): ExplorerSearchResult {
+  return {
+    kind: "view",
+    address: view.contractAddress,
+    name: view.name,
+    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(view.name)}`,
+  };
+}
+
 export async function GET(request: NextRequest) {
   const query = classifySearchQuery(request.nextUrl.searchParams.get("query") ?? "");
   if (!query) {
     return Response.json(
       {
         error: "Invalid Shinzohub search query.",
-        detail: "Enter a Shinzo address, transaction hash, positive block height, or consensus block hash.",
+        detail: "Enter a Shinzo address, transaction hash, positive block height, consensus block hash, or View name fragment.",
       },
       { status: 400 },
     );
@@ -64,12 +80,7 @@ export async function GET(request: NextRequest) {
       ]);
 
       if (view) {
-        results.push({
-          kind: "view",
-          address: view.contractAddress,
-          name: view.name,
-          externalUrl: `https://studio.shinzo.network/views/${view.contractAddress}`,
-        });
+        results.push(toViewSearchResult(view));
       }
       if (host) {
         results.push({ kind: "host", address: host.address, did: host.did });
@@ -91,6 +102,13 @@ export async function GET(request: NextRequest) {
           shinzoAddress: query.shinzoAddress,
         }];
       }
+    } else if (query.kind === "view-name") {
+      const views = await listViews(client, {
+        cosmosRestUrl,
+        limit: VIEW_NAME_SEARCH_LIMIT,
+        name: query.name,
+      });
+      results = views.views.map(toViewSearchResult);
     } else if (query.kind === "block-height") {
       const block = await optionalLookup(() => getBlock(client, {
         height: query.height,

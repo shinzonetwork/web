@@ -131,7 +131,7 @@ filters.
     - `includeData`: include raw viewbundle data.
     - `sinceBlock`: minimum registration height.
     - `includeMetadata`: include parsed viewbundle metadata.
-    - `name`: exact view name.
+    - `name`: case-insensitive view name substring.
     - `creator`: exact creator address.
     - `metadataRootType`: exact metadata root type.
     - `metadataLensHash`: required lens hash.

@@ -45,7 +45,7 @@ export function getIncompleteSearchState(
 
   return {
     title,
-    description: "Search supports Shinzo addresses, EVM hex addresses, transaction hashes, block heights, and consensus block hashes.",
+    description: "Search supports View name fragments, Shinzo addresses, EVM hex addresses, transaction hashes, block heights, and consensus block hashes.",
   };
 }
 
@@ -67,6 +67,11 @@ export function getNoResultsSearchState(
       return {
         title: "No hash match found",
         description: "That 32-byte hash did not match a confirmed Cosmos/EVM transaction or consensus block.",
+      };
+    case "view-name":
+      return {
+        title: "No View names matched",
+        description: "No registered Shinzohub Views matched that name fragment.",
       };
     default:
       return {

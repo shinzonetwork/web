@@ -24,7 +24,7 @@ export const SUPPORTED_SEARCH_ENTITIES = [
     docsHref: SEARCH_DOCUMENTATION_LINKS.views,
     id: "view",
     label: "View",
-    description: "View contract addresses open the matching Studio View.",
+    description: "View names and contract addresses open the matching Studio View.",
   },
   {
     docsHref: SEARCH_DOCUMENTATION_LINKS.hosts,
@@ -58,9 +58,9 @@ export const SEARCH_EXAMPLES = [
   {
     id: "view",
     label: "View",
-    value: "0x018a06D78E0802dB5bC055B4527d7B481c3e9932",
-    query: "0x018a06D78E0802dB5bC055B4527d7B481c3e9932",
-    description: "Studio View contract address",
+    value: "Erc20Transfer",
+    query: "Erc20Transfer",
+    description: "View name fragment",
   },
   {
     id: "hash",

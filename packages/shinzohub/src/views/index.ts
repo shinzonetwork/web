@@ -179,7 +179,7 @@ export interface ListViewsParameters {
   sinceBlock?: number | bigint | string;
   /** Include parsed bundle metadata in each `view.metadata` field. */
   includeMetadata?: boolean;
-  /** Filter views by exact registered view name. */
+  /** Filter views whose registered name contains this text, case-insensitively. */
   name?: string;
   /** Filter views by creator address, using the API's creator address format. */
   creator?: string;
