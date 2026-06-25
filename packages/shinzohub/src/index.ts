@@ -89,15 +89,7 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
-export {
-  fetchWithTimeout,
-  getHealth,
-  healthCheckUrls,
-  ipToSslipHostname,
-  isIPv4,
-  HEALTH_FETCH_TIMEOUT_MS,
-  UNHEALTHY_LIVE_DATA,
-} from "./health/index";
+export { getHealth } from "./health/index";
 export type {
   GetHealthParameters,
   HealthLiveData,

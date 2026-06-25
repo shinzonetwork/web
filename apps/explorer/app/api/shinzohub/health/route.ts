@@ -1,13 +1,10 @@
-import { getHealth, isIPv4 } from "@shinzo/shinzohub/health";
+import { getHealth } from "@shinzo/shinzohub";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const ip = req.nextUrl.searchParams.get("ip")?.trim() ?? "";
   if (!ip) {
     return Response.json({ error: "Missing ip parameter" }, { status: 400 });
-  }
-  if (!isIPv4(ip)) {
-    return Response.json({ error: "ip must be a valid IPv4 address" }, { status: 400 });
   }
 
   try {

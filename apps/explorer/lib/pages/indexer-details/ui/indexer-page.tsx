@@ -1,8 +1,8 @@
 import { PageLayout } from '@/widgets/layout';
 import { formatHash } from '@/shared/utils/format-hash';
-import { IndexerTabs } from './indexer-tabs';
 import { CopyButton } from '@/shared/ui/button';
 import { Typography } from '@/shared/ui/typography';
+import { IndexerCard } from './indexer-card';
 
 export type IndexerDetailClientPageProps = {
   address: string;
@@ -23,7 +23,7 @@ export const IndexerDetailClientPage = async ({ params }: { params: Promise<{ ad
         )}
       title='Indexer'
     >
-      <IndexerTabs address={address} />
+      <IndexerCard address={address} />
     </PageLayout>
   );
 };

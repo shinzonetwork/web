@@ -2,9 +2,9 @@
 
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
-import type { LiveData } from "../types";
 import { createHealthEntryKey } from "../lib/utils";
 import { fetchHealthStatus, healthQueryKey } from "./use-health-check";
+import type { HealthLiveData } from "../types";
 
 export type HealthCheckEntry = {
   address: string;
@@ -29,7 +29,7 @@ export function useHealthPolling<T>({
   resetKey,
   intervalMs = DEFAULT_INTERVAL_MS,
   enabled = true,
-}: UseHealthPollingOptions<T>): Map<string, LiveData> {
+}: UseHealthPollingOptions<T>): Map<string, HealthLiveData> {
   const healthEntries = useMemo(
     () => (enabled ? entries.map((entry) => toHealthEntry(entry)) : []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +48,7 @@ export function useHealthPolling<T>({
   });
 
   return useMemo(() => {
-    const liveDataByKey = new Map<string, LiveData>();
+    const liveDataByKey = new Map<string, HealthLiveData>();
     for (const query of queries) {
       if (query.data) {
         liveDataByKey.set(query.data.key, query.data.data);

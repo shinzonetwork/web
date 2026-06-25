@@ -1,6 +1,12 @@
-import type { HealthLiveData } from "@shinzo/shinzohub/health";
+import type { HealthLiveData } from "@shinzo/shinzohub";
 
-export type { HealthLiveData as LiveData, HealthStatus } from "@shinzo/shinzohub/health";
+export type {
+  GetHealthParameters,
+  HealthLiveData,
+  HealthP2P,
+  HealthPeer,
+  HealthStatus,
+} from "@shinzo/shinzohub";
 
 export type HealthEntryKeyParams = {
   address: string;

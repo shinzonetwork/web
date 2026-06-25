@@ -1,14 +1,12 @@
 "use client";
 
-import {
-  fetchWithTimeout,
-  HEALTH_FETCH_TIMEOUT_MS,
-  UNHEALTHY_LIVE_DATA,
-  type HealthLiveData,
-} from "@shinzo/shinzohub/health";
 import { useQuery, type QueryKey } from "@tanstack/react-query";
+import {
+  type HealthLiveData,
+} from "@shinzo/shinzohub";
 import { LiveDataWithKey, HealthEntryKeyParams } from "../types";
 import { createHealthEntryKey } from "../lib/utils";
+import { UNHEALTHY_LIVE_DATA } from "../lib/constant";
 
 export const healthQueryKey = (entry: HealthEntryKeyParams): QueryKey =>
   ["health", createHealthEntryKey(entry)] as const;
@@ -19,16 +17,14 @@ export async function fetchHealthStatus(
   const key = createHealthEntryKey(entry);
 
   try {
-    const res = await fetchWithTimeout(
+    const response = await fetch(
       `/api/shinzohub/health?ip=${encodeURIComponent(entry.ip)}`,
-      HEALTH_FETCH_TIMEOUT_MS
     );
-    if (!res.ok) {
-      return { key, data: UNHEALTHY_LIVE_DATA };
-    }
-
-    const data = (await res.json()) as HealthLiveData;
-    return { key, data: { ...data, status: data.status || "unhealthy" } };
+    
+    if (!response.ok) throw new Error("Failed to fetch health data for ip: " + entry.ip);
+    
+    const data = (await response.json()) as HealthLiveData;
+    return { key, data };
   } catch {
     return { key, data: UNHEALTHY_LIVE_DATA };
   }

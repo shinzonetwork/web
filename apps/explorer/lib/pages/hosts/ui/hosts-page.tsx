@@ -12,14 +12,14 @@ import {
   ipFromConnectionString,
   useHealthPolling,
   type HealthStatus,
-  type LiveData,
+  type HealthLiveData,
 } from '@/shared/health';
 import { HostsList } from './hosts-list';
 
 const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 
-export type HostWithHealth = RegisteredHost & Omit<LiveData, "p2p" | "uptime"> & {
+export type HostWithHealth = RegisteredHost & Omit<HealthLiveData, "p2p" | "uptime"> & {
   ip: string;
 };
 

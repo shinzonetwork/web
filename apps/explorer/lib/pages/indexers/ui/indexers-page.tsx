@@ -11,7 +11,7 @@ import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cur
 import {
   createHealthEntryKey,
   ipFromConnectionString,
-  LiveData,
+  type HealthLiveData,
   useHealthPolling,
   type HealthStatus,
 } from '@/shared/health';
@@ -19,7 +19,7 @@ import {
 const INDEXERS_PAGE_PARAM = "indexersPage";
 const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
 
-export type IndexerWithHealth = RegisteredIndexer & Omit<LiveData, "p2p" | "uptime"> & {
+export type IndexerWithHealth = RegisteredIndexer & Omit<HealthLiveData, "p2p" | "uptime"> & {
   ip: string;
 };
 

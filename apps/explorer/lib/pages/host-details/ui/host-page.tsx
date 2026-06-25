@@ -1,8 +1,8 @@
 import { PageLayout } from '@/widgets/layout';
 import { formatHash } from '@/shared/utils/format-hash';
-import { HostTabs } from './host-tabs';
 import { CopyButton } from '@/shared/ui/button';
 import { Typography } from '@/shared/ui/typography';
+import { HostCard } from './host-card';
 
 export type HostDetailClientPageProps = {
   address: string;
@@ -23,7 +23,7 @@ export const HostDetailClientPage = async ({ params }: { params: Promise<{ addre
         )}
       title='Host'
     >
-      <HostTabs address={address} />
+      <HostCard address={address} />
     </PageLayout>
   );
 };

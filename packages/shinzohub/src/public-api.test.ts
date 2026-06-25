@@ -37,8 +37,6 @@ const expectedRootExports = [
   "shinzoHubLocal",
   "shinzoHubMainnet",
   "shinzoHubTestnet",
-  "UNHEALTHY_LIVE_DATA",
-  "HEALTH_FETCH_TIMEOUT_MS",
   "viewRegistryAbi",
   "viewRegistryAddress",
 ] as const;
