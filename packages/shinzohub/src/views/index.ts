@@ -411,7 +411,7 @@ export function getCreatedViewAddress(receipt: TransactionReceipt): Hex {
  * ```
  */
 export async function listViews(
-  client: Client,
+  client: ShinzoHubQueryClient,
   parameters: ListViewsParameters = {},
 ): Promise<ListViewsResult> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
@@ -489,7 +489,10 @@ export async function getView(
  * console.log(`ShinzoHub has ${totalViews} registered views`);
  * ```
  */
-export async function countViews(client: Client, parameters?: CountViewsParameters): Promise<bigint> {
+export async function countViews(
+  client: ShinzoHubQueryClient,
+  parameters?: CountViewsParameters,
+): Promise<bigint> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
     throw new Error("No fetch implementation is available.");
