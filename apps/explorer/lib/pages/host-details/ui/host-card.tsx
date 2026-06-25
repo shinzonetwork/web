@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { useHostDetails } from "../hook/use-host-details";
 import { CopyButton } from "@/shared/ui/button";
@@ -9,11 +9,9 @@ import { Badge } from "@/shared/ui/badge";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
-  createHealthEntryKey,
   ipFromConnectionString,
-  useHealthPolling,
+  useHealthCheck,
   type HealthStatus,
-  type LiveData,
   formatUptime,
   formatTime,
 } from "@/shared/health";
@@ -22,7 +20,6 @@ export type HostCardOptions = { address: string };
 
 export const HostCard = (options: HostCardOptions) => {
   const { data: hostDetails, isLoading } = useHostDetails(options.address);
-  const [healthData, setHealthData] = useState<LiveData | null>(null);
 
   const hostEntry = useMemo(() => {
     if (!hostDetails?.host) return null;
@@ -32,20 +29,10 @@ export const HostCard = (options: HostCardOptions) => {
     };
   }, [hostDetails]);
 
-  useHealthPolling({
-    entries: hostEntry ? [hostEntry] : [],
-    resetKey: hostEntry?.address,
-    toHealthEntry: (host) => ({
-      address: host.address,
-      ip: host.ip,
-    }),
-    onResults: (liveDataByKey) => {
-      if (!hostEntry) return;
-      const key = createHealthEntryKey(hostEntry);
-      const data = liveDataByKey.get(key);
-      if (data) setHealthData(data);
-    },
+  const { data: healthResult } = useHealthCheck(hostEntry, {
+    refetchIntervalMs: 30_000,
   });
+  const healthData = healthResult?.data ?? null;
 
   const status: HealthStatus = healthData?.status ?? "unknown";
 

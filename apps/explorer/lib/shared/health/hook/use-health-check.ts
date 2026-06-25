@@ -1,51 +1,54 @@
-import { useQueryClient, type QueryKey } from "@tanstack/react-query";
-import { useCallback } from "react";
+"use client";
+
+import { useQuery, type QueryKey } from "@tanstack/react-query";
 import { LiveDataWithKey, LiveData, HealthEntryKeyParams } from "../types";
 import { createHealthEntryKey } from "../lib/utils";
+import {
+  HEALTH_FETCH_TIMEOUT_MS,
+  UNHEALTHY_LIVE_DATA,
+} from "../lib/constants";
+import { fetchWithTimeout } from "../lib/fetch-with-timeout";
 
 export const healthQueryKey = (entry: HealthEntryKeyParams): QueryKey =>
   ["health", createHealthEntryKey(entry)] as const;
 
-const HEALTH_PROXY_URL =
-  process.env.NEXT_PUBLIC_HEALTH_PROXY_URL ||
-  "https://shinzo-health-proxy.fly.dev";
-
-async function fetchHealthStatus(
+export async function fetchHealthStatus(
   entry: HealthEntryKeyParams
 ): Promise<LiveDataWithKey> {
   const key = createHealthEntryKey(entry);
 
   try {
-    const res = await fetch(
-      `${HEALTH_PROXY_URL}/health?ip=${encodeURIComponent(entry.ip)}`,
-      { method: "GET", cache: "no-store" }
+    const res = await fetchWithTimeout(
+      `/api/shinzohub/health?ip=${encodeURIComponent(entry.ip)}`,
+      HEALTH_FETCH_TIMEOUT_MS
     );
-
     if (!res.ok) {
-      return { key, data: { status: "unhealthy", uptime: 0, uptime_seconds: 0, last_processed: "", current_block: 0, p2p: null } };
+      return { key, data: UNHEALTHY_LIVE_DATA };
     }
 
     const data = (await res.json()) as LiveData;
-
     return { key, data: { ...data, status: data.status || "unhealthy" } };
   } catch {
-    return { key, data: { status: "unhealthy", uptime: 0, uptime_seconds: 0, last_processed: "", current_block: 0, p2p: null } };
+    return { key, data: UNHEALTHY_LIVE_DATA };
   }
 }
 
-export const useHealthCheck = () => {
-  const queryClient = useQueryClient();
-
-  const fetchHealth = useCallback(
-    async (entry: HealthEntryKeyParams): Promise<LiveDataWithKey> => {
-      return queryClient.fetchQuery({
-        queryKey: healthQueryKey(entry),
-        queryFn: () => fetchHealthStatus(entry),
-        staleTime: 0,
-      });
-    },
-    [queryClient]
-  );
-
-  return { fetchHealth };
+type UseHealthCheckOptions = {
+  enabled?: boolean;
+  refetchIntervalMs?: number;
 };
+
+/** Polls health for a single host/indexer entry via React Query. */
+export function useHealthCheck(
+  entry: HealthEntryKeyParams | null | undefined,
+  { enabled = true, refetchIntervalMs }: UseHealthCheckOptions = {}
+) {
+  return useQuery({
+    queryKey: healthQueryKey(entry ?? { address: "", ip: "" }),
+    queryFn: () => fetchHealthStatus(entry!),
+    enabled: enabled && Boolean(entry?.address && entry?.ip),
+    staleTime: 0,
+    refetchInterval: refetchIntervalMs,
+    refetchIntervalInBackground: true,
+  });
+}

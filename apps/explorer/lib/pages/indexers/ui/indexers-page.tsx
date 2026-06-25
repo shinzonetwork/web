@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo } from 'react';
 import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
@@ -24,10 +24,6 @@ export type IndexerWithHealth = RegisteredIndexer & Omit<LiveData, "p2p" | "upti
 };
 
 function IndexersPageContent() {
-  const [healthByKey, setHealthByKey] = useState<Map<string, LiveData>>(
-    new Map()
-  );
-
   const { page, queryParams, applyPaginationData, totalItems, limit } =
     useCursorPagePagination({
       pageParam: INDEXERS_PAGE_PARAM,
@@ -60,22 +56,13 @@ function IndexersPageContent() {
     }
   }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
 
-  useHealthPolling<IndexerWithHealth>({
+  const healthByKey = useHealthPolling<IndexerWithHealth>({
     entries: indexers,
     resetKey: page,
     toHealthEntry: (indexer) => ({
       address: indexer.address,
       ip: indexer.ip,
     }),
-    onResults: (liveDataByKey) => {
-      setHealthByKey((prev) => {
-        const next = new Map(prev);
-        for (const [key, liveData] of liveDataByKey) {
-          if (liveData) next.set(key, liveData);
-        }
-        return next;
-      });
-    },
   });
 
   const indexersWithHealth = useMemo(

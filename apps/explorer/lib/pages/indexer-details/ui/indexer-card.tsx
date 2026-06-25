@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { CopyButton } from "@/shared/ui/button";
 import { Typography } from "@/shared/ui/typography";
@@ -8,11 +8,9 @@ import { Badge } from "@/shared/ui/badge";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
-  createHealthEntryKey,
   ipFromConnectionString,
-  useHealthPolling,
+  useHealthCheck,
   type HealthStatus,
-  type LiveData,
   formatUptime,
   formatTime,
 } from "@/shared/health";
@@ -22,7 +20,6 @@ export type IndexerCardOptions = { address: string };
 
 export const IndexerCard = (options: IndexerCardOptions) => {
   const { data: indexerDetails, isLoading } = useIndexerDetails(options.address);
-  const [healthData, setHealthData] = useState<LiveData | null>(null);
 
   const indexerEntry = useMemo(() => {
     if (!indexerDetails?.indexer) return null;
@@ -32,20 +29,10 @@ export const IndexerCard = (options: IndexerCardOptions) => {
     };
   }, [indexerDetails]);
 
-  useHealthPolling({
-    entries: indexerEntry ? [indexerEntry] : [],
-    resetKey: indexerEntry?.address,
-    toHealthEntry: (indexer) => ({
-      address: indexer.address,
-      ip: '35.208.241.78', //indexer.ip,
-    }),
-    onResults: (liveDataByKey) => {
-      if (!indexerEntry) return;
-      const key = createHealthEntryKey(indexerEntry);
-      const data = liveDataByKey.get(key);
-      if (data) setHealthData(data);
-    },
+  const { data: healthResult } = useHealthCheck(indexerEntry, {
+    refetchIntervalMs: 30_000,
   });
+  const healthData = healthResult?.data ?? null;
 
   const status: HealthStatus = healthData?.status ?? "unknown";
 
