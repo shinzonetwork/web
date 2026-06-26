@@ -23,7 +23,7 @@ export async function fetchIndexerHealth(
 
   try {
     const response = await fetch(
-      `/api/shinzohub/hosts/health?ip=${encodeURIComponent(entry.ip)}`,
+      `/api/shinzohub/indexers/health?ip=${encodeURIComponent(entry.ip)}`,
     );
 
     if (!response.ok) {

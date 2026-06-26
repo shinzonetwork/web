@@ -145,11 +145,6 @@ export const HostCard = (options: HostCardOptions) => {
             )}
           </div>
         </DataItem>
-      </DataList>
-
-      <div className="col-span-3 h-4 w-full border-y border-border" />
-
-      <DataList>
         <DataItem title="Peers Connection Status" value={healthData?.p2p?.enabled} loading={isLoading} >
             <Badge
               variant="default"
@@ -191,6 +186,7 @@ export const HostCard = (options: HostCardOptions) => {
             ) : '—'}
           </DataItem>
       </DataList>
+
     </>
   );
 };

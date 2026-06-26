@@ -2,7 +2,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicClient, http } from "viem";
 import { shinzoHubDevelop } from "../chains/index";
 import { createShinzoHubClient } from "../index";
-import { getHost, listHosts } from "./index";
+import { getHost, getHostHealth, listHosts } from "./index";
+import { UNHEALTHY_LIVE_DATA } from "./get-host-health";
 
 const originalFetch = globalThis.fetch;
 
@@ -142,3 +143,44 @@ describe("getHost", () => {
     ).resolves.toMatchObject({ address: hostAddress });
   });
 });
+
+describe("getHostHealth timeout", () => {
+  it("returns unhealthy after each candidate port times out", async () => {
+    vi.useFakeTimers();
+
+    globalThis.fetch = vi.fn((_url, init?: RequestInit) => {
+      return new Promise((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => {
+          reject(new DOMException("The operation was aborted.", "AbortError"));
+        });
+      });
+    }) as typeof fetch;
+
+    const promise = getHostHealth({ ip: "203.0.113.10", timeoutMs: 50 });
+    const expectation = expect(promise).resolves.toEqual(UNHEALTHY_LIVE_DATA);
+
+    await vi.advanceTimersByTimeAsync(50);
+    await vi.advanceTimersByTimeAsync(50);
+    await expectation;
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+
+    vi.useRealTimers();
+  });
+
+  it("does not wait for later ports after the first succeeds", async () => {
+    globalThis.fetch = vi.fn(async (url) => {
+      if (String(url).includes(":443")) {
+        return Response.json({ status: "healthy", uptime: 1, uptime_seconds: 1, last_processed: "", current_block: 1, p2p: null });
+      }
+      throw new Error("should not reach port 8080");
+    }) as typeof fetch;
+
+    await expect(getHostHealth({ ip: "203.0.113.10", timeoutMs: 50 })).resolves.toMatchObject({
+      status: "healthy",
+    });
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+});
+
