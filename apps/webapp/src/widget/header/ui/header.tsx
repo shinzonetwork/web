@@ -58,13 +58,16 @@ export function Header() {
         </div>
       </div>
       <div className="flex flex-row justify-end">
-        {isConnected && isSignedWithWallet && isIndexerWhitelisted && (
-          <Link href="/join-devnet">
-            <Button className=" bg-primary text-primary-foreground rounded-none">
-              Join Devnet
-            </Button>
-          </Link>
-        )}
+        {!isRegistrationV2() &&
+          isConnected &&
+          isSignedWithWallet &&
+          isIndexerWhitelisted && (
+            <Link href="/join-devnet">
+              <Button className=" bg-primary text-primary-foreground rounded-none">
+                Join Devnet
+              </Button>
+            </Link>
+          )}
         <Connect />
       </div>
     </header>
