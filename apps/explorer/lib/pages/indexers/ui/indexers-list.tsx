@@ -3,15 +3,19 @@
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { DEFAULT_LIMIT } from "@shinzo/ui/pagination";
 import { Badge } from "@/shared/ui/badge";
-import { ArrowRightIcon, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { IndexerWithHealth } from "./indexers-page";
 import { formatTime, formatUptime } from "@/shared/health";
 import Link from "next/link";
 import { getPageLink } from "@/shared/utils/links";
 import { Typography } from "@/shared/ui/typography";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import { CopyButton } from "@/shared/ui/button";
+import { formatHash } from "@/shared/utils/format-hash";
 
 const tableHeadings = [
+  "Indexer Public IP",
   "Address",
   "Status",
   "Chain",
@@ -41,9 +45,33 @@ export const IndexersList = ({
         iterable={indexers ?? []}
         rowRenderer={(indexer) => (
           <>
+            <TableNullableCell value={indexer?.ip}>
+              {(value) => (
+              <Link prefetch={false} href={getPageLink('indexer', { address: value, chain: 'shinzohub' })}>
+                <Typography color='accent' className='underline'>
+                  {value}
+                </Typography>
+              </Link>
+              )}
+            </TableNullableCell>
             <TableNullableCell value={indexer?.address}>
               {(value) => (
-                <span className="text-sm text-foreground">{value}</span>
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <Typography>{formatHash(value, 12, 8)}</Typography>
+                        <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
+                      </div>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                        <Typography variant='xs' color='secondary'>
+                          {value}
+                        </Typography>
+                    </TooltipContent>
+                  </Tooltip> 
+                </>
               )}
             </TableNullableCell>
 
@@ -91,17 +119,6 @@ export const IndexersList = ({
               <TableNullableCell value={indexer?.last_processed}>
                 {(value) => (
                   <span className="text-sm text-foreground">{value ? formatTime(value) : '—'}</span>
-                )}
-              </TableNullableCell>
-
-              <TableNullableCell value={indexer?.address}>
-                {(value) => (
-                    <Link prefetch={false} href={getPageLink('indexer', { address: value, chain: 'shinzohub' })}>
-                      <div className="flex items-center gap-1 cursor-pointer">
-                        <Typography color="accent" font="mono" className="underline text-accent/75 hover:text-accent">View</Typography>
-                        <ArrowRightIcon className="size-4 text-accent/75 hover:text-accent" />
-                      </div>
-                    </Link>
                 )}
               </TableNullableCell>
           </>)}

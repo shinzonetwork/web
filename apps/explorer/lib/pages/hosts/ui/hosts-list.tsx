@@ -3,21 +3,24 @@
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { DEFAULT_LIMIT } from "@shinzo/ui/pagination";
 import { Badge } from "@/shared/ui/badge";
-import { ArrowRightIcon, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { HostWithHealth } from "./hosts-page";
 import Link from "next/link";
 import { getPageLink } from "@/shared/utils/links";
 import { Typography } from "@/shared/ui/typography";
 import { formatUptime, formatTime } from "@/shared/health";
+import { CopyButton } from "@/shared/ui/button";
+import { formatHash } from "@/shared/utils/format-hash";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const tableHeadings = [
+  "Host Public IP",
   "Address",
   "Status",
   "Uptime",
   "Current Block",
   "Last Updated",
-  ''
 ];
 
 export const HostsList = ({
@@ -40,9 +43,33 @@ export const HostsList = ({
         iterable={hosts ?? []}
         rowRenderer={(host) => (
           <>
+            <TableNullableCell value={host?.ip}>
+              {(value) => (
+              <Link prefetch={false} href={getPageLink('host', { address: value, chain: 'shinzohub' })}>
+                <Typography color='accent' className='underline'>
+                  {value}
+                </Typography>
+              </Link>
+              )}
+            </TableNullableCell>
             <TableNullableCell value={host?.address}>
               {(value) => (
-                <span className="text-sm text-foreground">{value}</span>
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <Typography>{formatHash(value, 12, 8)}</Typography>
+                        <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
+                      </div>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                        <Typography variant='xs' color='secondary'>
+                          {value}
+                        </Typography>
+                    </TooltipContent>
+                  </Tooltip> 
+                </>
               )}
             </TableNullableCell>
             <TableNullableCell value={host?.status} nowrap>
@@ -78,16 +105,6 @@ export const HostsList = ({
               <TableNullableCell value={host?.last_processed}>
                 {(value) => (
                   <span className="text-sm text-foreground">{value ? formatTime(value) : '—'}</span>
-                )}
-              </TableNullableCell>
-              <TableNullableCell value={host?.address}>
-                {(value) => (
-                    <Link prefetch={false} href={getPageLink('host', { address: value, chain: 'shinzohub' })}>
-                      <div className="flex items-center gap-1 cursor-pointer">
-                        <Typography color="accent" font="mono" className="underline text-accent/75 hover:text-accent">View</Typography>
-                        <ArrowRightIcon className="size-4 text-accent/75 hover:text-accent" />
-                      </div>
-                    </Link>
                 )}
               </TableNullableCell>
           </>)}
