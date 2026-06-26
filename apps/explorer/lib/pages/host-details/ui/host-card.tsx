@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { DataItem, DataList } from "@/widgets/data-list";
 import { useHostDetails } from "../hook/use-host-details";
 import { CopyButton } from "@/shared/ui/button";
@@ -10,11 +10,11 @@ import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
   ipFromConnectionString,
-  useHealthCheck,
   type HealthStatus,
   formatUptime,
   formatTime,
 } from "@/shared/health";
+import { useHostHealthCheck } from "../hook/use-host-health-check";
 
 export type HostCardOptions = { address: string };
 
@@ -29,7 +29,7 @@ export const HostCard = (options: HostCardOptions) => {
     };
   }, [hostDetails]);
 
-  const { data: healthResult } = useHealthCheck(hostEntry, {
+  const { data: healthResult } = useHostHealthCheck(hostEntry, {
     refetchIntervalMs: 30_000,
   });
   const healthData = healthResult?.data ?? null;
@@ -172,8 +172,8 @@ export const HostCard = (options: HostCardOptions) => {
             {(healthData?.p2p?.peers?.length ?? 0) > 0 ? (
             <div className="flex flex-col gap-2 min-w-0 w-full">
               {healthData?.p2p?.peers?.map((peer, index) => (
-                <>
-                  <div key={peer.id} className="flex items-start gap-2 min-w-0">
+                <Fragment key={peer.id}>
+                  <div className="flex items-start gap-2 min-w-0">
                     <Typography className="break-all">
                       {`${peer.addresses[0]}/p2p/${peer.id}`}
                     </Typography>
@@ -185,7 +185,7 @@ export const HostCard = (options: HostCardOptions) => {
                   {index < (healthData?.p2p?.peers?.length ?? 0) - 1 && (
                     <div className="h-1 w-full border-b border-border" />
                   )}
-                </>
+                </Fragment>
               ))}
             </div>
             ) : '—'}

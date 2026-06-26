@@ -1,4 +1,10 @@
 import type {
+  HostHealthData as ShinzoHubHostHealthData,
+  HostHealthP2P as ShinzoHubHostHealthP2P,
+  HostHealthPeer as ShinzoHubHostHealthPeer,
+  IndexerHealthData as ShinzoHubIndexerHealthData,
+  IndexerHealthP2P as ShinzoHubIndexerHealthP2P,
+  IndexerHealthPeer as ShinzoHubIndexerHealthPeer,
   ListBlocksResult,
   ListHostsResult,
   ListIndexersResult,
@@ -18,7 +24,7 @@ import type {
   ShinzoHubTransfer,
 } from '@shinzo/shinzohub';
 
-type JsonSerialized<T> =
+export type JsonSerialized<T> =
   T extends bigint
     ? string
     : T extends readonly (infer Item)[]
@@ -74,3 +80,10 @@ export type RegisteredIndexersListResponse = JsonSerialized<
 
 export type RegisteredIndexerDetailsResponse =
   JsonSerialized<RegisteredIndexerDetailsResult>;
+
+export type HostHealthData = JsonSerialized<ShinzoHubHostHealthData>;
+export type HostHealthP2P = JsonSerialized<ShinzoHubHostHealthP2P>;
+export type HostHealthPeer = JsonSerialized<ShinzoHubHostHealthPeer>;
+export type IndexerHealthData = JsonSerialized<ShinzoHubIndexerHealthData>;
+export type IndexerHealthP2P = JsonSerialized<ShinzoHubIndexerHealthP2P>;
+export type IndexerHealthPeer = JsonSerialized<ShinzoHubIndexerHealthPeer>;

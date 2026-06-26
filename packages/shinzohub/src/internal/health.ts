@@ -29,3 +29,12 @@ export interface GetHealthParameters {
   /** Per-attempt fetch timeout in milliseconds. Defaults to {@link HEALTH_FETCH_TIMEOUT_MS}. */
   timeoutMs?: number;
 }
+
+export const UNHEALTHY_LIVE_DATA: HealthLiveData = {
+  status: "unhealthy",
+  uptime: 0,
+  uptime_seconds: 0,
+  last_processed: "",
+  current_block: 0,
+  p2p: null,
+};

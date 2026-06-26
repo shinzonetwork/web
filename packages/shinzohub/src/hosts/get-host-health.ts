@@ -1,13 +1,21 @@
-import { HEALTH_FETCH_TIMEOUT_MS, UNHEALTHY_LIVE_DATA } from "./constants";
-import { fetchWithTimeout } from "./fetch-with-timeout";
-import { healthCheckUrls, isIPv4 } from "./sslip";
-import type { GetHealthParameters, HealthLiveData } from "./types";
+import { fetchWithTimeout, HEALTH_FETCH_TIMEOUT_MS } from "../internal/fetch-with-timeout";
+import { healthCheckUrls, isIPv4 } from "../internal/sslip";
+import type { GetHealthParameters, HealthLiveData } from "../internal/health";
+
+export const UNHEALTHY_LIVE_DATA: HealthLiveData = {
+  status: "unhealthy",
+  uptime: 0,
+  uptime_seconds: 0,
+  last_processed: "",
+  current_block: 0,
+  p2p: null,
+};
 
 /**
- * Fetches live indexer/host health over sslip.io.
+ * Fetches live host health over sslip.io.
  * Intended for server-side use to avoid browser CORS restrictions.
  */
-export async function getHealth(parameters: GetHealthParameters): Promise<HealthLiveData> {
+export async function getHostHealth(parameters: GetHealthParameters): Promise<HealthLiveData> {
   const ip = parameters.ip.trim();
   const timeoutMs = parameters.timeoutMs ?? HEALTH_FETCH_TIMEOUT_MS;
 

@@ -5,21 +5,20 @@ import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { useRegisteredIndexers } from '../hook/use-registered-indexers';
-import type { RegisteredIndexer } from '@/shared/shinzohub/types';
+import type { IndexerHealthData, RegisteredIndexer } from '@/shared/shinzohub/types';
 import { IndexersList } from './indexers-list';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
   ipFromConnectionString,
-  type HealthLiveData,
-  useHealthPolling,
   type HealthStatus,
 } from '@/shared/health';
+import { useIndexerHealthPolling } from '../hook/use-indexer-health-polling';
 
 const INDEXERS_PAGE_PARAM = "indexersPage";
 const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
 
-export type IndexerWithHealth = RegisteredIndexer & Omit<HealthLiveData, "p2p" | "uptime"> & {
+export type IndexerWithHealth = RegisteredIndexer & Omit<IndexerHealthData, "p2p" | "uptime"> & {
   ip: string;
 };
 
@@ -56,7 +55,7 @@ function IndexersPageContent() {
     }
   }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
 
-  const healthByKey = useHealthPolling<IndexerWithHealth>({
+  const healthByKey = useIndexerHealthPolling<IndexerWithHealth>({
     entries: indexers,
     resetKey: page,
     toHealthEntry: (indexer) => ({

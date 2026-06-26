@@ -2,16 +2,16 @@
 
 import { useQueries } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { createHealthEntryKey } from "../lib/utils";
-import { fetchHealthStatus, healthQueryKey } from "./use-health-check";
-import type { HealthLiveData } from "../types";
+import { createHealthEntryKey } from "@/shared/health";
+import { fetchHostHealthStatus, healthQueryKey } from "./use-host-health-check";
+import { HostHealthData } from "@/shared/shinzohub/types";
 
 export type HealthCheckEntry = {
   address: string;
   ip: string;
 };
 
-type UseHealthPollingOptions<T> = {
+type UseHostHealthPollingOptions<T> = {
   entries: T[];
   toHealthEntry: (entry: T) => HealthCheckEntry;
   /** Restart polling when this changes (e.g. page or list revision). */
@@ -23,13 +23,13 @@ type UseHealthPollingOptions<T> = {
 const DEFAULT_INTERVAL_MS = 60_000;
 
 /** Polls health for many entries in parallel via React Query. */
-export function useHealthPolling<T>({
+export function useHostHealthPolling<T>({
   entries,
   toHealthEntry,
   resetKey,
   intervalMs = DEFAULT_INTERVAL_MS,
   enabled = true,
-}: UseHealthPollingOptions<T>): Map<string, HealthLiveData> {
+}: UseHostHealthPollingOptions<T>): Map<string, HostHealthData> {
   const healthEntries = useMemo(
     () => (enabled ? entries.map((entry) => toHealthEntry(entry)) : []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +39,7 @@ export function useHealthPolling<T>({
   const queries = useQueries({
     queries: healthEntries.map((entry) => ({
       queryKey: [...healthQueryKey(entry), resetKey] as const,
-      queryFn: () => fetchHealthStatus(entry),
+      queryFn: () => fetchHostHealthStatus(entry),
       enabled: Boolean(entry.address && entry.ip),
       staleTime: 0,
       refetchInterval: intervalMs,
@@ -48,7 +48,7 @@ export function useHealthPolling<T>({
   });
 
   return useMemo(() => {
-    const liveDataByKey = new Map<string, HealthLiveData>();
+    const liveDataByKey = new Map<string, HostHealthData>();
     for (const query of queries) {
       if (query.data) {
         liveDataByKey.set(query.data.key, query.data.data);

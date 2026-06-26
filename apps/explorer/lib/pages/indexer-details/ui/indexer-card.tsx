@@ -9,12 +9,12 @@ import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
   ipFromConnectionString,
-  useHealthCheck,
   type HealthStatus,
   formatUptime,
   formatTime,
 } from "@/shared/health";
 import { useIndexerDetails } from "../hook/use-indexer-details";
+import { useIndexerHealthCheck } from "../hook/use-indexer-health-check";
 
 export type IndexerCardOptions = { address: string };
 
@@ -29,7 +29,7 @@ export const IndexerCard = (options: IndexerCardOptions) => {
     };
   }, [indexerDetails]);
 
-  const { data: healthResult } = useHealthCheck(indexerEntry, {
+  const { data: healthResult } = useIndexerHealthCheck(indexerEntry, {
     refetchIntervalMs: 30_000,
   });
   const healthData = healthResult?.data ?? null;

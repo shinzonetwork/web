@@ -1,3 +1,5 @@
+import type { GetHealthParameters, HealthLiveData, HealthP2P, HealthPeer } from "../internal/health";
+
 /** A registered ShinzoHub indexer returned by the Cosmos REST gateway. */
 export interface RegisteredIndexer {
   /** Shinzo bech32 indexer address. */
@@ -54,3 +56,8 @@ export interface RegisteredIndexerDetailsResult {
   /** The registered indexer. */
   indexer: RegisteredIndexer;
 }
+
+export type GetIndexerHealthParameters = GetHealthParameters;
+export type IndexerHealthData = HealthLiveData;
+export type IndexerHealthP2P = HealthP2P;
+export type IndexerHealthPeer = HealthPeer;

@@ -1,3 +1,6 @@
+/** Abort in-flight health fetches that do not complete within this window. */
+export const HEALTH_FETCH_TIMEOUT_MS = 2_000;
+
 /** Fetches a URL and aborts if the response is not received within `timeoutMs`. */
 export async function fetchWithTimeout(
   url: string,

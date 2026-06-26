@@ -18,9 +18,16 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
-import { getHealth } from "./health/index";
-import { listHosts, getHost } from "./hosts/index";
-import { getIndexer, listIndexers } from "./indexers/index";
+import { 
+  listHosts, 
+  getHost, 
+  getHostHealth,
+} from "./hosts/index";
+import { 
+  getIndexer, 
+  listIndexers, 
+  getIndexerHealth,
+} from "./indexers/index";
 
 export {
   hexToShinzoAddress,
@@ -89,29 +96,37 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
-export { getHealth } from "./health/index";
-export type {
-  GetHealthParameters,
-  HealthLiveData,
-  HealthP2P,
-  HealthPeer,
-  HealthStatus,
-} from "./health/index";
-export { getHost, listHosts } from "./hosts/index";
+export { 
+  getHost, 
+  listHosts, 
+  getHostHealth,
+} from "./hosts/index";
 export type {
   GetHostParameters,
   ListHostsParameters,
   ListHostsResult,
   RegisteredHost,
   RegisteredHostDetailsResult,
+  GetHostHealthParameters,
+  HostHealthData,
+  HostHealthP2P,
+  HostHealthPeer,
 } from "./hosts/index";
-export { getIndexer, listIndexers } from "./indexers/index";
+export { 
+  getIndexer, 
+  listIndexers, 
+  getIndexerHealth,
+} from "./indexers/index";
 export type {
   GetIndexerParameters,
   ListIndexersParameters,
   ListIndexersResult,
   RegisteredIndexer,
   RegisteredIndexerDetailsResult,
+  GetIndexerHealthParameters,
+  IndexerHealthData,
+  IndexerHealthP2P,
+  IndexerHealthPeer,
 } from "./indexers/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
@@ -158,14 +173,16 @@ export function shinzoHubActions(client: Client) {
     /** Fetches one registered ShinzoHub host by address. */
     getHost: (parameters: Parameters<typeof getHost>[1]) =>
       getHost(client, parameters),
-    /** Fetches live health for an indexer or host IPv4 address. */
-    getHealth: (parameters: Parameters<typeof getHealth>[0]) => getHealth(parameters),
+    /** Fetches live health for an host IPv4 address. */
+    getHostHealth: (parameters: Parameters<typeof getHostHealth>[0]) => getHostHealth(parameters),
     /** Lists registered ShinzoHub indexers. */
     listIndexers: (parameters?: Parameters<typeof listIndexers>[1]) =>
       listIndexers(client, parameters),
     /** Fetches one registered ShinzoHub indexer by address. */
     getIndexer: (parameters: Parameters<typeof getIndexer>[1]) =>
       getIndexer(client, parameters),
+    /** Fetches live health for an indexer IPv4 address. */
+    getIndexerHealth: (parameters: Parameters<typeof getIndexerHealth>[0]) => getIndexerHealth(parameters), 
   };
 }
 

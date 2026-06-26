@@ -1,3 +1,5 @@
+import type { GetHealthParameters, HealthLiveData, HealthP2P, HealthPeer } from "../internal/health";
+
 /** A registered ShinzoHub host returned by the Cosmos REST gateway. */
 export interface RegisteredHost {
   /** Shinzo bech32 host address. */
@@ -52,3 +54,8 @@ export interface RegisteredHostDetailsResult {
   /** The registered host. */
   host: RegisteredHost;
 }
+
+export type GetHostHealthParameters = GetHealthParameters;
+export type HostHealthData = HealthLiveData;
+export type HostHealthP2P = HealthP2P;
+export type HostHealthPeer = HealthPeer;

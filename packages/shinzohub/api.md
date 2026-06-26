@@ -281,6 +281,49 @@ Example response:
 }
 ```
 
+### `getHostHealth`
+
+Fetches health information of the host based on ipv4 ip address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `ip` required: IPV4 ip address.
+    - `timeoutms`: timeout for teh fetch in milliseconds.
+
+Example response:
+
+```ts
+{
+    status: "healthy",
+    timestamp: "2026-06-25T14:35:42.854425-04:00",
+    current_block: 25396467,
+    last_processed: "2026-06-25T14:35:42.284792-04:00",
+    defradb_connected: true,
+    uptime: "3h12m28.552343375s",
+    uptime_seconds: 11548.552343375,
+    p2p: {
+        enabled: true,
+        self: {
+            id: "12D3KooWJCMwQtB3A3L2orbVTHhY3kifo62VRKavL9Wuk1AdhNNc",
+            addresses: [
+                "/ip4/127.0.0.1/tcp/9171",
+                "/ip4/192.168.2.72/tcp/9171"
+            ]
+        },
+        peers: [
+            {
+                id: "12D3KooWDYXkjdncFL3X1SaaYBpFi4XfWskbXv4y5gYdTvmGm3bo",
+                addresses: [
+                    "/ip4/35.208.241.78/tcp/9171"
+                ]
+            },
+        ]
+    }
+}
+```
+
 ## Indexers
 
 Import from `@shinzo/shinzohub/indexers` or the package root.
@@ -340,6 +383,49 @@ Example response:
     "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
   sourceChain: "ethereum",
   sourceChainId: "1",
+}
+```
+
+### `getIndexerHealth`
+
+Fetches health information of the indexer based on ipv4 ip address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `ip` required: IPV4 ip address.
+    - `timeoutms`: timeout for teh fetch in milliseconds.
+
+Example response:
+
+```ts
+{
+    status: "healthy",
+    timestamp: "2026-06-25T14:35:42.854425-04:00",
+    current_block: 25396467,
+    last_processed: "2026-06-25T14:35:42.284792-04:00",
+    defradb_connected: true,
+    uptime: "3h12m28.552343375s",
+    uptime_seconds: 11548.552343375,
+    p2p: {
+        enabled: true,
+        self: {
+            id: "12D3KooWJCMwQtB3A3L2orbVTHhY3kifo62VRKavL9Wuk1AdhNNc",
+            addresses: [
+                "/ip4/127.0.0.1/tcp/9171",
+                "/ip4/192.168.2.72/tcp/9171"
+            ]
+        },
+        peers: [
+            {
+                id: "12D3KooWDYXkjdncFL3X1SaaYBpFi4XfWskbXv4y5gYdTvmGm3bo",
+                addresses: [
+                    "/ip4/35.208.241.78/tcp/9171"
+                ]
+            },
+        ]
+    }
 }
 ```
 

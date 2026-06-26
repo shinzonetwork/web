@@ -1,16 +1,10 @@
-import type { HealthLiveData } from "@shinzo/shinzohub";
+import type { HostHealthData, IndexerHealthData } from "@/shared/shinzohub/types";
 
-export type {
-  GetHealthParameters,
-  HealthLiveData,
-  HealthP2P,
-  HealthPeer,
-  HealthStatus,
-} from "@shinzo/shinzohub";
+export type HealthStatus = "healthy" | "unhealthy" | "unknown";
 
 export type HealthEntryKeyParams = {
   address: string;
   ip: string;
 };
 
-export type LiveDataWithKey = { key: string; data: HealthLiveData };
+export type LiveDataWithKey = { key: string; data: HostHealthData | IndexerHealthData };

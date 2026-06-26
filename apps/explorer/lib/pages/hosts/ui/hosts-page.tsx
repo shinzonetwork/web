@@ -5,21 +5,20 @@ import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { useRegisteredHosts } from '../hook/use-registered-hosts';
-import type { RegisteredHost } from '@/shared/shinzohub/types';
+import type { HostHealthData, RegisteredHost } from '@/shared/shinzohub/types';
 import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
   ipFromConnectionString,
-  useHealthPolling,
   type HealthStatus,
-  type HealthLiveData,
 } from '@/shared/health';
+import { useHostHealthPolling } from '../hook/use-host-health-polling';
 import { HostsList } from './hosts-list';
 
 const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 
-export type HostWithHealth = RegisteredHost & Omit<HealthLiveData, "p2p" | "uptime"> & {
+export type HostWithHealth = RegisteredHost & Omit<HostHealthData, "p2p" | "uptime"> & {
   ip: string;
 };
 
@@ -56,7 +55,7 @@ function HostsPageContent() {
     }
   }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
 
-  const healthByKey = useHealthPolling<HostWithHealth>({
+  const healthByKey = useHostHealthPolling<HostWithHealth>({
     entries: hosts,
     resetKey: page,
     toHealthEntry: (host) => ({
