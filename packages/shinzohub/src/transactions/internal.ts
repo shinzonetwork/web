@@ -173,6 +173,22 @@ export function positiveInteger(
   return result;
 }
 
+// The CometBFT query grammar takes the address as a raw single-quoted string, so
+// any value reaching it must be free of quotes and whitespace to keep it from
+// breaking out of the literal. bech32 and hex addresses are alphanumeric, so an
+// alphanumeric-only check both validates the shape and blocks injection.
+const ADDRESS_PATTERN = /^[0-9a-zA-Z]{1,128}$/;
+
+/** Validates an address filter before it is interpolated into a tx_search query. */
+export function assertAddressFilter(address: string): string {
+  if (!ADDRESS_PATTERN.test(address)) {
+    throw new Error(
+      "address must be a bech32 or hex address with no quotes or whitespace.",
+    );
+  }
+  return address;
+}
+
 function addUnique(
   values: string[],
   value: string | null | undefined,
