@@ -1,0 +1,1 @@
+export { GeneratorsPage as default } from '@/pages/generators';

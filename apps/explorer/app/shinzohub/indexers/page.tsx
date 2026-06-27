@@ -1,1 +1,0 @@
-export { IndexersPage as default } from '@/pages/indexers';

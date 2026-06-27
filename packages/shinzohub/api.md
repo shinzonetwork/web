@@ -324,13 +324,13 @@ Example response:
 }
 ```
 
-## Indexers
+## Generators
 
-Import from `@shinzo/shinzohub/indexers` or the package root.
+Import from `@shinzo/shinzohub/Generators` or the package root.
 
-### `listIndexers`
+### `listGenerators`
 
-Lists registered indexers with Cosmos REST cursor pagination.
+Lists registered generators with Cosmos REST cursor pagination.
 
 - Parameters
   - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
@@ -347,7 +347,7 @@ Example response:
 
 ```ts
 {
-  indexers: [{
+  generators: [{
     address: "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg",
     did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
     connectionString:
@@ -362,15 +362,15 @@ Example response:
 }
 ```
 
-### `getIndexer`
+### `getGenerator`
 
-Fetches one registered indexer by Shinzo bech32 address.
+Fetches one registered generator by Shinzo bech32 address.
 
 - Parameters
   - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
     `cosmosRestUrl` is supplied.
   - `parameters`
-    - `address` required: Shinzo bech32 indexer address.
+    - `address` required: Shinzo bech32 generator address.
     - `cosmosRestUrl`: Cosmos REST endpoint override.
 
 Example response:
@@ -386,9 +386,9 @@ Example response:
 }
 ```
 
-### `getIndexerHealth`
+### `getGeneratorHealth`
 
-Fetches health information of the indexer based on ipv4 ip address.
+Fetches health information of the generator based on ipv4 ip address.
 
 - Parameters
   - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless

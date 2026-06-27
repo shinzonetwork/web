@@ -1,1 +1,0 @@
-export { IndexersPageClient as IndexersPage } from './ui/indexers-page';

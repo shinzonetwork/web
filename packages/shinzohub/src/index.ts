@@ -24,10 +24,10 @@ import {
   getHostHealth,
 } from "./hosts/index";
 import { 
-  getIndexer, 
-  listIndexers, 
-  getIndexerHealth,
-} from "./indexers/index";
+  getGenerator, 
+  listGenerators, 
+  getGeneratorHealth,
+} from "./generators/index";
 
 export {
   hexToShinzoAddress,
@@ -113,21 +113,21 @@ export type {
   HostHealthPeer,
 } from "./hosts/index";
 export { 
-  getIndexer, 
-  listIndexers, 
-  getIndexerHealth,
-} from "./indexers/index";
+    getGenerator, 
+  listGenerators, 
+  getGeneratorHealth,
+} from "./generators/index";
 export type {
-  GetIndexerParameters,
-  ListIndexersParameters,
-  ListIndexersResult,
-  RegisteredIndexer,
-  RegisteredIndexerDetailsResult,
-  GetIndexerHealthParameters,
-  IndexerHealthData,
-  IndexerHealthP2P,
-  IndexerHealthPeer,
-} from "./indexers/index";
+  GetGeneratorParameters,
+  ListGeneratorsParameters,
+  ListGeneratorsResult,
+  RegisteredGenerator,
+  RegisteredGeneratorDetailsResult,
+  GetGeneratorHealthParameters,
+  GeneratorHealthData,
+  GeneratorHealthP2P,
+  GeneratorHealthPeer,
+} from "./generators/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
@@ -175,14 +175,14 @@ export function shinzoHubActions(client: Client) {
       getHost(client, parameters),
     /** Fetches live health for an host IPv4 address. */
     getHostHealth: (parameters: Parameters<typeof getHostHealth>[0]) => getHostHealth(parameters),
-    /** Lists registered ShinzoHub indexers. */
-    listIndexers: (parameters?: Parameters<typeof listIndexers>[1]) =>
-      listIndexers(client, parameters),
-    /** Fetches one registered ShinzoHub indexer by address. */
-    getIndexer: (parameters: Parameters<typeof getIndexer>[1]) =>
-      getIndexer(client, parameters),
-    /** Fetches live health for an indexer IPv4 address. */
-    getIndexerHealth: (parameters: Parameters<typeof getIndexerHealth>[0]) => getIndexerHealth(parameters), 
+    /** Lists registered ShinzoHub generators. */
+    listGenerators: (parameters?: Parameters<typeof listGenerators>[1]) =>
+      listGenerators(client, parameters),
+    /** Fetches one registered ShinzoHub generator by address. */
+    getGenerator: (parameters: Parameters<typeof getGenerator>[1]) =>
+      getGenerator(client, parameters),
+    /** Fetches live health for an generator IPv4 address. */
+    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) => getGeneratorHealth(parameters), 
   };
 }
 

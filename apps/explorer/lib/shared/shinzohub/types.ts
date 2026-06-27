@@ -2,17 +2,17 @@ import type {
   HostHealthData as ShinzoHubHostHealthData,
   HostHealthP2P as ShinzoHubHostHealthP2P,
   HostHealthPeer as ShinzoHubHostHealthPeer,
-  IndexerHealthData as ShinzoHubIndexerHealthData,
-  IndexerHealthP2P as ShinzoHubIndexerHealthP2P,
-  IndexerHealthPeer as ShinzoHubIndexerHealthPeer,
+  GeneratorHealthData as ShinzoHubGeneratorHealthData,
+  GeneratorHealthP2P as ShinzoHubGeneratorHealthP2P,
+  GeneratorHealthPeer as ShinzoHubGeneratorHealthPeer,
   ListBlocksResult,
   ListHostsResult,
-  ListIndexersResult,
+  ListGeneratorsResult,
   ListTransactionsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
-  RegisteredIndexer as ShinzoHubRegisteredIndexer,
-  RegisteredIndexerDetailsResult,
+  RegisteredGenerator as ShinzoHubRegisteredGenerator,
+  RegisteredGeneratorDetailsResult,
   ShinzoHubBlock,
   ShinzoHubEvent,
   ShinzoHubEventAttribute,
@@ -67,10 +67,10 @@ export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "
 
 export type RegisteredHostDetailsResponse = JsonSerialized<RegisteredHostDetailsResult>;
 
-export type RegisteredIndexer = JsonSerialized<ShinzoHubRegisteredIndexer>;
+export type RegisteredGenerator = JsonSerialized<ShinzoHubRegisteredGenerator>;
 
-export type RegisteredIndexersListResponse = JsonSerialized<
-  Omit<ListIndexersResult, "pagination">
+export type RegisteredGeneratorsListResponse = JsonSerialized<
+  Omit<ListGeneratorsResult, "pagination">
 > & {
   pagination: {
     next_key: string | null;
@@ -78,12 +78,12 @@ export type RegisteredIndexersListResponse = JsonSerialized<
   };
 };
 
-export type RegisteredIndexerDetailsResponse =
-  JsonSerialized<RegisteredIndexerDetailsResult>;
+export type RegisteredGeneratorDetailsResponse =
+  JsonSerialized<RegisteredGeneratorDetailsResult>;
 
 export type HostHealthData = JsonSerialized<ShinzoHubHostHealthData>;
 export type HostHealthP2P = JsonSerialized<ShinzoHubHostHealthP2P>;
 export type HostHealthPeer = JsonSerialized<ShinzoHubHostHealthPeer>;
-export type IndexerHealthData = JsonSerialized<ShinzoHubIndexerHealthData>;
-export type IndexerHealthP2P = JsonSerialized<ShinzoHubIndexerHealthP2P>;
-export type IndexerHealthPeer = JsonSerialized<ShinzoHubIndexerHealthPeer>;
+export type GeneratorHealthData = JsonSerialized<ShinzoHubGeneratorHealthData>;
+export type GeneratorHealthP2P = JsonSerialized<ShinzoHubGeneratorHealthP2P>;
+export type GeneratorHealthPeer = JsonSerialized<ShinzoHubGeneratorHealthPeer>;
