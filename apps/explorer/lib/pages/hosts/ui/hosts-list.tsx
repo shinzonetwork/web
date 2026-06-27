@@ -37,28 +37,19 @@ export const HostsList = ({
       <TableLayout
         isLoading={hostLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound="No Indexers are registered yet."
+        notFound="No Hosts are registered yet."
         headings={hosts.length > 0 ? tableHeadings : [""]}
         gridClass="grid-cols[repeat(5,1fr)]"
         iterable={hosts ?? []}
         rowRenderer={(host) => (
           <>
-            <TableNullableCell value={host?.ip}>
-              {(value) => (
-              <Link prefetch={false} href={getPageLink('host', { address: value, chain: 'shinzohub' })}>
-                <Typography color='accent' className='underline'>
-                  {value}
-                </Typography>
-              </Link>
-              )}
-            </TableNullableCell>
             <TableNullableCell value={host?.address}>
               {(value) => (
-                <>
+                <Link prefetch={false} href={getPageLink('host', { address: value, chain: 'shinzohub' })}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1">
-                        <Typography>{formatHash(value, 12, 8)}</Typography>
+                        <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
                         <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
                       </div>
                     </TooltipTrigger>
@@ -69,9 +60,20 @@ export const HostsList = ({
                         </Typography>
                     </TooltipContent>
                   </Tooltip> 
-                </>
+                </Link>
               )}
             </TableNullableCell>
+
+            <TableNullableCell value={host?.ip}>
+              {(value) => (
+              <Link prefetch={false} target="_blank" href={`http://${value}:443/health`}>
+                <Typography color='accent' className='underline'>
+                  {value}
+                </Typography>
+              </Link>
+              )}
+            </TableNullableCell>
+
             <TableNullableCell value={host?.status} nowrap>
               {(value) => (
                 <>

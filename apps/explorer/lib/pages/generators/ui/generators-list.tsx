@@ -45,22 +45,14 @@ export const GeneratorsList = ({
         iterable={generators ?? []}
         rowRenderer={(generator) => (
           <>
-            <TableNullableCell value={generator?.ip}>
+
+            <TableNullableCell value={generator?.address}>
               {(value) => (
-              <Link prefetch={false} href={getPageLink('generator', { address: value, chain: 'shinzohub' })}>
-                <Typography color='accent' className='underline'>
-                  {value}
-                </Typography>
-              </Link>
-              )}
-            </TableNullableCell>
-              <TableNullableCell value={generator?.address}>
-              {(value) => (
-                <>
+                <Link prefetch={false} href={getPageLink('generator', { address: value, chain: 'shinzohub' })}>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1">
-                        <Typography>{formatHash(value, 12, 8)}</Typography>
+                        <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
                         <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
                       </div>
                     </TooltipTrigger>
@@ -71,7 +63,17 @@ export const GeneratorsList = ({
                         </Typography>
                     </TooltipContent>
                   </Tooltip> 
-                </>
+                </Link>
+              )}
+            </TableNullableCell>
+
+            <TableNullableCell value={generator?.ip}>
+              {(value) => (
+              <Link prefetch={false} target="_blank" href={`http://${value}:443/health`}>
+                <Typography color='accent' className='underline'>
+                  {value}
+                </Typography>
+              </Link>
               )}
             </TableNullableCell>
 
