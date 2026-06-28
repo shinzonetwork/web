@@ -1,80 +1,72 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { Pagination } from "@shinzo/ui/pagination";
-import { useHealthCheck, useHealthPolling } from "@/features/indexer-list";
-import { useRegisteredHosts } from "../hooks/use-registered-hosts";
-import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
+import { useRegisteredHosts } from "../hooks/hosts/use-registered-hosts";
+import { useOffsetPagePagination } from "../hooks/use-offset-page-pagination";
 import {
   cn,
   formatHash,
-  indexerEntryKey,
+  HostHealthData,
   ipFromConnectionString,
+  RegisteredHost,
 } from "@/shared/lib";
 import { HealthStatus } from "@/shared/types";
 import { CopyToClipboard } from "@/widget";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import { createHealthEntryKey, PAGE_SIZE } from "../lib/health";
+import { useHostHealthPolling } from "../hooks/hosts/use-host-health-polling";
+
+export type HostWithHealth = RegisteredHost &
+  Pick<HostHealthData, "status"> & {
+    ip: string;
+  };
 
 const HOSTS_PAGE_PARAM = "hostsPage";
-const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
-const PAGE_SIZE = 5;
 
 const tableHeadings = ["Address", "DID", "Connection String", "Status"];
 
 function HostsHomeContent() {
   const router = useRouter();
-  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
-    new Map()
+  const pageParams = useOffsetPagePagination(HOSTS_PAGE_PARAM, PAGE_SIZE);
+  const { page } = pageParams;
+  const { data: registeredHosts, isPending } = useRegisteredHosts({
+    pageParams,
+  });
+
+  const hosts: HostWithHealth[] = useMemo(
+    () =>
+      registeredHosts?.hosts.map((host) => ({
+        ...host,
+        ip: ipFromConnectionString(host.connectionString),
+        status: "unknown" as HealthStatus,
+      })) ?? [],
+    [registeredHosts]
   );
-  const { fetchHealth } = useHealthCheck();
-  const { page, queryParams, applyPaginationData, totalItems } =
-    useCursorPagePagination({
-      pageParam: HOSTS_PAGE_PARAM,
-      storageKey: HOSTS_CURSOR_KEY,
-      limit: PAGE_SIZE,
-    });
 
-  const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
-  const hosts = registeredHosts?.hosts ?? [];
-  const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
-  const nextKey = registeredHosts?.pagination?.next_key;
-
-  useEffect(() => {
-    if (registeredHosts) {
-      applyPaginationData(nextKey, pageTotal);
-    }
-  }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
-
-  useHealthPolling({
+  const healthByKey = useHostHealthPolling<HostWithHealth>({
     entries: hosts,
     resetKey: page,
     toHealthEntry: (host) => ({
-      validatorAddress: host.address,
-      ip: ipFromConnectionString(host.connection_string),
+      address: host.address,
+      ip: host.ip,
     }),
-    fetchHealth,
-    onResults: (liveDataByKey) => {
-      setHealthByKey((prev) => {
-        const next = new Map(prev);
-        for (const [key, data] of liveDataByKey) {
-          if (data.health) next.set(key, data.health);
-        }
-        return next;
-      });
-    },
   });
 
   const hostsWithHealth = useMemo(
     () =>
       hosts.map((host) => {
-        const ip = ipFromConnectionString(host.connection_string);
-        const key = indexerEntryKey({ validatorAddress: host.address, ip });
+        const key = createHealthEntryKey({
+          address: host.address,
+          ip: host.ip,
+        });
+        const healthData = healthByKey.get(key);
         return {
           ...host,
-          health: healthByKey.get(key) ?? ("unknown" as HealthStatus),
+          status: healthData?.status ?? ("unknown" as HealthStatus),
         };
       }),
     [hosts, healthByKey]
@@ -142,7 +134,7 @@ function HostsHomeContent() {
               </TableNullableCell>
 
               <TableNullableCell
-                value={host?.connection_string}
+                value={host?.connectionString}
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
@@ -165,7 +157,7 @@ function HostsHomeContent() {
                   </Tooltip>
                 )}
               </TableNullableCell>
-              <TableNullableCell value={host?.health} nowrap>
+              <TableNullableCell value={host?.status} nowrap>
                 {(value) => (
                   <>
                     {value !== "unknown" && (
@@ -194,7 +186,7 @@ function HostsHomeContent() {
         <div className="pr-6">
           <Pagination
             page={page}
-            totalItems={totalItems}
+            totalItems={registeredHosts?.totalHostsCount ?? 0}
             itemsPerPage={PAGE_SIZE}
             pageParam={HOSTS_PAGE_PARAM}
           />

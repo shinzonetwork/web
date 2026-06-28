@@ -27,6 +27,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@shinzo/ui": "workspace:*",
+    "@shinzo/shinzohub": "workspace:*",
     "@tanstack/react-query": "^5.90.12",
     "@wagmi/core": "2.22.1",
     "class-variance-authority": "^0.7.1",
