@@ -227,7 +227,7 @@ export const REGISTRATION_FORM_INPUTS_V2 = [
   {
     id: "defraSignedMessage",
     label: "Signed public key message",
-    isTextarea: true,
+    isTextarea: false,
     isSelect: false,
     required: true,
   },

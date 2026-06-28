@@ -23,6 +23,12 @@ export function Footer() {
         >
           EXPLORER
         </a>
+        <a
+          className="text-muted-foreground hover:text-accent transition-colors"
+          href="https://discord.shinzo.network/"
+        >
+          DISCORD
+        </a>
       </div>
     </footer>
   );
