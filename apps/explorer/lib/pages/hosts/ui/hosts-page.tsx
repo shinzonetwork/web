@@ -1,12 +1,11 @@
 "use client"
 
-import { Suspense, useEffect, useMemo } from 'react';
-import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
+import { useMemo } from 'react';
+import { DEFAULT_LIMIT, Pagination, type PageParams } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { useRegisteredHosts } from '../hook/use-registered-hosts';
 import type { HostHealthData, RegisteredHost } from '@/shared/shinzohub/types';
-import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
   ipFromConnectionString,
@@ -15,23 +14,17 @@ import {
 import { useHostHealthPolling } from '../hook/use-host-health-polling';
 import { HostsList } from './hosts-list';
 
-const HOSTS_PAGE_PARAM = "hostsPage";
-const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
-
 export type HostWithHealth = RegisteredHost & Omit<HostHealthData, "p2p" | "uptime"> & {
   ip: string;
 };
 
-function HostsPageContent() {
-  const { page, queryParams, applyPaginationData, totalItems, limit } =
-    useCursorPagePagination({
-      pageParam: HOSTS_PAGE_PARAM,
-      storageKey: HOSTS_CURSOR_KEY,
-      limit: DEFAULT_LIMIT,
-    });
+export interface HostsPageClientProps {
+  pageParams: PageParams;
+}
 
-  const { data: registeredHosts, isPending } =
-    useRegisteredHosts(queryParams);
+export function HostsPageClient({ pageParams }: HostsPageClientProps) {
+  const { page } = pageParams;
+  const { data: registeredHosts, isPending } = useRegisteredHosts({ pageParams });
 
   const hosts: HostWithHealth[] = useMemo(
     () =>
@@ -45,15 +38,6 @@ function HostsPageContent() {
       })) ?? [],
     [registeredHosts]
   );  
-
-  const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
-  const nextKey = registeredHosts?.pagination?.next_key;
-
-  useEffect(() => {
-    if (registeredHosts) {
-      applyPaginationData(nextKey, pageTotal);
-    }
-  }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
 
   const healthByKey = useHostHealthPolling<HostWithHealth>({
     entries: hosts,
@@ -71,11 +55,11 @@ function HostsPageContent() {
           address: host.address,
           ip: host.ip,
         });
-        const data = healthByKey.get(key);
+        const healthData = healthByKey.get(key);
         return {
           ...host,
-          ...data,
-          status: data?.status ?? ("unknown" as HealthStatus)
+          ...healthData,
+          status: healthData?.status ?? ("unknown" as HealthStatus)
         };
       }),
     [hosts, healthByKey]
@@ -97,9 +81,8 @@ function HostsPageContent() {
 
         <Pagination
           page={page}
-          totalItems={totalItems}
-          itemsPerPage={limit}
-          pageParam={HOSTS_PAGE_PARAM}
+          totalItems={registeredHosts?.totalHostsCount ?? 0}
+          itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>
 
@@ -110,9 +93,3 @@ function HostsPageContent() {
     </PageLayout>
   );
 }
-
-export const HostsPageClient = () => (
-  <Suspense fallback={null}>
-    <HostsPageContent />
-  </Suspense>
-);

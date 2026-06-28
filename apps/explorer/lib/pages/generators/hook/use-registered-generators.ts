@@ -2,18 +2,22 @@
 
 import { useQuery } from "@tanstack/react-query";
 import type { RegisteredGeneratorsListResponse } from "@/shared/shinzohub/types";
-import {
-  buildCursorPaginationSearchParams,
-  type CursorPaginationParams,
-} from "../../../shared/cursor-pagination/lib/pagination";
+import { DEFAULT_LIMIT, type PageParams } from "@shinzo/ui/pagination";
 
-export type RegisteredGeneratorsPaginationParams = CursorPaginationParams;
+type UseRegisteredGeneratorsOptions = {
+  pageParams: PageParams;
+  refetchIntervalMs?: number;
+};
 
-export async function fetchRegisteredGenerators(
-  pagination: RegisteredGeneratorsPaginationParams
-): Promise<RegisteredGeneratorsListResponse> {
-  const params = buildCursorPaginationSearchParams(pagination);
-  const response = await fetch(`/api/shinzohub/generators?${params.toString()}`);
+export async function fetchRegisteredGenerators(params: {
+  page: number;
+  limit: number;
+}): Promise<RegisteredGeneratorsListResponse> {
+  const searchParams = new URLSearchParams({
+    page: String(params.page),
+    limit: String(params.limit),
+  });
+  const response = await fetch(`/api/shinzohub/generators?${searchParams.toString()}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch generators");
@@ -22,15 +26,27 @@ export async function fetchRegisteredGenerators(
   return response.json() as Promise<RegisteredGeneratorsListResponse>;
 }
 
-export function useRegisteredGenerators(
-  pagination: RegisteredGeneratorsPaginationParams,
-  intervalMs = 30000
-) {
+export function registeredGeneratorsQueryKey(page: number, limit: number) {
+  return ["shinzohub", "registered-generators", page, limit] as const;
+}
+
+export function useRegisteredGenerators({
+  pageParams,
+  refetchIntervalMs = 30_000,
+}: UseRegisteredGeneratorsOptions = {
+  pageParams: { page: 1, offset: 0, limit: DEFAULT_LIMIT },
+}) {
+  const { page, limit } = pageParams;
+
   return useQuery({
-    queryKey: ["shinzohub", "registered-generators", pagination],
-    queryFn: () => fetchRegisteredGenerators(pagination),
-    refetchInterval: intervalMs,
+    queryKey: registeredGeneratorsQueryKey(page, limit),
+    queryFn: () => fetchRegisteredGenerators({ page, limit }),
+    refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
     placeholderData: (previousData) => previousData,
+    select: (data) => ({
+      generators: data.generators,
+      totalGeneratorsCount: Number(data.pagination?.total ?? 0),
+    }),
   });
 }

@@ -1,13 +1,12 @@
 "use client"
 
-import { Suspense, useEffect, useMemo } from 'react';
-import { DEFAULT_LIMIT, Pagination } from '@shinzo/ui/pagination';
+import { useMemo } from 'react';
+import { DEFAULT_LIMIT, Pagination, type PageParams } from '@shinzo/ui/pagination';
 import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
 import { Container, PageLayout } from '@/widgets/layout'
 import { useRegisteredGenerators } from '../hook/use-registered-generators';
 import type { GeneratorHealthData, RegisteredGenerator } from '@/shared/shinzohub/types';
 import { GeneratorsList } from './generators-list';
-import { useCursorPagePagination } from '@/shared/cursor-pagination/hook/use-cursor-page-pagination';
 import {
   createHealthEntryKey,
   ipFromConnectionString,
@@ -15,23 +14,17 @@ import {
 } from '@/shared/health';
 import { useGeneratorHealthPolling } from '../hook/use-generator-health-polling';
 
-const GENERATORS_PAGE_PARAM = "generatorsPage";
-const GENERATORS_CURSOR_KEY = "registered-generators-cursor-key";
-
 export type GeneratorWithHealth = RegisteredGenerator & Omit<GeneratorHealthData, "p2p" | "uptime"> & {
   ip: string;
 };
 
-function GeneratorsPageContent() {
-  const { page, queryParams, applyPaginationData, totalItems, limit } =
-    useCursorPagePagination({
-      pageParam: GENERATORS_PAGE_PARAM,
-      storageKey: GENERATORS_CURSOR_KEY,
-      limit: DEFAULT_LIMIT,
-    });
+export interface GeneratorsPageClientProps {
+  pageParams: PageParams;
+}
 
-  const { data: registeredGenerators, isPending } =
-    useRegisteredGenerators(queryParams);
+export function GeneratorsPageClient({ pageParams }: GeneratorsPageClientProps) {
+  const { page } = pageParams;
+  const { data: registeredGenerators, isPending } = useRegisteredGenerators({ pageParams });
 
   const generators: GeneratorWithHealth[] = useMemo(
     () =>
@@ -43,17 +36,8 @@ function GeneratorsPageContent() {
         last_processed: "",
         current_block: 0,
       })) ?? [],
-    [registeredGenerators]
+    [registeredGenerators?.generators]
   );
-
-  const pageTotal = Number(registeredGenerators?.pagination?.total ?? 0);
-  const nextKey = registeredGenerators?.pagination?.next_key;
-
-  useEffect(() => {
-    if (registeredGenerators) {
-      applyPaginationData(nextKey, pageTotal);
-    }
-  }, [registeredGenerators, nextKey, pageTotal, applyPaginationData]);
 
   const healthByKey = useGeneratorHealthPolling<GeneratorWithHealth>({
     entries: generators,
@@ -71,11 +55,11 @@ function GeneratorsPageContent() {
           address: generator.address,
           ip: generator.ip,
         });
-        const data = healthByKey.get(key);
+        const healthData = healthByKey.get(key);
         return {
           ...generator,
-          ...data,
-          status: data?.status ?? ("unknown" as HealthStatus)
+          ...healthData,
+          status: healthData?.status ?? ("unknown" as HealthStatus)
         };
       }),
     [generators, healthByKey]
@@ -97,9 +81,8 @@ function GeneratorsPageContent() {
 
         <Pagination
           page={page}
-          totalItems={totalItems}
-          itemsPerPage={limit}
-          pageParam={GENERATORS_PAGE_PARAM}
+          totalItems={registeredGenerators?.totalGeneratorsCount ?? 0}
+          itemsPerPage={DEFAULT_LIMIT}
         />
       </Container>
 
@@ -110,9 +93,3 @@ function GeneratorsPageContent() {
     </PageLayout>
   );
 }
-
-export const GeneratorsPageClient = () => (
-  <Suspense fallback={null}>
-    <GeneratorsPageContent />
-  </Suspense>
-);

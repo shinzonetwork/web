@@ -1,39 +1,25 @@
 import { NextRequest } from "next/server";
-import { listHosts, type ListHostsParameters } from "@shinzo/shinzohub";
+import { listHosts } from "@shinzo/shinzohub";
 import { getShinzohubQueryContext } from "../../../../lib/shared/shinzohub/query-context";
 import { serializeHostsList } from "./_lib/serialize";
 
-function parseOptionalBoolean(rawValue: string | null): boolean | undefined {
-  if (rawValue === null) return undefined;
-  return rawValue === "true";
-}
-
-function parseListHostsParameters(searchParams: URLSearchParams): ListHostsParameters {
-  const limit =
-    searchParams.get("pagination.limit") ?? searchParams.get("limit") ?? undefined;
-  const pageKey =
-    searchParams.get("pagination.key") ?? searchParams.get("key") ?? undefined;
-  const offset =
-    searchParams.get("pagination.offset") ?? searchParams.get("offset") ?? undefined;
-
-  return {
-    ...(limit ? { limit } : {}),
-    ...(pageKey ? { pageKey } : {}),
-    ...(offset ? { offset } : {}),
-    countTotal: parseOptionalBoolean(
-      searchParams.get("pagination.count_total") ?? searchParams.get("count_total"),
-    ),
-    reverse: parseOptionalBoolean(
-      searchParams.get("pagination.reverse") ?? searchParams.get("reverse"),
-    ),
-  };
+function parsePositiveInteger(rawValue: string | null, fallback: number): number {
+  const value = rawValue ? Number(rawValue) : fallback;
+  return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
 export async function GET(req: NextRequest) {
   try {
+    const page = parsePositiveInteger(req.nextUrl.searchParams.get("page"), 1);
+    const limit = Math.min(
+      100,
+      parsePositiveInteger(req.nextUrl.searchParams.get("limit"), 10),
+    );
     const { client, cosmosRestUrl } = getShinzohubQueryContext();
     const result = await listHosts(client, {
-      ...parseListHostsParameters(req.nextUrl.searchParams),
+      limit,
+      offset: (page - 1) * limit,
+      countTotal: true,
       cosmosRestUrl,
     });
 

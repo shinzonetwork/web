@@ -1,2 +1,1 @@
-export { HostsPageClient } from './ui/hosts-page';
-export type { RegisteredHost } from '@/shared/shinzohub/types';
+export { HostsPage } from './ui/hosts-page-server';

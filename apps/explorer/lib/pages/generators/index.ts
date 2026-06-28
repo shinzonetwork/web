@@ -1,1 +1,2 @@
-export { GeneratorsPageClient as GeneratorsPage } from './ui/generators-page';
+export { GeneratorsPage } from './ui/generators-page-server';
+export { GeneratorsPageClient } from './ui/generators-page';

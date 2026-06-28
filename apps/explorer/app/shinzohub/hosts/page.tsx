@@ -1,1 +1,1 @@
-export { HostsPageClient as default } from '@/pages/hosts';
+export { HostsPage as default } from '@/pages/hosts';
