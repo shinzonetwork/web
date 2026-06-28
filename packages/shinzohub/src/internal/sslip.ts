@@ -1,6 +1,6 @@
 const SSLIP_DOMAIN = "sslip.io";
 const HEALTH_PATH = "/health";
-const HEALTH_PORTS = [443, 8080] as const;
+const HEALTH_PORT = 443;
 
 /** Returns true for dotted-decimal IPv4 addresses only. */
 export function isIPv4(value: string): boolean {
@@ -22,33 +22,8 @@ export function ipToSslipHostname(ip: string): string {
   return `${trimmed.replace(/\./g, "-")}.${SSLIP_DOMAIN}`;
 }
 
-/** Candidate health endpoints for an IPv4 or URL (443 first, then 8080). */
-export function healthCheckUrls(ipOrUrl: string): string[] {
-  const trimmed = ipOrUrl.trim();
-
-  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
-    const url = new URL(trimmed);
-    if (isIPv4(url.hostname)) {
-      return HEALTH_PORTS.map((port) => {
-        const candidate = new URL(url.toString());
-        candidate.hostname = ipToSslipHostname(url.hostname);
-        candidate.protocol = "http:";
-        candidate.port = String(port);
-        candidate.pathname = HEALTH_PATH;
-        return candidate.toString();
-      });
-    }
-
-    if (!url.pathname.endsWith(HEALTH_PATH)) {
-      url.pathname = HEALTH_PATH;
-    }
-    return [url.toString()];
-  }
-
-  if (!isIPv4(trimmed)) {
-    return [];
-  }
-
-  const host = ipToSslipHostname(trimmed);
-  return HEALTH_PORTS.map((port) => `http://${host}:${port}${HEALTH_PATH}`);
+/** Health endpoint for an IPv4. */
+export function healthCheckUrl(ip: string): string {
+  const host = ipToSslipHostname(ip.trim());
+  return `http://${host}:${HEALTH_PORT}${HEALTH_PATH}`;
 }

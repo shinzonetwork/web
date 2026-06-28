@@ -13,6 +13,7 @@ import { formatUptime, formatTime } from "@/shared/health";
 import { CopyButton } from "@/shared/ui/button";
 import { formatHash } from "@/shared/utils/format-hash";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import { getHealthUrl } from "@/shared/health/lib/utils";
 
 const tableHeadings = [
   "Host Public IP",
@@ -66,7 +67,7 @@ export const HostsList = ({
 
             <TableNullableCell value={host?.ip}>
               {(value) => (
-              <Link prefetch={false} target="_blank" href={`http://${value}:443/health`}>
+              <Link prefetch={false} target="_blank" href={getHealthUrl(value)}>
                 <Typography color='accent' className='underline'>
                   {value}
                 </Typography>

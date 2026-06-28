@@ -1,5 +1,5 @@
 import { fetchWithTimeout, HEALTH_FETCH_TIMEOUT_MS } from "../internal/fetch-with-timeout";
-import { healthCheckUrls, isIPv4 } from "../internal/sslip";
+import { healthCheckUrl, isIPv4 } from "../internal/sslip";
 import type { GetHealthParameters, HealthLiveData } from "../internal/health";
 
 export const UNHEALTHY_LIVE_DATA: HealthLiveData = {
@@ -23,17 +23,15 @@ export async function getHostHealth(parameters: GetHealthParameters): Promise<He
     return UNHEALTHY_LIVE_DATA;
   }
 
-  for (const url of healthCheckUrls(ip)) {
-    try {
-      const res = await fetchWithTimeout(url, timeoutMs);
-      if (!res.ok) continue;
+  try {
+    const res = await fetchWithTimeout(healthCheckUrl(ip), timeoutMs);
+    if (!res.ok) {
+      return UNHEALTHY_LIVE_DATA;
+    }
 
       const data = (await res.json()) as HealthLiveData;
       return { ...data, status: data.status || "unhealthy" };
-    } catch {
-      // timed out or network error — try next candidate port
-    }
+  } catch {
+    return UNHEALTHY_LIVE_DATA;
   }
-
-  return UNHEALTHY_LIVE_DATA;
 }
