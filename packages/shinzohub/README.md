@@ -118,6 +118,18 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover `include_data` and `include_metadata` in `getView`.
 - [x] Cover `GET /shinzonetwork/view/v1/view_count` with `countViews`.
 
+### Cosmos REST Host Queries
+
+- [x] Cover `GET /shinzonetwork/host/v1/hosts` with `listHosts`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
+- [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
+
+### Cosmos REST Indexer Queries
+
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listIndexers`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listIndexers`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getIndexer`.
+
 ### Transactions And Blocks
 
 - [x] List all or EVM transactions with `listTransactions`.
