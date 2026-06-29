@@ -1,2 +1,2 @@
-export { AddressDetailPage } from './page';
-export { ShinzohubAddressDetailPage } from './shinzohub-page';
+export { AddressDetailPage } from './ui/page';
+export { ShinzohubAddressDetailPage } from './ui/shinzohub-page';

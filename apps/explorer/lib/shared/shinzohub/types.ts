@@ -144,3 +144,19 @@ export interface ShinzohubAddressDetailsResponse {
   account: ShinzohubAddressAccount;
   related: ShinzohubAddressRelatedEntities;
 }
+
+export interface ShinzohubAddressViewsPagination {
+  nextKey: string | null;
+  total: string | null;
+  page: number;
+  limit: number;
+  offset: number;
+}
+
+export interface ShinzohubAddressViewsResponse {
+  inputAddress: string;
+  shinzoAddress: string;
+  hexAddress: string;
+  views: ShinzohubAddressView[];
+  pagination: ShinzohubAddressViewsPagination;
+}

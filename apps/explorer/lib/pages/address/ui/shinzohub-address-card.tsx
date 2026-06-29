@@ -15,6 +15,7 @@ import { DataItem, DataList } from "@/widgets/data-list";
 interface ShinzohubAddressCardProps {
   details?: ShinzohubAddressDetailsResponse;
   isLoading: boolean;
+  viewsTabHref: string;
 }
 
 interface ViewLinkProps {
@@ -53,28 +54,34 @@ function ViewLink({ view }: ViewLinkProps) {
   );
 }
 
-function CreatedViews({
-  details,
+function getCreatedViewsCount(
+  createdViews: ShinzohubAddressDetailsResponse["related"]["createdViews"] | undefined,
+): string | null {
+  if (!createdViews) return null;
+  if (createdViews.total !== null) {
+    return BigInt(createdViews.total) > 0n ? createdViews.total : null;
+  }
+
+  return createdViews.items.length > 0 ? String(createdViews.items.length) : null;
+}
+
+function CreatedViewsSummary({
+  count,
+  viewsTabHref,
 }: {
-  details?: ShinzohubAddressDetailsResponse;
+  count: string;
+  viewsTabHref: string;
 }) {
-  const createdViews = details?.related.createdViews;
-  if (!createdViews?.items.length) return null;
-
-  const hasMore = createdViews.total
-    ? BigInt(createdViews.total) > BigInt(createdViews.items.length)
-    : false;
-
   return (
-    <div className="flex min-w-0 flex-col gap-3">
-      {createdViews.items.map((view) => (
-        <ViewLink key={view.contractAddress} view={view} />
-      ))}
-      {createdViews.total && hasMore && (
-        <span className="text-xs text-muted-foreground">
-          Showing {createdViews.items.length} of {createdViews.total}
-        </span>
-      )}
+    <div className="flex min-w-0 items-center gap-4">
+      <span>{count}</span>
+      <Link
+        prefetch={false}
+        href={viewsTabHref}
+        className="cursor-pointer text-text-accent underline"
+      >
+        Show all
+      </Link>
     </div>
   );
 }
@@ -82,6 +89,7 @@ function CreatedViews({
 export function ShinzohubAddressCard({
   details,
   isLoading,
+  viewsTabHref,
 }: ShinzohubAddressCardProps) {
   if (!isLoading && !details) {
     return (
@@ -94,7 +102,7 @@ export function ShinzohubAddressCard({
   const host = details?.related.host;
   const generator = details?.related.generator;
   const viewContract = details?.related.viewContract;
-  const hasCreatedViews = !!details?.related.createdViews.items.length;
+  const createdViewsCount = getCreatedViewsCount(details?.related.createdViews);
 
   return (
     <DataList>
@@ -141,70 +149,51 @@ export function ShinzohubAddressCard({
         value={details?.account.transactionsCount}
         loading={isLoading}
       />
-      <DataItem
-        title="Host"
-        value={host?.address}
-        loading={isLoading}
-      >
-        {host ? (
-          <div className="flex min-w-0 flex-col gap-1">
-            <div className="flex min-w-0 items-center gap-3">
-              <ShinzohubAddressLink address={host.address} className="break-all font-mono text-sm">
-                {host.address}
-              </ShinzohubAddressLink>
-              <Link
-                prefetch={false}
-                href={getPageLink("host", { address: host.address, chain: "shinzohub" })}
-                className="shrink-0 cursor-pointer text-xs text-text-accent underline"
-              >
-                Host details
-              </Link>
-            </div>
-            <span className="break-all text-xs text-muted-foreground">{host.did}</span>
-          </div>
-        ) : undefined}
-      </DataItem>
-      <DataItem
-        title="Generator"
-        value={generator?.address}
-        loading={isLoading}
-      >
-        {generator ? (
-          <div className="flex min-w-0 flex-col gap-1">
-            <div className="flex min-w-0 items-center gap-3">
-              <ShinzohubAddressLink address={generator.address} className="break-all font-mono text-sm">
-                {generator.address}
-              </ShinzohubAddressLink>
-              <Link
-                prefetch={false}
-                href={getPageLink("generator", { address: generator.address, chain: "shinzohub" })}
-                className="shrink-0 cursor-pointer text-xs text-text-accent underline"
-              >
-                Generator details
-              </Link>
-            </div>
-            <span className="text-xs text-muted-foreground">
-              {generator.sourceChain || "Unknown chain"} / {generator.sourceChainId}
-            </span>
-          </div>
-        ) : undefined}
-      </DataItem>
-      <DataItem
-        title="View Contract"
-        value={viewContract?.name}
-        loading={isLoading}
-        allowWrap
-      >
-        {viewContract ? <ViewLink view={viewContract} /> : undefined}
-      </DataItem>
-      <DataItem
-        title="Created Views"
-        value={hasCreatedViews ? `${details?.related.createdViews.items.length}` : undefined}
-        loading={isLoading}
-        allowWrap
-      >
-        {hasCreatedViews ? <CreatedViews details={details} /> : undefined}
-      </DataItem>
+      {host && (
+        <DataItem title="Host" value={host.did} loading={isLoading} allowWrap>
+          <Link
+            prefetch={false}
+            href={getPageLink("host", { address: host.address, chain: "shinzohub" })}
+            className="break-all font-mono text-text-accent underline"
+          >
+            {host.did}
+          </Link>
+        </DataItem>
+      )}
+      {generator && (
+        <DataItem title="Generator" value={generator.did} loading={isLoading} allowWrap>
+          <Link
+            prefetch={false}
+            href={getPageLink("generator", { address: generator.address, chain: "shinzohub" })}
+            className="break-all font-mono text-text-accent underline"
+          >
+            {generator.did}
+          </Link>
+        </DataItem>
+      )}
+      {viewContract && (
+        <DataItem
+          title="View Contract"
+          value={viewContract.name}
+          loading={isLoading}
+          allowWrap
+        >
+          <ViewLink view={viewContract} />
+        </DataItem>
+      )}
+      {createdViewsCount && (
+        <DataItem
+          title="Created Views"
+          value={createdViewsCount}
+          loading={isLoading}
+          allowWrap
+        >
+          <CreatedViewsSummary
+            count={createdViewsCount}
+            viewsTabHref={viewsTabHref}
+          />
+        </DataItem>
+      )}
     </DataList>
   );
 }
