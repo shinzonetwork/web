@@ -1,0 +1,1 @@
+export { HostDetailClientPage as default } from '@/pages/host-details';

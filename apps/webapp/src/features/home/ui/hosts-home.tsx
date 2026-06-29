@@ -1,20 +1,35 @@
 "use client";
 
-import { Suspense, useEffect, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { Pagination } from "@shinzo/ui/pagination";
+import { useHealthCheck, useHealthPolling } from "@/features/indexer-list";
 import { useRegisteredHosts } from "../hooks/use-registered-hosts";
 import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
+import {
+  cn,
+  formatHash,
+  indexerEntryKey,
+  ipFromConnectionString,
+} from "@/shared/lib";
+import { HealthStatus } from "@/shared/types";
+import { CopyToClipboard } from "@/widget";
+import { LoaderCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 const PAGE_SIZE = 5;
 
-const tableHeadings = ["Address", "DID", "Connection String"];
+const tableHeadings = ["Address", "DID", "Connection String", "Status"];
 
 function HostsHomeContent() {
   const router = useRouter();
+  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
+    new Map()
+  );
+  const { fetchHealth } = useHealthCheck();
   const { page, queryParams, applyPaginationData, totalItems } =
     useCursorPagePagination({
       pageParam: HOSTS_PAGE_PARAM,
@@ -33,7 +48,37 @@ function HostsHomeContent() {
     }
   }, [registeredHosts, nextKey, pageTotal, applyPaginationData]);
 
-  const showPagination = useMemo(() => totalItems > PAGE_SIZE, [totalItems]);
+  useHealthPolling({
+    entries: hosts,
+    resetKey: page,
+    toHealthEntry: (host) => ({
+      validatorAddress: host.address,
+      ip: ipFromConnectionString(host.connection_string),
+    }),
+    fetchHealth,
+    onResults: (liveDataByKey) => {
+      setHealthByKey((prev) => {
+        const next = new Map(prev);
+        for (const [key, data] of liveDataByKey) {
+          if (data.health) next.set(key, data.health);
+        }
+        return next;
+      });
+    },
+  });
+
+  const hostsWithHealth = useMemo(
+    () =>
+      hosts.map((host) => {
+        const ip = ipFromConnectionString(host.connection_string);
+        const key = indexerEntryKey({ validatorAddress: host.address, ip });
+        return {
+          ...host,
+          health: healthByKey.get(key) ?? ("unknown" as HealthStatus),
+        };
+      }),
+    [hosts, healthByKey]
+  );
 
   const handleRegisterAsHost = () => {
     router.push("/host-registration");
@@ -63,9 +108,9 @@ function HostsHomeContent() {
           isLoading={isPending}
           loadingRowCount={PAGE_SIZE}
           notFound="No hosts are registered yet."
-          headings={hosts.length > 0 ? tableHeadings : [""]}
-          gridClass="grid-cols[repeat(3,1fr)]"
-          iterable={hosts ?? []}
+          headings={hostsWithHealth.length > 0 ? tableHeadings : [""]}
+          gridClass="grid-cols[repeat(4,1fr)]"
+          iterable={hostsWithHealth}
           rowRenderer={(host) => (
             <>
               <TableNullableCell value={host?.address}>
@@ -76,7 +121,23 @@ function HostsHomeContent() {
 
               <TableNullableCell value={host?.did} nowrap>
                 {(value) => (
-                  <span className="text-sm text-foreground">{value}</span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground">
+                          {formatHash(value, 15, 5)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </TableNullableCell>
 
@@ -85,24 +146,59 @@ function HostsHomeContent() {
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
-                  <span className="text-sm text-foreground wrap-break-word break-all">
-                    {value}
-                  </span>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground wrap-break-word break-all">
+                          {formatHash(value, 20, 10)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </TableNullableCell>
+              <TableNullableCell value={host?.health} nowrap>
+                {(value) => (
+                  <>
+                    {value !== "unknown" && (
+                      <span
+                        className={cn(
+                          "px-2 py-1 rounded-md text-xs",
+                          value === "healthy"
+                            ? "bg-success/20 text-success"
+                            : "bg-destructive/20 text-destructive"
+                        )}
+                      >
+                        {value === "healthy" ? "Online" : "Offline"}
+                      </span>
+                    )}
+                    {value === "unknown" && (
+                      <span className="px-2 py-1 rounded-md text-xs text-muted-foreground">
+                        <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
+                      </span>
+                    )}
+                  </>
                 )}
               </TableNullableCell>
             </>
           )}
         />
-        {showPagination && (
-          <div className="pr-6">
-            <Pagination
-              page={page}
-              totalItems={totalItems}
-              itemsPerPage={PAGE_SIZE}
-              pageParam={HOSTS_PAGE_PARAM}
-            />
-          </div>
-        )}
+        <div className="pr-6">
+          <Pagination
+            page={page}
+            totalItems={totalItems}
+            itemsPerPage={PAGE_SIZE}
+            pageParam={HOSTS_PAGE_PARAM}
+          />
+        </div>
       </div>
     </section>
   );

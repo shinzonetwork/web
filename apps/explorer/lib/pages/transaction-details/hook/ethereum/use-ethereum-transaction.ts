@@ -1,0 +1,53 @@
+import { execute, graphql } from '@/shared/graphql';
+import { useQuery } from '@tanstack/react-query';
+import { Hex } from 'viem';
+
+const TransactionQuery = graphql(`
+  query Transaction($hash: String) {
+    Transaction: Ethereum__Mainnet__Transaction(filter: { hash: { _eq: $hash } }, limit: 1) {
+      _docID
+      hash
+      blockNumber
+      blockHash
+      from
+      to
+      value
+      gas
+      gasPrice
+      gasUsed
+      effectiveGasPrice
+      maxFeePerGas
+      maxPriorityFeePerGas
+      nonce
+      transactionIndex
+      type
+      input
+      chainId
+      v
+      r
+      s
+      status
+      cumulativeGasUsed
+      block {
+        timestamp
+      }
+    }
+  }
+`)
+
+interface UseEthereumTransactionOptions {
+  hash: Hex;
+}
+
+export const useEthereumTransaction = (options: UseEthereumTransactionOptions) => {
+  const { hash } = options;
+
+  return useQuery({
+    queryKey: ['transaction', hash],
+    queryFn: async () => {
+      const res = await execute(TransactionQuery, { hash });
+      return res.Transaction?.[0] ?? null;
+    },
+    enabled: !!hash,
+  });
+};

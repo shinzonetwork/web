@@ -1,1 +1,1 @@
-export { TransactionDetailPage as default } from '@/pages/transaction-details';
+export { EthereumTransactionDetailPage as default } from '@/pages/transaction-details';

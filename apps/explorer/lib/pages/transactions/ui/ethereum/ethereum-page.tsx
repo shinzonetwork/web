@@ -1,0 +1,51 @@
+"use client"
+
+import { DEFAULT_LIMIT, PageParams, Pagination } from '@shinzo/ui/pagination';
+import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs';
+import { Container, PageLayout } from '@/widgets/layout'
+import { TransactionsList } from './transactions-list';
+import { useEthereumTransactions } from '../../hooks/ethereum/use-ethereum-transactions';
+import { useTransactionsCount } from '../../hooks/ethereum/use-transactions-count';
+
+export type EthereumTransactionPageProps = {
+  block?: number;
+  pageParams: PageParams;
+}
+
+export const EthereumTransactionsPageClient = ({ block, pageParams }: EthereumTransactionPageProps) => {
+  const { page, offset, limit } = pageParams;
+  const { data: transactions, isLoading } = useEthereumTransactions({
+    limit,
+    offset,
+    blockNumber: block,
+  });
+  const { data: transactionsCount } = useTransactionsCount();
+
+  return (
+    <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
+      <Container
+        wrapperClassName='mt-16 mb-8 border-b border-ui-border'
+        className='flex items-end justify-between [&>*]:translate-y-[1px]'
+      >
+        <Tabs defaultValue='all'>
+          <TabsList>
+            <TabsTrigger value='all' className='min-w-16'>
+              All
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <Pagination
+          page={page}
+          totalItems={transactionsCount?.totalTransactions ?? 0}
+          itemsPerPage={DEFAULT_LIMIT}
+        />
+      </Container>
+
+      <TransactionsList
+        transactions={transactions?.filter((txn): txn is NonNullable<typeof txn> => txn !== null) ?? []}
+        isLoading={isLoading}
+      />
+    </PageLayout>
+  );
+};

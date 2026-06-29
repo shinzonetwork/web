@@ -1,0 +1,1 @@
+export { ShinzohubBlocksPage as default } from '@/pages/blocks';

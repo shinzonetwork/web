@@ -13,6 +13,10 @@ export const APP_PAGES = {
   token: '/token/{param}',
   txs: '/txs',
   tx: '/tx/{param}',
+  generators: '/generators',
+  generator: '/generators/{address}',
+  hosts: '/hosts',
+  host: '/hosts/{address}',
 } as const;
 
 export type AppPage = keyof typeof APP_PAGES;
@@ -26,6 +30,10 @@ type OptionsByPage = {
   tx: { param: string },
   address: { param: string },
   token: { param: string },
+  generators: undefined,
+  generator: { address: string },
+  hosts: undefined,
+  host: { address: string },
 };
 
 export type PageOptions<PAGE extends AppPage> = OptionsByPage[PAGE];

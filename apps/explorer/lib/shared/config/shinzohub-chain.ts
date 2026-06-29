@@ -1,12 +1,13 @@
 import { defineChain, type Chain } from 'viem';
 import { getRpcUrlForChainPathSegment } from '@/shared/utils/consts';
+import { SHINZO_TOKEN } from '../utils/tokens';
 
 export function createShinzoHubChain(): Chain {
     const url = getRpcUrlForChainPathSegment('shinzohub');
     return defineChain({
       id: 91273002,
       name: 'Shinzo',
-      nativeCurrency: { name: 'Shinzo', symbol: 'SHNZ', decimals: 18 },
+      nativeCurrency: SHINZO_TOKEN,
       rpcUrls: {
         default: { http: [url] },
         public: { http: [url] },

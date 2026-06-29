@@ -1,10 +1,10 @@
 "use client";
 
-import { LiveData, LiveDataWithKey } from "@/shared/types";
 import { Pagination, Table } from "@/widget";
 import { LoaderCircle } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useHealthCheck } from "../hook/use-health-check";
+import { useHealthPolling } from "../hook/use-health-polling";
 import { useLoadIndexers } from "../hook/use-load-indexers";
 
 export function IndexerList() {
@@ -19,60 +19,21 @@ export function IndexerList() {
     updateEntriesWithLiveData,
   } = useLoadIndexers();
   const { fetchHealth } = useHealthCheck();
-  const entriesRef = useRef(entries);
 
   useEffect(() => {
     void loadIndexers(page);
   }, [page, loadIndexers]);
 
-  // Keep a ref in sync so the polling tick always uses the latest entries,
-  // without re-creating the interval on every health update.
-  useEffect(() => {
-    entriesRef.current = entries;
-  }, [entries]);
-
-  useEffect(() => {
-    if (entries.length === 0) return;
-
-    let alive = true;
-
-    const tick = async () => {
-      const current = entriesRef.current;
-      const pageEntries = current;
-
-      const checks = pageEntries.map(async (entry) => {
-        return await fetchHealth(entry);
-      });
-
-      const results = await Promise.allSettled<LiveDataWithKey>(checks);
-      if (!alive) return;
-
-      const liveDataByKey = new Map<string, LiveData>();
-      for (const result of results) {
-        if (result.status === "fulfilled") {
-          liveDataByKey.set(result.value.key, result.value.data);
-        }
-      }
-
-      updateEntriesWithLiveData(liveDataByKey);
-    };
-
-    void tick();
-    const intervalId = setInterval(() => {
-      void tick();
-    }, 60_000); // 1 minute
-
-    return () => {
-      alive = false;
-      clearInterval(intervalId);
-    };
-  }, [
-    listRevision,
-    entries.length,
-    page,
+  useHealthPolling({
+    entries,
+    resetKey: [listRevision, page],
+    toHealthEntry: (entry) => ({
+      validatorAddress: entry.validatorAddress,
+      ip: entry.ip,
+    }),
     fetchHealth,
-    updateEntriesWithLiveData,
-  ]);
+    onResults: updateEntriesWithLiveData,
+  });
 
   const totalPages = useMemo(() => {
     if (totalEntries === 0) return 1;

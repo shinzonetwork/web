@@ -1,1 +1,1 @@
-export { BlocksPage as default } from '@/pages/blocks';
+export { EthereumBlocksPage as default } from '@/pages/blocks';

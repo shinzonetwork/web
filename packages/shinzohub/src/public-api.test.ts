@@ -1,15 +1,29 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
-import * as shinzohub from "./index.js";
+import * as shinzohub from "./index";
 
 const expectedRootExports = [
   "countViews",
   "createShinzoHubClient",
   "createView",
+  "findTransactionByEvmHash",
+  "getBlock",
+  "getBlockTimestamp",
   "getCreatedViewAddress",
+  "getHost",
+  "getHostHealth",
+  "getGenerator",
+  "getGeneratorHealth",
+  "getLatestBlock",
+  "getLatestBlockHeight",
+  "getTransaction",
   "getView",
   "hexToShinzoAddress",
   "listViews",
+  "listBlocks",
+  "listHosts",
+  "listGenerators",
+  "listTransactions",
   "normalizeHexAddress",
   "normalizeShinzoAddress",
   "shinzoAddressToHex",
@@ -25,11 +39,11 @@ const expectedRootExports = [
 ] as const;
 
 describe("public API", () => {
-  it("keeps the root export surface intentionally small", () => {
+  it("exports the supported SDK capabilities from the package root", () => {
     expect(Object.keys(shinzohub).sort()).toEqual([...expectedRootExports].sort());
   });
 
-  it("does not expose internal or legacy package subpaths", async () => {
+  it("limits subpath imports to supported feature modules", async () => {
     const packageJson = JSON.parse(
       await readFile(new URL("../package.json", import.meta.url), "utf8"),
     ) as {
@@ -39,8 +53,12 @@ describe("public API", () => {
     expect(Object.keys(packageJson.exports).sort()).toEqual([
       ".",
       "./addresses",
+      "./blocks",
       "./chains",
+      "./hosts",
+      "./generators",
       "./package.json",
+      "./transactions",
       "./views",
     ]);
   });

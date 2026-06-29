@@ -14,3 +14,8 @@ export function parseBlockHashFromPathParam(encoded: string): string | null {
   }
   return decoded.toLowerCase();
 }
+
+export function isValidBlockId(value: string): boolean {
+  const decoded = decodeURIComponent(value);
+  return isBlockHeightParam(decoded) || parseBlockHashFromPathParam(decoded) !== null;
+}

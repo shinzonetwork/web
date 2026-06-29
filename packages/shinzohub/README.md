@@ -2,12 +2,11 @@
 
 Viem-first TypeScript client actions for ShinzoHub.
 
-This package intentionally keeps the public API small:
+See the complete [API reference](./api.md).
 
-- query registered views
-- create a view from a viewbundle
-- convert Shinzo and EVM address formats
-- reuse ShinzoHub Viem chain definitions
+Each query function maps to exactly one ShinzoHub REST or Comet RPC request.
+Applications can compose primitives when they need enrichment or fallback
+behavior.
 
 ## Usage
 
@@ -31,6 +30,16 @@ const views = await publicClient.listViews({
 
 const view = await publicClient.getView({
   address: views.views[0].contractAddress,
+});
+
+const transactions = await publicClient.listTransactions({
+  kind: "all", // "all" | "evm"
+  limit: 20,
+});
+
+const blocks = await publicClient.listBlocks({
+  minHeight: 100,
+  maxHeight: 119,
 });
 ```
 
@@ -85,7 +94,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Export the testnet Viem chain definition as `shinzoHubTestnet`.
 - [x] Export the mainnet Viem chain definition as `shinzoHubMainnet`.
 - [x] Export known chain mappings as `shinzoHubChains`.
-- [x] Keep package subpaths limited to `@shinzo/shinzohub`, `@shinzo/shinzohub/views`, `@shinzo/shinzohub/addresses`, and `@shinzo/shinzohub/chains`.
+- [x] Keep package subpaths limited to the root, views, transactions, blocks, addresses, and chains APIs.
 - [x] Keep `./internal`, URL builders, calldata builders, event selectors, and payload normalizers out of public package exports.
 
 ### ViewRegistry Precompile
@@ -108,6 +117,30 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover `GET /shinzonetwork/view/v1/views/{contract_address}` with `getView`.
 - [x] Cover `include_data` and `include_metadata` in `getView`.
 - [x] Cover `GET /shinzonetwork/view/v1/view_count` with `countViews`.
+
+### Cosmos REST Host Queries
+
+- [x] Cover `GET /shinzonetwork/host/v1/hosts` with `listHosts`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
+- [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
+
+### Cosmos REST Indexer Queries
+
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listIndexers`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listIndexers`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getIndexer`.
+
+### Transactions And Blocks
+
+- [x] List all or EVM transactions with `listTransactions`.
+- [x] Fetch decoded transaction details by Cosmos hash with `getTransaction`.
+- [x] Resolve a Cosmos transaction summary from an EVM hash with `findTransactionByEvmHash`.
+- [x] Preserve decoded Cosmos messages and events for generic clients.
+- [x] List consensus blocks with `listBlocks`.
+- [x] Fetch the latest block with `getLatestBlock`.
+- [x] Fetch the latest block height with `getLatestBlockHeight`.
+- [x] Fetch one block timestamp with `getBlockTimestamp`.
+- [x] Fetch a block by height or hash with `getBlock`.
 
 ### Deployed View Contracts
 

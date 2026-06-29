@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { listViews, type ShinzoHubView } from "@shinzo/shinzohub";
+import {
+  getView,
+  listViews,
+  type ListViewsResult,
+  type ShinzoHubView,
+} from "@shinzo/shinzohub";
 import { createPublicClient, http } from "viem";
 import { STUDIO_VIEW_NAME_PREFIX } from "@/entities/lens";
 import {
@@ -22,7 +27,7 @@ interface FindHubViewByEntityNameOptions {
 
 const HUB_VIEWS_PAGE_LIMIT = 200;
 const STUDIO_HUB_VIEWS_STALE_TIME_MS = 60 * 1000;
-const shinzohubPublicClient = createPublicClient({
+export const shinzohubPublicClient = createPublicClient({
   chain: shinzoDevnet,
   transport: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
 });
@@ -32,7 +37,7 @@ export const STUDIO_HUB_VIEWS_QUERY_KEY = [
   STUDIO_VIEW_NAME_PREFIX,
 ] as const;
 
-const getHubCosmosRestUrl = (): string => {
+export const getHubCosmosRestUrl = (): string => {
   const trimmed = SHINZOHUB_COSMOS_RPC_REQUEST_URL.trim();
 
   if (!trimmed) {
@@ -40,6 +45,49 @@ const getHubCosmosRestUrl = (): string => {
   }
 
   return new URL(trimmed, window.location.origin).toString();
+};
+
+export interface ListHubViewsPageInput {
+  limit?: number;
+  pageKey?: string | null;
+  creator?: string | null;
+  name?: string;
+  includeMetadata?: boolean;
+}
+
+export const fetchHubViewsPage = async (
+  input: ListHubViewsPageInput = {}
+): Promise<ListViewsResult> =>
+  listViews(shinzohubPublicClient, {
+    cosmosRestUrl: getHubCosmosRestUrl(),
+    includeMetadata: input.includeMetadata,
+    limit: input.limit ?? HUB_VIEWS_PAGE_LIMIT,
+    pageKey: input.pageKey ?? undefined,
+    creator: input.creator ?? undefined,
+    name: input.name,
+  });
+
+export const fetchHubViewByAddress = async (
+  address: string,
+  options?: { includeMetadata?: boolean }
+): Promise<ShinzoHubView> =>
+  getView(shinzohubPublicClient, {
+    cosmosRestUrl: getHubCosmosRestUrl(),
+    includeMetadata: options?.includeMetadata,
+    address,
+  });
+
+export const fetchHubViewsByName = async (
+  name: string,
+  options?: { includeMetadata?: boolean; limit?: number }
+): Promise<readonly ShinzoHubView[]> => {
+  const payload = await fetchHubViewsPage({
+    name,
+    includeMetadata: options?.includeMetadata,
+    limit: options?.limit,
+  });
+
+  return payload.views;
 };
 
 const toHubViewRecord = (
@@ -71,11 +119,9 @@ const compareHubViewsByHeightDesc = (
 export const fetchStudioHubViews = async (): Promise<HubViewRecord[]> => {
   const collectedViews: HubViewRecord[] = [];
   let nextKey: string | null = null;
-  const cosmosRestUrl = getHubCosmosRestUrl();
 
   while (true) {
-    const payload = await listViews(shinzohubPublicClient, {
-      cosmosRestUrl,
+    const payload = await fetchHubViewsPage({
       limit: HUB_VIEWS_PAGE_LIMIT,
       pageKey: nextKey ?? undefined,
     });

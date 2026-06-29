@@ -1,91 +1,27 @@
 "use client";
 
-import {
-  ArrowLeft,
-  CircleHelp,
-  ExternalLink,
-  ShieldCheck,
-  ShieldX,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Skeleton } from "@shinzo/ui/skeleton";
-import { cn } from "@shinzo/ui/cn";
-import { Header } from "@/pages/studio/ui/header";
+import { ViewAddressChip, ViewLensBadge } from "@/entities/view";
 import { Button } from "@/shared/ui/button";
+import { Header } from "@/shared/ui/header";
 import { navigateWithAnchorClick } from "@/shared/utils/browser-location";
 import { useViewPage } from "../model/use-view";
-import type {
-  ViewAddressLink,
-  ViewLensStatus,
-  ViewPageRecord,
-} from "../model/types";
+import type { ViewPageRecord } from "../model/types";
 import { ViewPlayground } from "./view-playground";
-
-const AddressChip = ({ link }: { link: ViewAddressLink }) => (
-  <a
-    href={link.href}
-    target="_blank"
-    rel="noreferrer"
-    title={link.address}
-    className={cn(
-      "inline-flex max-w-full items-center gap-1 border border-ui-border bg-ui-bg px-2 py-0.5 align-baseline",
-      "font-mono text-[11px] leading-5 text-szo-black transition-colors",
-      "hover:border-szo-primary hover:text-szo-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-szo-primary/40"
-    )}
-  >
-    <span className="truncate">{link.shortAddress}</span>
-    <ExternalLink className="size-3 shrink-0" aria-hidden="true" />
-  </a>
-);
-
-const getLensLabel = (lens: ViewLensStatus): string => {
-  switch (lens.status) {
-    case "verified":
-      return "Verified";
-    case "not-verified":
-      return "Not verified";
-    case "unknown":
-      return "Unknown";
-  }
-};
-
-const LensStatus = ({ lens }: { lens: ViewLensStatus }) => {
-  const className = cn(
-    "inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 font-sans text-xs font-medium",
-    lens.status === "verified" &&
-      "border-szo-primary/30 bg-ui-bg-accent text-ui-text-accent",
-    lens.status === "not-verified" &&
-      "border-ui-border bg-ui-bg-muted text-ui-text-muted",
-    lens.status === "unknown" && "border-ui-border bg-white text-ui-text-muted"
-  );
-
-  return (
-    <span className={className}>
-      {lens.status === "verified" ? (
-        <ShieldCheck className="size-3.5" aria-hidden="true" />
-      ) : null}
-      {lens.status === "not-verified" ? (
-        <ShieldX className="size-3.5" aria-hidden="true" />
-      ) : null}
-      {lens.status === "unknown" ? (
-        <CircleHelp className="size-3.5" aria-hidden="true" />
-      ) : null}
-      {getLensLabel(lens)}
-    </span>
-  );
-};
 
 const ViewMeta = ({ view }: { view: ViewPageRecord }) => (
   <dl className="grid min-w-0 gap-4 border-y border-ui-border py-5 text-sm md:grid-cols-2 xl:grid-cols-4">
     <div className="min-w-0">
       <dt className="mb-1 text-xs uppercase text-ui-text-muted">Contract</dt>
       <dd>
-        <AddressChip link={view.contract} />
+        <ViewAddressChip link={view.contract} />
       </dd>
     </div>
     <div className="min-w-0">
       <dt className="mb-1 text-xs uppercase text-ui-text-muted">Author</dt>
       <dd>
-        <AddressChip link={view.creator} />
+        <ViewAddressChip link={view.creator} />
       </dd>
     </div>
     <div className="min-w-0">
@@ -218,7 +154,7 @@ const ViewPageContent = ({ view }: { view: ViewPageRecord }) => (
         </div>
 
         <div className="shrink-0">
-          <LensStatus lens={view.lens} />
+          <ViewLensBadge lens={view.lens} showIcon />
         </div>
       </div>
 
