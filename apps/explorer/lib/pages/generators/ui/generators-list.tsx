@@ -8,12 +8,11 @@ import { cn } from "@/shared/utils/utils";
 import { GeneratorWithHealth } from "./generators-page";
 import { formatTime, formatUptime } from "@/shared/health";
 import Link from "next/link";
-import { getPageLink } from "@/shared/utils/links";
 import { Typography } from "@/shared/ui/typography";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
-import { CopyButton } from "@/shared/ui/button";
 import { formatHash } from "@/shared/utils/format-hash";
 import { getHealthUrl } from "@/shared/health/lib/utils";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 
 const tableHeadings = [
   "Generator Public IP",
@@ -49,22 +48,21 @@ export const GeneratorsList = ({
 
             <TableNullableCell value={generator?.address}>
               {(value) => (
-                <Link prefetch={false} href={getPageLink('generator', { address: value, chain: 'shinzohub' })}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center gap-1">
-                        <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
-                        <CopyButton text={value ?? ''} className="text-muted-foreground" />
-                      </div>
-                    </TooltipTrigger>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="inline-flex min-w-0">
+                      <ShinzohubAddressLink address={value} copyable className="font-mono">
+                        {formatHash(value, 12, 8)}
+                      </ShinzohubAddressLink>
+                    </span>
+                  </TooltipTrigger>
 
-                    <TooltipContent>
-                        <Typography variant='xs' color='secondary'>
-                          {value}
-                        </Typography>
-                    </TooltipContent>
-                  </Tooltip>
-                </Link>
+                  <TooltipContent>
+                      <Typography variant='xs' color='secondary'>
+                        {value}
+                      </Typography>
+                  </TooltipContent>
+                </Tooltip>
               )}
             </TableNullableCell>
 

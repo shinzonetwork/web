@@ -6,6 +6,7 @@ import { CheckCircle2, ChevronDown, ChevronUp, XCircle } from 'lucide-react';
 import { formatGwei } from 'viem';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
+import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 import type { ShinzohubTransaction } from '@/shared/shinzohub/types';
 import {
   formatShinzoBaseAmount,
@@ -128,8 +129,26 @@ export function ShinzohubTransactionCard({
       <DataItem title='Type' value={transaction?.kind} loading={loading}>
         {transaction?.kind && <Badge variant='outline'>{transaction.kind === 'evm' ? 'EVM' : 'Cosmos'}</Badge>}
       </DataItem>
-      <DataItem title='From' value={from} copyable loading={loading} />
-      <DataItem title='To' value={to} copyable loading={loading} />
+      <DataItem title='From' value={from} loading={loading}>
+        <ShinzohubAddressLink
+          address={from}
+          copyable
+          fallback='—'
+          className='break-all font-mono'
+        >
+          {from}
+        </ShinzohubAddressLink>
+      </DataItem>
+      <DataItem title='To' value={to} loading={loading}>
+        <ShinzohubAddressLink
+          address={to}
+          copyable
+          fallback='—'
+          className='break-all font-mono'
+        >
+          {to}
+        </ShinzohubAddressLink>
+      </DataItem>
       <DataItem title='Amount' value={amount} loading={loading} />
       <DataItem title='Fee' value={fee} loading={loading} />
       <DataItem

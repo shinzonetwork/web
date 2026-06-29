@@ -10,9 +10,9 @@ import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
 import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';
 import { useHighlight } from '@/pages/home/use-highlight';
-import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 // import { useHomeBlocks } from "../hook/use-home-blocks";
 import { useHomeBlocks } from "../hook/use-home-blocks";
 
@@ -98,10 +98,14 @@ export const BlocksHome = () => {
 
               <TableNullableCell value={block?.miner} align="center" className={highlightClass}>
                 {(value) => (
-                  <div className="flex items-center gap-1 text-sm text-foreground">
+                  <ShinzohubAddressLink
+                    address={value}
+                    copyable
+                    wrapperClassName="text-sm"
+                    className="font-mono"
+                  >
                     {formatHash(value ?? '', 8, 6)}
-                    <CopyButton text={value ?? ''} className="text-muted-foreground" />
-                  </div>
+                  </ShinzohubAddressLink>
                 )}
               </TableNullableCell>
               <TableNullableCell

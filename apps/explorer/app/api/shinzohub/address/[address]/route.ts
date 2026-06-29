@@ -18,8 +18,8 @@ import type {
   ShinzohubAddressDetailsResponse,
   ShinzohubAddressView,
 } from "@/shared/shinzohub/types";
+import { STUDIO_VIEW_BASE_URL } from "@/shared/utils/consts";
 
-const STUDIO_VIEW_BASE_URL = "https://studio.shinzo.network/views";
 const CREATED_VIEWS_LIMIT = 10;
 
 function isNotFound(error: unknown): boolean {

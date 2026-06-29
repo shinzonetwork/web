@@ -12,11 +12,11 @@ import {
   TableLayout,
   TableNullableCell,
 } from '@shinzo/ui/table';
-import { CopyButton } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { useShinzohubBlocks } from "../../hooks/shinzohub/use-shinohub-blocks";
 import { formatProposerAddress } from "@/shared/shinzohub/utils/format-proposer-address";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 export interface ShinzohubBlocksPageClientProps {
   pageParams: PageParams;
 }
@@ -90,12 +90,9 @@ export const ShinzohubBlocksPageClient = ({ pageParams }: ShinzohubBlocksPageCli
 
               <TableNullableCell value={proposer} nowrap>
                 {(value) => (
-                  <Link prefetch={false} href={`${getPageLink('address', { param: value, chain})}`} className='flex items-center gap-4'>
-                    <Typography color='accent' className='underline'>
-                      {formatHash(value, 8, 6)}
-                    </Typography>
-                    <CopyButton text={value} className="text-muted-foreground" />
-                  </Link>
+                  <ShinzohubAddressLink address={value} copyable className='font-mono'>
+                    {formatHash(value, 8, 6)}
+                  </ShinzohubAddressLink>
                 )}
               </TableNullableCell>
 

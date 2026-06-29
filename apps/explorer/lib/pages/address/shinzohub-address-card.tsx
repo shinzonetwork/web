@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 import { getPageLink } from "@/shared/utils/links";
 import { formatShinzoCoin } from "@/shared/utils/format-token";
 import type {
@@ -38,9 +40,12 @@ function ViewLink({ view }: ViewLinkProps) {
         <span className="truncate">{view.name}</span>
         <ExternalLink aria-hidden className="size-3.5 shrink-0" />
       </a>
-      <span className="break-all font-mono text-xs text-muted-foreground">
+      <ShinzohubAddressLink
+        address={view.contractAddress}
+        className="break-all font-mono text-xs"
+      >
         {view.contractAddress}
-      </span>
+      </ShinzohubAddressLink>
       <span className="text-xs text-muted-foreground">
         Height {view.height}
       </span>
@@ -96,15 +101,27 @@ export function ShinzohubAddressCard({
       <DataItem
         title="EVM Address"
         value={details?.hexAddress}
-        copyable
         loading={isLoading}
-      />
+      >
+        <ShinzohubAddressLink
+          address={details?.hexAddress}
+          copyable
+          fallback="—"
+          className="break-all font-mono"
+        />
+      </DataItem>
       <DataItem
         title="Shinzo Address"
         value={details?.shinzoAddress}
-        copyable
         loading={isLoading}
-      />
+      >
+        <ShinzohubAddressLink
+          address={details?.shinzoAddress}
+          copyable
+          fallback="—"
+          className="break-all font-mono"
+        />
+      </DataItem>
       <DataItem
         title="Native Balance"
         value={formatNativeBalance(details?.nativeBalance)}
@@ -127,12 +144,22 @@ export function ShinzohubAddressCard({
       <DataItem
         title="Host"
         value={host?.address}
-        link={host ? getPageLink("host", { address: host.address, chain: "shinzohub" }) : undefined}
         loading={isLoading}
       >
         {host ? (
           <div className="flex min-w-0 flex-col gap-1">
-            <span className="break-all font-mono text-sm">{host.address}</span>
+            <div className="flex min-w-0 items-center gap-3">
+              <ShinzohubAddressLink address={host.address} className="break-all font-mono text-sm">
+                {host.address}
+              </ShinzohubAddressLink>
+              <Link
+                prefetch={false}
+                href={getPageLink("host", { address: host.address, chain: "shinzohub" })}
+                className="shrink-0 cursor-pointer text-xs text-text-accent underline"
+              >
+                Host details
+              </Link>
+            </div>
             <span className="break-all text-xs text-muted-foreground">{host.did}</span>
           </div>
         ) : undefined}
@@ -140,16 +167,22 @@ export function ShinzohubAddressCard({
       <DataItem
         title="Generator"
         value={generator?.address}
-        link={
-          generator
-            ? getPageLink("generator", { address: generator.address, chain: "shinzohub" })
-            : undefined
-        }
         loading={isLoading}
       >
         {generator ? (
           <div className="flex min-w-0 flex-col gap-1">
-            <span className="break-all font-mono text-sm">{generator.address}</span>
+            <div className="flex min-w-0 items-center gap-3">
+              <ShinzohubAddressLink address={generator.address} className="break-all font-mono text-sm">
+                {generator.address}
+              </ShinzohubAddressLink>
+              <Link
+                prefetch={false}
+                href={getPageLink("generator", { address: generator.address, chain: "shinzohub" })}
+                className="shrink-0 cursor-pointer text-xs text-text-accent underline"
+              >
+                Generator details
+              </Link>
+            </div>
             <span className="text-xs text-muted-foreground">
               {generator.sourceChain || "Unknown chain"} / {generator.sourceChainId}
             </span>

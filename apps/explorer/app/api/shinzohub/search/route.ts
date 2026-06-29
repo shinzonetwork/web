@@ -13,8 +13,8 @@ import {
   classifySearchQuery,
   type ExplorerSearchResult,
 } from "@/widgets/search";
+import { STUDIO_VIEW_BASE_URL } from "@/shared/utils/consts";
 
-const STUDIO_VIEW_BASE_URL = "https://studio.shinzo.network/views";
 const VIEW_NAME_SEARCH_LIMIT = 10;
 
 function isNotFound(error: unknown): boolean {

@@ -11,9 +11,9 @@ import { cn } from '@/shared/utils/utils';
 import { HALF_CONTAINER_CLASS } from './blocks-home';
 import { useHomeTransactions } from '../hook/use-home-transactions';
 import { useHighlight } from '@/pages/home/use-highlight';
-import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
+import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 
 function TransactionValue({ value }: { value: string }) {
   const formatted = formatShinzoCoin(value);
@@ -90,19 +90,27 @@ export const TransactionsHome = () => {
                     {from && (
                       <div className="flex flex-row gap-2">
                         <Typography>From: </Typography>
-                        <div className="flex items-center gap-1 text-sm text-foreground">
+                        <ShinzohubAddressLink
+                          address={from}
+                          copyable
+                          wrapperClassName="text-sm"
+                          className="font-mono"
+                        >
                           {formatHash(from, 8, 6)}
-                          <CopyButton text={from} className="text-muted-foreground" />
-                        </div>
+                        </ShinzohubAddressLink>
                       </div>
                     )}
                     {tx?.to && (
                       <div className="flex flex-row gap-2">
                         <Typography>To: </Typography>
-                        <div className="flex items-center gap-1 text-sm text-foreground">
+                        <ShinzohubAddressLink
+                          address={tx.to}
+                          copyable
+                          wrapperClassName="text-sm"
+                          className="font-mono"
+                        >
                           {formatHash(tx.to, 8, 6)}
-                          <CopyButton text={tx.to} className="text-muted-foreground" />
-                        </div>
+                        </ShinzohubAddressLink>
                       </div>
                     )}
                   </div>

@@ -1,8 +1,7 @@
 import { type Hex } from "viem";
 import { PageLayout } from "@/widgets/layout";
-import { Typography } from "@/shared/ui/typography";
 import { formatHash } from "@/shared/utils/format-hash";
-import { CopyButton } from "@/shared/ui/button";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 import { ShinzohubAddressTabs } from "./shinzohub-address-tabs";
 
 export async function ShinzohubAddressDetailPage({
@@ -16,10 +15,14 @@ export async function ShinzohubAddressDetailPage({
     <PageLayout
       info={(
         <div className="flex items-center gap-3">
-          <Typography variant="md" color="accent">
+          <ShinzohubAddressLink
+            address={address}
+            copyable
+            className="font-mono text-base"
+            copyButtonClassName="text-text-accent"
+          >
             {formatHash(address)}
-          </Typography>
-          <CopyButton text={address} className="text-text-accent" />
+          </ShinzohubAddressLink>
         </div>
       )}
       title="Address"

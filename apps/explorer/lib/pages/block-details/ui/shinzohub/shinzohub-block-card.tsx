@@ -8,6 +8,7 @@ import { Button } from "@/shared/ui/button";
 import { getPageLink } from "@/shared/utils/links";
 import { useShinzohubBlock } from "../../hook/shinzohub/use-shinzohub-block";
 import { formatProposerAddress } from "@/shared/shinzohub/utils/format-proposer-address";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 
 export type ShinzohubBlockCardOptions = { id: string }
 
@@ -40,13 +41,15 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
           title="Validator"
           value={proposer}
           loading={isLoading}
-          link={
-            proposer
-              ? `${getPageLink("address", { param: proposer, chain: 'shinzohub' })}`
-              : undefined
-          }
         >
-          {proposer}
+          <ShinzohubAddressLink
+            address={proposer}
+            copyable
+            fallback="—"
+            className="break-all font-mono"
+          >
+            {proposer}
+          </ShinzohubAddressLink>
         </DataItem>
 
         <DataItem
