@@ -10,13 +10,13 @@ type UseRegisteredGeneratorsOptions = {
   refetchIntervalMs?: number;
 };
 
-export async function fetchRegisteredGenerators(params: {
-  page: number;
-  limit: number;
-}): Promise<RegisteredGeneratorsListResponse> {
+export async function fetchRegisteredGenerators({
+  page,
+  limit,
+}: Pick<PageParams, "page" | "limit">): Promise<RegisteredGeneratorsListResponse> {
   const searchParams = new URLSearchParams({
-    page: String(params.page),
-    limit: String(params.limit),
+    page: String(page),
+    limit: String(limit),
   });
   const response = await fetch(
     `/api/shinzohub/generators?${searchParams.toString()}`
@@ -47,7 +47,7 @@ export function useRegisteredGenerators({
     placeholderData: (previousData) => previousData,
     select: (data) => ({
       generators: data.generators,
-      totalGeneratorsCount: Number(data.pagination?.total ?? 0),
+      totalGeneratorsCount: Number(data.pagination.total ?? 0),
     }),
   });
 }

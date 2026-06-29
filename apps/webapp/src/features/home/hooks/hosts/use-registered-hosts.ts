@@ -10,14 +10,13 @@ type UseRegisteredHostsOptions = {
   refetchIntervalMs?: number;
 };
 
-export async function fetchRegisteredHosts(
-  pageParams: PageParams
-): Promise<RegisteredHostsListResponse> {
-  const { page, limit, offset } = pageParams;
+export async function fetchRegisteredHosts({
+  page,
+  limit,
+}: Pick<PageParams, "page" | "limit">): Promise<RegisteredHostsListResponse> {
   const searchParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),
-    offset: String(offset),
   });
   const response = await fetch(
     `/api/shinzohub/hosts?${searchParams.toString()}`
@@ -42,7 +41,7 @@ export function useRegisteredHosts({
 
   return useQuery({
     queryKey: registeredHostsQueryKey(page, limit),
-    queryFn: () => fetchRegisteredHosts(pageParams),
+    queryFn: () => fetchRegisteredHosts({ page, limit }),
     refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
     placeholderData: (previousData) => previousData,
