@@ -7,6 +7,11 @@ import {
   listViews,
 } from "./views/index";
 import {
+  getAccount,
+  getAccountBalance,
+  getEvmAccount,
+} from "./accounts/index";
+import {
   findTransactionByEvmHash,
   getTransaction,
   listTransactions,
@@ -29,6 +34,19 @@ import {
   getGeneratorHealth,
 } from "./generators/index";
 
+export {
+  getAccount,
+  getAccountBalance,
+  getEvmAccount,
+} from "./accounts/index";
+export type {
+  GetAccountBalanceParameters,
+  GetAccountParameters,
+  GetEvmAccountParameters,
+  ShinzoHubAccount,
+  ShinzoHubAccountBalance,
+  ShinzoHubEvmAccount,
+} from "./accounts/index";
 export {
   hexToShinzoAddress,
   normalizeHexAddress,
@@ -132,6 +150,15 @@ export type {
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
   return {
+    /** Fetches one Cosmos auth account. */
+    getAccount: (parameters: Parameters<typeof getAccount>[1]) =>
+      getAccount(client, parameters),
+    /** Fetches one native bank balance by denom. */
+    getAccountBalance: (parameters: Parameters<typeof getAccountBalance>[1]) =>
+      getAccountBalance(client, parameters),
+    /** Fetches one EVM account view. */
+    getEvmAccount: (parameters: Parameters<typeof getEvmAccount>[1]) =>
+      getEvmAccount(client, parameters),
     /** Counts registered ShinzoHub views. */
     countViews: (parameters?: Parameters<typeof countViews>[1]) => countViews(client, parameters),
     /** Creates a ShinzoHub view from raw viewbundle bytes. */
