@@ -34,7 +34,6 @@ export function serializeGeneratorsList(
       serializeGenerator(generator)
     ),
     pagination: {
-      next_key: result.pagination.nextKey ?? "",
       total: result.pagination.total ?? 0,
     },
   };

@@ -8,7 +8,7 @@ import { SHINZO_CHAIN_ID } from "../lib/constants/chains";
 export const shinzoHub: Chain = defineChain({
   id: SHINZO_CHAIN_ID,
   name: "Shinzo",
-  nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
+  nativeCurrency: { name: "Shinzo", symbol: "SHNZ", decimals: 18 },
   rpcUrls: {
     default: {
       http: [getRpcUrl()],

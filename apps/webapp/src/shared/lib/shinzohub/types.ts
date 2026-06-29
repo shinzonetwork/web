@@ -5,6 +5,7 @@ import type {
   GeneratorHealthData as ShinzoHubGeneratorHealthData,
   GeneratorHealthP2P as ShinzoHubGeneratorHealthP2P,
   GeneratorHealthPeer as ShinzoHubGeneratorHealthPeer,
+  GeneratorAssertion as ShinzoHubGeneratorAssertion,
   ListHostsResult,
   ListGeneratorsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
@@ -27,7 +28,6 @@ export type RegisteredHostsListResponse = JsonSerialized<
   Omit<ListHostsResult, "pagination">
 > & {
   pagination: {
-    next_key: string | null;
     total: number;
   };
 };
@@ -41,7 +41,6 @@ export type RegisteredGeneratorsListResponse = JsonSerialized<
   Omit<ListGeneratorsResult, "pagination">
 > & {
   pagination: {
-    next_key: string | null;
     total: number;
   };
 };
@@ -55,3 +54,9 @@ export type HostHealthPeer = JsonSerialized<ShinzoHubHostHealthPeer>;
 export type GeneratorHealthData = JsonSerialized<ShinzoHubGeneratorHealthData>;
 export type GeneratorHealthP2P = JsonSerialized<ShinzoHubGeneratorHealthP2P>;
 export type GeneratorHealthPeer = JsonSerialized<ShinzoHubGeneratorHealthPeer>;
+
+export type GeneratorAssertion = JsonSerialized<ShinzoHubGeneratorAssertion>;
+
+export type GeneratorAssertionsResponse = {
+  assertions: GeneratorAssertion[];
+};

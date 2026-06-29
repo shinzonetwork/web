@@ -29,7 +29,6 @@ export function serializeHostsList(
   return {
     hosts: result.hosts.map((host) => serializeHost(host)),
     pagination: {
-      next_key: result.pagination.nextKey,
       total: result.pagination.total ?? 0,
     },
   };
