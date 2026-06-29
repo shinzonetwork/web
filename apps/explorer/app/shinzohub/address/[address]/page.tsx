@@ -1,1 +1,1 @@
-export { AddressDetailPage as default } from "@/pages/address";
+export { ShinzohubAddressDetailPage as default } from "@/pages/address";
