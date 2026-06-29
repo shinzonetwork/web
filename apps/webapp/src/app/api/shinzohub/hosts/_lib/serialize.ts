@@ -5,7 +5,7 @@ import type {
   HostHealthData,
   HostHealthP2P,
   HostHealthPeer,
-} from "@/shared/shinzohub/types";
+} from "@/shared/lib";
 import type {
   ListHostsResult,
   RegisteredHost as ShinzoHubRegisteredHost,

@@ -5,7 +5,7 @@ import {
   createHealthEntryKey,
   type HealthEntryKeyParams,
   type LiveDataWithKey,
-} from "../../lib/health";
+} from "../../../../shared/lib/shinzohub/health";
 import { GeneratorHealthData } from "@/shared/lib";
 
 const UNHEALTHY_LIVE_DATA: GeneratorHealthData = {

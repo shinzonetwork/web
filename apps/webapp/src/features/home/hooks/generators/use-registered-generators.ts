@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { RegisteredGeneratorsListResponse } from "@/shared/lib";
 import { type PageParams } from "@shinzo/ui/pagination";
-import { DEFAULT_PAGE_PARAMS } from "../../lib/health";
+import { DEFAULT_PAGE_PARAMS } from "../../../../shared/lib/shinzohub/health";
 
 type UseRegisteredGeneratorsOptions = {
   pageParams: PageParams;

@@ -7,7 +7,7 @@ import { Hex, hexToBytes } from "viem";
 import { useAccount } from "wagmi";
 
 const registeredHostsApiEndpoint =
-  process.env.NEXT_PUBLIC_REGISTERED_HOSTS_API_ENDPOINT ||
+  process.env.NEXT_PUBLIC_INDEXER_ASSERTION_API_ENDPOINT ||
   "http://rpc.develop.devnet.shinzo.network:1317/shinzonetwork/indexer/v1/assertions/";
 
 type IndexerAssertion = {

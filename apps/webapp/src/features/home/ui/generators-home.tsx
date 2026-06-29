@@ -17,7 +17,7 @@ import {
 import { HealthStatus } from "@/shared/types";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
-import { createHealthEntryKey, PAGE_SIZE } from "../lib/health";
+import { createHealthEntryKey, PAGE_SIZE } from "../../../shared/lib/shinzohub/health";
 import { useGeneratorHealthPolling } from "../hooks/generators/use-generator-health-polling";
 
 export type GeneratorWithHealth = RegisteredGenerator &

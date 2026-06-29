@@ -5,7 +5,7 @@ import type {
   GeneratorHealthData,
   GeneratorHealthP2P,
   GeneratorHealthPeer,
-} from "@/shared/shinzohub/types";
+} from "@/shared/lib";
 import type {
   ListGeneratorsResult,
   RegisteredGenerator as ShinzoHubRegisteredGenerator,
