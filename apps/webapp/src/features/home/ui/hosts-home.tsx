@@ -76,6 +76,10 @@ function HostsHomeContent() {
     router.push("/host-registration");
   };
 
+  const showPagination =
+    registeredHosts?.totalHostsCount &&
+    registeredHosts?.totalHostsCount > PAGE_SIZE;
+
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -183,14 +187,16 @@ function HostsHomeContent() {
             </>
           )}
         />
-        <div className="pr-6">
-          <Pagination
-            page={page}
-            totalItems={registeredHosts?.totalHostsCount ?? 0}
-            itemsPerPage={PAGE_SIZE}
-            pageParam={HOSTS_PAGE_PARAM}
-          />
-        </div>
+        {showPagination && (
+          <div className="pr-6">
+            <Pagination
+              page={page}
+              totalItems={registeredHosts?.totalHostsCount ?? 0}
+              itemsPerPage={PAGE_SIZE}
+              pageParam={HOSTS_PAGE_PARAM}
+            />
+          </div>
+        )}
       </div>
     </section>
   );

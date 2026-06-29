@@ -82,6 +82,10 @@ function GeneratorHomeContent() {
     router.push("/generator-registration");
   };
 
+  const showPagination =
+    registeredGenerators?.totalGeneratorsCount &&
+    registeredGenerators?.totalGeneratorsCount > PAGE_SIZE;
+
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -200,14 +204,16 @@ function GeneratorHomeContent() {
             </>
           )}
         />
-        <div className="pr-6">
-          <Pagination
-            page={page}
-            totalItems={registeredGenerators?.totalGeneratorsCount ?? 0}
-            itemsPerPage={PAGE_SIZE}
-            pageParam={GENERATORS_PAGE_PARAM}
-          />
-        </div>
+        {showPagination && (
+          <div className="pr-6">
+            <Pagination
+              page={page}
+              totalItems={registeredGenerators?.totalGeneratorsCount ?? 0}
+              itemsPerPage={PAGE_SIZE}
+              pageParam={GENERATORS_PAGE_PARAM}
+            />
+          </div>
+        )}
       </div>
     </section>
   );
