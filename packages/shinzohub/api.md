@@ -46,20 +46,20 @@ serialization, for example with `String(value)`.
 Every query function performs exactly one REST or Comet RPC request. Compose
 multiple functions in application code when you need fallback or enrichment.
 
-## Hosts And Indexers
+## Hosts And Generators
 
-Import `getHost` from `@shinzo/shinzohub/hosts` and `getIndexer` from
-`@shinzo/shinzohub/indexers`, or import either action from the package root.
-Both actions accept a Shinzo bech32 address or a 20-byte EVM hex address and
-perform one Cosmos REST request.
+Import host helpers from `@shinzo/shinzohub/hosts` and generator helpers from
+`@shinzo/shinzohub/generators`, or import the same actions from the package
+root. Detail actions accept a Shinzo bech32 address and perform one Cosmos REST
+request.
 
 ```ts
-const host = await getHost(client, { address: "0x1234..." });
-const indexer = await getIndexer(client, { address: "shinzo1..." });
+const host = await getHost(client, { address: "shinzo1..." });
+const generator = await getGenerator(client, { address: "shinzo1..." });
 ```
 
 `getHost` returns the canonical account address, DID, connection string, and
-GraphQL endpoint. `getIndexer` returns the canonical account address, DID,
+GraphQL endpoint. `getGenerator` returns the canonical account address, DID,
 connection string, source chain, and source-chain ID.
 
 ## Clients
@@ -87,7 +87,11 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `getShinzoHubBlockTimestamp`: extended-client name for
     `getBlockTimestamp`.
   - `getHost`
-  - `getIndexer`
+  - `listHosts`
+  - `getHostHealth`
+  - `getGenerator`
+  - `listGenerators`
+  - `getGeneratorHealth`
 
 Example result:
 
@@ -237,6 +241,215 @@ Example response:
 
 Throws when the receipt has no decodable `ViewCreated` event from the
 ViewRegistry.
+
+## Hosts
+
+Import from `@shinzo/shinzohub/hosts` or the package root.
+
+### `listHosts`
+
+Lists registered hosts with Cosmos REST cursor pagination.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters` optional
+    - `limit`: page size as `number | bigint | string`.
+    - `offset`: numeric pagination offset as `number | bigint | string`.
+    - `pageKey`: opaque `pagination.nextKey` from the previous response.
+    - `countTotal`: request the total count.
+    - `reverse`: request reverse registration order.
+    - `cosmosRestUrl`: Cosmos REST endpoint override, e.g.
+      `http://rpc.develop.devnet.shinzo.network:1317`.
+
+Example response:
+
+```ts
+{
+  hosts: [{
+    address: "shinzo10vc55fnvu6ajrv53znvecrwg0tm07cphdvpccc",
+    did: "did:key:zQ3shND2BaSKQLTBTPrvGa5i3EdVnnAFzfJ8oLXa9aG8zWY1B",
+    connectionString:
+      "/ip4/35.254.135.221/tcp/9171/p2p/12D3KooWEz59tCjcDaUw4tsMhyyKXiBDcV2hwKQ6DYwpXJXVNqsB",
+    endpointAddress: undefined,
+  }],
+  pagination: {
+    nextKey: null,
+    total: 6n,
+  },
+}
+```
+
+### `getHost`
+
+Fetches one registered host by Shinzo bech32 address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `address` required: Shinzo bech32 host address.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  address: "shinzo10vc55fnvu6ajrv53znvecrwg0tm07cphdvpccc",
+  did: "did:key:zQ3shND2BaSKQLTBTPrvGa5i3EdVnnAFzfJ8oLXa9aG8zWY1B",
+  connectionString:
+    "/ip4/35.254.135.221/tcp/9171/p2p/12D3KooWEz59tCjcDaUw4tsMhyyKXiBDcV2hwKQ6DYwpXJXVNqsB",
+  endpointAddress: undefined,
+}
+```
+
+### `getHostHealth`
+
+Fetches health information of the host based on ipv4 ip address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `ip` required: IPV4 ip address.
+    - `timeoutms`: timeout for teh fetch in milliseconds.
+
+Example response:
+
+```ts
+{
+    status: "healthy",
+    timestamp: "2026-06-25T14:35:42.854425-04:00",
+    current_block: 25396467,
+    last_processed: "2026-06-25T14:35:42.284792-04:00",
+    defradb_connected: true,
+    uptime: "3h12m28.552343375s",
+    uptime_seconds: 11548.552343375,
+    p2p: {
+        enabled: true,
+        self: {
+            id: "12D3KooWJCMwQtB3A3L2orbVTHhY3kifo62VRKavL9Wuk1AdhNNc",
+            addresses: [
+                "/ip4/127.0.0.1/tcp/9171",
+                "/ip4/192.168.2.72/tcp/9171"
+            ]
+        },
+        peers: [
+            {
+                id: "12D3KooWDYXkjdncFL3X1SaaYBpFi4XfWskbXv4y5gYdTvmGm3bo",
+                addresses: [
+                    "/ip4/35.208.241.78/tcp/9171"
+                ]
+            },
+        ]
+    }
+}
+```
+
+## Generators
+
+Import from `@shinzo/shinzohub/Generators` or the package root.
+
+### `listGenerators`
+
+Lists registered generators with Cosmos REST cursor pagination.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters` optional
+    - `limit`: page size as `number | bigint | string`.
+    - `offset`: numeric pagination offset as `number | bigint | string`.
+    - `pageKey`: opaque `pagination.nextKey` from the previous response.
+    - `countTotal`: request the total count.
+    - `reverse`: request reverse registration order.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  generators: [{
+    address: "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg",
+    did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
+    connectionString:
+      "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
+    sourceChain: "ethereum",
+    sourceChainId: "1",
+  }],
+  pagination: {
+    nextKey: null,
+    total: 1,
+  },
+}
+```
+
+### `getGenerator`
+
+Fetches one registered generator by Shinzo bech32 address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `address` required: Shinzo bech32 generator address.
+    - `cosmosRestUrl`: Cosmos REST endpoint override.
+
+Example response:
+
+```ts
+{
+  address: "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg",
+  did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
+  connectionString:
+    "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
+  sourceChain: "ethereum",
+  sourceChainId: "1",
+}
+```
+
+### `getGeneratorHealth`
+
+Fetches health information of the generator based on ipv4 ip address.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cosmosRest`, unless
+    `cosmosRestUrl` is supplied.
+  - `parameters`
+    - `ip` required: IPV4 ip address.
+    - `timeoutms`: timeout for teh fetch in milliseconds.
+
+Example response:
+
+```ts
+{
+    status: "healthy",
+    timestamp: "2026-06-25T14:35:42.854425-04:00",
+    current_block: 25396467,
+    last_processed: "2026-06-25T14:35:42.284792-04:00",
+    defradb_connected: true,
+    uptime: "3h12m28.552343375s",
+    uptime_seconds: 11548.552343375,
+    p2p: {
+        enabled: true,
+        self: {
+            id: "12D3KooWJCMwQtB3A3L2orbVTHhY3kifo62VRKavL9Wuk1AdhNNc",
+            addresses: [
+                "/ip4/127.0.0.1/tcp/9171",
+                "/ip4/192.168.2.72/tcp/9171"
+            ]
+        },
+        peers: [
+            {
+                id: "12D3KooWDYXkjdncFL3X1SaaYBpFi4XfWskbXv4y5gYdTvmGm3bo",
+                addresses: [
+                    "/ip4/35.208.241.78/tcp/9171"
+                ]
+            },
+        ]
+    }
+}
+```
 
 ## Transactions
 

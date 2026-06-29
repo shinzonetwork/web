@@ -78,8 +78,8 @@ function SearchEntityChips() {
         {", "}
         <DocsLink href={SEARCH_DOCUMENTATION_LINKS.hosts}>Hosts</DocsLink>
         {", and "}
-        <DocsLink href={SEARCH_DOCUMENTATION_LINKS.indexers}>
-          Indexers
+        <DocsLink href={SEARCH_DOCUMENTATION_LINKS.generators}>
+          Generators
         </DocsLink>{" "}
         are exact address matches.
       </p>

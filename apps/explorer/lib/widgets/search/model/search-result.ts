@@ -10,8 +10,8 @@ export function getExplorerSearchResultKey(
       return `view-${result.address}`;
     case "host":
       return `host-${result.address}`;
-    case "indexer":
-      return `indexer-${result.address}`;
+    case "generator":
+      return `generator-${result.address}`;
     case "transaction":
       return `transaction-${result.cosmosHash}`;
     case "block":
@@ -46,7 +46,7 @@ export function isExplorerSearchResult(
     case "host":
       return hasStringProperty(candidate, "address") &&
         hasStringProperty(candidate, "did");
-    case "indexer":
+    case "generator":
       return hasStringProperty(candidate, "address") &&
         hasStringProperty(candidate, "did") &&
         hasStringProperty(candidate, "sourceChain") &&

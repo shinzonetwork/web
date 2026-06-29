@@ -2,8 +2,8 @@ import { NextRequest } from "next/server";
 import {
   findTransactionByEvmHash,
   getBlock,
+  getGenerator,
   getHost,
-  getIndexer,
   getTransaction,
   getView,
   listViews,
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     let results: ExplorerSearchResult[] = [];
 
     if (query.kind === "address") {
-      const [view, host, indexer] = await Promise.all([
+      const [view, host, generator] = await Promise.all([
         optionalLookup(() => getView(client, {
           address: query.hexAddress,
           cosmosRestUrl,
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
           address: query.shinzoAddress,
           cosmosRestUrl,
         })),
-        optionalLookup(() => getIndexer(client, {
+        optionalLookup(() => getGenerator(client, {
           address: query.shinzoAddress,
           cosmosRestUrl,
         })),
@@ -85,13 +85,13 @@ export async function GET(request: NextRequest) {
       if (host) {
         results.push({ kind: "host", address: host.address, did: host.did });
       }
-      if (indexer) {
+      if (generator) {
         results.push({
-          kind: "indexer",
-          address: indexer.address,
-          did: indexer.did,
-          sourceChain: indexer.sourceChain,
-          sourceChainId: indexer.sourceChainId.toString(),
+          kind: "generator",
+          address: generator.address,
+          did: generator.did,
+          sourceChain: generator.sourceChain,
+          sourceChainId: generator.sourceChainId.toString(),
         });
       }
       if (results.length === 0) {

@@ -52,10 +52,10 @@ function getResultPresentation(
         title: "Host",
         description: `${result.address} · ${formatHash(result.did, 14, 6)}`,
       };
-    case "indexer":
+    case "generator":
       return {
         Icon: Database,
-        title: "Indexer",
+        title: "Generator",
         description: `${result.address} · ${
           result.sourceChain || "Unknown chain"
         }`,
@@ -85,8 +85,8 @@ export function getInternalResultHref(result: InternalSearchResult): string {
   switch (result.kind) {
     case "host":
       return getPageLink("host", { address: result.address, chain });
-    case "indexer":
-      return getPageLink("indexer", { address: result.address, chain });
+    case "generator":
+      return getPageLink("generator", { address: result.address, chain });
     case "transaction":
       return getPageLink("tx", { param: result.cosmosHash, chain });
     case "block":

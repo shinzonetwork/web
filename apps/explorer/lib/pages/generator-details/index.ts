@@ -1,0 +1,1 @@
+export { GeneratorDetailClientPage as GeneratorDetailPage } from './ui/generator-page';

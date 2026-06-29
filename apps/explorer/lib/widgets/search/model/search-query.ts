@@ -49,7 +49,7 @@ export type ExplorerSearchResult =
       did: string;
     }
   | {
-      kind: "indexer";
+      kind: "generator";
       address: string;
       did: string;
       sourceChain: string;

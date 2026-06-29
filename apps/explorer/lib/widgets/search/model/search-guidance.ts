@@ -1,7 +1,7 @@
 export const SEARCH_DOCUMENTATION_LINKS = {
   views: "https://docs.shinzo.network/views",
   hosts: "https://docs.shinzo.network/hosts",
-  indexers: "https://docs.shinzo.network/indexers",
+  generators: "https://docs.shinzo.network/generators",
 } as const;
 
 export const SUPPORTED_SEARCH_ENTITIES = [
@@ -33,10 +33,10 @@ export const SUPPORTED_SEARCH_ENTITIES = [
     description: "Registered Host wallet addresses resolve to Host detail pages.",
   },
   {
-    docsHref: SEARCH_DOCUMENTATION_LINKS.indexers,
-    id: "indexer",
-    label: "Indexer",
-    description: "Registered Indexer wallet addresses resolve to Indexer detail pages.",
+    docsHref: SEARCH_DOCUMENTATION_LINKS.generators,
+    id: "generator",
+    label: "Generator",
+    description: "Registered Generator wallet addresses resolve to Generator detail pages.",
   },
 ] as const;
 

@@ -56,7 +56,7 @@ export function getNoResultsSearchState(
     case "address":
       return {
         title: "No address match found",
-        description: "Explorer could not resolve this address to a View, Host, Indexer, or generic account page.",
+        description: "Explorer could not resolve this address to a View, Host, Generator, or generic account page.",
       };
     case "block-height":
       return {

@@ -1,0 +1,118 @@
+"use client";
+
+import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
+import { DEFAULT_LIMIT } from "@shinzo/ui/pagination";
+import { Badge } from "@/shared/ui/badge";
+import { LoaderCircle } from "lucide-react";
+import { cn } from "@/shared/utils/utils";
+import { HostWithHealth } from "./hosts-page";
+import Link from "next/link";
+import { getPageLink } from "@/shared/utils/links";
+import { Typography } from "@/shared/ui/typography";
+import { formatUptime, formatTime } from "@/shared/health";
+import { CopyButton } from "@/shared/ui/button";
+import { formatHash } from "@/shared/utils/format-hash";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import { getHealthUrl } from "@/shared/health/lib/utils";
+
+const tableHeadings = [
+  "Host Public IP",
+  "Address",
+  "Status",
+  "Uptime",
+  "Current Block",
+  "Last Updated",
+];
+
+export const HostsList = ({
+  hosts,
+  hostLoading,
+}: {
+  hosts: HostWithHealth[];
+  hostLoading: boolean;
+}) => {
+
+  return (
+    <section className="w-full min-w-0 max-w-full">
+      <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
+      <TableLayout
+        isLoading={hostLoading}
+        loadingRowCount={DEFAULT_LIMIT}
+        notFound="No Hosts are registered yet."
+        headings={hosts.length > 0 ? tableHeadings : [""]}
+        gridClass="grid-cols[repeat(5,1fr)]"
+        iterable={hosts ?? []}
+        rowRenderer={(host) => (
+          <>
+            <TableNullableCell value={host?.address}>
+              {(value) => (
+                <Link prefetch={false} href={getPageLink('host', { address: value, chain: 'shinzohub' })}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
+                        <CopyButton text={value ?? ''} className="text-muted-foreground" />
+                      </div>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                        <Typography variant='xs' color='secondary'>
+                          {value}
+                        </Typography>
+                    </TooltipContent>
+                  </Tooltip>
+                </Link>
+              )}
+            </TableNullableCell>
+
+            <TableNullableCell value={host?.ip}>
+              {(value) => (
+              <Link prefetch={false} target="_blank" href={getHealthUrl(value)}>
+                <Typography color='accent' className='underline'>
+                  {value}
+                </Typography>
+              </Link>
+              )}
+            </TableNullableCell>
+
+            <TableNullableCell value={host?.status} nowrap>
+              {(value) => (
+                <>
+                  {value !== "unknown" && (
+                    <Badge
+                      variant={"default"}
+                      className={cn(
+                        "rounded-md capitalize",
+                        value === "healthy" ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-500"
+                      )}
+                    >
+                      {value === "healthy" ? "Online" : "Offline"}
+                    </Badge>
+                  )}
+                  {value === "unknown" && (
+                    <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
+                  )}
+                </>
+              )}
+            </TableNullableCell>
+              <TableNullableCell value={host?.uptime_seconds}>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value ? formatUptime(value) : '—'}</span>
+                )}
+              </TableNullableCell>
+              <TableNullableCell value={host?.current_block}>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value !== 0 ? value : '—'}</span>
+                )}
+              </TableNullableCell>
+              <TableNullableCell value={host?.last_processed}>
+                {(value) => (
+                  <span className="text-sm text-foreground">{value ? formatTime(value) : '—'}</span>
+                )}
+              </TableNullableCell>
+          </>)}
+        />
+      </div>
+    </section>
+  );
+}

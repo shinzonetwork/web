@@ -118,6 +118,18 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover `include_data` and `include_metadata` in `getView`.
 - [x] Cover `GET /shinzonetwork/view/v1/view_count` with `countViews`.
 
+### Cosmos REST Host Queries
+
+- [x] Cover `GET /shinzonetwork/host/v1/hosts` with `listHosts`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
+- [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
+
+### Cosmos REST Generator Queries
+
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listGenerators`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listGenerators`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getGenerator`.
+
 ### Transactions And Blocks
 
 - [x] List all or EVM transactions with `listTransactions`.
@@ -176,19 +188,19 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Fetch one registered host by account address with `getHost`.
 - [ ] Cover paginated Cosmos REST host listings.
 
-### IndexerRegistry Precompile
+### GeneratorRegistry Precompile
 
-- [ ] Cover the IndexerRegistry precompile address.
-- [ ] Cover the IndexerRegistry ABI.
+- [ ] Cover the GeneratorRegistry precompile address.
+- [ ] Cover the GeneratorRegistry ABI.
 - [ ] Cover `register(bytes,bytes,bytes,string,string,uint64)`.
 - [ ] Cover `isRegistered(address)`.
 - [ ] Cover `getDid(address)`.
 - [ ] Cover `getConnectionString(address)`.
 - [ ] Cover `getSourceChain(address)`.
 - [ ] Cover `Registered(address,bytes,string,string,uint64)`.
-- [x] Fetch one registered indexer by account address with `getIndexer`.
-- [ ] Cover paginated Cosmos REST indexer listings.
-- [ ] Cover indexer assertion transaction helpers when the workflow is designed.
+- [x] Fetch one registered generator by account address with `getGenerator`.
+- [ ] Cover paginated Cosmos REST generator listings.
+- [ ] Cover generator assertion transaction helpers when the workflow is designed.
 
 ### SourceHub And Admin Workflows
 
