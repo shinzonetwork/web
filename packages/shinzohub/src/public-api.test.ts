@@ -7,9 +7,12 @@ const expectedRootExports = [
   "createShinzoHubClient",
   "createView",
   "findTransactionByEvmHash",
+  "getAccount",
+  "getAccountBalance",
   "getBlock",
   "getBlockTimestamp",
   "getCreatedViewAddress",
+  "getEvmAccount",
   "getHost",
   "getHostHealth",
   "getGenerator",
@@ -19,6 +22,7 @@ const expectedRootExports = [
   "getTransaction",
   "getView",
   "hexToShinzoAddress",
+  "isShinzoAddress",
   "listViews",
   "listBlocks",
   "listHosts",
@@ -52,6 +56,7 @@ describe("public API", () => {
 
     expect(Object.keys(packageJson.exports).sort()).toEqual([
       ".",
+      "./accounts",
       "./addresses",
       "./blocks",
       "./chains",

@@ -6,6 +6,7 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
+    "./accounts": "./src/accounts/index.ts",
     "./addresses": "./src/addresses/index.ts",
     "./chains": "./src/chains/index.ts",
     "./blocks": "./src/blocks/index.ts",

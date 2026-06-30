@@ -1,3 +1,4 @@
+import { isShinzoAddress } from "@shinzo/shinzohub";
 import type { ExplorerSearchQuery } from "./search-query";
 
 interface SearchEmptyState {
@@ -22,7 +23,7 @@ export function getIncompleteSearchState(
     ? "That search is incomplete"
     : "Keep typing…";
 
-  if (/^shinzo1/i.test(value)) {
+  if (isShinzoAddress(value)) {
     return {
       title,
       description: "This looks like a Shinzo address, but it is incomplete or it has an invalid checksum.",

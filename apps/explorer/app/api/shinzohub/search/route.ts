@@ -9,30 +9,14 @@ import {
   listViews,
 } from "@shinzo/shinzohub";
 import { getShinzohubQueryContext } from "@/shared/shinzohub/query-context";
+import { optionalLookup } from "@/shared/shinzohub/utils/optional-lookup";
 import {
   classifySearchQuery,
   type ExplorerSearchResult,
 } from "@/widgets/search";
+import { STUDIO_VIEW_BASE_URL } from "@/shared/utils/consts";
 
-const STUDIO_VIEW_BASE_URL = "https://studio.shinzo.network/views";
 const VIEW_NAME_SEARCH_LIMIT = 10;
-
-function isNotFound(error: unknown): boolean {
-  if (!error || typeof error !== "object") return false;
-  const candidate = error as { status?: number; code?: number; message?: string };
-  return candidate.status === 404 ||
-    candidate.code === 5 ||
-    /not found|unknown transaction/i.test(candidate.message ?? "");
-}
-
-async function optionalLookup<T>(lookup: () => Promise<T>): Promise<T | null> {
-  try {
-    return await lookup();
-  } catch (error) {
-    if (isNotFound(error)) return null;
-    throw error;
-  }
-}
 
 function toViewSearchResult(view: {
   contractAddress: string;

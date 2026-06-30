@@ -38,6 +38,18 @@ function isHexAddress(value: string): boolean {
   return isHexLike(value.trim(), SHINZO_ADDRESS_BYTE_LENGTH);
 }
 
+/**
+ * Returns whether a value uses the Shinzo bech32 account address prefix.
+ *
+ * This is useful as a cheap boundary guard before converting Shinzo-native
+ * addresses to EVM hex addresses. Use `normalizeShinzoAddress` or
+ * `shinzoAddressToHex` when you need full checksum and length validation.
+ */
+export function isShinzoAddress(value: string, options: ShinzoAddressOptions = {}): boolean {
+  const prefix = options.prefix ?? SHINZO_BECH32_PREFIX;
+  return value.trim().toLowerCase().startsWith(`${prefix.toLowerCase()}1`);
+}
+
 function validateShinzoAddress(
   value: string,
   options: ShinzoAddressOptions = {},

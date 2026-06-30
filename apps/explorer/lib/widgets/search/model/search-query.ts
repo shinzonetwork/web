@@ -1,4 +1,5 @@
 import {
+  isShinzoAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
 } from "@shinzo/shinzohub";
@@ -75,7 +76,6 @@ export interface ExplorerSearchResponse {
 type QueryClassifier = (value: string) => ExplorerSearchQuery | null;
 
 const HEX_ADDRESS_RE = /^(?:0[xX])?[0-9a-fA-F]{40}$/;
-const SHINZO_ADDRESS_RE = /^shinzo1/i;
 const HASH_RE = /^(?:0[xX])?([0-9a-fA-F]{64})$/;
 const BLOCK_HEIGHT_RE = /^\d+$/;
 const VIEW_NAME_RE = /^[A-Za-z][A-Za-z0-9_.-]{2,}$/;
@@ -87,7 +87,7 @@ const VIEW_NAME_RE = /^[A-Za-z][A-Za-z0-9_.-]{2,}$/;
  */
 function classifyAddress(value: string): ExplorerSearchQuery | null {
   const looksLikeAddress = HEX_ADDRESS_RE.test(value) ||
-    SHINZO_ADDRESS_RE.test(value);
+    isShinzoAddress(value);
   if (!looksLikeAddress) return null;
 
   try {
@@ -148,7 +148,7 @@ function classifyBlockHeight(value: string): ExplorerSearchQuery | null {
  * lower-cased while the submitted value preserves what the user typed.
  */
 function classifyViewName(value: string): ExplorerSearchQuery | null {
-  if (SHINZO_ADDRESS_RE.test(value)) return null;
+  if (isShinzoAddress(value)) return null;
   if (!VIEW_NAME_RE.test(value)) return null;
 
   const normalizedName = value.toLowerCase();
