@@ -4,6 +4,7 @@ import {
   type ShinzoHubQueryClient,
 } from "../internal/endpoints";
 import {
+  assertAddressFilter,
   positiveInteger,
   searchTransactions,
   toTransactionSummary,
@@ -27,11 +28,14 @@ export async function listTransactions(
   );
   const order = parameters.order ?? "desc";
   const kind = parameters.kind ?? "all";
-  const baseQuery = transactionQuery(parameters.blockHeight);
-  const query =
-    kind === "evm"
-      ? `${baseQuery} AND ethereum_tx.ethereumTxHash EXISTS`
-      : baseQuery;
+  const clauses = [transactionQuery(parameters.blockHeight)];
+  if (kind === "evm") {
+    clauses.push("ethereum_tx.ethereumTxHash EXISTS");
+  }
+  if (parameters.address !== undefined) {
+    clauses.push(`shinzo.address = '${assertAddressFilter(parameters.address)}'`);
+  }
+  const query = clauses.join(" AND ");
   const cometRpcUrl = getRpcEndpoint(
     client,
     "cometRpc",

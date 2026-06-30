@@ -76,6 +76,12 @@ export interface ListTransactionsParameters {
   order?: ShinzoHubTransactionOrder;
   kind?: ShinzoHubTransactionFilter;
   blockHeight?: number | bigint | string;
+  /**
+   * Restrict the feed to transactions that touch this address as a sender or a
+   * recipient. Matched against the chain's `shinzo.address` participant index, so
+   * it pages natively. Accepts a bech32 (`shinzo1...`) or hex (`0x...`) address.
+   */
+  address?: string;
   cometRpcUrl?: string;
 }
 
