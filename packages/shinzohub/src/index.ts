@@ -33,6 +33,7 @@ import {
   listGenerators,
   getGeneratorHealth,
 } from "./generators/index";
+import { listValidators } from "./validators/index";
 
 export {
   getAccount,
@@ -147,6 +148,13 @@ export type {
   GeneratorHealthP2P,
   GeneratorHealthPeer,
 } from "./generators/index";
+export { listValidators } from "./validators/index";
+export type {
+  ListValidatorsParameters,
+  ListValidatorsResult,
+  ShinzoHubValidator,
+  ShinzoHubValidatorPubKey,
+} from "./validators/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
@@ -212,6 +220,9 @@ export function shinzoHubActions(client: Client) {
     /** Fetches live health for an generator IPv4 address. */
     getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) =>
       getGeneratorHealth(parameters),
+    /** Lists active consensus validators. */
+    listValidators: (parameters?: Parameters<typeof listValidators>[1]) =>
+      listValidators(client, parameters),
   };
 }
 

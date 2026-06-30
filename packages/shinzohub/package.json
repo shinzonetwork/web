@@ -12,6 +12,7 @@
     "./blocks": "./src/blocks/index.ts",
     "./hosts": "./src/hosts/index.ts",
     "./generators": "./src/generators/index.ts",
+    "./validators": "./src/validators/index.ts",
     "./transactions": "./src/transactions/index.ts",
     "./views": "./src/views/index.ts",
     "./package.json": "./package.json"
