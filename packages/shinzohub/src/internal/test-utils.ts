@@ -59,11 +59,33 @@ export interface BlockFixture {
   header: Record<string, unknown>;
 }
 
+/** Consensus validator fixture shared by validator RPC tests. */
+export interface ValidatorFixture {
+  address: Hex;
+  pubKey: {
+    type: string;
+    value: string;
+  };
+  votingPower: string;
+  proposerPriority: string;
+  wire: {
+    address: string;
+    pub_key: {
+      type: string;
+      value: string;
+    };
+    voting_power: string;
+    proposer_priority: string;
+  };
+}
+
 interface MockShinzoHubApiOptions {
   transactions?: readonly TransactionFixture[];
   transactionDetails?: readonly TransactionDetailsFixture[];
   blocks?: readonly BlockFixture[];
   latestBlockHeight?: number | bigint | string;
+  validators?: readonly ValidatorFixture[];
+  validatorsBlockHeight?: number | bigint | string;
   rpcErrors?: Partial<Record<string, RpcErrorFixture>>;
 }
 
@@ -255,15 +277,50 @@ export function blockFixture({
   };
 }
 
+/** Builds a consensus validator fixture from a normalized 20-byte address. */
+export function validatorFixture({
+  address,
+  pubKey = {
+    type: "tendermint/PubKeyEd25519",
+    value: "A83lbqaRU8f+9Oi8pSnk2V2e17zggC/V+oLjDM9xC6k=",
+  },
+  votingPower = 10,
+  proposerPriority = 0,
+}: {
+  address: Hex;
+  pubKey?: {
+    type: string;
+    value: string;
+  };
+  votingPower?: number | bigint | string;
+  proposerPriority?: number | bigint | string;
+}): ValidatorFixture {
+  return {
+    address,
+    pubKey,
+    votingPower: String(votingPower),
+    proposerPriority: String(proposerPriority),
+    wire: {
+      address: address.slice(2).toUpperCase(),
+      pub_key: pubKey,
+      voting_power: String(votingPower),
+      proposer_priority: String(proposerPriority),
+    },
+  };
+}
+
 /** Installs a fetch mock that models the ShinzoHub query endpoints. */
 export function mockShinzoHubApi({
   transactions = [],
   transactionDetails = [],
   blocks = [],
   latestBlockHeight,
+  validators = [],
+  validatorsBlockHeight,
   rpcErrors = {},
 }: MockShinzoHubApiOptions = {}) {
   let requestCount = 0;
+  const rpcRequests: RpcRequest[] = [];
   const resolvedLatestBlockHeight = String(
     latestBlockHeight ??
       blocks.reduce(
@@ -291,6 +348,7 @@ export function mockShinzoHubApi({
     }
 
     const request = JSON.parse(String(init?.body)) as RpcRequest;
+    rpcRequests.push(request);
     return Response.json(handleRpc(request));
   }) as typeof fetch;
 
@@ -364,6 +422,13 @@ export function mockShinzoHubApi({
           },
         };
       }
+      case "validators":
+        return {
+          block_height: String(validatorsBlockHeight ?? resolvedLatestBlockHeight),
+          validators: validators.map((validator) => validator.wire),
+          count: String(validators.length),
+          total: String(validators.length),
+        };
       default:
         throw new Error(`No mock RPC result configured for ${request.method}.`);
     }
@@ -429,6 +494,13 @@ export function mockShinzoHubApi({
   return {
     expectRequestCount(expected: number) {
       expect(requestCount).toBe(expected);
+    },
+    expectRpcRequest(
+      index: number,
+      method: string,
+      params: Record<string, string>,
+    ) {
+      expect(rpcRequests[index]).toMatchObject({ method, params });
     },
   };
 }

@@ -9,6 +9,7 @@ import type {
   ListHostsResult,
   ListGeneratorsResult,
   ListTransactionsResult,
+  ListValidatorsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
   RegisteredGenerator as ShinzoHubRegisteredGenerator,
@@ -22,6 +23,7 @@ import type {
   ShinzoHubTransactionKind,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
+  ShinzoHubValidator,
 } from '@shinzo/shinzohub';
 
 export type JsonSerialized<T> =
@@ -55,6 +57,11 @@ export type ShinzohubBlock = JsonSerialized<ShinzoHubBlock>;
 export type ShinzohubBlocksResponse = JsonSerialized<ListBlocksResult> & {
   total: number;
 };
+
+export type ShinzohubValidator = JsonSerialized<ShinzoHubValidator>;
+
+export type ShinzohubValidatorsResponse =
+  JsonSerialized<ListValidatorsResult>;
 
 export type RegisteredHost = JsonSerialized<ShinzoHubRegisteredHost>;
 

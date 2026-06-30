@@ -74,14 +74,21 @@ export const Header = ({ hideSearch = false }: HeaderProps) => {
             <NavLink link={`${getPageLink('txs', { chain })}`}>
               Transactions
             </NavLink>
-            {chain === 'shinzohub' && <NavLink link={`${getPageLink('generators', { chain })}`}>
-              Generators
-            </NavLink>
-            }
-            {chain === 'shinzohub' && <NavLink link={`${getPageLink('hosts', { chain })}`}>
-              Hosts
-            </NavLink>
-            }
+            {chain === 'shinzohub' && (
+              <NavLink link={`${getPageLink('generators', { chain })}`}>
+                Generators
+              </NavLink>
+            )}
+            {chain === 'shinzohub' && (
+              <NavLink link={`${getPageLink('hosts', { chain })}`}>
+                Hosts
+              </NavLink>
+            )}
+            {chain === 'shinzohub' && (
+              <NavLink link={`${getPageLink('validators', { chain })}`}>
+                Validators
+              </NavLink>
+            )}
           </nav>
         </div>
 

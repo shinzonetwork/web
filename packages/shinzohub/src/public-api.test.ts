@@ -28,6 +28,7 @@ const expectedRootExports = [
   "listHosts",
   "listGenerators",
   "listTransactions",
+  "listValidators",
   "normalizeHexAddress",
   "normalizeShinzoAddress",
   "shinzoAddressToHex",
@@ -64,6 +65,7 @@ describe("public API", () => {
       "./hosts",
       "./package.json",
       "./transactions",
+      "./validators",
       "./views",
     ]);
   });

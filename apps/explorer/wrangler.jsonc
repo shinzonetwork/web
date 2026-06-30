@@ -9,10 +9,5 @@
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
-	},
-	"vars": {
-		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545",
-		"SHINZOHUB_COSMOS_REST_URL": "http://rpc.develop.devnet.shinzo.network:1317",
-		"SHINZOHUB_COMET_RPC_URL": "http://rpc.develop.devnet.shinzo.network:26657"
 	}
 }

@@ -41,6 +41,8 @@ const blocks = await publicClient.listBlocks({
   minHeight: 100,
   maxHeight: 119,
 });
+
+const validators = await publicClient.listValidators();
 ```
 
 Create a view with a wallet client:
@@ -94,7 +96,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Export the testnet Viem chain definition as `shinzoHubTestnet`.
 - [x] Export the mainnet Viem chain definition as `shinzoHubMainnet`.
 - [x] Export known chain mappings as `shinzoHubChains`.
-- [x] Keep package subpaths limited to the root, views, transactions, blocks, addresses, and chains APIs.
+- [x] Keep package subpaths limited to the root, views, transactions, blocks, validators, addresses, and chains APIs.
 - [x] Keep `./internal`, URL builders, calldata builders, event selectors, and payload normalizers out of public package exports.
 
 ### ViewRegistry Precompile
@@ -141,6 +143,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Fetch the latest block height with `getLatestBlockHeight`.
 - [x] Fetch one block timestamp with `getBlockTimestamp`.
 - [x] Fetch a block by height or hash with `getBlock`.
+- [x] List active consensus validators with `listValidators`.
 
 ### Deployed View Contracts
 

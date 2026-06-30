@@ -1,7 +1,7 @@
 # API reference
 
 `@shinzo/shinzohub` provides Viem-compatible functions for ShinzoHub views,
-transactions, blocks, addresses, and chain configuration.
+transactions, blocks, validators, addresses, and chain configuration.
 
 Install it with its Viem peer dependencies:
 
@@ -20,9 +20,11 @@ subpaths:
 ```ts
 import { listTransactions } from "@shinzo/shinzohub/transactions";
 import { listBlocks } from "@shinzo/shinzohub/blocks";
+import { listValidators } from "@shinzo/shinzohub/validators";
 
 const transactions = await listTransactions(publicClient, { kind: "all" });
 const blocks = await listBlocks(publicClient);
+const validators = await listValidators(publicClient);
 ```
 
 Client extension is more convenient, but imports the combined action bundle.
@@ -92,12 +94,49 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `getGenerator`
   - `listGenerators`
   - `getGeneratorHealth`
+  - `listValidators`
 
 Example result:
 
 ```ts
 const client = publicClient.extend(shinzoHubActions);
 await client.listBlocks({ minHeight: 100, maxHeight: 109 });
+```
+
+## Validators
+
+Import from `@shinzo/shinzohub/validators` or the package root.
+
+### `listValidators`
+
+Lists active consensus validators through Comet RPC.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cometRpc`, unless
+    `cometRpcUrl` is supplied.
+  - `parameters` optional
+    - `height`: validator set height.
+    - `page`: validator page number; defaults to `1`.
+    - `perPage`: page size; defaults to `100`.
+    - `cometRpcUrl`: Comet RPC endpoint override.
+
+Example response:
+
+```ts
+{
+  blockHeight: 8382514n,
+  validators: [{
+    address: "0x0b556cff4829c40773fdd05c44e0269cf22123f3",
+    pubKey: {
+      type: "tendermint/PubKeyEd25519",
+      value: "A83lbqaRU8f+9Oi8pSnk2V2e17zggC/V+oLjDM9xC6k=",
+    },
+    votingPower: 10n,
+    proposerPriority: -8n,
+  }],
+  count: 1,
+  total: 1,
+}
 ```
 
 ### `createShinzoHubClient`
@@ -806,7 +845,8 @@ Import from `@shinzo/shinzohub/chains` or the package root.
   endpoints.
 - `shinzoHubDevelop`: chain ID `91273002`; shared develop EVM, Cosmos REST,
   and Comet RPC endpoints.
-- `shinzoHubDevnet`: chain ID `91273002`; public devnet EVM endpoint only.
+- `shinzoHubDevnet`: chain ID `91273002`; public devnet EVM and Comet RPC
+  endpoints.
 - `shinzoHubTestnet`: chain ID `91273001`; endpoint placeholders are empty.
 - `shinzoHubMainnet`: chain ID `91273000`; endpoint placeholders are empty.
 - `shinzoHubChains`: the definitions above keyed by `local`, `develop`,
