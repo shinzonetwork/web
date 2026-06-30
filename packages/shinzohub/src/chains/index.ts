@@ -55,9 +55,9 @@ export const shinzoHubDevelop = defineChain({
 /**
  * Public devnet ShinzoHub Viem chain definition.
  *
- * This chain currently exposes the EVM RPC endpoint. Pass `cosmosRestUrl`
- * explicitly to REST-backed SDK actions when the chain definition does not
- * include a Cosmos REST endpoint.
+ * This chain currently exposes EVM and Comet RPC endpoints. Pass
+ * `cosmosRestUrl` explicitly to REST-backed SDK actions when the chain
+ * definition does not include a Cosmos REST endpoint.
  */
 export const shinzoHubDevnet = defineChain({
   id: 91273002,
@@ -65,6 +65,7 @@ export const shinzoHubDevnet = defineChain({
   nativeCurrency: currency,
   rpcUrls: {
     default: { http: ["http://rpc.devnet.shinzo.network:8545"] },
+    cometRpc: { http: ["http://rpc.devnet.shinzo.network:26657"] },
   },
 });
 
