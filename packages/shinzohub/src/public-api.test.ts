@@ -22,6 +22,7 @@ const expectedRootExports = [
   "getTransaction",
   "getView",
   "hexToShinzoAddress",
+  "isShinzoAddress",
   "listViews",
   "listBlocks",
   "listHosts",

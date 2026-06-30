@@ -49,6 +49,7 @@ export type {
 } from "./accounts/index";
 export {
   hexToShinzoAddress,
+  isShinzoAddress,
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
