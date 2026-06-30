@@ -64,7 +64,7 @@ const findParsedViewByAddress = async (
   if (isParsedView(view)) return view;
 
   throw new Error(
-    `No parsed ShinzoHub view metadata found for contract address "${address}".`
+    `No ShinzoHub View metadata found for this contract address: "${address}".`
   );
 };
 
