@@ -1,17 +1,15 @@
 import type {
+  GeneratorAssertion,
+  GeneratorAssertionsResponse,
   RegisteredGenerator,
   RegisteredGeneratorDetailsResponse,
   RegisteredGeneratorsListResponse,
-  GeneratorHealthData,
-  GeneratorHealthP2P,
-  GeneratorHealthPeer,
 } from "@/shared/lib";
 import type {
+  GeneratorAssertion as ShinzoHubGeneratorAssertion,
+  GetAssertionResult,
   ListGeneratorsResult,
   RegisteredGenerator as ShinzoHubRegisteredGenerator,
-  GeneratorHealthData as ShinzoHubGeneratorHealthData,
-  GeneratorHealthP2P as ShinzoHubGeneratorHealthP2P,
-  GeneratorHealthPeer as ShinzoHubGeneratorHealthPeer,
 } from "@shinzo/shinzohub";
 
 export function serializeGenerator(
@@ -47,35 +45,22 @@ export function serializeGeneratorDetails(
   };
 }
 
-function serializeHealthPeer(
-  peer: ShinzoHubGeneratorHealthPeer
-): GeneratorHealthPeer {
+export function serializeAssertion(
+  assertion: ShinzoHubGeneratorAssertion
+): GeneratorAssertion {
   return {
-    id: peer.id,
-    addresses: [...peer.addresses],
-    public_key: peer.public_key,
+    assertionId: assertion.assertionId,
+    consensusPubKey: assertion.consensusPubKey,
+    delegateAddress: assertion.delegateAddress,
+    sourceChain: assertion.sourceChain,
+    sourceChainId: assertion.sourceChainId,
   };
 }
 
-function serializeHealthP2P(
-  p2p: ShinzoHubGeneratorHealthP2P
-): GeneratorHealthP2P {
+export function serializeAssertions(
+  result: GetAssertionResult
+): GeneratorAssertionsResponse {
   return {
-    enabled: p2p.enabled,
-    peers: p2p.peers.map(serializeHealthPeer),
-    self: serializeHealthPeer(p2p.self),
-  };
-}
-
-export function serializeGeneratorHealth(
-  data: ShinzoHubGeneratorHealthData
-): GeneratorHealthData {
-  return {
-    status: data.status || "unhealthy",
-    uptime: data.uptime,
-    uptime_seconds: data.uptime_seconds,
-    last_processed: data.last_processed,
-    current_block: data.current_block,
-    p2p: data.p2p ? serializeHealthP2P(data.p2p) : null,
+    assertions: result.assertions.map(serializeAssertion),
   };
 }

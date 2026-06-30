@@ -17,7 +17,10 @@ import { HealthStatus } from "@/shared/types";
 import { CopyToClipboard } from "@/widget";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
-import { createHealthEntryKey, PAGE_SIZE } from "../../../shared/lib/shinzohub/health";
+import {
+  createHealthEntryKey,
+  PAGE_SIZE,
+} from "../../../shared/lib/shinzohub/health";
 import { useHostHealthPolling } from "../hooks/hosts/use-host-health-polling";
 
 export type HostWithHealth = RegisteredHost &

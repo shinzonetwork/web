@@ -9,7 +9,7 @@ import { useAccount } from "wagmi";
 
 async function fetchIndexerAssertion(address: string): Promise<boolean> {
   const response = await fetch(
-    `/api/shinzohub/assertion?address=${encodeURIComponent(address)}`,
+    `api/shinzohub/generators/assertion?address=${encodeURIComponent(address)}`
   );
 
   if (!response.ok) {

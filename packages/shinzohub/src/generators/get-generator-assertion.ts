@@ -11,7 +11,7 @@ import type { GetAssertionParameters, GetAssertionResult } from "./types";
 /**
  * Fetches generator assertions for a delegate address through the Cosmos REST gateway.
  */
-export async function getAssertion(
+export async function getGeneratorAssertion(
   client: ShinzoHubQueryClient | Client,
   parameters: GetAssertionParameters,
 ): Promise<GetAssertionResult> {

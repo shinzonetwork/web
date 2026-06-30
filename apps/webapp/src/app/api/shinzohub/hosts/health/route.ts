@@ -1,6 +1,6 @@
 import { getHostHealth } from "@shinzo/shinzohub";
 import { NextRequest } from "next/server";
-import { serializeHostHealth } from "../_lib/serialize";
+import { serializeHealth } from "@/app/api/_lib/serialize-health";
 
 export async function GET(req: NextRequest) {
   const ip = req.nextUrl.searchParams.get("ip")?.trim() ?? "";
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const data = await getHostHealth({ ip });
-    return Response.json(serializeHostHealth(data));
+    return Response.json(serializeHealth(data));
   } catch {
     return Response.json(
       { error: "Failed to fetch host health" },
