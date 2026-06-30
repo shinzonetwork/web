@@ -78,7 +78,7 @@ export default function BlockManifesto() {
                             It wasn&apos;t a failure of the chain. It was a failure of architecture and of our imagination.
                         </p>
                         <p>
-                            Centralized indexers and APIs made development faster but turned blockchain infrastructure fragile. We traded sovereignty for speed.
+                            Centralized generators and APIs made development faster but turned blockchain infrastructure fragile. We traded sovereignty for speed.
                         </p>
                         <p>
                             And now, the so-called open web runs on infrastructure that can be manipulated at any time.

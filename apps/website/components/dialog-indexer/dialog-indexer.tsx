@@ -53,7 +53,7 @@ const defaultFormValues: z.input<typeof schema> = {
     socialMedia: [{ platform: "", link: "" }],
 }
 
-export function DialogIndexer({ networkName, chainId, supported, label = 'Become an Indexer' }: DialogIndexerProps) {
+export function DialogIndexer({ networkName, chainId, supported, label = 'Become a Generator' }: DialogIndexerProps) {
     const { address } = useAccount();
 
     const form = useAppForm({
@@ -160,10 +160,10 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
 
                 {!isSubmitSuccessful && (
                   <DialogHeader>
-                      <DialogTitle>/ Become an Indexer of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
+                      <DialogTitle>/ Become a Generator of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
                       <DialogDescription>
                           {supported ? (
-                            <>Verify you&apos;re an active validator of {networkName} to become an indexer of this network. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
+                            <>Verify you&apos;re an active validator of {networkName} to become an generator of this network. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
                           ) : (
                             <>Claim your spot as a validator of {networkName}. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
                           )}

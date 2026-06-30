@@ -88,7 +88,7 @@ export function Buttons() {
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
-          Add indexer
+          Add generator
         </Button>
         <Button variant="red">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

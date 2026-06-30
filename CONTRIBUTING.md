@@ -14,7 +14,7 @@ The repo is a pnpm monorepo with two top-level directories:
   - `explorer`: Block explorer (Next.js, reads from DefraDB via GraphQL).
   - `faucet`: Devnet token faucet (Vite SPA + Cloudflare Worker).
   - `studio`: View creation and deployment UI (Vite SPA + Cloudflare Worker).
-  - `health-proxy`: Lightweight HTTP proxy for indexer health checks (Bun, Fly.io).
+  - `health-proxy`: Lightweight HTTP proxy for generator health checks (Bun, Fly.io).
   - `metrics-dashboard`: Network metrics dashboard (Next.js).
   - `brand-kit`: Brand asset showcase (Vite SPA).
 - `packages/` contains shared libraries used by the apps above.

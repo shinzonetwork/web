@@ -49,7 +49,7 @@ export default async function Page() {
                   <h2 className="text-h4">/ Index this Chain!</h2>
                   <p>
                     Help power Ethereum indexing for developers, dApps, and
-                    analytics tools. Become an indexer and contribute to global,
+                    analytics tools. Become a generator and contribute to global,
                     decentralized data availability.
                   </p>
                   <DialogIndexer

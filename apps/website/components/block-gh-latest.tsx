@@ -19,7 +19,7 @@ type LatestCommit = {
 } | null;
 
 const REPOS = [
-    { owner: 'shinzonetwork', name: 'shinzo-indexer-client' },
+    { owner: 'shinzonetwork', name: 'shinzo-generator-client' },
     { owner: 'shinzonetwork', name: 'shinzo-view-creator' },
     { owner: 'shinzonetwork', name: 'shinzo-host-client' },
 ] as const;

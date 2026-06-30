@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Existing Chain Validators"
       title={<>Secure<span className="highlight">!</span> the Chain<span className="highlight">.</span> <br /> Serve<span className="highlight" >*</span > the Truth<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Indexer Cohort</Link></Button>
+        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Generator Cohort</Link></Button>
       </>}
     />
 
@@ -46,7 +46,7 @@ export default function Page() {
           </ul>
           <p>Builders who need the freshest possible view of the chain can subscribe to you.<br />Hosts take responsibility for depth, history, and serving the data at scale.</p>
           <p>You stay focused on validation and truth production.<br />Your validator stays lightweight and fast.</p>
-          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/indexer/overview" target="_blank">Indexer Docs ↗</a></p>
+          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/generators/overview" target="_blank">Generator Docs ↗</a></p>
         </>
       }
     ]} />
@@ -56,13 +56,13 @@ export default function Page() {
         sectionTitle:
           <>
             <p className="text-jp">あなたがインデクサー</p>
-            <h3>In Shinzō, <br />You Are The Indexer</h3>
+            <h3>In Shinzō, <br />You Are The Generator</h3>
           </>
         ,
         sectionContent: <>
           <p>On your chain, you are a validator.</p>
-          <p>In Shinzō, when you run the indexing engine, that same role is what we call an indexer.</p>
-          <p>Any time you see “indexer” in Shinzō, it refers to operators like you, validators of existing blockchains who run Shinzō beside their nodes and produce verifiable data from the chains they secure.</p>
+          <p>In Shinzō, when you run the indexing engine, that same role is what we call a generator.</p>
+          <p>Any time you see “generator” in Shinzō, it refers to operators like you, validators of existing blockchains who run Shinzō beside their nodes and produce verifiable data from the chains they secure.</p>
         </>
       },
       {
@@ -75,7 +75,7 @@ export default function Page() {
         sectionContent: <>
           <p>ShinzoHub is Shinzō&apos;s own blockchain for incentives and market mechanics, and it has its own validators.</p>
           <p>Your role is different. <br />As a validator of an existing blockchain running Shinzō, you secure the data read layer by producing verifiable data from the chains you validate today. <br />You do not validate ShinzoHub blocks. You extend the truth of the networks you already secure.</p>
-          <p>ShinzoHub will dogfood the same model. <br />Its validators will secure incentives and market mechanics and also run the indexing engine, acting as indexers in their own right. <br />We are not asking other networks to adopt a pattern we will not use ourselves.</p>
+          <p>ShinzoHub will dogfood the same model. <br />Its validators will secure incentives and market mechanics and also run the indexing engine, acting as generators in their own right. <br />We are not asking other networks to adopt a pattern we will not use ourselves.</p>
         </>
       },
       {
@@ -120,7 +120,7 @@ export default function Page() {
             <li>Shape how validator integration works across real networks.</li>
             <li>Influence which chains and data views are supported first.</li>
             <li>Contribute directly to the protocol, including building indexing engines for new chains if you choose.</li>
-            <li>Help refine incentives for indexers and Hosts as the system takes shape.</li>
+            <li>Help refine incentives for Generators and Hosts as the system takes shape.</li>
             <li>Establish yourself as an early operator and contributor in the Shinzō ecosystem.</li>
           </ul>
           <p>This is not a wait and see moment. <br />This is a build with us moment.</p>
@@ -129,10 +129,10 @@ export default function Page() {
     ]} />
 
     <BlockCta
-      title="Join the Indexer Cohort"
-      content={<p>If you run validators or node infrastructure and want to become an indexer in Shinzō’s trustless data read layer, we want to work with you.</p>}
+      title="Join the Generator Cohort"
+      content={<p>If you run validators or node infrastructure and want to become a generator in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
-        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Indexer Cohort</Link></Button>
+        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Generator Cohort</Link></Button>
       </>}
       footerText={<p className="text-raised">You already secure the chain. <br />Now help secure its truth.</p>}
     />

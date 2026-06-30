@@ -67,7 +67,7 @@ These are the preferred tokens for interface implementation. Use `--color-ui-*` 
 
 | State | Background | Text | Usage |
 |-------|-----------|------|-------|
-| Active / Success | `rgba(34,197,94,0.1)` | `#16a34a` | Running indexers, confirmed transactions |
+| Active / Success | `rgba(34,197,94,0.1)` | `#16a34a` | Running generators, confirmed transactions |
 | Warning / Syncing | `rgba(234,179,8,0.1)` | `#ca8a04` | In-progress sync, pending states |
 | Error | `rgba(208,31,39,0.08)` | `#d01f27` | Failures, schema mismatches |
 | Inactive | `#f5f5f5` | `#a3a3a3` | Offline, disabled, deprecated |
