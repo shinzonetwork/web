@@ -71,7 +71,7 @@ export function getNoResultsSearchState(
     case "view-name":
       return {
         title: "No View names matched",
-        description: "No registered Shinzohub Views matched that name fragment.",
+        description: "We cannot find a View matching that name.",
       };
     default:
       return {
