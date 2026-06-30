@@ -1,6 +1,7 @@
 import { listViews } from "@shinzo/shinzohub";
 import {
   normalizeAddressParam,
+  toFilteredViewsTotal,
   toViewAddressResult,
   type NormalizedShinzohubAddress,
 } from "@/pages/address/api/shinzohub-address-api-utils";
@@ -61,7 +62,10 @@ export async function GET(
       views: views.views.map(toViewAddressResult),
       pagination: {
         nextKey: views.pagination.nextKey,
-        total: views.pagination.total?.toString() ?? null,
+        total: toFilteredViewsTotal(views, {
+          limit: page.limit,
+          offset: page.offset,
+        }),
         page: page.page,
         limit: page.limit,
         offset: page.offset,

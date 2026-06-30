@@ -11,6 +11,7 @@ import {
 } from "@shinzo/shinzohub";
 import {
   normalizeAddressParam,
+  toFilteredViewsTotal,
   toViewAddressResult,
   type NormalizedShinzohubAddress,
 } from "@/pages/address/api/shinzohub-address-api-utils";
@@ -21,7 +22,7 @@ import type {
   ShinzohubAddressDetailsResponse,
 } from "@/shared/shinzohub/types";
 
-const CREATED_VIEWS_PREVIEW_LIMIT = 1;
+const CREATED_VIEWS_PREVIEW_LIMIT = 20;
 
 function toTypeLabel(
   account: ShinzoHubAccount | null,
@@ -119,7 +120,9 @@ export async function GET(
           : null,
         viewContract: viewContract ? toViewAddressResult(viewContract) : null,
         createdViews: {
-          total: createdViews.pagination.total?.toString() ?? null,
+          total: toFilteredViewsTotal(createdViews, {
+            limit: CREATED_VIEWS_PREVIEW_LIMIT,
+          }),
           items: createdViews.views.map(toViewAddressResult),
         },
       },
