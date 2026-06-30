@@ -13,8 +13,7 @@ import { useHighlight } from '@/pages/home/use-highlight';
 import { getPageLink } from "@/shared/utils/links";
 import { useChainPathSegment } from "@/widgets/chain-path-segment";
 import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
-// import { useHomeBlocks } from "../hook/use-home-blocks";
-import { useHomeBlocks } from "../hook/use-home-blocks";
+import { useHomeBlocks } from "../api/use-home-blocks";
 
 /** A container that takes at most 50% of the width, so that a spacer can take up all the rest width */
 export const HALF_CONTAINER_CLASS = cn('w-full max-w-full lg:max-w-lg xl:max-w-160 2xl:max-w-3xl')

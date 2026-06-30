@@ -1,9 +1,9 @@
 import { AnimatedNumber } from "@/shared/ui/animated-number";
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { StatsBlock } from "@/pages/home/stats";
-import { useHomeBlocks } from "../hook/use-home-blocks";
+import { useHomeBlocks } from "../api/use-home-blocks";
 import { ArrowLeftRightIcon } from "lucide-react";
-import { useHomeTransactions } from "../hook/use-home-transactions";
+import { useHomeTransactions } from "../api/use-home-transactions";
 
 export const HomeStats = () => {
     const {blocks, isLoading: blocksLoading} = useHomeBlocks({ count: 5 });

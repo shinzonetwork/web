@@ -9,7 +9,7 @@ import { formatHash } from '@/shared/utils/format-hash';
 import { formatShinzoCoin } from '@/shared/utils/format-token';
 import { cn } from '@/shared/utils/utils';
 import { HALF_CONTAINER_CLASS } from './blocks-home';
-import { useHomeTransactions } from '../hook/use-home-transactions';
+import { useHomeTransactions } from '../api/use-home-transactions';
 import { useHighlight } from '@/pages/home/use-highlight';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
