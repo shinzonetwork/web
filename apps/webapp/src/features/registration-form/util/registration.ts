@@ -269,7 +269,7 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
   },
   {
     id: "endpointAddress",
-    label: "Endpoint address",
+    label: "GraphQL endpoint",
     isTextarea: false,
     isSelect: false,
     required: true,
