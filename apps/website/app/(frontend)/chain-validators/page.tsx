@@ -46,7 +46,7 @@ export default function Page() {
           </ul>
           <p>Builders who need the freshest possible view of the chain can subscribe to you.<br />Hosts take responsibility for depth, history, and serving the data at scale.</p>
           <p>You stay focused on validation and truth production.<br />Your validator stays lightweight and fast.</p>
-          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/generators/overview" target="_blank">Generator Docs ↗</a></p>
+          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/generators/overview" target="_blank">Generator Client Docs ↗</a></p>
         </>
       }
     ]} />

@@ -122,7 +122,7 @@ export default function Page() {
 
           <ul>
             <li>Builders who want verification instead of trust.</li>
-            <li>Builders who are tired of having to run their own nodes or generators because existing providers cannot be trusted to give a complete or accurate view of onchain reality.</li>
+            <li>Builders who are tired of having to run their own nodes or generator client because existing providers cannot be trusted to give a complete or accurate view of onchain reality.</li>
             <li>Builders who do not want their product reliability tied to a single company&apos;s infrastructure.</li>
             <li>Builders working across chains who are worn down by glue code, custom pipelines, and brittle integrations.</li>
           </ul>
