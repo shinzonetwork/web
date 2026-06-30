@@ -1,1 +1,1 @@
-export { GET } from "@/pages/shinzohub-home/api/shinzohub-validators-route";
+export { GET } from "@/pages/validators/api/shinzohub-validators-route";

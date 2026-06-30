@@ -15,6 +15,7 @@ export const APP_PAGES = {
   tx: '/tx/{param}',
   generators: '/generators',
   generator: '/generators/{address}',
+  validators: '/validators',
   hosts: '/hosts',
   host: '/hosts/{address}',
 } as const;
@@ -32,6 +33,7 @@ type OptionsByPage = {
   token: { param: string },
   generators: undefined,
   generator: { address: string },
+  validators: undefined,
   hosts: undefined,
   host: { address: string },
 };

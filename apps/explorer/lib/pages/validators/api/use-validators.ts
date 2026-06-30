@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import type { ShinzohubValidatorsResponse } from '@/shared/shinzohub/types';
 
-type UseHomeValidatorsOptions = {
+type UseValidatorsOptions = {
   refetchIntervalMs?: number;
 };
 
@@ -21,8 +21,8 @@ export async function fetchShinzohubValidators(): Promise<ShinzohubValidatorsRes
   return response.json() as Promise<ShinzohubValidatorsResponse>;
 }
 
-export function useHomeValidators(
-  { refetchIntervalMs = 30_000 }: UseHomeValidatorsOptions = {},
+export function useValidators(
+  { refetchIntervalMs = 30_000 }: UseValidatorsOptions = {},
 ) {
   return useQuery({
     queryKey: shinzohubValidatorsQueryKey(),

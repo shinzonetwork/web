@@ -5,7 +5,6 @@ import { Typography } from '@/shared/ui/typography';
 
 import { BlocksHome } from "./blocks-home";
 import { TransactionsHome } from "./transactions-home";
-import { ValidatorsHome } from "./validators-home";
 import { HomeStats } from './stats-home';
 import { ExplorerSearch } from '@/widgets/search';
 
@@ -27,8 +26,6 @@ export const HomePage = () => {
         <BlocksHome />
         <TransactionsHome />
       </section>
-
-      <ValidatorsHome />
     </PageLayout>
   );
 };
