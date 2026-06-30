@@ -124,11 +124,11 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
 - [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
 
-### Cosmos REST Indexer Queries
+### Cosmos REST Generator Queries
 
-- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listIndexers`.
-- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listIndexers`.
-- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getIndexer`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listGenerators`.
+- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listGenerators`.
+- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getGenerator`.
 
 ### Transactions And Blocks
 
@@ -185,20 +185,22 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [ ] Cover `getDid(address)`.
 - [ ] Cover `getConnectionString(address)`.
 - [ ] Cover `Registered(address,bytes,string)`.
-- [ ] Cover Cosmos REST host queries when the REST API is stable.
+- [x] Fetch one registered host by account address with `getHost`.
+- [ ] Cover paginated Cosmos REST host listings.
 
-### IndexerRegistry Precompile
+### GeneratorRegistry Precompile
 
-- [ ] Cover the IndexerRegistry precompile address.
-- [ ] Cover the IndexerRegistry ABI.
+- [ ] Cover the GeneratorRegistry precompile address.
+- [ ] Cover the GeneratorRegistry ABI.
 - [ ] Cover `register(bytes,bytes,bytes,string,string,uint64)`.
 - [ ] Cover `isRegistered(address)`.
 - [ ] Cover `getDid(address)`.
 - [ ] Cover `getConnectionString(address)`.
 - [ ] Cover `getSourceChain(address)`.
 - [ ] Cover `Registered(address,bytes,string,string,uint64)`.
-- [ ] Cover Cosmos REST indexer queries when the REST API is stable.
-- [ ] Cover indexer assertion transaction helpers when the workflow is designed.
+- [x] Fetch one registered generator by account address with `getGenerator`.
+- [ ] Cover paginated Cosmos REST generator listings.
+- [ ] Cover generator assertion transaction helpers when the workflow is designed.
 
 ### SourceHub And Admin Workflows
 

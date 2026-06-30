@@ -54,7 +54,7 @@ export const GeneratorsList = ({
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1">
                         <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
-                        <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
+                        <CopyButton text={value ?? ''} className="text-muted-foreground" />
                       </div>
                     </TooltipTrigger>
 
@@ -63,7 +63,7 @@ export const GeneratorsList = ({
                           {value}
                         </Typography>
                     </TooltipContent>
-                  </Tooltip> 
+                  </Tooltip>
                 </Link>
               )}
             </TableNullableCell>

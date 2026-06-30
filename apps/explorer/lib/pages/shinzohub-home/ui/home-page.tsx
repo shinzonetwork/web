@@ -6,7 +6,7 @@ import { Typography } from '@/shared/ui/typography';
 import { BlocksHome } from "./blocks-home";
 import { TransactionsHome } from "./transactions-home";
 import { HomeStats } from './stats-home';
-// import { SearchInput } from '@/shared/ui/search-input';
+import { ExplorerSearch } from '@/widgets/search';
 
 export const HomePage = () => {
   return (
@@ -18,7 +18,7 @@ export const HomePage = () => {
           <Typography font='mono' className='text-[25px] whitespace-nowrap'>
             Shinzō Chain Explorer
           </Typography>
-          {/*<SearchInput />*/}
+          <ExplorerSearch />
         </div>
       </Container>
 

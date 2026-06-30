@@ -1,9 +1,12 @@
 import type { Account, Address, Client, Hex, TransactionReceipt } from "viem";
-import { decodeEventLog, encodeFunctionData } from "viem";
+import { decodeEventLog, encodeFunctionData, getAddress } from "viem";
 import { sendTransaction } from "viem/actions";
 import { normalizeHexAddress, shinzoAddressToHex } from "../addresses/index";
 import { buildUrl, requestJson } from "../internal/fetch";
-import { getRpcEndpoint } from "../internal/endpoints";
+import {
+  getRpcEndpoint,
+  type ShinzoHubQueryClient,
+} from "../internal/endpoints";
 import { bytesLikeToHex, normalizeHex } from "../internal/hex";
 
 /**
@@ -176,7 +179,7 @@ export interface ListViewsParameters {
   sinceBlock?: number | bigint | string;
   /** Include parsed bundle metadata in each `view.metadata` field. */
   includeMetadata?: boolean;
-  /** Filter views by exact registered view name. */
+  /** Filter views whose registered name contains this text, case-insensitively. */
   name?: string;
   /** Filter views by creator address, using the API's creator address format. */
   creator?: string;
@@ -408,7 +411,7 @@ export function getCreatedViewAddress(receipt: TransactionReceipt): Hex {
  * ```
  */
 export async function listViews(
-  client: Client,
+  client: ShinzoHubQueryClient,
   parameters: ListViewsParameters = {},
 ): Promise<ListViewsResult> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
@@ -449,7 +452,10 @@ export async function listViews(
  * console.log(view.name, view.metadata?.rootType);
  * ```
  */
-export async function getView(client: Client, parameters: GetViewParameters): Promise<ShinzoHubView> {
+export async function getView(
+  client: ShinzoHubQueryClient,
+  parameters: GetViewParameters,
+): Promise<ShinzoHubView> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
     throw new Error("No fetch implementation is available.");
@@ -483,7 +489,10 @@ export async function getView(client: Client, parameters: GetViewParameters): Pr
  * console.log(`ShinzoHub has ${totalViews} registered views`);
  * ```
  */
-export async function countViews(client: Client, parameters?: CountViewsParameters): Promise<bigint> {
+export async function countViews(
+  client: ShinzoHubQueryClient,
+  parameters?: CountViewsParameters,
+): Promise<bigint> {
   const fetchFn = globalThis.fetch?.bind(globalThis);
   if (!fetchFn) {
     throw new Error("No fetch implementation is available.");
@@ -602,7 +611,7 @@ function toMetadata(wire: ViewMetadataWire): ViewMetadata {
 function normalizeAnyAddress(value: string): Hex {
   const trimmed = value.trim();
   if (/^0x/i.test(trimmed) || /^[0-9a-fA-F]{40}$/.test(trimmed)) {
-    return normalizeHexAddress(trimmed);
+    return getAddress(normalizeHexAddress(trimmed));
   }
-  return shinzoAddressToHex(trimmed);
+  return getAddress(shinzoAddressToHex(trimmed));
 }

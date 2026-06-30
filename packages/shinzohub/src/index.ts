@@ -18,14 +18,14 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
-import { 
-  listHosts, 
-  getHost, 
+import {
+  listHosts,
+  getHost,
   getHostHealth,
 } from "./hosts/index";
-import { 
-  getGenerator, 
-  listGenerators, 
+import {
+  getGenerator,
+  listGenerators,
   getGeneratorHealth,
 } from "./generators/index";
 
@@ -96,9 +96,9 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
-export { 
-  getHost, 
-  listHosts, 
+export {
+  getHost,
+  listHosts,
   getHostHealth,
 } from "./hosts/index";
 export type {
@@ -112,9 +112,9 @@ export type {
   HostHealthP2P,
   HostHealthPeer,
 } from "./hosts/index";
-export { 
-    getGenerator, 
-  listGenerators, 
+export {
+  getGenerator,
+  listGenerators,
   getGeneratorHealth,
 } from "./generators/index";
 export type {
@@ -182,7 +182,8 @@ export function shinzoHubActions(client: Client) {
     getGenerator: (parameters: Parameters<typeof getGenerator>[1]) =>
       getGenerator(client, parameters),
     /** Fetches live health for an generator IPv4 address. */
-    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) => getGeneratorHealth(parameters), 
+    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) =>
+      getGeneratorHealth(parameters),
   };
 }
 

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./dropdown-menu": "./src/dropdown-menu/index.tsx",
     "./select": "./src/select/index.ts",
     "./cn": "./src/cn.ts",
     "./skeleton": "./src/skeleton/index.tsx",
@@ -21,6 +22,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
     "clsx": "^2.1.1",

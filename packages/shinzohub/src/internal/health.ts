@@ -12,7 +12,7 @@ export type HealthP2P = {
   self: HealthPeer;
 };
 
-/** Live health payload returned by indexer/host `/health` endpoints. */
+/** Live health payload returned by generator/host `/health` endpoints. */
 export type HealthLiveData = {
   status: HealthStatus;
   uptime: number;
@@ -22,9 +22,9 @@ export type HealthLiveData = {
   p2p: HealthP2P | null;
 };
 
-/** Options for fetching live health from an indexer/host IPv4 address. */
+/** Options for fetching live health from a generator/host IPv4 address. */
 export interface GetHealthParameters {
-  /** IPv4 address of the indexer or host node. */
+  /** IPv4 address of the generator or host node. */
   ip: string;
   /** Per-attempt fetch timeout in milliseconds. Defaults to {@link HEALTH_FETCH_TIMEOUT_MS}. */
   timeoutMs?: number;

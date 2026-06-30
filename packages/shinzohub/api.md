@@ -46,6 +46,22 @@ serialization, for example with `String(value)`.
 Every query function performs exactly one REST or Comet RPC request. Compose
 multiple functions in application code when you need fallback or enrichment.
 
+## Hosts And Generators
+
+Import host helpers from `@shinzo/shinzohub/hosts` and generator helpers from
+`@shinzo/shinzohub/generators`, or import the same actions from the package
+root. Detail actions accept a Shinzo bech32 address and perform one Cosmos REST
+request.
+
+```ts
+const host = await getHost(client, { address: "shinzo1..." });
+const generator = await getGenerator(client, { address: "shinzo1..." });
+```
+
+`getHost` returns the canonical account address, DID, connection string, and
+GraphQL endpoint. `getGenerator` returns the canonical account address, DID,
+connection string, source chain, and source-chain ID.
+
 ## Clients
 
 ### `shinzoHubActions`
@@ -70,6 +86,12 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `getShinzoHubBlock`: extended-client name for `getBlock`.
   - `getShinzoHubBlockTimestamp`: extended-client name for
     `getBlockTimestamp`.
+  - `getHost`
+  - `listHosts`
+  - `getHostHealth`
+  - `getGenerator`
+  - `listGenerators`
+  - `getGeneratorHealth`
 
 Example result:
 
@@ -113,7 +135,7 @@ filters.
     - `includeData`: include raw viewbundle data.
     - `sinceBlock`: minimum registration height.
     - `includeMetadata`: include parsed viewbundle metadata.
-    - `name`: exact view name.
+    - `name`: case-insensitive view name substring.
     - `creator`: exact creator address.
     - `metadataRootType`: exact metadata root type.
     - `metadataLensHash`: required lens hash.

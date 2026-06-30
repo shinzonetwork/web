@@ -51,7 +51,7 @@ export const HostsList = ({
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1">
                         <Typography color='accent' className='underline'>{formatHash(value, 12, 8)}</Typography>
-                        <CopyButton text={value ?? ''} className="text-muted-foreground" /> 
+                        <CopyButton text={value ?? ''} className="text-muted-foreground" />
                       </div>
                     </TooltipTrigger>
 
@@ -60,7 +60,7 @@ export const HostsList = ({
                           {value}
                         </Typography>
                     </TooltipContent>
-                  </Tooltip> 
+                  </Tooltip>
                 </Link>
               )}
             </TableNullableCell>
