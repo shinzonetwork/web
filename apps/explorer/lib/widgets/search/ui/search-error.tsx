@@ -11,7 +11,7 @@ export function SearchError({
 }) {
   const description = error instanceof ExplorerSearchApiError
     ? error.detail
-    : "The Explorer could not reach its search service. Check your connection and try again.";
+    : "Search did not respond. Try again in a moment.";
   const title = error instanceof ExplorerSearchApiError && error.status === 502
     ? "Shinzohub RPCs are unavailable"
     : "Unable to search Shinzohub";
