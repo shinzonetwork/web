@@ -25,7 +25,7 @@ export function getIncompleteSearchState(
   if (/^shinzo1/i.test(value)) {
     return {
       title,
-      description: "This looks like a Shinzo address, but it is not complete or has an invalid checksum yet.",
+      description: "This looks like a Shinzo address, but it is incomplete or it has an invalid checksum.",
     };
   }
 
