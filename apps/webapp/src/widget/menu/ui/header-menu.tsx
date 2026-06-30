@@ -23,7 +23,6 @@ export function HeaderMenu() {
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
-      <MenubarSeparator />
       <MenubarMenu>
         <MenubarTrigger className="flex items-center gap-2 text-lg text-muted-foreground">
           <span>Indexer</span>
@@ -38,12 +37,6 @@ export function HeaderMenu() {
             <Link href="/indexer-registration">Registration</Link>
           </MenubarItem>
         </MenubarContent>
-      </MenubarMenu>
-      <MenubarSeparator />
-      <MenubarMenu>
-        <MenubarTrigger className="text-lg text-muted-foreground flex items-center gap-2">
-          <Link href="/validators">Validators</Link>
-        </MenubarTrigger>
       </MenubarMenu>
     </Menubar>
   );
