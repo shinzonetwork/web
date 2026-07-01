@@ -95,7 +95,7 @@ export function InputField({
           onChange={(e: ChangeEvent<HTMLSelectElement>) =>
             onChange(e.target.value)
           }
-          className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 ${
+          className={`w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-mono text-muted-foregroundforeground outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring/50 ${
             error ? "border-destructive focus-visible:ring-destructive" : ""
           } ${disabled ? "bg-muted cursor-not-allowed opacity-70" : ""}`}
           aria-invalid={error ? "true" : "false"}

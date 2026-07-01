@@ -20,5 +20,5 @@ export const getSourceChainOptions = (): SourceChainOption[] => {
     label: key.charAt(0).toUpperCase() + key.slice(1),
   }));
 
-  return [{ value: "", label: "Select the chain" }, ...chainOptions];
+  return [{ value: "", label: "Select the chain your indexer node is monitoring." }, ...chainOptions];
 };
