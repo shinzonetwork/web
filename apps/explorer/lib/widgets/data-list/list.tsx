@@ -8,7 +8,7 @@ export interface DataListProps {
 export const DataList = ({ children }: DataListProps) => {
   return (
     <Container borderX borderB className='flex'>
-      <div className='grow grid grid-cols-[12px_auto_1fr] overflow-x-auto'>
+      <div className='grid min-w-0 grow grid-cols-[12px_auto_max-content] overflow-x-auto'>
         {children}
       </div>
       {/* empty space */}

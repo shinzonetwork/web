@@ -10,7 +10,7 @@ export const HomeStats = () => {
     const {data: transactions, isLoading: transactionsLoading} = useHomeTransactions();
 
     return (
-      <section className='flex -mt-px'>
+      <section className='grid grid-cols-1 min-[360px]:grid-cols-2 lg:flex -mt-px'>
         <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={blocksLoading}>
           <AnimatedNumber value={Number(blocks?.[0]?.number)} />
         </StatsBlock>

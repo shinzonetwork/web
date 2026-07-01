@@ -31,7 +31,19 @@ import {
   getInternalResultHref,
 } from "./search-result-item";
 
-export function ExplorerSearch({ className = "" }: { className?: string }) {
+export interface ExplorerSearchProps {
+  autoFocus?: boolean;
+  className?: string;
+  inputTabIndex?: number;
+  showShortcutHint?: boolean;
+}
+
+export function ExplorerSearch({
+  autoFocus = false,
+  className = "",
+  inputTabIndex,
+  showShortcutHint = true,
+}: ExplorerSearchProps) {
   const router = useRouter();
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -80,6 +92,11 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
   const focusInput = () => {
     window.queueMicrotask(() => inputRef.current?.focus());
   };
+
+  useEffect(() => {
+    if (!autoFocus) return;
+    window.queueMicrotask(() => inputRef.current?.focus());
+  }, [autoFocus]);
 
   const closeMenu = () => setOpen(false);
 
@@ -266,9 +283,10 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
                 onFocus={() => setOpen(true)}
                 onKeyDown={handleInputKeyDown}
                 aria-label="Search Shinzohub"
-                aria-controls={open ? menuId : undefined}
+                aria-controls={menuId}
                 aria-activedescendant={open ? activeResultId : undefined}
                 placeholder="Search by Address / Txn Hash / Block"
+                tabIndex={inputTabIndex}
                 autoComplete="off"
                 spellCheck={false}
                 className="relative h-14 w-full min-w-0 rounded-xl border-2 border-ui-accent bg-white px-10 py-4 pr-14 font-mono text-base outline-none transition-[color,box-shadow] placeholder:text-ui-text-muted selection:bg-ui-accent selection:text-ui-bg focus-visible:border-ui-accent focus-visible:ring-3 focus-visible:ring-ui-accent/50"
@@ -278,27 +296,30 @@ export function ExplorerSearch({ className = "" }: { className?: string }) {
               hasInput={search.input.length > 0}
               isSearching={search.isSearching}
               onClear={clearSearch}
+              showShortcutHint={showShortcutHint}
             />
           </div>
         </form>
 
-        <SearchDropdownContent
-          id={menuId}
-          contentRef={contentRef}
-          onKeyDown={handleDropdownKeyDown}
-        >
-          <SearchDropdownBody
-            activeIndex={activeIndex}
-            menuId={menuId}
-            recentSearches={recentSearches}
-            search={search}
-            onExampleSelect={selectExample}
-            onHighlight={setActiveIndex}
-            onPick={pickResult}
-            onRetry={() => void search.retry()}
-            onSelect={selectResult}
-          />
-        </SearchDropdownContent>
+        {open && (
+          <SearchDropdownContent
+            id={menuId}
+            contentRef={contentRef}
+            onKeyDown={handleDropdownKeyDown}
+          >
+            <SearchDropdownBody
+              activeIndex={activeIndex}
+              menuId={menuId}
+              recentSearches={recentSearches}
+              search={search}
+              onExampleSelect={selectExample}
+              onHighlight={setActiveIndex}
+              onPick={pickResult}
+              onRetry={() => void search.retry()}
+              onSelect={selectResult}
+            />
+          </SearchDropdownContent>
+        )}
       </DropdownMenu>
     </div>
   );

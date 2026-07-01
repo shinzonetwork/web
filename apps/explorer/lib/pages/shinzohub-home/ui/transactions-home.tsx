@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
 import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
 import { formatShinzoCoin } from '@/shared/utils/format-token';
@@ -60,7 +61,13 @@ export const TransactionsHome = () => {
         className={HALF_CONTAINER_CLASS}
         isLoading={isLoading}
         loadingRowCount={5}
-        notFound="No transactions found."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No recent transactions."
+            description="Latest transactions will appear here once activity is indexed."
+          />
+        )}
         gridClass="grid-cols-[1fr_270px_150px]"
         headings={['Hash', 'From–To', 'Value']}
         hideHeader

@@ -7,6 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { formatHash } from "@/shared/utils/format-hash";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';
 import { useShortBlocks } from './use-short-blocks';
@@ -32,7 +33,7 @@ export const BlocksHome = () => {
 
   // needed to fill grid spacing with pink color
   const GAP_BG = cn(
-    'after:hidden lg:after:block after:content-[""] after:absolute z-100',
+    'after:hidden xl:after:block after:content-[""] after:absolute z-100',
     'after:left-full after:w-4 after:h-[calc(100%+1px)] after:top-0 after:bg-background-accent-light',
     'after:border-border',
   );
@@ -51,7 +52,13 @@ export const BlocksHome = () => {
         isLoading={isLoading}
         loadingRowCount={5}
         className={cn(HALF_CONTAINER_CLASS, 'relative', GAP_BG, 'after:border-t')}
-        notFound="No blocks found."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No recent blocks."
+            description="Latest blocks will appear here once they are indexed."
+          />
+        )}
         gridClass="grid-cols-[1fr_270px_150px]"
         headings={["Block number", "Validator", "Txns"]}
         hideHeader

@@ -3,6 +3,7 @@
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { PageLayout } from "@/widgets/layout";
 import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { Typography } from "@/shared/ui/typography";
 import { formatHash } from "@/shared/utils/format-hash";
 import { useValidators } from "../api/use-validators";
@@ -17,7 +18,13 @@ export const ValidatorsPage = () => {
         <TableLayout
           isLoading={isLoading}
           loadingRowCount={3}
-          notFound="No validators found."
+          notFound={(
+            <EmptyTableState
+              variant="content"
+              title="No validators found."
+              description="Validator set data will appear here once it is available."
+            />
+          )}
           headings={["Address", "Public Key", "Voting Power", "Proposer Priority"]}
           gridClass="grid-cols-[minmax(220px,1.2fr)_minmax(260px,1.8fr)_160px_180px]"
           iterable={validators}

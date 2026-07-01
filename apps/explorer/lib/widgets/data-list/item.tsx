@@ -63,7 +63,7 @@ export const DataItem = ({
       />
 
       <div className='pr-8'>
-        <Typography className='w-48 shrink-0'>
+        <Typography className='w-36 shrink-0 sm:w-48'>
           {title}:
         </Typography>
       </div>
@@ -75,7 +75,8 @@ export const DataItem = ({
       ) : (
         <div
           className={cn(
-            'flex gap-2 lg:min-w-0 pr-8',
+            'flex gap-2 pr-8',
+            allowWrap ? 'min-w-0 max-w-full' : 'w-max max-w-none',
             allowWrap ? 'items-start' : 'items-center',
           )}
         >
@@ -83,7 +84,7 @@ export const DataItem = ({
             <Link
               href={link}
               className={cn(
-                'lg:min-w-0',
+                allowWrap ? 'min-w-0 max-w-full' : 'w-max max-w-none',
                 textBehaviorClass,
                 childClassName,
               )}
@@ -105,7 +106,7 @@ export const DataItem = ({
             <Typography
               as='div'
               className={cn(
-                'lg:min-w-0 w-[900px]',
+                allowWrap ? 'min-w-0 max-w-full' : 'w-max max-w-none',
                 textBehaviorClass,
                 childClassName,
               )}

@@ -5,6 +5,7 @@ import { isShinzoAddress, shinzoAddressToHex } from '@shinzo/shinzohub';
 import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
 import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
 import { Badge } from '@/shared/ui/badge';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import type { ShinzohubTransactionSummary } from '@/shared/shinzohub/types';
 import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
@@ -29,9 +30,13 @@ function toEvmAddress(address: string | null | undefined): string | null {
 }
 
 export function ShinzohubTransactionsList({
+  emptyStateDescription = "Transactions will appear here once Shinzohub has activity.",
+  emptyStateTitle = "No transactions found.",
   transactions,
   isLoading,
 }: {
+  emptyStateDescription?: string;
+  emptyStateTitle?: string;
   transactions: ShinzohubTransactionSummary[];
   isLoading: boolean;
 }) {
@@ -39,7 +44,13 @@ export function ShinzohubTransactionsList({
     <TableLayout
       isLoading={isLoading}
       loadingRowCount={DEFAULT_LIMIT}
-      notFound='No transactions found.'
+      notFound={(
+        <EmptyTableState
+          variant="content"
+          title={emptyStateTitle}
+          description={emptyStateDescription}
+        />
+      )}
       gridClass='grid-cols-[1fr_90px_100px_1fr_1fr_150px_130px]'
       headings={['Hash', 'Type', 'Block', 'Sender', 'Recipient', 'Amount', 'Fee']}
       iterable={transactions}

@@ -5,6 +5,7 @@ import { Skeleton } from '@shinzo/ui/skeleton';
 import { formatUnits, getAddress } from 'viem';
 import { Badge } from '@/shared/ui/badge';
 import { CopyButton } from '@/shared/ui/button';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import { getPageLink, type ChainPathSegment } from '@/shared/utils/links';
 import { DataItem, DataList } from '@/widgets/data-list';
@@ -168,8 +169,11 @@ export function TransactionLogs({
 
   if (!logs?.length) {
     return (
-      <Container className='py-10'>
-        <Typography variant='md'>No logs for this transaction.</Typography>
+      <Container>
+        <EmptyTableState
+          title='No logs for this transaction.'
+          description='Contract event logs will appear here when this transaction emits them.'
+        />
       </Container>
     );
   }

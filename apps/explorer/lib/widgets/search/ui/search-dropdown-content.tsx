@@ -21,7 +21,7 @@ const SEARCH_SCROLL_AREA_CLASS_NAME = [
 ].join(" ");
 
 const SEARCH_DROPDOWN_CONTENT_CLASS_NAME = [
-  "z-[100] min-h-26",
+  "z-[300] min-h-26",
   "w-[calc(100vw_-_2rem)]",
   "sm:w-[min(calc(100vw_-_2rem),36rem)]",
   "lg:w-[max(var(--radix-dropdown-menu-trigger-width),36rem)]",
@@ -43,6 +43,7 @@ export function SearchDropdownContent({
     <DropdownMenuContent
       id={id}
       align="start"
+      sideOffset={16}
       onOpenAutoFocus={(event) => event.preventDefault()}
       onCloseAutoFocus={(event) => event.preventDefault()}
       className={SEARCH_DROPDOWN_CONTENT_CLASS_NAME}

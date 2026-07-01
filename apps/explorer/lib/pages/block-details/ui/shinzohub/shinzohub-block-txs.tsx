@@ -42,6 +42,8 @@ export const ShinzohubBlockTransactions = ({
       <ShinzohubTransactionsList
         transactions={data?.transactions ?? []}
         isLoading={isLoading}
+        emptyStateTitle="No transactions in this block."
+        emptyStateDescription="Transactions for this block will appear here if any are indexed."
       />
       <Container className="flex justify-between items-end">
         <div />

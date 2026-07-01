@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs'
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatGasUsed } from '@/shared/utils/format-gas';
 import { formatHash } from '@/shared/utils/format-hash';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import { Container, PageLayout } from '@/widgets/layout'
 import {
@@ -53,7 +54,13 @@ export const EthereumBlocksPageClient = ({ pageParams }: EthereumBlocksPageClien
       <TableLayout
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound='No blocks found.'
+        notFound={(
+          <EmptyTableState
+            variant='content'
+            title='No blocks found.'
+            description='Blocks will appear here as soon as they are indexed.'
+          />
+        )}
         headings={['Block', 'Age', 'Transactions', 'Validator', 'Gas Used']}
         gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks?.blocks ?? []}

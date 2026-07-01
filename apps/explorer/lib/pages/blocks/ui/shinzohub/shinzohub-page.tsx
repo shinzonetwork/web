@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from '@shinzo/ui/tabs'
 import ShinzoFilledIcon from '@/shared/ui/icons/shinzo-filled.svg';
 import { formatHash } from '@/shared/utils/format-hash';
 import { Typography } from '@/shared/ui/typography';
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { Container, PageLayout } from '@/widgets/layout'
 import {
   TableLayout,
@@ -51,7 +52,13 @@ export const ShinzohubBlocksPageClient = ({ pageParams }: ShinzohubBlocksPageCli
       <TableLayout
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound='No blocks found.'
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No blocks found."
+            description="Blocks will appear here as soon as they are indexed."
+          />
+        )}
         headings={['Block', 'Age', 'Transactions', 'Validator', 'Size']}
         gridClass='grid-cols[repeat(5,1fr)]'
         iterable={blocks ?? []}

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
 import { formatHash } from '@/shared/utils/format-hash';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import {
   TableLayout,
@@ -28,7 +29,13 @@ export const TransactionsList = ({ transactions, isLoading }: TransactionsListPr
       <TableLayout
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound='No transactions found.'
+        notFound={(
+          <EmptyTableState
+            variant='content'
+            title='No transactions found.'
+            description='Transactions will appear here once activity is indexed.'
+          />
+        )}
         gridClass='grid-cols-[1fr_100px_120px_1fr_1fr_160px_160px]'
         headings={['Hash', 'Block', 'Age', 'From', 'To', 'Value', 'Fee']}
         iterable={transactions ?? []}
