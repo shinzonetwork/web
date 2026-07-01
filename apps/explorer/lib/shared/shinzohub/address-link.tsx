@@ -33,7 +33,7 @@ export function ShinzohubAddressLink({
     <Link
       prefetch={false}
       href={getPageLink("address", { param: address, chain: "shinzohub" })}
-      className={cn("cursor-pointer text-text-accent underline", className)}
+      className={cn("min-w-0 cursor-pointer text-text-accent underline", className)}
     >
       {children ?? address}
     </Link>
