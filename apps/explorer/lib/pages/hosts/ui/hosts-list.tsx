@@ -3,6 +3,7 @@
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { DEFAULT_LIMIT } from "@shinzo/ui/pagination";
 import { Badge } from "@/shared/ui/badge";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { HostWithHealth } from "./hosts-page";
@@ -34,10 +35,16 @@ export const HostsList = ({
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">
-      <TableLayout
+        <TableLayout
         isLoading={hostLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound="No Hosts are registered yet."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No hosts are registered yet."
+            description="Registered hosts and their health status will appear here."
+          />
+        )}
         headings={hosts.length > 0 ? tableHeadings : [""]}
         gridClass="grid-cols[repeat(5,1fr)]"
         iterable={hosts ?? []}

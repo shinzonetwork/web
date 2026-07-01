@@ -3,6 +3,7 @@
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { DEFAULT_LIMIT } from "@shinzo/ui/pagination";
 import { Badge } from "@/shared/ui/badge";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { GeneratorWithHealth } from "./generators-page";
@@ -39,7 +40,13 @@ export const GeneratorsList = ({
       <TableLayout
         isLoading={generatorLoading}
         loadingRowCount={DEFAULT_LIMIT}
-        notFound="No Generators are registered yet."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No generators are registered yet."
+            description="Registered generators and their sync status will appear here."
+          />
+        )}
         headings={generators.length > 0 ? tableHeadings : [""]}
         gridClass="grid-cols[repeat(5,1fr)]"
         iterable={generators ?? []}

@@ -4,6 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { DEFAULT_LIMIT, Pagination } from "@shinzo/ui/pagination";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { Typography } from "@/shared/ui/typography";
 import { formatHash } from "@/shared/utils/format-hash";
 import { Container } from "@/widgets/layout";
@@ -41,14 +42,11 @@ export function ShinzohubAddressViews({
         isLoading={isLoading}
         loadingRowCount={DEFAULT_LIMIT}
         notFound={(
-          <div className="flex flex-col items-center gap-1 text-center">
-            <Typography variant="md">
-              No views created by this address.
-            </Typography>
-            <Typography variant="sm" color="secondary">
-              Registered views will appear here.
-            </Typography>
-          </div>
+          <EmptyTableState
+            variant="content"
+            title="No views created by this address."
+            description="Registered views will appear here."
+          />
         )}
         headings={["View", "Contract", "Height"]}
         gridClass="grid-cols-[minmax(0,55%)_minmax(0,1fr)_140px]"

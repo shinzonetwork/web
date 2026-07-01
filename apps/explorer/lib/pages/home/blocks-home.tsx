@@ -7,6 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { formatHash } from "@/shared/utils/format-hash";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import ShinzoFilledIcon from "@/shared/ui/icons/shinzo-filled.svg";
+import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { Typography } from "@/shared/ui/typography";
 import { cn } from '@/shared/utils/utils';
 import { useShortBlocks } from './use-short-blocks';
@@ -51,7 +52,13 @@ export const BlocksHome = () => {
         isLoading={isLoading}
         loadingRowCount={5}
         className={cn(HALF_CONTAINER_CLASS, 'relative', GAP_BG, 'after:border-t')}
-        notFound="No blocks found."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No recent blocks."
+            description="Latest blocks will appear here once they are indexed."
+          />
+        )}
         gridClass="grid-cols-[1fr_270px_150px]"
         headings={["Block number", "Validator", "Txns"]}
         hideHeader
