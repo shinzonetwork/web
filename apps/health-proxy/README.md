@@ -4,9 +4,9 @@
 
 ## Why this exists
 
-The main webapp (`shinzo-webapp`) is deployed on Cloudflare Workers. Cloudflare Workers block all outgoing `fetch()` calls to raw IP addresses, returning error 1003 ("Direct IP Access Not Allowed"). Since indexer health checks require fetching `http://<ip>:443/health` by IP, they cannot be made from the webapp directly.
+The main webapp (`shinzo-webapp`) is deployed on Cloudflare Workers. Cloudflare Workers block all outgoing `fetch()` calls to raw IP addresses, returning error 1003 ("Direct IP Access Not Allowed"). Since generator client health checks require fetching `http://<ip>:443/health` by IP, they cannot be made from the webapp directly.
 
-This service is a lightweight Bun HTTP server that runs outside Cloudflare's network (on Fly.io) and proxies health check requests to indexer IPs on behalf of the webapp's frontend.
+This service is a lightweight Bun HTTP server that runs outside Cloudflare's network (on Fly.io) and proxies health check requests to generator client IPs on behalf of the webapp's frontend.
 
 ### Request flow
 
@@ -19,8 +19,8 @@ Browser → shinzo-health-proxy.fly.dev/health?ip=X.X.X.X → http://X.X.X.X:443
 
 ### `GET /health?ip=<ip>`
 
-- **ip** (required) — a valid IPv4 or IPv6 address of the indexer node
-- Returns the indexer's health response JSON on success
+- **ip** (required) — a valid IPv4 or IPv6 address of the generator client node
+- Returns the generator client's health response JSON on success
 - Returns `{ "status": "unhealthy" }` with status `502` on failure or timeout (5s)
 
 ### CORS

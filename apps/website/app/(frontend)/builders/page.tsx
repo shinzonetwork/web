@@ -105,7 +105,7 @@ export default function Page() {
         ,
         sectionContent: <>
           <p>Today, many teams end up rebuilding the same infrastructure.</p>
-          <p>Run nodes. <br />Maintain indexers. <br />Patch together caches and databases. <br />Hope nothing breaks. </p>
+          <p>Run nodes. <br />Maintain generators. <br />Patch together caches and databases. <br />Hope nothing breaks. </p>
           <p>Shinzō removes that burden.</p>
           <p>You can focus on product logic while relying on a read layer that is open, verifiable, and shared across the ecosystem, without sacrificing the speed your users expect.</p>
           <p>You can run infrastructure close to your app or rely on the network. <br />Either way, you are not forced into a black box.</p>
@@ -122,7 +122,7 @@ export default function Page() {
 
           <ul>
             <li>Builders who want verification instead of trust.</li>
-            <li>Builders who are tired of having to run their own nodes or indexers because existing providers cannot be trusted to give a complete or accurate view of onchain reality.</li>
+            <li>Builders who are tired of having to run their own nodes or generator client because existing providers cannot be trusted to give a complete or accurate view of onchain reality.</li>
             <li>Builders who do not want their product reliability tied to a single company&apos;s infrastructure.</li>
             <li>Builders working across chains who are worn down by glue code, custom pipelines, and brittle integrations.</li>
           </ul>
