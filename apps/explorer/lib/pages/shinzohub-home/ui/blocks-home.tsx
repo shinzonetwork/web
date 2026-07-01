@@ -36,7 +36,7 @@ export const BlocksHome = () => {
 
   // needed to fill grid spacing with pink color
   const GAP_BG = cn(
-    'after:hidden lg:after:block after:content-[""] after:absolute z-100',
+    'after:hidden xl:after:block after:content-[""] after:absolute z-100',
     'after:left-full after:w-4 after:h-[calc(100%+1px)] after:top-0 after:bg-background-accent-light',
     'after:border-border',
   );

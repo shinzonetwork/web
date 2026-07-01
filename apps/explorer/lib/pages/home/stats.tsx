@@ -15,7 +15,7 @@ export interface StatsBlockProps {
 
 export const StatsBlock = ({ children, icon, title, isLoading }: StatsBlockProps) => {
   return (
-    <div className='min-w-50 px-7 py-8 flex gap-3 items-center border-l border-border first:border-none'>
+    <div className='flex min-w-0 items-center gap-2 border-t border-border px-4 py-6 first:border-t-0 min-[360px]:border-t-0 min-[360px]:border-l min-[360px]:first:border-l-0 sm:gap-3 sm:px-7 sm:py-8 lg:min-w-50'>
       <i className='flex items-center size-4 [&>svg]:size-full text-accent'>
         {icon}
       </i>
@@ -26,7 +26,7 @@ export const StatsBlock = ({ children, icon, title, isLoading }: StatsBlockProps
         </Typography>
 
         {isLoading ? (
-          <div className='h-7 w-28'>
+          <div className='h-7 w-20 sm:w-28'>
             <Skeleton />
           </div>
         ) : (
@@ -43,7 +43,7 @@ export const HomeStats = () => {
   const {data: metricsData, isLoading: metricsLoading} = useBlocksAndTransactionsCount();
 
   return (
-    <section className='flex -mt-px'>
+    <section className='grid grid-cols-1 min-[360px]:grid-cols-2 lg:flex -mt-px'>
       <StatsBlock title='Total Blocks' icon={<ShinzoFilledIcon />} isLoading={metricsLoading}>
         <AnimatedNumber value={metricsData?.metrics.blocks_processed} />
       </StatsBlock>

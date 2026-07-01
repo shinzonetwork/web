@@ -7,10 +7,12 @@ export function SearchInputHint({
   hasInput,
   isSearching,
   onClear,
+  showShortcutHint = true,
 }: {
   hasInput: boolean;
   isSearching: boolean;
   onClear: () => void;
+  showShortcutHint?: boolean;
 }) {
   if (isSearching) {
     return (
@@ -36,6 +38,10 @@ export function SearchInputHint({
         <X aria-hidden className="size-4" />
       </button>
     );
+  }
+
+  if (!showShortcutHint) {
+    return null;
   }
 
   return (
