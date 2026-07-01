@@ -283,7 +283,7 @@ export function ExplorerSearch({
                 onFocus={() => setOpen(true)}
                 onKeyDown={handleInputKeyDown}
                 aria-label="Search Shinzohub"
-                aria-controls={open ? menuId : undefined}
+                aria-controls={menuId}
                 aria-activedescendant={open ? activeResultId : undefined}
                 placeholder="Search by Address / Txn Hash / Block"
                 tabIndex={inputTabIndex}
@@ -301,23 +301,25 @@ export function ExplorerSearch({
           </div>
         </form>
 
-        <SearchDropdownContent
-          id={menuId}
-          contentRef={contentRef}
-          onKeyDown={handleDropdownKeyDown}
-        >
-          <SearchDropdownBody
-            activeIndex={activeIndex}
-            menuId={menuId}
-            recentSearches={recentSearches}
-            search={search}
-            onExampleSelect={selectExample}
-            onHighlight={setActiveIndex}
-            onPick={pickResult}
-            onRetry={() => void search.retry()}
-            onSelect={selectResult}
-          />
-        </SearchDropdownContent>
+        {open && (
+          <SearchDropdownContent
+            id={menuId}
+            contentRef={contentRef}
+            onKeyDown={handleDropdownKeyDown}
+          >
+            <SearchDropdownBody
+              activeIndex={activeIndex}
+              menuId={menuId}
+              recentSearches={recentSearches}
+              search={search}
+              onExampleSelect={selectExample}
+              onHighlight={setActiveIndex}
+              onPick={pickResult}
+              onRetry={() => void search.retry()}
+              onSelect={selectResult}
+            />
+          </SearchDropdownContent>
+        )}
       </DropdownMenu>
     </div>
   );
