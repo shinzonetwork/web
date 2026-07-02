@@ -1,26 +1,34 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { TableLayout, TableNullableCell } from "@shinzo/ui/table";
 import { Pagination } from "@shinzo/ui/pagination";
-import { useHealthCheck, useHealthPolling } from "@/features/indexer-list";
-import { useRegisteredIndexers } from "../hooks/use-registered-indexers";
-import { useCursorPagePagination } from "../hooks/use-cursor-page-pagination";
+import { useRegisteredGenerators } from "../hooks/generators/use-registered-generators";
+import { useOffsetPagePagination } from "../hooks/use-offset-page-pagination";
 import { CopyToClipboard } from "@/widget";
 import {
   cn,
   formatHash,
-  indexerEntryKey,
+  GeneratorHealthData,
   ipFromConnectionString,
+  RegisteredGenerator,
 } from "@/shared/lib";
 import { HealthStatus } from "@/shared/types";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+import {
+  createHealthEntryKey,
+  PAGE_SIZE,
+} from "../../../shared/lib/shinzohub/health";
+import { useGeneratorHealthPolling } from "../hooks/generators/use-generator-health-polling";
 
-const INDEXERS_PAGE_PARAM = "indexersPage";
-const INDEXERS_CURSOR_KEY = "registered-indexers-cursor-key";
-const PAGE_SIZE = 5;
+export type GeneratorWithHealth = RegisteredGenerator &
+  Pick<GeneratorHealthData, "status"> & {
+    ip: string;
+  };
+
+const GENERATORS_PAGE_PARAM = "generatorsPage";
 
 const tableHeadings = [
   "Address",
@@ -30,73 +38,63 @@ const tableHeadings = [
   "Status",
 ];
 
-function IndexersHomeContent() {
+function GeneratorHomeContent() {
   const router = useRouter();
-  const [healthByKey, setHealthByKey] = useState<Map<string, HealthStatus>>(
-    new Map()
-  );
-  const { fetchHealth } = useHealthCheck();
-  const { page, queryParams, applyPaginationData, totalItems } =
-    useCursorPagePagination({
-      pageParam: INDEXERS_PAGE_PARAM,
-      storageKey: INDEXERS_CURSOR_KEY,
-      limit: PAGE_SIZE,
-    });
-
-  const { data: registeredIndexers, isPending } =
-    useRegisteredIndexers(queryParams);
-  const indexers = registeredIndexers?.indexers ?? [];
-  const pageTotal = Number(registeredIndexers?.pagination?.total ?? 0);
-  const nextKey = registeredIndexers?.pagination?.next_key;
-
-  useEffect(() => {
-    if (registeredIndexers) {
-      applyPaginationData(nextKey, pageTotal);
-    }
-  }, [registeredIndexers, nextKey, pageTotal, applyPaginationData]);
-
-  useHealthPolling({
-    entries: indexers,
-    resetKey: page,
-    toHealthEntry: (indexer) => ({
-      validatorAddress: indexer.address,
-      ip: ipFromConnectionString(indexer.connection_string),
-    }),
-    fetchHealth,
-    onResults: (liveDataByKey) => {
-      setHealthByKey((prev) => {
-        const next = new Map(prev);
-        for (const [key, data] of liveDataByKey) {
-          if (data.health) next.set(key, data.health);
-        }
-        return next;
-      });
-    },
+  const pageParams = useOffsetPagePagination(GENERATORS_PAGE_PARAM, PAGE_SIZE);
+  const { page } = pageParams;
+  const { data: registeredGenerators, isPending } = useRegisteredGenerators({
+    pageParams,
   });
 
-  const indexersWithHealth = useMemo(
+  const generators: GeneratorWithHealth[] = useMemo(
     () =>
-      indexers.map((indexer) => {
-        const ip = ipFromConnectionString(indexer.connection_string);
-        const key = indexerEntryKey({ validatorAddress: indexer.address, ip });
-        return {
-          ...indexer,
-          health: healthByKey.get(key) ?? ("unknown" as HealthStatus),
-        };
-      }),
-    [indexers, healthByKey]
+      registeredGenerators?.generators.map((generator) => ({
+        ...generator,
+        ip: ipFromConnectionString(generator.connectionString),
+        status: "unknown" as HealthStatus,
+      })) ?? [],
+    [registeredGenerators?.generators]
   );
 
-  const handleRegisterAsIndexer = () => {
+  const healthByKey = useGeneratorHealthPolling<GeneratorWithHealth>({
+    entries: generators,
+    resetKey: page,
+    toHealthEntry: (generator) => ({
+      address: generator.address,
+      ip: generator.ip,
+    }),
+  });
+
+  const generatorsWithHealth = useMemo(
+    () =>
+      generators.map((generator) => {
+        const key = createHealthEntryKey({
+          address: generator.address,
+          ip: generator.ip,
+        });
+        const healthData = healthByKey.get(key);
+        return {
+          ...generator,
+          status: healthData?.status ?? ("unknown" as HealthStatus),
+        };
+      }),
+    [generators, healthByKey]
+  );
+
+  const handleRegisterAsGenerator = () => {
     router.push("/indexer-registration");
   };
+
+  const showPagination =
+    registeredGenerators?.totalGeneratorsCount &&
+    registeredGenerators?.totalGeneratorsCount > PAGE_SIZE;
 
   return (
     <section className="w-full min-w-0 max-w-full">
       <div className="mb-8 flex min-w-0 p-8 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <h2 className="font-h2 text-h2 text-foreground slash-separator uppercase wrap-break-word">
-            Registered Indexers
+            Registered Generators
           </h2>
           <p className="font-mono text-muted-foreground mt-2 wrap-break-word">
             NETWORK LAYER / INDEXING SERVICES
@@ -105,7 +103,7 @@ function IndexersHomeContent() {
         <button
           type="button"
           className="shrink-0 self-start bg-primary px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary-foreground rounded-none transition-opacity hover:opacity-90 active:opacity-80 sm:self-auto sm:px-8"
-          onClick={handleRegisterAsIndexer}
+          onClick={handleRegisterAsGenerator}
         >
           REGISTER AS GENERATOR
         </button>
@@ -114,19 +112,19 @@ function IndexersHomeContent() {
         <TableLayout
           isLoading={isPending}
           loadingRowCount={PAGE_SIZE}
-          notFound="No Indexers are registered yet."
-          headings={indexersWithHealth.length > 0 ? tableHeadings : [""]}
+          notFound="No Generators are registered yet."
+          headings={generatorsWithHealth.length > 0 ? tableHeadings : [""]}
           gridClass="grid-cols[repeat(5,1fr)]"
-          iterable={indexersWithHealth}
-          rowRenderer={(indexer) => (
+          iterable={generatorsWithHealth}
+          rowRenderer={(generator) => (
             <>
-              <TableNullableCell value={indexer?.address}>
+              <TableNullableCell value={generator?.address}>
                 {(value) => (
                   <span className="text-sm text-foreground">{value}</span>
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.did}>
+              <TableNullableCell value={generator?.did}>
                 {(value) => (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -148,7 +146,7 @@ function IndexersHomeContent() {
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.source_chain}>
+              <TableNullableCell value={generator?.sourceChain}>
                 {(value) => (
                   <span className="text-sm text-foreground">
                     {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -157,7 +155,7 @@ function IndexersHomeContent() {
               </TableNullableCell>
 
               <TableNullableCell
-                value={indexer?.connection_string}
+                value={generator?.connectionString}
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
@@ -183,7 +181,7 @@ function IndexersHomeContent() {
                 )}
               </TableNullableCell>
 
-              <TableNullableCell value={indexer?.health} nowrap>
+              <TableNullableCell value={generator?.status} nowrap>
                 {(value) => (
                   <>
                     {value !== "unknown" && (
@@ -209,23 +207,25 @@ function IndexersHomeContent() {
             </>
           )}
         />
-        <div className="pr-6">
-          <Pagination
-            page={page}
-            totalItems={totalItems}
-            itemsPerPage={PAGE_SIZE}
-            pageParam={INDEXERS_PAGE_PARAM}
-          />
-        </div>
+        {showPagination && (
+          <div className="pr-6">
+            <Pagination
+              page={page}
+              totalItems={registeredGenerators?.totalGeneratorsCount ?? 0}
+              itemsPerPage={PAGE_SIZE}
+              pageParam={GENERATORS_PAGE_PARAM}
+            />
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-export function IndexersHome() {
+export function GeneratorsHome() {
   return (
     <Suspense fallback={null}>
-      <IndexersHomeContent />
+      <GeneratorHomeContent />
     </Suspense>
   );
 }

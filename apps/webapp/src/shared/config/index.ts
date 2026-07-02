@@ -5,10 +5,10 @@ import { defineChain, type Chain } from "viem";
 import { getRpcUrl } from "./env";
 import { SHINZO_CHAIN_ID } from "../lib/constants/chains";
 
-export const Shinzo: Chain = defineChain({
+export const shinzoHub: Chain = defineChain({
   id: SHINZO_CHAIN_ID,
   name: "Shinzo",
-  nativeCurrency: { name: "Shinzo", symbol: "SHN", decimals: 18 },
+  nativeCurrency: { name: "Shinzo", symbol: "SHNZ", decimals: 18 },
   rpcUrls: {
     default: {
       http: [getRpcUrl()],
@@ -19,11 +19,11 @@ export const Shinzo: Chain = defineChain({
   },
 });
 
-const config = createConfig({
+const wagmiConfig = createConfig({
   ssr: true,
-  chains: [Shinzo],
+  chains: [shinzoHub],
   transports: {
-    [Shinzo.id]: http(getRpcUrl()),
+    [shinzoHub.id]: http(getRpcUrl()),
   },
 });
-export default config;
+export default wagmiConfig;
