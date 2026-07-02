@@ -17,6 +17,7 @@ const expectedRootExports = [
   "getHostHealth",
   "getGenerator",
   "getGeneratorHealth",
+  "getGeneratorAssertion",
   "getLatestBlock",
   "getLatestBlockHeight",
   "getTransaction",

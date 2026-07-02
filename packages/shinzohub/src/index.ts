@@ -28,10 +28,11 @@ import {
   getHost,
   getHostHealth,
 } from "./hosts/index";
-import {
-  getGenerator,
-  listGenerators,
+import { 
+  getGenerator, 
+  listGenerators, 
   getGeneratorHealth,
+  getGeneratorAssertion,
 } from "./generators/index";
 import { listValidators } from "./validators/index";
 
@@ -132,9 +133,10 @@ export type {
   HostHealthP2P,
   HostHealthPeer,
 } from "./hosts/index";
-export {
-  getGenerator,
-  listGenerators,
+export { 
+  getGenerator, 
+  listGenerators, 
+  getGeneratorAssertion,
   getGeneratorHealth,
 } from "./generators/index";
 export type {
@@ -147,6 +149,9 @@ export type {
   GeneratorHealthData,
   GeneratorHealthP2P,
   GeneratorHealthPeer,
+  GeneratorAssertion,
+  GetAssertionParameters,
+  GetAssertionResult,
 } from "./generators/index";
 export { listValidators } from "./validators/index";
 export type {
@@ -223,6 +228,9 @@ export function shinzoHubActions(client: Client) {
     /** Lists active consensus validators. */
     listValidators: (parameters?: Parameters<typeof listValidators>[1]) =>
       listValidators(client, parameters),
+    /** Fetches generator assertions for a delegate address. */
+    getGeneratorAssertion: (parameters: Parameters<typeof getGeneratorAssertion>[1]) =>
+      getGeneratorAssertion(client, parameters),
   };
 }
 

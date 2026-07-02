@@ -1,5 +1,5 @@
 import { HostsHome } from "./hosts-home";
-import { IndexersHome } from "./indexers-home";
+import { GeneratorsHome } from "./generators-home";
 import { StatsHome } from "./stats-home";
 import { TitleHome } from "./title-home";
 
@@ -8,7 +8,7 @@ export function Home() {
     <div className="my-4 w-full min-w-0 max-w-full">
       <TitleHome />
       <StatsHome />
-      <IndexersHome />
+      <GeneratorsHome />
       <HostsHome />
     </div>
   );
