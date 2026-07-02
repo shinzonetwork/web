@@ -45,7 +45,7 @@ export const ShinzohubTransactionsPageClient = ({ block, kind, pageParams }: Shi
     <PageLayout title={block ? `Transactions in block #${block}` : 'Transactions'}>
       <Container
         wrapperClassName='mt-16 mb-8 border-b border-ui-border'
-        className='flex items-end justify-between [&>*]:translate-y-[1px]'
+        className='flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between [&>*]:translate-y-[1px]'
       >
         <Tabs value={kind} onValueChange={setKind}>
           <TabsList>

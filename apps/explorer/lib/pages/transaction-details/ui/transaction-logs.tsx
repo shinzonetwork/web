@@ -5,8 +5,9 @@ import { Skeleton } from '@shinzo/ui/skeleton';
 import { formatUnits, getAddress } from 'viem';
 import { Badge } from '@/shared/ui/badge';
 import { CopyButton } from '@/shared/ui/button';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
-import { getPageLink } from '@/shared/utils/links';
+import { getPageLink, type ChainPathSegment } from '@/shared/utils/links';
 import { DataItem, DataList } from '@/widgets/data-list';
 import { Container } from '@/widgets/layout';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
@@ -49,6 +50,39 @@ function TokenInfo({ token }: { token: TokenMetadata }) {
   );
 }
 
+function normalizeLogAddress(address: string): string {
+  try {
+    return getAddress(address);
+  } catch {
+    return address;
+  }
+}
+
+function LogAddressLink({
+  address,
+  chain,
+}: {
+  address: string;
+  chain: ChainPathSegment;
+}) {
+  const displayAddress = normalizeLogAddress(address);
+
+  return (
+    <span className='inline-flex min-w-0 items-center gap-1'>
+      <Link
+        prefetch={false}
+        href={getPageLink('address', { param: displayAddress, chain })}
+        className='inline-flex min-w-0 cursor-pointer text-text-accent underline'
+      >
+        <Typography variant='sm' font='mono' className='truncate'>
+          {displayAddress}
+        </Typography>
+      </Link>
+      <CopyButton text={displayAddress} className='text-muted-foreground' />
+    </span>
+  );
+}
+
 function TransactionLogEntry({
   logIndex,
   address,
@@ -62,12 +96,7 @@ function TransactionLogEntry({
     isTokenEvent(normalizedTopics) ? (address ?? undefined) : undefined,
   );
 
-  let checksumAddress: string | undefined;
-  try {
-    checksumAddress = address ? getAddress(address) : undefined;
-  } catch {
-    checksumAddress = address ?? undefined;
-  }
+  const checksumAddress = address ? normalizeLogAddress(address) : undefined;
 
   return (
     <DataList>
@@ -80,35 +109,35 @@ function TransactionLogEntry({
             {decoded.eventName}
           </Badge>
         )}
-        {checksumAddress && (
-          <Link href={getPageLink('address', { param: checksumAddress, chain })} className='inline-flex items-center'>
-            <Typography variant='sm' font='mono' className='truncate'>
-              {checksumAddress}
-            </Typography>
-            <CopyButton text={checksumAddress} />
-          </Link>
-        )}
+        {checksumAddress && <LogAddressLink address={checksumAddress} chain={chain} />}
       </DataItem>
 
       {decoded ? (
-        decoded.args.map((argument, index) => (
-          <DataItem
-            key={`${argument.name}-${index}`}
-            title={`${argument.name} (${argument.type})`}
-            copyable={!token}
-            childClassName='flex gap-2 items-center'
-            value={
-              token && argument.type === 'uint256' ? (
-                <>
-                  {formatUnits(BigInt(argument.value), token.decimals)}{' '}
-                  <TokenInfo token={token} />
-                </>
-              ) : (
-                argument.value
-              )
-            }
-          />
-        ))
+        decoded.args.map((argument, index) => {
+          const isAddressArgument =
+            argument.type === 'address' && typeof argument.value === 'string';
+          const value =
+            token && argument.type === 'uint256' ? (
+              <>
+                {formatUnits(BigInt(argument.value), token.decimals)}{' '}
+                <TokenInfo token={token} />
+              </>
+            ) : isAddressArgument ? (
+              <LogAddressLink address={argument.value} chain={chain} />
+            ) : (
+              argument.value
+            );
+
+          return (
+            <DataItem
+              key={`${argument.name}-${index}`}
+              title={`${argument.name} (${argument.type})`}
+              copyable={!token && !isAddressArgument}
+              childClassName='flex gap-2 items-center'
+              value={value}
+            />
+          );
+        })
       ) : (
         <>
           {normalizedTopics.map((topic, index) => (
@@ -140,8 +169,11 @@ export function TransactionLogs({
 
   if (!logs?.length) {
     return (
-      <Container className='py-10'>
-        <Typography variant='md'>No logs for this transaction.</Typography>
+      <Container>
+        <EmptyTableState
+          title='No logs for this transaction.'
+          description='Contract event logs will appear here when this transaction emits them.'
+        />
       </Container>
     );
   }

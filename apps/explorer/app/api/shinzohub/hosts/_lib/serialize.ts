@@ -6,8 +6,8 @@ import type {
   HostHealthP2P,
   HostHealthPeer,
 } from "@/shared/shinzohub/types";
-import type { 
-  ListHostsResult, 
+import type {
+  ListHostsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   HostHealthData as ShinzoHubHostHealthData,
   HostHealthP2P as ShinzoHubHostHealthP2P,

@@ -1,20 +1,42 @@
 'use client';
 
 import Link from 'next/link';
+import { isShinzoAddress, shinzoAddressToHex } from '@shinzo/shinzohub';
 import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
 import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
 import { Badge } from '@/shared/ui/badge';
-import { CopyButton } from '@/shared/ui/button';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import type { ShinzohubTransactionSummary } from '@/shared/shinzohub/types';
+import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 import { formatHash } from '@/shared/utils/format-hash';
 import { formatShinzoCoin } from '@/shared/utils/format-token';
 import { getPageLink } from '@/shared/utils/links';
 
+function toEvmAddress(address: string | null | undefined): string | null {
+  if (!address) {
+    return null;
+  }
+
+  if (!isShinzoAddress(address)) {
+    return address;
+  }
+
+  try {
+    return shinzoAddressToHex(address);
+  } catch {
+    return address;
+  }
+}
+
 export function ShinzohubTransactionsList({
+  emptyStateDescription = "Transactions will appear here once Shinzohub has activity.",
+  emptyStateTitle = "No transactions found.",
   transactions,
   isLoading,
 }: {
+  emptyStateDescription?: string;
+  emptyStateTitle?: string;
   transactions: ShinzohubTransactionSummary[];
   isLoading: boolean;
 }) {
@@ -22,13 +44,19 @@ export function ShinzohubTransactionsList({
     <TableLayout
       isLoading={isLoading}
       loadingRowCount={DEFAULT_LIMIT}
-      notFound='No transactions found.'
+      notFound={(
+        <EmptyTableState
+          variant="content"
+          title={emptyStateTitle}
+          description={emptyStateDescription}
+        />
+      )}
       gridClass='grid-cols-[1fr_90px_100px_1fr_1fr_150px_130px]'
       headings={['Hash', 'Type', 'Block', 'Sender', 'Recipient', 'Amount', 'Fee']}
       iterable={transactions}
       rowRenderer={(transaction) => {
-        const sender = transaction.senders[0] ?? null;
-        const recipient = transaction.recipients[0] ?? null;
+        const sender = toEvmAddress(transaction.senders[0]);
+        const recipient = toEvmAddress(transaction.recipients[0]);
         const amount = transaction.transfers[0]?.amount ?? null;
 
         return (
@@ -61,19 +89,17 @@ export function ShinzohubTransactionsList({
 
             <TableNullableCell value={sender}>
               {(value) => (
-                <div className='flex items-center gap-1'>
-                  <span>{formatHash(value, 8, 6)}</span>
-                  <CopyButton text={value} className='text-muted-foreground' />
-                </div>
+                <ShinzohubAddressLink address={value} copyable className='font-mono'>
+                  {formatHash(value, 8, 6)}
+                </ShinzohubAddressLink>
               )}
             </TableNullableCell>
 
             <TableNullableCell value={recipient}>
               {(value) => (
-                <div className='flex items-center gap-1'>
-                  <span>{formatHash(value, 8, 6)}</span>
-                  <CopyButton text={value} className='text-muted-foreground' />
-                </div>
+                <ShinzohubAddressLink address={value} copyable className='font-mono'>
+                  {formatHash(value, 8, 6)}
+                </ShinzohubAddressLink>
               )}
             </TableNullableCell>
 

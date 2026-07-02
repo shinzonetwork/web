@@ -61,7 +61,7 @@ export default function Page() {
           <p>Builders do not choose ecosystems only on throughput or fees.<br /> They choose based on how quickly they can build something real and how much they can trust the infrastructure beneath them.</p>
           <p>A verifiable read layer changes that calculus.</p>
           <ul>
-            <li>Developers no longer need to run bespoke indexers just to answer basic questions.</li>
+            <li>Developers no longer need to run bespoke generators just to answer basic questions.</li>
             <li>They no longer have to choose between speed and correctness.</li>
             <li>They no longer have to trust opaque infrastructure to understand onchain reality.</li>
           </ul>

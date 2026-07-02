@@ -5,6 +5,7 @@ import { DataItem, DataList } from "@/widgets/data-list";
 import { CopyButton } from "@/shared/ui/button";
 import { Typography } from "@/shared/ui/typography";
 import { Badge } from "@/shared/ui/badge";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
@@ -70,13 +71,12 @@ export const GeneratorCard = (options: GeneratorCardOptions) => {
             )}
           </DataItem>
           <DataItem title="Address" value={generator?.address} loading={isLoading}>
-            <div className="flex items-center gap-2">
-              {generator?.address}
-              <CopyButton
-                text={generator?.address || ""}
-                className="text-muted-foreground"
-              />
-            </div>
+            <ShinzohubAddressLink
+              address={generator?.address}
+              copyable
+              fallback="—"
+              className="break-all font-mono"
+            />
           </DataItem>
 
           <DataItem title="DID key" value={generator?.did} loading={isLoading}>

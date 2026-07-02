@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   shinzoHubChains,
   shinzoHubDevelop,
+  shinzoHubDevnet,
   shinzoHubLocal,
 } from "./index";
 
@@ -35,8 +36,22 @@ describe("Viem chain definitions", () => {
     ]);
   });
 
+  it("defines the public devnet Comet RPC endpoint", () => {
+    expect(shinzoHubDevnet).toMatchObject({
+      id: 91273002,
+      name: "ShinzoHub Devnet",
+    });
+    expect(shinzoHubDevnet.rpcUrls.default.http).toEqual([
+      "http://rpc.devnet.shinzo.network:8545",
+    ]);
+    expect((shinzoHubDevnet.rpcUrls as any).cometRpc.http).toEqual([
+      "http://rpc.devnet.shinzo.network:26657",
+    ]);
+  });
+
   it("maps known chains in shinzoHubChains", () => {
     expect(shinzoHubChains.develop).toBe(shinzoHubDevelop);
     expect(shinzoHubChains.local).toBe(shinzoHubLocal);
+    expect(shinzoHubChains.devnet).toBe(shinzoHubDevnet);
   });
 });

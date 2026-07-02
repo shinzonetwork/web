@@ -4,16 +4,17 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
 import ShinzoTxnIcon from '@/shared/ui/icons/shinzo-txn.svg';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
 import { formatHash } from '@/shared/utils/format-hash';
 import { formatShinzoCoin } from '@/shared/utils/format-token';
 import { cn } from '@/shared/utils/utils';
 import { HALF_CONTAINER_CLASS } from './blocks-home';
-import { useHomeTransactions } from '../hook/use-home-transactions';
+import { useHomeTransactions } from '../api/use-home-transactions';
 import { useHighlight } from '@/pages/home/use-highlight';
-import { CopyButton } from '@/shared/ui/button';
 import { getPageLink } from '@/shared/utils/links';
 import { useChainPathSegment } from '@/widgets/chain-path-segment';
+import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 
 function TransactionValue({ value }: { value: string }) {
   const formatted = formatShinzoCoin(value);
@@ -60,7 +61,13 @@ export const TransactionsHome = () => {
         className={HALF_CONTAINER_CLASS}
         isLoading={isLoading}
         loadingRowCount={5}
-        notFound="No transactions found."
+        notFound={(
+          <EmptyTableState
+            variant="content"
+            title="No recent transactions."
+            description="Latest transactions will appear here once activity is indexed."
+          />
+        )}
         gridClass="grid-cols-[1fr_270px_150px]"
         headings={['Hash', 'From–To', 'Value']}
         hideHeader
@@ -90,19 +97,27 @@ export const TransactionsHome = () => {
                     {from && (
                       <div className="flex flex-row gap-2">
                         <Typography>From: </Typography>
-                        <div className="flex items-center gap-1 text-sm text-foreground">
+                        <ShinzohubAddressLink
+                          address={from}
+                          copyable
+                          wrapperClassName="text-sm"
+                          className="font-mono"
+                        >
                           {formatHash(from, 8, 6)}
-                          <CopyButton text={from} className="text-muted-foreground" />
-                        </div>
+                        </ShinzohubAddressLink>
                       </div>
                     )}
                     {tx?.to && (
                       <div className="flex flex-row gap-2">
                         <Typography>To: </Typography>
-                        <div className="flex items-center gap-1 text-sm text-foreground">
+                        <ShinzohubAddressLink
+                          address={tx.to}
+                          copyable
+                          wrapperClassName="text-sm"
+                          className="font-mono"
+                        >
                           {formatHash(tx.to, 8, 6)}
-                          <CopyButton text={tx.to} className="text-muted-foreground" />
-                        </div>
+                        </ShinzohubAddressLink>
                       </div>
                     )}
                   </div>

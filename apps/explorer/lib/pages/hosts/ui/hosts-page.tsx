@@ -37,7 +37,7 @@ export function HostsPageClient({ pageParams }: HostsPageClientProps) {
         current_block: 0,
       })) ?? [],
     [registeredHosts]
-  );  
+  );
 
   const healthByKey = useHostHealthPolling<HostWithHealth>({
     entries: hosts,

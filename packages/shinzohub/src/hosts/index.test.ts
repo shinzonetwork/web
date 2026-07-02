@@ -145,7 +145,7 @@ describe("getHost", () => {
 });
 
 describe("getHostHealth timeout", () => {
-  it("returns unhealthy after each candidate port times out", async () => {
+  it("returns unhealthy when the health request times out", async () => {
     vi.useFakeTimers();
 
     globalThis.fetch = vi.fn((_url, init?: RequestInit) => {
@@ -160,10 +160,9 @@ describe("getHostHealth timeout", () => {
     const expectation = expect(promise).resolves.toEqual(UNHEALTHY_LIVE_DATA);
 
     await vi.advanceTimersByTimeAsync(50);
-    await vi.advanceTimersByTimeAsync(50);
     await expectation;
 
-    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
 
     vi.useRealTimers();
   });
@@ -183,4 +182,3 @@ describe("getHostHealth timeout", () => {
     expect(globalThis.fetch).toHaveBeenCalledTimes(1);
   });
 });
-

@@ -256,7 +256,7 @@ export interface Chain {
   generateSlug?: boolean | null;
   slug: string;
   /**
-   * Maximum number of claimable spots for indexers
+   * Maximum number of claimable spots for generators
    */
   spotsLimit: number;
   /**

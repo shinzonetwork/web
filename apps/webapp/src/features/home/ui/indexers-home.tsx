@@ -107,7 +107,7 @@ function IndexersHomeContent() {
           className="shrink-0 self-start bg-primary px-6 py-3 text-xs font-bold uppercase tracking-widest text-primary-foreground rounded-none transition-opacity hover:opacity-90 active:opacity-80 sm:self-auto sm:px-8"
           onClick={handleRegisterAsIndexer}
         >
-          REGISTER AS INDEXER
+          REGISTER AS GENERATOR
         </button>
       </div>
       <div className="w-full min-w-0 max-w-full overflow-hidden gap-4 flex flex-col items-end">

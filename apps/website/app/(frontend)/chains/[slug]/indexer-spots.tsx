@@ -29,7 +29,7 @@ export const IndexerSpots = ({ claims, totalClaims, page, limit }: IndexerSpotsP
     <div className="pt-10">
       <div className="flex flex-col">
         <div className="content-wrapper flex flex-col">
-          <h2 className="text-h4 mb-8">/ Indexers</h2>
+          <h2 className="text-h4 mb-8">/ Generators</h2>
 
           <span className="pb-5 text-text-secondary">
             Operator

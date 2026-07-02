@@ -124,8 +124,8 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Indexer spots are limited. Claim yours now to secure
-                      your position in the network — early indexers shape the protocol and
+                      Generator spots are limited. Claim yours now to secure
+                      your position in the network — early generators shape the protocol and
                       earn priority access to rewards. Once all spots are taken, the window closes.
                     </p>
                   </div>
@@ -134,7 +134,7 @@ export default async function Page({
                     <div className="richtext">
                       <p>
                         Verify you&apos;re an active validator of this chain to
-                        become an indexer of this network
+                        become a generator of this network
                       </p>
                       <DialogIndexer
                         networkName={chain.name}
@@ -153,8 +153,8 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Indexer spots are limited. Claim yours now to secure
-                      your position in the network — early indexers shape the protocol and
+                      Generator spots are limited. Claim yours now to secure
+                      your position in the network — early generators shape the protocol and
                       earn priority access to rewards. Once all spots are taken, the window closes.
                     </p>
                   </div>
@@ -177,7 +177,7 @@ export default async function Page({
 
           {chain.claimedSpots > 0 && (
             <div className="col-span-full pt-10">
-              <h2 className="text-h4 mb-8">/ Indexer Spots</h2>
+              <h2 className="text-h4 mb-8">/ Generator Spots</h2>
               <div className="flex gap-10 lg:flex-row flex-col">
                 <p className="whitespace-nowrap text-px-14 text-text-secondary font-mono">Claimed: {chain.claimedSpots}/{chain.spotsLimit}</p>
 

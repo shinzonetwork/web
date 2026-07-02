@@ -24,7 +24,7 @@ export default function BlockHomeExplainer() {
                         <div className="richtext mb-10">
                             <h2>What Shinzō Is</h2>
                             <p>Shinzo is a trustless data read layer for blockchains.</p>
-                            <p>Instead of asking you to trust an indexer or API, Shinzo turns the network itself into the data source. Validators become the origin of indexed, provable data. A peer network of Hosts carries that data forward, keeps it available, and provides the views for builders to rely on.</p>
+                            <p>Instead of asking you to trust a generator or API, Shinzo turns the network itself into the data source. Validators become the origin of indexed, provable data. A peer network of Hosts carries that data forward, keeps it available, and provides the views for builders to rely on.</p>
                             <p>The result is simple: a shared read layer where anyone can access, verify, and build on blockchain data without handing control to a single company.</p>
                         </div>
                     </div>

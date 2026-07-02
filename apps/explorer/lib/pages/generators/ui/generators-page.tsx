@@ -66,7 +66,7 @@ export function GeneratorsPageClient({ pageParams }: GeneratorsPageClientProps) 
   );
 
   return (
-    <PageLayout title='Indexers'>
+    <PageLayout title='Generators'>
       <Container
         wrapperClassName='mt-16 mb-8 border-b border-ui-border'
         className='flex items-end justify-between [&>*]:translate-y-[1px]'

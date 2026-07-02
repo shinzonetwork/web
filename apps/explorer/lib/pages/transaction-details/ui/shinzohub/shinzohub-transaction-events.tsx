@@ -1,7 +1,7 @@
 'use client';
 
 import type { ShinzohubEvent } from '@/shared/shinzohub/types';
-import { Typography } from '@/shared/ui/typography';
+import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Container } from '@/widgets/layout';
 
 export function ShinzohubTransactionEvents({
@@ -11,8 +11,11 @@ export function ShinzohubTransactionEvents({
 }) {
   if (!events?.length) {
     return (
-      <Container className='py-10'>
-        <Typography variant='md'>No events for this transaction.</Typography>
+      <Container>
+        <EmptyTableState
+          title='No events for this transaction.'
+          description='Cosmos events will appear here when this transaction includes them.'
+        />
       </Container>
     );
   }

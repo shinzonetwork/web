@@ -57,7 +57,7 @@ export const Chains: CollectionConfig = {
       type: "number",
       label: "Spots Limit",
       admin: {
-        description: "Maximum number of claimable spots for indexers",
+        description: "Maximum number of claimable spots for generators",
       },
       required: true,
       defaultValue: 0,

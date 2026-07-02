@@ -6,6 +6,7 @@ import { useHostDetails } from "../hook/use-host-details";
 import { CopyButton } from "@/shared/ui/button";
 import { Typography } from "@/shared/ui/typography";
 import { Badge } from "@/shared/ui/badge";
+import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
@@ -70,13 +71,12 @@ export const HostCard = (options: HostCardOptions) => {
           )}
         </DataItem>
         <DataItem title="Address" value={host?.address} loading={isLoading}>
-          <div className="flex items-center gap-2">
-            {host?.address}
-            <CopyButton
-              text={host?.address || ""}
-              className="text-muted-foreground"
-            />
-          </div>
+          <ShinzohubAddressLink
+            address={host?.address}
+            copyable
+            fallback="—"
+            className="break-all font-mono"
+          />
         </DataItem>
 
         <DataItem title="DID key" value={host?.did} loading={isLoading}>

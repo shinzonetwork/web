@@ -19,7 +19,7 @@ interface ListGeneratorsWireResponse {
 }
 
 /**
- * Lists registered ShinzoHub indexers through the Cosmos REST gateway.
+ * Lists registered ShinzoHub generators through the Cosmos REST gateway.
  */
 export async function listGenerators(
   client: ShinzoHubQueryClient | Client,

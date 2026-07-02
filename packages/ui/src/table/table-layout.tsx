@@ -56,7 +56,7 @@ interface TableLayoutWrapperProps {
 
 export const TableLayoutWrapper = ({ children, hideHeader, hideLeftSpacer, hideRightSpacer }: TableLayoutWrapperProps) => {
   const spacer = (
-    <div className={cn('hidden lg:grid min-h-18 basis-0 shrink grow', hideHeader ? 'border-b border-ui-border' : 'pt-[71px]')}>
+    <div className={cn('hidden xl:grid min-h-18 basis-0 shrink grow', hideHeader ? 'border-b border-ui-border' : 'pt-[71px]')}>
       <div className={cn(
         'bg-ui-bg-accent',
         'bg-[repeating-linear-gradient(to_bottom,#C7C7C7,#C7C7C7_1px,transparent_1px,transparent_72px)]'
@@ -118,7 +118,7 @@ export const TableLayout = <ROW = unknown>({
 
   return (
     <TableLayoutWrapper hideHeader={hideHeader} hideLeftSpacer={hideLeftSpacer} hideRightSpacer={hideRightSpacer}>
-      <div className={cn('grid w-full grow container max-lg:overflow-x-auto max-lg:max-w-[100vw]', gridClass, className)}>
+      <div className={cn('grid w-full grow container max-xl:overflow-x-auto max-xl:max-w-full', gridClass, className)}>
         {!hideHeader && headings && headings.length > 0 && (
           <div className={cn('h-18 grid grid-cols-subgrid border-b border-ui-border', spanClass)}>
             {headings?.map((heading, index) => (

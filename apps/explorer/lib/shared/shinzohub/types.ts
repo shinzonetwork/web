@@ -9,6 +9,7 @@ import type {
   ListHostsResult,
   ListGeneratorsResult,
   ListTransactionsResult,
+  ListValidatorsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
   RegisteredGenerator as ShinzoHubRegisteredGenerator,
@@ -22,6 +23,7 @@ import type {
   ShinzoHubTransactionKind,
   ShinzoHubTransactionSummary,
   ShinzoHubTransfer,
+  ShinzoHubValidator,
 } from '@shinzo/shinzohub';
 
 export type JsonSerialized<T> =
@@ -56,6 +58,11 @@ export type ShinzohubBlocksResponse = JsonSerialized<ListBlocksResult> & {
   total: number;
 };
 
+export type ShinzohubValidator = JsonSerialized<ShinzoHubValidator>;
+
+export type ShinzohubValidatorsResponse =
+  JsonSerialized<ListValidatorsResult>;
+
 export type RegisteredHost = JsonSerialized<ShinzoHubRegisteredHost>;
 
 export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "pagination">> & {
@@ -87,3 +94,76 @@ export type HostHealthPeer = JsonSerialized<ShinzoHubHostHealthPeer>;
 export type GeneratorHealthData = JsonSerialized<ShinzoHubGeneratorHealthData>;
 export type GeneratorHealthP2P = JsonSerialized<ShinzoHubGeneratorHealthP2P>;
 export type GeneratorHealthPeer = JsonSerialized<ShinzoHubGeneratorHealthPeer>;
+
+export interface ShinzohubAddressBalance {
+  amount: string;
+  denom: string;
+}
+
+export interface ShinzohubAddressAccount {
+  exists: boolean;
+  typeUrl: string | null;
+  typeLabel: string;
+  accountNumber: string | null;
+  transactionsCount: string;
+  publicKeyType: string | null;
+  codeHash: string | null;
+  isContract: boolean;
+}
+
+export interface ShinzohubAddressHost {
+  address: string;
+  did: string;
+}
+
+export interface ShinzohubAddressGenerator {
+  address: string;
+  did: string;
+  sourceChain: string;
+  sourceChainId: string;
+}
+
+export interface ShinzohubAddressView {
+  name: string;
+  contractAddress: string;
+  creator: string;
+  height: string;
+  externalUrl: string;
+}
+
+export interface ShinzohubAddressCreatedViews {
+  total: string | null;
+  items: ShinzohubAddressView[];
+}
+
+export interface ShinzohubAddressRelatedEntities {
+  host: ShinzohubAddressHost | null;
+  generator: ShinzohubAddressGenerator | null;
+  viewContract: ShinzohubAddressView | null;
+  createdViews: ShinzohubAddressCreatedViews;
+}
+
+export interface ShinzohubAddressDetailsResponse {
+  inputAddress: string;
+  shinzoAddress: string;
+  hexAddress: string;
+  nativeBalance: ShinzohubAddressBalance;
+  account: ShinzohubAddressAccount;
+  related: ShinzohubAddressRelatedEntities;
+}
+
+export interface ShinzohubAddressViewsPagination {
+  nextKey: string | null;
+  total: string | null;
+  page: number;
+  limit: number;
+  offset: number;
+}
+
+export interface ShinzohubAddressViewsResponse {
+  inputAddress: string;
+  shinzoAddress: string;
+  hexAddress: string;
+  views: ShinzohubAddressView[];
+  pagination: ShinzohubAddressViewsPagination;
+}

@@ -50,6 +50,24 @@ const findNewestParsedViewByName = async (
   return view;
 };
 
+/**
+ * Resolves `/views/{identifier}` where the identifier can be either a public
+ * Studio view name or a historical contract-address deep link.
+ */
+const findParsedViewByAddress = async (
+  address: string
+): Promise<ShinzoHubView> => {
+  const view = await fetchHubViewByAddress(address, {
+    includeMetadata: true,
+  });
+
+  if (isParsedView(view)) return view;
+
+  throw new Error(
+    `No ShinzoHub View metadata found for this contract address: "${address}".`
+  );
+};
+
 const fetchViewByRoute = async ({
   identifier,
   address,
@@ -58,7 +76,7 @@ const fetchViewByRoute = async ({
   address: string | null;
 }): Promise<ShinzoHubView> => {
   if (address) {
-    return fetchHubViewByAddress(address, { includeMetadata: true });
+    return findParsedViewByAddress(address);
   }
 
   if (!identifier) {

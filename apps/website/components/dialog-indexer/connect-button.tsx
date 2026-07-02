@@ -14,7 +14,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Connector, useAccount, useConnect, useDisconnect, useSignMessage } from "wagmi";
 
 const SIGN_MESSAGE =
-  "I confirm that I am the owner of this wallet and want to become an Indexer on Shinzo Network.";
+  "I confirm that I am the owner of this wallet and want to become a Generator on Shinzo Network.";
 
 interface WalletConnectButtonProps {
   signature: string;

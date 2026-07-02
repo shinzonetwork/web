@@ -1,7 +1,7 @@
 # API reference
 
 `@shinzo/shinzohub` provides Viem-compatible functions for ShinzoHub views,
-transactions, blocks, addresses, and chain configuration.
+transactions, blocks, validators, addresses, and chain configuration.
 
 Install it with its Viem peer dependencies:
 
@@ -20,9 +20,11 @@ subpaths:
 ```ts
 import { listTransactions } from "@shinzo/shinzohub/transactions";
 import { listBlocks } from "@shinzo/shinzohub/blocks";
+import { listValidators } from "@shinzo/shinzohub/validators";
 
 const transactions = await listTransactions(publicClient, { kind: "all" });
 const blocks = await listBlocks(publicClient);
+const validators = await listValidators(publicClient);
 ```
 
 Client extension is more convenient, but imports the combined action bundle.
@@ -45,6 +47,22 @@ serialization, for example with `String(value)`.
 
 Every query function performs exactly one REST or Comet RPC request. Compose
 multiple functions in application code when you need fallback or enrichment.
+
+## Hosts And Generators
+
+Import host helpers from `@shinzo/shinzohub/hosts` and generator helpers from
+`@shinzo/shinzohub/generators`, or import the same actions from the package
+root. Detail actions accept a Shinzo bech32 address and perform one Cosmos REST
+request.
+
+```ts
+const host = await getHost(client, { address: "shinzo1..." });
+const generator = await getGenerator(client, { address: "shinzo1..." });
+```
+
+`getHost` returns the canonical account address, DID, connection string, and
+GraphQL endpoint. `getGenerator` returns the canonical account address, DID,
+connection string, source chain, and source-chain ID.
 
 ## Clients
 
@@ -70,12 +88,55 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `getShinzoHubBlock`: extended-client name for `getBlock`.
   - `getShinzoHubBlockTimestamp`: extended-client name for
     `getBlockTimestamp`.
+  - `getHost`
+  - `listHosts`
+  - `getHostHealth`
+  - `getGenerator`
+  - `listGenerators`
+  - `getGeneratorHealth`
+  - `listValidators`
 
 Example result:
 
 ```ts
 const client = publicClient.extend(shinzoHubActions);
 await client.listBlocks({ minHeight: 100, maxHeight: 109 });
+```
+
+## Validators
+
+Import from `@shinzo/shinzohub/validators` or the package root.
+
+### `listValidators`
+
+Lists active consensus validators through Comet RPC.
+
+- Parameters
+  - `client`: Viem client whose chain contains `rpcUrls.cometRpc`, unless
+    `cometRpcUrl` is supplied.
+  - `parameters` optional
+    - `height`: validator set height.
+    - `page`: validator page number; defaults to `1`.
+    - `perPage`: page size; defaults to `100`.
+    - `cometRpcUrl`: Comet RPC endpoint override.
+
+Example response:
+
+```ts
+{
+  blockHeight: 8382514n,
+  validators: [{
+    address: "0x0b556cff4829c40773fdd05c44e0269cf22123f3",
+    pubKey: {
+      type: "tendermint/PubKeyEd25519",
+      value: "A83lbqaRU8f+9Oi8pSnk2V2e17zggC/V+oLjDM9xC6k=",
+    },
+    votingPower: 10n,
+    proposerPriority: -8n,
+  }],
+  count: 1,
+  total: 1,
+}
 ```
 
 ### `createShinzoHubClient`
@@ -113,7 +174,7 @@ filters.
     - `includeData`: include raw viewbundle data.
     - `sinceBlock`: minimum registration height.
     - `includeMetadata`: include parsed viewbundle metadata.
-    - `name`: exact view name.
+    - `name`: case-insensitive view name substring.
     - `creator`: exact creator address.
     - `metadataRootType`: exact metadata root type.
     - `metadataLensHash`: required lens hash.
@@ -784,7 +845,8 @@ Import from `@shinzo/shinzohub/chains` or the package root.
   endpoints.
 - `shinzoHubDevelop`: chain ID `91273002`; shared develop EVM, Cosmos REST,
   and Comet RPC endpoints.
-- `shinzoHubDevnet`: chain ID `91273002`; public devnet EVM endpoint only.
+- `shinzoHubDevnet`: chain ID `91273002`; public devnet EVM and Comet RPC
+  endpoints.
 - `shinzoHubTestnet`: chain ID `91273001`; endpoint placeholders are empty.
 - `shinzoHubMainnet`: chain ID `91273000`; endpoint placeholders are empty.
 - `shinzoHubChains`: the definitions above keyed by `local`, `develop`,

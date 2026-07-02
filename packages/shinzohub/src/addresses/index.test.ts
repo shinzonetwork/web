@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   hexToShinzoAddress,
+  isShinzoAddress,
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
@@ -35,6 +36,14 @@ describe("Shinzo address utilities", () => {
     expect(normalizeHexAddress("000102030405060708090A0B0C0D0E0F10111213")).toBe(
       "0x000102030405060708090a0b0c0d0e0f10111213",
     );
+  });
+
+  it("detects Shinzo-prefixed bech32 account address strings", () => {
+    expect(isShinzoAddress("shinzo1qqqsyqcyq5rqwzqfpg9scrgwpugpzysngdwwg4")).toBe(true);
+    expect(isShinzoAddress("SHINZO1QQQSYQCYQ5RQWZQFPG9SCRGWPUGPZYSNGDWWG4")).toBe(true);
+    expect(isShinzoAddress("source1qqqsyqcyq5rqwzqfpg9scrgwpugpzysns0y44x")).toBe(false);
+    expect(isShinzoAddress("0x000102030405060708090a0b0c0d0e0f10111213")).toBe(false);
+    expect(isShinzoAddress("shinzo1notvalid")).toBe(true);
   });
 
   it("rejects invalid prefixes and lengths", () => {

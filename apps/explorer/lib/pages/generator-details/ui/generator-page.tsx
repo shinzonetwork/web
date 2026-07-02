@@ -1,7 +1,6 @@
 import { PageLayout } from '@/widgets/layout';
 import { formatHash } from '@/shared/utils/format-hash';
-import { CopyButton } from '@/shared/ui/button';
-import { Typography } from '@/shared/ui/typography';
+import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 import { GeneratorCard } from './generator-card';
 
 export type GeneratorDetailClientPageProps = {
@@ -15,10 +14,14 @@ export const GeneratorDetailClientPage = async ({ params }: { params: Promise<{ 
     <PageLayout
       info={(
         <div className='flex items-center gap-3'>
-          <Typography variant='md' color='accent'>
+          <ShinzohubAddressLink
+            address={address}
+            copyable
+            className='font-mono text-base'
+            copyButtonClassName='text-text-accent'
+          >
             {formatHash(address, 15, 5)}
-          </Typography>
-          <CopyButton text={address} className='text-text-accent' />
+          </ShinzohubAddressLink>
         </div>
         )}
       title='Generator'

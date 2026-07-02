@@ -7,6 +7,11 @@ import {
   listViews,
 } from "./views/index";
 import {
+  getAccount,
+  getAccountBalance,
+  getEvmAccount,
+} from "./accounts/index";
+import {
   findTransactionByEvmHash,
   getTransaction,
   listTransactions,
@@ -18,19 +23,34 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
-import { 
-  listHosts, 
-  getHost, 
+import {
+  listHosts,
+  getHost,
   getHostHealth,
 } from "./hosts/index";
-import { 
-  getGenerator, 
-  listGenerators, 
+import {
+  getGenerator,
+  listGenerators,
   getGeneratorHealth,
 } from "./generators/index";
+import { listValidators } from "./validators/index";
 
 export {
+  getAccount,
+  getAccountBalance,
+  getEvmAccount,
+} from "./accounts/index";
+export type {
+  GetAccountBalanceParameters,
+  GetAccountParameters,
+  GetEvmAccountParameters,
+  ShinzoHubAccount,
+  ShinzoHubAccountBalance,
+  ShinzoHubEvmAccount,
+} from "./accounts/index";
+export {
   hexToShinzoAddress,
+  isShinzoAddress,
   normalizeHexAddress,
   normalizeShinzoAddress,
   shinzoAddressToHex,
@@ -96,9 +116,9 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
-export { 
-  getHost, 
-  listHosts, 
+export {
+  getHost,
+  listHosts,
   getHostHealth,
 } from "./hosts/index";
 export type {
@@ -112,9 +132,9 @@ export type {
   HostHealthP2P,
   HostHealthPeer,
 } from "./hosts/index";
-export { 
-    getGenerator, 
-  listGenerators, 
+export {
+  getGenerator,
+  listGenerators,
   getGeneratorHealth,
 } from "./generators/index";
 export type {
@@ -128,10 +148,26 @@ export type {
   GeneratorHealthP2P,
   GeneratorHealthPeer,
 } from "./generators/index";
+export { listValidators } from "./validators/index";
+export type {
+  ListValidatorsParameters,
+  ListValidatorsResult,
+  ShinzoHubValidator,
+  ShinzoHubValidatorPubKey,
+} from "./validators/index";
 
 /** Creates ShinzoHub actions bound to an existing Viem client. */
 export function shinzoHubActions(client: Client) {
   return {
+    /** Fetches one Cosmos auth account. */
+    getAccount: (parameters: Parameters<typeof getAccount>[1]) =>
+      getAccount(client, parameters),
+    /** Fetches one native bank balance by denom. */
+    getAccountBalance: (parameters: Parameters<typeof getAccountBalance>[1]) =>
+      getAccountBalance(client, parameters),
+    /** Fetches one EVM account view. */
+    getEvmAccount: (parameters: Parameters<typeof getEvmAccount>[1]) =>
+      getEvmAccount(client, parameters),
     /** Counts registered ShinzoHub views. */
     countViews: (parameters?: Parameters<typeof countViews>[1]) => countViews(client, parameters),
     /** Creates a ShinzoHub view from raw viewbundle bytes. */
@@ -182,7 +218,11 @@ export function shinzoHubActions(client: Client) {
     getGenerator: (parameters: Parameters<typeof getGenerator>[1]) =>
       getGenerator(client, parameters),
     /** Fetches live health for an generator IPv4 address. */
-    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) => getGeneratorHealth(parameters), 
+    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) =>
+      getGeneratorHealth(parameters),
+    /** Lists active consensus validators. */
+    listValidators: (parameters?: Parameters<typeof listValidators>[1]) =>
+      listValidators(client, parameters),
   };
 }
 
