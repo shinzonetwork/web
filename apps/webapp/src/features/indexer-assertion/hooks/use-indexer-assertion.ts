@@ -44,7 +44,7 @@ export function useIndexerAssertion() {
     async (
       assertionFormData: IndexerAssertionFormData,
       signed: SignedDelegatePayload
-    ) => {
+    ): Promise<boolean> => {
       const privateKey = process.env.NEXT_PUBLIC_INDEXER_ASSERTION_PRIVATE_KEY;
       const rpcEndpoint =
         process.env.NEXT_PUBLIC_INDEXER_ASSERTION_RPC_ENDPOINT;
@@ -54,7 +54,7 @@ export function useIndexerAssertion() {
           "Missing assertion config: RPC endpoint or private key.",
           TOAST_CONFIG
         );
-        return;
+        return false;
       }
 
       const signature = hexToBytes(signed?.signature as `0x${string}`); // 65 bytes
@@ -82,11 +82,16 @@ export function useIndexerAssertion() {
           throw new Error(`Assertion failed (${result.code}): ${result.log}`);
         }
 
-        toast.success(`Assertion submitted: ${result.hash}`, TOAST_CONFIG);
+        toast.success(
+          "Assertion complete. Continuing to registration…",
+          TOAST_CONFIG
+        );
+        return true;
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Unknown error";
         toast.error(`Submit failed: ${message}`, TOAST_CONFIG);
+        return false;
       } finally {
         setIsSubmitting(false);
       }

@@ -3,7 +3,6 @@ import {
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
   MenubarTrigger,
 } from "@/shared/ui/custom-menubar";
 import { ChevronDownIcon } from "lucide-react";
@@ -30,11 +29,7 @@ export function HeaderMenu() {
         </MenubarTrigger>
         <MenubarContent className="w-full min-w-[150px] bg-background shadow-md rounded-none">
           <MenubarItem asChild className="text-lg text-muted-foreground">
-            <Link href="/indexer-assertion">Assertion</Link>
-          </MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem asChild className="text-lg text-muted-foreground">
-            <Link href="/indexer-registration">Registration</Link>
+            <Link href="/indexer-assertion">Registration</Link>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>

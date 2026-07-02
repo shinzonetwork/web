@@ -23,9 +23,12 @@ async function fetchIndexerAssertion(address: string): Promise<boolean> {
 
 export function useVerifyIndexerAssertion(intervalMs = 30000) {
   const { address } = useAccount();
-  const shinzoAddress = address?.startsWith(SHINZO_PREFIX)
-    ? address
-    : toBech32(SHINZO_PREFIX, hexToBytes(address as Hex));
+
+  const shinzoAddress = address
+    ? address.startsWith(SHINZO_PREFIX)
+      ? address
+      : toBech32(SHINZO_PREFIX, hexToBytes(address as Hex))
+    : undefined;
 
   return useQuery({
     queryKey: ["indexer-assertion-verification", shinzoAddress],
