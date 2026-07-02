@@ -88,13 +88,10 @@ function Stepper({
   // Register/unregister triggers
   const registerTrigger = useCallback((node: HTMLButtonElement | null) => {
     setTriggerNodes((prev) => {
-      if (node && !prev.includes(node)) {
-        return [...prev, node]
-      } else if (!node && prev.includes(node!)) {
-        return prev.filter((n) => n !== node)
-      } else {
-        return prev
+      if (node) {
+        return prev.includes(node) ? prev : [...prev, node]
       }
+      return prev
     })
   }, [])
 
@@ -110,27 +107,56 @@ function Stepper({
 
   const currentStep = value ?? activeStep
 
-  // Keyboard navigation logic
-  const focusTrigger = (idx: number) => {
-    if (triggerNodes[idx]) triggerNodes[idx].focus()
-  }
-  const focusNext = (currentIdx: number) =>
-    focusTrigger((currentIdx + 1) % triggerNodes.length)
-  const focusPrev = (currentIdx: number) =>
-    focusTrigger((currentIdx - 1 + triggerNodes.length) % triggerNodes.length)
-  const focusFirst = () => focusTrigger(0)
-  const focusLast = () => focusTrigger(triggerNodes.length - 1)
+  const focusTrigger = useCallback(
+    (idx: number) => {
+      triggerNodes[idx]?.focus()
+    },
+    [triggerNodes]
+  )
+
+  const focusNext = useCallback(
+    (currentIdx: number) => {
+      if (triggerNodes.length === 0) return
+      focusTrigger((currentIdx + 1) % triggerNodes.length)
+    },
+    [focusTrigger, triggerNodes.length]
+  )
+
+  const focusPrev = useCallback(
+    (currentIdx: number) => {
+      if (triggerNodes.length === 0) return
+      focusTrigger(
+        (currentIdx - 1 + triggerNodes.length) % triggerNodes.length
+      )
+    },
+    [focusTrigger, triggerNodes.length]
+  )
+
+  const focusFirst = useCallback(() => {
+    focusTrigger(0)
+  }, [focusTrigger])
+
+  const focusLast = useCallback(() => {
+    if (triggerNodes.length === 0) return
+    focusTrigger(triggerNodes.length - 1)
+  }, [focusTrigger, triggerNodes.length])
+
+  const stepsCount = useMemo(
+    () =>
+      Children.toArray(children).filter(
+        (child): child is ReactElement =>
+          isValidElement(child) &&
+          (child.type as { displayName?: string }).displayName === "StepperItem"
+      ).length,
+    [children]
+  )
 
   // Context value
   const contextValue = useMemo<StepperContextValue>(
     () => ({
       activeStep: currentStep,
       setActiveStep: handleSetActiveStep,
-      stepsCount: Children.toArray(children).filter(
-        (child): child is ReactElement =>
-          isValidElement(child) &&
-          (child.type as { displayName?: string }).displayName === "StepperItem"
-      ).length,
+      stepsCount,
       orientation,
       registerTrigger,
       focusNext,
@@ -143,10 +169,15 @@ function Stepper({
     [
       currentStep,
       handleSetActiveStep,
-      children,
+      stepsCount,
       orientation,
       registerTrigger,
+      focusNext,
+      focusPrev,
+      focusFirst,
+      focusLast,
       triggerNodes,
+      indicators,
     ]
   )
 
@@ -247,16 +278,13 @@ function StepperTrigger({
     if (btnRef.current) {
       registerTrigger(btnRef.current)
     }
-  }, [btnRef.current])
-
-  // Find our index among triggers for navigation
-  const myIdx = useMemo(
-    () =>
-      triggerNodes.findIndex((n: HTMLButtonElement) => n === btnRef.current),
-    [triggerNodes, btnRef.current]
-  )
+  }, [registerTrigger])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    const myIdx = triggerNodes.findIndex(
+      (n: HTMLButtonElement) => n === e.currentTarget,
+    )
+
     switch (e.key) {
       case "ArrowRight":
       case "ArrowDown":

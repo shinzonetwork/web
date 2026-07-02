@@ -3,7 +3,6 @@ import {
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
   MenubarTrigger,
 } from "@/shared/ui/custom-menubar";
 import { ChevronDownIcon } from "lucide-react";
