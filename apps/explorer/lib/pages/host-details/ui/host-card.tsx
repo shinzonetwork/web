@@ -37,7 +37,7 @@ export const HostCard = (options: HostCardOptions) => {
 
   const status: HealthStatus = healthData?.status ?? "unknown";
 
-  if (!hostDetails) {
+  if (!isLoading && !hostDetails) {
     return (
       <div className="flex justify-center items-center h-full">
         <Typography variant="md" color="accent">
@@ -47,13 +47,13 @@ export const HostCard = (options: HostCardOptions) => {
     );
   }
 
-  const { host } = hostDetails;
+  const host = hostDetails?.host;
 
   return (
     <>
       <div className="col-span-3 h-12 w-full border-y border-border" />
       <DataList>
-      <DataItem title="Status" value={status} loading={isLoading}>
+        <DataItem title="Status" value={status} loading={isLoading}>
           {status !== "unknown" ? (
             <Badge
               variant="default"
@@ -145,26 +145,26 @@ export const HostCard = (options: HostCardOptions) => {
             )}
           </div>
         </DataItem>
-        <DataItem title="Peers Connection Status" value={healthData?.p2p?.enabled} loading={isLoading} >
-            <Badge
-              variant="default"
-              className={cn(
-                "rounded-md capitalize",
-                healthData?.p2p?.enabled
-                  ? "bg-green-100 text-green-600"
-                  : "bg-gray-100 text-gray-500"
-              )}
-            >
-              {healthData?.p2p?.enabled ? "Enabled" : "Disabled"}
-            </Badge>
+        <DataItem title="Peers Connection Status" value={healthData?.p2p?.enabled} loading={isLoading}>
+          <Badge
+            variant="default"
+            className={cn(
+              "rounded-md capitalize",
+              healthData?.p2p?.enabled
+                ? "bg-green-100 text-green-600"
+                : "bg-gray-100 text-gray-500"
+            )}
+          >
+            {healthData?.p2p?.enabled ? "Enabled" : "Disabled"}
+          </Badge>
         </DataItem>
         <DataItem
-            title="Connected peers"
-            value={healthData?.p2p?.enabled}
-            loading={isLoading}
-            allowWrap
-          >
-            {(healthData?.p2p?.peers?.length ?? 0) > 0 ? (
+          title="Connected peers"
+          value={healthData?.p2p?.enabled}
+          loading={isLoading}
+          allowWrap
+        >
+          {(healthData?.p2p?.peers?.length ?? 0) > 0 ? (
             <div className="flex flex-col gap-2 min-w-0 w-full">
               {healthData?.p2p?.peers?.map((peer, index) => (
                 <Fragment key={peer.id}>
@@ -183,10 +183,11 @@ export const HostCard = (options: HostCardOptions) => {
                 </Fragment>
               ))}
             </div>
-            ) : '—'}
-          </DataItem>
+          ) : (
+            "—"
+          )}
+        </DataItem>
       </DataList>
-
     </>
   );
 };

@@ -31,7 +31,7 @@ const toEvmAddress = (value: string): string => {
   }
 };
 
-export const createBlockscoutAddressLink = (
+export const createExplorerAddressLink = (
   address: string
 ): ViewAddressLink => {
   const evmAddress = toEvmAddress(address);
@@ -177,8 +177,8 @@ export const toViewSummary = (view: ShinzoHubView): ViewSummary | null => {
     id: view.contractAddress,
     href: createViewHref(view.name),
     name: view.name,
-    creator: createBlockscoutAddressLink(view.creator || "unknown"),
-    contract: createBlockscoutAddressLink(view.contractAddress),
+    creator: createExplorerAddressLink(view.creator || "unknown"),
+    contract: createExplorerAddressLink(view.contractAddress),
     height: formatHeight(view.height),
     heightNumber: toHeightNumber(view.height),
     metadata,
@@ -201,8 +201,8 @@ export const toViewDetails = (view: ShinzoHubView): ViewDetails => {
   return {
     id: view.contractAddress,
     name: view.name,
-    creator: createBlockscoutAddressLink(view.creator || "unknown"),
-    contract: createBlockscoutAddressLink(view.contractAddress),
+    creator: createExplorerAddressLink(view.creator || "unknown"),
+    contract: createExplorerAddressLink(view.contractAddress),
     height: formatHeight(view.height),
     heightNumber: toHeightNumber(view.height),
     rootType: metadata.rootType,

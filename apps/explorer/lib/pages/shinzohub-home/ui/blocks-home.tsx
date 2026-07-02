@@ -63,7 +63,7 @@ export const BlocksHome = () => {
             description="Latest blocks will appear here once they are indexed."
           />
         )}
-        gridClass="grid-cols-[1fr_270px_150px]"
+        gridClass="grid-cols-[minmax(200px,1fr)_270px_150px]"
         headings={["Block number", "Validator", "Txns"]}
         hideHeader
         hideRightSpacer
@@ -78,12 +78,12 @@ export const BlocksHome = () => {
                   <Link
                     prefetch={false}
                     href={`${getPageLink('block', { param: value.toString(), chain})}`}
-                    className="flex items-center gap-4"
+                    className="flex min-w-0 items-center gap-4"
                   >
-                    <i className="flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm">
-                      <ShinzoFilledIcon className="size-4 text-[#35353599]" />
+                    <i className="flex size-8 shrink-0 items-center justify-center rounded-sm border border-border text-text-secondary">
+                      <ShinzoFilledIcon className="h-4 w-5 shrink-0 text-[#35353599]" />
                     </i>
-                    <div className="flex flex-col">
+                    <div className="flex min-w-0 flex-col">
                       <Typography color="accent" className="underline">
                         {value}
                       </Typography>

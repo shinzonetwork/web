@@ -16,25 +16,25 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
   const [showMore, setShowMore] = useState(false);
   const { data: block, isLoading } = useShinzohubBlock(options.id);
 
-  if (!block?.height) {
+  if (!isLoading && block?.height == null) {
     return (
       <p className="text-center text-muted-foreground">Block not found.</p>
     );
   }
 
-  const proposer = block.proposerAddress
+  const proposer = block?.proposerAddress
     ? formatProposerAddress(block.proposerAddress)
     : null;
 
   return (
     <>
       <DataList>
-        <DataItem title="Block Height" value={block.height} loading={isLoading}>
-          {block.height}
+        <DataItem title="Block Height" value={block?.height} loading={isLoading}>
+          {block?.height}
         </DataItem>
 
-        <DataItem title="Timestamp" value={block.timestamp} loading={isLoading}>
-          {block.timestamp && formatDistanceToNow(new Date(block.timestamp), { addSuffix: true })}
+        <DataItem title="Timestamp" value={block?.timestamp} loading={isLoading}>
+          {block?.timestamp && formatDistanceToNow(new Date(block.timestamp), { addSuffix: true })}
         </DataItem>
 
         <DataItem
@@ -54,18 +54,18 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
 
         <DataItem
           title="Transactions"
-          value={block.transactionCount}
+          value={block?.transactionCount}
           loading={isLoading}
         >
-          {block.transactionCount}
+          {block?.transactionCount}
         </DataItem>
 
-        <DataItem title="Chain ID" value={block.chainId} loading={isLoading}>
-          {block.chainId}
+        <DataItem title="Chain ID" value={block?.chainId} loading={isLoading}>
+          {block?.chainId}
         </DataItem>
 
-        <DataItem title="Size" value={block.size} loading={isLoading}>
-          {block.size ? `${(Number(block.size) / 1024).toFixed(2)} KB` : '-'}
+        <DataItem title="Size" value={block?.size} loading={isLoading}>
+          {block?.size ? `${(Number(block.size) / 1024).toFixed(2)} KB` : '-'}
         </DataItem>
       </DataList>
 
@@ -77,107 +77,111 @@ export const ShinzohubBlockCard = (options: ShinzohubBlockCardOptions) => {
         <DataList>
           <DataItem
             title="Hash"
-            value={block.hash}
+            value={block?.hash}
             copyable
             loading={isLoading}
             truncate={false}
-            link={`${getPageLink("block", { param: block.hash, chain: 'shinzohub' })}`}
+            link={
+              block?.hash
+                ? `${getPageLink("block", { param: block.hash, chain: 'shinzohub' })}`
+                : undefined
+            }
           >
-            <span className="whitespace-nowrap overflow-x-auto">{block.hash}</span>
+            <span className="whitespace-nowrap overflow-x-auto">{block?.hash}</span>
           </DataItem>
 
           <DataItem
             title="Parent Hash"
-            value={block.parentHash}
+            value={block?.parentHash}
             copyable
             truncate={false}
             link={
-              block.parentHash
+              block?.parentHash
                 ? `${getPageLink("block", { param: block.parentHash, chain: 'shinzohub' })}`
                 : undefined
             }
           >
-            {block.parentHash}
+            {block?.parentHash}
           </DataItem>
 
           <DataItem
             title="App Hash"
-            value={block.appHash}
+            value={block?.appHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.appHash}
+            {block?.appHash}
           </DataItem>
 
           <DataItem
             title="Data Hash"
-            value={block.dataHash}
+            value={block?.dataHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.dataHash}
+            {block?.dataHash}
           </DataItem>
 
           <DataItem
             title="Validators Hash"
-            value={block.validatorsHash}
+            value={block?.validatorsHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.validatorsHash}
+            {block?.validatorsHash}
           </DataItem>
 
           <DataItem
             title="Next Validators Hash"
-            value={block.nextValidatorsHash}
+            value={block?.nextValidatorsHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.nextValidatorsHash}
+            {block?.nextValidatorsHash}
           </DataItem>
 
           <DataItem
             title="Consensus Hash"
-            value={block.consensusHash}
+            value={block?.consensusHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.consensusHash}
+            {block?.consensusHash}
           </DataItem>
 
           <DataItem
             title="Last Results Hash"
-            value={block.lastResultsHash}
+            value={block?.lastResultsHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.lastResultsHash}
+            {block?.lastResultsHash}
           </DataItem>
 
           <DataItem
             title="Evidence Hash"
-            value={block.evidenceHash}
+            value={block?.evidenceHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.evidenceHash}
+            {block?.evidenceHash}
           </DataItem>
 
           <DataItem
             title="Last Commit Hash"
-            value={block.lastCommitHash}
+            value={block?.lastCommitHash}
             copyable
             loading={isLoading}
             truncate={false}
           >
-            {block.lastCommitHash}
+            {block?.lastCommitHash}
           </DataItem>
 
           <DataItem title="More Details" loading={isLoading}>

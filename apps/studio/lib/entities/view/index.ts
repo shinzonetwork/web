@@ -11,7 +11,7 @@ export type {
 } from "./model/types";
 export {
   assertParsedViewMetadata,
-  createBlockscoutAddressLink,
+  createExplorerAddressLink,
   createViewHref,
   decodeViewRouteIdentifier,
   formatHeight,
