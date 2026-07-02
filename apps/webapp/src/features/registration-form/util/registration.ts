@@ -29,6 +29,21 @@ export function isValidConnectionString(value: string): boolean {
   );
 }
 
+export function isValidEndpointAddress(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+
+  try {
+    const url = new URL(trimmed);
+    return (
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      Boolean(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Host vs Indexer for V2 registration is determined only by the URL route
  * (e.g. `/host-registration`, `/indexer-registration`). Users switch flows via nav links, not in-form toggles.
@@ -81,6 +96,8 @@ export function validateHostRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Host,
     validateRegistrationFormV2(formData),
+    isValidConnectionString(formData.connectionString ?? ""),
+    isValidEndpointAddress(formData.endpointAddress ?? ""),
   ];
   return validations.every(Boolean);
 }
@@ -189,6 +206,7 @@ export function validateHostFields(
     defraPublicKey: undefined,
     defraSignedMessage: undefined,
     connectionString: undefined,
+    endpointAddress: undefined,
   };
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
@@ -196,6 +214,12 @@ export function validateHostFields(
   } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
       "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
+  }
+  if (!formData.endpointAddress?.trim()) {
+    errors.endpointAddress = "Endpoint address is required";
+  } else if (!isValidEndpointAddress(formData.endpointAddress)) {
+    errors.endpointAddress =
+      "Endpoint address must be a valid http or https URL";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const hostFieldsValidation = Object.values(errors).every(
@@ -257,6 +281,13 @@ export const REGISTRATION_FORM_INPUTS_HOST = [
   {
     id: "connectionString",
     label: "Connection string",
+    isTextarea: false,
+    isSelect: false,
+    required: true,
+  },
+  {
+    id: "endpointAddress",
+    label: "GraphQL endpoint",
     isTextarea: false,
     isSelect: false,
     required: true,

@@ -22,7 +22,13 @@ const HOSTS_PAGE_PARAM = "hostsPage";
 const HOSTS_CURSOR_KEY = "registered-hosts-cursor-key";
 const PAGE_SIZE = 5;
 
-const tableHeadings = ["Address", "DID", "Connection String", "Status"];
+const tableHeadings = [
+  "Address",
+  "DID",
+  "Endpoint Address",
+  "Connection String",
+  "Status",
+];
 
 function HostsHomeContent() {
   const router = useRouter();
@@ -38,7 +44,15 @@ function HostsHomeContent() {
     });
 
   const { data: registeredHosts, isPending } = useRegisteredHosts(queryParams);
-  const hosts = registeredHosts?.hosts ?? [];
+  const hosts = useMemo(
+    () =>
+      registeredHosts?.hosts.map((host) => ({
+        ...host,
+        ip: ipFromConnectionString(host.connection_string),
+      })) ?? [],
+    [registeredHosts]
+  );
+
   const pageTotal = Number(registeredHosts?.pagination?.total ?? 0);
   const nextKey = registeredHosts?.pagination?.next_key;
 
@@ -53,7 +67,7 @@ function HostsHomeContent() {
     resetKey: page,
     toHealthEntry: (host) => ({
       validatorAddress: host.address,
-      ip: ipFromConnectionString(host.connection_string),
+      ip: host.ip,
     }),
     fetchHealth,
     onResults: (liveDataByKey) => {
@@ -70,8 +84,10 @@ function HostsHomeContent() {
   const hostsWithHealth = useMemo(
     () =>
       hosts.map((host) => {
-        const ip = ipFromConnectionString(host.connection_string);
-        const key = indexerEntryKey({ validatorAddress: host.address, ip });
+        const key = indexerEntryKey({
+          validatorAddress: host.address,
+          ip: host.ip,
+        });
         return {
           ...host,
           health: healthByKey.get(key) ?? ("unknown" as HealthStatus),
@@ -142,7 +158,7 @@ function HostsHomeContent() {
               </TableNullableCell>
 
               <TableNullableCell
-                value={host?.connection_string}
+                value={host?.endpoint_address}
                 className="min-w-0 whitespace-normal"
               >
                 {(value) => (
@@ -151,6 +167,31 @@ function HostsHomeContent() {
                       <div className="flex items-center gap-1">
                         <span className="text-sm text-foreground wrap-break-word break-all">
                           {formatHash(value, 20, 10)}
+                        </span>
+                        <CopyToClipboard text={value} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="top"
+                      sideOffset={6}
+                      className="font-normal font-mono break-all"
+                    >
+                      {value}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </TableNullableCell>
+
+              <TableNullableCell
+                value={host?.connection_string}
+                className="min-w-0 whitespace-normal"
+              >
+                {(value) => (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-foreground wrap-break-word break-all">
+                          {value ? formatHash(value, 20, 10) : "—"}
                         </span>
                         <CopyToClipboard text={value} />
                       </div>
