@@ -49,7 +49,7 @@ export function ShinzohubAddressViews({
           />
         )}
         headings={["View", "Contract", "Height"]}
-        gridClass="grid-cols-[minmax(0,55%)_minmax(0,1fr)_140px]"
+        gridClass="grid-cols-[minmax(180px,1fr)_minmax(180px,0.8fr)_110px]"
         iterable={data?.views ?? []}
         rowRenderer={(view) => (
           <>

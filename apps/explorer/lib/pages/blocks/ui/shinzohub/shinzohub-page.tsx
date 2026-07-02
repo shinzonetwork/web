@@ -71,9 +71,9 @@ export const ShinzohubBlocksPageClient = ({ pageParams }: ShinzohubBlocksPageCli
             <>
               <TableNullableCell value={block?.height}>
                 {(value) => (
-                  <Link prefetch={false} href={`${getPageLink('block', { param: value, chain})}`} className='flex items-center gap-4'>
-                    <i className='flex items-center justify-center size-8 text-text-secondary border border-border rounded-sm'>
-                      <ShinzoFilledIcon className='size-4' />
+                  <Link prefetch={false} href={`${getPageLink('block', { param: value, chain})}`} className='flex min-w-0 items-center gap-4'>
+                    <i className='flex size-8 shrink-0 items-center justify-center rounded-sm border border-border text-text-secondary'>
+                      <ShinzoFilledIcon className='h-4 w-5 shrink-0' />
                     </i>
                     <Typography color='accent' className='underline'>
                       {value}
