@@ -17,7 +17,10 @@ export function useIndexerAssertionForm() {
   >({});
 
   const isValid = useMemo(() => {
-    return assertionFormData.consensusPubKey.trim().length > 0;
+    return (
+      assertionFormData.consensusPubKey.trim().length > 0 &&
+      Boolean(assertionFormData.sourceChain?.trim())
+    );
   }, [assertionFormData]);
 
   const handleInputChange = useCallback((field: string, value: string) => {

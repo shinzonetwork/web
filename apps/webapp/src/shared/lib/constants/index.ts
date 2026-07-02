@@ -25,6 +25,21 @@ export const UI_FORM_HEADER_CONTENT = {
     description:
       "Assert your Indexer to participate in the Shinzo Network.",
   },
+  "indexer-onboarding": {
+    title: "/ Indexer registration",
+    description:
+      "Assert your indexer, then continue to on-chain registration in a guided two-step flow.",
+  },
+  "indexer-onboarding-assertion": {
+    title: "/ Indexer registration",
+    description:
+      "Step 1 of 2 — assert your indexer, then continue to on-chain registration.",
+  },
+  "indexer-onboarding-registration": {
+    title: "/ Indexer registration",
+    description:
+      "Step 2 of 2 — register your indexer on-chain after completing assertion.",
+  },
   registration: {
     title: "/ Register on the Shinzo Network",
     description:
