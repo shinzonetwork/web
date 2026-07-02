@@ -70,8 +70,10 @@ export const DataItem = ({
       </div>
 
       {loading ? (
-        <div className='min-w-32 w-1/2 h-1/2'>
-          <Skeleton />
+        <div className='flex min-w-0 items-center pr-8'>
+          <div className='h-4 w-40 max-w-full'>
+            <Skeleton />
+          </div>
         </div>
       ) : (
         <div
