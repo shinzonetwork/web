@@ -23,7 +23,7 @@ export default function WalletSignatureHandler() {
       // Reset the ref when we're in a state that allows signing again
       if (error) {
         hasInitiatedSigningRef.current = false;
-        toast.error("Error signing message: " + error.message, TOAST_CONFIG);
+        toast.error("Failed to sign the message. Please try again.", TOAST_CONFIG);
       }
       return;
     }

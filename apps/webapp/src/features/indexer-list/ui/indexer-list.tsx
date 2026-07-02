@@ -46,7 +46,7 @@ export function IndexerList() {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold mb-4">Devnet Indexers</h2>
           <span className="text-sm text-muted-foreground">
-            Showing {page} of {totalPages} pages
+            Page {page} of {totalPages}
           </span>
         </div>
 
@@ -55,7 +55,7 @@ export function IndexerList() {
             <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
           </div>
         ) : entries.length === 0 ? (
-          <p className="text-muted-foreground">No peers yet.</p>
+          <p className="text-muted-foreground">No indexers registered yet.</p>
         ) : (
           <>
             {(() => {
