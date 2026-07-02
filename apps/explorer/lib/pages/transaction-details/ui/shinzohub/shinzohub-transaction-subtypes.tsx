@@ -1,16 +1,19 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import { CopyButton } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
 import type { ShinzohubEvent } from '@/shared/shinzohub/types';
+import { getPageLink, type AppPage } from '@/shared/utils/links';
 import { cn } from '@/shared/utils/utils';
 import {
   getShinzohubTransactionSubtypes,
+  type GeneratorRegistrationTransactionSubtype,
   type HostTransactionSubtype,
   type IndexerAssertionTransactionSubtype,
-  type IndexerRegistrationTransactionSubtype,
   type ShinzohubTransactionSubtype,
   type ViewTransactionSubtype,
 } from '../../model/shinzohub-transaction-subtype';
@@ -65,23 +68,45 @@ function ViewSubtype({
 function AddressLifecycleSubtype({
   address,
   label,
+  page,
 }: {
   address: string;
   label: string;
+  page?: Extract<AppPage, 'generator' | 'host'>;
 }) {
+  const addressElement = page ? (
+    <Link
+      prefetch={false}
+      href={getPageLink(page, { address, chain: 'shinzohub' })}
+      className='min-w-0 cursor-pointer break-all font-mono text-text-accent underline'
+    >
+      {address}
+    </Link>
+  ) : (
+    <ShinzohubAddressLink
+      address={address}
+      copyable
+      className='break-all font-mono'
+    >
+      {address}
+    </ShinzohubAddressLink>
+  );
+
   return (
     <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
       <Badge variant='outline'>{label}</Badge>
       <span className='whitespace-nowrap text-muted-foreground'>
         Address
       </span>
-      <ShinzohubAddressLink
-        address={address}
-        copyable
-        className='break-all font-mono'
-      >
-        {address}
-      </ShinzohubAddressLink>
+      <span className='inline-flex min-w-0 items-center gap-1'>
+        {addressElement}
+        {page && (
+          <CopyButton
+            text={address}
+            className='shrink-0 text-muted-foreground'
+          />
+        )}
+      </span>
     </span>
   );
 }
@@ -95,19 +120,21 @@ function HostSubtype({
     <AddressLifecycleSubtype
       address={subtype.address}
       label={subtype.label}
+      page='host'
     />
   );
 }
 
-function IndexerRegistrationSubtype({
+function GeneratorRegistrationSubtype({
   subtype,
 }: {
-  subtype: IndexerRegistrationTransactionSubtype;
+  subtype: GeneratorRegistrationTransactionSubtype;
 }) {
   return (
     <AddressLifecycleSubtype
       address={subtype.address}
       label={subtype.label}
+      page='generator'
     />
   );
 }
@@ -147,8 +174,8 @@ function TransactionSubtype({
       return <ViewSubtype subtype={subtype} />;
     case 'host':
       return <HostSubtype subtype={subtype} />;
-    case 'indexer-registration':
-      return <IndexerRegistrationSubtype subtype={subtype} />;
+    case 'generator-registration':
+      return <GeneratorRegistrationSubtype subtype={subtype} />;
     case 'indexer-assertion':
       return <IndexerAssertionSubtype subtype={subtype} />;
   }

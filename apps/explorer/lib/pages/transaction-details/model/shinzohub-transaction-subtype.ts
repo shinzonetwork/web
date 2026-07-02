@@ -6,10 +6,12 @@ import { STUDIO_VIEW_BASE_URL } from '@/shared/utils/consts';
 
 type AttributeMap = ReadonlyMap<string, string>;
 
-type HostEventType = 'host.host_pending' | 'host.host_registered';
-type IndexerEventType =
+type GeneratorEventType =
+  | 'generator.generator_pending'
+  | 'generator.generator_registered'
   | 'indexer.indexer_pending'
   | 'indexer.indexer_registered';
+type HostEventType = 'host.host_pending' | 'host.host_registered';
 type ViewEventType =
   | 'view.view_pending'
   | 'view.view_registered'
@@ -33,7 +35,7 @@ interface HostEventAttributes {
   msg_index: string;
 }
 
-interface IndexerEventAttributes {
+interface GeneratorEventAttributes {
   address: string;
   did: string;
   msg_index: string;
@@ -78,13 +80,14 @@ export interface HostTransactionSubtype {
 }
 
 /**
- * Semantic transaction subtype for indexer registration lifecycle events.
- * Assertion events use a different shape and stay modeled separately.
+ * Semantic transaction subtype for generator registration lifecycle events.
+ * The current chain event type is `indexer.indexer_*`; the explorer presents
+ * those records as generators because that is the product-facing entity name.
  */
-export interface IndexerRegistrationTransactionSubtype {
-  kind: 'indexer-registration';
+export interface GeneratorRegistrationTransactionSubtype {
+  kind: 'generator-registration';
   status: 'pending' | 'registered';
-  label: 'Indexer pending' | 'Indexer registered';
+  label: 'Generator pending' | 'Generator registered';
   address: string;
   did: string;
 }
@@ -110,7 +113,7 @@ export interface IndexerAssertionTransactionSubtype {
 export type ShinzohubTransactionSubtype =
   | ViewTransactionSubtype
   | HostTransactionSubtype
-  | IndexerRegistrationTransactionSubtype
+  | GeneratorRegistrationTransactionSubtype
   | IndexerAssertionTransactionSubtype;
 
 type TransactionSubtypeResolver = (
@@ -247,10 +250,12 @@ function resolveHostSubtype(
   };
 }
 
-function resolveIndexerRegistrationSubtype(
+function resolveGeneratorRegistrationSubtype(
   event: ShinzohubEvent,
-): IndexerRegistrationTransactionSubtype | null {
+): GeneratorRegistrationTransactionSubtype | null {
   if (
+    event.type !== 'generator.generator_pending' &&
+    event.type !== 'generator.generator_registered' &&
     event.type !== 'indexer.indexer_pending' &&
     event.type !== 'indexer.indexer_registered'
   ) {
@@ -260,17 +265,20 @@ function resolveIndexerRegistrationSubtype(
   const attributes = getRequiredAttributes(
     toAttributeMap(event.attributes),
     ['address', 'did', 'msg_index'] as const,
-  ) satisfies IndexerEventAttributes | null;
+  ) satisfies GeneratorEventAttributes | null;
   if (!attributes) return null;
 
-  const eventType = event.type as IndexerEventType;
+  const eventType = event.type as GeneratorEventType;
   const status =
-    eventType === 'indexer.indexer_pending' ? 'pending' : 'registered';
+    eventType === 'generator.generator_pending' ||
+    eventType === 'indexer.indexer_pending'
+      ? 'pending'
+      : 'registered';
 
   return {
-    kind: 'indexer-registration',
+    kind: 'generator-registration',
     status,
-    label: status === 'pending' ? 'Indexer pending' : 'Indexer registered',
+    label: status === 'pending' ? 'Generator pending' : 'Generator registered',
     address: attributes.address,
     did: attributes.did,
   };
@@ -317,7 +325,7 @@ function resolveIndexerAssertionSubtype(
 const SUBTYPE_RESOLVERS: readonly TransactionSubtypeResolver[] = [
   resolveViewSubtype,
   resolveHostSubtype,
-  resolveIndexerRegistrationSubtype,
+  resolveGeneratorRegistrationSubtype,
   resolveIndexerAssertionSubtype,
 ];
 
