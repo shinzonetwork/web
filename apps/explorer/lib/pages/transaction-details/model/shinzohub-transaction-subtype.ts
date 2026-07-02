@@ -6,7 +6,14 @@ import { STUDIO_VIEW_BASE_URL } from '@/shared/utils/consts';
 
 type AttributeMap = ReadonlyMap<string, string>;
 
-type ViewEventType = 'view.view_pending' | 'view.view_registered';
+type HostEventType = 'host.host_pending' | 'host.host_registered';
+type IndexerEventType =
+  | 'indexer.indexer_pending'
+  | 'indexer.indexer_registered';
+type ViewEventType =
+  | 'view.view_pending'
+  | 'view.view_registered'
+  | 'view.view_registration_timed_out';
 
 /**
  * Raw event attributes are kept in their chain-emitted snake_case shape here.
@@ -17,6 +24,18 @@ interface ViewEventAttributes {
   view_id: string;
   contract_address: string;
   creator: string;
+  msg_index: string;
+}
+
+interface HostEventAttributes {
+  address: string;
+  did: string;
+  msg_index: string;
+}
+
+interface IndexerEventAttributes {
+  address: string;
+  did: string;
   msg_index: string;
 }
 
@@ -39,13 +58,35 @@ interface IndexerAssertedEventAttributes {
  */
 export interface ViewTransactionSubtype {
   kind: 'view';
+  status: 'pending' | 'registered' | 'timed-out';
+  label: 'View pending' | 'View registered' | 'View timed out';
+  viewId?: string;
+  viewName?: string;
+  contractAddress?: string;
+  creator?: string;
+  error?: string;
+  externalUrl?: string;
+}
+
+/** Semantic transaction subtype for host registration lifecycle events. */
+export interface HostTransactionSubtype {
+  kind: 'host';
   status: 'pending' | 'registered';
-  label: 'View pending' | 'View registered';
-  viewId: string;
-  viewName: string;
-  contractAddress: string;
-  creator: string;
-  externalUrl: string;
+  label: 'Host pending' | 'Host registered';
+  address: string;
+  did: string;
+}
+
+/**
+ * Semantic transaction subtype for indexer registration lifecycle events.
+ * Assertion events use a different shape and stay modeled separately.
+ */
+export interface IndexerRegistrationTransactionSubtype {
+  kind: 'indexer-registration';
+  status: 'pending' | 'registered';
+  label: 'Indexer pending' | 'Indexer registered';
+  address: string;
+  did: string;
 }
 
 /**
@@ -68,6 +109,8 @@ export interface IndexerAssertionTransactionSubtype {
 
 export type ShinzohubTransactionSubtype =
   | ViewTransactionSubtype
+  | HostTransactionSubtype
+  | IndexerRegistrationTransactionSubtype
   | IndexerAssertionTransactionSubtype;
 
 type TransactionSubtypeResolver = (
@@ -97,6 +140,13 @@ function getRequiredAttributes<Keys extends readonly string[]>(
   return result;
 }
 
+function getOptionalAttribute(
+  attributes: AttributeMap,
+  key: string,
+): string | undefined {
+  return attributes.get(key) || undefined;
+}
+
 /**
  * View ids include the deployed contract address as a suffix, while Studio view
  * routes are keyed by the human-readable view name. Strip only the exact
@@ -116,20 +166,43 @@ function resolveViewSubtype(
 ): ViewTransactionSubtype | null {
   if (
     event.type !== 'view.view_pending' &&
-    event.type !== 'view.view_registered'
+    event.type !== 'view.view_registered' &&
+    event.type !== 'view.view_registration_timed_out'
   ) {
     return null;
   }
 
+  const eventAttributes = toAttributeMap(event.attributes);
+  const eventType = event.type as ViewEventType;
+  const viewId = getOptionalAttribute(eventAttributes, 'view_id');
+  const contractAddress = getOptionalAttribute(eventAttributes, 'contract_address');
+  const creator = getOptionalAttribute(eventAttributes, 'creator');
+  const error = getOptionalAttribute(eventAttributes, 'error');
+  const viewName = viewId && contractAddress
+    ? getViewName(viewId, contractAddress)
+    : viewId;
+
+  if (eventType === 'view.view_registration_timed_out') {
+    return {
+      kind: 'view',
+      status: 'timed-out',
+      label: 'View timed out',
+      viewId,
+      viewName,
+      contractAddress,
+      creator,
+      error,
+    };
+  }
+
   const attributes = getRequiredAttributes(
-    toAttributeMap(event.attributes),
+    eventAttributes,
     ['view_id', 'contract_address', 'creator', 'msg_index'] as const,
   ) satisfies ViewEventAttributes | null;
   if (!attributes) return null;
 
-  const eventType = event.type as ViewEventType;
   const status = eventType === 'view.view_pending' ? 'pending' : 'registered';
-  const viewName = getViewName(
+  const resolvedViewName = getViewName(
     attributes.view_id,
     attributes.contract_address,
   );
@@ -139,10 +212,67 @@ function resolveViewSubtype(
     status,
     label: status === 'pending' ? 'View pending' : 'View registered',
     viewId: attributes.view_id,
-    viewName,
+    viewName: resolvedViewName,
     contractAddress: attributes.contract_address,
     creator: attributes.creator,
-    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(viewName)}`,
+    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(resolvedViewName)}`,
+  };
+}
+
+function resolveHostSubtype(
+  event: ShinzohubEvent,
+): HostTransactionSubtype | null {
+  if (
+    event.type !== 'host.host_pending' &&
+    event.type !== 'host.host_registered'
+  ) {
+    return null;
+  }
+
+  const attributes = getRequiredAttributes(
+    toAttributeMap(event.attributes),
+    ['address', 'did', 'msg_index'] as const,
+  ) satisfies HostEventAttributes | null;
+  if (!attributes) return null;
+
+  const eventType = event.type as HostEventType;
+  const status = eventType === 'host.host_pending' ? 'pending' : 'registered';
+
+  return {
+    kind: 'host',
+    status,
+    label: status === 'pending' ? 'Host pending' : 'Host registered',
+    address: attributes.address,
+    did: attributes.did,
+  };
+}
+
+function resolveIndexerRegistrationSubtype(
+  event: ShinzohubEvent,
+): IndexerRegistrationTransactionSubtype | null {
+  if (
+    event.type !== 'indexer.indexer_pending' &&
+    event.type !== 'indexer.indexer_registered'
+  ) {
+    return null;
+  }
+
+  const attributes = getRequiredAttributes(
+    toAttributeMap(event.attributes),
+    ['address', 'did', 'msg_index'] as const,
+  ) satisfies IndexerEventAttributes | null;
+  if (!attributes) return null;
+
+  const eventType = event.type as IndexerEventType;
+  const status =
+    eventType === 'indexer.indexer_pending' ? 'pending' : 'registered';
+
+  return {
+    kind: 'indexer-registration',
+    status,
+    label: status === 'pending' ? 'Indexer pending' : 'Indexer registered',
+    address: attributes.address,
+    did: attributes.did,
   };
 }
 
@@ -186,6 +316,8 @@ function resolveIndexerAssertionSubtype(
  */
 const SUBTYPE_RESOLVERS: readonly TransactionSubtypeResolver[] = [
   resolveViewSubtype,
+  resolveHostSubtype,
+  resolveIndexerRegistrationSubtype,
   resolveIndexerAssertionSubtype,
 ];
 

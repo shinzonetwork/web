@@ -17,22 +17,15 @@ function normalizeComparableHash(hash: string): string {
 
 function TransactionHeaderInfo({
   hash,
-  label,
 }: {
   hash: string;
-  label: string;
 }) {
   return (
-    <div className='flex min-w-0 flex-col items-start gap-1 md:items-end'>
-      <span className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
-        {label}
-      </span>
-      <div className='flex min-w-0 items-center gap-3'>
-        <Typography variant='md' color='accent' className='truncate'>
-          {formatHash(hash)}
-        </Typography>
-        <CopyButton text={hash} className='shrink-0 text-text-accent' />
-      </div>
+    <div className='flex min-w-0 items-center gap-3'>
+      <Typography variant='md' color='accent' className='truncate'>
+        {formatHash(hash)}
+      </Typography>
+      <CopyButton text={hash} className='shrink-0 text-text-accent' />
     </div>
   );
 }
@@ -42,7 +35,6 @@ export function ShinzohubTransactionPageClient({ hash }: { hash: string }) {
   const { data: transaction, isLoading, error } =
     useShinzohubTransactionDetails(hash);
   const headerHash = transaction?.cosmosHash ?? hash;
-  const headerLabel = transaction ? 'ShinzoHub Tx Hash' : 'Requested Hash';
 
   useEffect(() => {
     if (!transaction?.cosmosHash) return;
@@ -61,7 +53,7 @@ export function ShinzohubTransactionPageClient({ hash }: { hash: string }) {
 
   return (
     <PageLayout
-      info={<TransactionHeaderInfo hash={headerHash} label={headerLabel} />}
+      info={<TransactionHeaderInfo hash={headerHash} />}
       title='Transaction'
     >
       <ShinzohubTxTabs

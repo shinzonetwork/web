@@ -8,7 +8,9 @@ import type { ShinzohubEvent } from '@/shared/shinzohub/types';
 import { cn } from '@/shared/utils/utils';
 import {
   getShinzohubTransactionSubtypes,
+  type HostTransactionSubtype,
   type IndexerAssertionTransactionSubtype,
+  type IndexerRegistrationTransactionSubtype,
   type ShinzohubTransactionSubtype,
   type ViewTransactionSubtype,
 } from '../../model/shinzohub-transaction-subtype';
@@ -31,19 +33,82 @@ function ViewSubtype({
 }: {
   subtype: ViewTransactionSubtype;
 }) {
+  if (subtype.status === 'timed-out') {
+    return (
+      <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
+        <Badge variant='outline'>{subtype.label}</Badge>
+        {subtype.viewName && (
+          <span className='break-all'>{subtype.viewName}</span>
+        )}
+      </span>
+    );
+  }
+
   return (
     <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
       <Badge variant='outline'>{subtype.label}</Badge>
-      <a
-        href={subtype.externalUrl}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='inline-flex min-w-0 items-center gap-1 text-text-accent underline'
-      >
-        <span className='break-all'>{subtype.viewName}</span>
-        <ExternalLink aria-hidden className='size-3.5 shrink-0' />
-      </a>
+      {subtype.externalUrl && subtype.viewName && (
+        <a
+          href={subtype.externalUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='inline-flex min-w-0 items-center gap-1 text-text-accent underline'
+        >
+          <span className='break-all'>{subtype.viewName}</span>
+          <ExternalLink aria-hidden className='size-3.5 shrink-0' />
+        </a>
+      )}
     </span>
+  );
+}
+
+function AddressLifecycleSubtype({
+  address,
+  label,
+}: {
+  address: string;
+  label: string;
+}) {
+  return (
+    <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
+      <Badge variant='outline'>{label}</Badge>
+      <span className='whitespace-nowrap text-muted-foreground'>
+        Address
+      </span>
+      <ShinzohubAddressLink
+        address={address}
+        copyable
+        className='break-all font-mono'
+      >
+        {address}
+      </ShinzohubAddressLink>
+    </span>
+  );
+}
+
+function HostSubtype({
+  subtype,
+}: {
+  subtype: HostTransactionSubtype;
+}) {
+  return (
+    <AddressLifecycleSubtype
+      address={subtype.address}
+      label={subtype.label}
+    />
+  );
+}
+
+function IndexerRegistrationSubtype({
+  subtype,
+}: {
+  subtype: IndexerRegistrationTransactionSubtype;
+}) {
+  return (
+    <AddressLifecycleSubtype
+      address={subtype.address}
+      label={subtype.label}
+    />
   );
 }
 
@@ -80,6 +145,10 @@ function TransactionSubtype({
   switch (subtype.kind) {
     case 'view':
       return <ViewSubtype subtype={subtype} />;
+    case 'host':
+      return <HostSubtype subtype={subtype} />;
+    case 'indexer-registration':
+      return <IndexerRegistrationSubtype subtype={subtype} />;
     case 'indexer-assertion':
       return <IndexerAssertionSubtype subtype={subtype} />;
   }
