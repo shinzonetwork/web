@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   ChevronDown,
   ChevronUp,
-  ExternalLink,
   XCircle,
 } from 'lucide-react';
 import { formatGwei } from 'viem';
@@ -22,10 +21,8 @@ import { getPageLink } from '@/shared/utils/links';
 import { DataItem, DataList } from '@/widgets/data-list';
 import {
   getShinzohubTransactionSubtypes,
-  type IndexerAssertionTransactionSubtype,
-  type ShinzohubTransactionSubtype,
-  type ViewTransactionSubtype,
-} from '../../model/shinzohub-transaction-subtype';
+  ShinzohubTransactionSubtypes,
+} from '../../shinzohub';
 import { useShinzohubEvmTransaction } from '../../hook/shinzohub/use-shinzohub-evm-transaction';
 import { useShinzohubTransactionReceipt } from '../../hook/shinzohub/use-shinzohub-transaction-receipt';
 
@@ -41,80 +38,6 @@ function TransactionStatus({ success }: { success?: boolean }) {
       <XCircle className='mr-1 h-3 w-3' />
       Failed
     </Badge>
-  );
-}
-
-function formatSourceChain(sourceChain: string) {
-  return sourceChain
-    ? sourceChain.charAt(0).toUpperCase() + sourceChain.slice(1)
-    : 'Unknown chain';
-}
-
-function ViewSubtype({ subtype }: { subtype: ViewTransactionSubtype }) {
-  return (
-    <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
-      <Badge variant='outline'>{subtype.label}</Badge>
-      <a
-        href={subtype.externalUrl}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='inline-flex min-w-0 items-center gap-1 text-text-accent underline'
-      >
-        <span className='truncate'>{subtype.viewName}</span>
-        <ExternalLink aria-hidden className='size-3.5 shrink-0' />
-      </a>
-    </span>
-  );
-}
-
-function IndexerAssertionSubtype({
-  subtype,
-}: {
-  subtype: IndexerAssertionTransactionSubtype;
-}) {
-  return (
-    <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
-      <Badge variant='outline'>{subtype.label}</Badge>
-      <span className='whitespace-nowrap text-muted-foreground'>
-        Address
-      </span>
-      <ShinzohubAddressLink
-        address={subtype.signer}
-        copyable
-        className='break-all font-mono'
-      >
-        {subtype.signer}
-      </ShinzohubAddressLink>
-      <span className='whitespace-nowrap text-muted-foreground'>
-        on {formatSourceChain(subtype.sourceChain)}
-      </span>
-    </span>
-  );
-}
-
-function TransactionSubtype({ subtype }: { subtype: ShinzohubTransactionSubtype }) {
-  switch (subtype.kind) {
-    case 'view':
-      return <ViewSubtype subtype={subtype} />;
-    case 'indexer-assertion':
-      return <IndexerAssertionSubtype subtype={subtype} />;
-  }
-}
-
-function TransactionSubtypes({
-  subtypes,
-}: {
-  subtypes: readonly ShinzohubTransactionSubtype[];
-}) {
-  return (
-    <div className='flex min-w-0 flex-col items-start gap-2'>
-      {subtypes.map((subtype, index) => (
-        <TransactionSubtype
-          key={`${subtype.kind}-${index}`}
-          subtype={subtype}
-        />
-      ))}
-    </div>
   );
 }
 
@@ -223,7 +146,7 @@ export function ShinzohubTransactionCard({
           loading={loading}
           allowWrap
         >
-          <TransactionSubtypes subtypes={subtypes} />
+          <ShinzohubTransactionSubtypes subtypes={subtypes} />
         </DataItem>
       )}
       <DataItem title='From' value={from} loading={loading}>

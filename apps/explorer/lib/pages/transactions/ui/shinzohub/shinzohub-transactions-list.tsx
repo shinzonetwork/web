@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { isShinzoAddress, shinzoAddressToHex } from '@shinzo/shinzohub';
 import { DEFAULT_LIMIT } from '@shinzo/ui/pagination';
-import { TableLayout, TableNullableCell } from '@shinzo/ui/table';
+import { TableCell, TableLayout, TableNullableCell } from '@shinzo/ui/table';
+import { getShinzohubTransactionSubtypes } from '@/pages/transaction-details/shinzohub';
 import { Badge } from '@/shared/ui/badge';
 import { EmptyTableState } from '@/shared/ui/empty-table-state';
 import { Typography } from '@/shared/ui/typography';
-import type { ShinzohubTransactionSummary } from '@/shared/shinzohub/types';
 import { ShinzohubAddressLink } from '@/shared/shinzohub/address-link';
+import type { ShinzohubTransactionSummary } from '@/shared/shinzohub/types';
 import { formatHash } from '@/shared/utils/format-hash';
 import { formatShinzoCoin } from '@/shared/utils/format-token';
 import { getPageLink } from '@/shared/utils/links';
@@ -27,6 +28,70 @@ function toEvmAddress(address: string | null | undefined): string | null {
   } catch {
     return address;
   }
+}
+
+function SubtypeBadges({
+  transaction,
+}: {
+  transaction: ShinzohubTransactionSummary;
+}) {
+  const subtypes = getShinzohubTransactionSubtypes(transaction.events);
+
+  if (subtypes.length === 0) {
+    return '—';
+  }
+
+  return (
+    <div className='flex min-w-0 flex-wrap gap-1'>
+      {subtypes.map((subtype, index) => (
+        <Badge
+          key={`${subtype.kind}-${subtype.label}-${index}`}
+          variant='outline'
+        >
+          {subtype.label}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+function ParticipantAddress({
+  address,
+  label,
+}: {
+  address: string | null;
+  label: 'from' | 'to';
+}) {
+  return (
+    <div className='flex min-w-0 items-center gap-1'>
+      <span className='shrink-0 text-muted-foreground'>{label}:</span>
+      <ShinzohubAddressLink
+        address={address}
+        copyable
+        fallback='—'
+        className='font-mono'
+      >
+        {address && formatHash(address, 8, 6)}
+      </ShinzohubAddressLink>
+    </div>
+  );
+}
+
+function ParticipantsCell({
+  recipient,
+  sender,
+}: {
+  recipient: string | null;
+  sender: string | null;
+}) {
+  return (
+    <TableCell className='min-w-0 py-2'>
+      <div className='flex min-w-0 flex-col items-start gap-1'>
+        <ParticipantAddress label='from' address={sender} />
+        <ParticipantAddress label='to' address={recipient} />
+      </div>
+    </TableCell>
+  );
 }
 
 export function ShinzohubTransactionsList({
@@ -51,8 +116,8 @@ export function ShinzohubTransactionsList({
           description={emptyStateDescription}
         />
       )}
-      gridClass='grid-cols-[1fr_90px_100px_1fr_1fr_150px_130px]'
-      headings={['Hash', 'Type', 'Block', 'Sender', 'Recipient', 'Amount', 'Fee']}
+      gridClass='grid-cols-[minmax(180px,1fr)_90px_minmax(150px,0.8fr)_100px_minmax(220px,1.2fr)_150px_130px]'
+      headings={['Hash', 'Type', 'Subtype', 'Block', 'Participants', 'Amount', 'Fee']}
       iterable={transactions}
       rowRenderer={(transaction) => {
         const sender = toEvmAddress(transaction.senders[0]);
@@ -79,6 +144,10 @@ export function ShinzohubTransactionsList({
               )}
             </TableNullableCell>
 
+            <TableCell className='min-w-0 py-2'>
+              <SubtypeBadges transaction={transaction} />
+            </TableCell>
+
             <TableNullableCell value={transaction.height}>
               {(height) => (
                 <Link href={getPageLink('block', { param: height, chain: 'shinzohub' })}>
@@ -87,21 +156,7 @@ export function ShinzohubTransactionsList({
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={sender}>
-              {(value) => (
-                <ShinzohubAddressLink address={value} copyable className='font-mono'>
-                  {formatHash(value, 8, 6)}
-                </ShinzohubAddressLink>
-              )}
-            </TableNullableCell>
-
-            <TableNullableCell value={recipient}>
-              {(value) => (
-                <ShinzohubAddressLink address={value} copyable className='font-mono'>
-                  {formatHash(value, 8, 6)}
-                </ShinzohubAddressLink>
-              )}
-            </TableNullableCell>
+            <ParticipantsCell sender={sender} recipient={recipient} />
 
             <TableNullableCell value={amount}>
               {(value) => formatShinzoCoin(value)}
