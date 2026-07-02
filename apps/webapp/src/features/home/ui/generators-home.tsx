@@ -82,7 +82,7 @@ function GeneratorHomeContent() {
   );
 
   const handleRegisterAsGenerator = () => {
-    router.push("/generator-registration");
+    router.push("/indexer-registration");
   };
 
   const showPagination =
