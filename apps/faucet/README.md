@@ -31,7 +31,7 @@ Server-only Worker variables:
 Browser-exposed Vite variables:
 
 - `VITE_RECAPTCHA_SITE_KEY`: Site key for rendering reCAPTCHA in the browser. It must belong to the same reCAPTCHA project as `RECAPTCHA_SECRET_KEY`.
-- `VITE_SHINZOHUB_EXPLORER_URL`: Public ShinzoHub block explorer base URL used for transaction and address links. Production uses `http://blockscout.shinzo.network/`.
+- `VITE_SHINZOHUB_EXPLORER_URL`: Public ShinzoHub block explorer base URL used for transaction and address links. Production uses `https://explorer.shinzo.network/shinzohub`.
 
 ## Running
 
