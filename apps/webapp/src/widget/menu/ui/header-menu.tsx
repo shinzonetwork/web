@@ -24,12 +24,12 @@ export function HeaderMenu() {
       </MenubarMenu>
       <MenubarMenu>
         <MenubarTrigger className="flex items-center gap-2 text-lg text-muted-foreground">
-          <span>Indexer</span>
+          <span>Generator</span>
           <ChevronDownIcon className="h-4 w-4" />
         </MenubarTrigger>
         <MenubarContent className="w-full min-w-[150px] bg-background shadow-md rounded-none">
           <MenubarItem asChild className="text-lg text-muted-foreground">
-            <Link href="/indexer-assertion">Registration</Link>
+            <Link href="/generator-assertion">Registration</Link>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>

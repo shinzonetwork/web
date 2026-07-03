@@ -13,16 +13,16 @@ import {
   StepperTrigger,
 } from "@/widget/stepper";
 import {
-  INDEXER_ONBOARDING_STEPS,
-  type IndexerOnboardingStepId,
+  GENERATOR_ONBOARDING_STEPS,
+  type GeneratorOnboardingStepId,
 } from "../constants";
 
 interface IndexerOnboardingStepperProps {
-  currentStep: IndexerOnboardingStepId;
+  currentStep: GeneratorOnboardingStepId;
   assertionComplete?: boolean;
 }
 
-const STEP_INDEX: Record<IndexerOnboardingStepId, number> = {
+const STEP_INDEX: Record<GeneratorOnboardingStepId, number> = {
   assertion: 1,
   registration: 2,
 };
@@ -42,8 +42,8 @@ export function IndexerOnboardingStepper({
           completed: <CheckIcon className="size-3.5" aria-hidden />,
         }}
       >
-        <StepperNav aria-label="Indexer onboarding progress">
-          {INDEXER_ONBOARDING_STEPS.map((step, index) => {
+        <StepperNav aria-label="Generator onboarding progress">
+          {GENERATOR_ONBOARDING_STEPS.map((step, index) => {
             const stepNumber = index + 1;
             const isRegistration = step.id === "registration";
             const isCompleted =
@@ -87,7 +87,7 @@ export function IndexerOnboardingStepper({
                   </StepperTrigger>
                 )}
 
-                {index < INDEXER_ONBOARDING_STEPS.length - 1 && (
+                {index < GENERATOR_ONBOARDING_STEPS.length - 1 && (
                   <StepperSeparator className="mx-4" />
                 )}
               </StepperItem>

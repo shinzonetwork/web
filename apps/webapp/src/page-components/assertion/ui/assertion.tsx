@@ -20,9 +20,7 @@ export default function Assertion() {
     <>
       <Header />
       <div className="mx-12 my-12 flex flex-col gap-4">
-        <FormHeader
-          content={UI_FORM_HEADER_CONTENT["indexer-onboarding-assertion"]}
-        />
+        <FormHeader content={UI_FORM_HEADER_CONTENT["generator-assertion"]} />
         <div className="flex flex-col gap-4 py-8">
           {!isConnected && <Connect />}
           {isConnected &&

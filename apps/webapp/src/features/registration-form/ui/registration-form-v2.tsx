@@ -36,14 +36,14 @@ export function RegistrationFormV2() {
   const { data: isAssertionVerified } = useVerifyIndexerAssertion();
 
   const handleRegister = async () => {
-    if (registrationEntity === EntityRole.Indexer) {
+    if (registrationEntity === EntityRole.Generator) {
       if (!isAssertionVerified) {
-        toast.error("Indexer assertion is not done.", TOAST_CONFIG);
+        toast.error("Generator assertion is not done.", TOAST_CONFIG);
         return;
       }
     }
     const validatedFields =
-      formData.entity === EntityRole.Indexer
+      formData.entity === EntityRole.Generator
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
         : validateHostFields(formData as HostRegistrationFormData);
 
@@ -64,7 +64,7 @@ export function RegistrationFormV2() {
   };
 
   let isRegistrationDisabled = false;
-  if (formData.entity === EntityRole.Indexer) {
+  if (formData.entity === EntityRole.Generator) {
     isRegistrationDisabled =
       !validateIndexerRegistrationForm(
         formData as IndexerRegistrationFormData

@@ -3,18 +3,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useVerifyIndexerAssertion } from "@/features/registration-form";
-import { INDEXER_ASSERTION_PENDING_KEY } from "../constants";
+import { GENERATOR_ASSERTION_PENDING_KEY } from "../constants";
 
 /** Redirect to assertion when registration is opened without a completed assertion. */
 export function useIndexerOnboardingGuard(enabled: boolean) {
   const router = useRouter();
   const [assertionPending, setAssertionPending] = useState(false);
-  const { data: isAssertionVerified, isLoading, isFetching } =
-    useVerifyIndexerAssertion();
+  const {
+    data: isAssertionVerified,
+    isLoading,
+    isFetching,
+  } = useVerifyIndexerAssertion();
 
   useEffect(() => {
     setAssertionPending(
-      sessionStorage.getItem(INDEXER_ASSERTION_PENDING_KEY) === "true"
+      sessionStorage.getItem(GENERATOR_ASSERTION_PENDING_KEY) === "true"
     );
   }, []);
 
@@ -24,7 +27,7 @@ export function useIndexerOnboardingGuard(enabled: boolean) {
     }
 
     if (isAssertionVerified) {
-      sessionStorage.removeItem(INDEXER_ASSERTION_PENDING_KEY);
+      sessionStorage.removeItem(GENERATOR_ASSERTION_PENDING_KEY);
       setAssertionPending(false);
       return;
     }
@@ -33,7 +36,7 @@ export function useIndexerOnboardingGuard(enabled: boolean) {
       return;
     }
 
-    router.replace("/indexer-assertion");
+    router.replace("/generator-assertion");
   }, [
     enabled,
     isAssertionVerified,

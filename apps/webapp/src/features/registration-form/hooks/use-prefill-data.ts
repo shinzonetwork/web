@@ -38,8 +38,8 @@ function parseRole(value: string | null): EntityRole | undefined {
   if (value === "host") {
     return EntityRole.Host;
   }
-  if (value === "indexer") {
-    return EntityRole.Indexer;
+  if (value === "generator") {
+    return EntityRole.Generator;
   }
   return undefined;
 }
@@ -48,7 +48,7 @@ function parseRole(value: string | null): EntityRole | undefined {
  * Hook that returns the prefill data from URL query parameters.
  *
  * Expected query parameters:
- * - role: "host" | "indexer"
+ * - role: "host" | "generator"
  * - signedMessage: hex string
  * - defraPublicKey: hex string
  * - defraPublicKeySignedMessage: hex string
@@ -57,7 +57,7 @@ function parseRole(value: string | null): EntityRole | undefined {
  *
  * Example URLs:
  * - ?role=host&signedMessage=0x1234&defraPublicKey=0x5678&defraPublicKeySignedMessage=0xabcd&peerId=0xef01&peerSignedMessage=0x2345
- * - ?role=indexer&signedMessage=0x5368696e7a6&peerId=0x3bf54397b0&peerSignedMessage=0x435cb4cc3e&defraPublicKey=0x034e95&defraPublicKeySignedMessage=0x304502210
+ * - ?role=generator&signedMessage=0x5368696e7a6&peerId=0x3bf54397b0&peerSignedMessage=0x435cb4cc3e&defraPublicKey=0x034e95&defraPublicKeySignedMessage=0x304502210
  */
 export function usePrefillData(): PrefillData {
   if (typeof window === "undefined") {

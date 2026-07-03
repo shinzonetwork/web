@@ -21,33 +21,31 @@ export default function Register() {
   const { isConnected } = useAccount();
   const { isSignedWithWallet } = useRegistrationContext();
   const pathname = usePathname();
-  const routeKey = pathname.split("/").pop() as keyof typeof UI_FORM_HEADER_CONTENT;
-  const isIndexerRegistration =
-    isRegistrationV2() && routeKey === "indexer-registration";
+  const routeKey = pathname
+    .split("/")
+    .pop() as keyof typeof UI_FORM_HEADER_CONTENT;
+  const isGeneratorRegistration =
+    isRegistrationV2() && routeKey === "generator-registration";
 
   const { assertionComplete, isLoading: isAssertionLoading } =
-    useIndexerOnboardingGuard(isIndexerRegistration);
-
-  const headerContent = isIndexerRegistration
-    ? UI_FORM_HEADER_CONTENT["indexer-onboarding-registration"]
-    : UI_FORM_HEADER_CONTENT[routeKey];
+    useIndexerOnboardingGuard(isGeneratorRegistration);
 
   return (
     <>
       <Header />
       <div className="mx-12 my-12 flex flex-col gap-4">
-        <FormHeader content={headerContent} />
+        <FormHeader content={UI_FORM_HEADER_CONTENT[routeKey]} />
         <div className="flex flex-col gap-4 py-8">
           {!isConnected && <Connect />}
           {isConnected && isSignedWithWallet && (
             <>
-              {isIndexerRegistration && (
+              {isGeneratorRegistration && (
                 <IndexerOnboardingStepper
                   currentStep="registration"
                   assertionComplete={assertionComplete}
                 />
               )}
-              {isIndexerRegistration && isAssertionLoading ? (
+              {isGeneratorRegistration && isAssertionLoading ? (
                 <p className="ml-10 font-mono text-sm text-muted-foreground">
                   Verifying assertion…
                 </p>

@@ -14,7 +14,7 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
     label: "Consensus Public Key",
     isTextarea: false,
     isSelect: false,
-    description: "The consensus public key of the indexer",
+    description: "The consensus public key of the generator",
   },
   {
     id: "sourceChain",

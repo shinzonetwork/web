@@ -30,8 +30,8 @@ export function isValidConnectionString(value: string): boolean {
 }
 
 /**
- * Host vs Indexer for V2 registration is determined only by the URL route
- * (e.g. `/host-registration`, `/indexer-registration`). Users switch flows via nav links, not in-form toggles.
+ * Host vs Generator for V2 registration is determined only by the URL route
+ * (e.g. `/host-registration`, `/generator-registration`). Users switch flows via nav links, not in-form toggles.
  */
 export function getRegistrationEntityFromPathname(
   pathname: string | null
@@ -39,8 +39,8 @@ export function getRegistrationEntityFromPathname(
   if (!pathname) {
     return EntityRole.Host;
   }
-  if (pathname.includes("indexer-registration")) {
-    return EntityRole.Indexer;
+  if (pathname.includes("generator-registration")) {
+    return EntityRole.Generator;
   }
   if (pathname.includes("host-registration")) {
     return EntityRole.Host;
@@ -66,7 +66,7 @@ export function validateIndexerRegistrationForm(
   formData: IndexerRegistrationFormData
 ): boolean {
   const validations = [
-    formData.entity === EntityRole.Indexer,
+    formData.entity === EntityRole.Generator,
     validateRegistrationFormV2(formData),
     isValidConnectionString(formData.connectionString ?? ""),
     Boolean(formData.sourceChain?.trim()),
@@ -326,7 +326,7 @@ export function validateEntity(
   if (entity === EntityRole.Host) {
     return true;
   }
-  if (entity === EntityRole.Indexer) {
+  if (entity === EntityRole.Generator) {
     return isIndexerWhitelisted(address);
   }
   return false;

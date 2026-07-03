@@ -7,9 +7,9 @@ const getInitialFormData = (
   entity: EntityRole,
   prefillData: PrefillDataV2 | undefined = undefined
 ) =>
-  entity === EntityRole.Indexer
+  entity === EntityRole.Generator
     ? {
-        entity: EntityRole.Indexer,
+        entity: EntityRole.Generator,
         message: prefillData?.signedMessage ?? "",
         defraPublicKey: prefillData?.defraPublicKey ?? "",
         defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",

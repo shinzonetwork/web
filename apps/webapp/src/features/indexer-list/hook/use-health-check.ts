@@ -18,7 +18,7 @@ type IndexerHealthResponse = {
 };
 
 export const indexerHealthQueryKey = (entry: IndexerHealthEntry): QueryKey =>
-  ["indexer-health", indexerEntryKey(entry)] as const;
+  ["generator-health", indexerEntryKey(entry)] as const;
 
 const HEALTH_PROXY_URL =
   process.env.NEXT_PUBLIC_HEALTH_PROXY_URL ||

@@ -13,7 +13,7 @@ async function fetchIndexerAssertion(address: string): Promise<boolean> {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to verify indexer assertion");
+    throw new Error("Failed to verify generator assertion");
   }
 
   const data = (await response.json()) as GeneratorAssertionsResponse;
@@ -31,7 +31,7 @@ export function useVerifyIndexerAssertion(intervalMs = 30000) {
     : undefined;
 
   return useQuery({
-    queryKey: ["indexer-assertion-verification", shinzoAddress],
+    queryKey: ["generator-assertion-verification", shinzoAddress],
     queryFn: () => fetchIndexerAssertion(shinzoAddress as string),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,

@@ -9,7 +9,7 @@ import { useIndexerAssertion } from "../hooks/use-indexer-assertion";
 import { getIndexerAssertionButtonText } from "../util/form-data";
 import {
   buildIndexerRegistrationUrl,
-  INDEXER_ASSERTION_PENDING_KEY,
+  GENERATOR_ASSERTION_PENDING_KEY,
 } from "@/features/indexer-onboarding";
 
 export default function IndexerAssertionForm() {
@@ -28,7 +28,7 @@ export default function IndexerAssertionForm() {
     const succeeded = await handleAssertion(assertionFormData, signed);
     if (!succeeded) return;
 
-    sessionStorage.setItem(INDEXER_ASSERTION_PENDING_KEY, "true");
+    sessionStorage.setItem(GENERATOR_ASSERTION_PENDING_KEY, "true");
     await queryClient.invalidateQueries({
       queryKey: ["indexer-assertion-verification"],
     });

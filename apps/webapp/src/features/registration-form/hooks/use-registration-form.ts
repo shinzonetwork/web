@@ -90,7 +90,7 @@ export function useRegistrationForm() {
     const parsed = parseInt(value, 10);
     if (
       isNaN(parsed) ||
-      (parsed !== EntityRole.Host && parsed !== EntityRole.Indexer)
+      (parsed !== EntityRole.Host && parsed !== EntityRole.Generator)
     ) {
       return;
     }

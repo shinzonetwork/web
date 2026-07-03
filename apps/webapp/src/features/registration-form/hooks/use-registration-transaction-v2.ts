@@ -14,7 +14,7 @@ import type {
 import { INDEXER_REGISTER_TRANSACTION_ABI } from "../abi/indexer-register-transaction-abi";
 import { HOST_REGISTER_TRANSACTION_ABI } from "../abi/host-register-transaction-abi";
 
-export const INDEXER_PRECOMPILE_ADDRESS =
+export const GENERATOR_PRECOMPILE_ADDRESS =
   "0x0000000000000000000000000000000000000212";
 export const HOST_PRECOMPILE_ADDRESS =
   "0x0000000000000000000000000000000000000211";
@@ -75,8 +75,8 @@ export function useRegistrationTransaction(
     let encodedData;
     let precompileAddress;
     try {
-      if (formData.entity === EntityRole.Indexer) {
-        precompileAddress = INDEXER_PRECOMPILE_ADDRESS;
+      if (formData.entity === EntityRole.Generator) {
+        precompileAddress = GENERATOR_PRECOMPILE_ADDRESS;
         const indexer = formData as IndexerRegistrationFormData;
         encodedData = encodeFunctionData({
           abi: INDEXER_REGISTER_TRANSACTION_ABI,

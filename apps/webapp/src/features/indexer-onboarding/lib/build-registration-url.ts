@@ -3,10 +3,10 @@ import { getSourceChainMap } from "@/shared/lib";
 export function buildIndexerRegistrationUrl(sourceChain: string): string {
   const sourceChainId = getSourceChainMap()[sourceChain] ?? 0;
   const params = new URLSearchParams({
-    role: "indexer",
+    role: "generator",
     sourceChain,
     sourceChainId: String(sourceChainId),
   });
 
-  return `/indexer-registration?${params.toString()}`;
+  return `/generator-registration?${params.toString()}`;
 }
