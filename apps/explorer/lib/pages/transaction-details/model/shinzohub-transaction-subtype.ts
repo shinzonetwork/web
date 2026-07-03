@@ -15,6 +15,7 @@ type HostEventType = 'host.host_pending' | 'host.host_registered';
 type ViewEventType =
   | 'view.view_pending'
   | 'view.view_registered'
+  | 'view.view_registration_failed'
   | 'view.view_registration_timed_out';
 
 /**
@@ -23,10 +24,9 @@ type ViewEventType =
  * payloads and avoids hiding wire-level assumptions behind renamed fields.
  */
 interface ViewEventAttributes {
-  view_id: string;
-  contract_address: string;
+  address: string;
+  name: string;
   creator: string;
-  msg_index: string;
 }
 
 interface HostEventAttributes {
@@ -54,17 +54,20 @@ interface IndexerAssertedEventAttributes {
 /**
  * Semantic transaction subtype for view lifecycle transactions.
  *
- * The chain already emits the view id, contract address, and creator in the
+ * The chain already emits the view address, name, and creator in the
  * transaction events, so the explorer can classify these synchronously from the
  * loaded transaction payload without decoding EVM logs or making view lookups.
  */
 export interface ViewTransactionSubtype {
   kind: 'view';
-  status: 'pending' | 'registered' | 'timed-out';
-  label: 'View pending' | 'View registered' | 'View timed out';
-  viewId?: string;
+  status: 'pending' | 'registered' | 'failed' | 'timed-out';
+  label:
+    | 'View pending'
+    | 'View registered'
+    | 'View failed'
+    | 'View timed out';
   viewName?: string;
-  contractAddress?: string;
+  viewAddress?: string;
   creator?: string;
   error?: string;
   externalUrl?: string;
@@ -150,26 +153,13 @@ function getOptionalAttribute(
   return attributes.get(key) || undefined;
 }
 
-/**
- * View ids include the deployed contract address as a suffix, while Studio view
- * routes are keyed by the human-readable view name. Strip only the exact
- * address suffix and fall back to the full id if the event ever changes shape.
- */
-function getViewName(viewId: string, contractAddress: string): string {
-  const suffix = `_${contractAddress}`;
-  if (viewId.toLowerCase().endsWith(suffix.toLowerCase())) {
-    return viewId.slice(0, -suffix.length);
-  }
-
-  return viewId;
-}
-
 function resolveViewSubtype(
   event: ShinzohubEvent,
 ): ViewTransactionSubtype | null {
   if (
     event.type !== 'view.view_pending' &&
     event.type !== 'view.view_registered' &&
+    event.type !== 'view.view_registration_failed' &&
     event.type !== 'view.view_registration_timed_out'
   ) {
     return null;
@@ -177,48 +167,39 @@ function resolveViewSubtype(
 
   const eventAttributes = toAttributeMap(event.attributes);
   const eventType = event.type as ViewEventType;
-  const viewId = getOptionalAttribute(eventAttributes, 'view_id');
-  const contractAddress = getOptionalAttribute(eventAttributes, 'contract_address');
-  const creator = getOptionalAttribute(eventAttributes, 'creator');
-  const error = getOptionalAttribute(eventAttributes, 'error');
-  const viewName = viewId && contractAddress
-    ? getViewName(viewId, contractAddress)
-    : viewId;
-
-  if (eventType === 'view.view_registration_timed_out') {
-    return {
-      kind: 'view',
-      status: 'timed-out',
-      label: 'View timed out',
-      viewId,
-      viewName,
-      contractAddress,
-      creator,
-      error,
-    };
-  }
-
   const attributes = getRequiredAttributes(
     eventAttributes,
-    ['view_id', 'contract_address', 'creator', 'msg_index'] as const,
+    ['address', 'name', 'creator'] as const,
   ) satisfies ViewEventAttributes | null;
   if (!attributes) return null;
 
-  const status = eventType === 'view.view_pending' ? 'pending' : 'registered';
-  const resolvedViewName = getViewName(
-    attributes.view_id,
-    attributes.contract_address,
-  );
+  const status = eventType === 'view.view_pending'
+    ? 'pending'
+    : eventType === 'view.view_registered'
+      ? 'registered'
+      : eventType === 'view.view_registration_failed'
+        ? 'failed'
+        : 'timed-out';
+  const label = status === 'pending'
+    ? 'View pending'
+    : status === 'registered'
+      ? 'View registered'
+      : status === 'failed'
+        ? 'View failed'
+        : 'View timed out';
+  const isLinkable = status === 'pending' || status === 'registered';
 
   return {
     kind: 'view',
     status,
-    label: status === 'pending' ? 'View pending' : 'View registered',
-    viewId: attributes.view_id,
-    viewName: resolvedViewName,
-    contractAddress: attributes.contract_address,
+    label,
+    viewName: attributes.name,
+    viewAddress: attributes.address,
     creator: attributes.creator,
-    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(resolvedViewName)}`,
+    error: getOptionalAttribute(eventAttributes, 'error'),
+    externalUrl: isLinkable
+      ? `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(attributes.address)}`
+      : undefined,
   };
 }
 

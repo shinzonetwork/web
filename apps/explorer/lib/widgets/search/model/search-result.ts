@@ -7,7 +7,7 @@ export function getExplorerSearchResultKey(
     case "address":
       return `address-${result.hexAddress}`;
     case "view":
-      return `view-${result.address}`;
+      return `view-${result.viewAddress}`;
     case "host":
       return `host-${result.address}`;
     case "generator":
@@ -40,7 +40,7 @@ export function isExplorerSearchResult(
         hasStringProperty(candidate, "hexAddress") &&
         hasStringProperty(candidate, "shinzoAddress");
     case "view":
-      return hasStringProperty(candidate, "address") &&
+      return hasStringProperty(candidate, "viewAddress") &&
         hasStringProperty(candidate, "name") &&
         hasStringProperty(candidate, "externalUrl");
     case "host":

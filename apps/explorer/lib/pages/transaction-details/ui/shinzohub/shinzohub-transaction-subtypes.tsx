@@ -36,30 +36,43 @@ function ViewSubtype({
 }: {
   subtype: ViewTransactionSubtype;
 }) {
-  if (subtype.status === 'timed-out') {
-    return (
-      <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
-        <Badge variant='outline'>{subtype.label}</Badge>
-        {subtype.viewName && (
-          <span className='break-all'>{subtype.viewName}</span>
-        )}
-      </span>
-    );
-  }
+  const label = subtype.viewName ?? subtype.viewAddress;
 
   return (
     <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
       <Badge variant='outline'>{subtype.label}</Badge>
-      {subtype.externalUrl && subtype.viewName && (
+      {subtype.externalUrl && label && (
         <a
           href={subtype.externalUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='inline-flex min-w-0 items-center gap-1 text-text-accent underline'
         >
-          <span className='break-all'>{subtype.viewName}</span>
+          <span className='break-all'>{label}</span>
           <ExternalLink aria-hidden className='size-3.5 shrink-0' />
         </a>
+      )}
+      {!subtype.externalUrl && label && (
+        <span className='break-all'>{label}</span>
+      )}
+      {subtype.viewAddress && (
+        <>
+          <span className='whitespace-nowrap text-muted-foreground'>
+            View
+          </span>
+          <ShinzohubAddressLink
+            address={subtype.viewAddress}
+            copyable
+            className='break-all font-mono'
+          >
+            {subtype.viewAddress}
+          </ShinzohubAddressLink>
+        </>
+      )}
+      {subtype.error && (
+        <span className='break-all text-muted-foreground'>
+          {subtype.error}
+        </span>
       )}
     </span>
   );

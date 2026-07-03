@@ -77,7 +77,7 @@ export async function GET(
       nativeBalance,
       host,
       generator,
-      viewContract,
+      view,
       createdViews,
     ] = await Promise.all([
       optionalLookup(() => getAccount(client, { address: shinzoAddress, cosmosRestUrl })),
@@ -85,9 +85,9 @@ export async function GET(
       getAccountBalance(client, { address: shinzoAddress, cosmosRestUrl }),
       optionalLookup(() => getHost(client, { address: shinzoAddress, cosmosRestUrl })),
       optionalLookup(() => getGenerator(client, { address: shinzoAddress, cosmosRestUrl })),
-      optionalLookup(() => getView(client, { address: hexAddress, cosmosRestUrl })),
+      optionalLookup(() => getView(client, { viewAddress: hexAddress, cosmosRestUrl })),
       listViews(client, {
-        creator: shinzoAddress,
+        creator: hexAddress,
         countTotal: true,
         cosmosRestUrl,
         limit: CREATED_VIEWS_PREVIEW_LIMIT,
@@ -118,7 +118,7 @@ export async function GET(
               sourceChainId: generator.sourceChainId,
             }
           : null,
-        viewContract: viewContract ? toViewAddressResult(viewContract) : null,
+        view: view ? toViewAddressResult(view) : null,
         createdViews: {
           total: toFilteredViewsTotal(createdViews, {
             limit: CREATED_VIEWS_PREVIEW_LIMIT,

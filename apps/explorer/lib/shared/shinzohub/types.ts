@@ -121,7 +121,7 @@ export interface ShinzohubAddressGenerator {
 
 export interface ShinzohubAddressView {
   name: string;
-  contractAddress: string;
+  viewAddress: string;
   creator: string;
   height: string;
   externalUrl: string;
@@ -135,7 +135,7 @@ export interface ShinzohubAddressCreatedViews {
 export interface ShinzohubAddressRelatedEntities {
   host: ShinzohubAddressHost | null;
   generator: ShinzohubAddressGenerator | null;
-  viewContract: ShinzohubAddressView | null;
+  view: ShinzohubAddressView | null;
   createdViews: ShinzohubAddressCreatedViews;
 }
 

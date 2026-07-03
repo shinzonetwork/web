@@ -19,14 +19,14 @@ import { STUDIO_VIEW_BASE_URL } from "@/shared/utils/consts";
 const VIEW_NAME_SEARCH_LIMIT = 10;
 
 function toViewSearchResult(view: {
-  contractAddress: string;
+  viewAddress: string;
   name: string;
 }): ExplorerSearchResult {
   return {
     kind: "view",
-    address: view.contractAddress,
+    viewAddress: view.viewAddress,
     name: view.name,
-    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(view.name)}`,
+    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(view.viewAddress)}`,
   };
 }
 
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     if (query.kind === "address") {
       const [view, host, generator] = await Promise.all([
         optionalLookup(() => getView(client, {
-          address: query.hexAddress,
+          viewAddress: query.hexAddress,
           cosmosRestUrl,
         })),
         optionalLookup(() => getHost(client, {

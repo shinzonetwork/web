@@ -42,10 +42,10 @@ function ViewLink({ view }: ViewLinkProps) {
         <ExternalLink aria-hidden className="size-3.5 shrink-0" />
       </a>
       <ShinzohubAddressLink
-        address={view.contractAddress}
+        address={view.viewAddress}
         className="break-all font-mono text-xs"
       >
-        {view.contractAddress}
+        {view.viewAddress}
       </ShinzohubAddressLink>
       <span className="text-xs text-muted-foreground">
         Height {view.height}
@@ -101,7 +101,7 @@ export function ShinzohubAddressCard({
 
   const host = details?.related.host;
   const generator = details?.related.generator;
-  const viewContract = details?.related.viewContract;
+  const view = details?.related.view;
   const createdViewsCount = getCreatedViewsCount(details?.related.createdViews);
 
   return (
@@ -171,14 +171,14 @@ export function ShinzohubAddressCard({
           </Link>
         </DataItem>
       )}
-      {viewContract && (
+      {view && (
         <DataItem
-          title="View Contract"
-          value={viewContract.name}
+          title="View"
+          value={view.name}
           loading={isLoading}
           allowWrap
         >
-          <ViewLink view={viewContract} />
+          <ViewLink view={view} />
         </DataItem>
       )}
       {createdViewsCount && (
