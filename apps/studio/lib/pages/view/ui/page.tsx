@@ -13,9 +13,9 @@ import { ViewPlayground } from "./view-playground";
 const ViewMeta = ({ view }: { view: ViewPageRecord }) => (
   <dl className="grid min-w-0 gap-4 border-y border-ui-border py-5 text-sm md:grid-cols-2 xl:grid-cols-4">
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-ui-text-muted">Contract</dt>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">View address</dt>
       <dd>
-        <ViewAddressChip link={view.contract} />
+        <ViewAddressChip link={view.viewAddressLink} />
       </dd>
     </div>
     <div className="min-w-0">

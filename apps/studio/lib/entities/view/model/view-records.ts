@@ -44,8 +44,8 @@ export const createExplorerAddressLink = (
   };
 };
 
-export const createViewHref = (name: string): string =>
-  `/views/${encodeURIComponent(name)}`;
+export const createViewHref = (viewAddress: string): string =>
+  `/views/${encodeURIComponent(viewAddress)}`;
 
 export const decodeViewRouteIdentifier = (pathname: string): string => {
   const rawIdentifier = pathname.replace(/^\/views\/?/, "").split("/")[0] ?? "";
@@ -126,13 +126,13 @@ export const assertParsedViewMetadata = (
 
   if (!metadata) {
     throw new Error(
-      `View "${view.name || view.contractAddress}" does not include metadata.`
+      `View "${view.name || view.viewAddress}" does not include metadata.`
     );
   }
 
   if (metadata.parseError.trim()) {
     throw new Error(
-      `View "${view.name || view.contractAddress}" metadata failed to parse: ${metadata.parseError}`
+      `View "${view.name || view.viewAddress}" metadata failed to parse: ${metadata.parseError}`
     );
   }
 
@@ -155,7 +155,7 @@ const createSummarySearchText = (
     [
       item.name,
       item.creator.address,
-      item.contract.address,
+      item.viewAddressLink.address,
       item.height,
       metadataText,
       lensText,
@@ -164,7 +164,7 @@ const createSummarySearchText = (
 };
 
 export const toViewSummary = (view: ShinzoHubView): ViewSummary | null => {
-  if (!view.name || !view.contractAddress) {
+  if (!view.name || !view.viewAddress) {
     return null;
   }
 
@@ -174,11 +174,11 @@ export const toViewSummary = (view: ShinzoHubView): ViewSummary | null => {
   }
 
   const itemWithoutSearchText = {
-    id: view.contractAddress,
-    href: createViewHref(view.name),
+    id: view.viewAddress,
+    href: createViewHref(view.viewAddress),
     name: view.name,
     creator: createExplorerAddressLink(view.creator || "unknown"),
-    contract: createExplorerAddressLink(view.contractAddress),
+    viewAddressLink: createExplorerAddressLink(view.viewAddress),
     height: formatHeight(view.height),
     heightNumber: toHeightNumber(view.height),
     metadata,
@@ -199,10 +199,10 @@ export const toViewDetails = (view: ShinzoHubView): ViewDetails => {
     .filter((hash) => hash.length > 0);
 
   return {
-    id: view.contractAddress,
+    id: view.viewAddress,
     name: view.name,
     creator: createExplorerAddressLink(view.creator || "unknown"),
-    contract: createExplorerAddressLink(view.contractAddress),
+    viewAddressLink: createExplorerAddressLink(view.viewAddress),
     height: formatHeight(view.height),
     heightNumber: toHeightNumber(view.height),
     rootType: metadata.rootType,

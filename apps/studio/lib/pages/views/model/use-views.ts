@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { hexToShinzoAddress } from "@shinzo/shinzohub";
 import { useConnection } from "wagmi";
 import {
   fetchHubViewsPage,
@@ -89,7 +88,7 @@ export const useViews = (): UseViewsResult => {
       return null;
     }
 
-    return hexToShinzoAddress(address);
+    return address;
   }, [address, ownerFilter]);
 
   const query = useInfiniteQuery({

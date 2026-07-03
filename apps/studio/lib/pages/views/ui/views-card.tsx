@@ -28,8 +28,8 @@ export const ViewsCard = ({ view }: { view: ViewsPageItem }) => (
         </h2>
 
         <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-ui-text-muted">
-          <span className="shrink-0">Smart contract</span>
-          <ViewAddressChip link={view.contract} className="relative z-20" />
+          <span className="shrink-0">View address</span>
+          <ViewAddressChip link={view.viewAddressLink} className="relative z-20" />
         </p>
 
         <p className="flex min-w-0 flex-wrap items-center gap-1.5 text-xs leading-6 text-ui-text-muted">

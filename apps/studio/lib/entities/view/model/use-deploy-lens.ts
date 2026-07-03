@@ -23,7 +23,11 @@ import {
   type ValidationIssue,
   type ViewDefinition,
 } from "@shinzo/lenses/view";
-import { createView, getCreatedViewAddress } from "@shinzo/shinzohub";
+import {
+  createView,
+  getCreatedViewAddress,
+  getViewRegistration,
+} from "@shinzo/shinzohub";
 import type {
   LensArgs,
   LensDefinition,
@@ -32,7 +36,9 @@ import type {
 import { shinzoDevnet, wagmiConfig } from "@/shared/consts/wagmi";
 import { resolveViewDefinition } from "../api/deploy-transaction";
 import {
+  fetchHubViewByAddress,
   findHubViewByEntityName,
+  shinzohubPublicClient,
   type HubViewRecord,
   useStudioHubViews,
 } from "../api/hub-views";
@@ -63,6 +69,8 @@ const validateResolvedView = async <TArgs extends LensArgs>(
 
 type PublicClient = NonNullable<ReturnType<typeof usePublicClient>>;
 type StudioWagmiConfig = typeof wagmiConfig;
+const VIEW_REGISTRATION_MAX_ATTEMPTS = 20;
+const VIEW_REGISTRATION_POLL_INTERVAL_MS = 1_000;
 
 const findError = (
   error: unknown,
@@ -231,28 +239,34 @@ const submitDeployTransaction = async (
 const confirmRegisteredView = async (
   receipt: TransactionReceipt,
   entityName: string,
-  studioHubViews: HubViewRecord[],
   refreshStudioHubViews: () => Promise<HubViewRecord[]>
-): Promise<{ contractAddress: string; txHash: string }> => {
-  const contractAddress = getCreatedViewAddress(receipt);
-  let availableViews = studioHubViews;
-  let registeredHubView = findHubViewByEntityName(availableViews, entityName, {
-    contractAddress,
-  });
+): Promise<{ viewAddress: string; txHash: string }> => {
+  const viewAddress = getCreatedViewAddress(receipt);
+  let isRegistered = false;
 
-  for (let attempt = 0; attempt < 20 && !registeredHubView; attempt += 1) {
-    await new Promise((resolve) => window.setTimeout(resolve, 1_000));
-    availableViews = await refreshStudioHubViews();
-
-    registeredHubView = findHubViewByEntityName(availableViews, entityName, {
-      contractAddress,
+  for (let attempt = 0; attempt < VIEW_REGISTRATION_MAX_ATTEMPTS; attempt += 1) {
+    const registration = await getViewRegistration(shinzohubPublicClient, {
+      viewAddress,
     });
+
+    if (registration.status === "registered") {
+      isRegistered = true;
+      break;
+    }
+
+    if (attempt < VIEW_REGISTRATION_MAX_ATTEMPTS - 1) {
+      await new Promise((resolve) =>
+        window.setTimeout(resolve, VIEW_REGISTRATION_POLL_INTERVAL_MS)
+      );
+    }
   }
 
-  if (!registeredHubView) {
+  if (!isRegistered) {
     const message = [
-      `Deployment transaction ${receipt.transactionHash} succeeded and deployed view contract ${contractAddress},`,
-      `but "${entityName}" did not become registered within 20 seconds.`,
+      `Deployment transaction ${receipt.transactionHash} succeeded and created view address ${viewAddress},`,
+      `but "${entityName}" did not become registered within ${
+        (VIEW_REGISTRATION_MAX_ATTEMPTS * VIEW_REGISTRATION_POLL_INTERVAL_MS) / 1_000
+      } seconds.`,
       "ShinzoHub completes registration asynchronously after a SourceHub ICA/IBC acknowledgement.",
       "Check the ShinzoHub relayer and ordered ICA channel before retrying; this is not a Host error.",
     ].join(" ");
@@ -260,8 +274,20 @@ const confirmRegisteredView = async (
     throw new Error(message);
   }
 
+  const registeredHubView = await fetchHubViewByAddress(viewAddress, {
+    includeMetadata: true,
+  });
+
+  if (registeredHubView.name !== entityName) {
+    throw new Error(
+      `Registered view ${viewAddress} has name "${registeredHubView.name}", expected "${entityName}".`
+    );
+  }
+
+  await refreshStudioHubViews();
+
   return {
-    contractAddress: registeredHubView.contractAddress,
+    viewAddress: registeredHubView.viewAddress,
     txHash: receipt.transactionHash,
   };
 };
@@ -324,7 +350,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       if (existing) {
         const deployedView = createDeployedViewRecord(resolvedView, {
           source: "hub-existing",
-          contractAddress: existing.contractAddress,
+          viewAddress: existing.viewAddress,
         });
         return { deployedView, validationWarnings: [] };
       }
@@ -356,16 +382,15 @@ export const useDeployLens = (): UseDeployLensResult => {
       });
 
       setStatus("registering");
-      const { contractAddress, txHash } = await confirmRegisteredView(
+      const { viewAddress, txHash } = await confirmRegisteredView(
         receipt,
         resolvedView.entityName,
-        studioHubViews,
         async () => (await refetchStudioHubViews()).data ?? []
       );
 
       const deployedView = createDeployedViewRecord(resolvedView, {
         source: "deployed",
-        contractAddress,
+        viewAddress,
         txHash,
       });
 
