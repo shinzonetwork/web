@@ -24,6 +24,7 @@ const expectedRootExports = [
   "getLatestBlockHeight",
   "getTransaction",
   "getView",
+  "getViewRegistration",
   "hexToShinzoAddress",
   "isShinzoAddress",
   "listViews",
@@ -45,6 +46,9 @@ const expectedRootExports = [
   "shinzoHubMainnet",
   "shinzoHubTestnet",
   "submitGeneratorAssertion",
+  "VIEW_REGISTRY_STATUS_NONE",
+  "VIEW_REGISTRY_STATUS_PENDING",
+  "VIEW_REGISTRY_STATUS_REGISTERED",
   "viewRegistryAbi",
   "viewRegistryAddress",
 ] as const;

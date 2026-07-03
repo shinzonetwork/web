@@ -29,7 +29,7 @@ const views = await publicClient.listViews({
 });
 
 const view = await publicClient.getView({
-  address: views.views[0].contractAddress,
+  viewAddress: views.views[0].viewAddress,
 });
 
 const transactions = await publicClient.listTransactions({
@@ -61,22 +61,20 @@ const hash = await walletClient.createView({
 });
 ```
 
-Read the deployed View address from the receipt:
+Read the deterministic View address from the receipt and poll registration:
 
 ```ts
 import { getCreatedViewAddress } from "@shinzo/shinzohub";
 
 const receipt = await publicClient.waitForTransactionReceipt({ hash });
 const viewAddress = getCreatedViewAddress(receipt);
-```
-
-Use a custom pricing contract by passing `pricing`:
-
-```ts
-const hash = await walletClient.createView({
-  bundle: "0x68656c6c6f",
-  pricing: "0x0000000000000000000000000000000000000000",
+const registration = await publicClient.getViewRegistration({
+  viewAddress,
 });
+
+if (registration.status === "registered") {
+  const view = await publicClient.getView({ viewAddress });
+}
 ```
 
 Power users can import `viewRegistryAbi` and `viewRegistryAddress` and call Viem directly for lower-level contract reads or log decoding.
@@ -104,9 +102,8 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover the ViewRegistry precompile address with `viewRegistryAddress`.
 - [x] Cover the ViewRegistry ABI with `viewRegistryAbi`.
 - [x] Cover `register(bytes)` with `createView({ bundle })`.
-- [x] Cover `registerWithPricing(bytes,address)` with `createView({ bundle, pricing })`.
 - [x] Cover `ViewCreated(address,address,string)` through `getCreatedViewAddress(receipt)` and `viewRegistryAbi`.
-- [ ] Add an ergonomic read helper for `getView(address)` if apps need direct ViewRegistry creator reads.
+- [x] Cover `getView(address)` with `getViewRegistration`.
 - [ ] Add dedicated ViewRegistry event query/decode helpers if ABI-based Viem usage is not enough.
 
 ### Cosmos REST View Queries
@@ -116,7 +113,7 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Cover `include_data`, `since_block`, and `include_metadata` in `listViews`.
 - [x] Cover view filters for name and creator in `listViews`.
 - [x] Cover metadata filters for root type, lens hash, query text, SDL text, and lens args text in `listViews`.
-- [x] Cover `GET /shinzonetwork/view/v1/views/{contract_address}` with `getView`.
+- [x] Cover `GET /shinzonetwork/view/v1/views/{view_address}` with `getView`.
 - [x] Cover `include_data` and `include_metadata` in `getView`.
 - [x] Cover `GET /shinzonetwork/view/v1/view_count` with `countViews`.
 
@@ -144,30 +141,6 @@ ShinzoHub protocol surface area that should be considered in future passes.
 - [x] Fetch one block timestamp with `getBlockTimestamp`.
 - [x] Fetch a block by height or hash with `getBlock`.
 - [x] List active consensus validators with `listValidators`.
-
-### Deployed View Contracts
-
-- [ ] Cover `name()`.
-- [ ] Cover `creator()`.
-- [ ] Cover `report(uint256,uint256)`.
-- [ ] Cover `hosts()`.
-- [ ] Cover `unhost()`.
-- [ ] Cover `stake()`.
-- [ ] Cover `unstake(uint256)`.
-- [ ] Cover `totalStake()`.
-- [ ] Cover `stakeOf(address)`.
-- [ ] Cover `rate()`.
-- [ ] Cover `complexity()`.
-- [ ] Cover `fund(bytes)`.
-- [ ] Cover `fundFor(address,bytes)`.
-- [ ] Cover `fundOf(bytes)`.
-- [ ] Cover `fundBy(address,bytes)`.
-- [ ] Cover `defund(bytes,uint256)`.
-- [ ] Cover `earnings()`.
-- [ ] Cover `claimEarnings()`.
-- [ ] Cover `consume(bytes)`.
-- [ ] Cover `price()`.
-- [ ] Cover `pricingContract()`.
 
 ### Addresses
 

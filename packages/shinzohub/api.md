@@ -189,8 +189,8 @@ Example response:
 {
   views: [{
     name: "Erc20Transfers",
-    creator: "shinzo1...",
-    contractAddress: "0x018a06d78e0802db5bc055b4527d7b481c3e9932",
+    creator: "0x1234567890AbcdEF1234567890aBcdef12345678",
+    viewAddress: "0x018a06D78E0802dB5bC055B4527d7B481c3e9932",
     data: null,
     height: 1715911n,
     metadata: {
@@ -213,8 +213,8 @@ Example response:
 - Parameters
   - `client`: Viem client with a Cosmos REST endpoint.
   - `parameters`
-    - `address` required: EVM hex, bare 20-byte hex, or Shinzo bech32 view
-      address.
+    - `viewAddress` required: EVM hex, bare 20-byte hex, or Shinzo bech32 view
+      address. REST lookups are normalized to EVM checksum casing.
     - `includeData`: include raw viewbundle data.
     - `includeMetadata`: include parsed viewbundle metadata.
     - `cosmosRestUrl`: Cosmos REST endpoint override.
@@ -224,8 +224,8 @@ Example response:
 ```ts
 {
   name: "Erc20Transfers",
-  creator: "shinzo1...",
-  contractAddress: "0x018a06d78e0802db5bc055b4527d7b481c3e9932",
+  creator: "0x1234567890AbcdEF1234567890aBcdef12345678",
+  viewAddress: "0x018a06D78E0802dB5bC055B4527d7B481c3e9932",
   data: null,
   height: 1715911n,
   metadata: null,
@@ -253,8 +253,6 @@ Registers raw viewbundle bytes through the ViewRegistry precompile.
   - `client`: wallet-capable Viem client.
   - `parameters`
     - `bundle` required: `0x` hex, `Uint8Array`, or `readonly number[]`.
-    - `pricing`: optional EVM hex or Shinzo bech32 pricing-contract address.
-      When supplied, registration uses `registerWithPricing`.
     - `account`: optional Viem `Account | Address`; otherwise the client's
       account is used.
 
@@ -266,7 +264,7 @@ Example response:
 
 ### `getCreatedViewAddress`
 
-Decodes the created View contract address from a confirmed ViewRegistry
+Decodes the deterministic View address from a confirmed ViewRegistry
 transaction receipt.
 
 - Parameters
@@ -280,6 +278,28 @@ Example response:
 
 Throws when the receipt has no decodable `ViewCreated` event from the
 ViewRegistry.
+
+### `getViewRegistration`
+
+Reads pending/registered lifecycle status from the ViewRegistry precompile.
+
+- Parameters
+  - `client`: Viem client with an EVM transport.
+  - `parameters`
+    - `viewAddress` required: EVM hex, bare 20-byte hex, or Shinzo bech32 view
+      address.
+
+Example response:
+
+```ts
+{
+  viewAddress: "0x018a06D78E0802dB5bC055B4527d7B481c3e9932",
+  name: "Erc20Transfers",
+  creator: "0x1234567890AbcdEF1234567890aBcdef12345678",
+  height: 1715911n,
+  status: "registered", // "none" | "pending" | "registered"
+}
+```
 
 ## Hosts
 
@@ -878,8 +898,9 @@ ViewRegistry precompile address:
 Viem-compatible ABI containing:
 
 - `register(bytes)`
-- `registerWithPricing(bytes,address)`
 - `getView(address)`
+- `listViews(uint256,uint256)`
+- `viewCount()`
 - `ViewCreated(address,address,string)`
 
 Use it for custom Viem contract calls, simulations, filters, or event
