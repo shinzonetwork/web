@@ -11,9 +11,9 @@ import { getPageLink, type AppPage } from '@/shared/utils/links';
 import { cn } from '@/shared/utils/utils';
 import {
   getShinzohubTransactionSubtypes,
+  type GeneratorAssertionTransactionSubtype,
   type GeneratorRegistrationTransactionSubtype,
   type HostTransactionSubtype,
-  type IndexerAssertionTransactionSubtype,
   type ShinzohubTransactionSubtype,
   type ViewTransactionSubtype,
 } from '../../model/shinzohub-transaction-subtype';
@@ -152,10 +152,10 @@ function GeneratorRegistrationSubtype({
   );
 }
 
-function IndexerAssertionSubtype({
+function GeneratorAssertionSubtype({
   subtype,
 }: {
-  subtype: IndexerAssertionTransactionSubtype;
+  subtype: GeneratorAssertionTransactionSubtype;
 }) {
   return (
     <span className='inline-flex min-w-0 flex-wrap items-center gap-2'>
@@ -189,8 +189,8 @@ function TransactionSubtype({
       return <HostSubtype subtype={subtype} />;
     case 'generator-registration':
       return <GeneratorRegistrationSubtype subtype={subtype} />;
-    case 'indexer-assertion':
-      return <IndexerAssertionSubtype subtype={subtype} />;
+    case 'generator-assertion':
+      return <GeneratorAssertionSubtype subtype={subtype} />;
   }
 }
 

@@ -8,9 +8,7 @@ type AttributeMap = ReadonlyMap<string, string>;
 
 type GeneratorEventType =
   | 'generator.generator_pending'
-  | 'generator.generator_registered'
-  | 'indexer.indexer_pending'
-  | 'indexer.indexer_registered';
+  | 'generator.generator_registered';
 type HostEventType = 'host.host_pending' | 'host.host_registered';
 type ViewEventType =
   | 'view.view_pending'
@@ -41,7 +39,7 @@ interface GeneratorEventAttributes {
   msg_index: string;
 }
 
-interface IndexerAssertedEventAttributes {
+interface GeneratorAssertedEventAttributes {
   signer: string;
   consensus_pub_key: string;
   delegate_address: string;
@@ -84,8 +82,6 @@ export interface HostTransactionSubtype {
 
 /**
  * Semantic transaction subtype for generator registration lifecycle events.
- * The current chain event type is `indexer.indexer_*`; the explorer presents
- * those records as generators because that is the product-facing entity name.
  */
 export interface GeneratorRegistrationTransactionSubtype {
   kind: 'generator-registration';
@@ -96,15 +92,15 @@ export interface GeneratorRegistrationTransactionSubtype {
 }
 
 /**
- * Semantic transaction subtype for indexer assertions.
+ * Semantic transaction subtype for generator assertions.
  *
- * `IndexerAsserted` events are not EVM-specific, so this keeps their source
- * chain and signer address available to the UI without coupling them to the
- * generic sender/recipient fields.
+ * Generator assertion events keep their source chain and signer address
+ * available to the UI without coupling them to the generic sender/recipient
+ * fields.
  */
-export interface IndexerAssertionTransactionSubtype {
-  kind: 'indexer-assertion';
-  label: 'Indexer assertion';
+export interface GeneratorAssertionTransactionSubtype {
+  kind: 'generator-assertion';
+  label: 'Generator assertion';
   signer: string;
   consensusPubKey: string;
   delegateAddress: string;
@@ -117,7 +113,7 @@ export type ShinzohubTransactionSubtype =
   | ViewTransactionSubtype
   | HostTransactionSubtype
   | GeneratorRegistrationTransactionSubtype
-  | IndexerAssertionTransactionSubtype;
+  | GeneratorAssertionTransactionSubtype;
 
 type TransactionSubtypeResolver = (
   event: ShinzohubEvent,
@@ -236,9 +232,7 @@ function resolveGeneratorRegistrationSubtype(
 ): GeneratorRegistrationTransactionSubtype | null {
   if (
     event.type !== 'generator.generator_pending' &&
-    event.type !== 'generator.generator_registered' &&
-    event.type !== 'indexer.indexer_pending' &&
-    event.type !== 'indexer.indexer_registered'
+    event.type !== 'generator.generator_registered'
   ) {
     return null;
   }
@@ -250,11 +244,9 @@ function resolveGeneratorRegistrationSubtype(
   if (!attributes) return null;
 
   const eventType = event.type as GeneratorEventType;
-  const status =
-    eventType === 'generator.generator_pending' ||
-    eventType === 'indexer.indexer_pending'
-      ? 'pending'
-      : 'registered';
+  const status = eventType === 'generator.generator_pending'
+    ? 'pending'
+    : 'registered';
 
   return {
     kind: 'generator-registration',
@@ -265,10 +257,10 @@ function resolveGeneratorRegistrationSubtype(
   };
 }
 
-function resolveIndexerAssertionSubtype(
+function resolveGeneratorAssertionSubtype(
   event: ShinzohubEvent,
-): IndexerAssertionTransactionSubtype | null {
-  if (event.type !== 'IndexerAsserted') {
+): GeneratorAssertionTransactionSubtype | null {
+  if (event.type !== 'GeneratorAsserted' && event.type !== 'IndexerAsserted') {
     return null;
   }
 
@@ -283,12 +275,12 @@ function resolveIndexerAssertionSubtype(
       'assertion_id',
       'msg_index',
     ] as const,
-  ) satisfies IndexerAssertedEventAttributes | null;
+  ) satisfies GeneratorAssertedEventAttributes | null;
   if (!attributes) return null;
 
   return {
-    kind: 'indexer-assertion',
-    label: 'Indexer assertion',
+    kind: 'generator-assertion',
+    label: 'Generator assertion',
     signer: attributes.signer,
     consensusPubKey: attributes.consensus_pub_key,
     delegateAddress: attributes.delegate_address,
@@ -307,7 +299,7 @@ const SUBTYPE_RESOLVERS: readonly TransactionSubtypeResolver[] = [
   resolveViewSubtype,
   resolveHostSubtype,
   resolveGeneratorRegistrationSubtype,
-  resolveIndexerAssertionSubtype,
+  resolveGeneratorAssertionSubtype,
 ];
 
 /**
