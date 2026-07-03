@@ -34,7 +34,8 @@ export const DataItem = ({
 }: DataItemProps) => {
   const isValueNull = typeof value === 'undefined' || value == null;
   const displayValue =
-  typeof children !== 'undefined' ? children : isValueNull ? '—' : value;  const wrapStyle =
+    typeof children !== 'undefined' ? children : isValueNull ? '—' : value;
+  const wrapStyle =
     allowWrap && wrapAt
       ? {
           maxWidth: `${wrapAt}ch`,
@@ -50,7 +51,7 @@ export const DataItem = ({
     <div
       className={cn(
         'grid grid-cols-subgrid col-span-3 gap-x-6 items-center',
-        'h-16 border-b border-r border-border',
+        'h-16 border-b border-border',
         allowWrap && 'items-start py-4 h-auto',
         className,
       )}
@@ -63,14 +64,16 @@ export const DataItem = ({
       />
 
       <div className='pr-8'>
-        <Typography className='w-36 shrink-0 sm:w-48'>
+        <Typography className='whitespace-nowrap'>
           {title}:
         </Typography>
       </div>
 
       {loading ? (
-        <div className='min-w-32 w-1/2 h-1/2'>
-          <Skeleton />
+        <div className='flex min-w-0 items-center pr-8'>
+          <div className='h-4 w-40 max-w-full'>
+            <Skeleton />
+          </div>
         </div>
       ) : (
         <div

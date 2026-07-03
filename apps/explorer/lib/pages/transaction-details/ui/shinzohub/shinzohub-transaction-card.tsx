@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { CheckCircle2, ChevronDown, ChevronUp, XCircle } from 'lucide-react';
+import {
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  XCircle,
+} from 'lucide-react';
 import { formatGwei } from 'viem';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
@@ -14,6 +19,10 @@ import {
 } from '@/shared/utils/format-token';
 import { getPageLink } from '@/shared/utils/links';
 import { DataItem, DataList } from '@/widgets/data-list';
+import {
+  getShinzohubTransactionSubtypes,
+  ShinzohubTransactionSubtypes,
+} from '../../shinzohub';
 import { useShinzohubEvmTransaction } from '../../hook/shinzohub/use-shinzohub-evm-transaction';
 import { useShinzohubTransactionReceipt } from '../../hook/shinzohub/use-shinzohub-transaction-receipt';
 
@@ -120,6 +129,7 @@ export function ShinzohubTransactionCard({
     : transaction?.fee
       ? formatShinzoCoin(transaction.fee)
       : transaction?.fee;
+  const subtypes = getShinzohubTransactionSubtypes(transaction?.events);
 
   return (
     <DataList>
@@ -129,6 +139,16 @@ export function ShinzohubTransactionCard({
       <DataItem title='Type' value={transaction?.kind} loading={loading}>
         {transaction?.kind && <Badge variant='outline'>{transaction.kind === 'evm' ? 'EVM' : 'Cosmos'}</Badge>}
       </DataItem>
+      {subtypes.length > 0 && (
+        <DataItem
+          title='Subtype'
+          value={subtypes.map((subtype) => subtype.label).join(', ')}
+          loading={loading}
+          allowWrap
+        >
+          <ShinzohubTransactionSubtypes subtypes={subtypes} />
+        </DataItem>
+      )}
       <DataItem title='From' value={from} loading={loading}>
         <ShinzohubAddressLink
           address={from}
@@ -169,9 +189,9 @@ export function ShinzohubTransactionCard({
           </>
         )}
       </DataItem>
-      <DataItem title='Cosmos Hash' value={transaction?.cosmosHash} copyable loading={loading} />
+      <DataItem title='ShinzoHub Tx Hash' value={transaction?.cosmosHash} copyable loading={loading} />
       {transaction?.evmHash && (
-        <DataItem title='EVM Hash' value={transaction.evmHash} copyable loading={loading} />
+        <DataItem title='EVM Tx Hash' value={transaction.evmHash} copyable loading={loading} />
       )}
       <DataItem title='Actions' value={transaction?.actions.join(', ')} loading={loading} />
       <DataItem title='Gas Used' value={transaction?.gasUsed} loading={loading} />
