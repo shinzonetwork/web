@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import { IndexerAssertionFormData } from "../util/form-data";
+import { GeneratorAssertionFormData } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
 
-function createInitialValues(): IndexerAssertionFormData {
+function createInitialValues(): GeneratorAssertionFormData {
   return {
     consensusPubKey: "",
     sourceChain: "",
   };
 }
 
-export function useIndexerAssertionForm() {
+export function useAssertionForm() {
   const [assertionFormData, setAssertionFormData] =
-    useState<IndexerAssertionFormData>(createInitialValues());
+    useState<GeneratorAssertionFormData>(createInitialValues());
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});

@@ -6,7 +6,7 @@ import { useVerifyIndexerAssertion } from "@/features/registration-form";
 import { GENERATOR_ASSERTION_PENDING_KEY } from "../constants";
 
 /** Redirect to assertion when registration is opened without a completed assertion. */
-export function useIndexerOnboardingGuard(enabled: boolean) {
+export function useGeneratorOnboardingGuard(enabled: boolean) {
   const router = useRouter();
   const [assertionPending, setAssertionPending] = useState(false);
   const {

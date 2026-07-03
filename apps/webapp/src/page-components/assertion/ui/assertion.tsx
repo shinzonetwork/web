@@ -2,8 +2,8 @@
 
 import { useAccount } from "wagmi";
 
-import { IndexerAssertionForm } from "@/features/indexer-assertion";
-import { IndexerOnboardingStepper } from "@/features/indexer-onboarding";
+import { AssertionForm } from "@/features/generator-assertion";
+import { GeneratorOnboardingStepper } from "@/features/generator-onboarding";
 import { useRegistrationContext } from "@/entities/registration-process";
 import { FormHeader } from "@/widget/form-header";
 import { Header } from "@/widget";
@@ -27,11 +27,11 @@ export default function Assertion() {
             isSignedWithWallet &&
             (isRegistrationV2() ? (
               <>
-                <IndexerOnboardingStepper
+                <GeneratorOnboardingStepper
                   currentStep="assertion"
                   assertionComplete={false}
                 />
-                <IndexerAssertionForm />
+                <AssertionForm />
               </>
             ) : (
               <div className="flex flex-col gap-2 items-center justify-center py-12">

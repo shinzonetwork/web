@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
-import { IndexerAssertionFormData } from "../util/form-data";
+import { GeneratorAssertionFormData } from "../util/form-data";
 import { TOAST_CONFIG, getSourceChainMap } from "@/shared/lib";
 import { adminIndexerAssertion } from "../util/assertion";
 import { useAccount, useSignMessage } from "wagmi";
@@ -8,7 +8,7 @@ import { concat, hexToBytes, keccak256, stringToBytes } from "viem";
 
 export type SignedDelegatePayload = { digest: Uint8Array; signature: string };
 
-export function useIndexerAssertion() {
+export function useAssertion() {
   const { signMessageAsync, isPending: isSigning } = useSignMessage();
   const { address } = useAccount();
 
@@ -42,7 +42,7 @@ export function useIndexerAssertion() {
 
   const handleAssertion = useCallback(
     async (
-      assertionFormData: IndexerAssertionFormData,
+      assertionFormData: GeneratorAssertionFormData,
       signed: SignedDelegatePayload
     ): Promise<boolean> => {
       const privateKey = process.env.NEXT_PUBLIC_INDEXER_ASSERTION_PRIVATE_KEY;

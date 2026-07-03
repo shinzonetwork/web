@@ -3,22 +3,22 @@
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/shared/ui/button";
-import { IndexerAssertionDataForm } from "./indexer-assertion-data-form";
-import { useIndexerAssertionForm } from "../hooks/use-indexer-assertion-form";
-import { useIndexerAssertion } from "../hooks/use-indexer-assertion";
-import { getIndexerAssertionButtonText } from "../util/form-data";
+import { AssertionDataForm } from "./assertion-data-form";
+import { useAssertionForm } from "../hooks/use-assertion-form";
+import { useAssertion } from "../hooks/use-assertion";
+import { getGeneratorAssertionButtonText } from "../util/form-data";
 import {
-  buildIndexerRegistrationUrl,
+  buildGeneratorRegistrationUrl,
   GENERATOR_ASSERTION_PENDING_KEY,
-} from "@/features/indexer-onboarding";
+} from "@/features/generator-onboarding";
 
-export default function IndexerAssertionForm() {
+export default function AssertionForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { assertionFormData, handleInputChange, fieldErrors, isValid } =
-    useIndexerAssertionForm();
+    useAssertionForm();
   const { handleSignDigest, isSigning, isSubmitting, handleAssertion } =
-    useIndexerAssertion();
+    useAssertion();
 
   const handleSubmit = async () => {
     if (!isValid) return;
@@ -30,10 +30,10 @@ export default function IndexerAssertionForm() {
 
     sessionStorage.setItem(GENERATOR_ASSERTION_PENDING_KEY, "true");
     await queryClient.invalidateQueries({
-      queryKey: ["indexer-assertion-verification"],
+      queryKey: ["generator-assertion-verification"],
     });
 
-    const registrationUrl = buildIndexerRegistrationUrl(
+    const registrationUrl = buildGeneratorRegistrationUrl(
       assertionFormData.sourceChain
     );
     router.push(registrationUrl);
@@ -41,7 +41,7 @@ export default function IndexerAssertionForm() {
 
   return (
     <div className="space-y-6 ml-10">
-      <IndexerAssertionDataForm
+      <AssertionDataForm
         formData={assertionFormData}
         handleInputChange={handleInputChange}
         fieldErrors={fieldErrors}
@@ -53,7 +53,7 @@ export default function IndexerAssertionForm() {
         className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
         disabled={!isValid || isSubmitting || isSigning}
       >
-        {getIndexerAssertionButtonText(isSigning, isSubmitting)}
+        {getGeneratorAssertionButtonText(isSigning, isSubmitting)}
       </Button>
     </div>
   );

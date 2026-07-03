@@ -8,9 +8,9 @@ import {
   RegistrationFormV2,
 } from "@/features/registration-form";
 import {
-  IndexerOnboardingStepper,
-  useIndexerOnboardingGuard,
-} from "@/features/indexer-onboarding";
+  GeneratorOnboardingStepper,
+  useGeneratorOnboardingGuard,
+} from "@/features/generator-onboarding";
 import { FormHeader } from "@/widget/form-header";
 import { Header } from "@/widget";
 import { isRegistrationV2, UI_FORM_HEADER_CONTENT } from "@/shared/lib";
@@ -28,7 +28,7 @@ export default function Register() {
     isRegistrationV2() && routeKey === "generator-registration";
 
   const { assertionComplete, isLoading: isAssertionLoading } =
-    useIndexerOnboardingGuard(isGeneratorRegistration);
+    useGeneratorOnboardingGuard(isGeneratorRegistration);
 
   return (
     <>
@@ -40,7 +40,7 @@ export default function Register() {
           {isConnected && isSignedWithWallet && (
             <>
               {isGeneratorRegistration && (
-                <IndexerOnboardingStepper
+                <GeneratorOnboardingStepper
                   currentStep="registration"
                   assertionComplete={assertionComplete}
                 />

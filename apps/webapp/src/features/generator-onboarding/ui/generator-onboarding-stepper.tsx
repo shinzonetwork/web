@@ -17,7 +17,7 @@ import {
   type GeneratorOnboardingStepId,
 } from "../constants";
 
-interface IndexerOnboardingStepperProps {
+interface GeneratorOnboardingStepperProps {
   currentStep: GeneratorOnboardingStepId;
   assertionComplete?: boolean;
 }
@@ -27,10 +27,10 @@ const STEP_INDEX: Record<GeneratorOnboardingStepId, number> = {
   registration: 2,
 };
 
-export function IndexerOnboardingStepper({
+export function GeneratorOnboardingStepper({
   currentStep,
   assertionComplete = false,
-}: IndexerOnboardingStepperProps) {
+}: GeneratorOnboardingStepperProps) {
   const router = useRouter();
   const activeStep = STEP_INDEX[currentStep];
 

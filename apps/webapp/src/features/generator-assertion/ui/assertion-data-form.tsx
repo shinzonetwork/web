@@ -1,22 +1,22 @@
 import { InputField } from "@/widget/input-field";
 import {
-  INDEXER_ASSERTION_FORM_INPUTS,
-  IndexerAssertionFormData,
+  GENERATOR_ASSERTION_FORM_INPUTS,
+  GeneratorAssertionFormData,
 } from "../util/form-data";
 
-type IndexerAssertionDataFormProps = React.PropsWithChildren<{
-  formData: IndexerAssertionFormData;
+type AssertionDataFormProps = React.PropsWithChildren<{
+  formData: GeneratorAssertionFormData;
   handleInputChange: (field: string, value: string) => void;
   fieldErrors: Record<string, string | undefined>;
   onSignDigest: () => void;
   isSigning: boolean;
 }>;
 
-export function IndexerAssertionDataForm({
+export function AssertionDataForm({
   formData,
   handleInputChange,
   fieldErrors,
-}: IndexerAssertionDataFormProps) {
+}: AssertionDataFormProps) {
   const disabledFields = [
     "delegateAddress",
     "sourceChainId",
@@ -24,15 +24,18 @@ export function IndexerAssertionDataForm({
   ];
   return (
     <div className="space-y-6 w-full max-w-6xl">
-      {INDEXER_ASSERTION_FORM_INPUTS.map((input) => (
+      {GENERATOR_ASSERTION_FORM_INPUTS.map((input) => (
         <InputField
           key={input.id}
           id={input.id}
           label={input.label}
           description={"description" in input ? input.description : undefined}
-          value={String(formData[input.id as keyof IndexerAssertionFormData])}
+          value={String(formData[input.id as keyof GeneratorAssertionFormData])}
           onChange={(value) =>
-            handleInputChange(input.id as keyof IndexerAssertionFormData, value)
+            handleInputChange(
+              input.id as keyof GeneratorAssertionFormData,
+              value
+            )
           }
           isTextarea={input.isTextarea}
           isSelect={input.isSelect}
