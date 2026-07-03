@@ -19,7 +19,7 @@ import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
-import { useVerifyIndexerAssertion } from "../hooks/use-verify-indexer-assertion";
+import { useVerifyAssertion } from "../hooks/use-verify-assertion";
 import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
@@ -33,7 +33,7 @@ export function RegistrationFormV2() {
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
     useRegistrationTransaction(formData);
-  const { data: isAssertionVerified } = useVerifyIndexerAssertion();
+  const { data: isAssertionVerified } = useVerifyAssertion();
 
   const handleRegister = async () => {
     if (registrationEntity === EntityRole.Generator) {

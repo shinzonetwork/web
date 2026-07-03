@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useVerifyIndexerAssertion } from "@/features/registration-form";
+import { useVerifyAssertion } from "@/features/registration-form";
 import { GENERATOR_ASSERTION_PENDING_KEY } from "../constants";
 
 /** Redirect to assertion when registration is opened without a completed assertion. */
@@ -13,7 +13,7 @@ export function useGeneratorOnboardingGuard(enabled: boolean) {
     data: isAssertionVerified,
     isLoading,
     isFetching,
-  } = useVerifyIndexerAssertion();
+  } = useVerifyAssertion();
 
   useEffect(() => {
     setAssertionPending(

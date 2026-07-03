@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Hex, hexToBytes } from "viem";
 import { useAccount } from "wagmi";
 
-async function fetchIndexerAssertion(address: string): Promise<boolean> {
+async function fetchGeneratorAssertion(address: string): Promise<boolean> {
   const response = await fetch(
     `api/shinzohub/generators/assertion?address=${encodeURIComponent(address)}`
   );
@@ -21,7 +21,7 @@ async function fetchIndexerAssertion(address: string): Promise<boolean> {
   return data.assertions.length > 0;
 }
 
-export function useVerifyIndexerAssertion(intervalMs = 30000) {
+export function useVerifyAssertion(intervalMs = 30000) {
   const { address } = useAccount();
 
   const shinzoAddress = address
@@ -32,7 +32,7 @@ export function useVerifyIndexerAssertion(intervalMs = 30000) {
 
   return useQuery({
     queryKey: ["generator-assertion-verification", shinzoAddress],
-    queryFn: () => fetchIndexerAssertion(shinzoAddress as string),
+    queryFn: () => fetchGeneratorAssertion(shinzoAddress as string),
     refetchInterval: intervalMs,
     refetchIntervalInBackground: true,
     enabled: Boolean(shinzoAddress),
