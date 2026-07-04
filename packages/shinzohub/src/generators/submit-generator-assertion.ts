@@ -21,6 +21,13 @@ import type {
   SubmitGeneratorAssertionResult,
 } from "./types";
 
+// protobufjs uses BufferWriter when `Buffer` exists. On Cloudflare Workers
+// (nodejs_compat), Buffer.utf8Write can throw:
+//   The value of "length" is out of range.
+// while encoding assertion txs. Force the pure JS writer instead.
+const ProtobufWriter = _m0.Writer;
+ProtobufWriter.create = () => new ProtobufWriter();
+
 const PUBKEY_TYPE = "/cosmos.evm.crypto.v1.ethsecp256k1.PubKey";
 const MSG_TYPE_URL = "/shinzonetwork.indexer.v1.MsgIndexerAssertion";
 
@@ -231,15 +238,22 @@ export async function submitGeneratorAssertion(
   };
   const shinzoDelegateAddress = normalizeShinzoAddress(delegateAddress);
 
+  const digestBytes = toBytes(delegateDigest);
+  const signatureBytes = toBytes(delegateSignature);
+  // personal_sign returns 65 bytes (r||s||v). Normalize v to 0/1 when present.
+  if (signatureBytes.length === 65 && signatureBytes[64]! >= 27) {
+    signatureBytes[64] = signatureBytes[64]! - 27;
+  }
+
   const msgValue = MsgIndexerAssertion.fromPartial({
     signer: signerAddress,
-    consensusPubKey,
+    consensusPubKey: consensusPubKey.trim(),
     delegateAddress: shinzoDelegateAddress,
-    sourceChain,
+    sourceChain: sourceChain.trim(),
     sourceChainId,
-    assertionId,
-    delegateDigest: toBytes(delegateDigest),
-    delegateSignature: toBytes(delegateSignature),
+    assertionId: assertionId.trim(),
+    delegateDigest: digestBytes,
+    delegateSignature: signatureBytes,
   });
 
   const txBodyBytes = TxBody.encode(
