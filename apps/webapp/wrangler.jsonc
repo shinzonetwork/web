@@ -2,6 +2,7 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
 	"name": "shinzo-webapp",
+	"keep_vars": true,
 	"compatibility_date": "2026-03-26",
 	"compatibility_flags": [
 		"nodejs_compat"
@@ -21,7 +22,9 @@
 		"staging": {
 			"name": "shinzo-webapp-staging",
 			"vars": {
-				"NEXT_PUBLIC_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545"
+				"NEXT_PUBLIC_RPC_URL": "http://rpc.develop.devnet.shinzo.network:8545",
+				"SHINZOHUB_COSMOS_REST_URL": "http://rpc.develop.devnet.shinzo.network:1317",
+				"SHINZOHUB_COMET_RPC_URL": "http://rpc.develop.devnet.shinzo.network:26657"
 			},
 			"d1_databases": [
 				{
