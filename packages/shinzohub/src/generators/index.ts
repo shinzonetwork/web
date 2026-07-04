@@ -2,6 +2,7 @@ export { getGenerator } from "./get-generator";
 export { getGeneratorHealth } from "./get-generator-health";
 export { listGenerators } from "./list-generators";
 export { getGeneratorAssertion } from "./get-generator-assertion";
+export { submitGeneratorAssertion } from "./submit-generator-assertion";
 export type {
   GetGeneratorParameters,
   ListGeneratorsParameters,
@@ -15,4 +16,6 @@ export type {
   GeneratorAssertion,
   GetAssertionParameters,
   GetAssertionResult,
+  SubmitGeneratorAssertionParameters,
+  SubmitGeneratorAssertionResult,
 } from "./types";

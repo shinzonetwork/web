@@ -9,7 +9,7 @@ import { useAccount } from "wagmi";
 
 async function fetchGeneratorAssertion(address: string): Promise<boolean> {
   const response = await fetch(
-    `api/shinzohub/generators/assertion?address=${encodeURIComponent(address)}`
+    `api/shinzohub/generators/verify-assertion?address=${encodeURIComponent(address)}`
   );
 
   if (!response.ok) {
@@ -33,7 +33,8 @@ export function useVerifyAssertion(intervalMs = 30000) {
   return useQuery({
     queryKey: ["generator-assertion-verification", shinzoAddress],
     queryFn: () => fetchGeneratorAssertion(shinzoAddress as string),
-    refetchInterval: intervalMs,
+    // Stop polling once verified so the registration form is not churned.
+    refetchInterval: (query) => (query.state.data ? false : intervalMs),
     refetchIntervalInBackground: true,
     enabled: Boolean(shinzoAddress),
   });

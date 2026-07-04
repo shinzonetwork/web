@@ -1,3 +1,4 @@
+import type { Hex } from "viem";
 import type { GetHealthParameters, HealthLiveData, HealthP2P, HealthPeer } from "../internal/health";
 
 /** A registered ShinzoHub generator returned by the Cosmos REST gateway. */
@@ -89,3 +90,33 @@ export interface GetAssertionResult {
   /** Matching assertions for the requested delegate address. */
   assertions: readonly GeneratorAssertion[];
 }
+
+/** Parameters for signing and broadcasting a generator assertion. */
+export type SubmitGeneratorAssertionParameters = {
+  /** Admin private key used to sign the assertion transaction. */
+  privateKey: string;
+  /** CometBFT RPC endpoint used for account queries and broadcast. */
+  rpcEndpoint: string;
+  /** Consensus public key for the generator. */
+  consensusPubKey: string;
+  /** Operator / delegate wallet address (Shinzo bech32 or EVM hex). */
+  delegateAddress: string;
+  /** Source chain name (e.g. `ethereum`). */
+  sourceChain: string;
+  /** Source chain numeric id. */
+  sourceChainId: number;
+  /** Unique assertion identifier. */
+  assertionId: string;
+  /** EIP-191 digest bytes or hex. */
+  delegateDigest: Uint8Array | Hex;
+  /** Delegate signature bytes or hex. */
+  delegateSignature: Uint8Array | Hex;
+};
+
+/** Result of broadcasting a generator assertion transaction. */
+export type SubmitGeneratorAssertionResult = {
+  hash: string;
+  code: number;
+  log: string;
+};
+

@@ -40,6 +40,7 @@ const expectedRootExports = [
   "shinzoHubLocal",
   "shinzoHubMainnet",
   "shinzoHubTestnet",
+  "submitGeneratorAssertion",
   "viewRegistryAbi",
   "viewRegistryAddress",
 ] as const;

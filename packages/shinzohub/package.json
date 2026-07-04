@@ -7,7 +7,6 @@
   "exports": {
     ".": "./src/index.ts",
     "./accounts": "./src/accounts/index.ts",
-    "./assertion": "./src/assertion/index.ts",
     "./addresses": "./src/addresses/index.ts",
     "./chains": "./src/chains/index.ts",
     "./blocks": "./src/blocks/index.ts",
@@ -30,6 +29,13 @@
     "prepack": "pnpm run build",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@cosmjs/crypto": "^0.38.1",
+    "@cosmjs/encoding": "^0.38.1",
+    "@cosmjs/proto-signing": "^0.38.1",
+    "cosmjs-types": "^0.11.0",
+    "protobufjs": "^8.0.3"
   },
   "devDependencies": {
     "@types/node": "^25.7.0",

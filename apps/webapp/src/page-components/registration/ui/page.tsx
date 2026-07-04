@@ -30,6 +30,11 @@ export default function Register() {
   const { assertionComplete, isLoading: isAssertionLoading } =
     useGeneratorOnboardingGuard(isGeneratorRegistration);
 
+  // Only block the form on the initial verification check when we do not yet
+  // have a pending/verified assertion. Never unmount the form for refetches.
+  const showAssertionLoading =
+    isGeneratorRegistration && isAssertionLoading && !assertionComplete;
+
   return (
     <>
       <Header />
@@ -45,7 +50,7 @@ export default function Register() {
                   assertionComplete={assertionComplete}
                 />
               )}
-              {isGeneratorRegistration && isAssertionLoading ? (
+              {showAssertionLoading ? (
                 <p className="ml-10 font-mono text-sm text-muted-foreground">
                   Verifying assertion…
                 </p>
