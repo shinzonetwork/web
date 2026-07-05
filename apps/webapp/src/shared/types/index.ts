@@ -54,6 +54,6 @@ export type HostRegistrationFormData = RegistrationFormDataV2 & {
 };
 
 export type RegistrationFormDataByEntity<T extends EntityRole> =
-  T extends EntityRole.Indexer
+  T extends EntityRole.Generator
     ? IndexerRegistrationFormData
     : HostRegistrationFormData;

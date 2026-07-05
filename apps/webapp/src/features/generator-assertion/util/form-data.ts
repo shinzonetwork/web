@@ -1,6 +1,6 @@
 import { getSourceChainOptions } from "@/shared/lib";
 
-export type IndexerAssertionFormData = {
+export type GeneratorAssertionFormData = {
   consensusPubKey: string;
   sourceChain: string;
 };
@@ -8,13 +8,13 @@ export type IndexerAssertionFormData = {
 /** Delegate digest is a fixed-length payload (32 characters). */
 export const DELEGATE_DIGEST_MAX_LENGTH = 32;
 
-export const INDEXER_ASSERTION_FORM_INPUTS = [
+export const GENERATOR_ASSERTION_FORM_INPUTS = [
   {
     id: "consensusPubKey",
     label: "Consensus Public Key",
     isTextarea: false,
     isSelect: false,
-    description: "The consensus public key of the indexer",
+    description: "The consensus public key of the generator",
   },
   {
     id: "sourceChain",
@@ -28,7 +28,7 @@ export const INDEXER_ASSERTION_FORM_INPUTS = [
 /**
  * Get button text based on transaction state
  */
-export function getIndexerAssertionButtonText(
+export function getGeneratorAssertionButtonText(
   isSigning: boolean,
   isSubmitting: boolean
 ): string {

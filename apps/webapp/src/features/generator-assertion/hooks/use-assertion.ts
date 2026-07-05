@@ -1,14 +1,20 @@
 import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
-import { IndexerAssertionFormData } from "../util/form-data";
-import { TOAST_CONFIG, getSourceChainMap } from "@/shared/lib";
-import { adminIndexerAssertion } from "../util/assertion";
 import { useAccount, useSignMessage } from "wagmi";
-import { concat, hexToBytes, keccak256, stringToBytes } from "viem";
+import {
+  bytesToHex,
+  concat,
+  Hex,
+  hexToBytes,
+  keccak256,
+  stringToBytes,
+} from "viem";
+import { GeneratorAssertionFormData } from "../util/form-data";
+import { TOAST_CONFIG, getSourceChainMap } from "@/shared/lib";
 
 export type SignedDelegatePayload = { digest: Uint8Array; signature: string };
 
-export function useIndexerAssertion() {
+export function useAssertion() {
   const { signMessageAsync, isPending: isSigning } = useSignMessage();
   const { address } = useAccount();
 
@@ -42,51 +48,66 @@ export function useIndexerAssertion() {
 
   const handleAssertion = useCallback(
     async (
-      assertionFormData: IndexerAssertionFormData,
+      assertionFormData: GeneratorAssertionFormData,
       signed: SignedDelegatePayload
-    ) => {
-      const privateKey = process.env.NEXT_PUBLIC_INDEXER_ASSERTION_PRIVATE_KEY;
-      const rpcEndpoint =
-        process.env.NEXT_PUBLIC_INDEXER_ASSERTION_RPC_ENDPOINT;
-
-      if (!privateKey || !rpcEndpoint) {
+    ): Promise<boolean> => {
+      if (!address) {
         toast.error(
-          "Missing assertion config: RPC endpoint or private key.",
+          "Connect a wallet before submitting assertion.",
           TOAST_CONFIG
         );
-        return;
+        return false;
       }
 
-      const signature = hexToBytes(signed?.signature as `0x${string}`); // 65 bytes
+      const signature = hexToBytes(signed.signature as Hex); // 65 bytes
       if (signature[64] >= 27) signature[64] -= 27;
 
       const availableChains = getSourceChainMap();
       const sourceChainId =
         availableChains[assertionFormData.sourceChain ?? ""];
 
+      if (!sourceChainId) {
+        toast.error("Unsupported source chain.", TOAST_CONFIG);
+        return false;
+      }
+
       try {
         setIsSubmitting(true);
-        const result = await adminIndexerAssertion({
-          privateKey,
-          rpcEndpoint,
-          consensusPubKey: assertionFormData.consensusPubKey,
-          delegateAddress: address ?? "",
-          sourceChain: assertionFormData.sourceChain,
-          sourceChainId: sourceChainId,
-          assertionId: `assert-${Math.random().toString(36).substring(2, 15)}`,
-          delegateDigest: signed?.digest,
-          delegateSignature: signature,
+        const response = await fetch("/api/shinzohub/generators/assert", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            consensusPubKey: assertionFormData.consensusPubKey,
+            delegateAddress: address,
+            sourceChain: assertionFormData.sourceChain,
+            sourceChainId,
+            assertionId: `assert-${Math.random().toString(36).substring(2, 15)}`,
+            delegateDigest: bytesToHex(signed.digest),
+            delegateSignature: bytesToHex(signature),
+          }),
         });
 
-        if (result.code !== 0) {
-          throw new Error(`Assertion failed (${result.code}): ${result.log}`);
+        const payload = (await response.json()) as {
+          error?: string;
+          hash?: string;
+          code?: number;
+          log?: string;
+        };
+
+        if (!response.ok) {
+          throw new Error(payload.error ?? "Assertion request failed");
         }
 
-        toast.success(`Assertion submitted: ${result.hash}`, TOAST_CONFIG);
+        toast.success(
+          "Assertion complete. Continuing to registration…",
+          TOAST_CONFIG
+        );
+        return true;
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Unknown error";
         toast.error(`Submit failed: ${message}`, TOAST_CONFIG);
+        return false;
       } finally {
         setIsSubmitting(false);
       }

@@ -27,7 +27,7 @@ interface RegistrationDataFormProps {
     | IndexerRegistrationFormData
     | HostRegistrationFormData;
   handleInputChange: (field: string, value: string) => void;
-  /** V1 only: Host/Indexer radio. Omitted for V2 (entity comes from the registration route). */
+  /** V1 only: Host/Generator radio. Omitted for V2 (entity comes from the registration route). */
   handleUserRoleChange?: (value: string) => void;
   fieldErrors?: Record<string, string | undefined>;
   prefilledFields?: Record<string, boolean>;
@@ -56,7 +56,7 @@ export function RegistrationDataForm({
       ) : null}
 
       {isRegistrationV2()
-        ? formData.entity === EntityRole.Indexer
+        ? formData.entity === EntityRole.Generator
           ? REGISTRATION_FORM_INPUTS_INDEXER.map((input) => {
               const indexerForm = formData as IndexerRegistrationFormData;
               return (

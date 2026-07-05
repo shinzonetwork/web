@@ -14,12 +14,12 @@ import {
   validateHostRegistrationForm,
   validateHostFields,
 } from "../util/registration";
-import { EntityRole, isRegistrationV2, TOAST_CONFIG } from "@/shared/lib";
+import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
-import { useVerifyIndexerAssertion } from "../hooks/use-verify-indexer-assertion";
+import { useVerifyAssertion } from "../hooks/use-verify-assertion";
 import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
@@ -33,17 +33,17 @@ export function RegistrationFormV2() {
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
     useRegistrationTransaction(formData);
-  const { data: isAssertionVerified } = useVerifyIndexerAssertion();
+  const { data: isAssertionVerified } = useVerifyAssertion();
 
   const handleRegister = async () => {
-    if (registrationEntity === EntityRole.Indexer) {
+    if (registrationEntity === EntityRole.Generator) {
       if (!isAssertionVerified) {
-        toast.error("Indexer assertion is not done.", TOAST_CONFIG);
+        toast.error("Generator assertion is not done.", TOAST_CONFIG);
         return;
       }
     }
     const validatedFields =
-      formData.entity === EntityRole.Indexer
+      formData.entity === EntityRole.Generator
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
         : validateHostFields(formData as HostRegistrationFormData);
 
@@ -64,7 +64,7 @@ export function RegistrationFormV2() {
   };
 
   let isRegistrationDisabled = false;
-  if (formData.entity === EntityRole.Indexer) {
+  if (formData.entity === EntityRole.Generator) {
     isRegistrationDisabled =
       !validateIndexerRegistrationForm(
         formData as IndexerRegistrationFormData
@@ -74,20 +74,8 @@ export function RegistrationFormV2() {
       formData as HostRegistrationFormData
     );
   }
-  const showAssertionBanner =
-    isRegistrationV2() &&
-    formData.entity === EntityRole.Indexer &&
-    !isAssertionVerified;
   return (
     <div className="space-y-6 ml-10">
-      {showAssertionBanner && (
-        <div className="w-full max-w-6xl rounded-none border border-destructive/40 bg-destructive/10 p-4 space-y-6">
-          <p className="mt-1 font-mono text-sm text-destructive">
-            Indexer assertion is not done. Please complete the indexer assertion
-            to register.
-          </p>
-        </div>
-      )}
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}

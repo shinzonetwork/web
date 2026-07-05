@@ -18,10 +18,10 @@ interface RegistrationRadioButtonProps {
 }
 
 /**
- * Radio button component for selecting user role (Host or Indexer).
+ * Radio button component for selecting user role (Host or Generator).
  * Displays as button-style toggles with icons for better UX.
  *
- * @param selectedEntityValue - Currently selected entity value ("1" for Host, "2" for Indexer). Defaults to "1"
+ * @param selectedEntityValue - Currently selected entity value ("1" for Host, "2" for Generator). Defaults to "1"
  * @param prefilledEntityValue - Whether the entity field is prefilled/disabled. Defaults to false
  * @param onChange - Callback when selection changes
  */

@@ -33,6 +33,7 @@ import {
   listGenerators, 
   getGeneratorHealth,
   getGeneratorAssertion,
+  submitGeneratorAssertion,
 } from "./generators/index";
 import { listValidators } from "./validators/index";
 
@@ -138,6 +139,7 @@ export {
   listGenerators, 
   getGeneratorAssertion,
   getGeneratorHealth,
+  submitGeneratorAssertion,
 } from "./generators/index";
 export type {
   GetGeneratorParameters,
@@ -152,6 +154,8 @@ export type {
   GeneratorAssertion,
   GetAssertionParameters,
   GetAssertionResult,
+  SubmitGeneratorAssertionParameters,
+  SubmitGeneratorAssertionResult,
 } from "./generators/index";
 export { listValidators } from "./validators/index";
 export type {
@@ -231,6 +235,10 @@ export function shinzoHubActions(client: Client) {
     /** Fetches generator assertions for a delegate address. */
     getGeneratorAssertion: (parameters: Parameters<typeof getGeneratorAssertion>[1]) =>
       getGeneratorAssertion(client, parameters),
+    /** Signs and broadcasts a generator assertion (trusted backend only). */
+    submitGeneratorAssertion: (
+      parameters: Parameters<typeof submitGeneratorAssertion>[0],
+    ) => submitGeneratorAssertion(parameters),
   };
 }
 

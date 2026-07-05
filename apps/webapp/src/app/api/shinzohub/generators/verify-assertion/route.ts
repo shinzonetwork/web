@@ -14,7 +14,10 @@ export async function GET(req: NextRequest) {
 
   try {
     const { client, cosmosRestUrl } = getShinzohubQueryContext();
-    const result = await getGeneratorAssertion(client, { address, cosmosRestUrl });
+    const result = await getGeneratorAssertion(client, {
+      address,
+      cosmosRestUrl,
+    });
 
     return Response.json(serializeAssertions(result));
   } catch {
