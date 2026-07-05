@@ -97,20 +97,22 @@ export type SubmitGeneratorAssertionParameters = {
   privateKey: string;
   /** CometBFT RPC endpoint used for account queries and broadcast. */
   rpcEndpoint: string;
-  /** Consensus public key for the generator. */
-  consensusPubKey: string;
-  /** Operator / delegate wallet address (Shinzo bech32 or EVM hex). */
-  delegateAddress: string;
+  /** Validator public key for the generator. */
+  validatorPublicKey: string;
   /** Source chain name (e.g. `ethereum`). */
   sourceChain: string;
   /** Source chain numeric id. */
   sourceChainId: number;
-  /** Unique assertion identifier. */
-  assertionId: string;
-  /** EIP-191 digest bytes or hex. */
-  delegateDigest: Uint8Array | Hex;
-  /** Delegate signature bytes or hex. */
-  delegateSignature: Uint8Array | Hex;
+  /** Withdrawal address for the source chain. */
+  assertionAuthority: string;
+  /** Nonce for the assertion. */
+  nonce: string | number;
+  /** Optional chain-specific payload (empty string when unused). */
+  chainSpecific: string;
+  /** Operator Shinzo bech32 address for the generator. */
+  operatorAddress: string;
+  /** Payout Shinzo bech32 address for the generator. */
+  payoutAddress: string;
 };
 
 /** Result of broadcasting a generator assertion transaction. */

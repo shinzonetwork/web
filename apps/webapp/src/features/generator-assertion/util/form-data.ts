@@ -1,7 +1,8 @@
 import { getSourceChainOptions } from "@/shared/lib";
 
 export type GeneratorAssertionFormData = {
-  consensusPubKey: string;
+  validatorPublicKey: string;
+  assertionAuthority: string;
   sourceChain: string;
 };
 
@@ -10,11 +11,18 @@ export const DELEGATE_DIGEST_MAX_LENGTH = 32;
 
 export const GENERATOR_ASSERTION_FORM_INPUTS = [
   {
-    id: "consensusPubKey",
-    label: "Consensus Public Key",
+    id: "validatorPublicKey",
+    label: "Validator Public Key",
     isTextarea: false,
     isSelect: false,
-    description: "The consensus public key of the generator",
+    description: "The validator public key or BLS key for the generator",
+  },
+  {
+    id: "assertionAuthority",
+    label: "Withdrawal Address",
+    isTextarea: false,
+    isSelect: false,
+    description: "The withdrawal address for the source chain",
   },
   {
     id: "sourceChain",
@@ -29,10 +37,8 @@ export const GENERATOR_ASSERTION_FORM_INPUTS = [
  * Get button text based on transaction state
  */
 export function getGeneratorAssertionButtonText(
-  isSigning: boolean,
   isSubmitting: boolean
 ): string {
-  if (isSigning) return "Signing...";
   if (isSubmitting) return "Processing submission...";
-  return "Sign & Submit";
+  return "Submit Assertion";
 }

@@ -17,15 +17,12 @@ export default function AssertionForm() {
   const queryClient = useQueryClient();
   const { assertionFormData, handleInputChange, fieldErrors, isValid } =
     useAssertionForm();
-  const { handleSignDigest, isSigning, isSubmitting, handleAssertion } =
-    useAssertion();
+  const { isSubmitting, handleAssertion } =useAssertion();
 
   const handleSubmit = async () => {
     if (!isValid) return;
-    const signed = await handleSignDigest();
-    if (!signed) return;
 
-    const succeeded = await handleAssertion(assertionFormData, signed);
+    const succeeded = await handleAssertion(assertionFormData);
     if (!succeeded) return;
 
     sessionStorage.setItem(GENERATOR_ASSERTION_PENDING_KEY, "true");
@@ -45,15 +42,13 @@ export default function AssertionForm() {
         formData={assertionFormData}
         handleInputChange={handleInputChange}
         fieldErrors={fieldErrors}
-        onSignDigest={handleSignDigest}
-        isSigning={isSigning}
       />
       <Button
         onClick={handleSubmit}
         className="w-fit rounded-none bg-muted-foreground hover:bg-muted-foreground/90"
-        disabled={!isValid || isSubmitting || isSigning}
+        disabled={!isValid || isSubmitting}
       >
-        {getGeneratorAssertionButtonText(isSigning, isSubmitting)}
+        {getGeneratorAssertionButtonText(isSubmitting)}
       </Button>
     </div>
   );

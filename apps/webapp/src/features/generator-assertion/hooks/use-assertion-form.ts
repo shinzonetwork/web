@@ -4,7 +4,8 @@ import { sanitizeString } from "@/shared/lib";
 
 function createInitialValues(): GeneratorAssertionFormData {
   return {
-    consensusPubKey: "",
+    validatorPublicKey: "",
+    assertionAuthority: "",
     sourceChain: "",
   };
 }
@@ -18,7 +19,8 @@ export function useAssertionForm() {
 
   const isValid = useMemo(() => {
     return (
-      assertionFormData.consensusPubKey.trim().length > 0 &&
+      assertionFormData.validatorPublicKey.trim().length > 0 &&
+      assertionFormData.assertionAuthority.trim().length > 0 &&
       Boolean(assertionFormData.sourceChain?.trim())
     );
   }, [assertionFormData]);

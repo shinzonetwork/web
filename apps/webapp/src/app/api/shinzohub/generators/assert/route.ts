@@ -3,13 +3,14 @@ import { submitGeneratorAssertion } from "@shinzo/shinzohub";
 import { getShinzohubQueryContext, getSourceChainMap } from "@/shared/lib";
 
 type AssertRequestBody = {
-  consensusPubKey?: string;
-  delegateAddress?: string;
-  sourceChain?: string;
-  sourceChainId?: number;
-  assertionId?: string;
-  delegateDigest?: string;
-  delegateSignature?: string;
+  validatorPublicKey: string;
+  assertionAuthority: string;
+  sourceChain: string;
+  sourceChainId: number;
+  nonce: number;
+  chainSpecific?: string;
+  operatorAddress: string;
+  payoutAddress: string;
 };
 
 function readRequiredString(
@@ -26,29 +27,6 @@ function readRequiredString(
   return trimmed;
 }
 
-function readRequiredHex(
-  value: string | undefined,
-  field: string
-): `0x${string}` | Response {
-  const trimmed = value?.trim() ?? "";
-  if (!trimmed) {
-    return Response.json(
-      { error: `Missing required field: ${field}` },
-      { status: 400 }
-    );
-  }
-  const hex = (
-    trimmed.startsWith("0x") ? trimmed : `0x${trimmed}`
-  ) as `0x${string}`;
-  if (!/^0x[0-9a-fA-F]+$/.test(hex) || hex.length % 2 !== 0) {
-    return Response.json(
-      { error: `Invalid hex field: ${field}` },
-      { status: 400 }
-    );
-  }
-  return hex;
-}
-
 export async function POST(req: NextRequest) {
   let body: AssertRequestBody;
   try {
@@ -57,32 +35,38 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const consensusPubKey = readRequiredString(
-    body.consensusPubKey,
-    "consensusPubKey"
+  const validatorPublicKey = readRequiredString(
+    body.validatorPublicKey,
+    "validatorPublicKey"
   );
-  if (consensusPubKey instanceof Response) return consensusPubKey;
+  if (validatorPublicKey instanceof Response) return validatorPublicKey;
 
-  const delegateAddress = readRequiredString(
-    body.delegateAddress,
-    "delegateAddress"
+  const assertionAuthority = readRequiredString(
+    body.assertionAuthority,
+    "assertionAuthority"
   );
-  if (delegateAddress instanceof Response) return delegateAddress;
+  if (assertionAuthority instanceof Response) return assertionAuthority;
 
   const sourceChain = readRequiredString(body.sourceChain, "sourceChain");
   if (sourceChain instanceof Response) return sourceChain;
 
-  const assertionId = readRequiredString(body.assertionId, "assertionId");
-  if (assertionId instanceof Response) return assertionId;
-
-  const delegateDigest = readRequiredHex(body.delegateDigest, "delegateDigest");
-  if (delegateDigest instanceof Response) return delegateDigest;
-
-  const delegateSignature = readRequiredHex(
-    body.delegateSignature,
-    "delegateSignature"
+  const operatorAddress = readRequiredString(
+    body.operatorAddress,
+    "operatorAddress"
   );
-  if (delegateSignature instanceof Response) return delegateSignature;
+  if (operatorAddress instanceof Response) return operatorAddress;
+
+  const payoutAddress = readRequiredString(body.payoutAddress, "payoutAddress");
+  if (payoutAddress instanceof Response) return payoutAddress;
+
+  const nonce =
+    typeof body.nonce === "number" ? body.nonce : undefined;
+  if (nonce === undefined || !Number.isFinite(nonce) || nonce <= 0) {
+    return Response.json(
+      { error: `Invalid nonce: ${body.nonce}` },
+      { status: 400 }
+    );
+  }
 
   const sourceChainId =
     typeof body.sourceChainId === "number"
@@ -116,13 +100,14 @@ export async function POST(req: NextRequest) {
     const result = await submitGeneratorAssertion({
       privateKey,
       rpcEndpoint,
-      consensusPubKey,
-      delegateAddress,
+      validatorPublicKey,
+      assertionAuthority,
       sourceChain,
       sourceChainId,
-      assertionId,
-      delegateDigest,
-      delegateSignature,
+      nonce,
+      chainSpecific: body.chainSpecific?.trim() ?? "",
+      operatorAddress,
+      payoutAddress,
     });
 
     if (result.code !== 0) {
