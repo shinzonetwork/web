@@ -15,5 +15,3 @@ export const GENERATOR_ONBOARDING_STEPS = [
 
 export type GeneratorOnboardingStepId =
   (typeof GENERATOR_ONBOARDING_STEPS)[number]["id"];
-
-export const GENERATOR_ASSERTION_PENDING_KEY = "generator-assertion-pending";

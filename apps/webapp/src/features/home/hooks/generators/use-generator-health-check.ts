@@ -50,7 +50,11 @@ type UseHealthCheckOptions = {
 /** Polls health for a single generator entry via React Query. */
 export function useGeneratorHealthCheck(
   entry: HealthEntryKeyParams | null | undefined,
-  { enabled = true, pollable = true, refetchIntervalMs }: UseHealthCheckOptions = {}
+  {
+    enabled = true,
+    pollable = true,
+    refetchIntervalMs,
+  }: UseHealthCheckOptions = {}
 ) {
   return useQuery({
     queryKey: healthQueryKey(entry ?? { address: "", ip: "" }),

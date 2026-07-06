@@ -29,6 +29,20 @@ export type GeneratorAssertionPrefill = {
   sourceChainId: number;
 };
 
+/** Optional assertion form fields from URL query parameters. */
+export type GeneratorAssertionFormPrefill = {
+  validatorPublicKey?: string;
+  assertionAuthority?: string;
+  sourceChain?: string;
+};
+
+export type RegistrationPrefillV2Params = {
+  signedMessage?: string;
+  defraPublicKey?: string;
+  defraPublicKeySignedMessage?: string;
+  connectionString?: string;
+};
+
 function toHexOrUndefined(value: string | null): Hex | undefined {
   if (!value || value === "") {
     return undefined;
@@ -54,28 +68,110 @@ function parseSourceChainId(value: string | null): number | undefined {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
-function readSearchParams(): URLSearchParams {
+export function readSearchParams(): URLSearchParams {
   if (typeof window === "undefined") {
     return new URLSearchParams();
   }
   return new URLSearchParams(window.location.search);
 }
 
+function readOptionalQueryParam(
+  searchParams: URLSearchParams,
+  key: string
+): string | undefined {
+  const value = searchParams.get(key)?.trim();
+  return value || undefined;
+}
+
+function readAssertionUrlFields(searchParams: URLSearchParams) {
+  const sourceChain = readOptionalQueryParam(searchParams, "sourceChain");
+  return {
+    validatorPublicKey: readOptionalQueryParam(
+      searchParams,
+      "validatorPublicKey"
+    ),
+    assertionAuthority: readOptionalQueryParam(
+      searchParams,
+      "assertionAuthority"
+    ),
+    sourceChain,
+    sourceChainId:
+      parseSourceChainId(searchParams.get("sourceChainId")) ??
+      (sourceChain ? getSourceChainMap()[sourceChain] : undefined),
+  };
+}
+
 /** Assertion fields carried on the generator registration URL after onboarding. */
 export function getGeneratorAssertionPrefill(
   searchParams: URLSearchParams = readSearchParams()
 ): GeneratorAssertionPrefill | null {
-  const validatorPublicKey = searchParams.get("validatorPublicKey")?.trim() ?? "";
-  const sourceChain = searchParams.get("sourceChain")?.trim() ?? "";
-  const sourceChainId =
-    parseSourceChainId(searchParams.get("sourceChainId")) ??
-    getSourceChainMap()[sourceChain];
+  const { validatorPublicKey, sourceChain, sourceChainId } =
+    readAssertionUrlFields(searchParams);
 
   if (!validatorPublicKey || !sourceChain || !sourceChainId) {
     return null;
   }
 
   return { validatorPublicKey, sourceChain, sourceChainId };
+}
+
+/** Assertion form fields from URL query parameters. */
+export function getGeneratorAssertionFormPrefill(
+  searchParams: URLSearchParams = readSearchParams()
+): GeneratorAssertionFormPrefill {
+  const { validatorPublicKey, assertionAuthority, sourceChain } =
+    readAssertionUrlFields(searchParams);
+
+  return { validatorPublicKey, assertionAuthority, sourceChain };
+}
+
+/** V2 registration fields from URL query parameters. */
+export function getRegistrationPrefillV2(
+  searchParams: URLSearchParams = readSearchParams()
+): PrefillDataV2 {
+  return {
+    role: parseRole(searchParams.get("role")),
+    signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
+    defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
+    defraPublicKeySignedMessage: toHexOrUndefined(
+      searchParams.get("defraPublicKeySignedMessage")
+    ),
+    connectionString: readOptionalQueryParam(searchParams, "connectionString"),
+  };
+}
+
+/** V2 registration prefill params from URL (for forwarding across onboarding steps). */
+export function getRegistrationPrefillV2Params(
+  searchParams: URLSearchParams = readSearchParams()
+): RegistrationPrefillV2Params {
+  const prefill = getRegistrationPrefillV2(searchParams);
+
+  return {
+    signedMessage: prefill.signedMessage,
+    defraPublicKey: prefill.defraPublicKey,
+    defraPublicKeySignedMessage: prefill.defraPublicKeySignedMessage,
+    connectionString: prefill.connectionString,
+  };
+}
+
+/** Which V2 registration fields were supplied via URL and should be read-only. */
+export function getRegistrationPrefilledFieldsV2(
+  prefillData: PrefillDataV2
+): Record<string, boolean> {
+  return {
+    message: prefillData.signedMessage !== undefined,
+    defraPublicKey: prefillData.defraPublicKey !== undefined,
+    defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
+  };
+}
+
+/** Which assertion form fields were supplied via URL and should be read-only. */
+export function getAssertionFormPrefilledFields(
+  prefill: GeneratorAssertionFormPrefill
+): Record<string, boolean> {
+  return {
+    sourceChain: Boolean(prefill.sourceChain),
+  };
 }
 
 /**
@@ -85,15 +181,7 @@ export function usePrefillData(): PrefillData {
   const searchParams = readSearchParams();
 
   if (isRegistrationV2()) {
-    return {
-      role: parseRole(searchParams.get("role")),
-      signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
-      defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
-      defraPublicKeySignedMessage: toHexOrUndefined(
-        searchParams.get("defraPublicKeySignedMessage")
-      ),
-      connectionString: searchParams.get("connectionString") ?? undefined,
-    } as PrefillDataV2;
+    return getRegistrationPrefillV2(searchParams);
   }
 
   return {

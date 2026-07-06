@@ -3,7 +3,11 @@ import {
   getGeneratorAssertion,
   submitGeneratorAssertion,
 } from "@shinzo/shinzohub";
-import { getShinzohubQueryContext, getSourceChainMap, validatorPublicKeyToBase64 } from "@/shared/lib";
+import {
+  getShinzohubQueryContext,
+  getSourceChainMap,
+  validatorPublicKeyToBase64,
+} from "@/shared/lib";
 
 type AssertRequestBody = {
   validatorPublicKey: string;
@@ -43,10 +47,12 @@ async function resolveNextAssertionNonce(
     validatorPublicKey: string;
     sourceChainId: number;
     cosmosRestUrl: string;
-  },
+  }
 ): Promise<number> {
   const existing = await getGeneratorAssertion(client, {
-    validatorPublicKey: validatorPublicKeyToBase64(parameters.validatorPublicKey),
+    validatorPublicKey: validatorPublicKeyToBase64(
+      parameters.validatorPublicKey
+    ),
     sourceChainId: String(parameters.sourceChainId),
     cosmosRestUrl: parameters.cosmosRestUrl,
   });

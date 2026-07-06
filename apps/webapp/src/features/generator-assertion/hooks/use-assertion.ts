@@ -21,7 +21,7 @@ export function useAssertion() {
 
   const handleAssertion = useCallback(
     async (
-      assertionFormData: GeneratorAssertionFormData,
+      assertionFormData: GeneratorAssertionFormData
     ): Promise<AssertionSubmitResult | false> => {
       if (!address) {
         toast.error(
@@ -76,11 +76,6 @@ export function useAssertion() {
         ) {
           throw new Error("Assertion response is missing on-chain details.");
         }
-
-        toast.success(
-          "Assertion complete. Continuing to registration…",
-          TOAST_CONFIG
-        );
 
         return {
           hash: payload.hash,

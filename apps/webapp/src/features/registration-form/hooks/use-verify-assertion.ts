@@ -3,7 +3,7 @@
 import { Generator } from "@/shared/lib";
 import { useQuery } from "@tanstack/react-query";
 
-async function fetchGeneratorAssertion(
+export async function fetchGeneratorAssertionVerified(
   validatorPublicKey: string,
   sourceChainId: string
 ): Promise<boolean> {
@@ -20,12 +20,43 @@ async function fetchGeneratorAssertion(
   return data != null;
 }
 
-export function useVerifyAssertion(validatorPublicKey: string, sourceChainId: string, intervalMs = 30000) {
+export async function waitForGeneratorAssertionVerification(
+  validatorPublicKey: string,
+  sourceChainId: string,
+  options: { maxAttempts?: number; intervalMs?: number } = {}
+): Promise<boolean> {
+  const { maxAttempts = 30, intervalMs = 2000 } = options;
 
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const verified = await fetchGeneratorAssertionVerified(
+      validatorPublicKey,
+      sourceChainId
+    );
+    if (verified) {
+      return true;
+    }
+
+    if (attempt < maxAttempts - 1) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
+  }
+
+  return false;
+}
+
+export function useVerifyAssertion(
+  validatorPublicKey: string,
+  sourceChainId: string,
+  intervalMs = 30000
+) {
   return useQuery({
-    queryKey: ["generator-assertion-verification", validatorPublicKey, sourceChainId],
-    queryFn: () => fetchGeneratorAssertion(validatorPublicKey, sourceChainId),
-    // Stop polling once verified so the registration form is not churned.
+    queryKey: [
+      "generator-assertion-verification",
+      validatorPublicKey,
+      sourceChainId,
+    ],
+    queryFn: () =>
+      fetchGeneratorAssertionVerified(validatorPublicKey, sourceChainId),
     refetchInterval: (query) => (query.state.data ? false : intervalMs),
     refetchIntervalInBackground: true,
     enabled: Boolean(validatorPublicKey && sourceChainId),

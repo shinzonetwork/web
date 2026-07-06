@@ -14,43 +14,26 @@ import {
   validateHostRegistrationForm,
   validateHostFields,
 } from "../util/registration";
-import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
+import { EntityRole } from "@/shared/lib";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,
 } from "@/shared/types";
-import { useVerifyAssertion } from "../hooks/use-verify-assertion";
-import { getGeneratorAssertionPrefill } from "../hooks/use-prefill-data";
-import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
   const { registrationEntity } = useRegistrationContext();
-  const assertionPrefill = getGeneratorAssertionPrefill();
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
-  const { formData, handleInputChange } = useRegistrationFormV2({
-    entity: registrationEntity,
-  });
+  const { formData, handleInputChange, prefilledFields } =
+    useRegistrationFormV2({
+      entity: registrationEntity,
+    });
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
     useRegistrationTransaction(formData);
-  const { data: isAssertionVerified } = useVerifyAssertion(
-    registrationEntity === EntityRole.Generator
-      ? (assertionPrefill?.validatorPublicKey ?? "")
-      : "",
-    registrationEntity === EntityRole.Generator
-      ? String(assertionPrefill?.sourceChainId ?? "")
-      : ""
-  );
 
   const handleRegister = async () => {
-    if (registrationEntity === EntityRole.Generator) {
-      if (!isAssertionVerified) {
-        toast.error("Generator assertion is not done.", TOAST_CONFIG);
-        return;
-      }
-    }
     const validatedFields =
       formData.entity === EntityRole.Generator
         ? validateIndexerFields(formData as IndexerRegistrationFormData)
@@ -65,30 +48,26 @@ export function RegistrationFormV2() {
     try {
       await sendRegisterTransaction();
     } catch (error) {
-      // Error is already handled in the hook
       if (process.env.NODE_ENV === "development") {
         console.error("Registration failed:", error);
       }
     }
   };
 
-  let isRegistrationDisabled = false;
-  if (formData.entity === EntityRole.Generator) {
-    isRegistrationDisabled =
-      !validateIndexerRegistrationForm(
-        formData as IndexerRegistrationFormData
-      ) || !isAssertionVerified;
-  } else {
-    isRegistrationDisabled = !validateHostRegistrationForm(
-      formData as HostRegistrationFormData
-    );
-  }
+  const isRegistrationDisabled =
+    formData.entity === EntityRole.Generator
+      ? !validateIndexerRegistrationForm(
+          formData as IndexerRegistrationFormData
+        )
+      : !validateHostRegistrationForm(formData as HostRegistrationFormData);
+
   return (
     <div className="space-y-6 ml-10">
       <RegistrationDataForm
         formData={formData}
         handleInputChange={handleInputChange}
         fieldErrors={fieldErrors}
+        prefilledFields={prefilledFields}
       />
       <Button
         onClick={handleRegister}

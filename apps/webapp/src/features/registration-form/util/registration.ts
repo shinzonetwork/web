@@ -68,7 +68,7 @@ export function validateIndexerRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Generator,
     validateRegistrationFormV2(formData),
-    isValidConnectionString(formData.connectionString ?? "")
+    isValidConnectionString(formData.connectionString ?? ""),
   ];
   return validations.every(Boolean);
 }

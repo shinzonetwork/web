@@ -190,7 +190,7 @@ function GeneratorHomeContent() {
                 {(value) => (
                   <>
                     {!isGeneratorHealthPollable(generator) ? (
-                      <span className= "px-2 py-1 rounded-md text-xs bg-muted-foreground/20 text-muted-foreground">
+                      <span className="px-2 py-1 rounded-md text-xs bg-muted-foreground/20 text-muted-foreground">
                         Unknown
                       </span>
                     ) : value !== "unknown" ? (

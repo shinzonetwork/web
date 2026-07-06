@@ -13,10 +13,7 @@ type UseRegisteredGeneratorsOptions = {
 export async function fetchRegisteredGenerators({
   page,
   limit,
-}: Pick<
-  PageParams,
-  "page" | "limit"
->): Promise<GeneratorsListResponse> {
+}: Pick<PageParams, "page" | "limit">): Promise<GeneratorsListResponse> {
   const searchParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),

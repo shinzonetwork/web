@@ -27,13 +27,11 @@ export default function Register() {
   const isGeneratorRegistration =
     isRegistrationV2() && routeKey === "generator-registration";
 
-  const { assertionComplete, isLoading: isAssertionLoading } =
+  const { isAssertionVerified, isAssertionLoading, isRedirectingToAssertion } =
     useGeneratorOnboardingGuard(isGeneratorRegistration);
 
-  // Only block the form on the initial verification check when we do not yet
-  // have a pending/verified assertion. Never unmount the form for refetches.
-  const showAssertionLoading =
-    isGeneratorRegistration && isAssertionLoading && !assertionComplete;
+  const showRegistrationForm = !isGeneratorRegistration || isAssertionVerified;
+  const showAssertionGate = isGeneratorRegistration && !isAssertionVerified;
 
   return (
     <>
@@ -47,18 +45,22 @@ export default function Register() {
               {isGeneratorRegistration && (
                 <GeneratorOnboardingStepper
                   currentStep="registration"
-                  assertionComplete={assertionComplete}
+                  assertionComplete={isAssertionVerified}
                 />
               )}
-              {showAssertionLoading ? (
+              {showAssertionGate && isAssertionLoading ? (
                 <p className="ml-10 font-mono text-sm text-muted-foreground">
                   Verifying assertion…
                 </p>
-              ) : isRegistrationV2() ? (
+              ) : showAssertionGate && isRedirectingToAssertion ? (
+                <p className="ml-10 font-mono text-sm text-muted-foreground">
+                  Redirecting to assertion…
+                </p>
+              ) : showRegistrationForm && isRegistrationV2() ? (
                 <RegistrationFormV2 />
-              ) : (
+              ) : showRegistrationForm ? (
                 <RegistrationForm />
-              )}
+              ) : null}
             </>
           )}
         </div>
