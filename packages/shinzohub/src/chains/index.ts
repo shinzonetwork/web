@@ -53,7 +53,7 @@ export const shinzoHubDevelop = defineChain({
 });
 
 /**
- * Public devnet ShinzoHub Viem chain definition.
+ * Public testnet ShinzoHub Viem chain definition.
  *
  * This chain currently exposes EVM and Comet RPC endpoints. Pass
  * `cosmosRestUrl` explicitly to REST-backed SDK actions when the chain

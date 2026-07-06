@@ -136,7 +136,7 @@ export default function Page() {
     ]} />
 
     <BlockCta
-      title="Join the Host Cohort"
+      title="Become a Host"
       content={<p>If you run infrastructure and want to become a Host in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
         <Button asChild><Link href="https://docs.shinzo.network/hosts/quickstart/" target="_blank">Install the Host Client</Link></Button>
