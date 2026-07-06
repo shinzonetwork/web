@@ -10,7 +10,6 @@ import type {
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
   Generator as ShinzoHubGenerator,
-  GeneratorDetailsResult,
 } from "@shinzo/shinzohub";
 
 export type JsonSerialized<T> = T extends bigint
@@ -43,8 +42,6 @@ export type GeneratorsListResponse = JsonSerialized<
     total: number;
   };
 };
-
-export type GeneratorDetailsResponse = JsonSerialized<GeneratorDetailsResult>;
 
 export type HostHealthData = JsonSerialized<ShinzoHubHostHealthData>;
 export type HostHealthP2P = JsonSerialized<ShinzoHubHostHealthP2P>;

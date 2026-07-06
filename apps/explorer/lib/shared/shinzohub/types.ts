@@ -13,7 +13,6 @@ import type {
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
   Generator as ShinzoHubGenerator,
-  GeneratorDetailsResult,
   ShinzoHubBlock,
   ShinzoHubEvent,
   ShinzoHubEventAttribute,

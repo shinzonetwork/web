@@ -63,12 +63,6 @@ export interface GetGeneratorParameters {
   cosmosRestUrl?: string;
 }
 
-  /** Response from fetching one registered generator by Shinzo bech32 address. */
-export interface GeneratorDetailsResult {
-  /** The registered generator. */
-  generator: Generator;
-}
-
 export type GetGeneratorHealthParameters = GetHealthParameters;
 export type GeneratorHealthData = HealthLiveData;
 export type GeneratorHealthP2P = HealthP2P;

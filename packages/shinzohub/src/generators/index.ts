@@ -11,7 +11,6 @@ export {
 export type { ParsedGeneratorAssertionMessage } from "./parse-assertion-transaction";
 export type {
   Generator,
-  GeneratorDetailsResult,
   GetGeneratorParameters,
   GetGeneratorHealthParameters,
   GeneratorHealthData,

@@ -147,7 +147,6 @@ export {
 } from "./generators/index";
 export type {
   Generator,
-  GeneratorDetailsResult,
   GetGeneratorParameters,
   GetGeneratorHealthParameters,
   GeneratorHealthData,
