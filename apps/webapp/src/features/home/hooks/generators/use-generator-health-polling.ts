@@ -16,6 +16,8 @@ type HealthCheckEntry = {
 type UseGeneratorHealthPollingOptions<T> = {
   entries: T[];
   toHealthEntry: (entry: T) => HealthCheckEntry;
+  /** Skip polling for entries that do not meet health-check prerequisites. */
+  isPollable?: (entry: T) => boolean;
   /** Restart polling when this changes (e.g. page or list revision). */
   resetKey?: unknown;
   intervalMs?: number;
@@ -28,14 +30,20 @@ const DEFAULT_INTERVAL_MS = 60_000;
 export function useGeneratorHealthPolling<T>({
   entries,
   toHealthEntry,
+  isPollable,
   resetKey,
   intervalMs = DEFAULT_INTERVAL_MS,
   enabled = true,
 }: UseGeneratorHealthPollingOptions<T>): Map<string, GeneratorHealthData> {
   const healthEntries = useMemo(
-    () => (enabled ? entries.map((entry) => toHealthEntry(entry)) : []),
+    () =>
+      enabled
+        ? entries
+            .filter((entry) => (isPollable ? isPollable(entry) : true))
+            .map((entry) => toHealthEntry(entry))
+        : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [enabled, entries, resetKey, toHealthEntry]
+    [enabled, entries, isPollable, resetKey, toHealthEntry]
   );
 
   const queries = useQueries({

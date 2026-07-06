@@ -1,16 +1,25 @@
 import { getPublicClient } from '@/shared/viem/client';
+import { shinzoHubDevelop } from '@shinzo/shinzohub';
 
 type ShinzoHubEndpointName = 'cosmosRest' | 'cometRpc';
 
-function getShinzohubRpcEndpoint(
-  client: ReturnType<typeof getPublicClient>,
-  name: ShinzoHubEndpointName,
-): string {
-  const url = client.chain?.rpcUrls?.[name]?.http?.[0];
-  if (!url) {
-    throw new Error(`ShinzoHub ${name} endpoint is not configured.`);
+const developRpcUrls =
+  shinzoHubDevelop.rpcUrls as typeof shinzoHubDevelop.rpcUrls & {
+    cosmosRest: { http: readonly string[] };
+    cometRpc: { http: readonly string[] };
+  };
+
+function getShinzohubRpcEndpoint(name: ShinzoHubEndpointName): string {
+  if (name === 'cosmosRest') {
+    return (
+      process.env.SHINZOHUB_COSMOS_REST_URL ??
+      developRpcUrls.cosmosRest.http[0]
+    );
   }
-  return url;
+
+  return (
+    process.env.SHINZOHUB_COMET_RPC_URL ?? developRpcUrls.cometRpc.http[0]
+  );
 }
 
 export function getShinzohubQueryContext() {
@@ -18,7 +27,7 @@ export function getShinzohubQueryContext() {
 
   return {
     client,
-    cosmosRestUrl: getShinzohubRpcEndpoint(client, 'cosmosRest'),
-    cometRpcUrl: getShinzohubRpcEndpoint(client, 'cometRpc'),
+    cosmosRestUrl: getShinzohubRpcEndpoint('cosmosRest'),
+    cometRpcUrl: getShinzohubRpcEndpoint('cometRpc'),
   };
 }

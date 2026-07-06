@@ -7,7 +7,7 @@ import { EmptyTableState } from "@/shared/ui/empty-table-state";
 import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import { GeneratorWithHealth } from "./generators-page";
-import { formatTime, formatUptime } from "@/shared/health";
+import { formatTime, formatUptime, isGeneratorHealthPollable } from "@/shared/health";
 import Link from "next/link";
 import { Typography } from "@/shared/ui/typography";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
@@ -53,7 +53,7 @@ export const GeneratorsList = ({
         rowRenderer={(generator) => (
           <>
 
-            <TableNullableCell value={generator?.address}>
+            <TableNullableCell value={generator?.operatorAddress}>
               {(value) => (
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -86,7 +86,9 @@ export const GeneratorsList = ({
             <TableNullableCell value={generator?.status} nowrap>
               {(value) => (
                 <>
-                  {value !== "unknown" && (
+                  {!isGeneratorHealthPollable(generator) ? (
+                    <span className="text-sm text-muted-foreground">—</span>
+                  ) : value !== "unknown" ? (
                     <Badge
                       variant={"default"}
                       className={cn(
@@ -96,8 +98,7 @@ export const GeneratorsList = ({
                     >
                       {value === "healthy" ? "Online" : "Offline"}
                     </Badge>
-                  )}
-                  {value === "unknown" && (
+                  ) : (
                     <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
                   )}
                 </>

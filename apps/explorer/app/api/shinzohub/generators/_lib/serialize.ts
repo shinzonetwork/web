@@ -1,6 +1,5 @@
 import type {
   RegisteredGenerator,
-  RegisteredGeneratorDetailsResponse,
   RegisteredGeneratorsListResponse,
   GeneratorHealthData,
   GeneratorHealthP2P,
@@ -8,17 +7,23 @@ import type {
 } from "@/shared/shinzohub/types";
 import type {
   ListGeneratorsResult,
-  RegisteredGenerator as ShinzoHubRegisteredGenerator,
+  Generator as ShinzoHubGenerator,
   GeneratorHealthData as ShinzoHubGeneratorHealthData,
   GeneratorHealthP2P as ShinzoHubGeneratorHealthP2P,
   GeneratorHealthPeer as ShinzoHubGeneratorHealthPeer,
 } from "@shinzo/shinzohub";
 
 export function serializeGenerator(
-  generator: ShinzoHubRegisteredGenerator,
+  generator: ShinzoHubGenerator,
 ): RegisteredGenerator {
   return {
-    address: generator.address,
+    validatorPublicKey: generator.validatorPublicKey,
+    assertionAuthority: generator.assertionAuthority,
+    nonce: generator.nonce,
+    chainSpecific: generator.chainSpecific,
+    operatorAddress: generator.operatorAddress,
+    payoutAddress: generator.payoutAddress,
+    registered: generator.registered,
     did: generator.did,
     connectionString: generator.connectionString,
     sourceChain: generator.sourceChain,
@@ -35,14 +40,6 @@ export function serializeGeneratorsList(
       next_key: result.pagination.nextKey ?? "",
       total: result.pagination.total ?? 0,
     },
-  };
-}
-
-export function serializeGeneratorDetails(
-    generator: ShinzoHubRegisteredGenerator,
-): RegisteredGeneratorDetailsResponse {
-  return {
-    generator: serializeGenerator(generator),
   };
 }
 

@@ -1,6 +1,6 @@
 import { getGenerator } from "@shinzo/shinzohub";
 import { getShinzohubQueryContext } from "@/shared/shinzohub/query-context";
-import { serializeGeneratorDetails } from "../_lib/serialize";
+import { serializeGenerator } from "../_lib/serialize";
 
 export async function GET(
   _request: Request,
@@ -16,7 +16,7 @@ export async function GET(
     const { client, cosmosRestUrl } = getShinzohubQueryContext();
     const generator = await getGenerator(client, { address, cosmosRestUrl });
 
-    return Response.json(serializeGeneratorDetails(generator));
+    return Response.json(serializeGenerator(generator));
   } catch (error) {
     console.error("Failed to load ShinzoHub generator:", error);
     return Response.json({ error: "Generator not found" }, { status: 404 });

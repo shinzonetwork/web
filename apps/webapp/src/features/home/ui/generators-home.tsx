@@ -12,6 +12,7 @@ import {
   formatHash,
   GeneratorHealthData,
   ipFromConnectionString,
+  isGeneratorHealthPollable,
   Generator,
 } from "@/shared/lib";
 import { HealthStatus } from "@/shared/types";
@@ -59,6 +60,7 @@ function GeneratorHomeContent() {
   const healthByKey = useGeneratorHealthPolling<GeneratorWithHealth>({
     entries: generators,
     resetKey: page,
+    isPollable: isGeneratorHealthPollable,
     toHealthEntry: (generator) => ({
       address: generator.operatorAddress,
       ip: generator.ip,
@@ -68,14 +70,17 @@ function GeneratorHomeContent() {
   const generatorsWithHealth = useMemo(
     () =>
       generators.map((generator) => {
+        const pollable = isGeneratorHealthPollable(generator);
         const key = createHealthEntryKey({
           address: generator.operatorAddress,
           ip: generator.ip,
         });
-        const healthData = healthByKey.get(key);
+        const healthData = pollable ? healthByKey.get(key) : undefined;
         return {
           ...generator,
-          status: healthData?.status ?? ("unknown" as HealthStatus),
+          status: pollable
+            ? (healthData?.status ?? ("unknown" as HealthStatus))
+            : ("unknown" as HealthStatus),
         };
       }),
     [generators, healthByKey]
@@ -184,7 +189,11 @@ function GeneratorHomeContent() {
               <TableNullableCell value={generator?.status} nowrap>
                 {(value) => (
                   <>
-                    {value !== "unknown" && (
+                    {!isGeneratorHealthPollable(generator) ? (
+                      <span className= "px-2 py-1 rounded-md text-xs bg-muted-foreground/20 text-muted-foreground">
+                        Unknown
+                      </span>
+                    ) : value !== "unknown" ? (
                       <span
                         className={cn(
                           "px-2 py-1 rounded-md text-xs",
@@ -195,8 +204,7 @@ function GeneratorHomeContent() {
                       >
                         {value === "healthy" ? "Online" : "Offline"}
                       </span>
-                    )}
-                    {value === "unknown" && (
+                    ) : (
                       <span className="px-2 py-1 rounded-md text-xs text-muted-foreground">
                         <LoaderCircle className="w-4 h-4 animate-spin text-muted-foreground" />
                       </span>

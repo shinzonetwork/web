@@ -12,8 +12,8 @@ import type {
   ListValidatorsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
   RegisteredHostDetailsResult,
-  RegisteredGenerator as ShinzoHubRegisteredGenerator,
-  RegisteredGeneratorDetailsResult,
+  Generator as ShinzoHubGenerator,
+  GeneratorDetailsResult,
   ShinzoHubBlock,
   ShinzoHubEvent,
   ShinzoHubEventAttribute,
@@ -74,7 +74,7 @@ export type RegisteredHostsListResponse = JsonSerialized<Omit<ListHostsResult, "
 
 export type RegisteredHostDetailsResponse = JsonSerialized<RegisteredHostDetailsResult>;
 
-export type RegisteredGenerator = JsonSerialized<ShinzoHubRegisteredGenerator>;
+export type RegisteredGenerator = JsonSerialized<ShinzoHubGenerator>;
 
 export type RegisteredGeneratorsListResponse = JsonSerialized<
   Omit<ListGeneratorsResult, "pagination">
@@ -84,9 +84,6 @@ export type RegisteredGeneratorsListResponse = JsonSerialized<
     total: number;
   };
 };
-
-export type RegisteredGeneratorDetailsResponse =
-  JsonSerialized<RegisteredGeneratorDetailsResult>;
 
 export type HostHealthData = JsonSerialized<ShinzoHubHostHealthData>;
 export type HostHealthP2P = JsonSerialized<ShinzoHubHostHealthP2P>;

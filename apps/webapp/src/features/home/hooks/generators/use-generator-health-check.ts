@@ -43,18 +43,19 @@ export async function fetchGeneratorHealth(
 
 type UseHealthCheckOptions = {
   enabled?: boolean;
+  pollable?: boolean;
   refetchIntervalMs?: number;
 };
 
 /** Polls health for a single generator entry via React Query. */
 export function useGeneratorHealthCheck(
   entry: HealthEntryKeyParams | null | undefined,
-  { enabled = true, refetchIntervalMs }: UseHealthCheckOptions = {}
+  { enabled = true, pollable = true, refetchIntervalMs }: UseHealthCheckOptions = {}
 ) {
   return useQuery({
     queryKey: healthQueryKey(entry ?? { address: "", ip: "" }),
     queryFn: () => fetchGeneratorHealth(entry ?? { address: "", ip: "" }),
-    enabled: enabled && Boolean(entry?.address && entry?.ip),
+    enabled: enabled && pollable && Boolean(entry?.address && entry?.ip),
     staleTime: 0,
     refetchInterval: refetchIntervalMs,
     refetchIntervalInBackground: true,
