@@ -52,6 +52,21 @@ export function ipFromConnectionString(connectionString: string): string {
   return trimmed;
 }
 
+/** UTF-8 validator public key string → base64 (chain REST wire format). */
+export function validatorPublicKeyToBase64(validatorPublicKey: string): string {
+  const bytes = new TextEncoder().encode(validatorPublicKey.trim());
+
+  if (typeof Buffer !== "undefined") {
+    return Buffer.from(bytes).toString("base64");
+  }
+
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary);
+}
+
 /** Whether live health polling is supported for this generator. */
 export function isGeneratorHealthPollable(generator: {
   registered: boolean;

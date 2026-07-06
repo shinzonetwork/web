@@ -1,16 +1,15 @@
 import { NextRequest } from "next/server";
 import {
-  getGeneratorAssertionFromTransaction,
+  getGeneratorAssertion,
   submitGeneratorAssertion,
 } from "@shinzo/shinzohub";
-import { getShinzohubQueryContext, getSourceChainMap } from "@/shared/lib";
+import { getShinzohubQueryContext, getSourceChainMap, validatorPublicKeyToBase64 } from "@/shared/lib";
 
 type AssertRequestBody = {
   validatorPublicKey: string;
   assertionAuthority: string;
   sourceChain: string;
   sourceChainId: number;
-  nonce: number;
   chainSpecific?: string;
   operatorAddress: string;
   payoutAddress: string;
@@ -28,6 +27,35 @@ function readRequiredString(
     );
   }
   return trimmed;
+}
+
+function parseOnChainNonce(value: string): number {
+  const parsed = Number.parseInt(value.trim(), 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`Invalid on-chain nonce: ${value}`);
+  }
+  return parsed;
+}
+
+async function resolveNextAssertionNonce(
+  client: ReturnType<typeof getShinzohubQueryContext>["client"],
+  parameters: {
+    validatorPublicKey: string;
+    sourceChainId: number;
+    cosmosRestUrl: string;
+  },
+): Promise<number> {
+  const existing = await getGeneratorAssertion(client, {
+    validatorPublicKey: validatorPublicKeyToBase64(parameters.validatorPublicKey),
+    sourceChainId: String(parameters.sourceChainId),
+    cosmosRestUrl: parameters.cosmosRestUrl,
+  });
+
+  if (!existing) {
+    return 1;
+  }
+
+  return parseOnChainNonce(existing.nonce) + 1;
 }
 
 export async function POST(req: NextRequest) {
@@ -62,14 +90,6 @@ export async function POST(req: NextRequest) {
   const payoutAddress = readRequiredString(body.payoutAddress, "payoutAddress");
   if (payoutAddress instanceof Response) return payoutAddress;
 
-  const nonce = typeof body.nonce === "number" ? body.nonce : undefined;
-  if (nonce === undefined || !Number.isFinite(nonce) || nonce <= 0) {
-    return Response.json(
-      { error: `Invalid nonce: ${body.nonce}` },
-      { status: 400 }
-    );
-  }
-
   const sourceChainId =
     typeof body.sourceChainId === "number"
       ? body.sourceChainId
@@ -99,6 +119,11 @@ export async function POST(req: NextRequest) {
     process.env.INDEXER_ASSERTION_RPC_ENDPOINT?.trim() || cometRpcUrl;
 
   try {
+    const nonce = await resolveNextAssertionNonce(client, {
+      validatorPublicKey,
+      sourceChainId,
+      cosmosRestUrl,
+    });
     const result = await submitGeneratorAssertion({
       privateKey,
       rpcEndpoint,
@@ -124,18 +149,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const assertion = await getGeneratorAssertionFromTransaction(client, {
-      hash: result.hash,
-      cosmosRestUrl,
-    });
-
     return Response.json({
       hash: result.hash,
       code: result.code,
       log: result.log,
-      validatorPublicKey: assertion.validatorPublicKey,
-      sourceChain: assertion.sourceChain,
-      sourceChainId: assertion.sourceChainId,
+      validatorPublicKey: validatorPublicKeyToBase64(validatorPublicKey),
+      sourceChain: sourceChain,
+      sourceChainId: sourceChainId,
     });
   } catch (err) {
     console.error("Failed to submit generator assertion:", err);

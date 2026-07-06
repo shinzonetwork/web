@@ -50,7 +50,6 @@ export function useAssertion() {
             assertionAuthority: assertionFormData.assertionAuthority,
             sourceChain: assertionFormData.sourceChain,
             sourceChainId,
-            nonce: 4,
             operatorAddress: address,
             payoutAddress: address,
           }),
