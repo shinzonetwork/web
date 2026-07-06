@@ -29,6 +29,6 @@ amount: String
 # deploy to a local DefraDB with mock data
 ./build/viewkit view deploy erc20-transfers --target local
 
-# deploy to ShinzoHub, so that a host can pick it up and run it against devnet data
-./build/viewkit view deploy erc20-transfers --target devnet --rpc http://rpc.devnet.shinzo.network:8545
+# deploy to ShinzoHub, so that a host can pick it up and run it against testnet data
+./build/viewkit view deploy erc20-transfers --target testnet --rpc http://rpc.testnet.shinzo.network:8545
 ```

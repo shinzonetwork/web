@@ -124,7 +124,7 @@ export function FaucetPage() {
       <div className="flex flex-col items-center gap-10 w-full max-w-3xl px-6 lg:px-24">
         <ShinzoLogo className="h-8 w-auto" />
 
-        <h1 className="text-2xl lg:text-4xl font-semibold text-szo-black text-center">Get devnet $SHN tokens</h1>
+        <h1 className="text-2xl lg:text-4xl font-semibold text-szo-black text-center">Get testnet $SHN tokens</h1>
 
         {status === 'success' ? (
           <div className="flex flex-col items-center gap-6 w-full text-center">

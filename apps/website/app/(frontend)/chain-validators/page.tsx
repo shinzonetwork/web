@@ -129,7 +129,7 @@ export default function Page() {
     ]} />
 
     <BlockCta
-      title="Join the Generator Cohort"
+      title="Become a Generator"
       content={<p>If you run validators or node infrastructure and want to become a generator in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
         <Button asChild><Link href="https://docs.shinzo.network/generator/install" target="_blank">Install the Generator Client</Link></Button>
