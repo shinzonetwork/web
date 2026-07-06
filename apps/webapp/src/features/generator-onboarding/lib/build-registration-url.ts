@@ -1,4 +1,4 @@
-import { getSourceChainMap } from "@/shared/lib";
+import { getSourceChainMap, validatorPublicKeyToBase64 } from "@/shared/lib";
 
 export function buildGeneratorRegistrationUrl(
   sourceChain: string,
@@ -11,7 +11,7 @@ export function buildGeneratorRegistrationUrl(
     role: "generator",
     sourceChain,
     sourceChainId: String(resolvedSourceChainId),
-    validatorPublicKey,
+    validatorPublicKey: validatorPublicKeyToBase64(validatorPublicKey),
   });
 
   return `/generator-registration?${params.toString()}`;

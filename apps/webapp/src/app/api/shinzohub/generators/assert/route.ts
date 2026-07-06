@@ -153,7 +153,7 @@ export async function POST(req: NextRequest) {
       hash: result.hash,
       code: result.code,
       log: result.log,
-      validatorPublicKey: validatorPublicKeyToBase64(validatorPublicKey),
+      validatorPublicKey: validatorPublicKey,
       sourceChain: sourceChain,
       sourceChainId: sourceChainId,
     });

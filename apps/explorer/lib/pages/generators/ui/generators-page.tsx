@@ -26,7 +26,7 @@ export interface GeneratorsPageClientProps {
 export function GeneratorsPageClient({ pageParams }: GeneratorsPageClientProps) {
   const { page } = pageParams;
   const { data: registeredGenerators, isPending } = useRegisteredGenerators({ pageParams });
-  console.log("registeredGenerators", JSON.stringify(registeredGenerators, null, 2));
+
   const generators: GeneratorWithHealth[] = useMemo(
     () =>
       registeredGenerators?.generators.map((generator) => ({

@@ -1,5 +1,6 @@
 "use client";
 
+import { Generator } from "@/shared/lib";
 import { useQuery } from "@tanstack/react-query";
 
 async function fetchGeneratorAssertion(
