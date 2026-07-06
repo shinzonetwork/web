@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Existing Chain Validators"
       title={<>Secure<span className="highlight">!</span> the Chain<span className="highlight">.</span> <br /> Serve<span className="highlight" >*</span > the Truth<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Generator Cohort</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/generator/install" target="_blank">Install the Generator Client</Link></Button>
       </>}
     />
 
@@ -132,7 +132,7 @@ export default function Page() {
       title="Join the Generator Cohort"
       content={<p>If you run validators or node infrastructure and want to become a generator in Shinzō’s trustless data read layer, we want to work with you.</p>}
       buttons={<>
-        <Button asChild><Link href="https://shinzo.network/chains" target="_blank">Apply to the Generator Cohort</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/generator/install" target="_blank">Install the Generator Client</Link></Button>
       </>}
       footerText={<p className="text-raised">You already secure the chain. <br />Now help secure its truth.</p>}
     />
