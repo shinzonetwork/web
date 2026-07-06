@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicClient, http } from "viem";
 import { shinzoHubDevelop } from "../chains/index";
 import { createShinzoHubClient } from "../index";
-import { getGenerator, getGeneratorHealth, listGenerators } from "./index";
+import { getGenerator, getGeneratorAssertion, getGeneratorHealth, listGenerators } from "./index";
 import { UNHEALTHY_LIVE_DATA } from "./get-generator-health";
 
 const originalFetch = globalThis.fetch;
@@ -123,6 +123,54 @@ describe("getGenerator", () => {
         cosmosRestUrl: "https://override.example",
       }),
     ).resolves.toMatchObject({ address: generatorAddress });
+  });
+});
+
+describe("getGeneratorAssertion", () => {
+  const mockChain = {
+    ...shinzoHubDevelop,
+    rpcUrls: {
+      ...shinzoHubDevelop.rpcUrls,
+      cosmosRest: { http: ["https://rest.example"] },
+    },
+  };
+
+  const viemClient = createPublicClient({
+    chain: mockChain,
+    transport: http(),
+  });
+
+  const validatorPublicKey = "dmFsaWRhdG9yLTE4MzM5OQ==";
+
+  it("loads generator assertion by validator public key", async () => {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      expect(String(input)).toBe(
+        `https://rest.example/shinzonetwork/indexer/v1/validator/1/${encodeURIComponent(validatorPublicKey)}`,
+      );
+      return Response.json({ indexer: generatorWire });
+    });
+
+    globalThis.fetch = fetchMock as typeof fetch;
+
+    await expect(
+      getGeneratorAssertion(viemClient, {
+        sourceChainId: "1",
+        validatorPublicKey,
+      }),
+    ).resolves.toEqual(generator);
+  });
+
+  it("returns null when no assertion exists yet", async () => {
+    globalThis.fetch = vi.fn(async () =>
+      new Response(JSON.stringify({ code: 5, message: "indexer not found" }), { status: 404 }),
+    ) as typeof fetch;
+
+    await expect(
+      getGeneratorAssertion(viemClient, {
+        sourceChainId: "1",
+        validatorPublicKey,
+      }),
+    ).resolves.toBeNull();
   });
 });
 

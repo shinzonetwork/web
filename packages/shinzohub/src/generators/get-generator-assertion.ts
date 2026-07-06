@@ -4,7 +4,7 @@ import {
   getRpcEndpoint,
   type ShinzoHubQueryClient,
 } from "../internal/endpoints";
-import { buildUrl, requestJson } from "../internal/fetch";
+import { buildUrl, requestJson, ShinzoHubHttpError } from "../internal/fetch";
 import { toGenerator, type GetGeneratorWireResponse } from "./internal";
 import type { GetAssertionParameters, Generator } from "./types";
 
@@ -26,17 +26,24 @@ export async function getGeneratorAssertion(
     throw new Error("sourceChainId cannot be empty.");
   }
 
-  const response = await requestJson<GetGeneratorWireResponse>(
-    getFetch(),
-    buildUrl(
-      getRpcEndpoint(client, "cosmosRest", parameters.cosmosRestUrl),
-      `/shinzonetwork/indexer/v1/validator/${encodeURIComponent(sourceChainId)}/${encodeURIComponent(validatorPublicKey)}`
-    ),
-  );
+  try {
+    const response = await requestJson<GetGeneratorWireResponse>(
+      getFetch(),
+      buildUrl(
+        getRpcEndpoint(client, "cosmosRest", parameters.cosmosRestUrl),
+        `/shinzonetwork/indexer/v1/validator/${encodeURIComponent(sourceChainId)}/${encodeURIComponent(validatorPublicKey)}`,
+      ),
+    );
 
-  if (!response.indexer) {
-    return null
+    if (!response.indexer) {
+      return null;
+    }
+
+    return toGenerator(response.indexer);
+  } catch (error) {
+    if (error instanceof ShinzoHubHttpError && error.status === 404) {
+      return null;
+    }
+    throw error;
   }
-
-  return toGenerator(response.indexer);
 }
