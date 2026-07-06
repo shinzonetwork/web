@@ -2,13 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useVerifyAssertion } from "@/features/registration-form";
+import {
+  getGeneratorAssertionPrefill,
+  useVerifyAssertion,
+} from "@/features/registration-form";
 import { GENERATOR_ASSERTION_PENDING_KEY } from "../constants";
 
 /** Redirect to assertion when registration is opened without a completed assertion. */
 export function useGeneratorOnboardingGuard(enabled: boolean) {
   const router = useRouter();
-  const { data: isAssertionVerified, isLoading } = useVerifyAssertion();
+  const assertionPrefill = getGeneratorAssertionPrefill();
+  const { data: isAssertionVerified, isLoading } = useVerifyAssertion(
+    assertionPrefill?.validatorPublicKey ?? "",
+    assertionPrefill?.sourceChainId
+      ? String(assertionPrefill.sourceChainId)
+      : ""
+  );
 
   // Read sessionStorage during init so the registration form is not briefly
   // replaced by the loading state after assertion navigation.

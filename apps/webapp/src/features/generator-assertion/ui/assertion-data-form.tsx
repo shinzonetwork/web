@@ -15,7 +15,6 @@ export function AssertionDataForm({
   handleInputChange,
   fieldErrors,
 }: AssertionDataFormProps) {
-
   return (
     <div className="space-y-6 w-full max-w-6xl">
       {GENERATOR_ASSERTION_FORM_INPUTS.map((input) => (

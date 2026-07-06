@@ -4,6 +4,16 @@ import { useAccount } from "wagmi";
 import { GeneratorAssertionFormData } from "../util/form-data";
 import { TOAST_CONFIG, getSourceChainMap } from "@/shared/lib";
 
+export type AssertionSubmitResult = {
+  error?: string;
+  hash?: string;
+  code?: number;
+  log?: string;
+  validatorPublicKey: string;
+  sourceChain: string;
+  sourceChainId: number;
+};
+
 export function useAssertion() {
   const { address } = useAccount();
 
@@ -12,7 +22,7 @@ export function useAssertion() {
   const handleAssertion = useCallback(
     async (
       assertionFormData: GeneratorAssertionFormData,
-    ): Promise<boolean> => {
+    ): Promise<AssertionSubmitResult | false> => {
       if (!address) {
         toast.error(
           "Connect a wallet before submitting assertion.",
@@ -40,7 +50,7 @@ export function useAssertion() {
             assertionAuthority: assertionFormData.assertionAuthority,
             sourceChain: assertionFormData.sourceChain,
             sourceChainId,
-            nonce: 1,
+            nonce: 4,
             operatorAddress: address,
             payoutAddress: address,
           }),
@@ -51,17 +61,36 @@ export function useAssertion() {
           hash?: string;
           code?: number;
           log?: string;
+          validatorPublicKey?: string;
+          sourceChain?: string;
+          sourceChainId?: number;
         };
 
         if (!response.ok) {
           throw new Error(payload.error ?? "Assertion request failed");
         }
 
+        if (
+          !payload.hash ||
+          !payload.validatorPublicKey ||
+          !payload.sourceChainId
+        ) {
+          throw new Error("Assertion response is missing on-chain details.");
+        }
+
         toast.success(
           "Assertion complete. Continuing to registration…",
           TOAST_CONFIG
         );
-        return true;
+
+        return {
+          hash: payload.hash,
+          log: payload.log,
+          error: payload.error,
+          validatorPublicKey: payload.validatorPublicKey,
+          sourceChain: payload.sourceChain ?? assertionFormData.sourceChain,
+          sourceChainId: payload.sourceChainId,
+        };
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Unknown error";

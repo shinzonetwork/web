@@ -73,7 +73,6 @@ export function RegistrationDataForm({
                   disabled={prefilledFields[input.id] ?? false}
                   required={input.required}
                   isSelect={input.isSelect}
-                  selectOptions={input.isSelect ? input.selectOptions : []}
                 />
               );
             })

@@ -12,7 +12,7 @@ import {
   formatHash,
   GeneratorHealthData,
   ipFromConnectionString,
-  RegisteredGenerator,
+  Generator,
 } from "@/shared/lib";
 import { HealthStatus } from "@/shared/types";
 import { LoaderCircle } from "lucide-react";
@@ -23,7 +23,7 @@ import {
 } from "../../../shared/lib/shinzohub/health";
 import { useGeneratorHealthPolling } from "../hooks/generators/use-generator-health-polling";
 
-export type GeneratorWithHealth = RegisteredGenerator &
+export type GeneratorWithHealth = Generator &
   Pick<GeneratorHealthData, "status"> & {
     ip: string;
   };
@@ -48,7 +48,7 @@ function GeneratorHomeContent() {
 
   const generators: GeneratorWithHealth[] = useMemo(
     () =>
-      registeredGenerators?.generators.map((generator) => ({
+      registeredGenerators?.generators.map((generator: Generator) => ({
         ...generator,
         ip: ipFromConnectionString(generator.connectionString),
         status: "unknown" as HealthStatus,
@@ -60,7 +60,7 @@ function GeneratorHomeContent() {
     entries: generators,
     resetKey: page,
     toHealthEntry: (generator) => ({
-      address: generator.address,
+      address: generator.operatorAddress,
       ip: generator.ip,
     }),
   });
@@ -69,7 +69,7 @@ function GeneratorHomeContent() {
     () =>
       generators.map((generator) => {
         const key = createHealthEntryKey({
-          address: generator.address,
+          address: generator.operatorAddress,
           ip: generator.ip,
         });
         const healthData = healthByKey.get(key);
@@ -118,7 +118,7 @@ function GeneratorHomeContent() {
           iterable={generatorsWithHealth}
           rowRenderer={(generator) => (
             <>
-              <TableNullableCell value={generator?.address}>
+              <TableNullableCell value={generator?.operatorAddress}>
                 {(value) => (
                   <span className="text-sm text-foreground">{value}</span>
                 )}

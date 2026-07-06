@@ -5,8 +5,8 @@ import {
   type ShinzoHubQueryClient,
 } from "../internal/endpoints";
 import { buildUrl, requestJson } from "../internal/fetch";
-import { toAssertion, type GetAssertionWireResponse } from "./internal";
-import type { GetAssertionParameters, GetAssertionResult } from "./types";
+import { toGenerator, type GetGeneratorWireResponse } from "./internal";
+import type { GetAssertionParameters, Generator } from "./types";
 
 /**
  * Fetches generator assertions for a delegate address through the Cosmos REST gateway.
@@ -14,21 +14,29 @@ import type { GetAssertionParameters, GetAssertionResult } from "./types";
 export async function getGeneratorAssertion(
   client: ShinzoHubQueryClient | Client,
   parameters: GetAssertionParameters,
-): Promise<GetAssertionResult> {
-  const address = parameters.address.trim();
-  if (!address) {
-    throw new Error("address cannot be empty.");
+): Promise<Generator | null> {
+
+  const validatorPublicKey = parameters.validatorPublicKey.trim();
+  if (!validatorPublicKey) {
+    throw new Error("validatorPublicKey cannot be empty.");
   }
 
-  const response = await requestJson<GetAssertionWireResponse>(
+  const sourceChainId = parameters.sourceChainId.trim();
+  if (!sourceChainId) {
+    throw new Error("sourceChainId cannot be empty.");
+  }
+
+  const response = await requestJson<GetGeneratorWireResponse>(
     getFetch(),
     buildUrl(
       getRpcEndpoint(client, "cosmosRest", parameters.cosmosRestUrl),
-      `/shinzonetwork/indexer/v1/assertions/${encodeURIComponent(address)}`,
+      `/shinzonetwork/indexer/v1/validator/${encodeURIComponent(sourceChainId)}/${encodeURIComponent(validatorPublicKey)}`
     ),
   );
 
-  return {
-    assertions: (response.assertions ?? []).map(toAssertion),
-  };
+  if (!response.indexer) {
+    return null
+  }
+
+  return toGenerator(response.indexer);
 }

@@ -1,5 +1,8 @@
 import { NextRequest } from "next/server";
-import { submitGeneratorAssertion } from "@shinzo/shinzohub";
+import {
+  getGeneratorAssertionFromTransaction,
+  submitGeneratorAssertion,
+} from "@shinzo/shinzohub";
 import { getShinzohubQueryContext, getSourceChainMap } from "@/shared/lib";
 
 type AssertRequestBody = {
@@ -59,8 +62,7 @@ export async function POST(req: NextRequest) {
   const payoutAddress = readRequiredString(body.payoutAddress, "payoutAddress");
   if (payoutAddress instanceof Response) return payoutAddress;
 
-  const nonce =
-    typeof body.nonce === "number" ? body.nonce : undefined;
+  const nonce = typeof body.nonce === "number" ? body.nonce : undefined;
   if (nonce === undefined || !Number.isFinite(nonce) || nonce <= 0) {
     return Response.json(
       { error: `Invalid nonce: ${body.nonce}` },
@@ -92,7 +94,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { cometRpcUrl } = getShinzohubQueryContext();
+  const { client, cometRpcUrl, cosmosRestUrl } = getShinzohubQueryContext();
   const rpcEndpoint =
     process.env.INDEXER_ASSERTION_RPC_ENDPOINT?.trim() || cometRpcUrl;
 
@@ -122,10 +124,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const assertion = await getGeneratorAssertionFromTransaction(client, {
+      hash: result.hash,
+      cosmosRestUrl,
+    });
+
     return Response.json({
       hash: result.hash,
       code: result.code,
       log: result.log,
+      validatorPublicKey: assertion.validatorPublicKey,
+      sourceChain: assertion.sourceChain,
+      sourceChainId: assertion.sourceChainId,
     });
   } catch (err) {
     console.error("Failed to submit generator assertion:", err);

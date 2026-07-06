@@ -1,13 +1,23 @@
 import { getGeneratorAssertion } from "@shinzo/shinzohub";
 import { NextRequest } from "next/server";
 import { getShinzohubQueryContext } from "@/shared/lib";
-import { serializeAssertions } from "../_lib/serialize";
+import { serializeGenerator } from "../_lib/serialize";
 
 export async function GET(req: NextRequest) {
-  const address = req.nextUrl.searchParams.get("address")?.trim() ?? "";
-  if (!address) {
+  const validatorPublicKey =
+    req.nextUrl.searchParams.get("validatorPublicKey")?.trim() ?? "";
+  if (!validatorPublicKey) {
     return Response.json(
-      { error: "Missing address parameter" },
+      { error: "Missing validatorPublicKey parameter" },
+      { status: 400 }
+    );
+  }
+
+  const sourceChainId =
+    req.nextUrl.searchParams.get("sourceChainId")?.trim() ?? "";
+  if (!sourceChainId) {
+    return Response.json(
+      { error: "Missing sourceChainId parameter" },
       { status: 400 }
     );
   }
@@ -15,11 +25,14 @@ export async function GET(req: NextRequest) {
   try {
     const { client, cosmosRestUrl } = getShinzohubQueryContext();
     const result = await getGeneratorAssertion(client, {
-      address,
+      validatorPublicKey,
+      sourceChainId,
       cosmosRestUrl,
     });
-
-    return Response.json(serializeAssertions(result));
+    if (!result) {
+      return Response.json(null, { status: 200 });
+    }
+    return Response.json(serializeGenerator(result));
   } catch {
     return Response.json(
       { error: "Failed to load assertion" },

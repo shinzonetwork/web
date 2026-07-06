@@ -86,8 +86,6 @@ export function useRegistrationTransaction(
             indexer.defraSignedMessage as Hex,
             indexer.message as Hex,
             indexer.connectionString,
-            indexer.sourceChain,
-            BigInt(indexer.sourceChainId),
           ],
         });
       } else if (formData.entity === EntityRole.Host) {

@@ -20,10 +20,12 @@ import type {
   IndexerRegistrationFormData,
 } from "@/shared/types";
 import { useVerifyAssertion } from "../hooks/use-verify-assertion";
+import { getGeneratorAssertionPrefill } from "../hooks/use-prefill-data";
 import { toast } from "react-toastify";
 
 export function RegistrationFormV2() {
   const { registrationEntity } = useRegistrationContext();
+  const assertionPrefill = getGeneratorAssertionPrefill();
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
@@ -33,7 +35,14 @@ export function RegistrationFormV2() {
 
   const { sendRegisterTransaction, isPending, isConfirming, isConfirmed } =
     useRegistrationTransaction(formData);
-  const { data: isAssertionVerified } = useVerifyAssertion();
+  const { data: isAssertionVerified } = useVerifyAssertion(
+    registrationEntity === EntityRole.Generator
+      ? (assertionPrefill?.validatorPublicKey ?? "")
+      : "",
+    registrationEntity === EntityRole.Generator
+      ? String(assertionPrefill?.sourceChainId ?? "")
+      : ""
+  );
 
   const handleRegister = async () => {
     if (registrationEntity === EntityRole.Generator) {
@@ -80,7 +89,6 @@ export function RegistrationFormV2() {
         formData={formData}
         handleInputChange={handleInputChange}
         fieldErrors={fieldErrors}
-        prefilledFields={{}}
       />
       <Button
         onClick={handleRegister}

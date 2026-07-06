@@ -17,13 +17,13 @@ export default function AssertionForm() {
   const queryClient = useQueryClient();
   const { assertionFormData, handleInputChange, fieldErrors, isValid } =
     useAssertionForm();
-  const { isSubmitting, handleAssertion } =useAssertion();
+  const { isSubmitting, handleAssertion } = useAssertion();
 
   const handleSubmit = async () => {
     if (!isValid) return;
 
-    const succeeded = await handleAssertion(assertionFormData);
-    if (!succeeded) return;
+    const assertionResult = await handleAssertion(assertionFormData);
+    if (!assertionResult) return;
 
     sessionStorage.setItem(GENERATOR_ASSERTION_PENDING_KEY, "true");
     await queryClient.invalidateQueries({
@@ -31,7 +31,9 @@ export default function AssertionForm() {
     });
 
     const registrationUrl = buildGeneratorRegistrationUrl(
-      assertionFormData.sourceChain
+      assertionResult.sourceChain,
+      assertionResult.validatorPublicKey,
+      assertionResult.sourceChainId
     );
     router.push(registrationUrl);
   };

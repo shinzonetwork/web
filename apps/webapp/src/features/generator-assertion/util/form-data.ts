@@ -36,9 +36,7 @@ export const GENERATOR_ASSERTION_FORM_INPUTS = [
 /**
  * Get button text based on transaction state
  */
-export function getGeneratorAssertionButtonText(
-  isSubmitting: boolean
-): string {
+export function getGeneratorAssertionButtonText(isSubmitting: boolean): string {
   if (isSubmitting) return "Processing submission...";
   return "Submit Assertion";
 }

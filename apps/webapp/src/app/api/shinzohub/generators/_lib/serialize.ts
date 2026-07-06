@@ -1,22 +1,18 @@
+import type { Generator, GeneratorsListResponse } from "@/shared/lib";
 import type {
-  GeneratorAssertion,
-  GeneratorAssertionsResponse,
-  RegisteredGenerator,
-  RegisteredGeneratorDetailsResponse,
-  RegisteredGeneratorsListResponse,
-} from "@/shared/lib";
-import type {
-  GeneratorAssertion as ShinzoHubGeneratorAssertion,
-  GetAssertionResult,
   ListGeneratorsResult,
-  RegisteredGenerator as ShinzoHubRegisteredGenerator,
+  Generator as ShinzoHubGenerator,
 } from "@shinzo/shinzohub";
 
-export function serializeGenerator(
-  generator: ShinzoHubRegisteredGenerator
-): RegisteredGenerator {
+export function serializeGenerator(generator: ShinzoHubGenerator): Generator {
   return {
-    address: generator.address,
+    validatorPublicKey: generator.validatorPublicKey,
+    assertionAuthority: generator.assertionAuthority,
+    nonce: generator.nonce,
+    chainSpecific: generator.chainSpecific,
+    operatorAddress: generator.operatorAddress,
+    payoutAddress: generator.payoutAddress,
+    registered: generator.registered,
     did: generator.did,
     connectionString: generator.connectionString,
     sourceChain: generator.sourceChain,
@@ -26,7 +22,7 @@ export function serializeGenerator(
 
 export function serializeGeneratorsList(
   result: ListGeneratorsResult
-): RegisteredGeneratorsListResponse {
+): GeneratorsListResponse {
   return {
     generators: result.generators.map((generator) =>
       serializeGenerator(generator)
@@ -34,33 +30,5 @@ export function serializeGeneratorsList(
     pagination: {
       total: result.pagination.total ?? 0,
     },
-  };
-}
-
-export function serializeGeneratorDetails(
-  generator: ShinzoHubRegisteredGenerator
-): RegisteredGeneratorDetailsResponse {
-  return {
-    generator: serializeGenerator(generator),
-  };
-}
-
-export function serializeAssertion(
-  assertion: ShinzoHubGeneratorAssertion
-): GeneratorAssertion {
-  return {
-    assertionId: assertion.assertionId,
-    consensusPubKey: assertion.consensusPubKey,
-    delegateAddress: assertion.delegateAddress,
-    sourceChain: assertion.sourceChain,
-    sourceChainId: assertion.sourceChainId,
-  };
-}
-
-export function serializeAssertions(
-  result: GetAssertionResult
-): GeneratorAssertionsResponse {
-  return {
-    assertions: result.assertions.map(serializeAssertion),
   };
 }

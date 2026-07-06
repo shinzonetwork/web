@@ -15,7 +15,6 @@ import * as _m0 from "protobufjs/minimal";
 import { bytesToHex, concat, type Hex, hexToBytes, keccak256 } from "viem";
 import { privateKeyToAccount, sign } from "viem/accounts";
 import { hexToShinzoAddress, normalizeShinzoAddress } from "../addresses/index";
-import { shinzoHubDevelop } from "../chains/index";
 import type {
   SubmitGeneratorAssertionParameters,
   SubmitGeneratorAssertionResult,
@@ -92,12 +91,6 @@ function utf8Bytes(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
 
-function parseHexBytes(value: string): Uint8Array {
-  const trimmed = value.trim();
-  if (!trimmed) return new Uint8Array(0);
-  return hexToBytes(trimmed.startsWith("0x") ? (trimmed as Hex) : (`0x${trimmed}` as Hex));
-}
-
 function normalizePrivateKey(privateKey: string): `0x${string}` {
   const hex = privateKey.trim().replace(/^0x/i, "");
   return `0x${hex}`;
@@ -115,13 +108,41 @@ function base64ToBytes(base64: string): Uint8Array {
   return new Uint8Array(Buffer.from(base64, "base64"));
 }
 
+function normalizeRpcEndpoint(rpc: string): string {
+  // Fix common typo: http://host/:26657 -> http://host:26657
+  return rpc.trim().replace(/\/:(\d+)\/?$/, ":$1").replace(/\/+$/, "");
+}
+
+async function getCometChainId(rpc: string): Promise<string> {
+  const response = await fetch(`${normalizeRpcEndpoint(rpc)}/status`);
+  if (!response.ok) {
+    throw new Error(`Comet status query failed with status ${response.status}.`);
+  }
+
+  const json = (await response.json()) as {
+    result?: { node_info?: { network?: string } };
+    error?: { message?: string };
+  };
+
+  if (json.error?.message) {
+    throw new Error(`Comet status query error: ${json.error.message}`);
+  }
+
+  const chainId = json.result?.node_info?.network?.trim();
+  if (!chainId) {
+    throw new Error("Comet status query did not return a chain ID.");
+  }
+
+  return chainId;
+}
+
 async function abciQuery(
   rpc: string,
   path: string,
   data: Uint8Array,
 ): Promise<Uint8Array> {
   const response = await fetch(
-    `${rpc.replace(/\/+$/, "")}/abci_query?path=%22${encodeURIComponent(path)}%22&data=${bytesToHex(data)}`,
+    `${normalizeRpcEndpoint(rpc)}/abci_query?path=%22${encodeURIComponent(path)}%22&data=${bytesToHex(data)}`,
   );
   if (!response.ok) {
     throw new Error(`ABCI query failed with status ${response.status}.`);
@@ -182,7 +203,7 @@ async function broadcast(
   rpc: string,
   txBytes: Uint8Array,
 ): Promise<SubmitGeneratorAssertionResult> {
-  const response = await fetch(rpc.replace(/\/+$/, ""), {
+  const response = await fetch(normalizeRpcEndpoint(rpc), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -195,7 +216,6 @@ async function broadcast(
   if (!response.ok) {
     throw new Error(`Broadcast failed with status ${response.status}.`);
   }
-
   const json = (await response.json()) as {
     result?: { hash: string; code: number; log: string };
     error?: { message?: string };
@@ -242,8 +262,10 @@ export async function submitGeneratorAssertion(
     hexToBytes(account.publicKey),
   );
   const signerAddress = hexToShinzoAddress(account.address);
+  const normalizedRpc = normalizeRpcEndpoint(rpcEndpoint);
+  const chainId =await getCometChainId(normalizedRpc);
   const { accountNumber, sequence } = await getAccountSequence(
-    rpcEndpoint,
+    normalizedRpc,
     signerAddress,
   );
   const pubkey = {
@@ -256,12 +278,11 @@ export async function submitGeneratorAssertion(
   if (!Number.isFinite(normalizedNonce) || normalizedNonce <= 0) {
     throw new Error(`Invalid nonce: ${nonce}`);
   }
-
   const msgValue = MsgIndexerAssertion.fromPartial({
     signer: signerAddress,
     sourceChain: sourceChain.trim(),
     sourceChainId,
-    validatorPubkey: parseHexBytes(validatorPublicKey),
+    validatorPubkey: utf8Bytes(validatorPublicKey.trim()),
     assertionAuthority: utf8Bytes(assertionAuthority.trim()),
     nonce: normalizedNonce,
     chainSpecific: chainSpecific.trim()
@@ -293,7 +314,7 @@ export async function submitGeneratorAssertion(
   const signDoc = makeSignDoc(
     txBodyBytes,
     authInfoBytes,
-    String(shinzoHubDevelop.id),
+    chainId,
     accountNumber,
   );
   const { r, s } = await sign({
@@ -310,5 +331,5 @@ export async function submitGeneratorAssertion(
     }),
   ).finish();
 
-  return broadcast(rpcEndpoint, txRaw);
+  return broadcast(normalizedRpc, txRaw);
 }

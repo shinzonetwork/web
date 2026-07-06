@@ -1,4 +1,4 @@
-import { EntityRole, getSourceChainOptions } from "@/shared/lib";
+import { EntityRole } from "@/shared/lib";
 import { Hex, isHex } from "viem";
 import {
   HostRegistrationFormData,
@@ -68,9 +68,7 @@ export function validateIndexerRegistrationForm(
   const validations = [
     formData.entity === EntityRole.Generator,
     validateRegistrationFormV2(formData),
-    isValidConnectionString(formData.connectionString ?? ""),
-    Boolean(formData.sourceChain?.trim()),
-    Boolean(formData.sourceChainId),
+    isValidConnectionString(formData.connectionString ?? "")
   ];
   return validations.every(Boolean);
 }
@@ -153,8 +151,6 @@ export function validateIndexerFields(
       defraPublicKey: undefined,
       defraSignedMessage: undefined,
       connectionString: undefined,
-      sourceChain: undefined,
-      sourceChainId: undefined,
     };
   const connection = formData.connectionString?.trim() ?? "";
   if (!connection) {
@@ -162,12 +158,6 @@ export function validateIndexerFields(
   } else if (!isValidConnectionString(connection)) {
     errors.connectionString =
       "Connection string must look like <IPv4 address> or /ip4/<IPv4>/tcp/<port>/p2p/<peer id>";
-  }
-  if (!formData.sourceChain?.trim()) {
-    errors.sourceChain = "Source chain is required";
-  }
-  if (!formData.sourceChainId) {
-    errors.sourceChainId = "Source chain ID is required";
   }
   const sharedfieldsValidation = validateSharedFieldsV2(formData);
   const indexerFieldsValidation = Object.values(errors).every(
@@ -240,14 +230,6 @@ export const REGISTRATION_FORM_INPUTS_INDEXER = [
     label: "Connection string",
     isTextarea: false,
     isSelect: false,
-    required: true,
-  },
-  {
-    id: "sourceChain",
-    label: "Source chain",
-    isTextarea: false,
-    isSelect: true,
-    selectOptions: getSourceChainOptions(),
     required: true,
   },
 ] as const;

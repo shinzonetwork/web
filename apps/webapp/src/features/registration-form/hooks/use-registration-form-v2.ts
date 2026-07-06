@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { EntityRole, getSourceChainMap, sanitizeString } from "@/shared/lib";
+import { EntityRole, sanitizeString } from "@/shared/lib";
 import { RegistrationFormDataByEntity } from "@/shared/types";
-import { PrefillDataV2, usePrefillData } from "./use-prefill-data";
+import {
+  PrefillDataV2,
+  usePrefillData,
+} from "./use-prefill-data";
 
 const getInitialFormData = (
   entity: EntityRole,
-  prefillData: PrefillDataV2 | undefined = undefined
+  prefillData: PrefillDataV2 | undefined = undefined,
 ) =>
   entity === EntityRole.Generator
     ? {
@@ -14,8 +17,6 @@ const getInitialFormData = (
         defraPublicKey: prefillData?.defraPublicKey ?? "",
         defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
         connectionString: prefillData?.connectionString ?? "",
-        sourceChain: prefillData?.sourceChain ?? "",
-        sourceChainId: prefillData?.sourceChainId ?? 0,
       }
     : {
         entity: EntityRole.Host,
@@ -23,6 +24,7 @@ const getInitialFormData = (
         defraPublicKey: prefillData?.defraPublicKey ?? "",
         defraSignedMessage: prefillData?.defraPublicKeySignedMessage ?? "",
         connectionString: prefillData?.connectionString ?? "",
+        endpoint: prefillData?.endpoint ?? "",
       };
 
 export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
@@ -32,9 +34,10 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
     RegistrationFormDataByEntity<typeof entity>
   >(
     () =>
-      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<
-        typeof entity
-      >
+      getInitialFormData(
+        entity,
+        prefillData,
+      ) as RegistrationFormDataByEntity<typeof entity>
   );
 
   const handleInputChange = useCallback((field: string, value: string) => {
@@ -42,22 +45,15 @@ export function useRegistrationFormV2({ entity }: { entity: EntityRole }) {
       return;
     }
     const sanitizedValue = sanitizeString(value);
-    // Update form data without validation (validation happens on button click)
     setFormData((prev) => ({ ...prev, [field]: sanitizedValue || undefined }));
-
-    if (field === "sourceChain") {
-      setFormData((prev) => ({
-        ...prev,
-        sourceChainId: getSourceChainMap()[value],
-      }));
-    }
   }, []);
 
   useEffect(() => {
     setFormData(
-      getInitialFormData(entity, prefillData) as RegistrationFormDataByEntity<
-        typeof entity
-      >
+      getInitialFormData(
+        entity,
+        prefillData,
+      ) as RegistrationFormDataByEntity<typeof entity>
     );
     // Only re-initialize when route-driven entity changes; prefillData is read from latest closure.
     // eslint-disable-next-line react-hooks/exhaustive-deps -- avoid resetting the form every render when prefill is a new object reference
