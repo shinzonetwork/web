@@ -1,6 +1,5 @@
 import type {
   RegisteredHost,
-  RegisteredHostDetailsResponse,
   RegisteredHostsListResponse,
 } from "@/shared/lib";
 import type {
@@ -13,6 +12,7 @@ export function serializeHost(host: ShinzoHubRegisteredHost): RegisteredHost {
     address: host.address,
     did: host.did,
     connectionString: host.connectionString,
+    endpointAddress: host.endpointAddress ?? "",
   };
 }
 
@@ -27,10 +27,3 @@ export function serializeHostsList(
   };
 }
 
-export function serializeHostDetails(
-  host: RegisteredHost
-): RegisteredHostDetailsResponse {
-  return {
-    host: serializeHost(host),
-  };
-}
