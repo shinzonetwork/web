@@ -7,7 +7,7 @@ import {
 import { buildUrl, requestJson } from "../internal/fetch";
 import type { GetGeneratorWireResponse } from "./internal";
 import { toGenerator } from "./internal";
-import type { GetGeneratorParameters, RegisteredGenerator } from "./types";
+import type { GetGeneratorParameters, Generator } from "./types";
 
 /**
  * Fetches one registered ShinzoHub generator through the Cosmos REST gateway.
@@ -15,10 +15,10 @@ import type { GetGeneratorParameters, RegisteredGenerator } from "./types";
 export async function getGenerator(
   client: ShinzoHubQueryClient | Client,
   parameters: GetGeneratorParameters,
-): Promise<RegisteredGenerator> {
+): Promise<Generator> {
   const address = parameters.address.trim();
   if (!address) {
-    throw new Error("address cannot be empty.");
+    throw new Error("Address cannot be empty.");
   }
 
   const response = await requestJson<GetGeneratorWireResponse>(
@@ -30,7 +30,7 @@ export async function getGenerator(
   );
 
   if (!response.indexer) {
-    throw new Error("Response did not include an Generator.");
+    throw new Error("Response did not include a generator.");
   }
 
   return toGenerator(response.indexer);

@@ -8,20 +8,15 @@ type AssertionDataFormProps = React.PropsWithChildren<{
   formData: GeneratorAssertionFormData;
   handleInputChange: (field: string, value: string) => void;
   fieldErrors: Record<string, string | undefined>;
-  onSignDigest: () => void;
-  isSigning: boolean;
+  prefilledFields?: Record<string, boolean>;
 }>;
 
 export function AssertionDataForm({
   formData,
   handleInputChange,
   fieldErrors,
+  prefilledFields = {},
 }: AssertionDataFormProps) {
-  const disabledFields = [
-    "delegateAddress",
-    "sourceChainId",
-    "delegateSignature",
-  ];
   return (
     <div className="space-y-6 w-full max-w-6xl">
       {GENERATOR_ASSERTION_FORM_INPUTS.map((input) => (
@@ -41,7 +36,7 @@ export function AssertionDataForm({
           isSelect={input.isSelect}
           selectOptions={input.isSelect ? input.selectOptions : []}
           error={fieldErrors[input.id]}
-          disabled={disabledFields.includes(input.id)}
+          disabled={prefilledFields[input.id] ?? false}
         />
       ))}
     </div>

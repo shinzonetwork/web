@@ -45,8 +45,6 @@ export type RegistrationFormDataV2 = {
 
 export type IndexerRegistrationFormData = RegistrationFormDataV2 & {
   connectionString: string;
-  sourceChain: string;
-  sourceChainId: number;
 };
 
 export type HostRegistrationFormData = RegistrationFormDataV2 & {

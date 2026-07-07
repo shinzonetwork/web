@@ -1,7 +1,7 @@
 "use client";
 
 import type { Hex } from "viem";
-import { EntityRole, isRegistrationV2 } from "@/shared/lib";
+import { EntityRole, getSourceChainMap, isRegistrationV2 } from "@/shared/lib";
 
 export type PrefillDataV1 = {
   role: EntityRole | undefined;
@@ -13,20 +13,36 @@ export type PrefillDataV1 = {
 };
 
 export type PrefillDataV2 = {
-  role: EntityRole;
-  signedMessage: Hex;
-  defraPublicKey: Hex;
-  defraPublicKeySignedMessage: Hex;
+  role: EntityRole | undefined;
+  signedMessage: Hex | undefined;
+  defraPublicKey: Hex | undefined;
+  defraPublicKeySignedMessage: Hex | undefined;
   connectionString?: string;
-  sourceChain?: string;
-  sourceChainId?: number;
 };
 
 export type PrefillData = PrefillDataV1 | PrefillDataV2;
 
-/**
- * Converts a string to Hex if it's a valid hex string, otherwise returns undefined.
- */
+/** Assertion context passed from the generator assertion step via URL. */
+export type GeneratorAssertionPrefill = {
+  validatorPublicKey: string;
+  sourceChain: string;
+  sourceChainId: number;
+};
+
+/** Optional assertion form fields from URL query parameters. */
+export type GeneratorAssertionFormPrefill = {
+  validatorPublicKey?: string;
+  assertionAuthority?: string;
+  sourceChain?: string;
+};
+
+export type RegistrationPrefillV2Params = {
+  signedMessage?: string;
+  defraPublicKey?: string;
+  defraPublicKeySignedMessage?: string;
+  connectionString?: string;
+};
+
 function toHexOrUndefined(value: string | null): Hex | undefined {
   if (!value || value === "") {
     return undefined;
@@ -44,50 +60,128 @@ function parseRole(value: string | null): EntityRole | undefined {
   return undefined;
 }
 
-/**
- * Hook that returns the prefill data from URL query parameters.
- *
- * Expected query parameters:
- * - role: "host" | "generator"
- * - signedMessage: hex string
- * - defraPublicKey: hex string
- * - defraPublicKeySignedMessage: hex string
- * - peerId: hex string
- * - peerSignedMessage: hex string
- *
- * Example URLs:
- * - ?role=host&signedMessage=0x1234&defraPublicKey=0x5678&defraPublicKeySignedMessage=0xabcd&peerId=0xef01&peerSignedMessage=0x2345
- * - ?role=generator&signedMessage=0x5368696e7a6&peerId=0x3bf54397b0&peerSignedMessage=0x435cb4cc3e&defraPublicKey=0x034e95&defraPublicKeySignedMessage=0x304502210
- */
-export function usePrefillData(): PrefillData {
+function parseSourceChainId(value: string | null): number | undefined {
+  if (!value?.trim()) {
+    return undefined;
+  }
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+export function readSearchParams(): URLSearchParams {
   if (typeof window === "undefined") {
-    return {
-      role: undefined,
-      signedMessage: undefined,
-      defraPublicKey: undefined,
-      defraPublicKeySignedMessage: undefined,
-      peerId: undefined,
-      peerSignedMessage: undefined,
-      connectionString: undefined,
-      sourceChain: undefined,
-      sourceChainId: undefined,
-    } as PrefillData;
+    return new URLSearchParams();
+  }
+  return new URLSearchParams(window.location.search);
+}
+
+function readOptionalQueryParam(
+  searchParams: URLSearchParams,
+  key: string
+): string | undefined {
+  const value = searchParams.get(key)?.trim();
+  return value || undefined;
+}
+
+function readAssertionUrlFields(searchParams: URLSearchParams) {
+  const sourceChain = readOptionalQueryParam(searchParams, "sourceChain");
+  return {
+    validatorPublicKey: readOptionalQueryParam(
+      searchParams,
+      "validatorPublicKey"
+    ),
+    assertionAuthority: readOptionalQueryParam(
+      searchParams,
+      "assertionAuthority"
+    ),
+    sourceChain,
+    sourceChainId:
+      parseSourceChainId(searchParams.get("sourceChainId")) ??
+      (sourceChain ? getSourceChainMap()[sourceChain] : undefined),
+  };
+}
+
+/** Assertion fields carried on the generator registration URL after onboarding. */
+export function getGeneratorAssertionPrefill(
+  searchParams: URLSearchParams = readSearchParams()
+): GeneratorAssertionPrefill | null {
+  const { validatorPublicKey, sourceChain, sourceChainId } =
+    readAssertionUrlFields(searchParams);
+
+  if (!validatorPublicKey || !sourceChain || !sourceChainId) {
+    return null;
   }
 
-  const searchParams = new URLSearchParams(window.location.search);
+  return { validatorPublicKey, sourceChain, sourceChainId };
+}
+
+/** Assertion form fields from URL query parameters. */
+export function getGeneratorAssertionFormPrefill(
+  searchParams: URLSearchParams = readSearchParams()
+): GeneratorAssertionFormPrefill {
+  const { validatorPublicKey, assertionAuthority, sourceChain } =
+    readAssertionUrlFields(searchParams);
+
+  return { validatorPublicKey, assertionAuthority, sourceChain };
+}
+
+/** V2 registration fields from URL query parameters. */
+export function getRegistrationPrefillV2(
+  searchParams: URLSearchParams = readSearchParams()
+): PrefillDataV2 {
+  return {
+    role: parseRole(searchParams.get("role")),
+    signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
+    defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
+    defraPublicKeySignedMessage: toHexOrUndefined(
+      searchParams.get("defraPublicKeySignedMessage")
+    ),
+    connectionString: readOptionalQueryParam(searchParams, "connectionString"),
+  };
+}
+
+/** V2 registration prefill params from URL (for forwarding across onboarding steps). */
+export function getRegistrationPrefillV2Params(
+  searchParams: URLSearchParams = readSearchParams()
+): RegistrationPrefillV2Params {
+  const prefill = getRegistrationPrefillV2(searchParams);
+
+  return {
+    signedMessage: prefill.signedMessage,
+    defraPublicKey: prefill.defraPublicKey,
+    defraPublicKeySignedMessage: prefill.defraPublicKeySignedMessage,
+    connectionString: prefill.connectionString,
+  };
+}
+
+/** Which V2 registration fields were supplied via URL and should be read-only. */
+export function getRegistrationPrefilledFieldsV2(
+  prefillData: PrefillDataV2
+): Record<string, boolean> {
+  return {
+    message: prefillData.signedMessage !== undefined,
+    defraPublicKey: prefillData.defraPublicKey !== undefined,
+    defraSignedMessage: prefillData.defraPublicKeySignedMessage !== undefined,
+  };
+}
+
+/** Which assertion form fields were supplied via URL and should be read-only. */
+export function getAssertionFormPrefilledFields(
+  prefill: GeneratorAssertionFormPrefill
+): Record<string, boolean> {
+  return {
+    sourceChain: Boolean(prefill.sourceChain),
+  };
+}
+
+/**
+ * Hook that returns the prefill data from URL query parameters.
+ */
+export function usePrefillData(): PrefillData {
+  const searchParams = readSearchParams();
 
   if (isRegistrationV2()) {
-    return {
-      role: parseRole(searchParams.get("role")),
-      signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
-      defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
-      defraPublicKeySignedMessage: toHexOrUndefined(
-        searchParams.get("defraPublicKeySignedMessage")
-      ),
-      connectionString: searchParams.get("connectionString") ?? undefined,
-      sourceChain: searchParams.get("sourceChain") ?? undefined,
-      sourceChainId: parseInt(searchParams.get("sourceChainId") ?? "0", 10),
-    } as PrefillDataV2;
+    return getRegistrationPrefillV2(searchParams);
   }
 
   return {

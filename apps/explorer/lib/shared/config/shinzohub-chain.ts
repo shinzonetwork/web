@@ -7,6 +7,15 @@ const developRpcUrls = shinzoHubDevelop.rpcUrls as typeof shinzoHubDevelop.rpcUr
 };
 
 export function createShinzoHubChain(): Chain {
+    const evmRpcUrl =
+      process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
+      shinzoHubDevelop.rpcUrls.default.http[0];
+    const cosmosRestUrl =
+      process.env.SHINZOHUB_COSMOS_REST_URL ??
+      developRpcUrls.cosmosRest.http[0];
+    const cometRpcUrl =
+      process.env.SHINZOHUB_COMET_RPC_URL ?? developRpcUrls.cometRpc.http[0];
+
     return defineChain({
       id: shinzoHubDevelop.id,
       name: shinzoHubDevelop.name,
@@ -16,10 +25,10 @@ export function createShinzoHubChain(): Chain {
         decimals: shinzoHubDevelop.nativeCurrency.decimals,
       },
       rpcUrls: {
-        default: { http: [...shinzoHubDevelop.rpcUrls.default.http] },
-        public: { http: [...shinzoHubDevelop.rpcUrls.default.http] },
-        cosmosRest: { http: [...developRpcUrls.cosmosRest.http] },
-        cometRpc: { http: [...developRpcUrls.cometRpc.http] },
+        default: { http: [evmRpcUrl] },
+        public: { http: [evmRpcUrl] },
+        cosmosRest: { http: [cosmosRestUrl] },
+        cometRpc: { http: [cometRpcUrl] },
       },
     });
 }

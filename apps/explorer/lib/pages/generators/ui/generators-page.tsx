@@ -10,6 +10,7 @@ import { GeneratorsList } from './generators-list';
 import {
   createHealthEntryKey,
   ipFromConnectionString,
+  isGeneratorHealthPollable,
   type HealthStatus,
 } from '@/shared/health';
 import { useGeneratorHealthPolling } from '../hook/use-generator-health-polling';
@@ -42,8 +43,9 @@ export function GeneratorsPageClient({ pageParams }: GeneratorsPageClientProps) 
   const healthByKey = useGeneratorHealthPolling<GeneratorWithHealth>({
     entries: generators,
     resetKey: page,
+    isPollable: isGeneratorHealthPollable,
     toHealthEntry: (generator) => ({
-      address: generator.address,
+      address: generator.operatorAddress,
       ip: generator.ip,
     }),
   });
@@ -51,15 +53,18 @@ export function GeneratorsPageClient({ pageParams }: GeneratorsPageClientProps) 
   const generatorsWithHealth = useMemo(
     () =>
       generators.map((generator) => {
+        const pollable = isGeneratorHealthPollable(generator);
         const key = createHealthEntryKey({
-          address: generator.address,
+          address: generator.operatorAddress,
           ip: generator.ip,
         });
-        const healthData = healthByKey.get(key);
+        const healthData = pollable ? healthByKey.get(key) : undefined;
         return {
           ...generator,
           ...healthData,
-          status: healthData?.status ?? ("unknown" as HealthStatus)
+          status: pollable
+            ? (healthData?.status ?? ("unknown" as HealthStatus))
+            : ("unknown" as HealthStatus)
         };
       }),
     [generators, healthByKey]

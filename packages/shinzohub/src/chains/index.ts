@@ -41,14 +41,15 @@ export const shinzoHubLocal = defineChain({
  * });
  * ```
  */
+// TODO: use the develop chain definition from the shinzohub repo
 export const shinzoHubDevelop = defineChain({
   id: 91273002,
   name: "ShinzoHub Develop",
   nativeCurrency: currency,
   rpcUrls: {
-    default: { http: ["http://rpc.develop.devnet.shinzo.network:8545"] },
-    cosmosRest: { http: ["http://rpc.develop.devnet.shinzo.network:1317"] },
-    cometRpc: { http: ["http://rpc.develop.devnet.shinzo.network:26657"] },
+    default: { http: ["http://rpc.testnet.shinzo.network:8545"] },
+    cosmosRest: { http: ["http://rest.testnet.shinzo.network:1317"] },
+    cometRpc: { http: ["http://rpc.testnet.shinzo.network:26657"] },
   },
 });
 

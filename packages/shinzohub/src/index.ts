@@ -33,6 +33,8 @@ import {
   listGenerators, 
   getGeneratorHealth,
   getGeneratorAssertion,
+  getGeneratorAssertionFromTransaction,
+  parseGeneratorAssertionFromTransaction,
   submitGeneratorAssertion,
 } from "./generators/index";
 import { listValidators } from "./validators/index";
@@ -140,22 +142,22 @@ export {
   getGeneratorAssertion,
   getGeneratorHealth,
   submitGeneratorAssertion,
+  getGeneratorAssertionFromTransaction,
+  parseGeneratorAssertionFromTransaction,
 } from "./generators/index";
 export type {
+  Generator,
   GetGeneratorParameters,
-  ListGeneratorsParameters,
-  ListGeneratorsResult,
-  RegisteredGenerator,
-  RegisteredGeneratorDetailsResult,
   GetGeneratorHealthParameters,
   GeneratorHealthData,
   GeneratorHealthP2P,
   GeneratorHealthPeer,
-  GeneratorAssertion,
   GetAssertionParameters,
-  GetAssertionResult,
+  ListGeneratorsParameters,
+  ListGeneratorsResult,
   SubmitGeneratorAssertionParameters,
   SubmitGeneratorAssertionResult,
+  ParsedGeneratorAssertionMessage,
 } from "./generators/index";
 export { listValidators } from "./validators/index";
 export type {

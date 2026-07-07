@@ -1,24 +1,41 @@
+"use client";
+
 import { useCallback, useMemo, useState } from "react";
 import { GeneratorAssertionFormData } from "../util/form-data";
 import { sanitizeString } from "@/shared/lib";
+import {
+  getAssertionFormPrefilledFields,
+  getGeneratorAssertionFormPrefill,
+  type GeneratorAssertionFormPrefill,
+} from "@/features/registration-form";
 
-function createInitialValues(): GeneratorAssertionFormData {
+function createInitialValues(
+  urlPrefill: GeneratorAssertionFormPrefill
+): GeneratorAssertionFormData {
   return {
-    consensusPubKey: "",
-    sourceChain: "",
+    validatorPublicKey: urlPrefill.validatorPublicKey ?? "",
+    assertionAuthority: urlPrefill.assertionAuthority ?? "",
+    sourceChain: urlPrefill.sourceChain ?? "",
   };
 }
 
 export function useAssertionForm() {
+  const urlPrefill = useMemo(() => getGeneratorAssertionFormPrefill(), []);
+  const prefilledFields = useMemo(
+    () => getAssertionFormPrefilledFields(urlPrefill),
+    [urlPrefill]
+  );
+
   const [assertionFormData, setAssertionFormData] =
-    useState<GeneratorAssertionFormData>(createInitialValues());
+    useState<GeneratorAssertionFormData>(() => createInitialValues(urlPrefill));
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, string | undefined>
   >({});
 
   const isValid = useMemo(() => {
     return (
-      assertionFormData.consensusPubKey.trim().length > 0 &&
+      assertionFormData.validatorPublicKey.trim().length > 0 &&
+      assertionFormData.assertionAuthority.trim().length > 0 &&
       Boolean(assertionFormData.sourceChain?.trim())
     );
   }, [assertionFormData]);
@@ -26,20 +43,16 @@ export function useAssertionForm() {
   const handleInputChange = useCallback((field: string, value: string) => {
     const sanitizedValue = sanitizeString(value);
 
-    // Clear previous error for this field when user starts typing
     setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
 
-    setAssertionFormData((prev) => {
-      const updatedData = { ...prev, [field]: sanitizedValue };
-
-      return updatedData;
-    });
+    setAssertionFormData((prev) => ({ ...prev, [field]: sanitizedValue }));
   }, []);
 
   return {
     assertionFormData,
     handleInputChange,
     fieldErrors,
+    prefilledFields,
     isValid,
   };
 }

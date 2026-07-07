@@ -1,18 +1,29 @@
-import type { Hex } from "viem";
 import type { GetHealthParameters, HealthLiveData, HealthP2P, HealthPeer } from "../internal/health";
 
 /** A registered ShinzoHub generator returned by the Cosmos REST gateway. */
-export interface RegisteredGenerator {
-  /** Shinzo bech32 generator address. */
-  address: string;
-  /** Generator DID key identifier. */
-  did: string;
-  /** libp2p multiaddr connection string for the generator node. */
-  connectionString: string;
+export interface Generator {
   /** Source chain name the generator validates. */
   sourceChain: string;
   /** Source chain ID the generator validates. */
   sourceChainId: string;
+  /** Validator public key for the generator. */
+  validatorPublicKey: string;
+  /** Assertion authority for the generator. */
+  assertionAuthority: string;
+  /** Nonce for the generator. */
+  nonce: string;
+  /** Chain-specific payload for the generator. */
+  chainSpecific: string;
+  /** Operator Shinzo bech32 address for the generator. */
+  operatorAddress: string;
+  /** Payout Shinzo bech32 address for the generator. */
+  payoutAddress: string;
+  /** Registered status of the generator. */
+  registered: boolean;
+  /** DID key identifier for the generator. */
+  did: string;
+  /** Connection string for the generator. */
+  connectionString: string;
 }
 
 /** Pagination and endpoint options for `listGenerators`. */
@@ -34,7 +45,7 @@ export interface ListGeneratorsParameters {
 /** Page of registered ShinzoHub generators returned by `listGenerators`. */
 export interface ListGeneratorsResult {
   /** Registered generators returned for this page. */
-  generators: readonly RegisteredGenerator[];
+  generators: readonly Generator[];
   /** Pagination data returned by the ShinzoHub REST gateway. */
   pagination: {
     /** Opaque key to pass as `pageKey` for the next page, or `null` when absent. */
@@ -52,43 +63,19 @@ export interface GetGeneratorParameters {
   cosmosRestUrl?: string;
 }
 
-  /** Response from fetching one registered generator by Shinzo bech32 address. */
-export interface RegisteredGeneratorDetailsResult {
-  /** The registered generator. */
-  generator: RegisteredGenerator;
-}
-
 export type GetGeneratorHealthParameters = GetHealthParameters;
 export type GeneratorHealthData = HealthLiveData;
 export type GeneratorHealthP2P = HealthP2P;
 export type GeneratorHealthPeer = HealthPeer;
 
-/** Generator assertion returned by the ShinzoHub Cosmos REST gateway. */
-export interface GeneratorAssertion {
-  /** Unique assertion identifier. */
-  assertionId: string;
-  /** Consensus public key associated with the assertion. */
-  consensusPubKey: string;
-  /** Shinzo bech32 delegate address the assertion belongs to. */
-  delegateAddress: string;
-  /** Source chain name the generator validates. */
-  sourceChain: string;
+/** Options for fetching generator assertions by validator public key. */
+export interface GetAssertionParameters {
+  /** Validator public key to look up assertions for. */
+  validatorPublicKey: string;
   /** Source chain ID the generator validates. */
   sourceChainId: string;
-}
-
-/** Options for fetching generator assertions by delegate address. */
-export interface GetAssertionParameters {
-  /** Shinzo bech32 delegate address to look up assertions for. */
-  address: string;
   /** Override the chain's configured Cosmos REST endpoint for this request. */
   cosmosRestUrl?: string;
-}
-
-/** Assertions for one delegate address returned by `getAssertion`. */
-export interface GetAssertionResult {
-  /** Matching assertions for the requested delegate address. */
-  assertions: readonly GeneratorAssertion[];
 }
 
 /** Parameters for signing and broadcasting a generator assertion. */
@@ -97,20 +84,24 @@ export type SubmitGeneratorAssertionParameters = {
   privateKey: string;
   /** CometBFT RPC endpoint used for account queries and broadcast. */
   rpcEndpoint: string;
-  /** Consensus public key for the generator. */
-  consensusPubKey: string;
-  /** Operator / delegate wallet address (Shinzo bech32 or EVM hex). */
-  delegateAddress: string;
+  /** Cosmos chain ID. Defaults to the ID from the Comet RPC `/status` endpoint. */
+  chainId?: string;
+  /** Validator public key for the generator. */
+  validatorPublicKey: string;
   /** Source chain name (e.g. `ethereum`). */
   sourceChain: string;
   /** Source chain numeric id. */
   sourceChainId: number;
-  /** Unique assertion identifier. */
-  assertionId: string;
-  /** EIP-191 digest bytes or hex. */
-  delegateDigest: Uint8Array | Hex;
-  /** Delegate signature bytes or hex. */
-  delegateSignature: Uint8Array | Hex;
+  /** Withdrawal address for the source chain. */
+  assertionAuthority: string;
+  /** Nonce for the assertion. */
+  nonce: string | number;
+  /** Optional chain-specific payload (empty string when unused). */
+  chainSpecific: string;
+  /** Operator Shinzo bech32 address for the generator. */
+  operatorAddress: string;
+  /** Payout Shinzo bech32 address for the generator. */
+  payoutAddress: string;
 };
 
 /** Result of broadcasting a generator assertion transaction. */

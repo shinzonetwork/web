@@ -112,7 +112,7 @@ export async function GET(
           : null,
         generator: generator
           ? {
-              address: generator.address,
+              address: generator.operatorAddress,
               did: generator.did,
               sourceChain: generator.sourceChain,
               sourceChainId: generator.sourceChainId,

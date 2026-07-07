@@ -12,7 +12,10 @@ export const STUDIO_VIEW_BASE_URL = 'https://studio.shinzo.network/views';
 export function getRpcUrlForChainPathSegment(segment: ChainPathSegment): string {
   switch (segment) {
     case 'shinzohub':
-      return shinzoHubDevelop.rpcUrls.default.http[0];
+      return (
+        process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
+        shinzoHubDevelop.rpcUrls.default.http[0]
+      );
     case 'ethereum':
       return process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL ?? 'https://ethereum-rpc.publicnode.com';
     default:

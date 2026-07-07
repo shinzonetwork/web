@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
       if (generator) {
         results.push({
           kind: "generator",
-          address: generator.address,
+          address: generator.operatorAddress,
           did: generator.did,
           sourceChain: generator.sourceChain,
           sourceChainId: generator.sourceChainId.toString(),

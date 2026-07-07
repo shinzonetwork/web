@@ -1,15 +1,22 @@
 import { NextRequest } from "next/server";
-import { submitGeneratorAssertion } from "@shinzo/shinzohub";
-import { getShinzohubQueryContext, getSourceChainMap } from "@/shared/lib";
+import {
+  getGeneratorAssertion,
+  submitGeneratorAssertion,
+} from "@shinzo/shinzohub";
+import {
+  getShinzohubQueryContext,
+  getSourceChainMap,
+  validatorPublicKeyToBase64,
+} from "@/shared/lib";
 
 type AssertRequestBody = {
-  consensusPubKey?: string;
-  delegateAddress?: string;
-  sourceChain?: string;
-  sourceChainId?: number;
-  assertionId?: string;
-  delegateDigest?: string;
-  delegateSignature?: string;
+  validatorPublicKey: string;
+  assertionAuthority: string;
+  sourceChain: string;
+  sourceChainId: number;
+  chainSpecific?: string;
+  operatorAddress: string;
+  payoutAddress: string;
 };
 
 function readRequiredString(
@@ -26,27 +33,35 @@ function readRequiredString(
   return trimmed;
 }
 
-function readRequiredHex(
-  value: string | undefined,
-  field: string
-): `0x${string}` | Response {
-  const trimmed = value?.trim() ?? "";
-  if (!trimmed) {
-    return Response.json(
-      { error: `Missing required field: ${field}` },
-      { status: 400 }
-    );
+function parseOnChainNonce(value: string): number {
+  const parsed = Number.parseInt(value.trim(), 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`Invalid on-chain nonce: ${value}`);
   }
-  const hex = (
-    trimmed.startsWith("0x") ? trimmed : `0x${trimmed}`
-  ) as `0x${string}`;
-  if (!/^0x[0-9a-fA-F]+$/.test(hex) || hex.length % 2 !== 0) {
-    return Response.json(
-      { error: `Invalid hex field: ${field}` },
-      { status: 400 }
-    );
+  return parsed;
+}
+
+async function resolveNextAssertionNonce(
+  client: ReturnType<typeof getShinzohubQueryContext>["client"],
+  parameters: {
+    validatorPublicKey: string;
+    sourceChainId: number;
+    cosmosRestUrl: string;
   }
-  return hex;
+): Promise<number> {
+  const existing = await getGeneratorAssertion(client, {
+    validatorPublicKey: validatorPublicKeyToBase64(
+      parameters.validatorPublicKey
+    ),
+    sourceChainId: String(parameters.sourceChainId),
+    cosmosRestUrl: parameters.cosmosRestUrl,
+  });
+
+  if (!existing) {
+    return 1;
+  }
+
+  return parseOnChainNonce(existing.nonce) + 1;
 }
 
 export async function POST(req: NextRequest) {
@@ -57,32 +72,29 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const consensusPubKey = readRequiredString(
-    body.consensusPubKey,
-    "consensusPubKey"
+  const validatorPublicKey = readRequiredString(
+    body.validatorPublicKey,
+    "validatorPublicKey"
   );
-  if (consensusPubKey instanceof Response) return consensusPubKey;
+  if (validatorPublicKey instanceof Response) return validatorPublicKey;
 
-  const delegateAddress = readRequiredString(
-    body.delegateAddress,
-    "delegateAddress"
+  const assertionAuthority = readRequiredString(
+    body.assertionAuthority,
+    "assertionAuthority"
   );
-  if (delegateAddress instanceof Response) return delegateAddress;
+  if (assertionAuthority instanceof Response) return assertionAuthority;
 
   const sourceChain = readRequiredString(body.sourceChain, "sourceChain");
   if (sourceChain instanceof Response) return sourceChain;
 
-  const assertionId = readRequiredString(body.assertionId, "assertionId");
-  if (assertionId instanceof Response) return assertionId;
-
-  const delegateDigest = readRequiredHex(body.delegateDigest, "delegateDigest");
-  if (delegateDigest instanceof Response) return delegateDigest;
-
-  const delegateSignature = readRequiredHex(
-    body.delegateSignature,
-    "delegateSignature"
+  const operatorAddress = readRequiredString(
+    body.operatorAddress,
+    "operatorAddress"
   );
-  if (delegateSignature instanceof Response) return delegateSignature;
+  if (operatorAddress instanceof Response) return operatorAddress;
+
+  const payoutAddress = readRequiredString(body.payoutAddress, "payoutAddress");
+  if (payoutAddress instanceof Response) return payoutAddress;
 
   const sourceChainId =
     typeof body.sourceChainId === "number"
@@ -108,21 +120,27 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { cometRpcUrl } = getShinzohubQueryContext();
+  const { client, cometRpcUrl, cosmosRestUrl } = getShinzohubQueryContext();
   const rpcEndpoint =
     process.env.INDEXER_ASSERTION_RPC_ENDPOINT?.trim() || cometRpcUrl;
 
   try {
+    const nonce = await resolveNextAssertionNonce(client, {
+      validatorPublicKey,
+      sourceChainId,
+      cosmosRestUrl,
+    });
     const result = await submitGeneratorAssertion({
       privateKey,
       rpcEndpoint,
-      consensusPubKey,
-      delegateAddress,
+      validatorPublicKey,
+      assertionAuthority,
       sourceChain,
       sourceChainId,
-      assertionId,
-      delegateDigest,
-      delegateSignature,
+      nonce,
+      chainSpecific: body.chainSpecific?.trim() ?? "",
+      operatorAddress,
+      payoutAddress,
     });
 
     if (result.code !== 0) {
@@ -141,6 +159,9 @@ export async function POST(req: NextRequest) {
       hash: result.hash,
       code: result.code,
       log: result.log,
+      validatorPublicKey: validatorPublicKey,
+      sourceChain: sourceChain,
+      sourceChainId: sourceChainId,
     });
   } catch (err) {
     console.error("Failed to submit generator assertion:", err);

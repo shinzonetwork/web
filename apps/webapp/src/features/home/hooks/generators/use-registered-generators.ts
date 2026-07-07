@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import type { RegisteredGeneratorsListResponse } from "@/shared/lib";
+import type { GeneratorsListResponse } from "@/shared/lib";
 import { type PageParams } from "@shinzo/ui/pagination";
 import { DEFAULT_PAGE_PARAMS } from "../../../../shared/lib/shinzohub/health";
 
@@ -13,10 +13,7 @@ type UseRegisteredGeneratorsOptions = {
 export async function fetchRegisteredGenerators({
   page,
   limit,
-}: Pick<
-  PageParams,
-  "page" | "limit"
->): Promise<RegisteredGeneratorsListResponse> {
+}: Pick<PageParams, "page" | "limit">): Promise<GeneratorsListResponse> {
   const searchParams = new URLSearchParams({
     page: String(page),
     limit: String(limit),
@@ -29,7 +26,7 @@ export async function fetchRegisteredGenerators({
     throw new Error("Failed to fetch generators");
   }
 
-  return response.json() as Promise<RegisteredGeneratorsListResponse>;
+  return response.json() as Promise<GeneratorsListResponse>;
 }
 
 export function registeredGeneratorsQueryKey(page: number, limit: number) {

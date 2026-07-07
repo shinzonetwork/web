@@ -1,41 +1,64 @@
 "use client";
 
-import { SHINZO_PREFIX } from "@/shared/lib";
-import type { GeneratorAssertionsResponse } from "@/shared/lib";
-import { toBech32 } from "@cosmjs/encoding";
+import { Generator } from "@/shared/lib";
 import { useQuery } from "@tanstack/react-query";
-import { Hex, hexToBytes } from "viem";
-import { useAccount } from "wagmi";
 
-async function fetchGeneratorAssertion(address: string): Promise<boolean> {
+export async function fetchGeneratorAssertionVerified(
+  validatorPublicKey: string,
+  sourceChainId: string
+): Promise<boolean> {
   const response = await fetch(
-    `api/shinzohub/generators/verify-assertion?address=${encodeURIComponent(address)}`
+    `/api/shinzohub/generators/verify-assertion?validatorPublicKey=${encodeURIComponent(validatorPublicKey)}&sourceChainId=${encodeURIComponent(sourceChainId)}`
   );
 
   if (!response.ok) {
     throw new Error("Failed to verify generator assertion");
   }
 
-  const data = (await response.json()) as GeneratorAssertionsResponse;
+  const data = (await response.json()) as Generator | null;
 
-  return data.assertions.length > 0;
+  return data != null;
 }
 
-export function useVerifyAssertion(intervalMs = 30000) {
-  const { address } = useAccount();
+export async function waitForGeneratorAssertionVerification(
+  validatorPublicKey: string,
+  sourceChainId: string,
+  options: { maxAttempts?: number; intervalMs?: number } = {}
+): Promise<boolean> {
+  const { maxAttempts = 30, intervalMs = 2000 } = options;
 
-  const shinzoAddress = address
-    ? address.startsWith(SHINZO_PREFIX)
-      ? address
-      : toBech32(SHINZO_PREFIX, hexToBytes(address as Hex))
-    : undefined;
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const verified = await fetchGeneratorAssertionVerified(
+      validatorPublicKey,
+      sourceChainId
+    );
+    if (verified) {
+      return true;
+    }
 
+    if (attempt < maxAttempts - 1) {
+      await new Promise((resolve) => setTimeout(resolve, intervalMs));
+    }
+  }
+
+  return false;
+}
+
+export function useVerifyAssertion(
+  validatorPublicKey: string,
+  sourceChainId: string,
+  intervalMs = 30000
+) {
   return useQuery({
-    queryKey: ["generator-assertion-verification", shinzoAddress],
-    queryFn: () => fetchGeneratorAssertion(shinzoAddress as string),
-    // Stop polling once verified so the registration form is not churned.
+    queryKey: [
+      "generator-assertion-verification",
+      validatorPublicKey,
+      sourceChainId,
+    ],
+    queryFn: () =>
+      fetchGeneratorAssertionVerified(validatorPublicKey, sourceChainId),
     refetchInterval: (query) => (query.state.data ? false : intervalMs),
     refetchIntervalInBackground: true,
-    enabled: Boolean(shinzoAddress),
+    enabled: Boolean(validatorPublicKey && sourceChainId),
   });
 }

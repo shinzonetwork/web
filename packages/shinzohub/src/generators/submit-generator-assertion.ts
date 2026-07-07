@@ -15,7 +15,6 @@ import * as _m0 from "protobufjs/minimal";
 import { bytesToHex, concat, type Hex, hexToBytes, keccak256 } from "viem";
 import { privateKeyToAccount, sign } from "viem/accounts";
 import { hexToShinzoAddress, normalizeShinzoAddress } from "../addresses/index";
-import { shinzoHubDevelop } from "../chains/index";
 import type {
   SubmitGeneratorAssertionParameters,
   SubmitGeneratorAssertionResult,
@@ -33,13 +32,14 @@ const MSG_TYPE_URL = "/shinzonetwork.indexer.v1.MsgIndexerAssertion";
 
 type MsgIndexerAssertion = {
   signer: string;
-  consensusPubKey: string;
-  delegateAddress: string;
   sourceChain: string;
   sourceChainId: number;
-  assertionId: string;
-  delegateDigest: Uint8Array;
-  delegateSignature: Uint8Array;
+  validatorPubkey: Uint8Array;
+  assertionAuthority: Uint8Array;
+  nonce: number;
+  chainSpecific: Uint8Array;
+  operatorAddress: string;
+  payoutAddress: string;
 };
 
 const MsgIndexerAssertion = {
@@ -48,42 +48,48 @@ const MsgIndexerAssertion = {
     writer: _m0.Writer = _m0.Writer.create(),
   ): _m0.Writer {
     if (message.signer !== "") writer.uint32(10).string(message.signer);
-    if (message.consensusPubKey !== "") {
-      writer.uint32(18).string(message.consensusPubKey);
-    }
-    if (message.delegateAddress !== "") {
-      writer.uint32(26).string(message.delegateAddress);
-    }
     if (message.sourceChain !== "") {
-      writer.uint32(34).string(message.sourceChain);
+      writer.uint32(18).string(message.sourceChain);
     }
     if (message.sourceChainId !== 0) {
-      writer.uint32(40).uint64(message.sourceChainId);
+      writer.uint32(24).uint64(message.sourceChainId);
     }
-    if (message.assertionId !== "") {
-      writer.uint32(50).string(message.assertionId);
+    if (message.validatorPubkey.length > 0) {
+      writer.uint32(34).bytes(message.validatorPubkey);
     }
-    if (message.delegateDigest.length !== 0) {
-      writer.uint32(58).bytes(message.delegateDigest);
+    if (message.assertionAuthority.length > 0) {
+      writer.uint32(42).bytes(message.assertionAuthority);
     }
-    if (message.delegateSignature.length !== 0) {
-      writer.uint32(66).bytes(message.delegateSignature);
+    if (message.nonce !== 0) writer.uint32(48).uint64(message.nonce);
+    if (message.chainSpecific.length > 0) {
+      writer.uint32(58).bytes(message.chainSpecific);
+    }
+    if (message.operatorAddress !== "") {
+      writer.uint32(66).string(message.operatorAddress);
+    }
+    if (message.payoutAddress !== "") {
+      writer.uint32(74).string(message.payoutAddress);
     }
     return writer;
   },
   fromPartial(object: MsgIndexerAssertion): MsgIndexerAssertion {
     return {
       signer: object.signer ?? "",
-      consensusPubKey: object.consensusPubKey ?? "",
-      delegateAddress: object.delegateAddress ?? "",
       sourceChain: object.sourceChain ?? "",
       sourceChainId: object.sourceChainId ?? 0,
-      assertionId: object.assertionId ?? "",
-      delegateDigest: object.delegateDigest ?? new Uint8Array(0),
-      delegateSignature: object.delegateSignature ?? new Uint8Array(0),
+      validatorPubkey: object.validatorPubkey ?? new Uint8Array(0),
+      assertionAuthority: object.assertionAuthority ?? new Uint8Array(0),
+      nonce: object.nonce ?? 0,
+      chainSpecific: object.chainSpecific ?? new Uint8Array(0),
+      operatorAddress: object.operatorAddress ?? "",
+      payoutAddress: object.payoutAddress ?? "",
     };
   },
 };
+
+function utf8Bytes(value: string): Uint8Array {
+  return new TextEncoder().encode(value);
+}
 
 function normalizePrivateKey(privateKey: string): `0x${string}` {
   const hex = privateKey.trim().replace(/^0x/i, "");
@@ -102,13 +108,41 @@ function base64ToBytes(base64: string): Uint8Array {
   return new Uint8Array(Buffer.from(base64, "base64"));
 }
 
+function normalizeRpcEndpoint(rpc: string): string {
+  // Fix common typo: http://host/:26657 -> http://host:26657
+  return rpc.trim().replace(/\/:(\d+)\/?$/, ":$1").replace(/\/+$/, "");
+}
+
+async function getCometChainId(rpc: string): Promise<string> {
+  const response = await fetch(`${normalizeRpcEndpoint(rpc)}/status`);
+  if (!response.ok) {
+    throw new Error(`Comet status query failed with status ${response.status}.`);
+  }
+
+  const json = (await response.json()) as {
+    result?: { node_info?: { network?: string } };
+    error?: { message?: string };
+  };
+
+  if (json.error?.message) {
+    throw new Error(`Comet status query error: ${json.error.message}`);
+  }
+
+  const chainId = json.result?.node_info?.network?.trim();
+  if (!chainId) {
+    throw new Error("Comet status query did not return a chain ID.");
+  }
+
+  return chainId;
+}
+
 async function abciQuery(
   rpc: string,
   path: string,
   data: Uint8Array,
 ): Promise<Uint8Array> {
   const response = await fetch(
-    `${rpc.replace(/\/+$/, "")}/abci_query?path=%22${encodeURIComponent(path)}%22&data=${bytesToHex(data)}`,
+    `${normalizeRpcEndpoint(rpc)}/abci_query?path=%22${encodeURIComponent(path)}%22&data=${bytesToHex(data)}`,
   );
   if (!response.ok) {
     throw new Error(`ABCI query failed with status ${response.status}.`);
@@ -169,7 +203,7 @@ async function broadcast(
   rpc: string,
   txBytes: Uint8Array,
 ): Promise<SubmitGeneratorAssertionResult> {
-  const response = await fetch(rpc.replace(/\/+$/, ""), {
+  const response = await fetch(normalizeRpcEndpoint(rpc), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -182,7 +216,6 @@ async function broadcast(
   if (!response.ok) {
     throw new Error(`Broadcast failed with status ${response.status}.`);
   }
-
   const json = (await response.json()) as {
     result?: { hash: string; code: number; log: string };
     error?: { message?: string };
@@ -213,13 +246,14 @@ export async function submitGeneratorAssertion(
   const {
     privateKey,
     rpcEndpoint,
-    consensusPubKey,
-    delegateAddress,
+    validatorPublicKey,
+    assertionAuthority,
     sourceChain,
     sourceChainId,
-    assertionId,
-    delegateDigest,
-    delegateSignature,
+    nonce,
+    chainSpecific,
+    operatorAddress,
+    payoutAddress,
   } = parameters;
 
   const normalizedPrivateKey = normalizePrivateKey(privateKey);
@@ -228,32 +262,34 @@ export async function submitGeneratorAssertion(
     hexToBytes(account.publicKey),
   );
   const signerAddress = hexToShinzoAddress(account.address);
+  const normalizedRpc = normalizeRpcEndpoint(rpcEndpoint);
+  const chainId =await getCometChainId(normalizedRpc);
   const { accountNumber, sequence } = await getAccountSequence(
-    rpcEndpoint,
+    normalizedRpc,
     signerAddress,
   );
   const pubkey = {
     typeUrl: PUBKEY_TYPE,
     value: PubKey.encode({ key: compressedPubkey }).finish(),
   };
-  const shinzoDelegateAddress = normalizeShinzoAddress(delegateAddress);
 
-  const digestBytes = toBytes(delegateDigest);
-  const signatureBytes = toBytes(delegateSignature);
-  // personal_sign returns 65 bytes (r||s||v). Normalize v to 0/1 when present.
-  if (signatureBytes.length === 65 && signatureBytes[64]! >= 27) {
-    signatureBytes[64] = signatureBytes[64]! - 27;
+  const normalizedNonce =
+    typeof nonce === "number" ? nonce : Number.parseInt(String(nonce).trim(), 10);
+  if (!Number.isFinite(normalizedNonce) || normalizedNonce <= 0) {
+    throw new Error(`Invalid nonce: ${nonce}`);
   }
-
   const msgValue = MsgIndexerAssertion.fromPartial({
     signer: signerAddress,
-    consensusPubKey: consensusPubKey.trim(),
-    delegateAddress: shinzoDelegateAddress,
     sourceChain: sourceChain.trim(),
     sourceChainId,
-    assertionId: assertionId.trim(),
-    delegateDigest: digestBytes,
-    delegateSignature: signatureBytes,
+    validatorPubkey: utf8Bytes(validatorPublicKey.trim()),
+    assertionAuthority: utf8Bytes(assertionAuthority.trim()),
+    nonce: normalizedNonce,
+    chainSpecific: chainSpecific.trim()
+      ? utf8Bytes(chainSpecific.trim())
+      : new Uint8Array(0),
+    operatorAddress: normalizeShinzoAddress(operatorAddress),
+    payoutAddress: normalizeShinzoAddress(payoutAddress),
   });
 
   const txBodyBytes = TxBody.encode(
@@ -278,7 +314,7 @@ export async function submitGeneratorAssertion(
   const signDoc = makeSignDoc(
     txBodyBytes,
     authInfoBytes,
-    String(shinzoHubDevelop.id),
+    chainId,
     accountNumber,
   );
   const { r, s } = await sign({
@@ -295,5 +331,5 @@ export async function submitGeneratorAssertion(
     }),
   ).finish();
 
-  return broadcast(rpcEndpoint, txRaw);
+  return broadcast(normalizedRpc, txRaw);
 }

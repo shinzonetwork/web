@@ -10,6 +10,7 @@ import { LoaderCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
 import {
   ipFromConnectionString,
+  isGeneratorHealthPollable,
   type HealthStatus,
   formatUptime,
   formatTime,
@@ -20,24 +21,28 @@ import { useGeneratorHealthCheck } from "../hook/use-generator-health-check";
 export type GeneratorCardOptions = { address: string };
 
 export const GeneratorCard = (options: GeneratorCardOptions) => {
-  const { data: generatorDetails, isLoading } = useGeneratorDetails(options.address);
+  const { data: generator, isLoading } = useGeneratorDetails(options.address);
 
   const generatorEntry = useMemo(() => {
-    if (!generatorDetails?.generator) return null;
+    if (!generator) return null;
     return {
-      address: generatorDetails.generator.address,
-      ip: ipFromConnectionString(generatorDetails.generator.connectionString),
+      address: generator.operatorAddress,
+      ip: ipFromConnectionString(generator.connectionString),
     };
-  }, [generatorDetails]);
+  }, [generator]);
 
   const { data: healthResult } = useGeneratorHealthCheck(generatorEntry, {
     refetchIntervalMs: 30_000,
+    pollable: generator ? isGeneratorHealthPollable(generator) : false,
   });
   const healthData = healthResult?.data ?? null;
 
-  const status: HealthStatus = healthData?.status ?? "unknown";
+  const pollable = generator ? isGeneratorHealthPollable(generator) : false;
+  const status: HealthStatus = pollable
+    ? (healthData?.status ?? "unknown")
+    : "unknown";
 
-  if (!isLoading && !generatorDetails) {
+  if (!isLoading && !generator) {
     return (
       <div className="flex justify-center items-center h-full">
         <Typography variant="md" color="accent">
@@ -47,14 +52,16 @@ export const GeneratorCard = (options: GeneratorCardOptions) => {
     );
   }
 
-  const generator = generatorDetails?.generator;
-
   return (
     <>
       <div className="col-span-3 h-12 w-full border-y border-border" />
       <DataList>
         <DataItem title="Status" value={status} loading={isLoading}>
-          {status !== "unknown" ? (
+          {!pollable ? (
+            <Typography variant="md" color="secondary">
+              —
+            </Typography>
+          ) : status !== "unknown" ? (
             <Badge
               variant="default"
               className={cn(
@@ -70,9 +77,9 @@ export const GeneratorCard = (options: GeneratorCardOptions) => {
             <LoaderCircle className="size-4 animate-spin text-muted-foreground" />
           )}
         </DataItem>
-        <DataItem title="Address" value={generator?.address} loading={isLoading}>
+        <DataItem title="Address" value={generator?.operatorAddress} loading={isLoading}>
           <ShinzohubAddressLink
-            address={generator?.address}
+            address={generator?.operatorAddress}
             copyable
             fallback="—"
             className="break-all font-mono"
@@ -97,13 +104,13 @@ export const GeneratorCard = (options: GeneratorCardOptions) => {
               ? formatUptime(healthData.uptime_seconds)
               : "—"
           }
-          loading={isLoading || status === "unknown"}
+          loading={isLoading || (pollable && status === "unknown")}
         />
 
         <DataItem
           title="Current block"
           value={healthData?.current_block === 0 ? "—" : healthData?.current_block}
-          loading={isLoading || status === "unknown"}
+          loading={isLoading || (pollable && status === "unknown")}
         />
 
         <DataItem
@@ -113,7 +120,7 @@ export const GeneratorCard = (options: GeneratorCardOptions) => {
               ? formatTime(healthData.last_processed)
               : undefined
           }
-          loading={isLoading || status === "unknown"}
+          loading={isLoading || (pollable && status === "unknown")}
         />
 
         <DataItem
