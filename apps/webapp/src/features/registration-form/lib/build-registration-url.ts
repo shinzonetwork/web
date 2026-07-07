@@ -25,6 +25,9 @@ function appendRegistrationPrefillParams(
   if (prefill.connectionString) {
     params.set("connectionString", prefill.connectionString);
   }
+  if (prefill.endpointAddress) {
+    params.set("endpointAddress", prefill.endpointAddress);
+  }
 }
 
 export function buildGeneratorAssertionUrl(

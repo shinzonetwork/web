@@ -42,6 +42,7 @@ export type RegistrationPrefillV2Params = {
   defraPublicKey?: string;
   defraPublicKeySignedMessage?: string;
   connectionString?: string;
+  endpointAddress?: string;
 };
 
 function toHexOrUndefined(value: string | null): Hex | undefined {
@@ -138,6 +139,7 @@ export function getRegistrationPrefillV2(
       searchParams.get("defraPublicKeySignedMessage")
     ),
     connectionString: readOptionalQueryParam(searchParams, "connectionString"),
+    endpointAddress: readOptionalQueryParam(searchParams, "endpointAddress"),
   };
 }
 
@@ -152,6 +154,7 @@ export function getRegistrationPrefillV2Params(
     defraPublicKey: prefill.defraPublicKey,
     defraPublicKeySignedMessage: prefill.defraPublicKeySignedMessage,
     connectionString: prefill.connectionString,
+    endpointAddress: prefill.endpointAddress,
   };
 }
 
