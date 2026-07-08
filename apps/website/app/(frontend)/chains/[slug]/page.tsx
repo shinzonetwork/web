@@ -1,19 +1,17 @@
 import BlockContainer from "@/components/block-container";
 import BlockCta from "@/components/block-cta";
 import BlockSpacing from "@/components/block-spacing";
-import { DialogIndexer } from "@/components/dialog-indexer/dialog-indexer";
+import { DialogGeneratorInterest } from "@/components/dialog-generator/dialog-generator";
 import { DialogSuggest } from "@/components/dialog-suggest";
 import { ImageMedia } from "@/components/image-media";
+import { Button } from "@/components/ui/button";
 import { isPopulated } from "@/lib/utils";
-import { getServerPage } from "@shinzo/ui/pagination";
 import configPromise from "@payload-config";
 import { Info } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPayload } from "payload";
-import { Chain } from '@/payload/payload-types';
-import { IndexerSpots, type ShortClaim } from "./indexer-spots";
 
 export const dynamic = "force-dynamic";
 
@@ -33,18 +31,11 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
-  searchParams: searchParamsPromise,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string; limit?: string }>;
 }) {
   const { slug } = await params;
-  const searchParams = await searchParamsPromise;
-  const { page, limit } = getServerPage({
-    page: searchParams.page ?? '1',
-    limit: searchParams.limit ?? '20',
-  });
-  const chain = await queryChainBySlug(slug, { page, limit });
+  const chain = await queryChainBySlug(slug);
 
   if (!chain) {
     notFound();
@@ -96,23 +87,17 @@ export default async function Page({
                     {chain.token && (
                       <tr>
                         <td>Token</td>
-                        <td className="font-mono opacity-70">
-                          {chain.token}
-                        </td>
+                        <td className="font-mono opacity-70">{chain.token}</td>
                       </tr>
                     )}
-                    {chain.claimedSpots > 0 && (
+                    {!chain.isSupported && (
                       <tr>
-                        <td>Claimed</td>
+                        <td>Upvotes</td>
                         <td className="font-mono opacity-70">
-                          {chain.claimedSpots}/{chain.spotsLimit}
+                          {chain.upvotes || "0"}
                         </td>
                       </tr>
                     )}
-                    <tr>
-                      <td>Upvotes</td>
-                      <td className="font-mono opacity-70">{chain.upvotes || '0'}</td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -120,27 +105,33 @@ export default async function Page({
 
             {chain.isSupported && (
               <div className="col-span-full border-t border-szo-border-light py-5 ">
-                <h2 className="text-h4 mb-5">/ Index this Chain!</h2>
+                <h2 className="text-h4 mb-5">/ Become a Generator</h2>
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Generator spots are limited. Claim yours now to secure
-                      your position in the network — early generators shape the protocol and
-                      earn priority access to rewards. Once all spots are taken, the window closes.
+                      Generators power the network's read layer. Run a
+                      lightweight client alongside your node to turn raw chain
+                      data into structured, queryable documents, and earn
+                      rewards for what you serve.
                     </p>
                   </div>
                   <div className="flex gap-x-2 lg:w-1/2">
                     <Info className="size-5 text-szo-primary shrink-0" />
                     <div className="richtext">
                       <p>
-                        Verify you&apos;re an active validator of this chain to
-                        become a generator of this network
+                        Help build the network's read layer and earn rewards for
+                        the data you serve.
                       </p>
-                      <DialogIndexer
-                        networkName={chain.name}
-                        chainId={chain.id}
-                        supported={chain.isSupported}
-                      />
+                      <div className="not-prose">
+                        <Button asChild>
+                          <Link
+                            href="https://docs.shinzo.network/generator/overview"
+                            target="_blank"
+                          >
+                            Become a Generator
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -149,25 +140,29 @@ export default async function Page({
 
             {!chain.isSupported && (
               <div className="col-span-full border-t border-szo-border-light py-5 ">
-                <h2 className="text-h4 mb-5">/ Validate this Chain?</h2>
+                <h2 className="text-h4 mb-5">/ More Chains Soon</h2>
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Generator spots are limited. Claim yours now to secure
-                      your position in the network — early generators shape the protocol and
-                      earn priority access to rewards. Once all spots are taken, the window closes.
+                      This chain isn't supported yet. Register your interest in
+                      becoming a generator for it, and we'll let you know when
+                      it goes live.
                     </p>
                   </div>
                   <div className="flex gap-x-2 lg:w-1/2">
                     <Info className="size-5 text-szo-primary shrink-0" />
                     <div className="richtext">
-                      <p>Claim your spot as a validator of this chain</p>
-                      <DialogIndexer
-                        networkName={chain.name}
-                        chainId={chain.id}
-                        supported={chain.isSupported ?? false}
-                        label="Claim a Spot"
-                      />
+                      <p>
+                        Register your interest in generating for this chain once
+                        it's supported.
+                      </p>
+                      <div className="not-prose">
+                        <DialogGeneratorInterest
+                          label="Register Interest"
+                          networkName={chain.name}
+                          chainId={chain.id}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -175,36 +170,8 @@ export default async function Page({
             )}
           </div>
 
-          {chain.claimedSpots > 0 && (
-            <div className="col-span-full pt-10">
-              <h2 className="text-h4 mb-8">/ Generator Spots</h2>
-              <div className="flex gap-10 lg:flex-row flex-col">
-                <p className="whitespace-nowrap text-px-14 text-text-secondary font-mono">Claimed: {chain.claimedSpots}/{chain.spotsLimit}</p>
-
-                <div className="relative grow h-4 w-full border-2 border-szo-primary">
-                  <div
-                    style={{ width: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
-                    className="bg-[url('/bg-pattern.png')] bg-no-repeat bg-[length:100%_100%] h-full"
-                  />
-                  <div
-                    style={{ left: `${chain.spotsLimit > 0 ? Math.floor((chain.claimedSpots / chain.spotsLimit) * 100) : 0}%`}}
-                    className="absolute -top-1.5 w-3 h-6 bg-white border-2 border-szo-primary"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
         </BlockContainer>
       </BlockSpacing>
-
-      {chain.claimedSpots > 0 && (
-        <IndexerSpots
-          claims={chain.claims ?? []}
-          totalClaims={chain.claimedSpots}
-          page={page}
-          limit={limit}
-        />
-      )}
 
       <BlockCta
         title="Don't see yours?"
@@ -228,7 +195,7 @@ export default async function Page({
   );
 }
 
-const queryChainBySlug = async (slug: string, pagination?: { page: number; limit: number }) => {
+const queryChainBySlug = async (slug: string) => {
   const payload = await getPayload({ config: configPromise });
 
   const result = await payload.find({
@@ -238,31 +205,7 @@ const queryChainBySlug = async (slug: string, pagination?: { page: number; limit
     where: {
       slug: { equals: slug },
     },
-    joins: {
-      claims: {
-        count: true,
-        limit: pagination?.limit ?? 20,
-        page: pagination?.page ?? 1,
-        where: {
-          verified: { equals: true },
-        }
-      }
-    },
   });
 
-  const document = result.docs[0];
-  return document ? {
-    ...document,
-    claimedSpots: document.claims?.totalDocs ?? 0,
-    // do not return the full claim objects for user privacy
-    claims: document.claims?.docs?.map((claim) => {
-      if (typeof claim === 'object' && claim !== null) {
-        return {
-          id: claim.id,
-          validatorAddress: claim.validatorAddress,
-        };
-      }
-      return null;
-    }),
-  } as (Chain & { claimedSpots: number; claims: ShortClaim[] }) : null;
+  return result.docs[0] ?? null;
 };

@@ -72,25 +72,21 @@ export interface Config {
     posts: Post;
     authors: Author;
     chains: Chain;
-    claims: Claim;
+    leads: Lead;
     suggestions: Suggestion;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {
-    chains: {
-      claims: 'claims';
-    };
-  };
+  collectionsJoins: {};
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     chains: ChainsSelect<false> | ChainsSelect<true>;
-    claims: ClaimsSelect<false> | ClaimsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
     suggestions: SuggestionsSelect<false> | SuggestionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -256,39 +252,31 @@ export interface Chain {
   generateSlug?: boolean | null;
   slug: string;
   /**
-   * Maximum number of claimable spots for generators
-   */
-  spotsLimit: number;
-  /**
    * Number of upvotes from connected wallets
    */
   upvotes?: number | null;
-  claims?: {
-    docs?: (number | Claim)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "claims".
+ * via the `definition` "leads".
  */
-export interface Claim {
+export interface Lead {
   id: number;
   network: number | Chain;
-  validatorAddress: string;
-  /**
-   * BLS public key of the validator (96 hex characters, 0x-prefixed)
-   */
-  validatorPublicKey: string;
-  /**
-   * Wallet signature proving ownership
-   */
-  signature: string;
+  name: string;
   email: string;
   domain?: string | null;
+  otherChains?: string | null;
+  /**
+   * Set automatically when the user confirms their email address.
+   */
+  confirmed?: boolean | null;
+  /**
+   * If checked, this lead will not be added to the Resend mailing list.
+   */
+  skipMailingList?: boolean | null;
   socialMedia?:
     | {
         platform?: string | null;
@@ -296,10 +284,6 @@ export interface Claim {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Whether this claim has been verified by an admin
-   */
-  verified?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -365,8 +349,8 @@ export interface PayloadLockedDocument {
         value: number | Chain;
       } | null)
     | ({
-        relationTo: 'claims';
-        value: number | Claim;
+        relationTo: 'leads';
+        value: number | Lead;
       } | null)
     | ({
         relationTo: 'suggestions';
@@ -500,23 +484,22 @@ export interface ChainsSelect<T extends boolean = true> {
   isSupported?: T;
   generateSlug?: T;
   slug?: T;
-  spotsLimit?: T;
   upvotes?: T;
-  claims?: T;
   updatedAt?: T;
   createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "claims_select".
+ * via the `definition` "leads_select".
  */
-export interface ClaimsSelect<T extends boolean = true> {
+export interface LeadsSelect<T extends boolean = true> {
   network?: T;
-  validatorAddress?: T;
-  validatorPublicKey?: T;
-  signature?: T;
+  name?: T;
   email?: T;
   domain?: T;
+  otherChains?: T;
+  confirmed?: T;
+  skipMailingList?: T;
   socialMedia?:
     | T
     | {
@@ -524,7 +507,6 @@ export interface ClaimsSelect<T extends boolean = true> {
         link?: T;
         id?: T;
       };
-  verified?: T;
   updatedAt?: T;
   createdAt?: T;
 }

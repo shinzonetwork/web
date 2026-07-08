@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Existing Chain Validators"
       title={<>Secure<span className="highlight">!</span> the Chain<span className="highlight">.</span> <br /> Serve<span className="highlight" >*</span > the Truth<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/generator/install" target="_blank">Install the Generator Client</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/generator/overview" target="_blank">Become a Generator</Link></Button>
       </>}
     />
 
@@ -46,7 +46,7 @@ export default function Page() {
           </ul>
           <p>Builders who need the freshest possible view of the chain can subscribe to you.<br />Hosts take responsibility for depth, history, and serving the data at scale.</p>
           <p>You stay focused on validation and truth production.<br />Your validator stays lightweight and fast.</p>
-          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/generators/overview" target="_blank">Generator Client Docs ↗</a></p>
+          <p><a className="text-inline-link font-mono font-bold" href="https://docs.shinzo.network/generator" target="_blank">Generator Client Docs ↗</a></p>
         </>
       }
     ]} />
@@ -129,10 +129,10 @@ export default function Page() {
     ]} />
 
     <BlockCta
-      title="Become a Generator"
-      content={<p>If you run validators or node infrastructure and want to become a generator in Shinzō’s trustless data read layer, we want to work with you.</p>}
+      title="Power the Network"
+      content={<p>Your node already sees everything. Become a Generator, and put that data to work: capturing raw chain data and powering Shinzō's trustless read layer.</p>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/generator/install" target="_blank">Install the Generator Client</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/generator/overview" target="_blank">Become a Generator</Link></Button>
       </>}
       footerText={<p className="text-raised">You already secure the chain. <br />Now help secure its truth.</p>}
     />

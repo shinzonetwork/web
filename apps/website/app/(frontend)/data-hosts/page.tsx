@@ -18,7 +18,7 @@ export default function Page() {
       eyebrow="For Data Hosts"
       title={<>Carry<span className="highlight">!</span> the Truth<span className="highlight">.</span> <br /> Power<span className="highlight" >*</span > the <span className="highlight">/</span>Read Layer<span className="highlight">/</span></>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/hosts/quickstart/" target="_blank">Install the Host Client</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/hosts" target="_blank">Learn How to Become a Host</Link></Button>
       </>}
     />
 
@@ -136,15 +136,13 @@ export default function Page() {
     ]} />
 
     <BlockCta
-      title="Become a Host"
-      content={<p>If you run infrastructure and want to become a Host in Shinzō’s trustless data read layer, we want to work with you.</p>}
+      title="Serve Data as a Host"
+      content={<p>Hosts take signed data from Generators, verify it, and transform it into something the whole network can use. Run infrastructure? Become a Host.</p>}
       buttons={<>
-        <Button asChild><Link href="https://docs.shinzo.network/hosts/quickstart/" target="_blank">Install the Host Client</Link></Button>
+        <Button asChild><Link href="https://docs.shinzo.network/hosts" target="_blank">Become a Host</Link></Button>
       </>}
       footerText={<p className="text-raised">Validators prove the data. <br />Hosts carry it forward.</p>}
     />
-
-
   </>
   );
 }

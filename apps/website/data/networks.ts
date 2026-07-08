@@ -5,7 +5,6 @@ export interface Network {
   token?: string;
   description: string;
   isSupported: boolean;
-  spotsLimit: number;
 }
 
 export const networks: Network[] = [
@@ -17,7 +16,6 @@ export const networks: Network[] = [
     token: "ETH",
     description: "Ethereum is a decentralized Layer 1 smart contract platform that enables programmable blockchain applications, including DeFi, NFTs, DAOs, and more. It transitioned to proof-of-stake with \u201CThe Merge,\u201D improving energy efficiency and enabling future scalability upgrades. Its rich developer ecosystem, broad tooling, and strong security make it the foundation for many Layer 2 scaling solutions and onchain innovation.",
     isSupported: true,
-    spotsLimit: 100,
   },
 
   // ── L1 / Decentralized validator chains (planned) ─────────────────
@@ -28,7 +26,6 @@ export const networks: Network[] = [
     token: "SOL",
     description: "Solana is a high-performance Layer 1 that combines Proof-of-History with parallel execution to achieve extremely high throughput and sub-second finality. It\u2019s built for high-volume apps such as DeFi, trading, and consumer experiences.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "BNB Chain",
@@ -37,7 +34,6 @@ export const networks: Network[] = [
     token: "BNB",
     description: "BNB Chain is a fast, low-cost, EVM-compatible ecosystem consisting of the BNB Smart Chain and BNB Beacon Chain. It\u2019s heavily used for DeFi, trading, and decentralized applications with high user activity.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Tron",
@@ -46,7 +42,6 @@ export const networks: Network[] = [
     token: "TRX",
     description: "Tron is a high-throughput blockchain optimized for payments and digital assets, offering fast confirmation times and very low fees. It\u2019s widely used for stablecoin transfers and consumer-facing applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Bitcoin",
@@ -55,7 +50,6 @@ export const networks: Network[] = [
     token: "BTC",
     description: "Bitcoin is the first decentralized blockchain, designed as a secure, censorship-resistant digital currency using proof-of-work. Its fixed supply and strong security make it a foundational asset in the crypto ecosystem.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Avalanche",
@@ -64,7 +58,6 @@ export const networks: Network[] = [
     token: "AVAX",
     description: "Avalanche is a scalable Layer 1 known for its sub-second finality and flexible subnet architecture. Developers can deploy custom, interoperable blockchains tailored for specific applications, enterprise use cases, or regulated environments.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Polygon",
@@ -73,7 +66,6 @@ export const networks: Network[] = [
     token: "POL",
     description: "Polygon is a multichain scaling ecosystem for Ethereum offering a suite of solutions\u2014including PoS, zkEVM, and supernets\u2014designed to increase throughput and reduce costs. It connects deeply with the Ethereum ecosystem while enabling scalable, secure apps.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Sui",
@@ -82,7 +74,6 @@ export const networks: Network[] = [
     token: "SUI",
     description: "Sui is a next-generation Layer 1 using an object-based model and parallel execution to achieve very high throughput. Its design enables low-latency transactions, smooth user experiences, and scalable onchain apps such as gaming and payments.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Cronos",
@@ -91,7 +82,6 @@ export const networks: Network[] = [
     token: "CRO",
     description: "Cronos is an EVM-compatible blockchain backed by Crypto.com, enabling easy deployment of Ethereum applications with low fees. It focuses on DeFi, payments, and consumer-facing tools within the Crypto.com ecosystem.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Aptos",
@@ -100,7 +90,6 @@ export const networks: Network[] = [
     token: "APT",
     description: "Aptos is a high-performance Layer 1 featuring the Move programming language and a parallel execution engine for fast throughput. It aims to deliver secure, upgradeable, and developer-friendly infrastructure with low-latency transactions.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Near",
@@ -109,7 +98,6 @@ export const networks: Network[] = [
     token: "NEAR",
     description: "Near is a user-friendly Layer 1 blockchain using nightshade sharding to scale horizontally as demand grows. It emphasizes simple onboarding, human-readable accounts, and fast, cost-effective transactions for consumer Web3 apps.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Cosmos",
@@ -118,7 +106,6 @@ export const networks: Network[] = [
     token: "ATOM",
     description: "Cosmos is an ecosystem of sovereign blockchains built with the Cosmos SDK and connected through the IBC protocol. It focuses on interoperability, letting chains communicate, transfer assets, and scale independently.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Berachain",
@@ -127,7 +114,6 @@ export const networks: Network[] = [
     token: "BERA",
     description: "Berachain is an emerging high-performance EVM-compatible Layer 1 built using Proof-of-Liquidity, a consensus model that aligns validators with liquidity providers. It aims to improve capital efficiency and ecosystem incentives across DeFi.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Polkadot",
@@ -136,7 +122,6 @@ export const networks: Network[] = [
     token: "DOT",
     description: "Polkadot is a modular multichain network where specialized parachains run in parallel and share security from a central relay chain. It focuses on interoperability, customization, and scalable, cross-chain communication.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Gnosis",
@@ -145,7 +130,6 @@ export const networks: Network[] = [
     token: "GNO",
     description: "Gnosis is an Ethereum sidechain built for low-cost, eco-friendly transactions and widely adopted by DAOs and Web3 organizations. Its predictable gas fees and stability make it ideal for governance and operational tooling.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Kava",
@@ -154,7 +138,6 @@ export const networks: Network[] = [
     token: "KAVA",
     description: "Kava is a hybrid blockchain combining the Ethereum and Cosmos ecosystems. It offers EVM smart contract support on a Cosmos SDK foundation, enabling interoperability and high performance across DeFi and cross-chain applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "TON",
@@ -163,7 +146,6 @@ export const networks: Network[] = [
     token: "TON",
     description: "TON (The Open Network) is a scalable Layer 1 originally designed by Telegram, now maintained by the TON Foundation. It uses dynamic sharding to support millions of users, low-cost transactions, decentralized storage, and native integrations for messaging ecosystems.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Cardano",
@@ -172,7 +154,6 @@ export const networks: Network[] = [
     token: "ADA",
     description: "Cardano is a research-driven Layer 1 built on peer-reviewed protocols and a proof-of-stake consensus called Ouroboros. It emphasizes security, formal verification, sustainability, and a structured approach to smart contract development.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Hyperliquid",
@@ -181,7 +162,6 @@ export const networks: Network[] = [
     token: "HYPE",
     description: "Hyperliquid is a high-performance Layer 1 built for onchain finance, running a fully onchain order book with sub-second latency. It supports perpetuals, spot trading, and native token launches without relying on external settlement layers.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Sonic",
@@ -190,7 +170,6 @@ export const networks: Network[] = [
     token: "S",
     description: "Sonic (formerly Fantom) is a high-speed EVM-compatible Layer 1 using a DAG-based consensus mechanism to achieve near-instant finality. It is designed for DeFi and real-time applications that demand fast and cheap transactions.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Monad",
@@ -199,7 +178,6 @@ export const networks: Network[] = [
     token: "MON",
     description: "Monad is an EVM-compatible Layer 1 engineered for extreme throughput through pipelined execution and optimistic parallel processing. It targets 10,000 TPS while preserving full Ethereum tooling compatibility.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Sei",
@@ -208,7 +186,6 @@ export const networks: Network[] = [
     token: "SEI",
     description: "Sei is a Layer 1 blockchain optimized for trading, featuring a built-in order matching engine and parallelized transaction processing. It provides low-latency finality for exchanges, games, and other performance-sensitive applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Fantom",
@@ -217,7 +194,6 @@ export const networks: Network[] = [
     token: "FTM",
     description: "Fantom is a DAG-based Layer 1 platform that delivers fast, low-cost transactions through its Lachesis consensus. Its EVM compatibility and rapid finality make it well-suited for DeFi protocols and enterprise applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Injective",
@@ -226,7 +202,6 @@ export const networks: Network[] = [
     token: "INJ",
     description: "Injective is a Cosmos SDK-based Layer 1 built for finance, offering a decentralized exchange module, cross-chain bridges, and MEV-resistant order matching. It targets derivatives, prediction markets, and DeFi applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Celo",
@@ -235,7 +210,6 @@ export const networks: Network[] = [
     token: "CELO",
     description: "Celo is a mobile-first Layer 1 blockchain focused on financial inclusion, allowing users to send payments using phone numbers. It emphasizes stablecoins, carbon-negative operations, and accessibility in emerging markets.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Algorand",
@@ -244,7 +218,6 @@ export const networks: Network[] = [
     token: "ALGO",
     description: "Algorand is a pure proof-of-stake Layer 1 designed for speed, security, and decentralization without forks. It supports smart contracts, tokenized assets, and enterprise-grade applications with instant finality.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Hedera",
@@ -253,7 +226,6 @@ export const networks: Network[] = [
     token: "HBAR",
     description: "Hedera is a public distributed ledger using hashgraph consensus to achieve high throughput, low fees, and fair transaction ordering. It is governed by a council of global enterprises and supports tokenization, smart contracts, and data integrity services.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Filecoin",
@@ -262,7 +234,6 @@ export const networks: Network[] = [
     token: "FIL",
     description: "Filecoin is a decentralized storage network that turns cloud storage into an open market. Storage providers earn FIL by hosting client data, and the network uses proof-of-replication and proof-of-spacetime to verify storage integrity.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Stellar",
@@ -271,7 +242,6 @@ export const networks: Network[] = [
     token: "XLM",
     description: "Stellar is an open-source payment network designed for fast, low-cost cross-border transactions and asset tokenization. Its federated consensus protocol enables rapid settlement between financial institutions and individuals worldwide.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Flare",
@@ -280,7 +250,6 @@ export const networks: Network[] = [
     token: "FLR",
     description: "Flare is an EVM-compatible Layer 1 that provides decentralized data access to other blockchains through its State Connector and Flare Time Series Oracle. It enables smart contracts to securely use data from multiple chains and Web2 APIs.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "IOTA",
@@ -289,7 +258,6 @@ export const networks: Network[] = [
     token: "IOTA",
     description: "IOTA is a distributed ledger built on a directed acyclic graph (the Tangle) designed for feeless microtransactions and IoT data integrity. It targets machine-to-machine payments, supply chain tracking, and digital identity.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Harmony",
@@ -298,7 +266,6 @@ export const networks: Network[] = [
     token: "ONE",
     description: "Harmony is a sharded proof-of-stake Layer 1 that uses random state sharding to achieve high throughput while maintaining decentralization. It focuses on cross-chain interoperability and low-latency consensus for Web3 applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Moonbeam",
@@ -307,7 +274,6 @@ export const networks: Network[] = [
     token: "GLMR",
     description: "Moonbeam is a Polkadot parachain that provides full Ethereum compatibility, letting developers deploy Solidity contracts with minimal changes. It combines Ethereum tooling with Polkadot shared security and cross-chain messaging.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Moonriver",
@@ -316,7 +282,6 @@ export const networks: Network[] = [
     token: "MOVR",
     description: "Moonriver is a Kusama parachain and canary network for Moonbeam, offering EVM compatibility in a live production environment. It serves as a testing ground for new features before they are deployed to Moonbeam on Polkadot.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Klaytn",
@@ -325,7 +290,6 @@ export const networks: Network[] = [
     token: "KLAY",
     description: "Klaytn is a public blockchain developed by Kakao, optimized for user-friendly Web3 experiences in Asia. It features fast finality, low gas fees, and enterprise-grade reliability for gaming, metaverse, and DeFi applications.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Metis",
@@ -334,7 +298,6 @@ export const networks: Network[] = [
     token: "METIS",
     description: "Metis is an Ethereum Layer 2 with a decentralized sequencer model, making it one of the few rollups actively decentralizing block production. It provides low-cost transactions and native support for DAOs and decentralized companies.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "ZetaChain",
@@ -343,7 +306,6 @@ export const networks: Network[] = [
     token: "ZETA",
     description: "ZetaChain is a Layer 1 that enables native cross-chain smart contracts, allowing developers to build omnichain dApps that interact with assets on Bitcoin, Ethereum, BNB Chain, and others without wrapping or bridging.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Provenance",
@@ -352,7 +314,6 @@ export const networks: Network[] = [
     token: "HASH",
     description: "Provenance is a Cosmos SDK-based Layer 1 purpose-built for financial services, powering real-world asset tokenization, lending, and trading. It is used by institutions to issue, trade, and manage digital financial instruments on-chain.",
     isSupported: false,
-    spotsLimit: 100,
   },
   {
     name: "Canto",
@@ -361,17 +322,14 @@ export const networks: Network[] = [
     token: "CANTO",
     description: "Canto is an EVM-compatible Layer 1 built on Cosmos SDK that offers free public infrastructure for DeFi, including a native DEX, lending market, and stablecoin. It aims to make core DeFi primitives freely accessible.",
     isSupported: false,
-    spotsLimit: 100,
   },
 
-  // ── L2 / Centralized sequencer chains (spotsLimit: 0) ────────────
   {
     name: "Base",
     slug: "base",
     image: "/network-images/base.svg",
     description: "Base is an Ethereum Layer 2 created by Coinbase using the OP Stack to deliver low fees, fast transactions, and a secure developer environment. It integrates tightly with Coinbase products to onboard mainstream users into onchain apps.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Arbitrum",
@@ -380,7 +338,6 @@ export const networks: Network[] = [
     token: "ARB",
     description: "Arbitrum is a leading Ethereum Layer 2 that uses optimistic rollups to batch and verify transactions off-chain while inheriting Ethereum\u2019s security. It offers low fees, high throughput, and strong EVM compatibility, making it popular for DeFi and gaming.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Optimism",
@@ -389,7 +346,6 @@ export const networks: Network[] = [
     token: "OP",
     description: "Optimism is an Ethereum Layer 2 designed for speed and simplicity, using optimistic rollups to reduce costs and scale throughput. It powers the OP Stack, enabling shared infrastructure across multiple L2s while funding public goods through its governance model.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Scroll",
@@ -397,7 +353,6 @@ export const networks: Network[] = [
     image: "/network-images/scroll.svg",
     description: "Scroll is an Ethereum Layer 2 zk-rollup focused on full EVM equivalence, enabling developers to deploy Ethereum apps with no code changes. Its zk-proof system provides strong security guarantees and efficient scaling.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Mantle",
@@ -406,7 +361,6 @@ export const networks: Network[] = [
     token: "MNT",
     description: "Mantle is a modular Ethereum Layer 2 that uses an optimistic rollup architecture with a separate data availability layer. It is backed by BitDAO and designed for low fees and high throughput for DeFi and gaming apps.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Starknet",
@@ -415,7 +369,6 @@ export const networks: Network[] = [
     token: "STRK",
     description: "Starknet is a permissionless Ethereum Layer 2 validity rollup that uses STARK proofs for scalability and security. It enables developers to build high-throughput dApps using its native Cairo programming language.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Linea",
@@ -423,7 +376,6 @@ export const networks: Network[] = [
     image: "/network-images/linea.svg",
     description: "Linea is a developer-friendly Ethereum Layer 2 zk-rollup built by Consensys. It offers EVM equivalence, low gas costs, and the security of zero-knowledge proofs, integrated with MetaMask and the broader Consensys ecosystem.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "zkSync Era",
@@ -432,7 +384,6 @@ export const networks: Network[] = [
     token: "ZK",
     description: "zkSync Era is an Ethereum Layer 2 ZK-rollup that provides EVM-compatible smart contract execution secured by zero-knowledge proofs. It focuses on low transaction costs, native account abstraction, and scalable throughput.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Blast",
@@ -441,7 +392,6 @@ export const networks: Network[] = [
     token: "BLAST",
     description: "Blast is an Ethereum Layer 2 optimistic rollup that offers native yield on ETH and stablecoins deposited into the network. Idle assets earn yield automatically through Lido staking and MakerDAO T-bill protocols.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Mode",
@@ -450,7 +400,6 @@ export const networks: Network[] = [
     token: "MODE",
     description: "Mode is an Ethereum Layer 2 built on the OP Stack that rewards developers and users who grow the network through its referral and fee-sharing system. It focuses on attracting DeFi protocols with cooperative economic incentives.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Manta Pacific",
@@ -459,7 +408,6 @@ export const networks: Network[] = [
     token: "MANTA",
     description: "Manta Pacific is a modular Ethereum Layer 2 that combines the OP Stack with Celestia for data availability, reducing costs while supporting ZK-native applications and universal circuits for privacy-preserving DeFi.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Ink",
@@ -467,7 +415,6 @@ export const networks: Network[] = [
     image: "/network-images/ink.svg",
     description: "Ink is an Ethereum Layer 2 built on the OP Stack by Kraken, designed to bring DeFi to a broader audience through low fees and tight exchange integration. It is part of the Optimism Superchain ecosystem.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "MegaETH",
@@ -475,7 +422,6 @@ export const networks: Network[] = [
     image: "/network-images/megaeth.svg",
     description: "MegaETH is an Ethereum Layer 2 that targets real-time blockchain performance with sub-millisecond block times and extremely high throughput. It uses a specialized execution environment optimized for latency-sensitive applications.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Merlin",
@@ -483,7 +429,6 @@ export const networks: Network[] = [
     image: "/network-images/merlin.svg",
     description: "Merlin Chain is a Bitcoin Layer 2 that integrates ZK-rollup technology, decentralized oracle networks, and on-chain BTC fraud proofs. It aims to unlock Bitcoin-native DeFi by supporting BRC-20 tokens, ordinals, and smart contracts.",
     isSupported: false,
-    spotsLimit: 0,
   },
   {
     name: "Aurora",
@@ -492,6 +437,5 @@ export const networks: Network[] = [
     token: "AURORA",
     description: "Aurora is an EVM-compatible execution environment built as a smart contract on NEAR Protocol. It combines Ethereum tooling compatibility with NEAR\u2019s fast finality and low costs, allowing Solidity developers to deploy without changes.",
     isSupported: false,
-    spotsLimit: 0,
   },
 ];

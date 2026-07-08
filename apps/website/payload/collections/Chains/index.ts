@@ -15,7 +15,7 @@ export const Chains: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ["name", "slug", "spotsLimit", "upvotes"],
+    defaultColumns: ["name", "slug", "upvotes"],
     useAsTitle: "name",
   },
   fields: [
@@ -53,16 +53,6 @@ export const Chains: CollectionConfig = {
     },
     slugField({ useAsSlug: 'name' }),
     {
-      name: "spotsLimit",
-      type: "number",
-      label: "Spots Limit",
-      admin: {
-        description: "Maximum number of claimable spots for generators",
-      },
-      required: true,
-      defaultValue: 0,
-    },
-    {
       name: "upvotes",
       type: "number",
       label: "Upvotes",
@@ -70,12 +60,6 @@ export const Chains: CollectionConfig = {
         description: "Number of upvotes from connected wallets",
       },
       defaultValue: 0,
-    },
-    {
-      name: "claims",
-      type: "join",
-      collection: "claims",
-      on: "network",
     },
   ],
   endpoints: [upvoteEndpoint],

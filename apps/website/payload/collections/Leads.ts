@@ -4,7 +4,7 @@ import { APIError } from "payload";
 import { authenticated } from "../access/authenticated";
 import { anyone } from "../access/anyone";
 
-const preventDuplicateClaim: CollectionBeforeChangeHook = async ({
+const preventDuplicateLead: CollectionBeforeChangeHook = async ({
   data,
   operation,
   req,
@@ -12,11 +12,11 @@ const preventDuplicateClaim: CollectionBeforeChangeHook = async ({
   if (operation !== "create") return data;
 
   const existing = await req.payload.find({
-    collection: "claims",
+    collection: "leads",
     where: {
       and: [
         { network: { equals: data?.network } },
-        { validatorAddress: { equals: data?.validatorAddress } },
+        { email: { equals: data?.email } },
       ],
     },
     limit: 1,
@@ -24,7 +24,7 @@ const preventDuplicateClaim: CollectionBeforeChangeHook = async ({
 
   if (existing.totalDocs > 0) {
     throw new APIError(
-      "You have already submitted a claim for this network with this wallet address.",
+      "You have already registered your interest for this network with this email address.",
       400
     );
   }
@@ -32,8 +32,12 @@ const preventDuplicateClaim: CollectionBeforeChangeHook = async ({
   return data;
 };
 
-export const Claims: CollectionConfig = {
-  slug: "claims",
+export const Leads: CollectionConfig = {
+  slug: "leads",
+  labels: {
+    singular: "Generator Lead",
+    plural: "Generator Leads",
+  },
   access: {
     admin: authenticated,
     create: anyone,
@@ -42,11 +46,11 @@ export const Claims: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ["network", "validatorAddress", "email", "verified", "createdAt"],
-    useAsTitle: "validatorAddress",
+    defaultColumns: ["name", "network", "email", "confirmed", "createdAt"],
+    useAsTitle: "name",
   },
   hooks: {
-    beforeChange: [preventDuplicateClaim],
+    beforeChange: [preventDuplicateLead],
   },
   fields: [
     {
@@ -56,27 +60,9 @@ export const Claims: CollectionConfig = {
       required: true,
     },
     {
-      name: "validatorAddress",
-      type: "text",
-      label: "Validator Withdrawal Address",
-      required: true,
-    },
-    {
-      name: "validatorPublicKey",
-      type: "text",
-      label: "Validator Public Key",
-      required: true,
-      admin: {
-        description: "BLS public key of the validator (96 hex characters, 0x-prefixed)",
-      },
-    },
-    {
-      name: "signature",
+      name: "name",
       type: "text",
       required: true,
-      admin: {
-        description: "Wallet signature proving ownership",
-      },
     },
     {
       name: "email",
@@ -87,6 +73,34 @@ export const Claims: CollectionConfig = {
       name: "domain",
       type: "text",
       label: "Website",
+    },
+    {
+      name: "otherChains",
+      type: "text",
+      label: "Other Chains Secured",
+    },
+    {
+      name: "confirmed",
+      type: "checkbox",
+      label: "Email Confirmed",
+      defaultValue: false,
+      admin: {
+        readOnly: true,
+        description: "Set automatically when the user confirms their email address.",
+      },
+    },
+    {
+      name: "skipMailingList",
+      type: "checkbox",
+      label: "Skip mailing list",
+      defaultValue: false,
+      access: {
+        create: ({ req }) => !!req.user,
+      },
+      admin: {
+        description: "If checked, this lead will not be added to the Resend mailing list.",
+        condition: (data) => !data?.id,
+      },
     },
     {
       name: "socialMedia",
@@ -102,15 +116,6 @@ export const Claims: CollectionConfig = {
           type: "text",
         },
       ],
-    },
-    {
-      name: "verified",
-      type: "checkbox",
-      label: "Verified",
-      defaultValue: false,
-      admin: {
-        description: "Whether this claim has been verified by an admin",
-      },
     },
   ],
 };
