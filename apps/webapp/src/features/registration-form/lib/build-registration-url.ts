@@ -35,6 +35,7 @@ export function buildGeneratorAssertionUrl(
     validatorPublicKey?: string;
     assertionAuthority?: string;
     sourceChain?: string;
+    sourceChainId?: number | string;
   } & RegistrationPrefillV2Params = {}
 ): string {
   const searchParams = new URLSearchParams();
@@ -47,6 +48,9 @@ export function buildGeneratorAssertionUrl(
   }
   if (params.sourceChain) {
     searchParams.set("sourceChain", params.sourceChain);
+  }
+  if (params.sourceChainId !== undefined) {
+    searchParams.set("sourceChainId", String(params.sourceChainId));
   }
 
   appendRegistrationPrefillParams(searchParams, params);

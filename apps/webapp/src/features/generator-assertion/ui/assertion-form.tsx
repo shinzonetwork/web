@@ -60,6 +60,11 @@ export default function AssertionForm() {
         TOAST_CONFIG
       );
 
+      queryClient.setQueryData(
+        ["generator-assertion-verification", validatorPublicKey, sourceChainId],
+        true
+      );
+
       await queryClient.invalidateQueries({
         queryKey: ["generator-assertion-verification"],
       });

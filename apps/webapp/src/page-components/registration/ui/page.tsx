@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useAccount } from "wagmi";
 
 import { useRegistrationContext } from "@/entities/registration-process";
@@ -17,7 +18,7 @@ import { isRegistrationV2, UI_FORM_HEADER_CONTENT } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { Connect } from "@/page-components/connect";
 
-export default function Register() {
+function RegisterContent() {
   const { isConnected } = useAccount();
   const { isSignedWithWallet } = useRegistrationContext();
   const pathname = usePathname();
@@ -66,5 +67,19 @@ export default function Register() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function Register() {
+  return (
+    <Suspense
+      fallback={
+        <p className="ml-10 font-mono text-sm text-muted-foreground">
+          Loading registration…
+        </p>
+      }
+    >
+      <RegisterContent />
+    </Suspense>
   );
 }
