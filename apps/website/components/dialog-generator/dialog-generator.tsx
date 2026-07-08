@@ -122,20 +122,20 @@ export function DialogGeneratorInterest({ networkName, chainId, label = 'Become 
                   <DialogHeader>
                       <DialogTitle>/ Become a Generator of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
                       <DialogDescription>
-                          Register your interest in becoming a Generator for {networkName}. <br />We'll notify you as soon as support is added.
+                          Register your interest in becoming a Generator for {networkName}. <br />We&apos;ll notify you as soon as support is added.
                       </DialogDescription>
-                      <p className="text-left text-xs text-text-secondary font-mono pt-4">You'll receive a confirmation email to verify your address.</p>
+                      <p className="text-left text-xs text-text-secondary font-mono pt-4">You&apos;ll receive a confirmation email to verify your address.</p>
                   </DialogHeader>
                 )}
 
                 {isSubmitSuccessful ? (
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
-                            <h2 className="text-h4">Thank you, we've received your interest.</h2>
+                            <h2 className="text-h4">Thank you, we&apos;ve received your interest.</h2>
                             {emailSent ? (
-                                <p>We've sent a confirmation email. Please check your inbox to complete your sign up.</p>
+                                <p>We&apos;ve sent a confirmation email. Please check your inbox to complete your sign up.</p>
                             ) : (
-                                <p>Thanks for registering your interest. We'll be in touch when support is added.</p>
+                                <p>Thanks for registering your interest. We&apos;ll be in touch when support is added.</p>
                             )}
                         </div>
 

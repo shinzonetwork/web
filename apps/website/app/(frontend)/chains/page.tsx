@@ -49,7 +49,7 @@ export default async function Page() {
                 <div className="lg:col-span-2 richtext lg:p-4">
                   <h2 className="text-h4">/ Become a Generator</h2>
                   <p>
-                    Generators power the network's read layer. Run a lightweight
+                    Generators power the network&apos;s read layer. Run a lightweight
                     client alongside your node and earn rewards for the data you serve.
                   </p>
                   <div className="not-prose">

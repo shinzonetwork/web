@@ -109,7 +109,7 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      Generators power the network's read layer. Run a
+                      Generators power the network&apos;s read layer. Run a
                       lightweight client alongside your node to turn raw chain
                       data into structured, queryable documents, and earn
                       rewards for what you serve.
@@ -119,7 +119,7 @@ export default async function Page({
                     <Info className="size-5 text-szo-primary shrink-0" />
                     <div className="richtext">
                       <p>
-                        Help build the network's read layer and earn rewards for
+                        Help build the network&apos;s read layer and earn rewards for
                         the data you serve.
                       </p>
                       <div className="not-prose">
@@ -144,8 +144,8 @@ export default async function Page({
                 <div className="flex gap-10 lg:flex-row flex-col">
                   <div className="richtext lg:w-1/2">
                     <p>
-                      This chain isn't supported yet. Register your interest in
-                      becoming a generator for it, and we'll let you know when
+                      This chain isn&apos;t supported yet. Register your interest in
+                      becoming a generator for it, and we&apos;ll let you know when
                       it goes live.
                     </p>
                   </div>
@@ -154,7 +154,7 @@ export default async function Page({
                     <div className="richtext">
                       <p>
                         Register your interest in generating for this chain once
-                        it's supported.
+                        it&apos;s supported.
                       </p>
                       <div className="not-prose">
                         <DialogGeneratorInterest

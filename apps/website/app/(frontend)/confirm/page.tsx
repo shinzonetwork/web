@@ -15,6 +15,8 @@ export default async function ConfirmPage({
     return <ConfirmResult success={false} message="No confirmation token provided." />;
   }
 
+  let success = false;
+
   try {
     const email = await verifyConfirmToken(token);
 
@@ -47,10 +49,16 @@ export default async function ConfirmPage({
       )
     );
 
-    return <ConfirmResult success />;
+    success = true;
   } catch {
+    // token invalid or expired
+  }
+
+  if (!success) {
     return <ConfirmResult success={false} message="This confirmation link is invalid or has expired." />;
   }
+
+  return <ConfirmResult success />;
 }
 
 function ConfirmResult({

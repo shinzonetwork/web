@@ -130,7 +130,7 @@ export default function Page() {
 
     <BlockCta
       title="Power the Network"
-      content={<p>Your node already sees everything. Become a Generator, and put that data to work: capturing raw chain data and powering Shinzō's trustless read layer.</p>}
+      content={<p>Your node already sees everything. Become a Generator, and put that data to work: capturing raw chain data and powering Shinzō&apos;s trustless read layer.</p>}
       buttons={<>
         <Button asChild><Link href="https://docs.shinzo.network/generator/overview" target="_blank">Become a Generator</Link></Button>
       </>}
