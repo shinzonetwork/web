@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { client, cosmosRestUrl } = getShinzohubQueryContext();
+    const { client, cosmosRestUrl } = await getShinzohubQueryContext();
     const result = await getGeneratorAssertion(client, {
       validatorPublicKey,
       sourceChainId,

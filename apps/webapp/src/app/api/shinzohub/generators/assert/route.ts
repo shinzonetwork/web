@@ -3,6 +3,7 @@ import {
   getGeneratorAssertion,
   submitGeneratorAssertion,
 } from "@shinzo/shinzohub";
+import type { PublicClient } from "viem";
 import {
   getShinzohubQueryContext,
   getSourceChainMap,
@@ -42,7 +43,7 @@ function parseOnChainNonce(value: string): number {
 }
 
 async function resolveNextAssertionNonce(
-  client: ReturnType<typeof getShinzohubQueryContext>["client"],
+  client: PublicClient,
   parameters: {
     validatorPublicKey: string;
     sourceChainId: number;
@@ -120,7 +121,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { client, cometRpcUrl, cosmosRestUrl } = getShinzohubQueryContext();
+  const { client, cometRpcUrl, cosmosRestUrl } = await getShinzohubQueryContext();
   const rpcEndpoint =
     process.env.INDEXER_ASSERTION_RPC_ENDPOINT?.trim() || cometRpcUrl;
 

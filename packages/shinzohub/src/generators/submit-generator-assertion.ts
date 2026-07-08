@@ -15,6 +15,8 @@ import * as _m0 from "protobufjs/minimal";
 import { bytesToHex, concat, type Hex, hexToBytes, keccak256 } from "viem";
 import { privateKeyToAccount, sign } from "viem/accounts";
 import { hexToShinzoAddress, normalizeShinzoAddress } from "../addresses/index";
+import { getChainId } from "../chains/get-chain-id";
+import { normalizeRpcEndpoint } from "../internal/endpoints";
 import type {
   SubmitGeneratorAssertionParameters,
   SubmitGeneratorAssertionResult,
@@ -106,34 +108,6 @@ function bytesToBase64(bytes: Uint8Array): string {
 
 function base64ToBytes(base64: string): Uint8Array {
   return new Uint8Array(Buffer.from(base64, "base64"));
-}
-
-function normalizeRpcEndpoint(rpc: string): string {
-  // Fix common typo: http://host/:26657 -> http://host:26657
-  return rpc.trim().replace(/\/:(\d+)\/?$/, ":$1").replace(/\/+$/, "");
-}
-
-async function getCometChainId(rpc: string): Promise<string> {
-  const response = await fetch(`${normalizeRpcEndpoint(rpc)}/status`);
-  if (!response.ok) {
-    throw new Error(`Comet status query failed with status ${response.status}.`);
-  }
-
-  const json = (await response.json()) as {
-    result?: { node_info?: { network?: string } };
-    error?: { message?: string };
-  };
-
-  if (json.error?.message) {
-    throw new Error(`Comet status query error: ${json.error.message}`);
-  }
-
-  const chainId = json.result?.node_info?.network?.trim();
-  if (!chainId) {
-    throw new Error("Comet status query did not return a chain ID.");
-  }
-
-  return chainId;
 }
 
 async function abciQuery(
@@ -263,7 +237,7 @@ export async function submitGeneratorAssertion(
   );
   const signerAddress = hexToShinzoAddress(account.address);
   const normalizedRpc = normalizeRpcEndpoint(rpcEndpoint);
-  const chainId =await getCometChainId(normalizedRpc);
+  const chainId = await getChainId({ cometRpcUrl: normalizedRpc });
   const { accountNumber, sequence } = await getAccountSequence(
     normalizedRpc,
     signerAddress,

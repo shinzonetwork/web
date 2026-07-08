@@ -1,10 +1,38 @@
 import { defineChain } from "viem";
+import { getChainId } from "./get-chain-id";
+import type { ShinzoHubChainParameters } from "./types";
+
+export { getChainId } from "./get-chain-id";
+export type { GetChainIdParameters, ShinzoHubChainParameters } from "./types";
 
 const currency = {
   name: "Shinzo",
   symbol: "SHNZ",
   decimals: 18,
 } as const;
+
+/** Builds a live ShinzoHub viem chain definition from RPC endpoints. */
+export async function shinzoHubChain({
+  defaultRpcUrl,
+  cometRpcUrl,
+  cosmosRestUrl,
+}: ShinzoHubChainParameters) {
+  const chainId = Number(await getChainId({ cometRpcUrl }));
+  if (!Number.isFinite(chainId) || chainId <= 0) {
+    throw new Error("Comet status query did not return a valid numeric chain ID.");
+  }
+
+  return defineChain({
+    id: chainId,
+    name: "ShinzoHub",
+    nativeCurrency: currency,
+    rpcUrls: {
+      default: { http: [defaultRpcUrl] },
+      cosmosRest: { http: [cosmosRestUrl] },
+      cometRpc: { http: [cometRpcUrl] },
+    },
+  });
+}
 
 /**
  * Local ShinzoHub Viem chain definition.
@@ -47,9 +75,9 @@ export const shinzoHubDevelop = defineChain({
   name: "ShinzoHub Develop",
   nativeCurrency: currency,
   rpcUrls: {
-    default: { http: ["http://rpc.testnet.shinzo.network:8545"] },
-    cosmosRest: { http: ["http://rest.testnet.shinzo.network:1317"] },
-    cometRpc: { http: ["http://rpc.testnet.shinzo.network:26657"] },
+    default: { http: ["http://rpc.devnet.shinzo.network:8545"] },
+    cosmosRest: { http: ["http://rpc.devnet.shinzo.network:1317"] },
+    cometRpc: { http: ["http://rpc.devnet.shinzo.network:26657"] },
   },
 });
 
@@ -76,7 +104,9 @@ export const shinzoHubTestnet = defineChain({
   name: "ShinzoHub Testnet",
   nativeCurrency: currency,
   rpcUrls: {
-    default: { http: [] },
+    default: { http: ["http://testnet.shinzo.network:8545"] },
+    cosmosRest: { http: ["http://testnet.shinzo.network:1317"] },
+    cometRpc: { http: ["http://testnet.shinzo.network:26657"] },
   },
 });
 

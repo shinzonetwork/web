@@ -1,5 +1,3 @@
-export const SHINZO_CHAIN_ID = 91273002;
-
 export const AVAILABLE_CHAINS_MAP: Record<string, number> = {
   ethereum: 1,
 };

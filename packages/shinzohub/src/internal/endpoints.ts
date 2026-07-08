@@ -1,5 +1,11 @@
 type RpcEndpointName = "cosmosRest" | "cometRpc";
 
+/** Normalizes RPC endpoint URL. */
+export function normalizeRpcEndpoint(rpc: string): string {
+  // Fix common typo: http://testnet/:26657 -> http://testnet:26657
+  return rpc.trim().replace(/\/:(\d+)\/?$/, ":$1").replace(/\/+$/, "");
+}
+
 /** Minimal Viem client shape required by ShinzoHub query methods. */
 export interface ShinzoHubQueryClient {
   chain?: {
