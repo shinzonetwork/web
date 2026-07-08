@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   buildGeneratorAssertionUrlFromSearchParams,
   getGeneratorAssertionPrefill,
@@ -11,7 +11,8 @@ import {
 /** Redirect to assertion when registration is opened without a verified assertion. */
 export function useGeneratorOnboardingGuard(enabled: boolean) {
   const router = useRouter();
-  const assertionPrefill = getGeneratorAssertionPrefill();
+  const searchParams = useSearchParams();
+  const assertionPrefill = getGeneratorAssertionPrefill(searchParams);
   const canVerifyAssertion = Boolean(
     assertionPrefill?.validatorPublicKey && assertionPrefill?.sourceChainId
   );
@@ -27,19 +28,36 @@ export function useGeneratorOnboardingGuard(enabled: boolean) {
       : ""
   );
 
+  const isAssertionPending =
+    canVerifyAssertion &&
+    (isLoading || isFetching || isAssertionVerified === undefined);
+
   useEffect(() => {
-    if (!enabled || isLoading || isFetching || isAssertionVerified) {
+    if (!enabled || isAssertionPending || isAssertionVerified === true) {
       return;
     }
 
-    router.replace(buildGeneratorAssertionUrlFromSearchParams());
-  }, [enabled, isAssertionVerified, isLoading, isFetching, router]);
+    if (canVerifyAssertion && isAssertionVerified !== false) {
+      return;
+    }
+
+    router.replace(buildGeneratorAssertionUrlFromSearchParams(searchParams));
+  }, [
+    enabled,
+    isAssertionPending,
+    isAssertionVerified,
+    canVerifyAssertion,
+    router,
+    searchParams,
+  ]);
 
   return {
-    isAssertionVerified: Boolean(isAssertionVerified),
-    isAssertionLoading:
-      canVerifyAssertion && (isLoading || isFetching) && !isAssertionVerified,
+    isAssertionVerified: isAssertionVerified === true,
+    isAssertionLoading: isAssertionPending,
     isRedirectingToAssertion:
-      enabled && !isAssertionVerified && !canVerifyAssertion,
+      enabled &&
+      !canVerifyAssertion &&
+      isAssertionVerified !== true &&
+      !isAssertionPending,
   };
 }

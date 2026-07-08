@@ -35,6 +35,7 @@ export type GeneratorAssertionFormPrefill = {
   validatorPublicKey?: string;
   assertionAuthority?: string;
   sourceChain?: string;
+  sourceChainId?: number;
 };
 
 export type RegistrationPrefillV2Params = {
@@ -121,10 +122,10 @@ export function getGeneratorAssertionPrefill(
 export function getGeneratorAssertionFormPrefill(
   searchParams: URLSearchParams = readSearchParams()
 ): GeneratorAssertionFormPrefill {
-  const { validatorPublicKey, assertionAuthority, sourceChain } =
+  const { validatorPublicKey, assertionAuthority, sourceChain, sourceChainId } =
     readAssertionUrlFields(searchParams);
 
-  return { validatorPublicKey, assertionAuthority, sourceChain };
+  return { validatorPublicKey, assertionAuthority, sourceChain, sourceChainId };
 }
 
 /** V2 registration fields from URL query parameters. */
