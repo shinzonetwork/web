@@ -1,4 +1,7 @@
-import { shinzoHubChain, type ShinzoHubChainParameters } from "@shinzo/shinzohub";
+import {
+  shinzoHubChain,
+  type ShinzoHubChainParameters,
+} from "@shinzo/shinzohub";
 import type { Chain } from "viem";
 import { getRpcUrl } from "@/shared/config/env";
 import { getCometRpcUrl, getCosmosRestUrl } from "./endpoints";
@@ -18,7 +21,9 @@ export async function resolveShinzoHubChain(): Promise<Chain> {
 }
 
 /** Fetches the live ShinzoHub chain definition through the webapp API proxy. */
-export async function fetchShinzoHubChain(signal?: AbortSignal): Promise<Chain> {
+export async function fetchShinzoHubChain(
+  signal?: AbortSignal
+): Promise<Chain> {
   const response = await fetch("/api/shinzohub/chain", { signal });
   if (!response.ok) {
     throw new Error("Failed to fetch ShinzoHub chain definition.");

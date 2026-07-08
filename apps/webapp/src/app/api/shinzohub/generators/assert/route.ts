@@ -121,7 +121,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { client, cometRpcUrl, cosmosRestUrl } = await getShinzohubQueryContext();
+  const { client, cometRpcUrl, cosmosRestUrl } =
+    await getShinzohubQueryContext();
   const rpcEndpoint =
     process.env.INDEXER_ASSERTION_RPC_ENDPOINT?.trim() || cometRpcUrl;
 

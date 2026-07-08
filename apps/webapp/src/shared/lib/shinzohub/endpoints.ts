@@ -8,9 +8,7 @@ const testnetRpcUrls =
 
 /** Resolves the Comet RPC endpoint used by server-side ShinzoHub queries. */
 export function getCometRpcUrl(): string {
-  return (
-    process.env.SHINZOHUB_COMET_RPC_URL ?? testnetRpcUrls.cometRpc.http[0]
-  );
+  return process.env.SHINZOHUB_COMET_RPC_URL ?? testnetRpcUrls.cometRpc.http[0];
 }
 
 /** Resolves the Cosmos REST endpoint used by server-side ShinzoHub queries. */
