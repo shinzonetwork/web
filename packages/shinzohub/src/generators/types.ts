@@ -84,8 +84,6 @@ export type SubmitGeneratorAssertionParameters = {
   privateKey: string;
   /** CometBFT RPC endpoint used for account queries and broadcast. */
   rpcEndpoint: string;
-  /** Cosmos chain ID. Defaults to the ID from the Comet RPC `/status` endpoint. */
-  chainId?: string;
   /** Validator public key for the generator. */
   validatorPublicKey: string;
   /** Source chain name (e.g. `ethereum`). */

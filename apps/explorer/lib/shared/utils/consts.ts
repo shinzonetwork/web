@@ -1,4 +1,4 @@
-import { shinzoHubDevelop } from '@shinzo/shinzohub';
+import { shinzoHubTestnet } from '@shinzo/shinzohub';
 import type { ChainPathSegment } from '@/shared/utils/links';
 
 export const GRAPHQL_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:9181/api/v0/graphql';
@@ -14,7 +14,7 @@ export function getRpcUrlForChainPathSegment(segment: ChainPathSegment): string 
     case 'shinzohub':
       return (
         process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
-        shinzoHubDevelop.rpcUrls.default.http[0]
+        shinzoHubTestnet.rpcUrls.default.http[0]
       );
     case 'ethereum':
       return process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL ?? 'https://ethereum-rpc.publicnode.com';

@@ -1,19 +1,10 @@
-import { shinzoHubDevelop } from "@shinzo/shinzohub";
-import { getShinzoPublicClient } from "@/shared/lib";
+import { getShinzoPublicClient } from "@/shared/lib/viem/client";
+import { getCometRpcUrl, getCosmosRestUrl } from "./endpoints";
 
-const developRpcUrls =
-  shinzoHubDevelop.rpcUrls as typeof shinzoHubDevelop.rpcUrls & {
-    cosmosRest: { http: readonly string[] };
-    cometRpc: { http: readonly string[] };
-  };
-
-export function getShinzohubQueryContext() {
+export async function getShinzohubQueryContext() {
   return {
-    client: getShinzoPublicClient(),
-    cosmosRestUrl:
-      process.env.SHINZOHUB_COSMOS_REST_URL ??
-      developRpcUrls.cosmosRest.http[0],
-    cometRpcUrl:
-      process.env.SHINZOHUB_COMET_RPC_URL ?? developRpcUrls.cometRpc.http[0],
+    client: await getShinzoPublicClient(),
+    cosmosRestUrl: getCosmosRestUrl(),
+    cometRpcUrl: getCometRpcUrl(),
   };
 }

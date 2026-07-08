@@ -1,7 +1,4 @@
-import type {
-  RegisteredHost,
-  RegisteredHostsListResponse,
-} from "@/shared/lib";
+import type { RegisteredHost, RegisteredHostsListResponse } from "@/shared/lib";
 import type {
   ListHostsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
@@ -26,4 +23,3 @@ export function serializeHostsList(
     },
   };
 }
-

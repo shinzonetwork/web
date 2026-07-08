@@ -2,9 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { watchAccount } from "@wagmi/core";
-import { disconnect } from "@wagmi/core";
-import config from "@/shared/config";
+import { disconnect, watchAccount } from "@wagmi/core";
+import { useConfig } from "wagmi";
 import { toast } from "react-toastify";
 import { TOAST_CONFIG } from "@/shared/lib";
 
@@ -14,6 +13,7 @@ function shortAddress(address: string) {
 
 export function WalletChangeGuard() {
   const router = useRouter();
+  const config = useConfig();
   const mountedRef = useRef(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function WalletChangeGuard() {
     });
 
     return () => unwatch();
-  }, [router]);
+  }, [config, router]);
 
   return null;
 }

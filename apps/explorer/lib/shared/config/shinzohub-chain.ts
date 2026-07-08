@@ -1,7 +1,7 @@
 import { defineChain, type Chain } from 'viem';
-import { shinzoHubDevelop } from '@shinzo/shinzohub';
+import {  shinzoHubTestnet } from '@shinzo/shinzohub';
 
-const developRpcUrls = shinzoHubDevelop.rpcUrls as typeof shinzoHubDevelop.rpcUrls & {
+const developRpcUrls = shinzoHubTestnet.rpcUrls as typeof shinzoHubTestnet.rpcUrls & {
   cosmosRest: { http: readonly string[] };
   cometRpc: { http: readonly string[] };
 };
@@ -9,7 +9,7 @@ const developRpcUrls = shinzoHubDevelop.rpcUrls as typeof shinzoHubDevelop.rpcUr
 export function createShinzoHubChain(): Chain {
     const evmRpcUrl =
       process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
-      shinzoHubDevelop.rpcUrls.default.http[0];
+      shinzoHubTestnet.rpcUrls.default.http[0];
     const cosmosRestUrl =
       process.env.SHINZOHUB_COSMOS_REST_URL ??
       developRpcUrls.cosmosRest.http[0];
@@ -17,12 +17,12 @@ export function createShinzoHubChain(): Chain {
       process.env.SHINZOHUB_COMET_RPC_URL ?? developRpcUrls.cometRpc.http[0];
 
     return defineChain({
-      id: shinzoHubDevelop.id,
-      name: shinzoHubDevelop.name,
+      id: shinzoHubTestnet.id,
+      name: shinzoHubTestnet.name,
       nativeCurrency: {
-        name: shinzoHubDevelop.nativeCurrency.name,
-        symbol: shinzoHubDevelop.nativeCurrency.symbol,
-        decimals: shinzoHubDevelop.nativeCurrency.decimals,
+        name: shinzoHubTestnet.nativeCurrency.name,
+        symbol: shinzoHubTestnet.nativeCurrency.symbol,
+        decimals: shinzoHubTestnet.nativeCurrency.decimals,
       },
       rpcUrls: {
         default: { http: [evmRpcUrl] },

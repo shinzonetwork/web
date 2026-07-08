@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
       100,
       parsePositiveInteger(req.nextUrl.searchParams.get("limit"), 10)
     );
-    const { client, cosmosRestUrl } = getShinzohubQueryContext();
+    const { client, cosmosRestUrl } = await getShinzohubQueryContext();
     const result = await listGenerators(client, {
       limit,
       offset: (page - 1) * limit,

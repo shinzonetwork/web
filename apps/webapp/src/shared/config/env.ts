@@ -4,6 +4,10 @@
  * to ensure proper validation and type safety.
  */
 
+import { shinzoHubTestnet } from "@shinzo/shinzohub";
+
+const testnetDefaultRpcUrl = shinzoHubTestnet.rpcUrls.default.http[0];
+
 /**
  * Get the RPC URL for the Shinzo network
  * @throws Error if NEXT_PUBLIC_RPC_URL is not configured in production
@@ -18,6 +22,6 @@ export function getRpcUrl(): string {
     );
   }
 
-  // Default to localhost for development
-  return rpcUrl || "http://localhost:8545";
+  // Default to testnet for development
+  return rpcUrl || testnetDefaultRpcUrl;
 }
