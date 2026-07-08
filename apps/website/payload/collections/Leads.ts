@@ -63,6 +63,7 @@ export const Leads: CollectionConfig = {
       name: "name",
       type: "text",
       required: true,
+      maxLength: 100,
     },
     {
       name: "email",
@@ -73,11 +74,13 @@ export const Leads: CollectionConfig = {
       name: "domain",
       type: "text",
       label: "Website",
+      maxLength: 253,
     },
     {
       name: "otherChains",
       type: "text",
       label: "Other Chains Secured",
+      maxLength: 500,
     },
     {
       name: "confirmed",
@@ -106,14 +109,17 @@ export const Leads: CollectionConfig = {
       name: "socialMedia",
       type: "array",
       label: "Social Media",
+      maxRows: 10,
       fields: [
         {
           name: "platform",
           type: "text",
+          maxLength: 50,
         },
         {
           name: "link",
           type: "text",
+          maxLength: 200,
         },
       ],
     },

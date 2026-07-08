@@ -2,17 +2,27 @@ import { createConfirmToken } from "@/lib/confirm-token";
 import configPromise from "@payload-config";
 import { getPayload } from "payload";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+
+const schema = z.object({
+  network: z.number(),
+  name: z.string().min(1).max(100),
+  email: z.email().max(254),
+  domain: z.string().max(253).optional(),
+  otherChains: z.string().max(500).optional(),
+  socialMedia: z.array(z.object({
+    platform: z.string().max(50),
+    link: z.string().max(200),
+  })).max(10).optional(),
+});
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json() as {
-      network: number;
-      name: string;
-      email: string;
-      domain?: string;
-      otherChains?: string;
-      socialMedia?: { platform: string; link: string }[];
-    };
+    const parsed = schema.safeParse(await req.json());
+    if (!parsed.success) {
+      return NextResponse.json({ errors: [{ message: "Invalid input." }] }, { status: 400 });
+    }
+    const body = parsed.data;
     const payload = await getPayload({ config: configPromise });
 
     const apiKey = process.env.RESEND_API_KEY;
