@@ -8,22 +8,35 @@ import { UNHEALTHY_LIVE_DATA } from "./get-generator-health";
 const originalFetch = globalThis.fetch;
 
 const generatorAddress = "shinzo1n97hkw5lqrh62e6644s2nk87uzzyp9u5u9g4pg";
+const validatorPublicKey = "dmFsaWRhdG9yLTE4MzM5OQ==";
 
 const generatorWire = {
-  address: generatorAddress,
   did: "did:key:zQ3shaXAyH7cPt1SiemqWtwXTt47EUWvCucxXmg1asUPdNk6P",
   connection_string:
     "/ip4/184.147.199.95/tcp/9171/p2p/12D3KooWQn339hGpGpg5AMN1PotxuJtYvhh1i4NqkPivfxdHSBQT",
   source_chain: "ethereum",
   source_chain_id: "1",
+  validator_pubkey: validatorPublicKey,
+  assertion_authority: "MHhGNkZlOWZmQUYzQzIxNkI3N0UyNDU3NUZCQkIxRjgwNjBEQzFCQmQ3",
+  operator_address: generatorAddress,
+  payout_address: generatorAddress,
+  chain_specific: "",
+  nonce: "2",
+  registered: true,
 };
 
 const generator = {
-  address: generatorAddress,
   did: generatorWire.did,
   connectionString: generatorWire.connection_string,
   sourceChain: generatorWire.source_chain,
   sourceChainId: generatorWire.source_chain_id,
+  validatorPublicKey: generatorWire.validator_pubkey,
+  assertionAuthority: generatorWire.assertion_authority,
+  operatorAddress: generatorWire.operator_address,
+  payoutAddress: generatorWire.payout_address,
+  chainSpecific: generatorWire.chain_specific,
+  nonce: generatorWire.nonce,
+  registered: generatorWire.registered,
 };
 
 afterEach(() => {
@@ -122,7 +135,7 @@ describe("getGenerator", () => {
         address: generatorAddress,
         cosmosRestUrl: "https://override.example",
       }),
-    ).resolves.toMatchObject({ address: generatorAddress });
+    ).resolves.toMatchObject(generator);
   });
 });
 
@@ -139,8 +152,6 @@ describe("getGeneratorAssertion", () => {
     chain: mockChain,
     transport: http(),
   });
-
-  const validatorPublicKey = "dmFsaWRhdG9yLTE4MzM5OQ==";
 
   it("loads generator assertion by validator public key", async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
@@ -199,7 +210,7 @@ describe("getGeneratorHealth timeout", () => {
 
   it("does not wait for later ports after the first succeeds", async () => {
     globalThis.fetch = vi.fn(async (url) => {
-      if (String(url).includes(":443")) {
+      if (String(url).includes(":8080")) {
         return Response.json({ status: "healthy", uptime: 1, uptime_seconds: 1, last_processed: "", current_block: 1, p2p: null });
       }
       throw new Error("should not reach port 8080");

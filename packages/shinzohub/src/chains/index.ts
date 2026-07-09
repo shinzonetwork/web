@@ -75,9 +75,9 @@ export const shinzoHubDevelop = defineChain({
   name: "ShinzoHub Develop",
   nativeCurrency: currency,
   rpcUrls: {
-    default: { http: ["http://rpc.devnet.shinzo.network:8545"] },
-    cosmosRest: { http: ["http://rpc.devnet.shinzo.network:1317"] },
-    cometRpc: { http: ["http://rpc.devnet.shinzo.network:26657"] },
+    default: { http: ["http://rpc.develop.devnet.shinzo.network:8545"] },
+    cosmosRest: { http: ["http://rpc.develop.devnet.shinzo.network:1317"] },
+    cometRpc: { http: ["http://rpc.develop.devnet.shinzo.network:26657"] },
   },
 });
 

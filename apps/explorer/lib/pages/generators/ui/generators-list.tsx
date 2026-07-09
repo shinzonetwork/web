@@ -16,14 +16,13 @@ import { getHealthUrl } from "@/shared/health/lib/utils";
 import { ShinzohubAddressLink } from "@/shared/shinzohub/address-link";
 
 const tableHeadings = [
-  "Generator Public IP",
   "Address",
+  "Generator Public IP",
   "Status",
   "Chain",
   "Uptime",
   "Current Block",
   "Last Updated",
-  ''
 ];
 
 export const GeneratorsList = ({
