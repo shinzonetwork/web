@@ -6,6 +6,12 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"keep_vars": true,
+	"vars": {
+		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "http://testnet.shinzo.network:26657",
+		"SHINZOHUB_COSMOS_REST_URL": "http://testnet.shinzo.network:1317",
+		"SHINZOHUB_COMET_RPC_URL": "http://testnet.shinzo.network:26657"
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
