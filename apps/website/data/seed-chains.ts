@@ -64,7 +64,6 @@ async function seed() {
         description: network.description,
         token: network.token ?? null,
         isSupported: network.isSupported,
-        spotsLimit: network.spotsLimit,
         upvotes: 0,
       },
     });

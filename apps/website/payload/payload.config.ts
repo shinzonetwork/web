@@ -18,7 +18,7 @@ import { fileURLToPath } from "url";
 import { GetPlatformProxyOptions } from "wrangler";
 import { Authors } from "./collections/Authors";
 import { Chains } from "./collections/Chains";
-import { Claims } from "./collections/Claims";
+import { Leads } from "./collections/Leads";
 import { Media } from "./collections/Media";
 import { Posts } from "./collections/Posts";
 import { Suggestions } from "./collections/Suggestions";
@@ -73,7 +73,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts, Authors, Chains, Claims, Suggestions],
+  collections: [Users, Media, Posts, Authors, Chains, Leads, Suggestions],
   globals: [BlogLanding],
   editor: lexicalEditor({
     features: ({ defaultFeatures, rootFeatures }) => [
@@ -111,7 +111,7 @@ export default buildConfig({
   ],
   email: resendAdapter({
     defaultFromAddress: "updates@web-mail.shinzo.network",
-    defaultFromName: "Shinzo Website",
+    defaultFromName: "Shinzō",
     apiKey: process.env.RESEND_API_KEY || "",
   }),
 });

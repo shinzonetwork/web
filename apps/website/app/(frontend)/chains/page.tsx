@@ -2,14 +2,15 @@ import BlockContainer from "@/components/block-container";
 import BlockCta from "@/components/block-cta";
 import BlockHero from "@/components/block-hero";
 import BlockSpacing from "@/components/block-spacing";
-import { DialogIndexer } from "@/components/dialog-indexer/dialog-indexer";
 import { DialogSuggest } from "@/components/dialog-suggest";
 import { NetworkCard } from "@/components/network-card/network-card";
 import SectionTitle from "@/components/section-title";
+import { Button } from "@/components/ui/button";
+import { Chain } from '@/payload/payload-types';
 import configPromise from "@payload-config";
 import { Metadata } from "next";
+import Link from "next/link";
 import { BasePayload, getPayload } from 'payload';
-import { Chain } from '@/payload/payload-types';
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,7 @@ export default async function Page() {
         content={
           <p>
             Live chains you can join today. Planned chains you can push to the top.
-            Upvotes = demand. Claimed validator spots = verified supply.
+            Upvotes = demand signal.
           </p>
         }
       />
@@ -46,17 +47,14 @@ export default async function Page() {
                   <NetworkCard key={chain.slug} chain={chain} highlighted />
                 ))}
                 <div className="lg:col-span-2 richtext lg:p-4">
-                  <h2 className="text-h4">/ Index this Chain!</h2>
+                  <h2 className="text-h4">/ Become a Generator</h2>
                   <p>
-                    Help power Ethereum indexing for developers, dApps, and
-                    analytics tools. Become a generator and contribute to global,
-                    decentralized data availability.
+                    Generators power the network&apos;s read layer. Run a lightweight
+                    client alongside your node and earn rewards for the data you serve.
                   </p>
-                  <DialogIndexer
-                    networkName={supported[0]?.name}
-                    chainId={supported[0]?.id}
-                    supported={true}
-                  />
+                  <div className="not-prose">
+                  <Button asChild><Link href="https://docs.shinzo.network/generator/overview" target="_blank" >Become a Generator</Link></Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -120,28 +118,11 @@ const queryChainsByType = async (payload: BasePayload, supported: boolean) => {
       description: true,
       token: true,
       isSupported: true,
-      spotsLimit: true,
       upvotes: true,
-      claims: true,
-    },
-    joins: {
-      claims: {
-        count: true,
-        where: {
-          verified: { equals: true },
-        }
-      }
     },
   });
 
-  return chains.docs.map((chain) => {
-    const claims = (chain as unknown as { claims?: { totalDocs?: number } }).claims;
-    return {
-      ...chain,
-      claims: undefined,
-      claimedSpots: claims?.totalDocs ?? 0,
-    };
-  }) as (Chain & { claimedSpots: number })[];
+  return chains.docs as Chain[];
 };
 
 const queryChains = async () => {
@@ -152,8 +133,5 @@ const queryChains = async () => {
     queryChainsByType(payload, false),
   ]);
 
-  return {
-    supported,
-    planned,
-  };
+  return { supported, planned };
 };

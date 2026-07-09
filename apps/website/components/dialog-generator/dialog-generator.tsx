@@ -17,26 +17,19 @@ import { Info, XIcon } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 import { useAppForm } from "../forms/form-context"
-import { ConnectButton } from "./connect-button"
-import { useAccount } from 'wagmi';
-import type { Claim } from '@/payload/payload-types';
 
-interface DialogIndexerProps {
+interface DialogGeneratorInterestProps {
     networkName: string
     chainId: number
-    supported: boolean
     label?: string
 }
 
-const validatorPubkeyRegex = /^0x[0-9a-fA-F]{96}$/;
-
 const schema = z.object({
     network: z.number(),
-    validatorAddress: z.string().min(1, "Validator Address is required"),
-    validatorPublicKey: z.string().regex(validatorPubkeyRegex, "Must be a valid BLS public key (0x-prefixed, 96 hex characters)"),
-    signature: z.string().min(1, "Signature is required"),
+    name: z.string().min(1, "Name is required"),
     email: z.email(),
     domain: z.string(),
+    otherChains: z.string(),
     socialMedia: z.array(z.object({
         platform: z.string(),
         link: z.string()
@@ -45,22 +38,18 @@ const schema = z.object({
 
 const defaultFormValues: z.input<typeof schema> = {
     network: 0,
-    validatorAddress: "",
-    validatorPublicKey: "",
-    signature: "",
+    name: "",
     email: "",
     domain: "",
+    otherChains: "",
     socialMedia: [{ platform: "", link: "" }],
 }
 
-export function DialogIndexer({ networkName, chainId, supported, label = 'Become a Generator' }: DialogIndexerProps) {
-    const { address } = useAccount();
-
+export function DialogGeneratorInterest({ networkName, chainId, label = 'Become a Generator' }: DialogGeneratorInterestProps) {
     const form = useAppForm({
         defaultValues: {
             ...defaultFormValues,
             network: chainId,
-            validatorAddress: address as string,
         },
         onSubmit: async ({ value }) => {
             try {
@@ -68,15 +57,14 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
 
                 const body = {
                     network: value.network,
-                    validatorAddress: value.validatorAddress,
-                    validatorPublicKey: value.validatorPublicKey,
-                    signature: value.signature,
+                    name: value.name,
                     email: value.email,
                     domain: value.domain,
+                    otherChains: value.otherChains,
                     socialMedia: value.socialMedia?.filter(entry => entry.platform || entry.link),
-                } satisfies Omit<Claim, 'id' | 'updatedAt' | 'createdAt'>;
+                };
 
-                const response = await fetch(`/api/claims`, {
+                const response = await fetch(`/api/register-interest`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -89,6 +77,9 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                     const message = data?.errors?.[0]?.message;
                     throw new Error(message);
                 }
+
+                const data: { emailSent: boolean } = await response.json();
+                setEmailSent(data.emailSent);
 
             } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -104,8 +95,8 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
 
     const isSubmitting = useStore(form.store, (state) => state.isSubmitting);
     const isSubmitSuccessful = useStore(form.store, (state) => state.isSubmitSuccessful);
-    const signature = useStore(form.store, (state) => state.values.signature);
     const [formError, setFormError] = useState<string | null>(null);
+    const [emailSent, setEmailSent] = useState(false);
 
     const onOpenChange = (open: boolean) => {
         if (!open) {
@@ -115,22 +106,7 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
 
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!signature) {
-            setFormError("Please sign the message.");
-            return;
-        }
-
         form.handleSubmit();
-    }
-
-    const handleWalletSuccess = (address: string, signature: string) => {
-        form.setFieldValue("validatorAddress", address);
-        form.setFieldValue("signature", signature);
-    }
-
-    const handleWalletDisconnect = () => {
-        form.setFieldValue("validatorAddress", "");
-        form.setFieldValue("signature", "");
     }
 
     return (
@@ -140,42 +116,27 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                 <Button>{label}</Button>
             </DialogTrigger>
 
-            <DialogContent
-                className="max-w-[900px] w-dvw lg:px-30 lg:py-20"
-                onPointerDownOutside={(e) => {
-                    // Prevent closing when clicking on WalletConnect modal or other portaled elements
-                    const target = e.target as HTMLElement;
-                    if (target.closest('[data-radix-portal]') || target.closest('wcm-modal') || target.closest('w3m-modal')) {
-                        e.preventDefault();
-                    }
-                }}
-                onInteractOutside={(e) => {
-                    // Also prevent on interact outside for WalletConnect modals
-                    const target = e.target as HTMLElement;
-                    if (target.closest('[data-radix-portal]') || target.closest('wcm-modal') || target.closest('w3m-modal')) {
-                        e.preventDefault();
-                    }
-                }}
-            >
+            <DialogContent className="max-w-[900px] w-dvw lg:px-30 lg:py-20">
 
                 {!isSubmitSuccessful && (
                   <DialogHeader>
                       <DialogTitle>/ Become a Generator of <span className="text-szo-primary">{`[`}</span>{networkName}<span className="text-szo-primary">{`]`}</span></DialogTitle>
                       <DialogDescription>
-                          {supported ? (
-                            <>Verify you&apos;re an active validator of {networkName} to become an generator of this network. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
-                          ) : (
-                            <>Claim your spot as a validator of {networkName}. Connect the wallet tied to your validator pubkey&apos;s withdrawal address.</>
-                          )}
+                          Register your interest in becoming a Generator for {networkName}. <br />We&apos;ll notify you as soon as support is added.
                       </DialogDescription>
+                      <p className="text-left text-xs text-text-secondary font-mono pt-4">You&apos;ll receive a confirmation email to verify your address.</p>
                   </DialogHeader>
                 )}
 
                 {isSubmitSuccessful ? (
                     <div className="pt-15 ">
                         <div className="richtext mb-10">
-                            <h2 className="text-h4">We got it!</h2>
-                            <p>Thanks for registering! Our team will review your claim and get back to you shortly.</p>
+                            <h2 className="text-h4">Thank you, we&apos;ve received your interest.</h2>
+                            {emailSent ? (
+                                <p>We&apos;ve sent a confirmation email. Please check your inbox to complete your sign up.</p>
+                            ) : (
+                                <p>Thanks for registering your interest. We&apos;ll be in touch when support is added.</p>
+                            )}
                         </div>
 
                         <DialogClose asChild>
@@ -186,43 +147,8 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                     <form onSubmit={onFormSubmit} noValidate>
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-3">
-                                <form.AppField name="signature">
-                                    {() => null}
-                                </form.AppField>
-
-                                <form.AppField
-                                    name="validatorAddress"
-                                    validators={{
-                                        onChange: (data) => {
-                                            return data.value.split('Error: ')?.[1];
-                                        },
-                                    }}
-                                >
-                                    {({ TextField, handleChange }) => (
-                                      <TextField
-                                        label="Validator Withdrawal Address"
-                                        placeholder="Connect wallet to fill"
-                                        required
-                                        disabled
-                                        readonly
-                                        endAdornment={(
-                                              <ConnectButton
-                                                signature={signature}
-                                                onSuccess={handleWalletSuccess}
-                                                onDisconnect={handleWalletDisconnect}
-                                                onError={(err) => {
-                                                    if (!err) return;
-                                                    handleChange(`Error: ${err}`);
-                                                }}
-                                              />
-                                        )}
-                                      />
-                                    )}
-                                </form.AppField>
-                            </div>
-                            <div className="grid gap-3">
-                                <form.AppField name="validatorPublicKey">
-                                    {({ TextField }) => <TextField label="Validator Public Key" placeholder="0x..." required />}
+                                <form.AppField name="name">
+                                    {({ TextField }) => <TextField label="Name" placeholder="Your name" required />}
                                 </form.AppField>
                             </div>
                             <div className="grid gap-3">
@@ -232,12 +158,17 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                             </div>
                             <div className="grid gap-3">
                                 <form.AppField name="domain" >
-                                    {({ TextField }) => <TextField label="Domain" placeholder="Website" />}
+                                    {({ TextField }) => <TextField label="Organisation / Domain" placeholder="Your organisation or website" />}
+                                </form.AppField>
+                            </div>
+                            <div className="grid gap-3">
+                                <form.AppField name="otherChains">
+                                    {({ TextField }) => <TextField label="Other chains you secure?" placeholder="e.g. Ethereum, Solana, Avalanche" />}
                                 </form.AppField>
                             </div>
 
                             <div className="grid gap-3">
-                                <Label htmlFor="email">Social Media</Label>
+                                <Label>Social Media</Label>
                                 <form.AppField name="socialMedia" mode="array" >
                                     {(field) => {
                                         return (
@@ -281,12 +212,15 @@ export function DialogIndexer({ networkName, chainId, supported, label = 'Become
                                 )}
                             </div>
                         </div>
+
                         <DialogFooter>
                             <DialogClose asChild>
                                 <Button type="button" variant="outline">Cancel</Button>
                             </DialogClose>
                             <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
                         </DialogFooter>
+
+
                     </form>
                 )}
 

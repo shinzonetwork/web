@@ -10,7 +10,7 @@
     "build:open": "opennextjs-cloudflare build",
     "deploy": "pnpm run deploy:database && pnpm run deploy:app",
     "deploy:app": "opennextjs-cloudflare build --env=$CLOUDFLARE_ENV && opennextjs-cloudflare deploy --env=$CLOUDFLARE_ENV",
-    "deploy:database": "NODE_ENV=production CLOUDFLARE_ENV=$CLOUDFLARE_ENV payload migrate && pnpm seed:chains && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote",
+    "deploy:database": "NODE_ENV=production CLOUDFLARE_ENV=$CLOUDFLARE_ENV payload migrate && wrangler d1 execute D1 --command 'PRAGMA optimize' --env=$CLOUDFLARE_ENV --remote",
     "generate:importmap": "payload generate:importmap",
     "generate:types": "pnpm run generate:types:cloudflare && pnpm run generate:types:payload",
     "generate:types:cloudflare": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
@@ -18,7 +18,7 @@
     "lint": "eslint",
     "payload": "payload",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview --env=$CLOUDFLARE_ENV",
-    "seed:chains": "pnpx tsx data/seed-chains.ts",
+    "seed:chains": "PAYLOAD_MIGRATING=true pnpx tsx data/seed-chains.ts",
     "start": "next start"
   },
   "dependencies": {
@@ -40,10 +40,6 @@
     "@shikijs/themes": "^4.0.2",
     "@shinzo/ui": "workspace:*",
     "@tanstack/react-form": "^1.32.0",
-    "@tanstack/react-query": "^5.100.10",
-    "@wagmi/connectors": "^7.1.5",
-    "@wagmi/core": "^3.3.1",
-    "@walletconnect/ethereum-provider": "^2.23.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "17.4.2",
@@ -54,8 +50,6 @@
     "payload": "3.84.1",
     "sharp": "^0.34.5",
     "shiki": "^4.0.2",
-    "viem": "~2.44.4",
-    "wagmi": "^2.19.5",
     "zod": "^4.4.3"
   },
   "devDependencies": {

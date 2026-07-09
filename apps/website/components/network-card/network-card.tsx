@@ -13,11 +13,8 @@ export type ChainCardData = Pick<
   | "description"
   | "token"
   | "isSupported"
-  | "spotsLimit"
   | "upvotes"
-> & {
-  claimedSpots: number;
-};
+>;
 
 export const NetworkCard = ({
   chain,
@@ -39,10 +36,12 @@ export const NetworkCard = ({
         >
           <div className="absolute top-0 left-0 w-full h-14 flex gap-2 px-2 pt-2">
             <div className="h-full w-full inset[0_0_0_0] border border-szo-border-light bg-szo-light-gray group-hover:bg-szo-primary transition-all duration-300"></div>
-            <UpvotesButton
-              chainId={chain.id}
-              upvotes={chain.upvotes ?? 0}
-            />
+            {!chain.isSupported && (
+              <UpvotesButton
+                chainId={chain.id}
+                upvotes={chain.upvotes ?? 0}
+              />
+            )}
           </div>
 
           <div className={cn(
@@ -62,11 +61,6 @@ export const NetworkCard = ({
             <p className="font-light font-mono text-px-16">/ {chain.name}</p>
           </div>
 
-          {chain.claimedSpots > 0 && (
-            <p className="font-mono text-px-13 text-text-secondary">
-              Spots claimed: {chain.claimedSpots}/{chain.spotsLimit}
-            </p>
-          )}
         </div>
       </Link>
 

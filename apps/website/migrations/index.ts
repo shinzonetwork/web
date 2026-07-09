@@ -4,6 +4,7 @@ import * as migration_20251222_232332_update_posts from './20251222_232332_updat
 import * as migration_20251223_171559_add_blog_landing_global from './20251223_171559_add_blog_landing_global';
 import * as migration_20260205_134002_add_indexer_directory from './20260205_134002_add_indexer_directory';
 import * as migration_20260213_175812_validator_public_key from './20260213_175812_validator_public_key';
+import * as migration_20260707_224749 from './20260707_224749';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20260213_175812_validator_public_key.up,
     down: migration_20260213_175812_validator_public_key.down,
-    name: '20260213_175812_validator_public_key'
+    name: '20260213_175812_validator_public_key',
+  },
+  {
+    up: migration_20260707_224749.up,
+    down: migration_20260707_224749.down,
+    name: '20260707_224749'
   },
 ];
