@@ -1,6 +1,6 @@
 import { HealthEntryKeyParams } from "../types";
 
-export const HEALTH_PORT = 443 as const;
+export const HEALTH_PORT = 8080 as const;
 
 /** Health check URL for an IPv4. */
 export function getHealthUrl(ip: string): string {

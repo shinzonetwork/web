@@ -84,7 +84,7 @@ export function Table({ entries }: TableProps) {
                 </td>
                 <td className="min-w-0 px-1.5 py-2 align-top whitespace-nowrap font-mono text-xs sm:px-2">
                   <a
-                    href={`http://${entry.ip}:443/health`}
+                    href={`http://${entry.ip}:8080/health`}
                     target="_blank"
                     rel="noreferrer"
                     className="text-blue-500 underline hover:text-blue-600"

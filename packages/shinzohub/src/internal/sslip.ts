@@ -1,6 +1,6 @@
 const SSLIP_DOMAIN = "sslip.io";
 const HEALTH_PATH = "/health";
-const HEALTH_PORT = 443;
+const HEALTH_PORT = 8080;
 
 /** Returns true for dotted-decimal IPv4 addresses only. */
 export function isIPv4(value: string): boolean {

@@ -169,7 +169,7 @@ describe("getHostHealth timeout", () => {
 
   it("does not wait for later ports after the first succeeds", async () => {
     globalThis.fetch = vi.fn(async (url) => {
-      if (String(url).includes(":443")) {
+      if (String(url).includes(":8080")) {
         return Response.json({ status: "healthy", uptime: 1, uptime_seconds: 1, last_processed: "", current_block: 1, p2p: null });
       }
       throw new Error("should not reach port 8080");

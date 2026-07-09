@@ -16,8 +16,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { getHealthUrl } from "@/shared/health/lib/utils";
 
 const tableHeadings = [
-  "Host Public IP",
   "Address",
+  "Host Public IP",
   "Status",
   "Uptime",
   "Current Block",
