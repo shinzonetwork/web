@@ -10,8 +10,8 @@
   "vars": {
     "VITE_RECAPTCHA_SITE_KEY": "",
     "VITE_SHINZOHUB_EXPLORER_URL": "https://explorer.shinzo.network/shinzohub",
-    "SHINZOHUB_COSMOS_RPC": "http://rpc.develop.devnet.shinzo.network:1317",
-    "SHINZOHUB_RPC": "http://rpc.develop.devnet.shinzo.network:26657"
+    "SHINZOHUB_COSMOS_RPC": "http://testnet.shinzo.network:1317",
+    "SHINZOHUB_RPC": "http://testnet.shinzo.network:26657"
   },
   "secrets": {
     "required": ["RECAPTCHA_SECRET_KEY", "FAUCET_PRIVATE_KEY"]
