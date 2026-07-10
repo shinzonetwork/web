@@ -4,6 +4,7 @@ import {
   createView,
   getCreatedViewAddress,
   getView,
+  getViewRegistration,
   listViews,
 } from "./views/index";
 import {
@@ -76,15 +77,24 @@ export {
   createView,
   getCreatedViewAddress,
   getView,
+  getViewRegistration,
   listViews,
+  VIEW_REGISTRY_STATUS_NONE,
+  VIEW_REGISTRY_STATUS_PENDING,
+  VIEW_REGISTRY_STATUS_REGISTERED,
   viewRegistryAbi,
   viewRegistryAddress,
 } from "./views/index";
 export type {
+  CountViewsParameters,
   CreateViewParameters,
+  GetViewParameters,
+  GetViewRegistrationParameters,
   ListViewsParameters,
   ListViewsResult,
   ShinzoHubView,
+  ViewRegistration,
+  ViewRegistrationStatus,
   ViewMetadata,
 } from "./views/index";
 export {
@@ -186,8 +196,11 @@ export function shinzoHubActions(client: Client) {
     countViews: (parameters?: Parameters<typeof countViews>[1]) => countViews(client, parameters),
     /** Creates a ShinzoHub view from raw viewbundle bytes. */
     createView: (parameters: Parameters<typeof createView>[1]) => createView(client, parameters),
-    /** Fetches one registered ShinzoHub view by contract address. */
+    /** Fetches one registered ShinzoHub view by deterministic view address. */
     getView: (parameters: Parameters<typeof getView>[1]) => getView(client, parameters),
+    /** Fetches ViewRegistry lifecycle status for one view address. */
+    getViewRegistration: (parameters: Parameters<typeof getViewRegistration>[1]) =>
+      getViewRegistration(client, parameters),
     /** Lists registered ShinzoHub views. */
     listViews: (parameters?: Parameters<typeof listViews>[1]) => listViews(client, parameters),
     /** Lists native Cosmos and EVM transactions. */

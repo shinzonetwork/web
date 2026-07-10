@@ -2,14 +2,10 @@
 
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  type ShinzoHubView,
-} from "@shinzo/shinzohub";
+import { type ShinzoHubView } from "@shinzo/shinzohub";
 import {
   decodeViewRouteIdentifier,
   fetchHubViewByAddress,
-  fetchHubViewsByName,
-  toHeightNumber,
   toViewAddress,
   toViewDetails,
 } from "@/entities/view";
@@ -21,69 +17,38 @@ import {
 } from "./view-graphql";
 import type { ViewPageRecord, ViewPageState } from "./types";
 
-const VIEW_LOOKUP_LIMIT = 200;
 const VIEW_STALE_TIME_MS = 60 * 1000;
-
-const compareViewsByHeightDesc = (
-  left: ShinzoHubView,
-  right: ShinzoHubView
-): number => toHeightNumber(right.height) - toHeightNumber(left.height);
 
 const isParsedView = (view: ShinzoHubView): boolean =>
   Boolean(view.metadata) && !view.metadata?.parseError.trim();
 
-const findNewestParsedViewByName = async (
-  name: string
-): Promise<ShinzoHubView> => {
-  const views = await fetchHubViewsByName(name, {
-    includeMetadata: true,
-    limit: VIEW_LOOKUP_LIMIT,
-  });
-  const view = [...views]
-    .filter((candidate) => candidate.name === name && isParsedView(candidate))
-    .sort(compareViewsByHeightDesc)[0];
-
-  if (!view) {
-    throw new Error(`No parsed ShinzoHub view metadata found for "${name}".`);
-  }
-
-  return view;
-};
-
 /**
- * Resolves `/views/{identifier}` where the identifier can be either a public
- * Studio view name or a historical contract-address deep link.
+ * Resolves `/views/{viewAddress}` by deterministic registry-owned view address.
  */
 const findParsedViewByAddress = async (
-  address: string
+  viewAddress: string
 ): Promise<ShinzoHubView> => {
-  const view = await fetchHubViewByAddress(address, {
+  const view = await fetchHubViewByAddress(viewAddress, {
     includeMetadata: true,
   });
 
   if (isParsedView(view)) return view;
 
   throw new Error(
-    `No ShinzoHub View metadata found for this contract address: "${address}".`
+    `No ShinzoHub View metadata found for this view address: "${viewAddress}".`
   );
 };
 
 const fetchViewByRoute = async ({
-  identifier,
   address,
 }: {
-  identifier: string;
   address: string | null;
 }): Promise<ShinzoHubView> => {
-  if (address) {
-    return findParsedViewByAddress(address);
+  if (!address) {
+    throw new Error("View address is missing or invalid.");
   }
 
-  if (!identifier) {
-    throw new Error("View identifier is missing.");
-  }
-
-  return findNewestParsedViewByName(identifier);
+  return findParsedViewByAddress(address);
 };
 
 const toViewPageRecord = (view: ShinzoHubView): ViewPageRecord => {

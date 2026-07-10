@@ -48,7 +48,7 @@ export function ShinzohubAddressViews({
             description="Registered views will appear here."
           />
         )}
-        headings={["View", "Contract", "Height"]}
+        headings={["View", "View address", "Height"]}
         gridClass="grid-cols-[minmax(180px,1fr)_minmax(180px,0.8fr)_110px]"
         iterable={data?.views ?? []}
         rowRenderer={(view) => (
@@ -67,10 +67,10 @@ export function ShinzohubAddressViews({
               )}
             </TableNullableCell>
 
-            <TableNullableCell value={view.contractAddress}>
-              {(contractAddress) => (
-                <ShinzohubAddressLink address={contractAddress} copyable className="font-mono">
-                  {formatHash(contractAddress, 10, 8)}
+            <TableNullableCell value={view.viewAddress}>
+              {(viewAddress) => (
+                <ShinzohubAddressLink address={viewAddress} copyable className="font-mono">
+                  {formatHash(viewAddress, 10, 8)}
                 </ShinzohubAddressLink>
               )}
             </TableNullableCell>

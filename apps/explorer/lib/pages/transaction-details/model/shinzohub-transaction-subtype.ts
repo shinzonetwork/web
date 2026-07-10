@@ -8,13 +8,12 @@ type AttributeMap = ReadonlyMap<string, string>;
 
 type GeneratorEventType =
   | 'generator.generator_pending'
-  | 'generator.generator_registered'
-  | 'indexer.indexer_pending'
-  | 'indexer.indexer_registered';
+  | 'generator.generator_registered';
 type HostEventType = 'host.host_pending' | 'host.host_registered';
 type ViewEventType =
   | 'view.view_pending'
   | 'view.view_registered'
+  | 'view.view_registration_failed'
   | 'view.view_registration_timed_out';
 
 /**
@@ -23,10 +22,9 @@ type ViewEventType =
  * payloads and avoids hiding wire-level assumptions behind renamed fields.
  */
 interface ViewEventAttributes {
-  view_id: string;
-  contract_address: string;
+  address: string;
+  name: string;
   creator: string;
-  msg_index: string;
 }
 
 interface HostEventAttributes {
@@ -41,7 +39,7 @@ interface GeneratorEventAttributes {
   msg_index: string;
 }
 
-interface IndexerAssertedEventAttributes {
+interface GeneratorAssertedEventAttributes {
   signer: string;
   consensus_pub_key: string;
   delegate_address: string;
@@ -54,17 +52,20 @@ interface IndexerAssertedEventAttributes {
 /**
  * Semantic transaction subtype for view lifecycle transactions.
  *
- * The chain already emits the view id, contract address, and creator in the
+ * The chain already emits the view address, name, and creator in the
  * transaction events, so the explorer can classify these synchronously from the
  * loaded transaction payload without decoding EVM logs or making view lookups.
  */
 export interface ViewTransactionSubtype {
   kind: 'view';
-  status: 'pending' | 'registered' | 'timed-out';
-  label: 'View pending' | 'View registered' | 'View timed out';
-  viewId?: string;
+  status: 'pending' | 'registered' | 'failed' | 'timed-out';
+  label:
+    | 'View pending'
+    | 'View registered'
+    | 'View failed'
+    | 'View timed out';
   viewName?: string;
-  contractAddress?: string;
+  viewAddress?: string;
   creator?: string;
   error?: string;
   externalUrl?: string;
@@ -81,8 +82,6 @@ export interface HostTransactionSubtype {
 
 /**
  * Semantic transaction subtype for generator registration lifecycle events.
- * The current chain event type is `indexer.indexer_*`; the explorer presents
- * those records as generators because that is the product-facing entity name.
  */
 export interface GeneratorRegistrationTransactionSubtype {
   kind: 'generator-registration';
@@ -93,15 +92,15 @@ export interface GeneratorRegistrationTransactionSubtype {
 }
 
 /**
- * Semantic transaction subtype for indexer assertions.
+ * Semantic transaction subtype for generator assertions.
  *
- * `IndexerAsserted` events are not EVM-specific, so this keeps their source
- * chain and signer address available to the UI without coupling them to the
- * generic sender/recipient fields.
+ * Generator assertion events keep their source chain and signer address
+ * available to the UI without coupling them to the generic sender/recipient
+ * fields.
  */
-export interface IndexerAssertionTransactionSubtype {
-  kind: 'indexer-assertion';
-  label: 'Indexer assertion';
+export interface GeneratorAssertionTransactionSubtype {
+  kind: 'generator-assertion';
+  label: 'Generator assertion';
   signer: string;
   consensusPubKey: string;
   delegateAddress: string;
@@ -114,7 +113,7 @@ export type ShinzohubTransactionSubtype =
   | ViewTransactionSubtype
   | HostTransactionSubtype
   | GeneratorRegistrationTransactionSubtype
-  | IndexerAssertionTransactionSubtype;
+  | GeneratorAssertionTransactionSubtype;
 
 type TransactionSubtypeResolver = (
   event: ShinzohubEvent,
@@ -150,26 +149,13 @@ function getOptionalAttribute(
   return attributes.get(key) || undefined;
 }
 
-/**
- * View ids include the deployed contract address as a suffix, while Studio view
- * routes are keyed by the human-readable view name. Strip only the exact
- * address suffix and fall back to the full id if the event ever changes shape.
- */
-function getViewName(viewId: string, contractAddress: string): string {
-  const suffix = `_${contractAddress}`;
-  if (viewId.toLowerCase().endsWith(suffix.toLowerCase())) {
-    return viewId.slice(0, -suffix.length);
-  }
-
-  return viewId;
-}
-
 function resolveViewSubtype(
   event: ShinzohubEvent,
 ): ViewTransactionSubtype | null {
   if (
     event.type !== 'view.view_pending' &&
     event.type !== 'view.view_registered' &&
+    event.type !== 'view.view_registration_failed' &&
     event.type !== 'view.view_registration_timed_out'
   ) {
     return null;
@@ -177,48 +163,39 @@ function resolveViewSubtype(
 
   const eventAttributes = toAttributeMap(event.attributes);
   const eventType = event.type as ViewEventType;
-  const viewId = getOptionalAttribute(eventAttributes, 'view_id');
-  const contractAddress = getOptionalAttribute(eventAttributes, 'contract_address');
-  const creator = getOptionalAttribute(eventAttributes, 'creator');
-  const error = getOptionalAttribute(eventAttributes, 'error');
-  const viewName = viewId && contractAddress
-    ? getViewName(viewId, contractAddress)
-    : viewId;
-
-  if (eventType === 'view.view_registration_timed_out') {
-    return {
-      kind: 'view',
-      status: 'timed-out',
-      label: 'View timed out',
-      viewId,
-      viewName,
-      contractAddress,
-      creator,
-      error,
-    };
-  }
-
   const attributes = getRequiredAttributes(
     eventAttributes,
-    ['view_id', 'contract_address', 'creator', 'msg_index'] as const,
+    ['address', 'name', 'creator'] as const,
   ) satisfies ViewEventAttributes | null;
   if (!attributes) return null;
 
-  const status = eventType === 'view.view_pending' ? 'pending' : 'registered';
-  const resolvedViewName = getViewName(
-    attributes.view_id,
-    attributes.contract_address,
-  );
+  const status = eventType === 'view.view_pending'
+    ? 'pending'
+    : eventType === 'view.view_registered'
+      ? 'registered'
+      : eventType === 'view.view_registration_failed'
+        ? 'failed'
+        : 'timed-out';
+  const label = status === 'pending'
+    ? 'View pending'
+    : status === 'registered'
+      ? 'View registered'
+      : status === 'failed'
+        ? 'View failed'
+        : 'View timed out';
+  const isLinkable = status === 'pending' || status === 'registered';
 
   return {
     kind: 'view',
     status,
-    label: status === 'pending' ? 'View pending' : 'View registered',
-    viewId: attributes.view_id,
-    viewName: resolvedViewName,
-    contractAddress: attributes.contract_address,
+    label,
+    viewName: attributes.name,
+    viewAddress: attributes.address,
     creator: attributes.creator,
-    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(resolvedViewName)}`,
+    error: getOptionalAttribute(eventAttributes, 'error'),
+    externalUrl: isLinkable
+      ? `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(attributes.address)}`
+      : undefined,
   };
 }
 
@@ -255,9 +232,7 @@ function resolveGeneratorRegistrationSubtype(
 ): GeneratorRegistrationTransactionSubtype | null {
   if (
     event.type !== 'generator.generator_pending' &&
-    event.type !== 'generator.generator_registered' &&
-    event.type !== 'indexer.indexer_pending' &&
-    event.type !== 'indexer.indexer_registered'
+    event.type !== 'generator.generator_registered'
   ) {
     return null;
   }
@@ -269,11 +244,9 @@ function resolveGeneratorRegistrationSubtype(
   if (!attributes) return null;
 
   const eventType = event.type as GeneratorEventType;
-  const status =
-    eventType === 'generator.generator_pending' ||
-    eventType === 'indexer.indexer_pending'
-      ? 'pending'
-      : 'registered';
+  const status = eventType === 'generator.generator_pending'
+    ? 'pending'
+    : 'registered';
 
   return {
     kind: 'generator-registration',
@@ -284,10 +257,10 @@ function resolveGeneratorRegistrationSubtype(
   };
 }
 
-function resolveIndexerAssertionSubtype(
+function resolveGeneratorAssertionSubtype(
   event: ShinzohubEvent,
-): IndexerAssertionTransactionSubtype | null {
-  if (event.type !== 'IndexerAsserted') {
+): GeneratorAssertionTransactionSubtype | null {
+  if (event.type !== 'GeneratorAsserted' && event.type !== 'IndexerAsserted') {
     return null;
   }
 
@@ -302,12 +275,12 @@ function resolveIndexerAssertionSubtype(
       'assertion_id',
       'msg_index',
     ] as const,
-  ) satisfies IndexerAssertedEventAttributes | null;
+  ) satisfies GeneratorAssertedEventAttributes | null;
   if (!attributes) return null;
 
   return {
-    kind: 'indexer-assertion',
-    label: 'Indexer assertion',
+    kind: 'generator-assertion',
+    label: 'Generator assertion',
     signer: attributes.signer,
     consensusPubKey: attributes.consensus_pub_key,
     delegateAddress: attributes.delegate_address,
@@ -326,7 +299,7 @@ const SUBTYPE_RESOLVERS: readonly TransactionSubtypeResolver[] = [
   resolveViewSubtype,
   resolveHostSubtype,
   resolveGeneratorRegistrationSubtype,
-  resolveIndexerAssertionSubtype,
+  resolveGeneratorAssertionSubtype,
 ];
 
 /**

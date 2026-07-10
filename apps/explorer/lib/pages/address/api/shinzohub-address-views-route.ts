@@ -49,7 +49,7 @@ export async function GET(
     const { client, cosmosRestUrl } = getShinzohubQueryContext();
     const page = parseViewsPage(request);
     const views = await listViews(client, {
-      creator: address.shinzoAddress,
+      creator: address.hexAddress,
       countTotal: true,
       cosmosRestUrl,
       limit: page.limit,

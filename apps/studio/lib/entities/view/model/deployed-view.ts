@@ -3,7 +3,7 @@ import type { DeployedView, DeployedViewSource } from "./types";
 
 interface CreateDeployedViewRecordInput {
   source: DeployedViewSource;
-  contractAddress?: string;
+  viewAddress: string;
   txHash?: string;
 }
 
@@ -13,7 +13,7 @@ export const createDeployedViewRecord = <TArgs extends LensArgs>(
 ): DeployedView => ({
   entityName: view.entityName,
   packKey: view.packKey,
-  contractAddress: input.contractAddress,
+  viewAddress: input.viewAddress,
   txHash: input.txHash,
   source: input.source,
   lensKey: view.lensKey,

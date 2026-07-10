@@ -16,13 +16,13 @@ import { shinzoDevnet } from "@/shared/consts/wagmi";
 export interface HubViewRecord {
   name: string;
   creator: string;
-  contractAddress: string;
+  viewAddress: string;
   data: string | null;
   height: string;
 }
 
 interface FindHubViewByEntityNameOptions {
-  contractAddress?: string;
+  viewAddress?: string;
 }
 
 const HUB_VIEWS_PAGE_LIMIT = 200;
@@ -68,13 +68,13 @@ export const fetchHubViewsPage = async (
   });
 
 export const fetchHubViewByAddress = async (
-  address: string,
+  viewAddress: string,
   options?: { includeMetadata?: boolean }
 ): Promise<ShinzoHubView> =>
   getView(shinzohubPublicClient, {
     cosmosRestUrl: getHubCosmosRestUrl(),
     includeMetadata: options?.includeMetadata,
-    address,
+    viewAddress,
   });
 
 export const fetchHubViewsByName = async (
@@ -93,14 +93,14 @@ export const fetchHubViewsByName = async (
 const toHubViewRecord = (
   view: ShinzoHubView | null | undefined
 ): HubViewRecord | null => {
-  if (!view?.name || !view.contractAddress) {
+  if (!view?.name || !view.viewAddress) {
     return null;
   }
 
   return {
     name: view.name,
     creator: view.creator ?? "",
-    contractAddress: view.contractAddress,
+    viewAddress: view.viewAddress,
     data: view.data ?? null,
     height: view.height.toString(),
   };
@@ -155,11 +155,11 @@ export const findHubViewByEntityName = (
 
   const matchingViews = views.filter((view) => view.name === entityName);
 
-  if (options?.contractAddress) {
-    const targetAddress = options.contractAddress.toLowerCase();
+  if (options?.viewAddress) {
+    const targetAddress = options.viewAddress.toLowerCase();
     return (
       matchingViews.find(
-        (view) => view.contractAddress.toLowerCase() === targetAddress
+        (view) => view.viewAddress.toLowerCase() === targetAddress
       ) ?? null
     );
   }

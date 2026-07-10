@@ -33,10 +33,10 @@ export function normalizeAddressParam(rawAddress: string): NormalizedShinzohubAd
 export function toViewAddressResult(view: ShinzoHubView): ShinzohubAddressView {
   return {
     name: view.name,
-    contractAddress: view.contractAddress,
+    viewAddress: view.viewAddress,
     creator: view.creator,
     height: view.height.toString(),
-    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(view.name)}`,
+    externalUrl: `${STUDIO_VIEW_BASE_URL}/${encodeURIComponent(view.viewAddress)}`,
   };
 }
 

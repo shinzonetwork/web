@@ -44,7 +44,7 @@ export interface ViewSummary {
   href: string;
   name: string;
   creator: ViewAddressLink;
-  contract: ViewAddressLink;
+  viewAddressLink: ViewAddressLink;
   height: string;
   heightNumber: number;
   metadata: ViewMetadataState;
@@ -56,7 +56,7 @@ export interface ViewDetails {
   id: string;
   name: string;
   creator: ViewAddressLink;
-  contract: ViewAddressLink;
+  viewAddressLink: ViewAddressLink;
   height: string;
   heightNumber: number;
   rootType: string;
@@ -71,7 +71,7 @@ export type DeployedViewSource = "deployed" | "hub-existing";
 export interface DeployedView {
   entityName: string;
   packKey?: string;
-  contractAddress?: string;
+  viewAddress: string;
   txHash?: string;
   source: DeployedViewSource;
   lensKey: string;

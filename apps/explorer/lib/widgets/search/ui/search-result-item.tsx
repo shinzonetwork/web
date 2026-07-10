@@ -44,7 +44,7 @@ function getResultPresentation(
       return {
         Icon: Database,
         title: `View · ${result.name}`,
-        description: result.address,
+        description: result.viewAddress,
       };
     case "host":
       return {

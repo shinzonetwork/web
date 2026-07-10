@@ -114,7 +114,7 @@ export const ViewsToolbar = ({
         </Tabs>
 
         <SearchInput
-          placeholder="Search views, owners, contracts, or lenses"
+          placeholder="Search views, creators, view addresses, or lenses"
           value={filters.search}
           onChange={(event) =>
             onFiltersChange({ ...filters, search: event.target.value })

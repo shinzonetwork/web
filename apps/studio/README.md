@@ -2,7 +2,7 @@
 
 Shinzo Studio is a browser UI for creating, deploying, and querying Shinzo Views.
 
-A View describes an indexed dataset: it combines a source query, an output SDL type, and one or more Lens WASM transforms. The deployed View is registered on ShinzoHub, then queried through a Shinzo Host GraphQL endpoint.
+A View describes an indexed dataset: it combines a source query, an output SDL type, and one or more Lens WASM transforms. The View is registered on ShinzoHub, then queried through a Shinzo Host GraphQL endpoint.
 
 Lenses are small WASM modules that transform raw source rows into the final View shape. This app uses the shared [`@shinzo/lenses`](https://github.com/shinzonetwork/web/tree/main/packages/lenses) package for example lenses, validation, and LensVM authoring utilities.
 

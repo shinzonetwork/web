@@ -80,7 +80,7 @@ export const useDeployViewAction = <TArgs extends LensArgs>({
 
     try {
       const { deployedView } = await deploy(lens, args);
-      pushBrowserUrl(createViewHref(deployedView.entityName));
+      pushBrowserUrl(createViewHref(deployedView.viewAddress));
     } catch (error) {
       if (!(error instanceof ViewValidationError)) {
         console.error(error);

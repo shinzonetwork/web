@@ -40,7 +40,7 @@ export type ExplorerSearchResult =
     }
   | {
       kind: "view";
-      address: string;
+      viewAddress: string;
       name: string;
       externalUrl: string;
     }
