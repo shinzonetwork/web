@@ -35,6 +35,7 @@ import type {
   ResolvedLensView,
 } from "@/entities/lens";
 import { wagmiConfig } from "@/shared/consts/wagmi";
+import { getChainSwitchErrorMessage } from "@/shared/utils/chain-switch-error";
 import { resolveViewDefinition } from "../api/deploy-transaction";
 import {
   fetchHubViewByAddress,
@@ -159,11 +160,7 @@ const submitDeployTransaction = async (
   try {
     await switchChainMutateAsync({ chainId });
   } catch (error) {
-    throw createDeployTransactionError(
-      "Could not switch your wallet to Shinzo.",
-      error,
-      "Network switch was rejected in your wallet."
-    );
+    throw new Error(getChainSwitchErrorMessage(error));
   }
 
   const walletClient = await (async () => {

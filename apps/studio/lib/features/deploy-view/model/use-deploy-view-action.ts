@@ -9,6 +9,7 @@ import {
   ViewValidationError,
   useDeployLens,
 } from "@/entities/view";
+import { getChainSwitchErrorMessage } from "@/shared/utils/chain-switch-error";
 import { pushBrowserUrl } from "@/shared/utils/browser-location";
 
 interface UseDeployViewActionInput<TArgs extends LensArgs> {
@@ -101,11 +102,7 @@ export const useDeployViewAction = <TArgs extends LensArgs>({
     try {
       await switchChainMutateAsync({ chainId: shinzoChain.id });
     } catch (error) {
-      setSwitchChainError(
-        error instanceof Error
-          ? error.message
-          : "Could not switch to Shinzo."
-      );
+      setSwitchChainError(getChainSwitchErrorMessage(error));
     }
   }, [switchChainMutateAsync]);
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
 import {
@@ -23,7 +22,7 @@ import { cn } from "@shinzo/ui/cn";
 export const ConnectDialog = () => {
   const { address, isConnected } = useConnection();
   const {
-    mutate: connect,
+    mutateAsync: connectAsync,
     error: connectError,
     isPending: isConnecting,
   } = useConnect();
@@ -31,13 +30,23 @@ export const ConnectDialog = () => {
   const { mutate: disconnect } = useDisconnect();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [pendingConnectorUid, setPendingConnectorUid] = useState<string | null>(
+    null
+  );
 
   const handleConnect = useCallback(
-    (connector: Connector) => {
-      setIsOpen(false);
-      connect({ connector, chainId: shinzoChain.id });
+    async (connector: Connector) => {
+      setPendingConnectorUid(connector.uid);
+      try {
+        await connectAsync({ connector });
+        setIsOpen(false);
+      } catch {
+        // The mutation exposes the error in the open dialog.
+      } finally {
+        setPendingConnectorUid(null);
+      }
     },
-    [connect]
+    [connectAsync]
   );
 
   const handleDisconnect = useCallback(() => {
@@ -66,19 +75,6 @@ export const ConnectDialog = () => {
     return <Wallet className="size-5 text-szo-black/50" />;
   }, []);
 
-  if (isConnecting) {
-    return (
-      <Button
-        disabled
-        variant="secondary"
-        className="gap-2 opacity-60"
-      >
-        <Loader2 className="size-4 animate-spin" />
-        Connecting...
-      </Button>
-    );
-  }
-
   if (isConnected && address) {
     return (
       <Button
@@ -103,7 +99,12 @@ export const ConnectDialog = () => {
         Connect Wallet
       </Button>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <Dialog
+        open={isOpen}
+        onOpenChange={(open) => {
+          if (!isConnecting) setIsOpen(open);
+        }}
+      >
         <DialogContent className="w-[min(calc(100dvw-2rem),900px)] px-6 py-8 md:px-10 md:py-10 lg:px-16 lg:py-14">
           <DialogHeader>
             <DialogTitle id="studio-connect-wallet-title">
@@ -118,7 +119,8 @@ export const ConnectDialog = () => {
               <div key={connector.uid} className="relative group">
                 <button
                   type="button"
-                  onClick={() => handleConnect(connector)}
+                  onClick={() => void handleConnect(connector)}
+                  disabled={isConnecting}
                   className={cn(
                     "relative flex w-full items-center gap-3 border-2 border-ui-border bg-white p-4 text-left",
                     "transition-all duration-300",
@@ -130,6 +132,9 @@ export const ConnectDialog = () => {
                     {getConnectorIcon(connector)}
                   </div>
                   <span className="font-mono text-sm">/ {connector.name}</span>
+                  {pendingConnectorUid === connector.uid && (
+                    <Loader2 className="ml-auto size-4 animate-spin" />
+                  )}
                 </button>
 
                 {/* Pattern background on hover */}
