@@ -6,6 +6,7 @@ import {
   shinzoHubDevelop,
   shinzoHubDevnet,
   shinzoHubLocal,
+  shinzoHubTestnet,
 } from "./index";
 
 const originalFetch = globalThis.fetch;
@@ -134,9 +135,26 @@ describe("Viem chain definitions", () => {
     ]);
   });
 
+  it("defines the public Shinzo testnet wallet metadata", () => {
+    expect(shinzoHubTestnet).toMatchObject({
+      id: 91273001,
+      name: "Shinzo",
+      nativeCurrency: {
+        name: "Shinzo",
+        symbol: "SHN",
+        decimals: 18,
+      },
+      testnet: true,
+    });
+    expect(shinzoHubTestnet.rpcUrls.default.http).toEqual([
+      "http://testnet.shinzo.network:8545",
+    ]);
+  });
+
   it("maps known chains in shinzoHubChains", () => {
     expect(shinzoHubChains.develop).toBe(shinzoHubDevelop);
     expect(shinzoHubChains.local).toBe(shinzoHubLocal);
     expect(shinzoHubChains.devnet).toBe(shinzoHubDevnet);
+    expect(shinzoHubChains.testnet).toBe(shinzoHubTestnet);
   });
 });

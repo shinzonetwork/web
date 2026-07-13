@@ -101,8 +101,13 @@ export const shinzoHubDevnet = defineChain({
 /** Testnet ShinzoHub Viem chain definition. */
 export const shinzoHubTestnet = defineChain({
   id: 91273001,
-  name: "ShinzoHub Testnet",
-  nativeCurrency: currency,
+  name: "Shinzo",
+  nativeCurrency: {
+    name: "Shinzo",
+    symbol: "SHN",
+    decimals: 18,
+  },
+  testnet: true,
   rpcUrls: {
     default: { http: ["http://testnet.shinzo.network:8545"] },
     cosmosRest: { http: ["http://testnet.shinzo.network:1317"] },
