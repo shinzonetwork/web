@@ -1,5 +1,6 @@
 "use client";
 
+import { shinzoHubTestnet } from "@shinzo/shinzohub";
 import { Button } from "@/shared/ui/button";
 import { useAccount, useConnect } from "wagmi";
 import { injected } from "wagmi/connectors";
@@ -14,7 +15,9 @@ export function ConnectWallet() {
   return (
     <div>
       <Button
-        onClick={() => connect({ connector: injected() })}
+        onClick={() =>
+          connect({ connector: injected(), chainId: shinzoHubTestnet.id })
+        }
         className="ml-2 w-fit rounded-none  bg-muted-foreground text-muted hover:bg-muted-foreground/90"
       >
         Connect
