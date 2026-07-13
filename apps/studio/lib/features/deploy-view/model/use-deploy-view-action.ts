@@ -1,5 +1,6 @@
 "use client";
 
+import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { useCallback, useState } from "react";
 import { useConnection, useSwitchChain } from "wagmi";
 import type { LensArgs, LensDefinition } from "@/entities/lens";
@@ -8,7 +9,6 @@ import {
   ViewValidationError,
   useDeployLens,
 } from "@/entities/view";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
 import { pushBrowserUrl } from "@/shared/utils/browser-location";
 
 interface UseDeployViewActionInput<TArgs extends LensArgs> {
@@ -19,7 +19,7 @@ interface UseDeployViewActionInput<TArgs extends LensArgs> {
 
 export interface UseDeployViewActionResult {
   isConnected: boolean;
-  isOnShinzoDevnet: boolean;
+  isOnShinzo: boolean;
   isPreparing: boolean;
   isInProgress: boolean;
   status: ReturnType<typeof useDeployLens>["status"];
@@ -55,7 +55,7 @@ export const useDeployViewAction = <TArgs extends LensArgs>({
     status === "confirming" ||
     status === "registering";
   const isInProgress = isPreparing || isDeployInProgress;
-  const isOnShinzoDevnet = activeChainId === shinzoDevnet.id;
+  const isOnShinzo = activeChainId === shinzoChain.id;
 
   const submit = useCallback(async () => {
     if (!isConnected || !canSubmit || isInProgress) {
@@ -99,19 +99,19 @@ export const useDeployViewAction = <TArgs extends LensArgs>({
   const switchToShinzo = useCallback(async () => {
     setSwitchChainError("");
     try {
-      await switchChainMutateAsync({ chainId: shinzoDevnet.id });
+      await switchChainMutateAsync({ chainId: shinzoChain.id });
     } catch (error) {
       setSwitchChainError(
         error instanceof Error
           ? error.message
-          : "Could not switch to Shinzo Devnet."
+          : "Could not switch to Shinzo."
       );
     }
   }, [switchChainMutateAsync]);
 
   return {
     isConnected,
-    isOnShinzoDevnet,
+    isOnShinzo,
     isPreparing,
     isInProgress,
     status,

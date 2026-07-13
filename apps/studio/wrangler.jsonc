@@ -9,7 +9,6 @@
   "vars": {
     "SHINZOHUB_EVM_RPC": "http://testnet.shinzo.network:8545",
     "SHINZOHUB_COSMOS_RPC": "http://testnet.shinzo.network:1317",
-    "VITE_SHINZOHUB_CHAIN_ID": "91273001",
     "HOST_GRAPHQL_URL": "http://104-197-95-122.sslip.io:9181/api/v0/graphql"
   },
   "compatibility_flags": ["nodejs_compat"],

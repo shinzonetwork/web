@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getView,
   listViews,
+  shinzoHubTestnet as shinzoChain,
   type ListViewsResult,
   type ShinzoHubView,
 } from "@shinzo/shinzohub";
@@ -11,7 +12,6 @@ import {
   SHINZOHUB_COSMOS_RPC_REQUEST_URL,
   SHINZOHUB_EVM_RPC_REQUEST_URL,
 } from "@/shared/consts/envs";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
 
 export interface HubViewRecord {
   name: string;
@@ -28,7 +28,7 @@ interface FindHubViewByEntityNameOptions {
 const HUB_VIEWS_PAGE_LIMIT = 200;
 const STUDIO_HUB_VIEWS_STALE_TIME_MS = 60 * 1000;
 export const shinzohubPublicClient = createPublicClient({
-  chain: shinzoDevnet,
+  chain: shinzoChain,
   transport: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
 });
 

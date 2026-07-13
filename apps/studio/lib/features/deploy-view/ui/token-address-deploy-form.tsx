@@ -88,7 +88,7 @@ export const TokenAddressDeployForm = ({
       <DeployActionControls
         canSubmit={Boolean(normalizedAddress)}
         isConnected={deployAction.isConnected}
-        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+        isOnShinzo={deployAction.isOnShinzo}
         isInProgress={deployAction.isInProgress}
         status={deployAction.status}
         onSubmit={() => void deployAction.submit()}
@@ -97,7 +97,7 @@ export const TokenAddressDeployForm = ({
 
       <DeployNetworkNotice
         isConnected={deployAction.isConnected}
-        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+        isOnShinzo={deployAction.isOnShinzo}
       />
 
       <DeployStatusMessage error={deployAction.error} />

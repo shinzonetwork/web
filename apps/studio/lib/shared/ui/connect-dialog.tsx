@@ -1,5 +1,6 @@
 "use client";
 
+import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { Loader2, Wallet } from "lucide-react";
 import { useCallback, useState } from "react";
 import {
@@ -10,7 +11,6 @@ import {
   useDisconnect,
 } from "wagmi";
 import { Button } from "@/shared/ui/button";
-import { shinzoDevnet } from "@/shared/consts/wagmi";
 import {
   Dialog,
   DialogContent,
@@ -35,7 +35,7 @@ export const ConnectDialog = () => {
   const handleConnect = useCallback(
     (connector: Connector) => {
       setIsOpen(false);
-      connect({ connector, chainId: shinzoDevnet.id });
+      connect({ connector, chainId: shinzoChain.id });
     },
     [connect]
   );
