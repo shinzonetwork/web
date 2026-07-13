@@ -5,5 +5,9 @@ interface DeployStatusMessageProps {
 }
 
 export const DeployStatusMessage = ({ error }: DeployStatusMessageProps) => (
-  <>{error && <p className="text-sm text-red-500">{error}</p>}</>
+  <>
+    {error && (
+      <p className="whitespace-pre-line text-sm text-red-500">{error}</p>
+    )}
+  </>
 );

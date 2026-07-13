@@ -1,4 +1,14 @@
+import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { BaseError, UserRejectedRequestError } from "viem";
+
+const manualShinzoNetworkInstructions = [
+  "Shinzo could not be added because this wallet requires an HTTPS RPC URL.",
+  "Try adding Shinzo manually in your wallet by opening custom network settings and entering:",
+  `Network name: ${shinzoChain.name}`,
+  `Default RPC URL: ${shinzoChain.rpcUrls.default.http[0]}`,
+  `Chain ID: ${shinzoChain.id}`,
+  `Currency symbol: ${shinzoChain.nativeCurrency.symbol}`,
+].join("\n");
 
 const errorIncludes = (error: unknown, pattern: RegExp): boolean => {
   if (error instanceof BaseError) {
@@ -41,7 +51,7 @@ const getReadableErrorMessage = (error: unknown): string => {
 
 export const getChainSwitchErrorMessage = (error: unknown): string => {
   if (errorIncludes(error, /rpcUrls[\s\S]*HTTPS|HTTPS[\s\S]*rpcUrls/i)) {
-    return "Shinzo could not be added because this wallet requires an HTTPS RPC URL.";
+    return manualShinzoNetworkInstructions;
   }
 
   if (isUserRejectedRequest(error)) {
