@@ -1,4 +1,4 @@
-import { shinzoHubTestnet } from '@shinzo/shinzohub';
+import { getShinzoHubChain } from '@/shared/config/shinzohub-chain';
 import type { ChainPathSegment } from '@/shared/utils/links';
 
 export const GRAPHQL_URL = process.env.NEXT_PUBLIC_GRAPHQL_URL ?? 'http://localhost:9181/api/v0/graphql';
@@ -12,10 +12,9 @@ export const STUDIO_VIEW_BASE_URL = 'https://studio.shinzo.network/views';
 export function getRpcUrlForChainPathSegment(segment: ChainPathSegment): string {
   switch (segment) {
     case 'shinzohub':
-      return (
-        process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
-        shinzoHubTestnet.rpcUrls.default.http[0]
-      );
+      return typeof window === 'undefined'
+        ? getShinzoHubChain().rpcUrls.default.http[0]
+        : '/api/shinzohub/evm-rpc';
     case 'ethereum':
       return process.env.NEXT_PUBLIC_ETHEREUM_RPC_URL ?? 'https://ethereum-rpc.publicnode.com';
     default:

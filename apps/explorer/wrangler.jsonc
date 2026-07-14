@@ -8,9 +8,7 @@
 	],
 	"keep_vars": true,
 	"vars": {
-		"NEXT_PUBLIC_SHINZOHUB_RPC_URL": "https://rpc-proxy.shinzo-492.workers.dev/api/insecure-resource",
-		"SHINZOHUB_COSMOS_REST_URL": "http://testnet.shinzo.network:1317",
-		"SHINZOHUB_COMET_RPC_URL": "http://testnet.shinzo.network:26657"
+		"SHINZOHUB_CHAIN": "testnet"
 	},
 	"assets": {
 		"directory": ".open-next/assets",

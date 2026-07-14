@@ -1,43 +1,24 @@
-import { defineChain, type Chain } from 'viem';
-import {  shinzoHubTestnet } from '@shinzo/shinzohub';
+import { getShinzoHubChain as selectShinzoHubChain } from '@shinzo/shinzohub';
+import type { Chain } from 'viem';
 
-const developRpcUrls = shinzoHubTestnet.rpcUrls as typeof shinzoHubTestnet.rpcUrls & {
-  cosmosRest: { http: readonly string[] };
-  cometRpc: { http: readonly string[] };
+type ExplorerShinzoHubChain = Chain & {
+  rpcUrls: Chain['rpcUrls'] & {
+    cosmosRest: { http: readonly string[] };
+    cometRpc: { http: readonly string[] };
+  };
 };
 
-export function createShinzoHubChain(): Chain {
-    const evmRpcUrl =
-      process.env.NEXT_PUBLIC_SHINZOHUB_RPC_URL ??
-      shinzoHubTestnet.rpcUrls.default.http[0];
-    const cosmosRestUrl =
-      process.env.SHINZOHUB_COSMOS_REST_URL ??
-      developRpcUrls.cosmosRest.http[0];
-    const cometRpcUrl =
-      process.env.SHINZOHUB_COMET_RPC_URL ?? developRpcUrls.cometRpc.http[0];
-
-    return defineChain({
-      id: shinzoHubTestnet.id,
-      name: shinzoHubTestnet.name,
-      nativeCurrency: {
-        name: shinzoHubTestnet.nativeCurrency.name,
-        symbol: shinzoHubTestnet.nativeCurrency.symbol,
-        decimals: shinzoHubTestnet.nativeCurrency.decimals,
-      },
-      rpcUrls: {
-        default: { http: [evmRpcUrl] },
-        public: { http: [evmRpcUrl] },
-        cosmosRest: { http: [cosmosRestUrl] },
-        cometRpc: { http: [cometRpcUrl] },
-      },
-    });
+export function createShinzoHubChain(): ExplorerShinzoHubChain {
+  return selectShinzoHubChain(
+    process.env.SHINZOHUB_CHAIN,
+  ) as unknown as ExplorerShinzoHubChain;
 }
-  
-let shinzohubChain: Chain | null = null;
-  
-export function getShinzoHubChain(): Chain {
-    if (!shinzohubChain) {
-      shinzohubChain = createShinzoHubChain();
-    }
-    return shinzohubChain;
+
+let shinzohubChain: ReturnType<typeof createShinzoHubChain> | null = null;
+
+export function getShinzoHubChain() {
+  if (!shinzohubChain) {
+    shinzohubChain = createShinzoHubChain();
+  }
+  return shinzohubChain;
 }
