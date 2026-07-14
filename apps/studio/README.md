@@ -23,8 +23,7 @@ Create `apps/studio/.env` from `.env.example`.
 Server-only Worker variables:
 
 - `HOST_GRAPHQL_URL`: GraphQL endpoint for Shinzo Host. See [`shinzo-host-client`](https://github.com/shinzonetwork/shinzo-host-client) for running or connecting a Host.
-- `SHINZOHUB_EVM_RPC`: EVM JSON-RPC endpoint for ShinzoHub, used for wallet transactions and confirmations. See [`shinzohub`](https://github.com/shinzonetwork/shinzohub).
-- `SHINZOHUB_COSMOS_RPC`: Cosmos REST/RPC endpoint for ShinzoHub, used for View registry reads. See [`shinzohub`](https://github.com/shinzonetwork/shinzohub).
+- `SHINZOHUB_CHAIN`: ShinzoHub environment used by the Worker and browser wallet configuration. Supported values are `testnet`, `internal`, `devnet`, and `local`; it defaults to `testnet`. RPC endpoints and chain IDs come from `@shinzo/shinzohub`.
 
 Browser-exposed Vite variables:
 

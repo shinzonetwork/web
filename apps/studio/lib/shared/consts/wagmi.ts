@@ -1,5 +1,5 @@
-import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { cookieStorage, createConfig, createStorage, http } from "wagmi";
+import { shinzoHubChains } from "@shinzo/shinzohub/chains";
 import { mainnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 import {
@@ -7,6 +7,7 @@ import {
   APP_URL,
   SHINZOHUB_EVM_RPC_REQUEST_URL,
 } from "@/shared/consts/envs";
+import { shinzoChain } from "@/shared/consts/shinzohub";
 
 if (!WALLETCONNECT_ID) {
   console.warn("VITE_WALLETCONNECT_ID is not set");
@@ -36,7 +37,8 @@ export const wagmiConfig = createConfig({
   ssr: true,
   transports: {
     [mainnet.id]: http(),
-    [shinzoChain.id]: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
+    [shinzoHubChains.testnet.id]: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
+    [shinzoHubChains.internal.id]: http(SHINZOHUB_EVM_RPC_REQUEST_URL),
   },
 });
 

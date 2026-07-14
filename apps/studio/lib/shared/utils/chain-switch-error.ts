@@ -1,5 +1,5 @@
-import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { BaseError, UserRejectedRequestError } from "viem";
+import { shinzoChain } from "@/shared/consts/shinzohub";
 
 const manualShinzoNetworkInstructions = [
   "Shinzo could not be added because this wallet requires an HTTPS RPC URL.",

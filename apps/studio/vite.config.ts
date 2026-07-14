@@ -6,6 +6,7 @@ import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
+  envPrefix: ["VITE_", "SHINZOHUB_CHAIN"],
   build: {
     rollupOptions: {
       output: {

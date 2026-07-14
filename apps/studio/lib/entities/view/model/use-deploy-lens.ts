@@ -27,7 +27,6 @@ import {
   createView,
   getCreatedViewAddress,
   getViewRegistration,
-  shinzoHubTestnet as shinzoChain,
 } from "@shinzo/shinzohub";
 import type {
   LensArgs,
@@ -35,6 +34,7 @@ import type {
   ResolvedLensView,
 } from "@/entities/lens";
 import { wagmiConfig } from "@/shared/consts/wagmi";
+import { shinzoChain } from "@/shared/consts/shinzohub";
 import { getChainSwitchErrorMessage } from "@/shared/utils/chain-switch-error";
 import { resolveViewDefinition } from "../api/deploy-transaction";
 import {
@@ -361,7 +361,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 
@@ -413,7 +413,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 
@@ -447,7 +447,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 

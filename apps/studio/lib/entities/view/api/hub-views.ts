@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getView,
   listViews,
-  shinzoHubTestnet as shinzoChain,
   type ListViewsResult,
   type ShinzoHubView,
 } from "@shinzo/shinzohub";
@@ -12,6 +11,7 @@ import {
   SHINZOHUB_COSMOS_RPC_REQUEST_URL,
   SHINZOHUB_EVM_RPC_REQUEST_URL,
 } from "@/shared/consts/envs";
+import { shinzoChain } from "@/shared/consts/shinzohub";
 
 export interface HubViewRecord {
   name: string;

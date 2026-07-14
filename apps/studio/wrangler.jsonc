@@ -7,8 +7,7 @@
   "preview_urls": true,
   "keep_vars": true,
   "vars": {
-    "SHINZOHUB_EVM_RPC": "http://testnet.shinzo.network:8545",
-    "SHINZOHUB_COSMOS_RPC": "http://testnet.shinzo.network:1317",
+    "SHINZOHUB_CHAIN": "testnet",
     "HOST_GRAPHQL_URL": "http://104-197-95-122.sslip.io:9181/api/v0/graphql"
   },
   "compatibility_flags": ["nodejs_compat"],

@@ -1,6 +1,5 @@
 "use client";
 
-import { shinzoHubTestnet as shinzoChain } from "@shinzo/shinzohub";
 import { useCallback, useState } from "react";
 import { useConnection, useSwitchChain } from "wagmi";
 import type { LensArgs, LensDefinition } from "@/entities/lens";
@@ -9,6 +8,7 @@ import {
   ViewValidationError,
   useDeployLens,
 } from "@/entities/view";
+import { shinzoChain } from "@/shared/consts/shinzohub";
 import { getChainSwitchErrorMessage } from "@/shared/utils/chain-switch-error";
 import { pushBrowserUrl } from "@/shared/utils/browser-location";
 
