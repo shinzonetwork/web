@@ -4,7 +4,7 @@ import {
   http,
   type Hex,
 } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { getView } from "./index";
 
 const originalFetch = globalThis.fetch;
@@ -12,9 +12,9 @@ const viewAddress = "0x018a06D78E0802dB5bC055B4527d7B481c3e9932" as const satisf
 const creatorAddress = "0x1234567890AbcdEF1234567890aBcdef12345678" as const satisfies Hex;
 
 const mockChain = {
-  ...shinzoHubDevelop,
+  ...shinzoHubDevnet,
   rpcUrls: {
-    ...shinzoHubDevelop.rpcUrls,
+    ...shinzoHubDevnet.rpcUrls,
     cosmosRest: { http: ["https://rest.example"] },
   },
 };

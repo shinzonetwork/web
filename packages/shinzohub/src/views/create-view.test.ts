@@ -4,7 +4,7 @@ import {
   http,
   type Hex,
 } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { createShinzoHubClient } from "../index";
 import {
   createView,
@@ -47,7 +47,7 @@ describe("createView", () => {
 
     const client = createWalletClient({
       account: creatorAddress,
-      chain: shinzoHubDevelop,
+      chain: shinzoHubDevnet,
       transport: http("https://evm.example", { fetchFn: fetch }),
     });
 
@@ -73,7 +73,7 @@ describe("createView", () => {
 
     const walletClient = createWalletClient({
       account: creatorAddress,
-      chain: shinzoHubDevelop,
+        chain: shinzoHubDevnet,
       transport: http("https://evm.example", { fetchFn: fetch }),
     });
     const client = createShinzoHubClient(walletClient);

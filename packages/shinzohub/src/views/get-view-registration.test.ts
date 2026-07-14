@@ -6,7 +6,7 @@ import {
   http,
   type Hex,
 } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { createShinzoHubClient } from "../index";
 import {
   getViewRegistration,
@@ -63,7 +63,7 @@ describe("getViewRegistration", () => {
     });
 
     const client = createPublicClient({
-      chain: shinzoHubDevelop,
+      chain: shinzoHubDevnet,
       transport: http("https://evm.example", { fetchFn: fetch }),
     });
 
@@ -110,7 +110,7 @@ describe("getViewRegistration", () => {
     });
 
     const client = createShinzoHubClient(createPublicClient({
-      chain: shinzoHubDevelop,
+        chain: shinzoHubDevnet,
       transport: http("https://evm.example", { fetchFn: fetch }),
     }));
 

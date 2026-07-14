@@ -4,7 +4,7 @@ import {
   hexToShinzoAddress,
   shinzoAddressToHex,
 } from "../addresses/index";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { createShinzoHubClient } from "../index";
 import {
   getAccount,
@@ -20,9 +20,9 @@ const emptyCodeHash =
   "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470";
 
 const mockChain = {
-  ...shinzoHubDevelop,
+  ...shinzoHubDevnet,
   rpcUrls: {
-    ...shinzoHubDevelop.rpcUrls,
+    ...shinzoHubDevnet.rpcUrls,
     cosmosRest: { http: ["https://rest.example"] },
   },
 };

@@ -62,16 +62,21 @@ export {
 } from "./addresses/index";
 export type { HexAddress, ShinzoAddress } from "./addresses/index";
 export {
+  defaultShinzoHubChainName,
   getChainId,
+  getShinzoHubChain,
   shinzoHubChain,
   shinzoHubChains,
-  shinzoHubDevelop,
   shinzoHubDevnet,
+  shinzoHubInternal,
   shinzoHubLocal,
-  shinzoHubMainnet,
   shinzoHubTestnet,
 } from "./chains/index";
-export type { GetChainIdParameters, ShinzoHubChainParameters } from "./chains/index";
+export type {
+  GetChainIdParameters,
+  ShinzoHubChainName,
+  ShinzoHubChainParameters,
+} from "./chains/index";
 export {
   countViews,
   createView,

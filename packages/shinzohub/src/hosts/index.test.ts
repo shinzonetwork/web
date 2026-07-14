@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicClient, http } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { createShinzoHubClient } from "../index";
 import { getHost, getHostHealth, listHosts } from "./index";
 import { UNHEALTHY_LIVE_DATA } from "./get-host-health";
@@ -14,9 +14,9 @@ afterEach(() => {
 
 describe("listHosts", () => {
   const mockChain = {
-    ...shinzoHubDevelop,
+    ...shinzoHubDevnet,
     rpcUrls: {
-      ...shinzoHubDevelop.rpcUrls,
+      ...shinzoHubDevnet.rpcUrls,
       cosmosRest: { http: ["https://rest.example"] },
     },
   };
@@ -81,9 +81,9 @@ describe("listHosts", () => {
 
 describe("getHost", () => {
   const mockChain = {
-    ...shinzoHubDevelop,
+    ...shinzoHubDevnet,
     rpcUrls: {
-      ...shinzoHubDevelop.rpcUrls,
+      ...shinzoHubDevnet.rpcUrls,
       cosmosRest: { http: ["https://rest.example"] },
     },
   };

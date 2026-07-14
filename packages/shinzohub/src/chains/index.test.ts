@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  defaultShinzoHubChainName,
   getChainId,
+  getShinzoHubChain,
   shinzoHubChain,
   shinzoHubChains,
-  shinzoHubDevelop,
   shinzoHubDevnet,
+  shinzoHubInternal,
   shinzoHubLocal,
   shinzoHubTestnet,
 } from "./index";
@@ -93,21 +95,21 @@ describe("shinzoHubChain", () => {
 });
 
 describe("Viem chain definitions", () => {
-  it("defines standard chain metadata for develop environment", () => {
-    expect(shinzoHubDevelop).toMatchObject({
+  it("defines the internal environment", () => {
+    expect(shinzoHubInternal).toMatchObject({
       id: 91273002,
-      name: "ShinzoHub Develop",
+      name: "Shinzo Internal",
       nativeCurrency: {
         name: "Shinzo",
-        symbol: "SHNZ",
+        symbol: "SHN",
         decimals: 18,
       },
     });
-    expect(shinzoHubDevelop.rpcUrls.default.http).toEqual([
-      "http://rpc.develop.devnet.shinzo.network:8545",
+    expect(shinzoHubInternal.rpcUrls.default.http).toEqual([
+      "http://testnet-internal.shinzo.network:8545",
     ]);
-    expect((shinzoHubDevelop.rpcUrls as any).cosmosRest.http).toEqual([
-      "http://rpc.develop.devnet.shinzo.network:1317",
+    expect((shinzoHubInternal.rpcUrls as any).cosmosRest.http).toEqual([
+      "http://testnet-internal.shinzo.network:1317",
     ]);
   });
 
@@ -122,16 +124,19 @@ describe("Viem chain definitions", () => {
     ]);
   });
 
-  it("defines the public devnet Comet RPC endpoint", () => {
+  it("defines the shared devnet endpoints", () => {
     expect(shinzoHubDevnet).toMatchObject({
       id: 91273002,
-      name: "ShinzoHub Devnet",
+      name: "Shinzo Devnet",
     });
     expect(shinzoHubDevnet.rpcUrls.default.http).toEqual([
-      "http://rpc.devnet.shinzo.network:8545",
+      "http://rpc.develop.devnet.shinzo.network:8545",
+    ]);
+    expect((shinzoHubDevnet.rpcUrls as any).cosmosRest.http).toEqual([
+      "http://rpc.develop.devnet.shinzo.network:1317",
     ]);
     expect((shinzoHubDevnet.rpcUrls as any).cometRpc.http).toEqual([
-      "http://rpc.devnet.shinzo.network:26657",
+      "http://rpc.develop.devnet.shinzo.network:26657",
     ]);
   });
 
@@ -152,9 +157,26 @@ describe("Viem chain definitions", () => {
   });
 
   it("maps known chains in shinzoHubChains", () => {
-    expect(shinzoHubChains.develop).toBe(shinzoHubDevelop);
-    expect(shinzoHubChains.local).toBe(shinzoHubLocal);
-    expect(shinzoHubChains.devnet).toBe(shinzoHubDevnet);
+    expect(Object.keys(shinzoHubChains)).toEqual([
+      "testnet",
+      "internal",
+      "devnet",
+      "local",
+    ]);
     expect(shinzoHubChains.testnet).toBe(shinzoHubTestnet);
+    expect(shinzoHubChains.internal).toBe(shinzoHubInternal);
+    expect(shinzoHubChains.devnet).toBe(shinzoHubDevnet);
+    expect(shinzoHubChains.local).toBe(shinzoHubLocal);
+  });
+
+  it("selects a configured chain and defaults to testnet", () => {
+    expect(defaultShinzoHubChainName).toBe("testnet");
+    expect(getShinzoHubChain()).toBe(shinzoHubTestnet);
+    expect(getShinzoHubChain("internal")).toBe(shinzoHubInternal);
+    expect(getShinzoHubChain("devnet")).toBe(shinzoHubDevnet);
+    expect(getShinzoHubChain("local")).toBe(shinzoHubLocal);
+    expect(() => getShinzoHubChain("mainnet")).toThrow(
+      'Unsupported ShinzoHub chain "mainnet"',
+    );
   });
 });

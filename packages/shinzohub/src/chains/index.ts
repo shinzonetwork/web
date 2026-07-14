@@ -7,6 +7,12 @@ export type { GetChainIdParameters, ShinzoHubChainParameters } from "./types";
 
 const currency = {
   name: "Shinzo",
+  symbol: "SHN",
+  decimals: 18,
+} as const;
+
+const localCurrency = {
+  name: "Shinzo",
   symbol: "SHNZ",
   decimals: 18,
 } as const;
@@ -43,7 +49,7 @@ export async function shinzoHubChain({
 export const shinzoHubLocal = defineChain({
   id: 91273002,
   name: "ShinzoHub Local",
-  nativeCurrency: currency,
+  nativeCurrency: localCurrency,
   rpcUrls: {
     default: { http: ["http://localhost:8545"] },
     cosmosRest: { http: ["http://localhost:1317"] },
@@ -51,28 +57,22 @@ export const shinzoHubLocal = defineChain({
   },
 });
 
-/**
- * Internal develop ShinzoHub Viem chain definition.
- *
- * This is the most useful default for development against the shared
- * ShinzoHub develop environment because it includes both EVM RPC and Cosmos
- * REST endpoints.
- *
- * @example
- * ```ts
- * import { createPublicClient, http } from "viem";
- * import { shinzoHubDevelop } from "@shinzo/shinzohub";
- *
- * const client = createPublicClient({
- *   chain: shinzoHubDevelop,
- *   transport: http(),
- * });
- * ```
- */
-// TODO: use the develop chain definition from the shinzohub repo
-export const shinzoHubDevelop = defineChain({
+/** Internal ShinzoHub Viem chain definition. */
+export const shinzoHubInternal = defineChain({
   id: 91273002,
-  name: "ShinzoHub Develop",
+  name: "Shinzo Internal",
+  nativeCurrency: currency,
+  rpcUrls: {
+    default: { http: ["http://testnet-internal.shinzo.network:8545"] },
+    cosmosRest: { http: ["http://testnet-internal.shinzo.network:1317"] },
+    cometRpc: { http: ["http://testnet-internal.shinzo.network:26657"] },
+  },
+});
+
+/** Shared development ShinzoHub Viem chain definition. */
+export const shinzoHubDevnet = defineChain({
+  id: 91273002,
+  name: "Shinzo Devnet",
   nativeCurrency: currency,
   rpcUrls: {
     default: { http: ["http://rpc.develop.devnet.shinzo.network:8545"] },
@@ -81,47 +81,16 @@ export const shinzoHubDevelop = defineChain({
   },
 });
 
-/**
- * Public devnet ShinzoHub Viem chain definition.
- *
- * This chain currently exposes EVM and Comet RPC endpoints. Pass
- * `cosmosRestUrl` explicitly to REST-backed SDK actions when the chain
- * definition does not include a Cosmos REST endpoint.
- */
-export const shinzoHubDevnet = defineChain({
-  id: 91273002,
-  name: "ShinzoHub Devnet",
-  nativeCurrency: currency,
-  rpcUrls: {
-    default: { http: ["http://rpc.devnet.shinzo.network:8545"] },
-    cometRpc: { http: ["http://rpc.devnet.shinzo.network:26657"] },
-  },
-});
-
 /** Testnet ShinzoHub Viem chain definition. */
 export const shinzoHubTestnet = defineChain({
   id: 91273001,
   name: "Shinzo",
-  nativeCurrency: {
-    name: "Shinzo",
-    symbol: "SHN",
-    decimals: 18,
-  },
+  nativeCurrency: currency,
   testnet: true,
   rpcUrls: {
     default: { http: ["http://testnet.shinzo.network:8545"] },
     cosmosRest: { http: ["http://testnet.shinzo.network:1317"] },
     cometRpc: { http: ["http://testnet.shinzo.network:26657"] },
-  },
-});
-
-/** Mainnet ShinzoHub Viem chain definition. */
-export const shinzoHubMainnet = defineChain({
-  id: 91273000,
-  name: "ShinzoHub Mainnet",
-  nativeCurrency: currency,
-  rpcUrls: {
-    default: { http: [] },
   },
 });
 
@@ -134,13 +103,31 @@ export const shinzoHubMainnet = defineChain({
  * ```ts
  * import { shinzoHubChains } from "@shinzo/shinzohub";
  *
- * const chain = shinzoHubChains.develop;
+ * const chain = shinzoHubChains.devnet;
  * ```
  */
 export const shinzoHubChains = {
-  local: shinzoHubLocal,
-  develop: shinzoHubDevelop,
-  devnet: shinzoHubDevnet,
   testnet: shinzoHubTestnet,
-  mainnet: shinzoHubMainnet,
+  internal: shinzoHubInternal,
+  devnet: shinzoHubDevnet,
+  local: shinzoHubLocal,
 } as const;
+
+export type ShinzoHubChainName = keyof typeof shinzoHubChains;
+
+export const defaultShinzoHubChainName: ShinzoHubChainName = "testnet";
+
+/** Resolves a named ShinzoHub chain, defaulting to public testnet. */
+export function getShinzoHubChain(
+  name: string | null | undefined = defaultShinzoHubChainName,
+) {
+  const resolvedName = name ?? defaultShinzoHubChainName;
+
+  if (Object.prototype.hasOwnProperty.call(shinzoHubChains, resolvedName)) {
+    return shinzoHubChains[resolvedName as ShinzoHubChainName];
+  }
+
+  throw new Error(
+    `Unsupported ShinzoHub chain "${resolvedName}". Expected one of: ${Object.keys(shinzoHubChains).join(", ")}.`,
+  );
+}

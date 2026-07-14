@@ -11,8 +11,8 @@ pnpm add @shinzo/shinzohub viem abitype
 
 Pass an existing Viem client as the first argument. Read methods work with a
 public client; `createView` requires a wallet-capable client. The supplied
-`shinzoHubLocal` and `shinzoHubDevelop` chains include EVM, Cosmos REST, and
-Comet RPC endpoints. Other chains may require explicit endpoint overrides.
+The supplied `testnet`, `internal`, `devnet`, and `local` chains include EVM,
+Cosmos REST, and Comet RPC endpoints.
 
 For smaller bundles, prefer standalone functions from focused package
 subpaths:
@@ -32,10 +32,12 @@ Use it when your bundler's tree shaking is known to remove unused code:
 
 ```ts
 import { createPublicClient, http } from "viem";
-import { shinzoHubActions, shinzoHubDevelop } from "@shinzo/shinzohub";
+import { getShinzoHubChain, shinzoHubActions } from "@shinzo/shinzohub";
+
+const chain = getShinzoHubChain(process.env.SHINZOHUB_CHAIN);
 
 const client = createPublicClient({
-  chain: shinzoHubDevelop,
+  chain,
   transport: http(),
 }).extend(shinzoHubActions);
 
@@ -861,22 +863,21 @@ Import from `@shinzo/shinzohub/chains` or the package root.
 
 ### Chain exports
 
-- `shinzoHubLocal`: chain ID `91273002`; local EVM, Cosmos REST, and Comet RPC
-  endpoints.
-- `shinzoHubDevelop`: chain ID `91273002`; shared develop EVM, Cosmos REST,
-  and Comet RPC endpoints.
-- `shinzoHubDevnet`: chain ID `91273002`; public devnet EVM and Comet RPC
-  endpoints.
-- `shinzoHubTestnet`: chain ID `91273001`; endpoint placeholders are empty.
-- `shinzoHubMainnet`: chain ID `91273000`; endpoint placeholders are empty.
-- `shinzoHubChains`: the definitions above keyed by `local`, `develop`,
-  `devnet`, `testnet`, and `mainnet`.
+- `shinzoHubTestnet`: chain ID `91273001`; public testnet endpoints.
+- `shinzoHubInternal`: chain ID `91273002`; internal testnet endpoints.
+- `shinzoHubDevnet`: chain ID `91273002`; shared development endpoints.
+- `shinzoHubLocal`: chain ID `91273002`; local endpoints.
+- `shinzoHubChains`: the definitions above keyed by `testnet`, `internal`,
+  `devnet`, and `local`.
+- `defaultShinzoHubChainName`: `"testnet"`.
+- `getShinzoHubChain(name)`: validates and returns a named chain, defaulting to
+  testnet when `name` is missing.
 
 Example:
 
 ```ts
 const publicClient = createPublicClient({
-  chain: shinzoHubChains.develop,
+  chain: getShinzoHubChain(process.env.SHINZOHUB_CHAIN),
   transport: http(),
 });
 ```
