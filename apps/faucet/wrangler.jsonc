@@ -19,5 +19,23 @@
   "assets": {
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
-  }
+  },
+  "env": {
+		"staging": {
+			"name": "faucet-internal",
+			"vars": {
+        "VITE_RECAPTCHA_SITE_KEY": "",
+        "VITE_SHINZOHUB_EXPLORER_URL": "https://explorer.shinzo.network/shinzohub",
+        "SHINZOHUB_COSMOS_RPC": "http://testnet-internal.shinzo.network:1317",
+        "SHINZOHUB_RPC": "http://testnet-internal.shinzo.network:26657"
+			},
+      "secrets": {
+        "required": ["RECAPTCHA_SECRET_KEY", "FAUCET_PRIVATE_KEY"]
+      },
+      "assets": {
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      },
+		}
+	}
 }
