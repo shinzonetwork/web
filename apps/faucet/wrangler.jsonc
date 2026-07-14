@@ -12,6 +12,16 @@
     "VITE_SHINZOHUB_EXPLORER_URL": "https://explorer.shinzo.network/shinzohub",
     "SHINZOHUB_CHAIN": "testnet"
   },
+  "env": {
+    "internal": {
+      "name": "faucet-internal",
+      "vars": {
+        "VITE_RECAPTCHA_SITE_KEY": "",
+        "VITE_SHINZOHUB_EXPLORER_URL": "https://explorer.shinzo.network/shinzohub",
+        "SHINZOHUB_CHAIN": "internal"
+      }
+    }
+  },
   "secrets": {
     "required": ["RECAPTCHA_SECRET_KEY", "FAUCET_PRIVATE_KEY"]
   },
