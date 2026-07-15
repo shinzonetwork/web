@@ -25,8 +25,7 @@ Server-only Worker variables:
 
 - `RECAPTCHA_SECRET_KEY`: Secret key for server-side reCAPTCHA verification. Create one in the [Google reCAPTCHA admin console](https://www.google.com/recaptcha/admin/create) and make sure you set your testing URL in the reCaptcha's allowlist.
 - `FAUCET_PRIVATE_KEY`: Private key for the funded ShinzoHub account that sends `$SHN`. Use a testnet faucet account only; never use a production or personally controlled key here.
-- `SHINZOHUB_RPC`: ShinzoHub CometBFT/Tendermint RPC endpoint, usually port `26657`. Used for account queries, chain status, and `broadcast_tx_sync`.
-- `SHINZOHUB_COSMOS_RPC`: ShinzoHub Cosmos REST/gRPC-gateway endpoint, usually port `1317`. Used to query recent transaction history before sending.
+- `SHINZOHUB_CHAIN`: ShinzoHub environment used for account queries, transaction history, and broadcasts. Supported values are `testnet`, `internal`, `devnet`, and `local`; it defaults to `testnet`. Endpoints come from `@shinzo/shinzohub`.
 
 Browser-exposed Vite variables:
 

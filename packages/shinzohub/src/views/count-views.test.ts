@@ -1,14 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicClient, http } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { countViews } from "./index";
 
 const originalFetch = globalThis.fetch;
 
 const mockChain = {
-  ...shinzoHubDevelop,
+  ...shinzoHubDevnet,
   rpcUrls: {
-    ...shinzoHubDevelop.rpcUrls,
+    ...shinzoHubDevnet.rpcUrls,
     cosmosRest: { http: ["https://rest.example"] },
   },
 };

@@ -6,11 +6,7 @@
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    /**
-     * RPC URL for the Shinzo network
-     * Required in production, defaults to http://localhost:8545 in development
-     */
-    readonly NEXT_PUBLIC_RPC_URL?: string;
+    readonly SHINZOHUB_CHAIN?: "testnet" | "internal" | "devnet" | "local";
 
     /**
      * Node environment (development, production, test)
@@ -19,4 +15,3 @@ declare namespace NodeJS {
     readonly NODE_ENV: "development" | "production" | "test";
   }
 }
-

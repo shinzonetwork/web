@@ -1,23 +1,9 @@
-import {
-  shinzoHubChain,
-  type ShinzoHubChainParameters,
-} from "@shinzo/shinzohub";
 import type { Chain } from "viem";
-import { getRpcUrl } from "@/shared/config/env";
-import { getCometRpcUrl, getCosmosRestUrl } from "./endpoints";
+import { shinzoChain } from "@/shared/config/shinzohub";
 
-/** Resolves ShinzoHub RPC endpoints from webapp env and package defaults. */
-export function getShinzoHubChainParameters(): ShinzoHubChainParameters {
-  return {
-    defaultRpcUrl: getRpcUrl(),
-    cometRpcUrl: getCometRpcUrl(),
-    cosmosRestUrl: getCosmosRestUrl(),
-  };
-}
-
-/** Builds the live ShinzoHub viem chain definition via `@shinzo/shinzohub`. */
+/** Resolves the configured ShinzoHub chain via `@shinzo/shinzohub`. */
 export async function resolveShinzoHubChain(): Promise<Chain> {
-  return (await shinzoHubChain(getShinzoHubChainParameters())) as Chain;
+  return shinzoChain as Chain;
 }
 
 /** Fetches the live ShinzoHub chain definition through the webapp API proxy. */

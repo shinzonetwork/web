@@ -6,12 +6,12 @@
   "workers_dev": true,
   "preview_urls": true,
   "compatibility_flags": ["nodejs_compat"],
+  // Runtime variables are managed in the Cloudflare dashboard for each Worker.
   "keep_vars": true,
-  "vars": {
-    "VITE_RECAPTCHA_SITE_KEY": "",
-    "VITE_SHINZOHUB_EXPLORER_URL": "https://explorer.shinzo.network/shinzohub",
-    "SHINZOHUB_COSMOS_RPC": "http://testnet.shinzo.network:1317",
-    "SHINZOHUB_RPC": "http://testnet.shinzo.network:26657"
+  "env": {
+    "internal": {
+      "name": "faucet-internal"
+    }
   },
   "secrets": {
     "required": ["RECAPTCHA_SECRET_KEY", "FAUCET_PRIVATE_KEY"]

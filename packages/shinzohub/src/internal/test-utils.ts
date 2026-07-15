@@ -1,6 +1,6 @@
 import { createPublicClient, http, type Hex } from "viem";
 import { expect, vi } from "vitest";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 
 type TransactionKind = "cosmos" | "evm";
 
@@ -99,7 +99,7 @@ const originalFetch = globalThis.fetch;
 
 /** Viem client configured with the package's develop-chain endpoints. */
 export const shinzoHubTestClient = createPublicClient({
-  chain: shinzoHubDevelop,
+  chain: shinzoHubDevnet,
   transport: http(),
 });
 

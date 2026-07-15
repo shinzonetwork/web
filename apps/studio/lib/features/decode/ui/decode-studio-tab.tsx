@@ -74,7 +74,7 @@ export const DecodeStudioTab = () => {
       <DeployActionControls
         canSubmit={isValidAddress}
         isConnected={deployAction.isConnected}
-        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+        isOnShinzo={deployAction.isOnShinzo}
         isInProgress={deployAction.isInProgress}
         status={deployAction.status}
         pendingLabel={
@@ -88,7 +88,7 @@ export const DecodeStudioTab = () => {
 
       <DeployNetworkNotice
         isConnected={deployAction.isConnected}
-        isOnShinzoDevnet={deployAction.isOnShinzoDevnet}
+        isOnShinzo={deployAction.isOnShinzo}
       />
 
       <DeployStatusMessage error={deployAction.error} />

@@ -19,7 +19,7 @@ const STATUS_LABELS: Record<DeployStatus, string> = {
 interface DeployActionControlsProps {
   canSubmit: boolean;
   isConnected: boolean;
-  isOnShinzoDevnet: boolean;
+  isOnShinzo: boolean;
   isInProgress: boolean;
   status: DeployStatus;
   pendingLabel?: string;
@@ -30,7 +30,7 @@ interface DeployActionControlsProps {
 export const DeployActionControls = ({
   canSubmit,
   isConnected,
-  isOnShinzoDevnet,
+  isOnShinzo,
   isInProgress,
   status,
   pendingLabel,
@@ -42,7 +42,7 @@ export const DeployActionControls = ({
       <ConnectDialog />
     ) : (
       <>
-        {!isOnShinzoDevnet && (
+        {!isOnShinzo && (
           <Button
             type="button"
             onClick={onSwitchToShinzo}
@@ -50,13 +50,13 @@ export const DeployActionControls = ({
             variant="secondary"
             className="disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Switch to Shinzo Devnet
+            Switch to Shinzo
           </Button>
         )}
         <Button
           type="button"
           onClick={onSubmit}
-          disabled={!canSubmit || isInProgress || !isOnShinzoDevnet}
+          disabled={!canSubmit || isInProgress || !isOnShinzo}
           className="gap-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isInProgress && <Loader2 className="size-4 animate-spin" />}

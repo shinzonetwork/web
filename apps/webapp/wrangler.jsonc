@@ -19,21 +19,15 @@
 		}
 	],
 	"vars": {
-		"NEXT_PUBLIC_RPC_URL": "http://testnet.shinzo.network:8545",
-		"SHINZOHUB_COSMOS_REST_URL": "http://testnet.shinzo.network:1317",
-		"SHINZOHUB_COMET_RPC_URL": "http://testnet.shinzo.network:26657",
+		"SHINZOHUB_CHAIN": "testnet",
 		"INDEXER_ASSERTION_PRIVATE_KEY": "2c5f0e00617b6849f8efd5d74db1d06d7e516a8b6ff86f6059b024b22d5eaccf",
-		"INDEXER_ASSERTION_RPC_ENDPOINT": "http://testnet.shinzo.network:26657"
 	},
 	"env": {
 		"staging": {
 			"name": "shinzo-webapp-staging",
 			"vars": {
-				"NEXT_PUBLIC_RPC_URL": "http://testnet-internal.shinzo.network:8545",
-				"SHINZOHUB_COSMOS_REST_URL": "http://testnet-internal.shinzo.network:1317",
-				"SHINZOHUB_COMET_RPC_URL": "http://testnet-internal.shinzo.network:26657",
+				"SHINZOHUB_CHAIN": "internal",
 				"INDEXER_ASSERTION_PRIVATE_KEY": "2c5f0e00617b6849f8efd5d74db1d06d7e516a8b6ff86f6059b024b22d5eaccf",
-				"INDEXER_ASSERTION_RPC_ENDPOINT": "http://testnet-internal.shinzo.network:26657"
 			},
 			"d1_databases": [
 				{

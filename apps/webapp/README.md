@@ -8,15 +8,8 @@ This application requires environment variables to be configured. Copy `.env.exa
 cp .env.example .env.local
 ```
 
-### Required Environment Variables
+### ShinzoHub Environment
 
-- `NEXT_PUBLIC_RPC_URL` - RPC URL for the Shinzohub network. This should point to a Shinzohub RPC endpoint. Required in production, defaults to `http://localhost:8545` in development.
+- `SHINZOHUB_CHAIN` selects the ShinzoHub environment for wallet and server requests. Supported values are `testnet`, `internal`, `devnet`, and `local`; it defaults to `testnet`.
 
-### Development
-
-In development mode, the application will default to `http://localhost:8545` if `NEXT_PUBLIC_RPC_URL` is not set.
-
-### Production
-
-In production, `NEXT_PUBLIC_RPC_URL` **must** be configured. The application will throw an error at startup if it's not set.
-
+The selected chain's EVM, Cosmos REST, and Comet endpoints are provided by `@shinzo/shinzohub`; individual RPC URL overrides are not needed.

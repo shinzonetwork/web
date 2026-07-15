@@ -40,7 +40,7 @@ const buildProxyInit = async (request: Request): Promise<RequestInit> => {
 };
 
 const buildConfiguredPathTargetUrl = (
-  key: EnvKey,
+  key: string,
   request: Request,
   proxyPath: string,
   upstreamBaseUrl: string
@@ -63,8 +63,8 @@ const buildConfiguredPathTargetUrl = (
   }
 };
 
-const proxyToUrl = async (
-  key: EnvKey,
+export const proxyToUrl = async (
+  key: string,
   request: Request,
   targetUrl: string,
   kind: ProxyResponseKind
@@ -114,6 +114,28 @@ const proxyToUrl = async (
   }
 };
 
+export const proxyToPath = async (
+  key: string,
+  request: Request,
+  proxyPath: string,
+  upstreamBaseUrl: string,
+  options: ProxyOptions = {}
+): Promise<Response> => {
+  const kind = options.kind ?? "raw";
+  const targetUrl = buildConfiguredPathTargetUrl(
+    key,
+    request,
+    proxyPath,
+    upstreamBaseUrl
+  );
+
+  if ("error" in targetUrl) {
+    return createProxyErrorResponse(targetUrl.error, 500, kind);
+  }
+
+  return proxyToUrl(key, request, targetUrl.url, kind);
+};
+
 export const proxyToConfiguredUrl = async (
   env: Env,
   key: EnvKey,
@@ -144,16 +166,5 @@ export const proxyToConfiguredPath = async (
     return createProxyErrorResponse(configuredUrl.error, 500, kind);
   }
 
-  const targetUrl = buildConfiguredPathTargetUrl(
-    key,
-    request,
-    proxyPath,
-    configuredUrl.url
-  );
-
-  if ("error" in targetUrl) {
-    return createProxyErrorResponse(targetUrl.error, 500, kind);
-  }
-
-  return proxyToUrl(key, request, targetUrl.url, kind);
+  return proxyToPath(key, request, proxyPath, configuredUrl.url, { kind });
 };

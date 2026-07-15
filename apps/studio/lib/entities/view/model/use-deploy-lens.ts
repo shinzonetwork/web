@@ -33,7 +33,9 @@ import type {
   LensDefinition,
   ResolvedLensView,
 } from "@/entities/lens";
-import { shinzoDevnet, wagmiConfig } from "@/shared/consts/wagmi";
+import { wagmiConfig } from "@/shared/consts/wagmi";
+import { shinzoChain } from "@/shared/consts/shinzohub";
+import { getChainSwitchErrorMessage } from "@/shared/utils/chain-switch-error";
 import { resolveViewDefinition } from "../api/deploy-transaction";
 import {
   fetchHubViewByAddress,
@@ -153,16 +155,12 @@ const submitDeployTransaction = async (
     onTransactionSent,
   } = input;
   const bundle = await bundleView(viewDefinition);
-  const chainId = shinzoDevnet.id;
+  const chainId = shinzoChain.id;
 
   try {
     await switchChainMutateAsync({ chainId });
   } catch (error) {
-    throw createDeployTransactionError(
-      "Could not switch your wallet to Shinzo Devnet.",
-      error,
-      "Network switch was rejected in your wallet."
-    );
+    throw new Error(getChainSwitchErrorMessage(error));
   }
 
   const walletClient = await (async () => {
@@ -170,7 +168,7 @@ const submitDeployTransaction = async (
       return await getWalletClient(wagmiConfig, { chainId });
     } catch (error) {
       throw createDeployTransactionError(
-        "Could not access your Shinzo Devnet wallet client.",
+        "Could not access your Shinzo wallet client.",
         error
       );
     }
@@ -207,7 +205,7 @@ const submitDeployTransaction = async (
   } catch (error) {
     if (isReceiptTimeout(error)) {
       throw new Error(
-        `Deployment transaction ${txHash} was broadcast, but confirmation timed out. It may still be pending on Shinzo Devnet.`
+        `Deployment transaction ${txHash} was broadcast, but confirmation timed out. It may still be pending on Shinzo.`
       );
     }
 
@@ -318,7 +316,7 @@ export interface UseDeployLensResult {
 export const useDeployLens = (): UseDeployLensResult => {
   const { address: account } = useConnection();
   const { mutateAsync: switchChainMutateAsync } = useSwitchChain();
-  const publicClient = usePublicClient({ chainId: shinzoDevnet.id });
+  const publicClient = usePublicClient({ chainId: shinzoChain.id });
   const { data: studioHubViews = [], refetch: refetchStudioHubViews } =
     useStudioHubViews();
 
@@ -363,7 +361,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 
@@ -415,7 +413,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 
@@ -449,7 +447,7 @@ export const useDeployLens = (): UseDeployLensResult => {
       }
       if (!publicClient) {
         throw new Error(
-          "Shinzo public client is unavailable. Check SHINZOHUB_EVM_RPC."
+          "Shinzo public client is unavailable. Check SHINZOHUB_CHAIN."
         );
       }
 

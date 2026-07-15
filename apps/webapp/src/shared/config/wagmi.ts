@@ -1,14 +1,16 @@
 import { createConfig, http, type Config } from "wagmi";
 import type { Chain } from "viem";
-import { getRpcUrl } from "./env";
+import { shinzoChain } from "./shinzohub";
 
-/** Creates a wagmi config bound to the resolved ShinzoHub chain. */
-export function createWagmiConfig(chain: Chain): Config {
+/** Creates the wagmi config for the selected ShinzoHub environment. */
+export function createWagmiConfig(): Config {
+  const chain = shinzoChain as Chain;
+
   return createConfig({
     ssr: true,
     chains: [chain],
     transports: {
-      [chain.id]: http(getRpcUrl()),
+      [chain.id]: http(),
     },
   });
 }

@@ -1,3 +1,4 @@
+import { getShinzoHubChain } from '@shinzo/shinzohub/chains';
 import type { Env } from './types';
 
 let faucetEnv: Env | null = null;
@@ -27,7 +28,7 @@ export const getRequiredEnv = (
 };
 
 export const getShinzoRpcUrl = (): string =>
-  getRequiredEnv('SHINZOHUB_RPC');
+  getShinzoHubChain(getConfiguredEnv().SHINZOHUB_CHAIN).rpcUrls.cometRpc.http[0];
 
 export const getShinzoHubCosmosRpcUrl = (): string =>
-  getRequiredEnv('SHINZOHUB_COSMOS_RPC');
+  getShinzoHubChain(getConfiguredEnv().SHINZOHUB_CHAIN).rpcUrls.cosmosRest.http[0];

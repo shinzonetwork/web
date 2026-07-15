@@ -1,12 +1,31 @@
 # @shinzo/shinzohub
 
-Viem-first TypeScript client actions for ShinzoHub.
+Viem-first TypeScript client actions and canonical chain definitions for ShinzoHub.
 
 See the complete [API reference](./api.md).
 
-Each query function maps to exactly one ShinzoHub REST or Comet RPC request.
-Applications can compose primitives when they need enrichment or fallback
-behavior.
+Each query function maps to exactly one ShinzoHub REST or Comet RPC request. Applications can compose primitives when they need enrichment or fallback behavior.
+
+## Chain selection
+
+The package exposes four environments:
+
+| Name | Chain ID | EVM RPC base |
+| --- | ---: | --- |
+| `testnet` | `91273001` | `http://testnet.shinzo.network:8545` |
+| `internal` | `91273002` | `http://testnet-internal.shinzo.network:8545` |
+| `devnet` | `91273002` | `http://rpc.develop.devnet.shinzo.network:8545` |
+| `local` | `91273002` | `http://localhost:8545` |
+
+Use `getShinzoHubChain` with the shared `SHINZOHUB_CHAIN` environment variable. Missing values default to `testnet`; unsupported values throw a configuration error.
+
+```ts
+import { getShinzoHubChain } from "@shinzo/shinzohub";
+
+const chain = getShinzoHubChain(process.env.SHINZOHUB_CHAIN);
+```
+
+The same definitions are available as `shinzoHubTestnet`, `shinzoHubInternal`, `shinzoHubDevnet`, `shinzoHubLocal`, and through `shinzoHubChains`.
 
 ## Usage
 
@@ -14,12 +33,13 @@ behavior.
 import { createPublicClient, createWalletClient, http } from "viem";
 import {
   createShinzoHubClient,
+  getShinzoHubChain,
   shinzoHubActions,
-  shinzoHubDevelop,
 } from "@shinzo/shinzohub";
 
+const chain = getShinzoHubChain(process.env.SHINZOHUB_CHAIN);
 const publicClient = createPublicClient({
-  chain: shinzoHubDevelop,
+  chain,
   transport: http(),
 }).extend(shinzoHubActions);
 
@@ -33,7 +53,7 @@ const view = await publicClient.getView({
 });
 
 const transactions = await publicClient.listTransactions({
-  kind: "all", // "all" | "evm"
+  kind: "all",
   limit: 20,
 });
 
@@ -43,15 +63,11 @@ const blocks = await publicClient.listBlocks({
 });
 
 const validators = await publicClient.listValidators();
-```
 
-Create a view with a wallet client:
-
-```ts
 const walletClient = createShinzoHubClient(
   createWalletClient({
     account: "0x1234567890AbcdEF1234567890aBcdef12345678",
-    chain: shinzoHubDevelop,
+    chain,
     transport: http(),
   }),
 );
@@ -61,16 +77,14 @@ const hash = await walletClient.createView({
 });
 ```
 
-Read the deterministic View address from the receipt and poll registration:
+Read the deterministic View address from a receipt and poll registration:
 
 ```ts
 import { getCreatedViewAddress } from "@shinzo/shinzohub";
 
 const receipt = await publicClient.waitForTransactionReceipt({ hash });
 const viewAddress = getCreatedViewAddress(receipt);
-const registration = await publicClient.getViewRegistration({
-  viewAddress,
-});
+const registration = await publicClient.getViewRegistration({ viewAddress });
 
 if (registration.status === "registered") {
   const view = await publicClient.getView({ viewAddress });
@@ -78,110 +92,3 @@ if (registration.status === "registered") {
 ```
 
 Power users can import `viewRegistryAbi` and `viewRegistryAddress` and call Viem directly for lower-level contract reads or log decoding.
-
-## Roadmap
-
-Checked items are covered by the current public SDK. Unchecked items are
-ShinzoHub protocol surface area that should be considered in future passes.
-
-### Client And Chains
-
-- [x] Decorate an existing Viem client with `createShinzoHubClient`.
-- [x] Use modular Viem actions with `shinzoHubActions`.
-- [x] Export the local Viem chain definition as `shinzoHubLocal`.
-- [x] Export the develop Viem chain definition as `shinzoHubDevelop`.
-- [x] Export the devnet Viem chain definition as `shinzoHubDevnet`.
-- [x] Export the testnet Viem chain definition as `shinzoHubTestnet`.
-- [x] Export the mainnet Viem chain definition as `shinzoHubMainnet`.
-- [x] Export known chain mappings as `shinzoHubChains`.
-- [x] Keep package subpaths limited to the root, views, transactions, blocks, validators, addresses, and chains APIs.
-- [x] Keep `./internal`, URL builders, calldata builders, event selectors, and payload normalizers out of public package exports.
-
-### ViewRegistry Precompile
-
-- [x] Cover the ViewRegistry precompile address with `viewRegistryAddress`.
-- [x] Cover the ViewRegistry ABI with `viewRegistryAbi`.
-- [x] Cover `register(bytes)` with `createView({ bundle })`.
-- [x] Cover `ViewCreated(address,address,string)` through `getCreatedViewAddress(receipt)` and `viewRegistryAbi`.
-- [x] Cover `getView(address)` with `getViewRegistration`.
-- [ ] Add dedicated ViewRegistry event query/decode helpers if ABI-based Viem usage is not enough.
-
-### Cosmos REST View Queries
-
-- [x] Cover `GET /shinzonetwork/view/v1/views` with `listViews`.
-- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listViews`.
-- [x] Cover `include_data`, `since_block`, and `include_metadata` in `listViews`.
-- [x] Cover view filters for name and creator in `listViews`.
-- [x] Cover metadata filters for root type, lens hash, query text, SDL text, and lens args text in `listViews`.
-- [x] Cover `GET /shinzonetwork/view/v1/views/{view_address}` with `getView`.
-- [x] Cover `include_data` and `include_metadata` in `getView`.
-- [x] Cover `GET /shinzonetwork/view/v1/view_count` with `countViews`.
-
-### Cosmos REST Host Queries
-
-- [x] Cover `GET /shinzonetwork/host/v1/hosts` with `listHosts`.
-- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listHosts`.
-- [x] Cover `GET /shinzonetwork/host/v1/hosts/{address}` with `getHost`.
-
-### Cosmos REST Generator Queries
-
-- [x] Cover `GET /shinzonetwork/indexer/v1/indexers` with `listGenerators`.
-- [x] Cover pagination limit, offset, key, total-count, and reverse options in `listGenerators`.
-- [x] Cover `GET /shinzonetwork/indexer/v1/indexers/{address}` with `getGenerator`.
-
-### Transactions And Blocks
-
-- [x] List all or EVM transactions with `listTransactions`.
-- [x] Fetch decoded transaction details by Cosmos hash with `getTransaction`.
-- [x] Resolve a Cosmos transaction summary from an EVM hash with `findTransactionByEvmHash`.
-- [x] Preserve decoded Cosmos messages and events for generic clients.
-- [x] List consensus blocks with `listBlocks`.
-- [x] Fetch the latest block with `getLatestBlock`.
-- [x] Fetch the latest block height with `getLatestBlockHeight`.
-- [x] Fetch one block timestamp with `getBlockTimestamp`.
-- [x] Fetch a block by height or hash with `getBlock`.
-- [x] List active consensus validators with `listValidators`.
-
-### Addresses
-
-- [x] Normalize Shinzo address input with `normalizeShinzoAddress`.
-- [x] Normalize EVM hex address input with `normalizeHexAddress`.
-- [x] Convert EVM hex to Shinzo bech32 with `hexToShinzoAddress`.
-- [x] Convert Shinzo bech32 to EVM hex with `shinzoAddressToHex`.
-- [ ] Reconsider boolean address validators only if product UI code needs them.
-- [ ] Reconsider public address constants only if users need to configure custom prefixes or byte lengths often.
-- [ ] Reconsider public address error classes only if consumers need typed catch branches.
-
-### HostRegistry Precompile
-
-- [ ] Cover the HostRegistry precompile address.
-- [ ] Cover the HostRegistry ABI.
-- [ ] Cover `register(bytes,bytes,bytes,string)`.
-- [ ] Cover `isRegistered(address)`.
-- [ ] Cover `getDid(address)`.
-- [ ] Cover `getConnectionString(address)`.
-- [ ] Cover `Registered(address,bytes,string)`.
-- [x] Fetch one registered host by account address with `getHost`.
-- [ ] Cover paginated Cosmos REST host listings.
-
-### GeneratorRegistry Precompile
-
-- [ ] Cover the GeneratorRegistry precompile address.
-- [ ] Cover the GeneratorRegistry ABI.
-- [ ] Cover `register(bytes,bytes,bytes,string,string,uint64)`.
-- [ ] Cover `isRegistered(address)`.
-- [ ] Cover `getDid(address)`.
-- [ ] Cover `getConnectionString(address)`.
-- [ ] Cover `getSourceChain(address)`.
-- [ ] Cover `Registered(address,bytes,string,string,uint64)`.
-- [x] Fetch one registered generator by account address with `getGenerator`.
-- [ ] Cover paginated Cosmos REST generator listings.
-- [ ] Cover generator assertion transaction helpers when the workflow is designed.
-
-### SourceHub And Admin Workflows
-
-- [ ] Cover SourceHub ICA registration transactions.
-- [ ] Cover Shinzo policy transactions.
-- [ ] Cover Shinzo object registration transactions.
-- [ ] Cover stream access transactions.
-- [ ] Cover admin params queries.

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createPublicClient, http } from "viem";
-import { shinzoHubDevelop } from "../chains/index";
+import { shinzoHubDevnet } from "../chains/index";
 import { createShinzoHubClient } from "../index";
 import { getGenerator, getGeneratorAssertion, getGeneratorHealth, listGenerators } from "./index";
 import { UNHEALTHY_LIVE_DATA } from "./get-generator-health";
@@ -46,9 +46,9 @@ afterEach(() => {
 
 describe("listGenerators", () => {
   const mockChain = {
-    ...shinzoHubDevelop,
+    ...shinzoHubDevnet,
     rpcUrls: {
-      ...shinzoHubDevelop.rpcUrls,
+      ...shinzoHubDevnet.rpcUrls,
       cosmosRest: { http: ["https://rest.example"] },
     },
   };
@@ -99,9 +99,9 @@ describe("listGenerators", () => {
 
 describe("getGenerator", () => {
   const mockChain = {
-    ...shinzoHubDevelop,
+    ...shinzoHubDevnet,
     rpcUrls: {
-      ...shinzoHubDevelop.rpcUrls,
+      ...shinzoHubDevnet.rpcUrls,
       cosmosRest: { http: ["https://rest.example"] },
     },
   };
@@ -141,9 +141,9 @@ describe("getGenerator", () => {
 
 describe("getGeneratorAssertion", () => {
   const mockChain = {
-    ...shinzoHubDevelop,
+    ...shinzoHubDevnet,
     rpcUrls: {
-      ...shinzoHubDevelop.rpcUrls,
+      ...shinzoHubDevnet.rpcUrls,
       cosmosRest: { http: ["https://rest.example"] },
     },
   };
