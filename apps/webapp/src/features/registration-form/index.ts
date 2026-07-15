@@ -1,8 +1,5 @@
 export { RegistrationFormV2 } from "./ui/registration-form-v2";
-export { RegistrationForm } from "./ui/registration-form";
-export { useRegistrationForm } from "./hooks/use-registration-form";
 export { useRegistrationFormV2 } from "./hooks/use-registration-form-v2";
-export { useRegistrationTransaction } from "./hooks/use-registration-transaction";
 export {
   useVerifyAssertion,
   waitForGeneratorAssertionVerification,
@@ -26,8 +23,6 @@ export {
 export type {
   GeneratorAssertionFormPrefill,
   GeneratorAssertionPrefill,
-  PrefillData,
-  PrefillDataV1,
   PrefillDataV2,
   RegistrationPrefillV2Params,
 } from "./hooks/use-prefill-data";

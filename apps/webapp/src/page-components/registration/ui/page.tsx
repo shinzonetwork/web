@@ -4,17 +4,14 @@ import { Suspense } from "react";
 import { useAccount } from "wagmi";
 
 import { useRegistrationContext } from "@/entities/registration-process";
-import {
-  RegistrationForm,
-  RegistrationFormV2,
-} from "@/features/registration-form";
+import { RegistrationFormV2 } from "@/features/registration-form";
 import {
   GeneratorOnboardingStepper,
   useGeneratorOnboardingGuard,
 } from "@/features/generator-onboarding";
 import { FormHeader } from "@/widget/form-header";
 import { Header } from "@/widget";
-import { isRegistrationV2, UI_FORM_HEADER_CONTENT } from "@/shared/lib";
+import { UI_FORM_HEADER_CONTENT } from "@/shared/lib";
 import { usePathname } from "next/navigation";
 import { Connect } from "@/page-components/connect";
 
@@ -25,8 +22,7 @@ function RegisterContent() {
   const routeKey = pathname
     .split("/")
     .pop() as keyof typeof UI_FORM_HEADER_CONTENT;
-  const isGeneratorRegistration =
-    isRegistrationV2() && routeKey === "generator-registration";
+  const isGeneratorRegistration = routeKey === "generator-registration";
 
   const { isAssertionVerified, isAssertionLoading, isRedirectingToAssertion } =
     useGeneratorOnboardingGuard(isGeneratorRegistration);
@@ -57,10 +53,8 @@ function RegisterContent() {
                 <p className="ml-10 font-mono text-sm text-muted-foreground">
                   Redirecting to assertion…
                 </p>
-              ) : showRegistrationForm && isRegistrationV2() ? (
-                <RegistrationFormV2 />
               ) : showRegistrationForm ? (
-                <RegistrationForm />
+                <RegistrationFormV2 />
               ) : null}
             </>
           )}

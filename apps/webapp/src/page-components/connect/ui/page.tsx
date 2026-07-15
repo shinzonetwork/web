@@ -1,3 +1,5 @@
+"use client";
+
 import { useRegistrationContext } from "@/entities/registration-process";
 import WalletSignatureHandler from "@/features/wallet-signature/ui/wallet-signature-handler";
 import { DisconnectWallet } from "@/widget";
