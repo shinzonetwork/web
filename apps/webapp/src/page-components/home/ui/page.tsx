@@ -1,5 +1,5 @@
 import { Header } from "@/widget";
-import { Home } from "@/features/home/ui/home";
+import { Home } from "@/features/home";
 
 export function HomePage() {
   return (

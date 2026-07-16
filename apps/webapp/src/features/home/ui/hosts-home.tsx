@@ -13,7 +13,7 @@ import {
   ipFromConnectionString,
   RegisteredHost,
 } from "@/shared/lib";
-import { HealthStatus } from "@/shared/types";
+import type { HealthStatus } from "@/shared/lib/utils/health";
 import { CopyToClipboard } from "@/widget";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";

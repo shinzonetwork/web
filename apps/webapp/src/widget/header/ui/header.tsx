@@ -1,5 +1,5 @@
-import { Connect } from "@/page-components/connect";
-import { HeaderMenu } from "@/widget/menu/ui/header-menu";
+import { Connect } from "@/page-components";
+import { HeaderMenu } from "@/widget";
 import Image from "next/image";
 import Link from "next/link";
 

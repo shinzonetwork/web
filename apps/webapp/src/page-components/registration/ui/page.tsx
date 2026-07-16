@@ -3,17 +3,16 @@
 import { Suspense } from "react";
 import { useAccount } from "wagmi";
 
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 import { RegistrationFormV2 } from "@/features/registration-form";
 import {
   GeneratorOnboardingStepper,
   useGeneratorOnboardingGuard,
 } from "@/features/generator-onboarding";
-import { FormHeader } from "@/widget/form-header";
-import { Header } from "@/widget";
+import { FormHeader, Header } from "@/widget";
 import { UI_FORM_HEADER_CONTENT } from "@/shared/lib";
 import { usePathname } from "next/navigation";
-import { Connect } from "@/page-components/connect";
+import { Connect } from "@/page-components";
 
 function RegisterContent() {
   const { isConnected } = useAccount();

@@ -4,11 +4,10 @@ import { useAccount } from "wagmi";
 
 import { AssertionForm } from "@/features/generator-assertion";
 import { GeneratorOnboardingStepper } from "@/features/generator-onboarding";
-import { useRegistrationContext } from "@/entities/registration-process";
-import { FormHeader } from "@/widget/form-header";
-import { Header } from "@/widget";
+import { useRegistrationContext } from "@/entities";
+import { FormHeader, Header } from "@/widget";
 import { UI_FORM_HEADER_CONTENT } from "@/shared/lib";
-import { Connect } from "@/page-components/connect";
+import { Connect } from "@/page-components";
 
 export default function Assertion() {
   const { isConnected } = useAccount();

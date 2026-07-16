@@ -1,9 +1,8 @@
 "use client";
 
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 import WalletSignatureHandler from "@/features/wallet-signature/ui/wallet-signature-handler";
-import { DisconnectWallet } from "@/widget";
-import { ConnectWallet } from "@/widget/connect-wallet";
+import { ConnectWallet, DisconnectWallet } from "@/widget";
 import { useAccount } from "wagmi";
 
 export function Connect() {

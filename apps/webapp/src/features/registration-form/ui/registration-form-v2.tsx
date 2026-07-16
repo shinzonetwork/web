@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/shared/ui/button";
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 
 import { RegistrationDataForm } from "./registration-data-form";
 import { useRegistrationFormV2 } from "../hooks/use-registration-form-v2";

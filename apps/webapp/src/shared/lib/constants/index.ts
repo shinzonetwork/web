@@ -1,5 +1,4 @@
 export const MESSAGE_TO_SIGN = "Shinzo Registration Verification";
-export const SHINZO_PREFIX = "shinzo";
 
 export enum EntityRole {
   Host = 1,

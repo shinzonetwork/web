@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { verifyMessage, type Hex } from "viem";
 
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 
 import { MESSAGE_TO_SIGN } from "@/shared/lib";
 

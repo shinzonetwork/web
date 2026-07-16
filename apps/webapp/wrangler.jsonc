@@ -11,13 +11,6 @@
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
 	},
-	"d1_databases": [
-		{
-			"binding": "shinzo_indexer_db",
-			"database_name": "shinzo-indexer-db",
-			"database_id": "06692941-66a9-4f60-b57a-44e09c4e6727"
-		}
-	],
 	"vars": {
 		"SHINZOHUB_CHAIN": "testnet",
 		"INDEXER_ASSERTION_PRIVATE_KEY": "2c5f0e00617b6849f8efd5d74db1d06d7e516a8b6ff86f6059b024b22d5eaccf",
@@ -28,14 +21,7 @@
 			"vars": {
 				"SHINZOHUB_CHAIN": "internal",
 				"INDEXER_ASSERTION_PRIVATE_KEY": "2c5f0e00617b6849f8efd5d74db1d06d7e516a8b6ff86f6059b024b22d5eaccf",
-			},
-			"d1_databases": [
-				{
-				  "binding": "shinzo_indexer_db",
-				  "database_name": "shinzo-indexer-db-staging",
-				  "database_id": "bc5cf7aa-5cd1-45e5-a01a-9f5826781d05"
-				}
-			  ]
+			}
 		}
 	}
 }

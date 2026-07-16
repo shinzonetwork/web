@@ -1,6 +1,5 @@
 export * from "./constants/index";
 export * from "./constants/chains";
-export * from "./constants/indexer-whitelist";
 export * from "./shinzohub/query-context";
 export * from "./shinzohub/types";
 export * from "./utils/endpoints";

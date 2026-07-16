@@ -1,5 +1,4 @@
 export { RegistrationFormV2 } from "./ui/registration-form-v2";
-export { useRegistrationFormV2 } from "./hooks/use-registration-form-v2";
 export {
   useVerifyAssertion,
   waitForGeneratorAssertionVerification,
@@ -8,7 +7,6 @@ export {
   buildGeneratorAssertionUrl,
   buildGeneratorAssertionUrlFromSearchParams,
   buildGeneratorRegistrationUrl,
-  buildHostRegistrationUrl,
 } from "./lib/build-registration-url";
 export {
   getAssertionFormPrefilledFields,
@@ -18,11 +16,10 @@ export {
   getRegistrationPrefillV2Params,
   getRegistrationPrefilledFieldsV2,
   readSearchParams,
-  usePrefillData,
-} from "./hooks/use-prefill-data";
+} from "./lib/prefill-data";
 export type {
   GeneratorAssertionFormPrefill,
   GeneratorAssertionPrefill,
   PrefillDataV2,
   RegistrationPrefillV2Params,
-} from "./hooks/use-prefill-data";
+} from "./lib/prefill-data";

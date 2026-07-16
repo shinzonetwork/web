@@ -1,4 +1,4 @@
+export * from "./assertion";
 export * from "./connect";
-export * from "./indexers";
-export * from "./join-devnet";
+export * from "./home";
 export * from "./registration";

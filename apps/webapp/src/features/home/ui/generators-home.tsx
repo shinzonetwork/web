@@ -15,7 +15,7 @@ import {
   isGeneratorHealthPollable,
   Generator,
 } from "@/shared/lib";
-import { HealthStatus } from "@/shared/types";
+import type { HealthStatus } from "@/shared/lib/utils/health";
 import { LoaderCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import {

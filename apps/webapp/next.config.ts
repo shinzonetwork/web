@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   },
   productionBrowserSourceMaps: false,
   experimental: {
-    optimizePackageImports: ['lucide-react', 'viem', 'wagmi', '@tanstack/react-query', '@radix-ui/react-tooltip', '@radix-ui/react-label', '@radix-ui/react-radio-group'],
+    optimizePackageImports: ['lucide-react', 'viem', 'wagmi', '@tanstack/react-query', '@radix-ui/react-tooltip', '@radix-ui/react-label'],
   },
   turbopack: {
     rules: {

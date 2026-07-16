@@ -4,7 +4,7 @@ import {
   getRegistrationPrefillV2Params,
   readSearchParams,
   type RegistrationPrefillV2Params,
-} from "../hooks/use-prefill-data";
+} from "./prefill-data";
 
 function appendRegistrationPrefillParams(
   params: URLSearchParams,
@@ -67,14 +67,6 @@ export function buildGeneratorAssertionUrlFromSearchParams(
     ...getRegistrationPrefillV2Params(searchParams),
     ...getGeneratorAssertionFormPrefill(searchParams),
   });
-}
-
-export function buildHostRegistrationUrl(
-  prefill: RegistrationPrefillV2Params = {}
-): string {
-  const params = new URLSearchParams({ role: "host" });
-  appendRegistrationPrefillParams(params, prefill);
-  return `/host-registration?${params.toString()}`;
 }
 
 export function buildGeneratorRegistrationUrl(

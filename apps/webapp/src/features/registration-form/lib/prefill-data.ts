@@ -12,8 +12,6 @@ export type PrefillDataV2 = {
   endpointAddress?: string;
 };
 
-export type PrefillData = PrefillDataV2;
-
 /** Assertion context passed from the generator assertion step via URL. */
 export type GeneratorAssertionPrefill = {
   validatorPublicKey: string;
@@ -168,12 +166,4 @@ export function getAssertionFormPrefilledFields(
   return {
     sourceChain: Boolean(prefill.sourceChain),
   };
-}
-
-/**
- * Hook that returns the prefill data from URL query parameters.
- */
-export function usePrefillData(): PrefillData {
-  const searchParams = readSearchParams();
-  return getRegistrationPrefillV2(searchParams);
 }

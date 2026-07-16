@@ -6,7 +6,7 @@ import { encodeFunctionData, type Hex } from "viem";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { EntityRole, TOAST_CONFIG } from "@/shared/lib";
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 import type {
   HostRegistrationFormData,
   IndexerRegistrationFormData,

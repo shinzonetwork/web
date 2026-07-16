@@ -1,1 +1,1 @@
-export { Register as default } from "@/page-components/registration";
+export { Register as default } from "@/page-components";
