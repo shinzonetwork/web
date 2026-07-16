@@ -20,7 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import {
   createHealthEntryKey,
   PAGE_SIZE,
-} from "../../../shared/lib/shinzohub/health";
+} from "../../../shared/lib/utils/health";
 import { useHostHealthPolling } from "../hooks/hosts/use-host-health-polling";
 
 export type HostWithHealth = RegisteredHost &

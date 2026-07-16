@@ -9,3 +9,10 @@ export function getCometRpcUrl(): string {
 export function getCosmosRestUrl(): string {
   return shinzoChain.rpcUrls.cosmosRest.http[0];
 }
+
+/**
+ * Get the RPC URL for the Shinzo network
+ */
+export function getEVMRpcUrl(): string {
+  return shinzoChain.rpcUrls.default.http[0];
+}

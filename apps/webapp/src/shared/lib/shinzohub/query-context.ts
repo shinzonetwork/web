@@ -1,9 +1,9 @@
 import { getShinzoPublicClient } from "@/shared/lib/viem/client";
-import { getCometRpcUrl, getCosmosRestUrl } from "./endpoints";
+import { getCometRpcUrl, getCosmosRestUrl } from "../utils/endpoints";
 
-export async function getShinzohubQueryContext() {
+export function getShinzohubQueryContext() {
   return {
-    client: await getShinzoPublicClient(),
+    client: getShinzoPublicClient(),
     cosmosRestUrl: getCosmosRestUrl(),
     cometRpcUrl: getCometRpcUrl(),
   };

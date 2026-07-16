@@ -65,7 +65,6 @@ export {
   defaultShinzoHubChainName,
   getChainId,
   getShinzoHubChain,
-  shinzoHubChain,
   shinzoHubChains,
   shinzoHubDevnet,
   shinzoHubInternal,
