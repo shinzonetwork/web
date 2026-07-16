@@ -7,7 +7,7 @@ import {
   getRegistrationPrefilledFieldsV2,
   getRegistrationPrefillV2,
   type PrefillDataV2,
-} from "../lib/prefill-data";
+} from "../../../shared/lib/utils/prefill-data";
 
 const getInitialFormData = (
   entity: EntityRole,

@@ -7,7 +7,7 @@ import {
   getAssertionFormPrefilledFields,
   getGeneratorAssertionFormPrefill,
   type GeneratorAssertionFormPrefill,
-} from "@/features/registration-form";
+} from "@/shared/lib/utils/prefill-data";
 
 function createInitialValues(
   urlPrefill: GeneratorAssertionFormPrefill

@@ -91,7 +91,7 @@ export const RegistrationContextProvider = ({
     isRegistered,
     isSignedWithWallet,
     setIsRegistered,
-    handleSignedWithWallet, 
+    handleSignedWithWallet,
     registrationEntity,
   ]);
 

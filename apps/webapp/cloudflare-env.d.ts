@@ -1,8 +1,7 @@
 /// <reference types="@cloudflare/workers-types" />
 
 declare global {
-  interface CloudflareEnv {
-  }
+  type CloudflareEnv = Record<string, never>;
 }
 
 export {};
