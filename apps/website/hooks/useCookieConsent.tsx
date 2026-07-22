@@ -2,16 +2,11 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "cookie-consent";
 
+// The global gtag() defined by the inline snippet in google-analytics.tsx.
 declare global {
   interface Window {
-    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
-}
-
-function gtag(..._args: unknown[]) {
-  window.dataLayer = window.dataLayer || [];
-  // eslint-disable-next-line prefer-rest-params -- gtag.js requires the Arguments object
-  window.dataLayer.push(arguments);
 }
 
 /**
@@ -38,7 +33,7 @@ export function useCookieConsent() {
 
   const choose = (granted: boolean) => {
     localStorage.setItem(STORAGE_KEY, granted ? "granted" : "denied");
-    gtag("consent", "update", {
+    window.gtag?.("consent", "update", {
       analytics_storage: granted ? "granted" : "denied",
     });
     setVisible(false);
