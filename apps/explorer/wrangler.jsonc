@@ -7,10 +7,8 @@
 		"nodejs_compat"
 	],
 	"keep_vars": true,
-	"env": {
-		"internal": {
-			"name": "explorer-internal"
-		}
+	"vars": {
+		"SHINZOHUB_CHAIN": "testnet"
 	},
 	"assets": {
 		"directory": ".open-next/assets",

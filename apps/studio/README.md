@@ -54,17 +54,10 @@ Deploy production (`shinzo-studio`):
 pnpm --filter @shinzo/studio deploy
 ```
 
-Deploy internal (`studio-internal`). Builds the SPA with `SHINZOHUB_CHAIN=internal` and deploys the Wrangler `internal` env:
-
-```bash
-pnpm --filter @shinzo/studio deploy:internal
-```
-
 Upload a Cloudflare preview version without promoting it:
 
 ```bash
 pnpm --filter @shinzo/studio upload
-pnpm --filter @shinzo/studio upload:internal
 ```
 
 Useful checks:
