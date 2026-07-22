@@ -7,9 +7,6 @@
 		"nodejs_compat"
 	],
 	"keep_vars": true,
-	"vars": {
-		"SHINZOHUB_CHAIN": "testnet"
-	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
