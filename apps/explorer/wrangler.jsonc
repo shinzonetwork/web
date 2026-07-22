@@ -10,5 +10,10 @@
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
+	},
+	"env": {
+		"internal": {
+			"name": "shinzo-explorer-internal"
+		}
 	}
 }
