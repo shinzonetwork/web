@@ -9,11 +9,9 @@ import { AssertionDataForm } from "./assertion-data-form";
 import { useAssertionForm } from "../hooks/use-assertion-form";
 import { useAssertion } from "../hooks/use-assertion";
 import { getGeneratorAssertionButtonText } from "../util/form-data";
-import {
-  buildGeneratorRegistrationUrl,
-  getRegistrationPrefillV2Params,
-  waitForGeneratorAssertionVerification,
-} from "@/features/registration-form";
+import { waitForGeneratorAssertionVerification } from "@/features/registration-form";
+import { getRegistrationPrefillV2Params } from "@/shared/lib/utils/prefill-data";
+import { buildGeneratorRegistrationUrl } from "@/shared/lib/utils/build-generator-url";
 import { TOAST_CONFIG, validatorPublicKeyToBase64 } from "@/shared/lib";
 
 export default function AssertionForm() {

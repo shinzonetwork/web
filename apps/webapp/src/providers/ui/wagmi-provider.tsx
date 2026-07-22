@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { WagmiProvider } from "wagmi";
-import { createWagmiConfig } from "@/shared/config";
+import { createWagmiConfig } from "@/shared/config/wagmi";
 
 const wagmiConfig = createWagmiConfig();
 

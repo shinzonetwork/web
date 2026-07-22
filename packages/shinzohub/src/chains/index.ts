@@ -17,29 +17,6 @@ const localCurrency = {
   decimals: 18,
 } as const;
 
-/** Builds a live ShinzoHub viem chain definition from RPC endpoints. */
-export async function shinzoHubChain({
-  defaultRpcUrl,
-  cometRpcUrl,
-  cosmosRestUrl,
-}: ShinzoHubChainParameters) {
-  const chainId = Number(await getChainId({ cometRpcUrl }));
-  if (!Number.isFinite(chainId) || chainId <= 0) {
-    throw new Error("Comet status query did not return a valid numeric chain ID.");
-  }
-
-  return defineChain({
-    id: chainId,
-    name: "ShinzoHub",
-    nativeCurrency: currency,
-    rpcUrls: {
-      default: { http: [defaultRpcUrl] },
-      cosmosRest: { http: [cosmosRestUrl] },
-      cometRpc: { http: [cometRpcUrl] },
-    },
-  });
-}
-
 /**
  * Local ShinzoHub Viem chain definition.
  *

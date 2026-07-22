@@ -3,7 +3,7 @@
 import { Generator } from "@/shared/lib";
 import { useQuery } from "@tanstack/react-query";
 
-export async function fetchGeneratorAssertionVerified(
+async function fetchGeneratorAssertionVerified(
   validatorPublicKey: string,
   sourceChainId: string
 ): Promise<boolean> {

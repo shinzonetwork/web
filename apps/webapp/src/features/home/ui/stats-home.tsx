@@ -3,7 +3,7 @@
 import { UI_HOME_HEADER_CONTENT } from "@/shared/lib";
 import { useRegisteredHosts } from "../hooks/hosts/use-registered-hosts";
 import { useRegisteredGenerators } from "../hooks/generators/use-registered-generators";
-import { DEFAULT_PAGE_PARAMS } from "../../../shared/lib/shinzohub/health";
+import { DEFAULT_PAGE_PARAMS } from "../../../shared/lib/utils/health";
 
 export function StatsHome() {
   const { data: generatorsData, isPending: generatorsPending } =

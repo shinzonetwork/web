@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { AppProviders } from "@/providers";
 import { Footer, Toast, WalletChangeGuard } from "@/widget";
-import { RegistrationContextProvider } from "@/entities/registration-process";
+import { RegistrationContextProvider } from "@/entities";
 import { TooltipProvider } from "@/shared/ui/tooltip";
 
 export const metadata: Metadata = {

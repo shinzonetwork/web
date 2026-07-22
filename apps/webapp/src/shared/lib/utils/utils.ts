@@ -1,7 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { getAddress, Hex, isAddress } from "viem";
-import { INDEXER_WHITELIST } from "../constants/indexer-whitelist";
+import { Hex } from "viem";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -23,14 +22,6 @@ export function sanitizeString(input: string): string {
     .replace(/[<>]/g, "") // Remove potential HTML tags
     .trim()
     .slice(0, 10000); // Limit length
-}
-
-/** Stable key for matching API rows to health results — shared by load + poll hooks. */
-export function indexerEntryKey(entry: {
-  validatorAddress: string;
-  ip: string;
-}): string {
-  return `${entry.validatorAddress}-${entry.ip}`;
 }
 
 /** Returns true for dotted-decimal IPv4 addresses only. */
@@ -77,35 +68,3 @@ export function isGeneratorHealthPollable(generator: {
   if (!connectionString) return false;
   return isIPv4(ipFromConnectionString(connectionString));
 }
-
-// Normalize all whitelist addresses once for case-insensitive comparison
-export const normalizedWhitelist = INDEXER_WHITELIST.map((addr) =>
-  getAddress(addr).toLowerCase()
-);
-
-export const isIndexerWhitelisted = (
-  address: Hex | undefined | null
-): boolean => {
-  // Handle undefined or null addresses
-  if (!address) {
-    return false;
-  }
-
-  // Validate address format
-  if (!isAddress(address)) {
-    return false;
-  }
-
-  try {
-    // Normalize the input address to lowercase for case-insensitive comparison
-    // getAddress validates and normalizes the address format
-    const normalizedAddress = getAddress(address).toLowerCase();
-    return normalizedWhitelist.includes(normalizedAddress);
-  } catch (error) {
-    // Invalid address format
-    if (process.env.NODE_ENV === "development") {
-      console.error("Invalid address format:", error);
-    }
-    return false;
-  }
-};

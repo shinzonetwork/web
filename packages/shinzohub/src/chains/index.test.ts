@@ -3,7 +3,6 @@ import {
   defaultShinzoHubChainName,
   getChainId,
   getShinzoHubChain,
-  shinzoHubChain,
   shinzoHubChains,
   shinzoHubDevnet,
   shinzoHubInternal,
@@ -61,36 +60,6 @@ describe("getChainId", () => {
     await expect(
       getChainId({ cometRpcUrl: "http://rpc.example.com:26657" }),
     ).rejects.toThrow("Comet status query did not return a chain ID.");
-  });
-});
-
-describe("shinzoHubChain", () => {
-  it("builds a chain definition with live endpoints and numeric chain ID", async () => {
-    globalThis.fetch = vi.fn(async () =>
-      Response.json({
-        result: {
-          node_info: {
-            network: "91273002",
-          },
-        },
-      }),
-    ) as typeof fetch;
-
-    await expect(
-      shinzoHubChain({
-        defaultRpcUrl: "http://rpc.example.com:8545",
-        cometRpcUrl: "http://rpc.example.com:26657",
-        cosmosRestUrl: "http://rpc.example.com:1317",
-      }),
-    ).resolves.toMatchObject({
-      id: 91273002,
-      name: "ShinzoHub",
-      rpcUrls: {
-        default: { http: ["http://rpc.example.com:8545"] },
-        cosmosRest: { http: ["http://rpc.example.com:1317"] },
-        cometRpc: { http: ["http://rpc.example.com:26657"] },
-      },
-    });
   });
 });
 

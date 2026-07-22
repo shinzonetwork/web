@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { SignatureVerificationHandler } from "./wallet-signature-verification-handler";
 import { useWalletSignature } from "../hooks/use-wallet-signature";
-import { useRegistrationContext } from "@/entities/registration-process";
+import { useRegistrationContext } from "@/entities";
 import { toast } from "react-toastify";
 import { TOAST_CONFIG } from "@/shared/lib";
 

@@ -1,4 +1,4 @@
-import { InputField } from "@/widget/input-field";
+import { InputField } from "@/widget";
 import {
   GENERATOR_ASSERTION_FORM_INPUTS,
   GeneratorAssertionFormData,

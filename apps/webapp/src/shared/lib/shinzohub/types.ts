@@ -8,7 +8,6 @@ import type {
   ListHostsResult,
   ListGeneratorsResult,
   RegisteredHost as ShinzoHubRegisteredHost,
-  RegisteredHostDetailsResult,
   Generator as ShinzoHubGenerator,
 } from "@shinzo/shinzohub";
 
@@ -29,9 +28,6 @@ export type RegisteredHostsListResponse = JsonSerialized<
     total: number;
   };
 };
-
-export type RegisteredHostDetailsResponse =
-  JsonSerialized<RegisteredHostDetailsResult>;
 
 export type Generator = JsonSerialized<ShinzoHubGenerator>;
 

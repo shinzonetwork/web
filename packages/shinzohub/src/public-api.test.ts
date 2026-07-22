@@ -40,7 +40,6 @@ const expectedRootExports = [
   "parseGeneratorAssertionFromTransaction",
   "shinzoAddressToHex",
   "shinzoHubActions",
-  "shinzoHubChain",
   "shinzoHubChains",
   "shinzoHubDevnet",
   "shinzoHubInternal",

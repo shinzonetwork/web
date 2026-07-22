@@ -1,16 +1,7 @@
 "use client";
 
 import type { Hex } from "viem";
-import { EntityRole, getSourceChainMap, isRegistrationV2 } from "@/shared/lib";
-
-export type PrefillDataV1 = {
-  role: EntityRole | undefined;
-  signedMessage: Hex | undefined;
-  defraPublicKey: Hex | undefined;
-  defraPublicKeySignedMessage: Hex | undefined;
-  peerId: Hex | undefined;
-  peerSignedMessage: Hex | undefined;
-};
+import { EntityRole, getSourceChainMap } from "@/shared/lib";
 
 export type PrefillDataV2 = {
   role: EntityRole | undefined;
@@ -20,8 +11,6 @@ export type PrefillDataV2 = {
   connectionString?: string;
   endpointAddress?: string;
 };
-
-export type PrefillData = PrefillDataV1 | PrefillDataV2;
 
 /** Assertion context passed from the generator assertion step via URL. */
 export type GeneratorAssertionPrefill = {
@@ -177,26 +166,4 @@ export function getAssertionFormPrefilledFields(
   return {
     sourceChain: Boolean(prefill.sourceChain),
   };
-}
-
-/**
- * Hook that returns the prefill data from URL query parameters.
- */
-export function usePrefillData(): PrefillData {
-  const searchParams = readSearchParams();
-
-  if (isRegistrationV2()) {
-    return getRegistrationPrefillV2(searchParams);
-  }
-
-  return {
-    role: parseRole(searchParams.get("role")),
-    signedMessage: toHexOrUndefined(searchParams.get("signedMessage")),
-    defraPublicKey: toHexOrUndefined(searchParams.get("defraPublicKey")),
-    defraPublicKeySignedMessage: toHexOrUndefined(
-      searchParams.get("defraPublicKeySignedMessage")
-    ),
-    peerId: toHexOrUndefined(searchParams.get("peerId")),
-    peerSignedMessage: toHexOrUndefined(searchParams.get("peerSignedMessage")),
-  } as PrefillDataV1;
 }

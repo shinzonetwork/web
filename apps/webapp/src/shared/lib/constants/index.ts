@@ -1,13 +1,9 @@
 export const MESSAGE_TO_SIGN = "Shinzo Registration Verification";
-export const SHINZO_PREFIX = "shinzo";
 
 export enum EntityRole {
   Host = 1,
   Generator = 2,
 }
-
-export const SHINZO_PRECOMPILE_ADDRESS =
-  "0x0000000000000000000000000000000000000211";
 
 export const UI_FORM_HEADER_CONTENT = {
   "host-registration": {
@@ -24,16 +20,7 @@ export const UI_FORM_HEADER_CONTENT = {
     description:
       "Step 2 of 2 — register your generator on-chain after completing assertion.",
   },
-  registration: {
-    title: "/ Register on the Shinzo Network",
-    description:
-      "Register your Host or Indexer to participate in the Shinzo Network.",
-  },
 } as const;
-
-export const isRegistrationV2 = () => {
-  return process.env.NEXT_PUBLIC_SHINZOHUB_V2_REGISTRATION_FLAG === "true";
-};
 
 export const UI_HOME_HEADER_CONTENT = {
   home: {

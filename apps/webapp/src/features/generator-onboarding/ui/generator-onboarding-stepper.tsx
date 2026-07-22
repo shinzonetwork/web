@@ -11,7 +11,7 @@ import {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from "@/widget/stepper";
+} from "@/widget";
 import {
   GENERATOR_ONBOARDING_STEPS,
   type GeneratorOnboardingStepId,

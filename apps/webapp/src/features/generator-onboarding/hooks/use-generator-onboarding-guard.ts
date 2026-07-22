@@ -2,11 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  buildGeneratorAssertionUrlFromSearchParams,
-  getGeneratorAssertionPrefill,
-  useVerifyAssertion,
-} from "@/features/registration-form";
+import { useVerifyAssertion } from "@/features/registration-form";
+import { buildGeneratorAssertionUrlFromSearchParams } from "@/shared/lib/utils/build-generator-url";
+import { getGeneratorAssertionPrefill } from "@/shared/lib/utils/prefill-data";
 
 /** Redirect to assertion when registration is opened without a verified assertion. */
 export function useGeneratorOnboardingGuard(enabled: boolean) {
