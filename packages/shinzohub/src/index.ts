@@ -5,13 +5,11 @@ import {
   getCreatedViewAddress,
   getView,
   getViewRegistration,
+  getNetworkUnitPrice,
+  listViewPools,
   listViews,
 } from "./views/index";
-import {
-  getAccount,
-  getAccountBalance,
-  getEvmAccount,
-} from "./accounts/index";
+import { getAccount, getAccountBalance, getEvmAccount } from "./accounts/index";
 import {
   findTransactionByEvmHash,
   getTransaction,
@@ -24,14 +22,10 @@ import {
   getLatestBlockHeight,
   listBlocks,
 } from "./blocks/index";
+import { listHosts, getHost, getHostHealth } from "./hosts/index";
 import {
-  listHosts,
-  getHost,
-  getHostHealth,
-} from "./hosts/index";
-import { 
-  getGenerator, 
-  listGenerators, 
+  getGenerator,
+  listGenerators,
   getGeneratorHealth,
   getGeneratorAssertion,
   getGeneratorAssertionFromTransaction,
@@ -40,11 +34,7 @@ import {
 } from "./generators/index";
 import { listValidators } from "./validators/index";
 
-export {
-  getAccount,
-  getAccountBalance,
-  getEvmAccount,
-} from "./accounts/index";
+export { getAccount, getAccountBalance, getEvmAccount } from "./accounts/index";
 export type {
   GetAccountBalanceParameters,
   GetAccountParameters,
@@ -83,6 +73,8 @@ export {
   getCreatedViewAddress,
   getView,
   getViewRegistration,
+  getNetworkUnitPrice,
+  listViewPools,
   listViews,
   VIEW_REGISTRY_STATUS_NONE,
   VIEW_REGISTRY_STATUS_PENDING,
@@ -95,9 +87,12 @@ export type {
   CreateViewParameters,
   GetViewParameters,
   GetViewRegistrationParameters,
+  GetNetworkUnitPriceParameters,
+  ListViewPoolsParameters,
   ListViewsParameters,
   ListViewsResult,
   ShinzoHubView,
+  ShinzoHubViewPool,
   ViewRegistration,
   ViewRegistrationStatus,
   ViewMetadata,
@@ -138,11 +133,7 @@ export type {
   ListBlocksResult,
   ShinzoHubBlock,
 } from "./blocks/index";
-export {
-  getHost,
-  listHosts,
-  getHostHealth,
-} from "./hosts/index";
+export { getHost, listHosts, getHostHealth } from "./hosts/index";
 export type {
   GetHostParameters,
   ListHostsParameters,
@@ -154,9 +145,9 @@ export type {
   HostHealthP2P,
   HostHealthPeer,
 } from "./hosts/index";
-export { 
-  getGenerator, 
-  listGenerators, 
+export {
+  getGenerator,
+  listGenerators,
   getGeneratorAssertion,
   getGeneratorHealth,
   submitGeneratorAssertion,
@@ -198,42 +189,56 @@ export function shinzoHubActions(client: Client) {
     getEvmAccount: (parameters: Parameters<typeof getEvmAccount>[1]) =>
       getEvmAccount(client, parameters),
     /** Counts registered ShinzoHub views. */
-    countViews: (parameters?: Parameters<typeof countViews>[1]) => countViews(client, parameters),
+    countViews: (parameters?: Parameters<typeof countViews>[1]) =>
+      countViews(client, parameters),
     /** Creates a ShinzoHub view from raw viewbundle bytes. */
-    createView: (parameters: Parameters<typeof createView>[1]) => createView(client, parameters),
+    createView: (parameters: Parameters<typeof createView>[1]) =>
+      createView(client, parameters),
     /** Fetches one registered ShinzoHub view by deterministic view address. */
-    getView: (parameters: Parameters<typeof getView>[1]) => getView(client, parameters),
+    getView: (parameters: Parameters<typeof getView>[1]) =>
+      getView(client, parameters),
     /** Fetches ViewRegistry lifecycle status for one view address. */
-    getViewRegistration: (parameters: Parameters<typeof getViewRegistration>[1]) =>
-      getViewRegistration(client, parameters),
+    getViewRegistration: (
+      parameters: Parameters<typeof getViewRegistration>[1],
+    ) => getViewRegistration(client, parameters),
+    /** Lists the network pools materialized for one registered view. */
+    listViewPools: (parameters: Parameters<typeof listViewPools>[1]) =>
+      listViewPools(client, parameters),
+    /** Reads the current global network unit price through a known view pool. */
+    getNetworkUnitPrice: (
+      parameters: Parameters<typeof getNetworkUnitPrice>[1],
+    ) => getNetworkUnitPrice(client, parameters),
     /** Lists registered ShinzoHub views. */
-    listViews: (parameters?: Parameters<typeof listViews>[1]) => listViews(client, parameters),
+    listViews: (parameters?: Parameters<typeof listViews>[1]) =>
+      listViews(client, parameters),
     /** Lists native Cosmos and EVM transactions. */
     listTransactions: (parameters?: Parameters<typeof listTransactions>[1]) =>
       listTransactions(client, parameters),
     /** Fetches decoded transaction details by Cosmos hash. */
-    getShinzoHubTransaction: (parameters: Parameters<typeof getTransaction>[1]) =>
-      getTransaction(client, parameters),
+    getShinzoHubTransaction: (
+      parameters: Parameters<typeof getTransaction>[1],
+    ) => getTransaction(client, parameters),
     /** Finds a transaction summary by EVM hash. */
     findShinzoHubTransactionByEvmHash: (
-      parameters: Parameters<typeof findTransactionByEvmHash>[1]
+      parameters: Parameters<typeof findTransactionByEvmHash>[1],
     ) => findTransactionByEvmHash(client, parameters),
     /** Lists consensus blocks. */
     listBlocks: (parameters?: Parameters<typeof listBlocks>[1]) =>
       listBlocks(client, parameters),
     /** Fetches the latest ShinzoHub consensus block. */
-    getLatestShinzoHubBlock: (parameters?: Parameters<typeof getLatestBlock>[1]) =>
-      getLatestBlock(client, parameters),
+    getLatestShinzoHubBlock: (
+      parameters?: Parameters<typeof getLatestBlock>[1],
+    ) => getLatestBlock(client, parameters),
     /** Fetches the latest ShinzoHub consensus height. */
     getLatestShinzoHubBlockHeight: (
-      parameters?: Parameters<typeof getLatestBlockHeight>[1]
+      parameters?: Parameters<typeof getLatestBlockHeight>[1],
     ) => getLatestBlockHeight(client, parameters),
     /** Fetches one ShinzoHub consensus block by height or hash. */
     getShinzoHubBlock: (parameters: Parameters<typeof getBlock>[1]) =>
       getBlock(client, parameters),
     /** Fetches a block timestamp by height. */
     getShinzoHubBlockTimestamp: (
-      parameters: Parameters<typeof getBlockTimestamp>[1]
+      parameters: Parameters<typeof getBlockTimestamp>[1],
     ) => getBlockTimestamp(client, parameters),
     /** Lists registered ShinzoHub hosts. */
     listHosts: (parameters?: Parameters<typeof listHosts>[1]) =>
@@ -242,7 +247,8 @@ export function shinzoHubActions(client: Client) {
     getHost: (parameters: Parameters<typeof getHost>[1]) =>
       getHost(client, parameters),
     /** Fetches live health for an host IPv4 address. */
-    getHostHealth: (parameters: Parameters<typeof getHostHealth>[0]) => getHostHealth(parameters),
+    getHostHealth: (parameters: Parameters<typeof getHostHealth>[0]) =>
+      getHostHealth(parameters),
     /** Lists registered ShinzoHub generators. */
     listGenerators: (parameters?: Parameters<typeof listGenerators>[1]) =>
       listGenerators(client, parameters),
@@ -250,14 +256,16 @@ export function shinzoHubActions(client: Client) {
     getGenerator: (parameters: Parameters<typeof getGenerator>[1]) =>
       getGenerator(client, parameters),
     /** Fetches live health for an generator IPv4 address. */
-    getGeneratorHealth: (parameters: Parameters<typeof getGeneratorHealth>[0]) =>
-      getGeneratorHealth(parameters),
+    getGeneratorHealth: (
+      parameters: Parameters<typeof getGeneratorHealth>[0],
+    ) => getGeneratorHealth(parameters),
     /** Lists active consensus validators. */
     listValidators: (parameters?: Parameters<typeof listValidators>[1]) =>
       listValidators(client, parameters),
     /** Fetches generator assertions for a delegate address. */
-    getGeneratorAssertion: (parameters: Parameters<typeof getGeneratorAssertion>[1]) =>
-      getGeneratorAssertion(client, parameters),
+    getGeneratorAssertion: (
+      parameters: Parameters<typeof getGeneratorAssertion>[1],
+    ) => getGeneratorAssertion(client, parameters),
     /** Signs and broadcasts a generator assertion (trusted backend only). */
     submitGeneratorAssertion: (
       parameters: Parameters<typeof submitGeneratorAssertion>[0],

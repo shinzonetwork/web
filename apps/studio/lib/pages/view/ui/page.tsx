@@ -8,12 +8,15 @@ import { Header } from "@/shared/ui/header";
 import { navigateWithAnchorClick } from "@/shared/utils/browser-location";
 import { useViewPage } from "../model/use-view";
 import type { ViewPageRecord } from "../model/types";
+import { NetworkBilling } from "./network-billing";
 import { ViewPlayground } from "./view-playground";
 
 const ViewMeta = ({ view }: { view: ViewPageRecord }) => (
   <dl className="grid min-w-0 gap-4 border-y border-ui-border py-5 text-sm md:grid-cols-2 xl:grid-cols-4">
     <div className="min-w-0">
-      <dt className="mb-1 text-xs uppercase text-ui-text-muted">View address</dt>
+      <dt className="mb-1 text-xs uppercase text-ui-text-muted">
+        View address
+      </dt>
       <dd>
         <ViewAddressChip link={view.viewAddressLink} />
       </dd>
@@ -160,6 +163,7 @@ const ViewPageContent = ({ view }: { view: ViewPageRecord }) => (
 
       <ViewMeta view={view} />
       <LensDetails view={view} />
+      <NetworkBilling viewAddress={view.id} />
       <ViewPlayground view={view} />
     </main>
   </div>

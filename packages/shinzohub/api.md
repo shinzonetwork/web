@@ -78,6 +78,8 @@ Creates a ShinzoHub action bundle for `client.extend(...)`.
   - `countViews`
   - `createView`
   - `getView`
+  - `listViewPools`
+  - `getNetworkUnitPrice`
   - `listViews`
   - `listTransactions`
   - `getShinzoHubTransaction`: Cosmos-hash details via `getTransaction`.
@@ -244,7 +246,7 @@ Example response:
 Example response:
 
 ```ts
-42n
+42n;
 ```
 
 ### `createView`
@@ -261,7 +263,7 @@ Registers raw viewbundle bytes through the ViewRegistry precompile.
 Example response:
 
 ```ts
-"0xd19c997a42bd50d5a0dfb85415fbac011786185f77c2150c38b24300da78a293"
+"0xd19c997a42bd50d5a0dfb85415fbac011786185f77c2150c38b24300da78a293";
 ```
 
 ### `getCreatedViewAddress`
@@ -275,7 +277,7 @@ transaction receipt.
 Example response:
 
 ```ts
-"0x018a06d78e0802db5bc055b4527d7b481c3e9932"
+"0x018a06d78e0802db5bc055b4527d7b481c3e9932";
 ```
 
 Throws when the receipt has no decodable `ViewCreated` event from the
@@ -302,6 +304,85 @@ Example response:
   status: "registered", // "none" | "pending" | "registered"
 }
 ```
+
+### `listViewPools`
+
+Lists the denormalized network pools attached to one registered view through
+`GET /shinzonetwork/pool/v1/views/{view_address}/pools`.
+
+- Parameters
+  - `client`: Viem client with a Cosmos REST endpoint.
+  - `parameters`
+    - `viewAddress`: EVM hex, bare 20-byte hex, or Shinzo bech32 view address.
+    - `cosmosRestUrl`: optional Cosmos REST endpoint override.
+
+The action performs one request and returns `readonly ShinzoHubViewPool[]`.
+Addresses are normalized for EVM wallet comparison. Window sizes, heights,
+bonds, prices, query totals, rewards, utilization, and epochs are returned as
+`bigint` values.
+
+```ts
+[
+  {
+    poolAddress: "0xDbc3bE7CBd8Dc8901E3BbbeA1A740BE490dAe23B",
+    viewAddress: "0xEAc245f905e0aAcF3b9Fe27153F2AaF485dc1B48",
+    config: { windowSize: 100n },
+    createdAtHeight: 81734n,
+    hosts: [
+      {
+        hostAddress: "0x7a48365220c023592dE7b4E214d0E99abAD7Aa69",
+        joinedAtHeight: 81848n,
+      },
+    ],
+    demands: [
+      {
+        registrantAddress: "0x406bCA5E3e8DC0E6b286e0004e83F8eC4A0894fE",
+        bond: 100000000000000000n,
+        pricePreference: null,
+        binding: false,
+        expiresAt: null,
+      },
+    ],
+    stats: {
+      reportedUnitPrice: null,
+      utilizationPercent: 0n,
+      totalQueries: 0n,
+      totalRewards: 0n,
+      lastUpdatedEpoch: 0n,
+    },
+    requiredHostCount: 3,
+    isActive: true,
+  },
+];
+```
+
+`isActive` is derived from normalized host membership using the current
+three-host protocol threshold. The wire-level `is_active` flag is not required
+by consumers.
+
+### `getNetworkUnitPrice`
+
+Reads the current global network unit price through PoolRegistry `getPool`.
+The Hub currently exposes this value through a materialized pool, so callers
+pass a pool address returned by `listViewPools`.
+
+- Parameters
+  - `client`: Viem client with an EVM transport.
+  - `parameters`
+    - `poolAddress`: materialized view-pool address.
+- Returns: the current network unit price in base `ushinzo` units as `bigint`.
+
+```ts
+const pools = await listViewPools(client, { viewAddress });
+const networkUnitPrice = pools[0]
+  ? await getNetworkUnitPrice(client, { poolAddress: pools[0].poolAddress })
+  : null;
+```
+
+Do not substitute `pool.stats.reportedUnitPrice` when this read fails. That
+statistics field is the last settlement-reported value, whereas this action
+returns the keeper's current global price. Neither value is a guaranteed
+per-query charge because the final metering and debit formula is not yet fixed.
 
 ## Hosts
 
@@ -743,7 +824,7 @@ Runs one Comet `status` request.
 Example response:
 
 ```ts
-2003690n
+2003690n;
 ```
 
 ### `getBlockTimestamp`
@@ -759,7 +840,7 @@ Runs one Comet `header` request.
 Example response:
 
 ```ts
-"2026-06-04T21:27:39.275864228Z"
+"2026-06-04T21:27:39.275864228Z";
 ```
 
 ### `getBlock`
@@ -813,7 +894,7 @@ validate that addresses contain exactly 20 bytes.
 Example response:
 
 ```ts
-"0x018a06d78e0802db5bc055b4527d7b481c3e9932"
+"0x018a06d78e0802db5bc055b4527d7b481c3e9932";
 ```
 
 ### `hexToShinzoAddress`
@@ -826,7 +907,7 @@ Example response:
 Example response:
 
 ```ts
-"shinzo1..."
+"shinzo1...";
 ```
 
 ### `shinzoAddressToHex`
@@ -839,7 +920,7 @@ Example response:
 Example response:
 
 ```ts
-"0x018a06d78e0802db5bc055b4527d7b481c3e9932"
+"0x018a06d78e0802db5bc055b4527d7b481c3e9932";
 ```
 
 ### `normalizeShinzoAddress`
@@ -854,7 +935,7 @@ Accepts hex or bech32 and returns canonical bech32.
 Example response:
 
 ```ts
-"shinzo1..."
+"shinzo1...";
 ```
 
 ## Chains
@@ -891,7 +972,7 @@ Import from `@shinzo/shinzohub/views` or the package root.
 ViewRegistry precompile address:
 
 ```ts
-"0x0000000000000000000000000000000000000210"
+"0x0000000000000000000000000000000000000210";
 ```
 
 ### `viewRegistryAbi`
