@@ -20,13 +20,15 @@ The frontend is a Vite React SPA. The Cloudflare Worker serves the SPA and proxi
 
 Create `apps/studio/.env` from `.env.example`.
 
-Server-only Worker variables:
+Worker runtime variables (set in the Cloudflare dashboard per Worker; kept across
+deploys via `keep_vars`):
 
 - `HOST_GRAPHQL_URL`: GraphQL endpoint for Shinzo Host. See [`shinzo-host-client`](https://github.com/shinzonetwork/shinzo-host-client) for running or connecting a Host.
-- `SHINZOHUB_CHAIN`: ShinzoHub environment used by the Worker and browser wallet configuration. Supported values are `testnet`, `internal`, `devnet`, and `local`; it defaults to `testnet`. RPC endpoints and chain IDs come from `@shinzo/shinzohub`.
+- `SHINZOHUB_CHAIN`: ShinzoHub environment used by Worker RPC proxies. Supported values are `testnet`, `internal`, `devnet`, and `local`.
 
-Browser-exposed Vite variables:
+Local / build-time variables (`.env` or the deploy script):
 
+- `SHINZOHUB_CHAIN`: Also baked into the Vite SPA at build time for wagmi and wallet chain config. Must match the Worker dashboard value for that environment.
 - `VITE_WALLETCONNECT_ID` (optional): WalletConnect/Reown project ID for QR wallet connections.
 - `VITE_APP_URL` (optional, needed with VITE_WALLETCONNECT_ID): Public app URL used in wallet metadata.
 - `VITE_SHINZOHUB_EXPLORER_URL` (optional): ShinzoHub block explorer base URL. Production uses `https://explorer.shinzo.network/shinzohub`.
@@ -46,13 +48,13 @@ pnpm --filter @shinzo/studio build
 pnpm --filter @shinzo/studio preview
 ```
 
-Deploy production:
+Deploy production (`shinzo-studio`):
 
 ```bash
 pnpm --filter @shinzo/studio deploy
 ```
 
-Upload a Cloudflare preview version without promoting it to production:
+Upload a Cloudflare preview version without promoting it:
 
 ```bash
 pnpm --filter @shinzo/studio upload
