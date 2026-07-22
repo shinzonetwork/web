@@ -9,6 +9,8 @@
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "build-and-deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "build-and-deploy:internal": "SHINZOHUB_CHAIN=internal opennextjs-cloudflare build --env internal && opennextjs-cloudflare deploy --env internal",
+    "upload:internal": "SHINZOHUB_CHAIN=internal opennextjs-cloudflare build --env internal && opennextjs-cloudflare upload --env internal",
     "lint": "eslint",
     "shadcn": "pnpm dlx shadcn@latest add",
     "graphql:codegen": "graphql-codegen --config ./lib/shared/graphql/codegen.ts",

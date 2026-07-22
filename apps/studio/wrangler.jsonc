@@ -6,13 +6,14 @@
   "workers_dev": true,
   "preview_urls": true,
   "keep_vars": true,
-  "vars": {
-    "SHINZOHUB_CHAIN": "testnet",
-    "HOST_GRAPHQL_URL": "http://104-197-95-122.sslip.io:9181/api/v0/graphql"
-  },
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
+  },
+  "env": {
+    "internal": {
+      "name": "shinzo-studio-internal"
+    }
   }
 }
