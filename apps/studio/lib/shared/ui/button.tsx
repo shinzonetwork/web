@@ -6,7 +6,7 @@ import { type ComponentProps } from "react";
 import { cn } from "@shinzo/ui/cn";
 
 const buttonVariants = cva(
-  "inline-flex cursor-pointer items-center justify-center rounded-full font-medium transition-all",
+  "inline-flex cursor-pointer items-center justify-center rounded-full font-medium transition-all disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40",
   {
     variants: {
       variant: {
@@ -26,8 +26,7 @@ const buttonVariants = cva(
 );
 
 interface ButtonProps
-  extends ComponentProps<"button">,
-    VariantProps<typeof buttonVariants> {
+  extends ComponentProps<"button">, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
