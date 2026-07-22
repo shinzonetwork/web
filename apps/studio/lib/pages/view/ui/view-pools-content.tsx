@@ -23,7 +23,7 @@ export const ViewPoolsContent = ({
         <NetworkRate state={state.networkUnitPrice} />
       </div>
 
-      <div className="grid min-w-0 gap-px border border-ui-border bg-ui-border lg:grid-cols-2">
+      <div className="grid min-w-0 gap-px border border-ui-border bg-white lg:grid-cols-2">
         {state.pools.map((pool, index) => (
           <PoolCard
             key={pool.poolAddress}
