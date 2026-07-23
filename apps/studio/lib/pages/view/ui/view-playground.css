@@ -3,7 +3,11 @@
   min-width: 0;
   background: #ffffff;
   color: #353535;
-  font-family: "Inter Variable", system-ui, -apple-system, sans-serif;
+  font-family:
+    "Inter Variable",
+    system-ui,
+    -apple-system,
+    sans-serif;
   font-size: 14px;
   --color-primary: #d01f27;
   --color-primary-light: #fffbfb;
@@ -118,22 +122,8 @@
   background: #f5f5f5 !important;
 }
 
-.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button {
-  border-color: #d01f27 !important;
-  background: #d01f27 !important;
-  color: #ffffff !important;
-}
-
-.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:hover,
-.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:focus-visible,
-.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button:active {
-  border-color: #a81920 !important;
-  background: #a81920 !important;
-  color: #ffffff !important;
-}
-
-.shinzo-graphiql-shell .graphiql-toolbar .graphiql-execute-button svg {
-  color: #ffffff !important;
+.shinzo-graphiql-preview .graphiql-toolbar .graphiql-execute-button {
+  display: none !important;
 }
 
 .shinzo-graphiql-shell .graphiql-toolbar svg,

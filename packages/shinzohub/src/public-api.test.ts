@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { describe, expect, it } from "vitest";
 import * as shinzohub from "./index";
+import * as views from "./views/index";
 
 const expectedRootExports = [
   "countViews",
@@ -24,6 +25,7 @@ const expectedRootExports = [
   "getShinzoHubChain",
   "getLatestBlock",
   "getLatestBlockHeight",
+  "getNetworkUnitPrice",
   "getTransaction",
   "getView",
   "getViewRegistration",
@@ -35,6 +37,7 @@ const expectedRootExports = [
   "listGenerators",
   "listTransactions",
   "listValidators",
+  "listViewPools",
   "normalizeHexAddress",
   "normalizeShinzoAddress",
   "parseGeneratorAssertionFromTransaction",
@@ -55,7 +58,9 @@ const expectedRootExports = [
 
 describe("public API", () => {
   it("exports the supported SDK capabilities from the package root", () => {
-    expect(Object.keys(shinzohub).sort()).toEqual([...expectedRootExports].sort());
+    expect(Object.keys(shinzohub).sort()).toEqual(
+      [...expectedRootExports].sort(),
+    );
   });
 
   it("limits subpath imports to supported feature modules", async () => {
@@ -78,5 +83,12 @@ describe("public API", () => {
       "./validators",
       "./views",
     ]);
+  });
+
+  it("keeps view pool reads in the existing views module", () => {
+    expect(views).toMatchObject({
+      getNetworkUnitPrice: expect.any(Function),
+      listViewPools: expect.any(Function),
+    });
   });
 });

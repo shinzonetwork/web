@@ -2,67 +2,80 @@
 
 import "./setup-graphiql-workers";
 import { GraphiQL, type GraphiQLProps } from "graphiql";
-import type { ExecutionResult } from "graphql";
-import { ChevronDown } from "lucide-react";
+import { GraphQLError, type ExecutionResult } from "graphql";
+import { ChevronDown, LockKeyhole, WalletCards } from "lucide-react";
+import type { KeyboardEvent } from "react";
 import "graphiql/style.css";
 import "./view-playground.css";
-import { HOST_GRAPHQL_REQUEST_URL } from "@/shared/consts/envs";
+import { Button } from "@/shared/ui/button";
 import type { ViewPageRecord } from "../model/types";
+import type { ViewAvailability } from "../model/view-availability";
 
 type GraphiQLFetcher = NonNullable<GraphiQLProps["fetcher"]>;
-type GraphiQLResult = ExecutionResult<
-  Record<string, unknown>,
-  Record<string, unknown>
->;
+type GraphiQLResult = ExecutionResult<Record<string, unknown>>;
 
-const parseJsonObject = (text: string): Record<string, unknown> | null => {
-  if (!text.trim()) {
-    return null;
-  }
-
-  const parsed: unknown = JSON.parse(text);
-  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
-    return null;
-  }
-
-  return parsed as Record<string, unknown>;
-};
-
-const graphiqlFetcher: GraphiQLFetcher = async (params) => {
-  const response = await fetch(HOST_GRAPHQL_REQUEST_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      operationName: params.operationName,
-      query: params.query,
-      variables: params.variables,
-    }),
+const previewFetcher: GraphiQLFetcher = (): Promise<GraphiQLResult> =>
+  Promise.resolve({
+    errors: [
+      new GraphQLError(
+        "Paid query execution is disabled in this Studio preview. No network request was sent."
+      ),
+    ],
   });
-  const responseText = await response.text();
-  const payload = parseJsonObject(responseText);
 
-  if (!payload) {
-    throw new Error(
-      responseText.trim()
-        ? `Host returned a non-JSON response: ${responseText.trim()}`
-        : "Host returned an empty response."
-    );
+const preventQueryExecution = (event: KeyboardEvent<HTMLDivElement>) => {
+  if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+    event.preventDefault();
+    event.stopPropagation();
   }
-
-  return payload as GraphiQLResult;
 };
 
-export const ViewPlayground = ({ view }: { view: ViewPageRecord }) => (
-  <section className="flex min-w-0 flex-col gap-3">
-    <div className="flex flex-col gap-1">
-      <h2 className="font-mono text-xl font-normal text-szo-black">
-        GraphQL playground
-      </h2>
-      <p className="text-sm text-ui-text-muted">
-        Query this view through the configured host GraphQL endpoint.
-      </p>
+export const ViewPlayground = ({
+  view,
+  availability,
+}: {
+  view: ViewPageRecord;
+  availability: ViewAvailability;
+}) => (
+  <section
+    className="flex min-w-0 flex-col gap-5"
+    aria-labelledby="query-view-title"
+  >
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="min-w-0">
+        <p className="font-mono text-xs uppercase tracking-[0.12em] text-ui-text-accent">
+          Query
+        </p>
+        <h2
+          id="query-view-title"
+          className="mt-2 font-mono text-2xl font-normal text-szo-black"
+        >
+          Query this view
+        </h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-ui-text-muted">
+          Draft and inspect a GraphQL query now. Paid execution will require an
+          active pool, prepaid query funds, and approval from the connected
+          wallet.
+        </p>
+      </div>
+      <div className="flex flex-col gap-2 sm:flex-row lg:shrink-0">
+        <Button type="button" variant="secondary" disabled className="gap-2">
+          <WalletCards className="size-4" aria-hidden="true" />
+          Add query funds
+          <span className="font-normal opacity-70">· Coming soon</span>
+        </Button>
+        <Button type="button" disabled className="gap-2">
+          <LockKeyhole className="size-4" aria-hidden="true" />
+          Run paid query
+          <span className="font-normal opacity-70">· Coming soon</span>
+        </Button>
+      </div>
+    </div>
+
+    <div className="border border-ui-border bg-ui-bg-muted px-4 py-3 text-xs leading-5 text-ui-text-muted">
+      <span className="font-medium text-szo-black">Preview only.</span>{" "}
+      {queryAvailabilityCopy(availability)} Editing and schema exploration stay
+      local; execution controls and the Ctrl/⌘ + Enter shortcut are disabled.
     </div>
 
     <div className="flex min-w-0 flex-col gap-0">
@@ -96,10 +109,13 @@ export const ViewPlayground = ({ view }: { view: ViewPageRecord }) => (
         </div>
       </details>
 
-      <div className="shinzo-graphiql-shell h-[680px] min-h-[560px] overflow-hidden border border-ui-border bg-white lg:h-[640px]">
+      <div
+        className="shinzo-graphiql-shell shinzo-graphiql-preview h-[680px] min-h-[560px] overflow-hidden border border-ui-border bg-white lg:h-[640px]"
+        onKeyDownCapture={preventQueryExecution}
+      >
         <GraphiQL
           key={view.id}
-          fetcher={graphiqlFetcher}
+          fetcher={previewFetcher}
           initialQuery={view.defaultQuery}
           defaultQuery={view.defaultQuery}
           schema={view.schema}
@@ -114,3 +130,18 @@ export const ViewPlayground = ({ view }: { view: ViewPageRecord }) => (
     </div>
   </section>
 );
+
+const queryAvailabilityCopy = (availability: ViewAvailability): string => {
+  switch (availability.status) {
+    case "loading":
+      return "Studio is checking this view's pools.";
+    case "available":
+      return "This view has an active pool for queries.";
+    case "waiting":
+      return "The pool still needs three joined hosts before queries can run.";
+    case "no-pools":
+      return "This view does not have a pool yet.";
+    case "unavailable":
+      return "Studio could not check pools, but your query draft is still available.";
+  }
+};

@@ -17,11 +17,12 @@ export type {
   GetViewRegistrationParameters,
   ViewRegistration,
 } from "./get-view-registration";
+export { getNetworkUnitPrice } from "./get-network-unit-price";
+export type { GetNetworkUnitPriceParameters } from "./get-network-unit-price";
 export { listViews } from "./list-views";
-export type {
-  ListViewsParameters,
-  ListViewsResult,
-} from "./list-views";
+export type { ListViewsParameters, ListViewsResult } from "./list-views";
+export { listViewPools } from "./view-pools";
+export type { ListViewPoolsParameters, ShinzoHubViewPool } from "./view-pools";
 export type {
   ShinzoHubView,
   ViewMetadata,
